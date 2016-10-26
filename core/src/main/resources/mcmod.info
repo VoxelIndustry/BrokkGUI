@@ -1,0 +1,16 @@
+[
+{
+  "modid": "brokkgui",
+  "name": "BrokkGui",
+  "description": "An API to add some swing-like utilities to minecraft gui drawing.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Ourten"],
+  "credits": "Ourten for the code",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

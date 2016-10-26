@@ -1,0 +1,123 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven {
+            url 'http://maven.ferenyr.info/artifactory/plugins-release'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+
+    group = "fr.ourten"
+    compileJava.options.encoding = 'UTF-8'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    apply plugin: "maven-publish"
+    apply plugin: "com.jfrog.artifactory"
+
+    artifactory {
+        contextUrl = "${artifactory_contextUrl}"
+        publish {
+            repository {
+                repoKey = 'ourten'
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+                maven = true
+            }
+            defaults {
+                publications ('mavenJava')
+            }
+        }
+    }
+
+	// Fix JDK version use in eclipse
+	eclipse {
+		jdt {
+			sourceCompatibility = 1.8
+			targetCompatibility = 1.8
+		}
+	}
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+    repositories {
+        maven { url "http://maven.ferenyr.info/artifactory/ourten"}
+        mavenCentral()
+    }
+
+    jar {
+        duplicatesStrategy = 'exclude'
+        exclude('fr/ourten/brokkgui/demo/**')
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+
+                artifactId archivesBaseName
+                artifact (sourcesJar) { 
+                    classifier = 'sources'
+                }
+                artifact source: sourcesJar, classifier: 'sources', extension: 'jar'
+            }
+        }
+    }
+	
+	// Add references to core project
+	tasks.cleanEclipse.doLast {
+		project.configurations.stream()
+		.flatMap({config -> config.dependencies.stream()})                  // get all deps
+		.filter({dep -> dep instanceof ProjectDependency})                  // that are Projects
+		.forEach({dep -> eclipse.project.referencedProjects.add(dep.name)}) // and add to referencedProjects
+	}
+	tasks.eclipse.dependsOn(cleanEclipse)
+}
+
+project(":core") {
+    archivesBaseName = "brokkgui-core"
+
+    version = "0.2.5"
+    dependencies {
+        compile "fr.ourten:teabeans:0.3.3"
+        compile "org.apache.commons:commons-lang3:3.4"
+    }
+}
+
+project(":1.7.10") {
+    archivesBaseName = "brokkgui-binding-mc1.7.10"
+
+    version = "0.2.5"
+    dependencies {
+        compile project(":core")
+    }
+}
+
+project(":1.10.2") {
+    archivesBaseName = "brokkgui-binding-mc1.10.2"
+
+    version = "0.1.0"
+    dependencies {
+        compile project(":core")
+    }
+}

@@ -1,0 +1,45 @@
+#!/bin/bash
+
+WHITE="\e[97m"
+CYAN="\e[36m"
+GREEN="\e[32m"
+LGREY="\e[37m"
+
+SUM=0
+FILES=($(find . -name "$@"))
+BLAME=""
+AUTHORS=(`git log --format='%aN' | sort -u | sed s/\ /_/g`)
+SCORES=("${AUTHORS[@]}")
+CURRENT=0
+
+echo =======================================
+echo -ne Summary: $CYAN${#FILES[@]}$LGREY Files With $CYAN${#AUTHORS[@]}$LGREY Authors.
+echo
+for f in "${!FILES[@]}";
+do
+	BLAME=$BLAME`git blame ${FILES[$f]} -w -C -M`
+	CURRENT=$(($CURRENT + 1))
+	echo -ne " Files blaming : $CYAN[$GREEN`echo $(perl -e "print $CURRENT/${#FILES[@]}*100") | cut -c 1-5`%$CYAN]          \r$LGREY"
+done
+echo -ne "\n"
+CURRENT=0
+for i in "${!AUTHORS[@]}"
+do
+	AUTHOR=`echo ${AUTHORS[$i]} | sed s/_/\ /g`
+	SCORES[$i]=`echo $BLAME | grep -o "$AUTHOR" | wc -l`;
+	CURRENT=$(($CURRENT + 1))
+	echo -ne " Authors Extraction : $CYAN[$GREEN`echo $(perl -e "print $CURRENT/${#AUTHORS[@]}*100") | cut -c 1-5`%$CYAN]          \r$LGREY"
+done
+echo -ne "\n"
+
+SUM=$(awk 'BEGIN {t=0; for (i in ARGV) t+=ARGV[i]; print t}' "${SCORES[@]}")
+
+
+echo -e "Lines : $CYAN$SUM$LGREY"
+echo
+for i in "${!AUTHORS[@]}"
+do
+	echo -ne ${AUTHORS[$i]} : $GREEN`echo $(perl -e "print ${SCORES[$i]}/$SUM*100") | cut -c 1-5`%$LGREY   \($CYAN`echo ${SCORES[$i]} | sed -re 's/([0-9])([0-9]{3})($|[^0-9])/\1 \2\3/'`L$LGREY\)
+	echo
+done
+echo =======================================
