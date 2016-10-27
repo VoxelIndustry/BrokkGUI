@@ -17,6 +17,8 @@ public class GuiRelativePane extends GuiPane
     public void addChild(final GuiNode node, final float ratioX, final float ratioY)
     {
         this.getChildrensProperty().add(node);
+        node.setFather(this);
+
         RelativeBindingHelper.bindToRelative(node, this, ratioX, ratioY);
     }
 
