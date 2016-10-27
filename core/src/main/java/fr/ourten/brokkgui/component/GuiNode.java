@@ -261,7 +261,7 @@ public abstract class GuiNode
     {
         if (ratio == -1)
             this.widthProperty.unbind();
-        else if (!this.widthProperty.isBound())
+        else if (!this.widthProperty.isBound() && this.getFather() != null)
             RelativeBindingHelper.bindWidthRelative(this, this.getFather(), this.widthRatioProperty);
         this.widthRatioProperty.setValue(ratio);
     }
@@ -282,7 +282,7 @@ public abstract class GuiNode
     {
         if (ratio == -1)
             this.heightProperty.unbind();
-        else if (!this.heightProperty.isBound())
+        else if (!this.heightProperty.isBound() && this.getFather() != null)
             RelativeBindingHelper.bindHeightRelative(this, this.getFather(), this.heightRatioProperty);
         this.heightRatioProperty.setValue(ratio);
     }
