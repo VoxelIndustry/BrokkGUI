@@ -21,6 +21,8 @@ public class BrokkGuiWrapperMod
         BrokkGuiPlatform.getInstance().setPlatformName("MC1.7.10");
         BrokkGuiPlatform.getInstance().setKeyboardUtil(new KeyboardUtil());
         BrokkGuiPlatform.getInstance().setMouseUtil(new MouseUtil());
-        BrokkGuiPlatform.getInstance().setGuiHelper(new GuiHelper());
+
+        if (event.getSide().isClient())
+            BrokkGuiPlatform.getInstance().setGuiHelper(new GuiHelper());
     }
 }
