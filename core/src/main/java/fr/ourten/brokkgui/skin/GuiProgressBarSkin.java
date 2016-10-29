@@ -18,7 +18,28 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         
         this.progressBar = new Rectangle(model.getxPos(), model.getyPos(), model.getWidth(), model.getHeight());
         
-        this.progressBar.getxPosProperty().bind(model.getxPosProperty());
+        this.progressBar.getxPosProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(model.getxPosProperty());
+            }
+            
+            @Override
+            public Float computeValue()
+            {
+                switch(model.getProgressDirection())
+                {
+                    case CENTER:
+                        return model.getxPos() + ((model.getWidth() - progressBar.getWidth()) / 2);
+                    case LEFT:
+                        return model.getxPos() + model.getWidth() - progressBar.getWidth();
+                    default:
+                        return model.getxPos();
+                }
+            }
+        }
+        
+        );
         this.progressBar.getyPosProperty().bind(model.getyPosProperty());
         
         this.progressBar.getWidthProperty().bind(new BaseBinding<Float>()
