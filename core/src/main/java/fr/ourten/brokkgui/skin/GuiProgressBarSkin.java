@@ -4,6 +4,7 @@ import fr.ourten.brokkgui.behavior.GuiBehaviorBase;
 import fr.ourten.brokkgui.data.EAlignment;
 import fr.ourten.brokkgui.element.GuiProgressBar;
 import fr.ourten.brokkgui.internal.IGuiRenderer;
+import fr.ourten.brokkgui.paint.Color;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
 import fr.ourten.brokkgui.shape.Rectangle;
 import fr.ourten.teabeans.binding.BaseBinding;
@@ -54,7 +55,19 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
                 return model.getWidth() * model.getProgress();
             }
         });
-        this.progressBar.getColorProperty().bind(model.getColorProperty());
+        
+        this.progressBar.getColorProperty().bind(new BaseBinding<Color>()
+        {
+            {
+                super.bind(model.getBackgroundProperty());
+            }
+            
+            @Override
+            public Color computeValue()
+            {
+                return model.getBackgroundProperty().getValue().getColor();
+            }
+        });
         this.getText().getxPosProperty().bind(new BaseBinding<Float>()
         {
             {
