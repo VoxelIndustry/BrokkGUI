@@ -34,9 +34,34 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
             }
         });
         this.progressBar.getColorProperty().bind(model.getColorProperty());
-        this.getText().getxPosProperty().bind(model.getxPosProperty());
-        this.getText().getyPosProperty().bind(model.getyPosProperty());
-        this.getText().getTextAlignmentProperty().setValue(EAlignment.MIDDLE_DOWN);
+        this.getText().getxPosProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(model.getxPosProperty());
+            }
+            
+            @Override
+            public Float computeValue()
+            {
+                return model.getxPos() + (model.getWidth() / 2);
+            }
+            
+        });
+        this.getText().getyPosProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(model.getyPosProperty());
+            }
+            
+            @Override
+            public Float computeValue()
+            {
+                return model.getyPos() + (model.getHeight() / 2);
+            }
+            
+        });
+        
+        this.getText().getTextAlignmentProperty().setValue(EAlignment.MIDDLE_CENTER);
         
         this.getText().getTextProperty().bind(new BaseBinding<String>()
         {
