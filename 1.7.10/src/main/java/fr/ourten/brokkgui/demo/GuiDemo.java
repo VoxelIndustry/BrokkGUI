@@ -3,6 +3,7 @@ package fr.ourten.brokkgui.demo;
 import java.util.Arrays;
 
 import fr.ourten.brokkgui.component.GuiTab;
+import fr.ourten.brokkgui.data.EHAlignment;
 import fr.ourten.brokkgui.element.GuiButton;
 import fr.ourten.brokkgui.element.GuiListView;
 import fr.ourten.brokkgui.element.GuiProgressBar;
@@ -57,7 +58,7 @@ public class GuiDemo extends BrokkGuiScreen
         listView.getSkin().setBorderColor(Color.GRAY);
         listView.getSkin().setBorderThin(1);
         
-        final GuiProgressBar progressBar = new GuiProgressBar(1);
+        final GuiProgressBar progressBar = new GuiProgressBar(0.5f, EHAlignment.CENTER);
         progressBar.setWidth(200);
         progressBar.setHeight(20);
         progressBar.getSkin().setBorderColor(Color.RED);
@@ -72,12 +73,12 @@ public class GuiDemo extends BrokkGuiScreen
         field.getSkin().setBorderThin(1);
         
         final GuiTabPane tabPane = new GuiTabPane();
-        tabPane.setWidth(150);
+        tabPane.setWidth(190);
         tabPane.setHeight(200);
         tabPane.getSkin().setBorderColor(Color.YELLOW);
         tabPane.getSkin().setBorderThin(1);
         tabPane.addTab(new GuiTab("Textfield", field));
-        tabPane.addTab(new GuiTab("Button", listView));
+        tabPane.addTab(new GuiTab("ListView", listView));
         tabPane.addTab(new GuiTab("Progress", progressBar));
         
         tabPane.setDefaultTab(0);
