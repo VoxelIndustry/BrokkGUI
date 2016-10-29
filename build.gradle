@@ -76,9 +76,6 @@ subprojects {
                 from components.java
 
                 artifactId archivesBaseName
-                artifact (sourcesJar) { 
-                    classifier = 'sources'
-                }
                 artifact source: sourcesJar, classifier: 'sources', extension: 'jar'
             }
         }
@@ -92,6 +89,8 @@ subprojects {
 		.forEach({dep -> eclipse.project.referencedProjects.add(dep.name)}) // and add to referencedProjects
 	}
 	tasks.eclipse.dependsOn(cleanEclipse)
+
+    artifactoryPublish.dependsOn build
 }
 
 project(":core") {
@@ -107,7 +106,7 @@ project(":core") {
 project(":1.7.10") {
     archivesBaseName = "brokkgui-binding-mc1.7.10"
 
-    version = "0.2.6"
+    version = "0.2.7"
     dependencies {
         compile project(":core")
     }

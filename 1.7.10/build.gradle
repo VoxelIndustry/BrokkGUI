@@ -35,3 +35,18 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+task devJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+}
+
+artifacts {
+    archives devJar
+}
+
+publishing.publications {
+    mavenJava(MavenPublication) {
+        artifact source: devJar, classifier: 'dev', extension: 'jar'
+    }
+}
