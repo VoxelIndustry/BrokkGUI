@@ -11,16 +11,18 @@ import net.minecraft.item.ItemStack;
  *         A custom node used only for itemstack display. It cannot be used as a
  *         replacement of a slot.
  */
-public class ItemStackNode extends GuiControl
+public class ItemStackView extends GuiControl
 {
+    private final BaseProperty<String>    alternateStringProperty;
     private final BaseProperty<ItemStack> stackProperty;
 
-    public ItemStackNode(final ItemStack stack)
+    public ItemStackView(final ItemStack stack)
     {
         this.stackProperty = new BaseProperty<>(stack, "stackProperty");
+        this.alternateStringProperty = new BaseProperty<>(null, "alternateStringProperty");
     }
 
-    public ItemStackNode()
+    public ItemStackView()
     {
         this(null);
     }
@@ -28,6 +30,11 @@ public class ItemStackNode extends GuiControl
     public BaseProperty<ItemStack> getStackProperty()
     {
         return this.stackProperty;
+    }
+
+    public BaseProperty<String> getAlternateStringProperty()
+    {
+        return this.alternateStringProperty;
     }
 
     public ItemStack getItemStack()
@@ -40,9 +47,24 @@ public class ItemStackNode extends GuiControl
         this.stackProperty.setValue(stack);
     }
 
+    public String getAlternateString()
+    {
+        return this.alternateStringProperty.getValue();
+    }
+
+    /**
+     * @param alternateString
+     *            a string to be displayed in place of the usual itemstack
+     *            quantity number at the down-right corner.
+     */
+    public void setAlternateString(final String alternateString)
+    {
+        this.alternateStringProperty.setValue(alternateString);
+    }
+
     @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
-        return new ItemStackNodeSkin(this, new ItemStackNodeBehavior(this));
+        return new ItemStackViewSkin(this, new ItemStackViewBehavior(this));
     }
 }
