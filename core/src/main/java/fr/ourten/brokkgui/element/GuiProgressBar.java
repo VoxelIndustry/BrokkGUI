@@ -7,6 +7,7 @@ import fr.ourten.brokkgui.data.EHAlignment;
 import fr.ourten.brokkgui.paint.Background;
 import fr.ourten.brokkgui.paint.Color;
 import fr.ourten.brokkgui.skin.GuiProgressBarSkin;
+import fr.ourten.brokkgui.skin.GuiSkinBase;
 import fr.ourten.teabeans.value.BaseProperty;
 
 /**
@@ -79,7 +80,7 @@ public class GuiProgressBar extends GuiLabeled
     }
 
     @Override
-    protected GuiProgressBarSkin<GuiProgressBar, GuiBehaviorBase<GuiProgressBar>> makeDefaultSkin()
+    protected GuiSkinBase<?> makeDefaultSkin()
     {
         return new GuiProgressBarSkin<>(this, new GuiBehaviorBase<>(this));
     }
