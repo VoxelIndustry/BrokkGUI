@@ -3,10 +3,9 @@ package fr.ourten.brokkgui.skin;
 import fr.ourten.brokkgui.behavior.GuiBehaviorBase;
 import fr.ourten.brokkgui.element.GuiProgressBar;
 import fr.ourten.brokkgui.internal.IGuiRenderer;
-import fr.ourten.brokkgui.paint.Color;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
 import fr.ourten.brokkgui.shape.Rectangle;
-import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.binding.BaseExpression;
 
 public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorBase<C>> extends GuiLabeledSkinBase<C, B>
 {
@@ -17,96 +16,45 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         super(model, behaviour);
 
         this.progressBar = new Rectangle(model.getxPos(), model.getyPos(), model.getWidth(), model.getHeight());
-        this.progressBar.getxPosProperty().bind(new BaseBinding<Float>()
+        this.progressBar.getxPosProperty().bind(new BaseExpression<>(() ->
         {
+            switch (model.getProgressDirection())
             {
-                super.bind(model.getxPosProperty());
-                super.bind(model.getWidthProperty());
-                super.bind(model.getProgressDirectionProperty());
+                case CENTER:
+                    return model.getxPos() + ((model.getWidth() - progressBar.getWidth()) / 2);
+                case LEFT:
+                    return model.getxPos() + model.getWidth() - progressBar.getWidth();
+                default:
+                    return model.getxPos();
             }
-
-            @Override
-            public Float computeValue()
-            {
-                switch (model.getProgressDirection())
-                {
-                    case CENTER:
-                        return model.getxPos() + ((model.getWidth() - progressBar.getWidth()) / 2);
-                    case LEFT:
-                        return model.getxPos() + model.getWidth() - progressBar.getWidth();
-                    default:
-                        return model.getxPos();
-                }
-            }
-        });
+        }, model.getxPosProperty(), model.getWidthProperty(), model.getProgressDirectionProperty()));
         this.progressBar.getyPosProperty().bind(model.getyPosProperty());
-        this.progressBar.getWidthProperty().bind(new BaseBinding<Float>()
+        this.progressBar.getWidthProperty().bind(new BaseExpression<>(() ->
         {
-            {
-                super.bind(model.getProgressProperty());
-                super.bind(model.getWidthProperty());
-            }
-
-            @Override
-            public Float computeValue()
-            {
-                return model.getWidth() * model.getProgress();
-            }
-        });
-        this.progressBar.getColorProperty().bind(new BaseBinding<Color>()
+            return model.getWidth() * model.getProgress();
+        }, model.getProgressProperty(), model.getWidthProperty()));
+        this.progressBar.getColorProperty().bind(new BaseExpression<>(() ->
         {
-            {
-                super.bind(model.getBackgroundProperty());
-            }
+            return model.getBackgroundProperty().getValue().getColor();
+        }, model.getBackgroundProperty()));
 
-            @Override
-            public Color computeValue()
-            {
-                return model.getBackgroundProperty().getValue().getColor();
-            }
-        });
-        this.getText().getxPosProperty().bind(new BaseBinding<Float>()
+        this.getText().getxPosProperty().bind(new BaseExpression<>(() ->
         {
-            {
-                super.bind(model.getxPosProperty());
-                super.bind(model.getWidthProperty());
-            }
+            return model.getxPos() + (model.getWidth() / 2);
+        }, model.getxPosProperty(), model.getWidthProperty()));
 
-            @Override
-            public Float computeValue()
-            {
-                return model.getxPos() + (model.getWidth() / 2);
-            }
-
-        });
-        this.getText().getyPosProperty().bind(new BaseBinding<Float>()
+        this.getText().getyPosProperty().bind(new BaseExpression<>(() ->
         {
-            {
-                super.bind(model.getyPosProperty());
-                super.bind(model.getHeightProperty());
-            }
+            return model.getyPos() + (model.getHeight() / 2);
+        }, model.getyPosProperty(), model.getHeightProperty()));
 
-            @Override
-            public Float computeValue()
-            {
-                return model.getyPos() + (model.getHeight() / 2);
-            }
-
-        });
         this.getText().getTextAlignmentProperty().bind(model.getTextAlignmentProperty());
         this.getText().getShadowProperty().setValue(false);
-        this.getText().getzLevelProperty().bind(new BaseBinding<Float>()
+        this.getText().getzLevelProperty().bind(new BaseExpression<>(() ->
         {
-            {
-                super.bind(model.getzLevelProperty());
-            }
+            return model.getzLevel() + 1;
+        }, model.getzLevelProperty()));
 
-            @Override
-            public Float computeValue()
-            {
-                return model.getzLevel() + 1;
-            }
-        });
     }
 
     @Override
