@@ -119,7 +119,7 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
             @Override
             public Float computeValue()
             {
-                return model.getzLevel() + 10;
+                return model.getzLevel() + 1;
             }
         });
 
@@ -130,8 +130,6 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
     {
         super.render(pass, renderer, mouseX, mouseY);
         this.progressBar.renderNode(renderer, pass, mouseX, mouseY);
-        // XXX temp : zLevel not working
-        this.getText().renderNode(renderer, pass, mouseX, mouseY);
     }
 
     public Rectangle getProgressBar()
