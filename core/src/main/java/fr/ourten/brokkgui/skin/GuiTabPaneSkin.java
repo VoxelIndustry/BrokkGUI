@@ -47,8 +47,8 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
                             this.getModel().getxPos() + this.getModel().getxTranslate() + 2
                                     + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
                                             * this.getModel().getTabsProperty().indexOf(tab),
-                            this.getModel().getyPos() + this.getModel().getyTranslate() + 2, Color.WHITE,
-                            EAlignment.LEFT_DOWN);
+                            this.getModel().getyPos() + this.getModel().getyTranslate() + 2,
+                            this.getModel().getzLevel(), Color.WHITE, EAlignment.LEFT_DOWN);
                     break;
                 // TODO : tab render for every possible sides
                 case DOWN:

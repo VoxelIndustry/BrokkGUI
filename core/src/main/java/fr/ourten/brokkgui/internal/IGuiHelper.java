@@ -18,16 +18,16 @@ public interface IGuiHelper
 
     public void scissorBox(final float f, final float g, final float h, final float i);
 
-    public void drawString(final String string, final int x, final int y, final Color color, final EAlignment alignment,
+    public void drawString(final String string, final int x, final int y, final float zLevel, final Color color,
+            final EAlignment alignment, final boolean shadow);
+
+    public void drawString(final String string, final double x, final double y, final float zLevel, final Color color,
             final boolean shadow);
 
-    public void drawString(final String string, final double x, final double y, final Color color,
-            final boolean shadow);
-
-    public void drawString(final String string, final double x, final double y, final Color color,
+    public void drawString(final String string, final double x, final double y, final float zLevel, final Color color,
             final EAlignment alignment);
 
-    public void drawString(final String string, final double x, final double y, final Color color);
+    public void drawString(final String string, final double x, final double y, final float zLevel, final Color color);
 
     public void drawTexturedModalRect(final IGuiRenderer renderer, final double xStart, final double yStart,
             final double uMin, final double vMin, final double uMax, final double vMax, final double width,

@@ -36,13 +36,13 @@ public class Text extends GuiShape
         {
             if (!this.wrapText())
                 renderer.getHelper().drawString(this.getText(), (int) (this.getxPos() + this.getxTranslate()),
-                        (int) (this.getyPos() + this.getyTranslate()), this.getColor(), this.getTextAlignment(),
-                        this.hasShadow());
+                        (int) (this.getyPos() + this.getyTranslate()), this.getzLevel(), this.getColor(),
+                        this.getTextAlignment(), this.hasShadow());
             else
                 renderer.getHelper().drawString(
                         renderer.getHelper().trimStringToPixelWidth(this.getText(), (int) this.getWidth()),
                         (int) (this.getxPos() + this.getxTranslate()), (int) (this.getyPos() + this.getyTranslate()),
-                        this.getColor(), this.getTextAlignment(), this.hasShadow());
+                        this.getzLevel(), this.getColor(), this.getTextAlignment(), this.hasShadow());
         }
     }
 

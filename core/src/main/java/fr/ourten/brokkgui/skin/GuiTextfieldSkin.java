@@ -40,14 +40,16 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 if (!StringUtils.isEmpty(this.getModel().getPromptText())
                         && (this.getModel().isPromptTextAlwaysDisplayed()
                                 || StringUtils.isEmpty(this.getModel().getText())))
-                    renderer.getHelper().drawString(this.getModel().getPromptText(), x + 3, y + 3, color.shade(0.5f));
+                    renderer.getHelper().drawString(this.getModel().getPromptText(), x + 3, y + 3,
+                            this.getModel().getzLevel(), color.shade(0.5f));
                 if (this.getModel().getCursorPosition() == this.getModel().getText().length())
                     renderer.getHelper().drawColoredRect(renderer,
                             x + 4 + renderer.getHelper().getStringWidth(
                                     this.getModel().getText().substring(0, this.getModel().getCursorPosition())),
                             y + renderer.getHelper().getStringHeight() + 2, 5, 1, this.getModel().getzLevel(),
                             color.shade(0.7f));
-                renderer.getHelper().drawString(this.getModel().getText(), x + 3 + 1, y + 3 + 1, color.shade(0.7f));
+                renderer.getHelper().drawString(this.getModel().getText(), x + 3 + 1, y + 3 + 1,
+                        this.getModel().getzLevel(), color.shade(0.7f));
 
                 if (this.getModel().getCursorPosition() != this.getModel().getText().length())
                     renderer.getHelper().drawColoredRect(renderer,
@@ -61,7 +63,8 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                                     this.getModel().getText().substring(0, this.getModel().getCursorPosition())),
                             y + renderer.getHelper().getStringHeight() + 1, 5, 1, this.getModel().getzLevel(),
                             color.shade(0.3f));
-                renderer.getHelper().drawString(this.getModel().getText(), x + 3, y + 3, color);
+                renderer.getHelper().drawString(this.getModel().getText(), x + 3, y + 3, this.getModel().getzLevel(),
+                        color);
             }
             else if (pass == EGuiRenderPass.SPECIAL)
                 if (!this.getModel().isValid())
@@ -75,7 +78,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                                     this.getModel().getyPos() + this.getModel().getyTranslate()
                                             + this.getModel().getHeight()
                                             + i * (renderer.getHelper().getStringHeight() + 1),
-                                    Color.RED);
+                                    this.getModel().getzLevel(), Color.RED);
                             i++;
                         }
                 }

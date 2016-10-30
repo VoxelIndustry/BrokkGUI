@@ -42,9 +42,14 @@ public class GuiHelper implements IGuiHelper
 
     // TODO: Handle UP/DOWN/LEFT/RIGHTS alignments combinaisons
     @Override
-    public final void drawString(final String string, final int x, final int y, final Color color,
+    public final void drawString(final String string, final int x, final int y, final float zLevel, final Color color,
             final EAlignment alignment, final boolean shadow)
     {
+        if (zLevel != 0)
+        {
+            GL11.glPushMatrix();
+            GL11.glTranslated(0, 0, zLevel);
+        }
         if (!shadow)
             this.mc.fontRenderer.drawString(string,
                     x - (alignment.isHorizontalCentered() ? this.mc.fontRenderer.getStringWidth(string) / 2 : 0),
@@ -53,26 +58,29 @@ public class GuiHelper implements IGuiHelper
             this.mc.fontRenderer.drawStringWithShadow(string,
                     x - (alignment.isHorizontalCentered() ? this.mc.fontRenderer.getStringWidth(string) / 2 : 0),
                     y - (alignment.isVerticalCentered() ? this.mc.fontRenderer.FONT_HEIGHT / 2 : 0), color.toInt());
+        if (zLevel != 0)
+            GL11.glPopMatrix();
     }
 
     @Override
-    public final void drawString(final String string, final double x, final double y, final Color color,
-            final boolean shadow)
+    public final void drawString(final String string, final double x, final double y, final float zLevel,
+            final Color color, final boolean shadow)
     {
-        this.drawString(string, (int) x, (int) y, color, EAlignment.LEFT_UP, shadow);
+        this.drawString(string, (int) x, (int) y, zLevel, color, EAlignment.LEFT_UP, shadow);
     }
 
     @Override
-    public final void drawString(final String string, final double x, final double y, final Color color,
-            final EAlignment alignment)
+    public final void drawString(final String string, final double x, final double y, final float zLevel,
+            final Color color, final EAlignment alignment)
     {
-        this.drawString(string, (int) x, (int) y, color, alignment, true);
+        this.drawString(string, (int) x, (int) y, zLevel, color, alignment, true);
     }
 
     @Override
-    public final void drawString(final String string, final double x, final double y, final Color color)
+    public final void drawString(final String string, final double x, final double y, final float zLevel,
+            final Color color)
     {
-        this.drawString(string, (int) x, (int) y, color, EAlignment.LEFT_UP, true);
+        this.drawString(string, (int) x, (int) y, zLevel, color, EAlignment.LEFT_UP, true);
     }
 
     @Override
