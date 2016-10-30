@@ -2,6 +2,7 @@ package fr.ourten.brokkgui.element;
 
 import fr.ourten.brokkgui.behavior.GuiBehaviorBase;
 import fr.ourten.brokkgui.control.GuiLabeled;
+import fr.ourten.brokkgui.data.EAlignment;
 import fr.ourten.brokkgui.data.EHAlignment;
 import fr.ourten.brokkgui.paint.Background;
 import fr.ourten.brokkgui.paint.Color;
@@ -34,7 +35,7 @@ public class GuiProgressBar extends GuiLabeled
         });
 
         this.progressBarProgressProperty.setValue(progressRatio);
-
+        this.getTextAlignmentProperty().setValue(EAlignment.MIDDLE_CENTER);
     }
 
     public GuiProgressBar(final String text, final Background background, final float progressRatio)

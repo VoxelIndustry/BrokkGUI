@@ -1,7 +1,6 @@
 package fr.ourten.brokkgui.skin;
 
 import fr.ourten.brokkgui.behavior.GuiBehaviorBase;
-import fr.ourten.brokkgui.data.EAlignment;
 import fr.ourten.brokkgui.element.GuiProgressBar;
 import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.Color;
@@ -18,11 +17,12 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         super(model, behaviour);
 
         this.progressBar = new Rectangle(model.getxPos(), model.getyPos(), model.getWidth(), model.getHeight());
-
         this.progressBar.getxPosProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(model.getxPosProperty());
+                super.bind(model.getWidthProperty());
+                super.bind(model.getProgressDirectionProperty());
             }
 
             @Override
@@ -38,15 +38,13 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
                         return model.getxPos();
                 }
             }
-        }
-
-        );
+        });
         this.progressBar.getyPosProperty().bind(model.getyPosProperty());
-
         this.progressBar.getWidthProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(model.getProgressProperty());
+                super.bind(model.getWidthProperty());
             }
 
             @Override
@@ -55,7 +53,6 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
                 return model.getWidth() * model.getProgress();
             }
         });
-
         this.progressBar.getColorProperty().bind(new BaseBinding<Color>()
         {
             {
@@ -72,6 +69,7 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         {
             {
                 super.bind(model.getxPosProperty());
+                super.bind(model.getWidthProperty());
             }
 
             @Override
@@ -85,6 +83,7 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         {
             {
                 super.bind(model.getyPosProperty());
+                super.bind(model.getHeightProperty());
             }
 
             @Override
@@ -94,8 +93,7 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
             }
 
         });
-
-        this.getText().getTextAlignmentProperty().setValue(EAlignment.MIDDLE_CENTER);
+        this.getText().getTextAlignmentProperty().bind(model.getTextAlignmentProperty());
         this.getText().getShadowProperty().setValue(false);
         this.getText().getTextProperty().bind(new BaseBinding<String>()
         {
@@ -109,7 +107,6 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
                 return model.getProgress() + "";
             }
         });
-
         this.getText().getzLevelProperty().bind(new BaseBinding<Float>()
         {
             {
@@ -122,7 +119,6 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
                 return model.getzLevel() + 1;
             }
         });
-
     }
 
     @Override
@@ -136,5 +132,4 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
     {
         return this.progressBar;
     }
-
 }
