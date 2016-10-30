@@ -95,18 +95,6 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         });
         this.getText().getTextAlignmentProperty().bind(model.getTextAlignmentProperty());
         this.getText().getShadowProperty().setValue(false);
-        this.getText().getTextProperty().bind(new BaseBinding<String>()
-        {
-            {
-                super.bind(model.getProgressProperty());
-            }
-
-            @Override
-            public String computeValue()
-            {
-                return model.getProgress() + "";
-            }
-        });
         this.getText().getzLevelProperty().bind(new BaseBinding<Float>()
         {
             {

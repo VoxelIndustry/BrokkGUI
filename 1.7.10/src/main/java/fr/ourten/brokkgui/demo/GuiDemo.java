@@ -14,6 +14,7 @@ import fr.ourten.brokkgui.paint.Color;
 import fr.ourten.brokkgui.panel.GuiRelativePane;
 import fr.ourten.brokkgui.panel.GuiTabPane;
 import fr.ourten.brokkgui.skin.GuiButtonSkin;
+import fr.ourten.teabeans.binding.BaseBinding;
 
 public class GuiDemo extends BrokkGuiScreen
 {
@@ -60,6 +61,19 @@ public class GuiDemo extends BrokkGuiScreen
         
         final GuiProgressBar progressBar = new GuiProgressBar(0.5f, EHAlignment.CENTER);
         progressBar.setWidth(200);
+        progressBar.getTextProperty().bind(new BaseBinding<String>()
+        {
+            {
+                super.bind(progressBar.getProgressProperty());
+            }
+            
+            @Override
+            public String computeValue()
+            {
+                return progressBar.getProgress() + "";
+            }
+        });
+        
         progressBar.setHeight(20);
         progressBar.getSkin().setBorderColor(Color.RED);
         progressBar.getSkin().setBorderThin(1);
