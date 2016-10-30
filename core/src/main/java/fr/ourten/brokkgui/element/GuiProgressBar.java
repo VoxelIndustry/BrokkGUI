@@ -85,11 +85,6 @@ public class GuiProgressBar extends GuiLabeled
         return new GuiProgressBarSkin<>(this, new GuiBehaviorBase<>(this));
     }
 
-    public void setProgress(float progress)
-    {
-        this.getProgressProperty().setValue(progress);
-    }
-
     public BaseProperty<Float> getProgressProperty()
     {
         return this.progressBarProgressProperty;
@@ -108,6 +103,11 @@ public class GuiProgressBar extends GuiLabeled
     public float getProgress()
     {
         return this.getProgressProperty().getValue();
+    }
+
+    public void setProgress(float progress)
+    {
+        this.getProgressProperty().setValue(progress);
     }
 
     public Background getBackground()
