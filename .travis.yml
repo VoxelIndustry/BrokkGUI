@@ -4,8 +4,10 @@ notifications:
   email: false
 install: true
 jdk: oraclejdk8
+before_install:
+  - chmod +x gradlew
 script:
-  - gradle build
+  - ./gradlew build check
 cache:
   directories:
     - ~/.gradle
