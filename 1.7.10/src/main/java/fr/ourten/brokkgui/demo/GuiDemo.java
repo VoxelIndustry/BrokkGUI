@@ -59,7 +59,8 @@ public class GuiDemo extends BrokkGuiScreen
         listView.getSkin().setBorderColor(Color.GRAY);
         listView.getSkin().setBorderThin(1);
         
-        final GuiProgressBar progressBar = new GuiProgressBar(0.5f, EHAlignment.CENTER);
+        final GuiProgressBar progressBar = new GuiProgressBar(0.5f);
+        progressBar.setProgressDirection(EHAlignment.CENTER);
         progressBar.setWidth(200);
         progressBar.getTextProperty().bind(new BaseBinding<String>()
         {

@@ -1,5 +1,7 @@
 package fr.ourten.brokkgui.element;
 
+import java.util.Objects;
+
 import fr.ourten.brokkgui.behavior.GuiBehaviorBase;
 import fr.ourten.brokkgui.control.GuiLabeled;
 import fr.ourten.brokkgui.data.EAlignment;
@@ -19,13 +21,13 @@ public class GuiProgressBar extends GuiLabeled
     private final BaseProperty<Background>  progressBarColorProperty;
     private final BaseProperty<EHAlignment> progressBarProgressDirection;
 
-    public GuiProgressBar(final String text, final Background background, final float progressRatio,
-            final EHAlignment progressDirection)
+    public GuiProgressBar(final String text, final float progressRatio)
     {
         super(text);
         this.progressBarProgressProperty = new BaseProperty<>(0f, "progressBarProgressProperty");
-        this.progressBarColorProperty = new BaseProperty<Background>(background, "progressBarColorProperty");
-        this.progressBarProgressDirection = new BaseProperty<EHAlignment>(progressDirection,
+        this.progressBarColorProperty = new BaseProperty<Background>(new Background(Color.WHITE),
+                "progressBarColorProperty");
+        this.progressBarProgressDirection = new BaseProperty<EHAlignment>(EHAlignment.RIGHT,
                 "progressBarProgressDirection");
 
         this.progressBarProgressProperty.setChecker((old, set) ->
@@ -39,44 +41,19 @@ public class GuiProgressBar extends GuiLabeled
         this.getTextAlignmentProperty().setValue(EAlignment.MIDDLE_CENTER);
     }
 
-    public GuiProgressBar(final String text, final Background background, final float progressRatio)
-    {
-        this(text, background, progressRatio, EHAlignment.RIGHT);
-    }
-
-    public GuiProgressBar(final Background background, final float progressRatio, final EHAlignment progressDirection)
-    {
-        this("", background, progressRatio, progressDirection);
-    }
-
-    public GuiProgressBar(final Background background, final float progressRatio)
-    {
-        this(background, progressRatio, EHAlignment.RIGHT);
-    }
-
-    public GuiProgressBar(final String text, final Background background)
-    {
-        this(text, background, 0);
-    }
-
-    public GuiProgressBar(final float progressRatio, final EHAlignment progressDirection)
-    {
-        this(new Background(Color.WHITE), progressRatio, progressDirection);
-    }
-
-    public GuiProgressBar(final Background background)
-    {
-        this(background, 0);
-    }
-
     public GuiProgressBar(final String text)
     {
-        this(text, new Background(Color.WHITE));
+        this(text, 0);
+    }
+
+    public GuiProgressBar(final float progressRatio)
+    {
+        this("", progressRatio);
     }
 
     public GuiProgressBar()
     {
-        this(new Background(Color.WHITE));
+        this("");
     }
 
     @Override
@@ -115,9 +92,21 @@ public class GuiProgressBar extends GuiLabeled
         return this.getBackgroundProperty().getValue();
     }
 
+    public void setBackground(Background background)
+    {
+        Objects.requireNonNull(background);
+        this.getBackgroundProperty().setValue(background);
+    }
+
     public EHAlignment getProgressDirection()
     {
         return this.getProgressDirectionProperty().getValue();
+    }
+
+    public void setProgressDirection(EHAlignment direction)
+    {
+        Objects.requireNonNull(direction);
+        this.getProgressDirectionProperty().setValue(direction);
     }
 
 }
