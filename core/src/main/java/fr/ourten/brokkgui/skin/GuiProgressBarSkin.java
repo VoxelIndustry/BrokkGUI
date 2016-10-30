@@ -96,7 +96,7 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         });
 
         this.getText().getTextAlignmentProperty().setValue(EAlignment.MIDDLE_CENTER);
-
+        this.getText().getShadowProperty().setValue(false);
         this.getText().getTextProperty().bind(new BaseBinding<String>()
         {
             {
