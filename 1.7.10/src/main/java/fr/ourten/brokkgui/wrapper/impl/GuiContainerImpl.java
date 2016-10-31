@@ -9,6 +9,7 @@ import fr.ourten.brokkgui.wrapper.container.BrokkGuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
 
 public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
 {
@@ -106,5 +107,14 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     public IGuiRenderer getRenderer()
     {
         return this.renderer;
+    }
+
+    @Override
+    protected void handleMouseClick(final Slot slot, final int slotID, final int button, final int flag)
+    {
+        super.handleMouseClick(slot, slotID, button, flag);
+
+        if (slot != null)
+            this.brokkgui.slotClick(slot, button);
     }
 }
