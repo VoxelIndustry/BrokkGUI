@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import com.google.common.collect.Lists;
 
 import fr.ourten.brokkgui.GuiFocusManager;
+import fr.ourten.brokkgui.event.EventDispatcher;
+import fr.ourten.brokkgui.event.EventHandler;
+import fr.ourten.brokkgui.event.WindowEvent;
 import fr.ourten.brokkgui.internal.IBrokkGuiImpl;
 import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.Color;
@@ -13,19 +16,23 @@ import fr.ourten.brokkgui.panel.GuiPane;
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
 
-public class BrokkGuiScreen
+public class BrokkGuiScreen implements IGuiWindow
 {
-    private GuiPane                       mainPanel;
-    private final ArrayList<SubGuiScreen> windows;
-    private IGuiRenderer                  renderer;
+    private EventDispatcher                 eventDispatcher;
+    private EventHandler<WindowEvent.Open>  onOpenEvent;
+    private EventHandler<WindowEvent.Close> onCloseEvent;
 
-    private final BaseProperty<Float>     widthProperty, heightProperty, xPosProperty, yPosProperty;
+    private GuiPane                         mainPanel;
+    private final ArrayList<SubGuiScreen>   windows;
+    private IGuiRenderer                    renderer;
 
-    private final BaseProperty<Float>     xRelativePosProperty, yRelativePosProperty;
+    private final BaseProperty<Float>       widthProperty, heightProperty, xPosProperty, yPosProperty;
 
-    private final BaseProperty<Integer>   screenWidthProperty, screenHeightProperty;
+    private final BaseProperty<Float>       xRelativePosProperty, yRelativePosProperty;
 
-    private IBrokkGuiImpl                 wrapper;
+    private final BaseProperty<Integer>     screenWidthProperty, screenHeightProperty;
+
+    private IBrokkGuiImpl                   wrapper;
 
     public BrokkGuiScreen(final float xRelativePos, final float yRelativePos, final float width, final float height)
     {
@@ -168,9 +175,28 @@ public class BrokkGuiScreen
         return this.windows.contains(subGui);
     }
 
+    @Override
+    public void open()
+    {
+        this.wrapper.askOpen();
+        this.onOpen();
+    }
+
+    public void onOpen()
+    {
+        this.getEventDispatcher().dispatchEvent(WindowEvent.OPEN, new WindowEvent.Open(this));
+    }
+
+    @Override
     public void close()
     {
-        this.wrapper.closeGui();
+        this.wrapper.askClose();
+        this.onClose();
+    }
+
+    public void onClose()
+    {
+        this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
     public GuiPane getMainPanel()
@@ -295,5 +321,36 @@ public class BrokkGuiScreen
     public BaseProperty<Integer> getScreenHeightProperty()
     {
         return this.screenHeightProperty;
+    }
+
+    /////////////////////
+    // EVENTS HANDLING //
+    /////////////////////
+
+    public void setOnOpenEvent(final EventHandler<WindowEvent.Open> onOpenEvent)
+    {
+        this.getEventDispatcher().removeHandler(WindowEvent.OPEN, this.onOpenEvent);
+        this.onOpenEvent = onOpenEvent;
+        this.getEventDispatcher().addHandler(WindowEvent.OPEN, this.onOpenEvent);
+    }
+
+    public void setOnCloseEvent(final EventHandler<WindowEvent.Close> onCloseEvent)
+    {
+        this.getEventDispatcher().removeHandler(WindowEvent.CLOSE, this.onCloseEvent);
+        this.onCloseEvent = onCloseEvent;
+        this.getEventDispatcher().addHandler(WindowEvent.CLOSE, this.onCloseEvent);
+    }
+
+    @Override
+    public EventDispatcher getEventDispatcher()
+    {
+        if (this.eventDispatcher == null)
+            this.initEventDispatcher();
+        return this.eventDispatcher;
+    }
+
+    private void initEventDispatcher()
+    {
+        this.eventDispatcher = new EventDispatcher();
     }
 }

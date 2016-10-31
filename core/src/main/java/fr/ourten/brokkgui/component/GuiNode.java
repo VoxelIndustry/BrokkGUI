@@ -11,12 +11,13 @@ import fr.ourten.brokkgui.event.EventHandler;
 import fr.ourten.brokkgui.event.FocusEvent;
 import fr.ourten.brokkgui.event.GuiMouseEvent;
 import fr.ourten.brokkgui.event.HoverEvent;
+import fr.ourten.brokkgui.event.IGuiEventEmitter;
 import fr.ourten.brokkgui.event.KeyEvent;
 import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
 import fr.ourten.teabeans.value.BaseProperty;
 
-public abstract class GuiNode
+public abstract class GuiNode implements IGuiEventEmitter
 {
     private final BaseProperty<GuiFather> fatherProperty;
     private final BaseProperty<Float>     xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,

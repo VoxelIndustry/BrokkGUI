@@ -45,6 +45,8 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     {
         super.onGuiClosed();
         Keyboard.enableRepeatEvents(false);
+
+        this.brokkgui.onClose();
     }
 
     @Override
@@ -78,10 +80,20 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     }
 
     @Override
-    public void closeGui()
+    public void askClose()
     {
         this.mc.displayGuiScreen(null);
         this.mc.setIngameFocus();
+
+        this.brokkgui.onClose();
+    }
+
+    @Override
+    public void askOpen()
+    {
+        this.mc.displayGuiScreen(this);
+
+        this.brokkgui.onOpen();
     }
 
     @Override

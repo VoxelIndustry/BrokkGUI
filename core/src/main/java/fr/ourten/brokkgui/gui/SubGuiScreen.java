@@ -6,7 +6,7 @@ import fr.ourten.brokkgui.event.WindowEvent;
 import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
 
-public class SubGuiScreen extends GuiFather
+public class SubGuiScreen extends GuiFather implements IGuiWindow
 {
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
@@ -45,11 +45,17 @@ public class SubGuiScreen extends GuiFather
         this.hasWarFog = warFog;
     }
 
+    /////////////////////
+    // EVENTS HANDLING //
+    /////////////////////
+
+    @Override
     public void open()
     {
         this.getEventDispatcher().dispatchEvent(WindowEvent.OPEN, new WindowEvent.Open(this));
     }
 
+    @Override
     public void close()
     {
         this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));

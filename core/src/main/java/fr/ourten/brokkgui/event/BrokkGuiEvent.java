@@ -1,17 +1,15 @@
 package fr.ourten.brokkgui.event;
 
-import fr.ourten.brokkgui.component.GuiNode;
-
 public class BrokkGuiEvent
 {
-    private final GuiNode source;
+    private final IGuiEventEmitter source;
 
-    public BrokkGuiEvent(final GuiNode source)
+    public BrokkGuiEvent(final IGuiEventEmitter source)
     {
         this.source = source;
     }
 
-    public GuiNode getSource()
+    public IGuiEventEmitter getSource()
     {
         return this.source;
     }

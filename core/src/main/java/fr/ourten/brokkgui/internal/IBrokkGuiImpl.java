@@ -6,7 +6,9 @@ public interface IBrokkGuiImpl
 
     int getScreenHeight();
 
-    void closeGui();
+    void askOpen();
+
+    void askClose();
 
     IGuiRenderer getRenderer();
 }

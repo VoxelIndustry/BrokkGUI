@@ -72,12 +72,22 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     }
 
     @Override
-    public void closeGui()
+    public void askClose()
     {
         if (this.mc.thePlayer != null)
             this.inventorySlots.onContainerClosed(this.mc.thePlayer);
         this.mc.displayGuiScreen(null);
         this.mc.setIngameFocus();
+
+        this.brokkgui.onClose();
+    }
+
+    @Override
+    public void askOpen()
+    {
+        // TODO : Container opening sync
+
+        this.brokkgui.onOpen();
     }
 
     @Override
