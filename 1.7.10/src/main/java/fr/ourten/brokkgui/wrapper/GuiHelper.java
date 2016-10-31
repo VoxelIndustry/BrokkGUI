@@ -1,6 +1,7 @@
 package fr.ourten.brokkgui.wrapper;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import fr.ourten.brokkgui.data.EAlignment;
 import fr.ourten.brokkgui.data.Vector2i;
@@ -10,17 +11,23 @@ import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.Color;
 import fr.ourten.brokkgui.paint.Texture;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiHelper implements IGuiHelper
 {
-    private final Minecraft mc;
+    private final RenderItem itemRender;
+    private final Minecraft  mc;
 
     public GuiHelper()
     {
         this.mc = Minecraft.getMinecraft();
+        this.itemRender = new RenderItem();
     }
 
     @Override
@@ -224,6 +231,47 @@ public class GuiHelper implements IGuiHelper
         GL11.glColor4f(1, 1, 1, 1);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
+    }
+
+    public final void drawItemStack(final IGuiRenderer renderer, final float startX, final float startY,
+            final float width, final float height, final float zLevel, final ItemStack stack)
+    {
+        this.drawItemStack(renderer, startX, startY, width, height, zLevel, stack, null);
+    }
+
+    public final void drawItemStack(final IGuiRenderer renderer, final float startX, final float startY,
+            final float width, final float height, final float zLevel, final ItemStack stack,
+            final String displayString)
+    {
+        GL11.glPushMatrix();
+        GL11.glTranslated(-9, -9, 0);
+
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        RenderHelper.disableStandardItemLighting();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        RenderHelper.enableGUIStandardItemLighting();
+        GL11.glTranslatef(0.0F, 0.0F, 32.0F);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        final short short1 = 240;
+        final short short2 = 240;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, short1 / 1.0F, short2 / 1.0F);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        final float oldItemZLevel = this.itemRender.zLevel;
+        this.itemRender.zLevel = 200.0F;
+        FontRenderer font = null;
+        if (stack != null)
+            font = stack.getItem().getFontRenderer(stack);
+        if (font == null)
+            font = this.mc.fontRenderer;
+        this.itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), stack, (int) startX,
+                (int) startY);
+        this.itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, (int) startX, (int) startY,
+                displayString);
+        this.itemRender.zLevel = oldItemZLevel;
+        GL11.glPopMatrix();
     }
 
     @Override
