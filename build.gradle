@@ -96,7 +96,7 @@ subprojects {
 project(":core") {
     archivesBaseName = "brokkgui-core"
 
-    version = "0.2.6"
+    version = "0.2.7"
     dependencies {
         compile "fr.ourten:teabeans:0.3.3"
         compile "org.apache.commons:commons-lang3:3.4"
@@ -106,7 +106,7 @@ project(":core") {
 project(":1.7.10") {
     archivesBaseName = "brokkgui-binding-mc1.7.10"
 
-    version = "0.2.7"
+    version = "0.2.8"
     dependencies {
         compile project(":core")
     }
