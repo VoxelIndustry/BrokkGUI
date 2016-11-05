@@ -9,6 +9,11 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 minecraft {
     version = "1.10.2-12.18.1.2095"
     runDir = "run"
