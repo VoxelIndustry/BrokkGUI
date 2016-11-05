@@ -31,7 +31,7 @@ public class BrokkGuiDemo
     public void onPreInit(final FMLPreInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new DemoGuiHandler());
-        GameRegistry.registerItem(new Item()// ItemBucketMilk
+        GameRegistry.registerItem(new Item()
         {
             @Override
             public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
