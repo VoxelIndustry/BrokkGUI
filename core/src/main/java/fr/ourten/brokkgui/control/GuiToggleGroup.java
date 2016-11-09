@@ -29,18 +29,18 @@ public class GuiToggleGroup
 
     public GuiToggleButtonBase getSelectedButton()
     {
-        return this.selectedButtonProperty.getValue();
+        return this.getSelectedButtonProperty().getValue();
     }
 
     public ImmutableList<GuiToggleButtonBase> getButtonList()
     {
-        return this.buttonListProperty.getValue();
+        return this.getButtonListProperty().getValue();
     }
 
     public void addButton(final GuiToggleButtonBase button)
     {
-        if (!this.buttonListProperty.contains(button))
-            this.buttonListProperty.add(button);
+        if (!this.getButtonListProperty().contains(button))
+            this.getButtonListProperty().add(button);
     }
 
     public boolean allowNothing()

@@ -23,7 +23,7 @@ public class GuiFather extends GuiNode
 
     public ImmutableList<GuiNode> getChildrens()
     {
-        return this.childrensProperty.getValue();
+        return this.getChildrensProperty().getValue();
     }
 
     protected BaseListProperty<GuiNode> getChildrensProperty()

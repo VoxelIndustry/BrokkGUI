@@ -86,17 +86,17 @@ public class GuiListCell<T> extends GuiLabeled
 
     public T getItem()
     {
-        return this.itemProperty.getValue();
+        return this.getItemProperty().getValue();
     }
 
     public void setItem(final T item)
     {
-        this.itemProperty.setValue(item);
+        this.getItemProperty().setValue(item);
     }
 
     public GuiNode getGraphic()
     {
-        return this.graphicProperty.getValue();
+        return this.getGraphicProperty().getValue();
     }
 
     public void setGraphic(final GuiNode graphic)
@@ -113,7 +113,7 @@ public class GuiListCell<T> extends GuiLabeled
             this.getGraphic().getWidthProperty().unbind();
             this.getGraphic().getHeightProperty().unbind();
         }
-        this.graphicProperty.setValue(graphic);
+        this.getGraphicProperty().setValue(graphic);
         if (this.getGraphic() != null)
         {
             this.getGraphic().getxPosProperty().bind(this.getxPosProperty());

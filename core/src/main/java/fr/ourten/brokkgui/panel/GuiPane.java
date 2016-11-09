@@ -90,22 +90,22 @@ public class GuiPane extends GuiFather
 
     public int getBorderThin()
     {
-        return this.borderThinProperty.getValue();
+        return this.getBorderThinProperty().getValue();
     }
 
     public void setBorderThin(final int thinness)
     {
-        this.borderThinProperty.setValue(thinness);
+        this.getBorderThinProperty().setValue(thinness);
     }
 
     public Color getBorderColor()
     {
-        return this.borderColorProperty.getValue();
+        return this.getBorderColorProperty().getValue();
     }
 
     public void setBorderColor(final Color color)
     {
-        this.borderColorProperty.setValue(color);
+        this.getBorderColorProperty().setValue(color);
     }
 
     public EOverflowPolicy getOverflowPolicy()

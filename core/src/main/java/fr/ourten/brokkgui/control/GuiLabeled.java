@@ -46,41 +46,41 @@ public abstract class GuiLabeled extends GuiControl
 
     public EAlignment getTextAlignment()
     {
-        return this.textAlignmentProperty.getValue();
+        return this.getTextAlignmentProperty().getValue();
     }
 
     public void setTextAlignment(final EAlignment alignment)
     {
-        this.textAlignmentProperty.setValue(alignment);
+        this.getTextAlignmentProperty().setValue(alignment);
     }
 
     public String getText()
     {
-        return this.textProperty.getValue();
+        return this.getTextProperty().getValue();
     }
 
     public void setText(final String text)
     {
-        this.textProperty.setValue(text);
+        this.getTextProperty().setValue(text);
     }
 
     public boolean isWrapText()
     {
-        return this.wrapTextProperty.getValue();
+        return this.getWrapTextProperty().getValue();
     }
 
     public void setWrapText(final boolean wrapText)
     {
-        this.wrapTextProperty.setValue(wrapText);
+        this.getWrapTextProperty().setValue(wrapText);
     }
 
     public Color getTextColor()
     {
-        return this.textColorProperty.getValue();
+        return this.getTextColorProperty().getValue();
     }
 
     public void setTextColor(final Color textColor)
     {
-        this.textColorProperty.setValue(textColor);
+        this.getTextColorProperty().setValue(textColor);
     }
 }

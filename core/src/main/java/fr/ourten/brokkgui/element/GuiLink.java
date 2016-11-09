@@ -44,11 +44,11 @@ public class GuiLink extends GuiLabeled
 
     public String getUrl()
     {
-        return this.urlProperty.getValue();
+        return this.getUrlProperty().getValue();
     }
 
     public void setUrl(final String URL)
     {
-        this.urlProperty.setValue(URL);
+        this.getUrlProperty().setValue(URL);
     }
 }

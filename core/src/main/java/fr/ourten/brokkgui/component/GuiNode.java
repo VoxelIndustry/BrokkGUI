@@ -119,12 +119,12 @@ public abstract class GuiNode implements IGuiEventEmitter
 
     public float getzLevel()
     {
-        return this.zLevelProperty.getValue();
+        return this.getzLevelProperty().getValue();
     }
 
     public void setzLevel(final float zLevel)
     {
-        this.zLevelProperty.setValue(zLevel);
+        this.getzLevelProperty().setValue(zLevel);
     }
 
     public BaseProperty<Float> getxPosProperty()
@@ -173,7 +173,7 @@ public abstract class GuiNode implements IGuiEventEmitter
      */
     public float getxPos()
     {
-        return this.xPosProperty.getValue();
+        return this.getxPosProperty().getValue();
     }
 
     /**
@@ -182,7 +182,7 @@ public abstract class GuiNode implements IGuiEventEmitter
      */
     public float getyPos()
     {
-        return this.yPosProperty.getValue();
+        return this.getyPosProperty().getValue();
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class GuiNode implements IGuiEventEmitter
      */
     public float getxTranslate()
     {
-        return this.xTranslateProperty.getValue();
+        return this.getxTranslateProperty().getValue();
     }
 
     /**
@@ -201,7 +201,7 @@ public abstract class GuiNode implements IGuiEventEmitter
      */
     public void setxTranslate(final float xTranslate)
     {
-        this.xTranslateProperty.setValue(xTranslate);
+        this.getxTranslateProperty().setValue(xTranslate);
     }
 
     /**
@@ -209,7 +209,7 @@ public abstract class GuiNode implements IGuiEventEmitter
      */
     public float getyTranslate()
     {
-        return this.yTranslateProperty.getValue();
+        return this.getyTranslateProperty().getValue();
     }
 
     /**
@@ -220,36 +220,36 @@ public abstract class GuiNode implements IGuiEventEmitter
      */
     public void setyTranslate(final float yTranslate)
     {
-        this.yTranslateProperty.setValue(yTranslate);
+        this.getyTranslateProperty().setValue(yTranslate);
     }
 
     public float getWidth()
     {
-        return this.widthProperty.getValue();
+        return this.getWidthProperty().getValue();
     }
 
     public void setWidth(final float width)
     {
-        if (this.widthProperty.isBound())
-            this.widthProperty.unbind();
-        this.widthProperty.setValue(width);
+        if (this.getWidthProperty().isBound())
+            this.getWidthProperty().unbind();
+        this.getWidthProperty().setValue(width);
     }
 
     public float getHeight()
     {
-        return this.heightProperty.getValue();
+        return this.getHeightProperty().getValue();
     }
 
     public void setHeight(final float height)
     {
-        if (this.heightProperty.isBound())
-            this.heightProperty.unbind();
-        this.heightProperty.setValue(height);
+        if (this.getHeightProperty().isBound())
+            this.getHeightProperty().unbind();
+        this.getHeightProperty().setValue(height);
     }
 
     public float getWidthRatio()
     {
-        return this.widthRatioProperty.getValue();
+        return this.getWidthRatioProperty().getValue();
     }
 
     /**
@@ -261,15 +261,15 @@ public abstract class GuiNode implements IGuiEventEmitter
     public void setWidthRatio(final float ratio)
     {
         if (ratio == -1)
-            this.widthProperty.unbind();
-        else if (!this.widthProperty.isBound() && this.getFather() != null)
-            RelativeBindingHelper.bindWidthRelative(this, this.getFather(), this.widthRatioProperty);
-        this.widthRatioProperty.setValue(ratio);
+            this.getWidthProperty().unbind();
+        else if (!this.getWidthProperty().isBound() && this.getFather() != null)
+            RelativeBindingHelper.bindWidthRelative(this, this.getFather(), this.getWidthRatioProperty());
+        this.getWidthRatioProperty().setValue(ratio);
     }
 
     public float getHeightRatio()
     {
-        return this.heightRatioProperty.getValue();
+        return this.getHeightRatioProperty().getValue();
     }
 
     /**
@@ -282,10 +282,10 @@ public abstract class GuiNode implements IGuiEventEmitter
     public void setHeightRatio(final float ratio)
     {
         if (ratio == -1)
-            this.heightProperty.unbind();
-        else if (!this.heightProperty.isBound() && this.getFather() != null)
-            RelativeBindingHelper.bindHeightRelative(this, this.getFather(), this.heightRatioProperty);
-        this.heightRatioProperty.setValue(ratio);
+            this.getHeightProperty().unbind();
+        else if (!this.getHeightProperty().isBound() && this.getFather() != null)
+            RelativeBindingHelper.bindHeightRelative(this, this.getFather(), this.getHeightRatioProperty());
+        this.getHeightRatioProperty().setValue(ratio);
     }
 
     public BaseProperty<GuiFather> getFatherProperty()
@@ -295,7 +295,7 @@ public abstract class GuiNode implements IGuiEventEmitter
 
     public GuiFather getFather()
     {
-        return this.fatherProperty.getValue();
+        return this.getFatherProperty().getValue();
     }
 
     /**
@@ -306,15 +306,15 @@ public abstract class GuiNode implements IGuiEventEmitter
      */
     public void setFather(final GuiFather father)
     {
-        if (this.heightProperty.isBound())
-            this.heightProperty.unbind();
-        if (this.widthProperty.isBound())
-            this.widthProperty.unbind();
-        this.fatherProperty.setValue(father);
+        if (this.getHeightProperty().isBound())
+            this.getHeightProperty().unbind();
+        if (this.getWidthProperty().isBound())
+            this.getWidthProperty().unbind();
+        this.getFatherProperty().setValue(father);
         if (father != null && this.getWidthRatio() != -1)
-            RelativeBindingHelper.bindWidthRelative(this, father, this.widthRatioProperty);
+            RelativeBindingHelper.bindWidthRelative(this, father, this.getWidthRatioProperty());
         if (father != null && this.getHeightRatio() != -1)
-            RelativeBindingHelper.bindHeightRelative(this, father, this.heightRatioProperty);
+            RelativeBindingHelper.bindHeightRelative(this, father, this.getHeightRatioProperty());
     }
 
     public BaseProperty<Boolean> getFocusedProperty()
@@ -339,7 +339,7 @@ public abstract class GuiNode implements IGuiEventEmitter
 
     public boolean isFocused()
     {
-        return this.focusedProperty.getValue();
+        return this.getFocusableProperty().getValue();
     }
 
     public void setFocused(final boolean focused)
@@ -353,39 +353,39 @@ public abstract class GuiNode implements IGuiEventEmitter
 
     public void internalSetFocused(final boolean focused)
     {
-        this.focusedProperty.setValue(focused);
+        this.getFocusedProperty().setValue(focused);
         this.getEventDispatcher().dispatchEvent(FocusEvent.TYPE, new FocusEvent(this, focused));
     }
 
     public boolean isFocusable()
     {
-        return this.focusableProperty.getValue();
+        return this.getFocusedProperty().getValue();
     }
 
     public void setFocusable(final boolean focusable)
     {
-        this.focusableProperty.setValue(focusable);
+        this.getFocusedProperty().setValue(focusable);
     }
 
     public boolean isDisabled()
     {
-        return this.disabledProperty.getValue();
+        return this.getDisabledProperty().getValue();
     }
 
     public void setDisabled(final boolean disable)
     {
-        this.disabledProperty.setValue(disable);
+        this.getDisabledProperty().setValue(disable);
         this.getEventDispatcher().dispatchEvent(DisableEvent.TYPE, new DisableEvent(this, disable));
     }
 
     public boolean isHovered()
     {
-        return this.hoveredProperty.getValue();
+        return this.getHoveredProperty().getValue();
     }
 
     public void setHovered(final boolean hovered)
     {
-        this.hoveredProperty.setValue(hovered);
+        this.getHoveredProperty().setValue(hovered);
         this.getEventDispatcher().dispatchEvent(HoverEvent.TYPE, new HoverEvent(this, hovered));
     }
 

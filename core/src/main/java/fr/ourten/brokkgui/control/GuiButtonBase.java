@@ -28,12 +28,12 @@ public abstract class GuiButtonBase extends GuiLabeled
 
     public boolean isActivated()
     {
-        return this.activatedProperty.getValue();
+        return this.getActivatedProperty().getValue();
     }
 
     public void setActivated(final boolean activated)
     {
-        this.activatedProperty.setValue(activated);
+        this.getActivatedProperty().setValue(activated);
         this.getEventDispatcher().dispatchEvent(ActionEvent.TYPE, new ActionEvent(this));
     }
 

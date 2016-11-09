@@ -58,17 +58,17 @@ public class GuiTab
 
     public String getText()
     {
-        return this.textProperty.getValue();
+        return this.getTextProperty().getValue();
     }
 
     public void setText(final String text)
     {
-        this.textProperty.setValue(text);
+        this.getTextProperty().setValue(text);
     }
 
     public GuiNode getContent()
     {
-        return this.contentProperty.getValue();
+        return this.getContentProperty().getValue();
     }
 
     public void setContent(final GuiNode content)
@@ -77,12 +77,12 @@ public class GuiTab
             this.setupContent(this.getTabPane(), content);
         if (this.getContent() != null)
             this.disposeContent();
-        this.contentProperty.setValue(content);
+        this.getContentProperty().setValue(content);
     }
 
     public GuiTabPane getTabPane()
     {
-        return this.tabPaneProperty.getValue();
+        return this.getTabPaneProperty().getValue();
     }
 
     public void setTabPane(final GuiTabPane tabPane)
@@ -91,7 +91,7 @@ public class GuiTab
             this.setupContent(tabPane, this.getContent());
         else if (this.getContent() != null && tabPane == null)
             this.disposeContent();
-        this.tabPaneProperty.setValue(tabPane);
+        this.getTabPaneProperty().setValue(tabPane);
     }
 
     private void setupContent(final GuiTabPane pane, final GuiNode content)
@@ -138,12 +138,12 @@ public class GuiTab
 
     public boolean isSelected()
     {
-        return this.selectedProperty.getValue();
+        return this.getSelectedProperty().getValue();
     }
 
     public void setSelected(final boolean selected)
     {
-        this.selectedProperty.setValue(selected);
+        this.getSelectedProperty().setValue(selected);
     }
 
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)

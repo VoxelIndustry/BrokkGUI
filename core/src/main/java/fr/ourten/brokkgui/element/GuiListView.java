@@ -98,60 +98,60 @@ public class GuiListView<T> extends GuiControl
 
     public ImmutableList<T> getElements()
     {
-        return this.elementsProperty.getValue();
+        return this.getElementsProperty().getValue();
     }
 
     public void setElements(final List<T> elements)
     {
-        this.elementsProperty.clear();
-        this.elementsProperty.addAll(elements);
+        this.getElementsProperty().clear();
+        this.getElementsProperty().addAll(elements);
     }
 
     public boolean isEditable()
     {
-        return this.editableProperty.getValue();
+        return this.getEditableProperty().getValue();
     }
 
     public void setEditable(final boolean editable)
     {
-        this.editableProperty.setValue(editable);
+        this.getEditableProperty().setValue(editable);
     }
 
     public GuiNode getPlaceholder()
     {
-        return this.placeholderProperty.getValue();
+        return this.getPlaceholderProperty().getValue();
     }
 
     public void setPlaceholder(final GuiNode placeholder)
     {
-        this.placeholderProperty.setValue(placeholder);
+        this.getPlaceholderProperty().setValue(placeholder);
     }
 
     public EOrientation getOrientation()
     {
-        return this.orientationProperty.getValue();
+        return this.getOrientationProperty().getValue();
     }
 
     public void setOrientation(final EOrientation orientation)
     {
-        this.orientationProperty.setValue(orientation);
+        this.getOrientationProperty().setValue(orientation);
     }
 
     public boolean isEmpty()
     {
-        return this.elementsProperty.getValue().isEmpty();
+        return this.getElementsProperty().getValue().isEmpty();
     }
 
     public void setCellFactory(final Function<T, ? extends GuiListCell<T>> cellFactory)
     {
-        this.cellFactoryProperty.setValue(cellFactory);
+        this.getCellFactoryProperty().setValue(cellFactory);
     }
 
     public Function<T, ? extends GuiListCell<T>> getCellFactory()
     {
-        if (this.cellFactoryProperty.getValue() == null)
+        if (this.getCellFactoryProperty().getValue() == null)
             this.setCellFactory(this.getDefaultCellFactory());
-        return this.cellFactoryProperty.getValue();
+        return this.getCellFactoryProperty().getValue();
     }
 
     private Function<T, ? extends GuiListCell<T>> getDefaultCellFactory()
@@ -181,31 +181,31 @@ public class GuiListView<T> extends GuiControl
 
     public float getCellWidth()
     {
-        return this.cellWidthProperty.getValue();
+        return this.getCellWidthProperty().getValue();
     }
 
     public void setCellWidth(final float cellWidth)
     {
-        this.cellWidthProperty.setValue(cellWidth);
+        this.getCellWidthProperty().setValue(cellWidth);
     }
 
     public float getCellHeight()
     {
-        return this.cellHeightProperty.getValue();
+        return this.getCellHeightProperty().getValue();
     }
 
     public void setCellHeight(final float cellHeight)
     {
-        this.cellHeightProperty.setValue(cellHeight);
+        this.getCellHeightProperty().setValue(cellHeight);
     }
 
     public int getSelectedCellIndex()
     {
-        return this.selectedCellIndexProperty.getValue();
+        return this.getSelectedCellIndexProperty().getValue();
     }
 
     public void setSelectedCellIndex(final int selectedCell)
     {
-        this.selectedCellIndexProperty.setValue(selectedCell);
+        this.getSelectedCellIndexProperty().setValue(selectedCell);
     }
 }

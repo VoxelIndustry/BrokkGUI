@@ -81,8 +81,8 @@ public class BrokkGuiScreen implements IGuiWindow
             public Float computeValue()
             {
                 return BrokkGuiScreen.this.getScreenWidthProperty().getValue()
-                        / (1 / BrokkGuiScreen.this.xRelativePosProperty.getValue())
-                        - BrokkGuiScreen.this.widthProperty.getValue() / 2;
+                        / (1 / BrokkGuiScreen.this.getxRelativePosProperty().getValue())
+                        - BrokkGuiScreen.this.getWidthProperty().getValue() / 2;
             }
         });
         this.yPosProperty.bind(new BaseBinding<Float>()
@@ -97,8 +97,8 @@ public class BrokkGuiScreen implements IGuiWindow
             public Float computeValue()
             {
                 return BrokkGuiScreen.this.getScreenHeightProperty().getValue()
-                        / (1 / BrokkGuiScreen.this.yRelativePosProperty.getValue())
-                        - BrokkGuiScreen.this.heightProperty.getValue() / 2;
+                        / (1 / BrokkGuiScreen.this.getyRelativePosProperty().getValue())
+                        - BrokkGuiScreen.this.getHeightProperty().getValue() / 2;
             }
         });
     }
@@ -255,62 +255,62 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public float getWidth()
     {
-        return this.widthProperty.getValue();
+        return this.getWidthProperty().getValue();
     }
 
     public float getHeight()
     {
-        return this.heightProperty.getValue();
+        return this.getHeightProperty().getValue();
     }
 
     public void setWidth(final float width)
     {
-        this.widthProperty.setValue(width);
+        this.getWidthProperty().setValue(width);
     }
 
     public void setHeight(final float height)
     {
-        this.heightProperty.setValue(height);
+        this.getHeightProperty().setValue(height);
     }
 
     public float getxPos()
     {
-        return this.xPosProperty.getValue();
+        return this.getxPosProperty().getValue();
     }
 
     public void setxPos(final float xPos)
     {
-        this.xPosProperty.setValue(xPos);
+        this.getxPosProperty().setValue(xPos);
     }
 
     public float getyPos()
     {
-        return this.yPosProperty.getValue();
+        return this.getyPosProperty().getValue();
     }
 
     public void setyPos(final float yPos)
     {
-        this.yPosProperty.setValue(yPos);
+        this.getyPosProperty().setValue(yPos);
     }
 
     public float getxRelativePos()
     {
-        return this.xRelativePosProperty.getValue();
+        return this.getxRelativePosProperty().getValue();
     }
 
     public void setxRelativePos(final float xRelativePos)
     {
-        this.xRelativePosProperty.setValue(xRelativePos);
+        this.getxRelativePosProperty().setValue(xRelativePos);
     }
 
     public float getyRelativePos()
     {
-        return this.yRelativePosProperty.getValue();
+        return this.getyRelativePosProperty().getValue();
     }
 
     public void setyRelativePos(final float yRelativePos)
     {
-        this.yRelativePosProperty.setValue(yRelativePos);
+        this.getyRelativePosProperty().setValue(yRelativePos);
     }
 
     public BaseProperty<Integer> getScreenWidthProperty()
