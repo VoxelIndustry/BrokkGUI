@@ -4,13 +4,13 @@ import fr.ourten.brokkgui.behavior.GuiScrollPaneBehavior;
 import fr.ourten.brokkgui.component.GuiNode;
 import fr.ourten.brokkgui.control.GuiControl;
 import fr.ourten.brokkgui.data.RelativeBindingHelper;
-import fr.ourten.brokkgui.event.EventHandler;
 import fr.ourten.brokkgui.event.ScrollEvent;
 import fr.ourten.brokkgui.paint.Color;
 import fr.ourten.brokkgui.policy.EOverflowPolicy;
 import fr.ourten.brokkgui.policy.EScrollbarPolicy;
 import fr.ourten.brokkgui.skin.GuiScrollPaneSkin;
 import fr.ourten.brokkgui.skin.GuiSkinBase;
+import fr.ourten.hermod.EventHandler;
 import fr.ourten.teabeans.value.BaseProperty;
 
 /**

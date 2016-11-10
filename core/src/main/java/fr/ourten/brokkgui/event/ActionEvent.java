@@ -1,6 +1,7 @@
 package fr.ourten.brokkgui.event;
 
 import fr.ourten.brokkgui.control.GuiButtonBase;
+import fr.ourten.hermod.EventType;
 
 public class ActionEvent extends GuiInputEvent
 {

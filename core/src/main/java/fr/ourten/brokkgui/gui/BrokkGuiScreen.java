@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import com.google.common.collect.Lists;
 
 import fr.ourten.brokkgui.GuiFocusManager;
-import fr.ourten.brokkgui.event.EventDispatcher;
-import fr.ourten.brokkgui.event.EventHandler;
 import fr.ourten.brokkgui.event.WindowEvent;
 import fr.ourten.brokkgui.internal.IBrokkGuiImpl;
 import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.Color;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
 import fr.ourten.brokkgui.panel.GuiPane;
+import fr.ourten.hermod.EventDispatcher;
+import fr.ourten.hermod.EventHandler;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 
@@ -69,13 +69,13 @@ public class BrokkGuiScreen implements IGuiWindow
 
         this.renderer = wrapper.getRenderer();
 
-        this.xPosProperty.bind(new BaseExpression<Float>(() ->
+        this.xPosProperty.bind(new BaseExpression<>(() ->
         {
             return BrokkGuiScreen.this.getScreenWidth() / (1 / BrokkGuiScreen.this.getxRelativePos())
                     - BrokkGuiScreen.this.getWidth() / 2;
         }, this.getScreenWidthProperty(), this.getxRelativePosProperty(), this.getWidthProperty()));
 
-        this.yPosProperty.bind(new BaseExpression<Float>(() ->
+        this.yPosProperty.bind(new BaseExpression<>(() ->
         {
             return BrokkGuiScreen.this.getScreenHeight() / (1 / BrokkGuiScreen.this.getyRelativePos())
                     - BrokkGuiScreen.this.getHeight() / 2;

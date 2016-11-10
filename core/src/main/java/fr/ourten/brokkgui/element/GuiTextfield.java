@@ -6,11 +6,11 @@ import fr.ourten.brokkgui.behavior.GuiTextfieldBehavior;
 import fr.ourten.brokkgui.behavior.ITextInput;
 import fr.ourten.brokkgui.control.GuiControl;
 import fr.ourten.brokkgui.event.CursorMoveEvent;
-import fr.ourten.brokkgui.event.EventHandler;
 import fr.ourten.brokkgui.event.TextTypedEvent;
 import fr.ourten.brokkgui.skin.GuiSkinBase;
 import fr.ourten.brokkgui.skin.GuiTextfieldSkin;
 import fr.ourten.brokkgui.validation.BaseTextValidator;
+import fr.ourten.hermod.EventHandler;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
 

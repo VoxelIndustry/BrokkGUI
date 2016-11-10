@@ -1,8 +1,10 @@
 package fr.ourten.brokkgui.event;
 
 import fr.ourten.brokkgui.gui.IGuiWindow;
+import fr.ourten.hermod.EventType;
+import fr.ourten.hermod.HermodEvent;
 
-public class WindowEvent extends BrokkGuiEvent
+public class WindowEvent extends HermodEvent
 {
     public static final EventType<WindowEvent>       ANY   = new EventType<>("WINDOW_EVENT");
     public static final EventType<WindowEvent.Close> CLOSE = new EventType<>(WindowEvent.ANY, "WINDOW_CLOSE_EVENT");

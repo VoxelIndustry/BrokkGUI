@@ -1,14 +1,14 @@
 package fr.ourten.brokkgui.wrapper.event;
 
-import fr.ourten.brokkgui.event.BrokkGuiEvent;
-import fr.ourten.brokkgui.event.EventType;
 import fr.ourten.brokkgui.wrapper.container.BrokkGuiContainer;
+import fr.ourten.hermod.EventType;
+import fr.ourten.hermod.HermodEvent;
 import net.minecraft.inventory.Slot;
 
 /**
  * @author Ourten 31 oct. 2016
  */
-public class SlotEvent extends BrokkGuiEvent
+public class SlotEvent extends HermodEvent
 {
     public static final EventType<SlotEvent>       ANY   = new EventType<>("SLOT_EVENT");
     public static final EventType<SlotEvent.Click> CLICK = new EventType<>(SlotEvent.ANY, "SLOT_CLICK_EVENT");

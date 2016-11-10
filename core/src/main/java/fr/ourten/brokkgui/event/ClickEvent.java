@@ -1,6 +1,7 @@
 package fr.ourten.brokkgui.event;
 
 import fr.ourten.brokkgui.component.GuiNode;
+import fr.ourten.hermod.EventType;
 
 public class ClickEvent extends GuiMouseEvent
 {
@@ -30,7 +31,7 @@ public class ClickEvent extends GuiMouseEvent
         public static final EventType<ClickEvent.Left> TYPE = new EventType<>(ClickEvent.TYPE,
                 "MOUSE_LEFT_CLICK_EVENT");
 
-        public Left(GuiNode source, int mouseX, int mouseY)
+        public Left(final GuiNode source, final int mouseX, final int mouseY)
         {
             super(source, mouseX, mouseY, 0);
         }
@@ -41,7 +42,7 @@ public class ClickEvent extends GuiMouseEvent
         public static final EventType<ClickEvent.Right> TYPE = new EventType<>(ClickEvent.TYPE,
                 "MOUSE_RIGHT_CLICK_EVENT");
 
-        public Right(GuiNode source, int mouseX, int mouseY)
+        public Right(final GuiNode source, final int mouseX, final int mouseY)
         {
             super(source, mouseX, mouseY, 1);
         }
@@ -52,7 +53,7 @@ public class ClickEvent extends GuiMouseEvent
         public static final EventType<ClickEvent.Middle> TYPE = new EventType<>(ClickEvent.TYPE,
                 "MOUSE_MIDDLE_CLICK_EVENT");
 
-        public Middle(GuiNode source, int mouseX, int mouseY)
+        public Middle(final GuiNode source, final int mouseX, final int mouseY)
         {
             super(source, mouseX, mouseY, 2);
         }

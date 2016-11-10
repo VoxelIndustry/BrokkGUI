@@ -1,6 +1,7 @@
 package fr.ourten.brokkgui.event;
 
 import fr.ourten.brokkgui.component.GuiNode;
+import fr.ourten.hermod.EventType;
 
 /**
  * @author Ourten 9 oct. 2016

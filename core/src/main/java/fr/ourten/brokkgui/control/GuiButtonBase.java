@@ -1,7 +1,7 @@
 package fr.ourten.brokkgui.control;
 
 import fr.ourten.brokkgui.event.ActionEvent;
-import fr.ourten.brokkgui.event.EventHandler;
+import fr.ourten.hermod.EventHandler;
 import fr.ourten.teabeans.value.BaseProperty;
 
 public abstract class GuiButtonBase extends GuiLabeled

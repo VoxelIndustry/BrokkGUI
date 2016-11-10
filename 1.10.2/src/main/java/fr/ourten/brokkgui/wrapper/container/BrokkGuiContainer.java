@@ -1,8 +1,8 @@
 package fr.ourten.brokkgui.wrapper.container;
 
-import fr.ourten.brokkgui.event.EventHandler;
 import fr.ourten.brokkgui.gui.BrokkGuiScreen;
 import fr.ourten.brokkgui.wrapper.event.SlotEvent;
+import fr.ourten.hermod.EventHandler;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 

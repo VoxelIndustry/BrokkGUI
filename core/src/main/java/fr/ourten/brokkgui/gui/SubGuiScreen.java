@@ -1,10 +1,10 @@
 package fr.ourten.brokkgui.gui;
 
 import fr.ourten.brokkgui.control.GuiFather;
-import fr.ourten.brokkgui.event.EventHandler;
 import fr.ourten.brokkgui.event.WindowEvent;
 import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
+import fr.ourten.hermod.EventHandler;
 
 public class SubGuiScreen extends GuiFather implements IGuiWindow
 {
