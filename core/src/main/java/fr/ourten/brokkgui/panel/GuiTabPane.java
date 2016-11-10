@@ -62,38 +62,38 @@ public class GuiTabPane extends GuiControl
 
     public ImmutableList<GuiTab> getTabs()
     {
-        return this.tabsProperty.getValue();
+        return this.getTabsProperty().getValue();
     }
 
     public void addTab(final GuiTab tab)
     {
         this.setupTab(tab);
-        this.tabsProperty.add(tab);
+        this.getTabsProperty().add(tab);
     }
 
     public void addTab(final GuiTab tab, final int index)
     {
         this.setupTab(tab);
-        this.tabsProperty.add(index, tab);
+        this.getTabsProperty().add(index, tab);
     }
 
     public void addTabs(final GuiTab... tabs)
     {
         final List<GuiTab> tabsList = Arrays.asList(tabs);
         tabsList.forEach(this::setupTab);
-        this.tabsProperty.addAll(tabsList);
+        this.getTabsProperty().addAll(tabsList);
     }
 
     public void removeTab(final GuiTab tab)
     {
         this.disposeTab(tab);
-        this.tabsProperty.remove(tab);
+        this.getTabsProperty().remove(tab);
     }
 
     public GuiTab getTab(final int index)
     {
         if (index != -1 && index < this.getTabsProperty().size())
-            return this.tabsProperty.get(index);
+            return this.getTabsProperty().get(index);
         return null;
     }
 
@@ -109,7 +109,7 @@ public class GuiTabPane extends GuiControl
 
     public int getSelectedTabIndex()
     {
-        return this.selectedTabProperty.getValue();
+        return this.getSelectedTabProperty().getValue();
     }
 
     public GuiTab getSelectedTab()
@@ -126,7 +126,7 @@ public class GuiTabPane extends GuiControl
         this.getTabs().stream().filter(tab -> tab.isSelected()).forEach(tab -> tab.setSelected(false));
         if (this.getTab(index) != null)
             this.getTab(index).setSelected(true);
-        this.selectedTabProperty.setValue(index);
+        this.getSelectedTabProperty().setValue(index);
     }
 
     public void setSelectedTab(final GuiTab tab)
@@ -136,7 +136,7 @@ public class GuiTabPane extends GuiControl
 
     public int getDefaultTabIndex()
     {
-        return this.defaultTabProperty.getValue();
+        return this.getDefaultTabProperty().getValue();
     }
 
     public GuiTab getDefaultTab()
@@ -148,7 +148,7 @@ public class GuiTabPane extends GuiControl
 
     public void setDefaultTab(final int index)
     {
-        this.defaultTabProperty.setValue(index);
+        this.getDefaultTabProperty().setValue(index);
     }
 
     public void setDefaultTab(final GuiTab tab)
@@ -158,11 +158,11 @@ public class GuiTabPane extends GuiControl
 
     public ESide getTabSide()
     {
-        return this.sideProperty.getValue();
+        return this.getSideProperty().getValue();
     }
 
     public void setTabSide(final ESide side)
     {
-        this.sideProperty.setValue(side);
+        this.getSideProperty().setValue(side);
     }
 }

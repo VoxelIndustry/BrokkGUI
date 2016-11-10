@@ -6,6 +6,7 @@ import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
 import fr.ourten.brokkgui.panel.GuiTabPane;
 import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 
 /**
@@ -58,17 +59,17 @@ public class GuiTab
 
     public String getText()
     {
-        return this.textProperty.getValue();
+        return this.getTextProperty().getValue();
     }
 
     public void setText(final String text)
     {
-        this.textProperty.setValue(text);
+        this.getTextProperty().setValue(text);
     }
 
     public GuiNode getContent()
     {
-        return this.contentProperty.getValue();
+        return this.getContentProperty().getValue();
     }
 
     public void setContent(final GuiNode content)
@@ -77,12 +78,12 @@ public class GuiTab
             this.setupContent(this.getTabPane(), content);
         if (this.getContent() != null)
             this.disposeContent();
-        this.contentProperty.setValue(content);
+        this.getContentProperty().setValue(content);
     }
 
     public GuiTabPane getTabPane()
     {
-        return this.tabPaneProperty.getValue();
+        return this.getTabPaneProperty().getValue();
     }
 
     public void setTabPane(final GuiTabPane tabPane)
@@ -91,39 +92,24 @@ public class GuiTab
             this.setupContent(tabPane, this.getContent());
         else if (this.getContent() != null && tabPane == null)
             this.disposeContent();
-        this.tabPaneProperty.setValue(tabPane);
+        this.getTabPaneProperty().setValue(tabPane);
     }
 
     private void setupContent(final GuiTabPane pane, final GuiNode content)
     {
-        final BaseBinding<Float> xPadding = new BaseBinding<Float>()
+        final BaseBinding<Float> xPadding = new BaseExpression<Float>(() ->
         {
-            {
-                super.bind(pane.getSideProperty(), pane.getWidthProperty());
-            }
+            if (pane.getTabSide() == ESide.LEFT)
+                return (pane.getWidth() / 10) + 1;
+            return 1f;
+        }, pane.getSideProperty(), pane.getWidthProperty());
 
-            @Override
-            public Float computeValue()
-            {
-                if (pane.getTabSide() == ESide.LEFT)
-                    return (pane.getWidth() / 10) + 1;
-                return 1f;
-            }
-        };
-        final BaseBinding<Float> yPadding = new BaseBinding<Float>()
+        final BaseBinding<Float> yPadding = new BaseExpression<Float>(() ->
         {
-            {
-                super.bind(pane.getSideProperty(), pane.getHeightProperty());
-            }
-
-            @Override
-            public Float computeValue()
-            {
-                if (pane.getTabSide() == ESide.UP)
-                    return (pane.getHeight() / 10) + 1;
-                return 1f;
-            }
-        };
+            if (pane.getTabSide() == ESide.UP)
+                return (pane.getHeight() / 10) + 1;
+            return 1f;
+        }, pane.getSideProperty(), pane.getHeightProperty());
 
         this.getContent().setFather(pane);
         RelativeBindingHelper.bindToPos(content, pane, xPadding, yPadding);
@@ -138,12 +124,12 @@ public class GuiTab
 
     public boolean isSelected()
     {
-        return this.selectedProperty.getValue();
+        return this.getSelectedProperty().getValue();
     }
 
     public void setSelected(final boolean selected)
     {
-        this.selectedProperty.setValue(selected);
+        this.getSelectedProperty().setValue(selected);
     }
 
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)

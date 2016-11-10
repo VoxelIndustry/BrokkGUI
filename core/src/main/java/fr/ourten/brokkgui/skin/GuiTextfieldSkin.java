@@ -92,11 +92,11 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
 
     public Color getTextColor()
     {
-        return this.textColorProperty.getValue();
+        return this.getTextColorProperty().getValue();
     }
 
     public void setTextColor(final Color textColor)
     {
-        this.textColorProperty.setValue(textColor);
+        this.getTextColorProperty().setValue(textColor);
     }
 }

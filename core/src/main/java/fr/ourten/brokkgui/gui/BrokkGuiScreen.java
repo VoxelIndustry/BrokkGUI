@@ -13,7 +13,7 @@ import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.Color;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
 import fr.ourten.brokkgui.panel.GuiPane;
-import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 
 public class BrokkGuiScreen implements IGuiWindow
@@ -69,38 +69,18 @@ public class BrokkGuiScreen implements IGuiWindow
 
         this.renderer = wrapper.getRenderer();
 
-        this.xPosProperty.bind(new BaseBinding<Float>()
+        this.xPosProperty.bind(new BaseExpression<Float>(() ->
         {
-            {
-                super.bind(BrokkGuiScreen.this.getScreenWidthProperty());
-                super.bind(BrokkGuiScreen.this.xRelativePosProperty);
-                super.bind(BrokkGuiScreen.this.widthProperty);
-            }
+            return BrokkGuiScreen.this.getScreenWidth() / (1 / BrokkGuiScreen.this.getxRelativePos())
+                    - BrokkGuiScreen.this.getWidth() / 2;
+        }, this.getScreenWidthProperty(), this.getxRelativePosProperty(), this.getWidthProperty()));
 
-            @Override
-            public Float computeValue()
-            {
-                return BrokkGuiScreen.this.getScreenWidthProperty().getValue()
-                        / (1 / BrokkGuiScreen.this.xRelativePosProperty.getValue())
-                        - BrokkGuiScreen.this.widthProperty.getValue() / 2;
-            }
-        });
-        this.yPosProperty.bind(new BaseBinding<Float>()
+        this.yPosProperty.bind(new BaseExpression<Float>(() ->
         {
-            {
-                super.bind(BrokkGuiScreen.this.yRelativePosProperty);
-                super.bind(BrokkGuiScreen.this.getScreenHeightProperty());
-                super.bind(BrokkGuiScreen.this.heightProperty);
-            }
+            return BrokkGuiScreen.this.getScreenHeight() / (1 / BrokkGuiScreen.this.getyRelativePos())
+                    - BrokkGuiScreen.this.getHeight() / 2;
+        }, this.getyRelativePosProperty(), this.getScreenHeightProperty(), this.getHeightProperty()));
 
-            @Override
-            public Float computeValue()
-            {
-                return BrokkGuiScreen.this.getScreenHeightProperty().getValue()
-                        / (1 / BrokkGuiScreen.this.yRelativePosProperty.getValue())
-                        - BrokkGuiScreen.this.heightProperty.getValue() / 2;
-            }
-        });
     }
 
     public void render(final int mouseX, final int mouseY, final float partialTicks)
@@ -255,62 +235,62 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public float getWidth()
     {
-        return this.widthProperty.getValue();
+        return this.getWidthProperty().getValue();
     }
 
     public float getHeight()
     {
-        return this.heightProperty.getValue();
+        return this.getHeightProperty().getValue();
     }
 
     public void setWidth(final float width)
     {
-        this.widthProperty.setValue(width);
+        this.getWidthProperty().setValue(width);
     }
 
     public void setHeight(final float height)
     {
-        this.heightProperty.setValue(height);
+        this.getHeightProperty().setValue(height);
     }
 
     public float getxPos()
     {
-        return this.xPosProperty.getValue();
+        return this.getxPosProperty().getValue();
     }
 
     public void setxPos(final float xPos)
     {
-        this.xPosProperty.setValue(xPos);
+        this.getxPosProperty().setValue(xPos);
     }
 
     public float getyPos()
     {
-        return this.yPosProperty.getValue();
+        return this.getyPosProperty().getValue();
     }
 
     public void setyPos(final float yPos)
     {
-        this.yPosProperty.setValue(yPos);
+        this.getyPosProperty().setValue(yPos);
     }
 
     public float getxRelativePos()
     {
-        return this.xRelativePosProperty.getValue();
+        return this.getxRelativePosProperty().getValue();
     }
 
     public void setxRelativePos(final float xRelativePos)
     {
-        this.xRelativePosProperty.setValue(xRelativePos);
+        this.getxRelativePosProperty().setValue(xRelativePos);
     }
 
     public float getyRelativePos()
     {
-        return this.yRelativePosProperty.getValue();
+        return this.getyRelativePosProperty().getValue();
     }
 
     public void setyRelativePos(final float yRelativePos)
     {
-        this.yRelativePosProperty.setValue(yRelativePos);
+        this.getyRelativePosProperty().setValue(yRelativePos);
     }
 
     public BaseProperty<Integer> getScreenWidthProperty()
@@ -321,6 +301,16 @@ public class BrokkGuiScreen implements IGuiWindow
     public BaseProperty<Integer> getScreenHeightProperty()
     {
         return this.screenHeightProperty;
+    }
+
+    public int getScreenWidth()
+    {
+        return this.getScreenWidthProperty().getValue();
+    }
+
+    public int getScreenHeight()
+    {
+        return this.getScreenHeightProperty().getValue();
     }
 
     /////////////////////

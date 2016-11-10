@@ -72,31 +72,31 @@ public class GuiBehaviorSkinBase<C extends GuiControl, B extends GuiBehaviorBase
 
     public Background getBackground()
     {
-        return this.backgroundProperty.getValue();
+        return this.getBackgroundProperty().getValue();
     }
 
     public void setBackground(final Background background)
     {
-        this.backgroundProperty.setValue(background);
+        this.getBackgroundProperty().setValue(background);
     }
 
     public Background getHoveredBackground()
     {
-        return this.backgroundHoveredProperty.getValue();
+        return this.getBackgroundHoveredProperty().getValue();
     }
 
     public void setHoveredBackground(final Background background)
     {
-        this.backgroundHoveredProperty.setValue(background);
+        this.getBackgroundHoveredProperty().setValue(background);
     }
 
     public Background getDisabledBackground()
     {
-        return this.backgroundDisabledProperty.getValue();
+        return this.getBackgroundDisabledProperty().getValue();
     }
 
     public void setDisabledBackground(final Background background)
     {
-        this.backgroundDisabledProperty.setValue(background);
+        this.getBackgroundDisabledProperty().setValue(background);
     }
 }

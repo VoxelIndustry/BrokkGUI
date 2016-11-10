@@ -21,7 +21,7 @@ public abstract class GuiToggleButtonBase extends GuiButtonBase implements IGuiT
         if (!selected)
             if (this.getToggleGroup() == null || this.getToggleGroup().allowNothing()
                     || this.getToggleGroup().getSelectedButton() != this)
-                this.selectedProperty.setValue(false);
+                this.getSelectedProperty().setValue(false);
         if (selected)
             if (this.getToggleGroup() != null && this.getToggleGroup().getSelectedButton() != this)
             {
@@ -34,19 +34,19 @@ public abstract class GuiToggleButtonBase extends GuiButtonBase implements IGuiT
     @Override
     public boolean isSelected()
     {
-        return this.selectedProperty.getValue();
+        return this.getSelectedProperty().getValue();
     }
 
     public void setToggleGroup(final GuiToggleGroup group)
     {
-        this.toggleGroupProperty.setValue(group);
+        this.getToggleGroupProperty().setValue(group);
         group.addButton(this);
     }
 
     @Override
     public GuiToggleGroup getToggleGroup()
     {
-        return this.toggleGroupProperty.getValue();
+        return this.getToggleGroupProperty().getValue();
     }
 
     @Override

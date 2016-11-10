@@ -103,50 +103,50 @@ public class GuiTextfield extends GuiControl implements ITextInput
     @Override
     public String getText()
     {
-        return this.textProperty.getValue();
+        return this.getTextProperty().getValue();
     }
 
     @Override
     public void setText(final String text)
     {
-        this.textProperty.setValue(text);
+        this.getTextProperty().setValue(text);
     }
 
     public String getPromptText()
     {
-        return this.promptTextProperty.getValue();
+        return this.getPrompTextProperty().getValue();
     }
 
     public void setPromptText(final String text)
     {
-        this.promptTextProperty.setValue(text);
+        this.getPrompTextProperty().setValue(text);
     }
 
     @Override
     public boolean isEditable()
     {
-        return this.editableProperty.getValue();
+        return this.getEditableProperty().getValue();
     }
 
     @Override
     public void setEditable(final boolean editable)
     {
-        this.editableProperty.setValue(editable);
+        this.getEditableProperty().setValue(editable);
     }
 
     public ImmutableList<BaseTextValidator> getValidators()
     {
-        return this.validatorsProperty.getValue();
+        return this.getValidatorsProperty().getValue();
     }
 
     public void addValidator(final BaseTextValidator validator)
     {
-        this.validatorsProperty.add(validator);
+        this.getValidatorsProperty().add(validator);
     }
 
     public void removeValidator(final BaseTextValidator validator)
     {
-        this.validatorsProperty.remove(validator);
+        this.getValidatorsProperty().remove(validator);
     }
 
     @Override
@@ -165,17 +165,17 @@ public class GuiTextfield extends GuiControl implements ITextInput
 
     public boolean isValid()
     {
-        return this.validatedProperty.getValue();
+        return this.getValidatedProperty().getValue();
     }
 
     public void setValid(final boolean valid)
     {
-        this.validatedProperty.setValue(valid);
+        this.getValidatedProperty().setValue(valid);
     }
 
     public int getMaxTextLength()
     {
-        return this.maxTextLengthProperty.getValue();
+        return this.getMaxTextLengthProperty().getValue();
     }
 
     /**
@@ -186,27 +186,27 @@ public class GuiTextfield extends GuiControl implements ITextInput
      */
     public void setMaxTextLength(final int length)
     {
-        this.maxTextLengthProperty.setValue(length);
+        this.getMaxTextLengthProperty().setValue(length);
     }
 
     public int getCursorPosition()
     {
-        return this.cursorPositionProperty.getValue();
+        return this.getCursorPositionProperty().getValue();
     }
 
     public void setCursorPosition(final int cursorPos)
     {
-        this.cursorPositionProperty.setValue(cursorPos);
+        this.getCursorPositionProperty().setValue(cursorPos);
     }
 
     public boolean isPromptTextAlwaysDisplayed()
     {
-        return this.promptTextAlwaysDisplayedProperty.getValue();
+        return this.getPromptTextAlwaysDisplayedProperty().getValue();
     }
 
     public void setPromptTextAlwaysDisplayed(final boolean always)
     {
-        this.promptTextAlwaysDisplayedProperty.setValue(always);
+        this.getPromptTextAlwaysDisplayedProperty().setValue(always);
     }
 
     ////////////

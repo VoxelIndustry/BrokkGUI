@@ -34,31 +34,31 @@ public abstract class GuiShape extends GuiNode
 
     public Color getColor()
     {
-        return this.colorProperty.getValue();
+        return this.getColorProperty().getValue();
     }
 
     public void setColor(final Color color)
     {
-        this.colorProperty.setValue(color);
+        this.getColorProperty().setValue(color);
     }
 
     public float getLineWeight()
     {
-        return this.lineWeightProperty.getValue();
+        return this.getLineWeightProperty().getValue();
     }
 
     public void setLineWeight(final float lineWeight)
     {
-        this.lineWeightProperty.setValue(lineWeight);
+        this.getLineWeightProperty().setValue(lineWeight);
     }
 
     public Color getLineColor()
     {
-        return this.lineColorProperty.getValue();
+        return this.getLineColorProperty().getValue();
     }
 
     public void setLineColor(final Color lineColor)
     {
-        this.lineColorProperty.setValue(lineColor);
+        this.getLineColorProperty().setValue(lineColor);
     }
 }

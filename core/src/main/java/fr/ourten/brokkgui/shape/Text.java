@@ -73,51 +73,51 @@ public class Text extends GuiShape
 
     public String getText()
     {
-        return this.textProperty.getValue();
+        return this.getTextProperty().getValue();
     }
 
     public void setText(final String text)
     {
-        this.textProperty.setValue(text);
+        this.getTextProperty().setValue(text);
     }
 
     public int getLineSpacing()
     {
-        return this.lineSpacingProperty.getValue();
+        return this.getLineSpacingProperty().getValue();
     }
 
     public void setLineSpacing(final int lineSpacing)
     {
-        this.lineSpacingProperty.setValue(lineSpacing);
+        this.getLineSpacingProperty().setValue(lineSpacing);
     }
 
     public EAlignment getTextAlignment()
     {
-        return this.textAlignmentProperty.getValue();
+        return this.getTextAlignmentProperty().getValue();
     }
 
     public void setTextAlignment(final EAlignment textAlignment)
     {
-        this.textAlignmentProperty.setValue(textAlignment);
+        this.getTextAlignmentProperty().setValue(textAlignment);
     }
 
     public boolean hasShadow()
     {
-        return this.shadowProperty.getValue();
+        return this.getShadowProperty().getValue();
     }
 
     public void setShadow(final boolean hasShadow)
     {
-        this.shadowProperty.setValue(hasShadow);
+        this.getShadowProperty().setValue(hasShadow);
     }
 
     public boolean wrapText()
     {
-        return this.wrapTextProperty.getValue();
+        return this.getWrapTextProperty().getValue();
     }
 
     public void setWrapText(final boolean wrapText)
     {
-        this.wrapTextProperty.setValue(wrapText);
+        this.getWrapTextProperty().setValue(wrapText);
     }
 }

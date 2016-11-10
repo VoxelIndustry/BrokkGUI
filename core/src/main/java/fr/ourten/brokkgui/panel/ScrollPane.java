@@ -107,32 +107,32 @@ public class ScrollPane extends GuiControl
 
     public float getScrollX()
     {
-        return this.scrollXProperty.getValue();
+        return this.getScrollXProperty().getValue();
     }
 
     public void setScrollX(final float scrollX)
     {
-        this.scrollXProperty.setValue(scrollX);
+        this.getScrollXProperty().setValue(scrollX);
     }
 
     public float getScrollY()
     {
-        return this.scrollYProperty.getValue();
+        return this.getScrollYProperty().getValue();
     }
 
     public void setScrollY(final float scrollY)
     {
-        this.scrollYProperty.setValue(scrollY);
+        this.getScrollYProperty().setValue(scrollY);
     }
 
     public float getTrueWidth()
     {
-        return this.trueWidthProperty.getValue();
+        return this.getTrueWidthProperty().getValue();
     }
 
     public float getTrueHeight()
     {
-        return this.trueHeightProperty.getValue();
+        return this.getTrueHeightProperty().getValue();
     }
 
     public EScrollbarPolicy getScrollXPolicy()
@@ -157,12 +157,12 @@ public class ScrollPane extends GuiControl
 
     public Color getScrollbarColor()
     {
-        return this.scrollbarColorProperty.getValue();
+        return this.getScrollbarColorProperty().getValue();
     }
 
     public void setScrollbarColor(final Color color)
     {
-        this.scrollbarColorProperty.setValue(color);
+        this.getScrollbarColorProperty().setValue(color);
     }
 
     /**
@@ -172,12 +172,12 @@ public class ScrollPane extends GuiControl
      */
     public float getScrollSpeed()
     {
-        return this.scrollSpeedProperty.getValue();
+        return this.getScrollSpeedProperty().getValue();
     }
 
     public void setScrollSpeed(final float scrollSpeed)
     {
-        this.scrollSpeedProperty.setValue(scrollSpeed);
+        this.getScrollSpeedProperty().setValue(scrollSpeed);
     }
 
     @Override
