@@ -6,6 +6,7 @@ import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
 import fr.ourten.brokkgui.panel.GuiTabPane;
 import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 
 /**
@@ -96,34 +97,19 @@ public class GuiTab
 
     private void setupContent(final GuiTabPane pane, final GuiNode content)
     {
-        final BaseBinding<Float> xPadding = new BaseBinding<Float>()
+        final BaseBinding<Float> xPadding = new BaseExpression<Float>(() ->
         {
-            {
-                super.bind(pane.getSideProperty(), pane.getWidthProperty());
-            }
+            if (pane.getTabSide() == ESide.LEFT)
+                return (pane.getWidth() / 10) + 1;
+            return 1f;
+        }, pane.getSideProperty(), pane.getWidthProperty());
 
-            @Override
-            public Float computeValue()
-            {
-                if (pane.getTabSide() == ESide.LEFT)
-                    return (pane.getWidth() / 10) + 1;
-                return 1f;
-            }
-        };
-        final BaseBinding<Float> yPadding = new BaseBinding<Float>()
+        final BaseBinding<Float> yPadding = new BaseExpression<Float>(() ->
         {
-            {
-                super.bind(pane.getSideProperty(), pane.getHeightProperty());
-            }
-
-            @Override
-            public Float computeValue()
-            {
-                if (pane.getTabSide() == ESide.UP)
-                    return (pane.getHeight() / 10) + 1;
-                return 1f;
-            }
-        };
+            if (pane.getTabSide() == ESide.UP)
+                return (pane.getHeight() / 10) + 1;
+            return 1f;
+        }, pane.getSideProperty(), pane.getHeightProperty());
 
         this.getContent().setFather(pane);
         RelativeBindingHelper.bindToPos(content, pane, xPadding, yPadding);
