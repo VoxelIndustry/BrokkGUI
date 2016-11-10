@@ -1,7 +1,9 @@
 package fr.ourten.brokkgui.control;
 
+import fr.ourten.brokkgui.BrokkGuiPlatform;
 import fr.ourten.brokkgui.data.EAlignment;
 import fr.ourten.brokkgui.paint.Color;
+import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
 
 public abstract class GuiLabeled extends GuiControl
@@ -9,19 +11,40 @@ public abstract class GuiLabeled extends GuiControl
     private final BaseProperty<Color>      textColorProperty;
     private final BaseProperty<EAlignment> textAlignmentProperty;
     private final BaseProperty<String>     textProperty;
-    private final BaseProperty<Boolean>    wrapTextProperty;
+
+    private final BaseProperty<String>     ellipsisProperty;
+    private final BaseProperty<Boolean>    expandToTextProperty;
 
     public GuiLabeled(final String text)
     {
         this.textColorProperty = new BaseProperty<>(Color.BLACK, "textColorProperty");
         this.textProperty = new BaseProperty<>(text, "textProperty");
         this.textAlignmentProperty = new BaseProperty<>(EAlignment.MIDDLE_CENTER, "textAlignmentProperty");
-        this.wrapTextProperty = new BaseProperty<>(false, "wrapTextProperty");
+        this.ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
+        this.expandToTextProperty = new BaseProperty<>(true, "expandToTextProperty");
+
+        this.bindSizeToText();
     }
 
     public GuiLabeled()
     {
         this("");
+    }
+
+    @Override
+    public void setWidth(final float width)
+    {
+        if (this.getWidthProperty().isBound())
+            this.setExpandToText(false);
+        super.setWidth(width);
+    }
+
+    @Override
+    public void setHeight(final float height)
+    {
+        if (this.getHeightProperty().isBound())
+            this.setExpandToText(false);
+        super.setHeight(height);
     }
 
     public BaseProperty<EAlignment> getTextAlignmentProperty()
@@ -34,14 +57,14 @@ public abstract class GuiLabeled extends GuiControl
         return this.textProperty;
     }
 
-    public BaseProperty<Boolean> getWrapTextProperty()
-    {
-        return this.wrapTextProperty;
-    }
-
     public BaseProperty<Color> getTextColorProperty()
     {
         return this.textColorProperty;
+    }
+
+    public BaseProperty<String> getEllipsisProperty()
+    {
+        return this.ellipsisProperty;
     }
 
     public EAlignment getTextAlignment()
@@ -54,6 +77,11 @@ public abstract class GuiLabeled extends GuiControl
         this.getTextAlignmentProperty().setValue(alignment);
     }
 
+    public BaseProperty<Boolean> getExpandToTextProperty()
+    {
+        return this.expandToTextProperty;
+    }
+
     public String getText()
     {
         return this.getTextProperty().getValue();
@@ -64,16 +92,6 @@ public abstract class GuiLabeled extends GuiControl
         this.getTextProperty().setValue(text);
     }
 
-    public boolean isWrapText()
-    {
-        return this.getWrapTextProperty().getValue();
-    }
-
-    public void setWrapText(final boolean wrapText)
-    {
-        this.getWrapTextProperty().setValue(wrapText);
-    }
-
     public Color getTextColor()
     {
         return this.getTextColorProperty().getValue();
@@ -82,5 +100,55 @@ public abstract class GuiLabeled extends GuiControl
     public void setTextColor(final Color textColor)
     {
         this.getTextColorProperty().setValue(textColor);
+    }
+
+    public String getEllipsis()
+    {
+        return this.ellipsisProperty.getValue();
+    }
+
+    public void setEllipsis(final String ellipsis)
+    {
+        this.ellipsisProperty.setValue(ellipsis);
+    }
+
+    public boolean expandToText()
+    {
+        return this.expandToTextProperty.getValue();
+    }
+
+    public void setExpandToText(final boolean expandToText)
+    {
+        if (expandToText && !this.expandToText())
+            this.bindSizeToText();
+        this.expandToTextProperty.setValue(expandToText);
+    }
+
+    private void bindSizeToText()
+    {
+        this.getWidthProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(GuiLabeled.this.textProperty);
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(GuiLabeled.this.getText());
+            }
+        });
+        this.getHeightProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(GuiLabeled.this.textProperty);
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight();
+            }
+        });
     }
 }

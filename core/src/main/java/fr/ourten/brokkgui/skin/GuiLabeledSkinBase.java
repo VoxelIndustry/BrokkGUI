@@ -7,6 +7,7 @@ import fr.ourten.brokkgui.internal.IGuiRenderer;
 import fr.ourten.brokkgui.paint.EGuiRenderPass;
 import fr.ourten.brokkgui.shape.Text;
 import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.value.BaseProperty;
 
 /**
  *
@@ -20,7 +21,9 @@ import fr.ourten.teabeans.binding.BaseBinding;
  */
 public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<C>> extends GuiBehaviorSkinBase<C, B>
 {
-    private final Text text;
+    private final Text                 text;
+
+    private final BaseProperty<String> ellipsedTextProperty;
 
     public GuiLabeledSkinBase(final C model, final B behaviour)
     {
@@ -28,11 +31,13 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
 
         this.text = new Text(model.getText());
 
+        this.ellipsedTextProperty = new BaseProperty<>("", "ellipsedTextProperty");
+
         // Bindings
 
         this.text.getColorProperty().bind(model.getTextColorProperty());
 
-        this.text.getTextProperty().bind(model.getTextProperty());
+        this.text.getTextProperty().bind(this.ellipsedTextProperty);
 
         this.text.getzLevelProperty().bind(model.getzLevelProperty());
 
@@ -40,7 +45,7 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         {
             {
                 super.bind(model.getTextAlignmentProperty(), model.getxPosProperty(), model.getxTranslateProperty(),
-                        model.getWidthProperty(), GuiLabeledSkinBase.this.text.getTextProperty());
+                        model.getWidthProperty(), GuiLabeledSkinBase.this.ellipsedTextProperty);
             }
 
             @Override
@@ -74,6 +79,8 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
                     return model.getyPos() + model.getyTranslate() + model.getHeight() / 2;
             }
         });
+
+        this.bindEllipsed();
     }
 
     @Override
@@ -90,5 +97,36 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
     public Text getText()
     {
         return this.text;
+    }
+
+    private void bindEllipsed()
+    {
+        this.ellipsedTextProperty.bind(new BaseBinding<String>()
+        {
+            {
+                super.bind(GuiLabeledSkinBase.this.getModel().getTextProperty(),
+                        GuiLabeledSkinBase.this.getModel().getExpandToTextProperty(),
+                        GuiLabeledSkinBase.this.getModel().getWidthProperty(),
+                        GuiLabeledSkinBase.this.getModel().getEllipsisProperty());
+            }
+
+            @Override
+            public String computeValue()
+            {
+                if (!GuiLabeledSkinBase.this.getModel().expandToText()
+                        && GuiLabeledSkinBase.this.getModel().getWidth() < BrokkGuiPlatform.getInstance().getGuiHelper()
+                                .getStringWidth(GuiLabeledSkinBase.this.getModel().getText()))
+                {
+                    String trimmed = BrokkGuiPlatform.getInstance().getGuiHelper().trimStringToPixelWidth(
+                            GuiLabeledSkinBase.this.getModel().getText(),
+                            (int) GuiLabeledSkinBase.this.getModel().getWidth());
+
+                    trimmed = trimmed.substring(0,
+                            trimmed.length() - GuiLabeledSkinBase.this.getModel().getEllipsis().length());
+                    return trimmed;
+                }
+                return GuiLabeledSkinBase.this.getModel().getText();
+            }
+        });
     }
 }
