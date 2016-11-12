@@ -123,7 +123,7 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
 
                     trimmed = trimmed.substring(0,
                             trimmed.length() - GuiLabeledSkinBase.this.getModel().getEllipsis().length());
-                    return trimmed;
+                    return trimmed + GuiLabeledSkinBase.this.getModel().getEllipsis();
                 }
                 return GuiLabeledSkinBase.this.getModel().getText();
             }
