@@ -1,0 +1,113 @@
+package org.yggard.brokkgui.demo;
+
+import java.util.Arrays;
+
+import org.yggard.brokkgui.component.GuiTab;
+import org.yggard.brokkgui.data.EHAlignment;
+import org.yggard.brokkgui.element.GuiButton;
+import org.yggard.brokkgui.element.GuiListView;
+import org.yggard.brokkgui.element.GuiProgressBar;
+import org.yggard.brokkgui.element.GuiTextfield;
+import org.yggard.brokkgui.gui.BrokkGuiScreen;
+import org.yggard.brokkgui.paint.Background;
+import org.yggard.brokkgui.paint.Color;
+import org.yggard.brokkgui.panel.GuiRelativePane;
+import org.yggard.brokkgui.panel.GuiTabPane;
+import org.yggard.brokkgui.skin.GuiButtonSkin;
+
+import fr.ourten.teabeans.binding.BaseBinding;
+
+public class GuiDemo extends BrokkGuiScreen
+{
+    public GuiDemo()
+    {
+        super(0.5f, 0.5f, 200, 200);
+        
+        final GuiRelativePane pane = new GuiRelativePane();
+        this.setMainPanel(pane);
+        final GuiButton button = new GuiButton("Test Button");
+        
+        button.setWidth(200);
+        button.setHeight(30);
+        
+        button.getSkin().setBorderColor(Color.GREEN);
+        button.getSkin().setBorderThin(2);
+        
+        final Background background = new Background(Color.AQUA);
+        final Background hoverBack = new Background(Color.YELLOW);
+        final Background disableBack = new Background(Color.RED);
+        
+        ((GuiButtonSkin)button.getSkin()).setBackground(background);
+        ((GuiButtonSkin)button.getSkin()).setHoveredBackground(hoverBack);
+        ((GuiButtonSkin)button.getSkin()).setDisabledBackground(disableBack);
+        
+        final GuiButton b2 = new GuiButton("B2");
+        
+        ((GuiButtonSkin)b2.getSkin()).setBackground(background);
+        ((GuiButtonSkin)b2.getSkin()).setHoveredBackground(hoverBack);
+        ((GuiButtonSkin)b2.getSkin()).setDisabledBackground(disableBack);
+        
+        button.setOnClickEvent(e -> System.out.println("clicked"));
+        
+        final GuiListView<String> listView = new GuiListView<>(Arrays.asList("test1", "test3", "teeeeest"));
+        
+        listView.setWidth(100);
+        listView.setHeight(30);
+        
+        listView.setCellHeight(20);
+        listView.setCellWidth(100);
+        
+        listView.getSkin().setBorderColor(Color.GRAY);
+        listView.getSkin().setBorderThin(1);
+        
+        final GuiProgressBar progressBar = new GuiProgressBar(0.5f);
+        progressBar.setProgressDirection(EHAlignment.CENTER);
+        progressBar.setWidth(200);
+        progressBar.getTextProperty().bind(new BaseBinding<String>()
+        {
+            {
+                super.bind(progressBar.getProgressProperty());
+            }
+            
+            @Override
+            public String computeValue()
+            {
+                return progressBar.getProgress() + "";
+            }
+        });
+        
+        progressBar.setHeight(20);
+        progressBar.getSkin().setBorderColor(Color.RED);
+        progressBar.getSkin().setBorderThin(1);
+        // pane.addChild(listView, 0.7f, 0.5f);
+        
+        final GuiTextfield field = new GuiTextfield();
+        field.setWidth(200);
+        field.setHeight(40);
+        
+        field.getSkin().setBorderColor(Color.BLACK);
+        field.getSkin().setBorderThin(1);
+        
+        final GuiTabPane tabPane = new GuiTabPane();
+        tabPane.setWidth(190);
+        tabPane.setHeight(200);
+        tabPane.getSkin().setBorderColor(Color.YELLOW);
+        tabPane.getSkin().setBorderThin(1);
+        tabPane.addTab(new GuiTab("Textfield", field));
+        tabPane.addTab(new GuiTab("ListView", listView));
+        tabPane.addTab(new GuiTab("Progress", progressBar));
+        
+        tabPane.setDefaultTab(0);
+        
+        pane.addChild(tabPane);
+        
+        this.getMainPanel().setBorderColor(Color.AQUA);
+        this.getMainPanel().setBorderThin(1);
+    }
+    
+    @Override
+    public void initGui()
+    {
+        super.initGui();
+    }
+}

@@ -20,7 +20,7 @@ subprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
 
-    group = "fr.ourten"
+    group = "org.yggard"
     compileJava.options.encoding = 'UTF-8'
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -32,7 +32,7 @@ subprojects {
         contextUrl = "${artifactory_contextUrl}"
         publish {
             repository {
-                repoKey = 'ourten'
+                repoKey = 'yggard'
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
                 maven = true
@@ -67,7 +67,7 @@ subprojects {
 
     jar {
         duplicatesStrategy = 'exclude'
-        exclude('fr/ourten/brokkgui/demo/**')
+        exclude('org/yggard/brokkgui/demo/**')
     }
 
     publishing {
@@ -96,10 +96,10 @@ subprojects {
 project(":core") {
     archivesBaseName = "brokkgui-core"
 
-    version = "0.2.7"
+    version = "0.2.8"
     dependencies {
         compile "fr.ourten:teabeans:0.3.3"
-        compile "fr.ourten:hermod:0.1.0"
+        compile "org.yggard:hermod:0.1.0"
         compile "org.apache.commons:commons-lang3:3.4"
     }
 }
@@ -107,7 +107,7 @@ project(":core") {
 project(":1.7.10") {
     archivesBaseName = "brokkgui-binding-mc1.7.10"
 
-    version = "0.2.8"
+    version = "0.2.9"
     dependencies {
         compile project(":core")
     }
