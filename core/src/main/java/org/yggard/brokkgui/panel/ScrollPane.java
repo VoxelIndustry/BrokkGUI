@@ -10,8 +10,8 @@ import org.yggard.brokkgui.policy.EOverflowPolicy;
 import org.yggard.brokkgui.policy.EScrollbarPolicy;
 import org.yggard.brokkgui.skin.GuiScrollPaneSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
+import org.yggard.hermod.EventHandler;
 
-import fr.ourten.hermod.EventHandler;
 import fr.ourten.teabeans.value.BaseProperty;
 
 /**

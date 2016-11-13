@@ -1,6 +1,6 @@
 package org.yggard.brokkgui.gui;
 
-import fr.ourten.hermod.IEventEmitter;
+import org.yggard.hermod.IEventEmitter;
 
 /**
  * @author Ourten 31 oct. 2016

@@ -2,8 +2,8 @@ package org.yggard.brokkgui.wrapper.container;
 
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.wrapper.event.SlotEvent;
+import org.yggard.hermod.EventHandler;
 
-import fr.ourten.hermod.EventHandler;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 

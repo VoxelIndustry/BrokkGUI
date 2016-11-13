@@ -1,9 +1,8 @@
 package org.yggard.brokkgui.event;
 
 import org.yggard.brokkgui.component.GuiNode;
-
-import fr.ourten.hermod.EventType;
-import fr.ourten.hermod.HermodEvent;
+import org.yggard.hermod.EventType;
+import org.yggard.hermod.HermodEvent;
 
 public class GuiStateEvent extends HermodEvent
 {

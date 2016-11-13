@@ -12,10 +12,10 @@ import org.yggard.brokkgui.event.HoverEvent;
 import org.yggard.brokkgui.event.KeyEvent;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.hermod.EventDispatcher;
+import org.yggard.hermod.EventHandler;
+import org.yggard.hermod.IEventEmitter;
 
-import fr.ourten.hermod.EventDispatcher;
-import fr.ourten.hermod.EventHandler;
-import fr.ourten.hermod.IEventEmitter;
 import fr.ourten.teabeans.value.BaseProperty;
 
 public abstract class GuiNode implements IEventEmitter

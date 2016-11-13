@@ -1,8 +1,7 @@
 package org.yggard.brokkgui.event;
 
 import org.yggard.brokkgui.component.GuiNode;
-
-import fr.ourten.hermod.EventType;
+import org.yggard.hermod.EventType;
 
 public class ClickEvent extends GuiMouseEvent
 {

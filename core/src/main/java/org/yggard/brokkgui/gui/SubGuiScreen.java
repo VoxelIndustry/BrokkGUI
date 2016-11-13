@@ -4,8 +4,7 @@ import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.event.WindowEvent;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
-
-import fr.ourten.hermod.EventHandler;
+import org.yggard.hermod.EventHandler;
 
 public class SubGuiScreen extends GuiFather implements IGuiWindow
 {

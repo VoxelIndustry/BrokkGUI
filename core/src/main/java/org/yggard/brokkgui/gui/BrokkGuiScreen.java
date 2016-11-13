@@ -9,11 +9,11 @@ import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.panel.GuiPane;
+import org.yggard.hermod.EventDispatcher;
+import org.yggard.hermod.EventHandler;
 
 import com.google.common.collect.Lists;
 
-import fr.ourten.hermod.EventDispatcher;
-import fr.ourten.hermod.EventHandler;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 

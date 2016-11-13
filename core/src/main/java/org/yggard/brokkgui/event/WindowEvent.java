@@ -1,9 +1,8 @@
 package org.yggard.brokkgui.event;
 
 import org.yggard.brokkgui.gui.IGuiWindow;
-
-import fr.ourten.hermod.EventType;
-import fr.ourten.hermod.HermodEvent;
+import org.yggard.hermod.EventType;
+import org.yggard.hermod.HermodEvent;
 
 public class WindowEvent extends HermodEvent
 {

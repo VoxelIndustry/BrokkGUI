@@ -1,8 +1,8 @@
 package org.yggard.brokkgui.control;
 
 import org.yggard.brokkgui.event.ActionEvent;
+import org.yggard.hermod.EventHandler;
 
-import fr.ourten.hermod.EventHandler;
 import fr.ourten.teabeans.value.BaseProperty;
 
 public abstract class GuiButtonBase extends GuiLabeled

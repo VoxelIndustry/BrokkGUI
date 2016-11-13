@@ -8,10 +8,10 @@ import org.yggard.brokkgui.event.TextTypedEvent;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 import org.yggard.brokkgui.skin.GuiTextfieldSkin;
 import org.yggard.brokkgui.validation.BaseTextValidator;
+import org.yggard.hermod.EventHandler;
 
 import com.google.common.collect.ImmutableList;
 
-import fr.ourten.hermod.EventHandler;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
 
@@ -182,7 +182,7 @@ public class GuiTextfield extends GuiControl implements ITextInput
     /**
      * Set the maximum text length this Textfield will be able to contain.
      * Setting this value to -1 will allow infinite.
-     * 
+     *
      * @param length
      */
     public void setMaxTextLength(final int length)
