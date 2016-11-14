@@ -7,6 +7,7 @@ import org.yggard.brokkgui.behavior.GuiListViewBehavior;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiControl;
 import org.yggard.brokkgui.data.EOrientation;
+import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.skin.GuiListViewSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
@@ -125,7 +126,16 @@ public class GuiListView<T> extends GuiControl
 
     public void setPlaceholder(final GuiNode placeholder)
     {
+        if (this.getPlaceholder() != null)
+        {
+            this.getPlaceholder().getxPosProperty().unbind();
+            this.getPlaceholder().getyPosProperty().unbind();
+        }
+
         this.getPlaceholderProperty().setValue(placeholder);
+
+        if (this.getPlaceholder() != null)
+            RelativeBindingHelper.bindToCenter(placeholder, this);
     }
 
     public EOrientation getOrientation()
