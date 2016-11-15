@@ -14,6 +14,7 @@ public class GuiButtonBehavior<C extends GuiButtonBase> extends GuiBehaviorBase<
 
     public void onClick(final ClickEvent.Left event)
     {
-
+        if (!this.getModel().isDisabled())
+            this.getModel().setActivated(!this.getModel().isActivated());
     }
 }
