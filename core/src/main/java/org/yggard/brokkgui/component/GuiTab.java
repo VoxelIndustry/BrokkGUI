@@ -98,28 +98,31 @@ public class GuiTab
 
     private void setupContent(final GuiTabPane pane, final GuiNode content)
     {
-        final BaseBinding<Float> xPadding = new BaseExpression<Float>(() ->
+        final BaseBinding<Float> xPadding = new BaseExpression<>(() ->
         {
             if (pane.getTabSide() == ESide.LEFT)
-                return (pane.getWidth() / 10) + 1;
+                return pane.getWidth() / 10 + 1;
             return 1f;
         }, pane.getSideProperty(), pane.getWidthProperty());
 
-        final BaseBinding<Float> yPadding = new BaseExpression<Float>(() ->
+        final BaseBinding<Float> yPadding = new BaseExpression<>(() ->
         {
             if (pane.getTabSide() == ESide.UP)
-                return (pane.getHeight() / 10) + 1;
+                return pane.getHeight() / 10 + 1;
             return 1f;
         }, pane.getSideProperty(), pane.getHeightProperty());
 
         this.getContent().setFather(pane);
         RelativeBindingHelper.bindToPos(content, pane, xPadding, yPadding);
+        RelativeBindingHelper.bindSizeRelative(content, pane, 1, 1);
     }
 
     private void disposeContent()
     {
         this.getContent().getxPosProperty().unbind();
         this.getContent().getyPosProperty().unbind();
+        this.getContent().getWidthProperty().unbind();
+        this.getContent().getHeightProperty().unbind();
         this.getContent().setFather(null);
     }
 
