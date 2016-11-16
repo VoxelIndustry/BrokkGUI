@@ -114,7 +114,35 @@ public class GuiTab
 
         this.getContent().setFather(pane);
         RelativeBindingHelper.bindToPos(content, pane, xPadding, yPadding);
-        RelativeBindingHelper.bindSizeRelative(content, pane, 1, 1);
+
+        content.getWidthProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(pane.getWidthProperty(), pane.getSideProperty(), pane.getTabHeightRatioProperty());
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                if (pane.getTabSide().equals(ESide.LEFT) || pane.getTabSide().equals(ESide.RIGHT))
+                    return pane.getWidth() - pane.getWidth() * pane.getTabHeightRatio();
+                return pane.getWidth();
+            }
+        });
+        content.getHeightProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(pane.getHeightProperty(), pane.getSideProperty(), pane.getTabHeightRatioProperty());
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                if (pane.getTabSide().equals(ESide.UP) || pane.getTabSide().equals(ESide.DOWN))
+                    return pane.getHeight() - pane.getHeight() * pane.getTabHeightRatio();
+                return pane.getHeight();
+            }
+        });
     }
 
     private void disposeContent()

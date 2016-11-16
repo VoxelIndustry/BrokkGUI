@@ -37,25 +37,25 @@ public class GuiTabPaneBehavior<T extends GuiTabPane> extends GuiBehaviorBase<T>
         {
             case DOWN:
                 if (pointY > this.getModel().getyPos() + this.getModel().getyTranslate()
-                        + 9 * (this.getModel().getHeight() / 10))
+                        + 9 * (this.getModel().getHeight() * this.getModel().getTabHeightRatio()))
                     index = (pointX - this.getModel().getxPos() - this.getModel().getxTranslate())
                             / this.getModel().getWidth() * this.getModel().getTabsProperty().size();
                 break;
             case LEFT:
                 if (pointX < this.getModel().getxPos() + this.getModel().getxTranslate()
-                        + this.getModel().getWidth() / 10)
+                        + this.getModel().getWidth() * this.getModel().getTabHeightRatio())
                     index = (pointY - this.getModel().getyPos() - this.getModel().getyTranslate())
                             / this.getModel().getHeight() * this.getModel().getTabsProperty().size();
                 break;
             case RIGHT:
                 if (pointX > this.getModel().getxPos() + this.getModel().getxTranslate()
-                        + 9 * (this.getModel().getWidth() / 10))
+                        + 9 * (this.getModel().getWidth() * this.getModel().getTabHeightRatio()))
                     index = (pointY - this.getModel().getyPos() - this.getModel().getyTranslate())
                             / this.getModel().getHeight() * this.getModel().getTabsProperty().size();
                 break;
             case UP:
                 if (pointY < this.getModel().getyPos() + this.getModel().getyTranslate()
-                        + this.getModel().getHeight() / 10)
+                        + this.getModel().getHeight() * this.getModel().getTabHeightRatio())
                     index = (pointX - this.getModel().getxPos() - this.getModel().getxTranslate())
                             / this.getModel().getWidth() * this.getModel().getTabsProperty().size();
                 break;

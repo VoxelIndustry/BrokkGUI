@@ -25,12 +25,16 @@ public class GuiTabPane extends GuiControl
     private final BaseProperty<Integer>    selectedTabProperty, defaultTabProperty;
     private final BaseProperty<ESide>      sideProperty;
 
+    private final BaseProperty<Float>      tabHeightRatioProperty;
+
     public GuiTabPane()
     {
         this.tabsProperty = new BaseListProperty<>(null, "tabsProperty");
         this.selectedTabProperty = new BaseProperty<>(-1, "selectedTabProperty");
         this.defaultTabProperty = new BaseProperty<>(-1, "defaultTabProperty");
         this.sideProperty = new BaseProperty<>(ESide.UP, "sideProperty");
+
+        this.tabHeightRatioProperty = new BaseProperty<>(.1f, "tabHeightRatioProperty");
 
         this.setOverflowPolicy(EOverflowPolicy.TRIM_ALL);
     }
@@ -59,6 +63,11 @@ public class GuiTabPane extends GuiControl
     public BaseProperty<ESide> getSideProperty()
     {
         return this.sideProperty;
+    }
+
+    public BaseProperty<Float> getTabHeightRatioProperty()
+    {
+        return this.tabHeightRatioProperty;
     }
 
     public ImmutableList<GuiTab> getTabs()
@@ -165,5 +174,15 @@ public class GuiTabPane extends GuiControl
     public void setTabSide(final ESide side)
     {
         this.getSideProperty().setValue(side);
+    }
+
+    public float getTabHeightRatio()
+    {
+        return this.getTabHeightRatioProperty().getValue();
+    }
+
+    public void setTabHeightRatio(final float tabHeight)
+    {
+        this.getTabHeightRatioProperty().setValue(tabHeight);
     }
 }
