@@ -9,7 +9,7 @@ import fr.ourten.teabeans.value.BaseProperty;
 public class Text extends GuiShape
 {
     private final BaseProperty<EAlignment> textAlignmentProperty;
-    private final BaseProperty<Boolean>    shadowProperty, wrapTextProperty;
+    private final BaseProperty<Boolean>    shadowProperty;
     private final BaseProperty<String>     textProperty;
     private final BaseProperty<Integer>    lineSpacingProperty;
 
@@ -22,7 +22,6 @@ public class Text extends GuiShape
         this.lineSpacingProperty = new BaseProperty<>(1, "lineSpacingProperty");
         this.textAlignmentProperty = new BaseProperty<>(EAlignment.MIDDLE_CENTER, "textAlignmentProperty");
         this.shadowProperty = new BaseProperty<>(true, "shadowProperty");
-        this.wrapTextProperty = new BaseProperty<>(false, "wrapTextProperty");
     }
 
     public Text(final String text)
@@ -34,17 +33,9 @@ public class Text extends GuiShape
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
         if (pass == EGuiRenderPass.MAIN)
-        {
-            if (!this.wrapText())
-                renderer.getHelper().drawString(this.getText(), (int) (this.getxPos() + this.getxTranslate()),
-                        (int) (this.getyPos() + this.getyTranslate()), this.getzLevel(), this.getColor(),
-                        this.getTextAlignment(), this.hasShadow());
-            else
-                renderer.getHelper().drawString(
-                        renderer.getHelper().trimStringToPixelWidth(this.getText(), (int) this.getWidth()),
-                        (int) (this.getxPos() + this.getxTranslate()), (int) (this.getyPos() + this.getyTranslate()),
-                        this.getzLevel(), this.getColor(), this.getTextAlignment(), this.hasShadow());
-        }
+            renderer.getHelper().drawString(this.getText(), (int) (this.getxPos() + this.getxTranslate()),
+                    (int) (this.getyPos() + this.getyTranslate()), this.getzLevel(), this.getColor(),
+                    this.getTextAlignment(), this.hasShadow());
     }
 
     public BaseProperty<String> getTextProperty()
@@ -65,11 +56,6 @@ public class Text extends GuiShape
     public BaseProperty<Boolean> getShadowProperty()
     {
         return this.shadowProperty;
-    }
-
-    public BaseProperty<Boolean> getWrapTextProperty()
-    {
-        return this.wrapTextProperty;
     }
 
     public String getText()
@@ -110,15 +96,5 @@ public class Text extends GuiShape
     public void setShadow(final boolean hasShadow)
     {
         this.getShadowProperty().setValue(hasShadow);
-    }
-
-    public boolean wrapText()
-    {
-        return this.getWrapTextProperty().getValue();
-    }
-
-    public void setWrapText(final boolean wrapText)
-    {
-        this.getWrapTextProperty().setValue(wrapText);
     }
 }

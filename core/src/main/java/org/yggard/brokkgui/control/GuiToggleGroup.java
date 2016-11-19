@@ -1,5 +1,7 @@
 package org.yggard.brokkgui.control;
 
+import org.yggard.brokkgui.behavior.IGuiTogglable;
+
 import com.google.common.collect.ImmutableList;
 
 import fr.ourten.teabeans.value.BaseListProperty;
@@ -7,9 +9,9 @@ import fr.ourten.teabeans.value.BaseProperty;
 
 public class GuiToggleGroup
 {
-    private final BaseProperty<GuiToggleButtonBase>     selectedButtonProperty;
-    private final BaseListProperty<GuiToggleButtonBase> buttonListProperty;
-    private boolean                                     allowNothing;
+    private final BaseProperty<IGuiTogglable>     selectedButtonProperty;
+    private final BaseListProperty<IGuiTogglable> buttonListProperty;
+    private boolean                               allowNothing;
 
     public GuiToggleGroup()
     {
@@ -17,7 +19,7 @@ public class GuiToggleGroup
         this.buttonListProperty = new BaseListProperty<>(null, "buttonListProperty");
     }
 
-    public void setSelectedButton(final GuiToggleButtonBase button)
+    public void setSelectedButton(final IGuiTogglable button)
     {
         if (this.buttonListProperty.contains(button))
         {
@@ -27,12 +29,12 @@ public class GuiToggleGroup
         }
     }
 
-    public GuiToggleButtonBase getSelectedButton()
+    public IGuiTogglable getSelectedButton()
     {
         return this.getSelectedButtonProperty().getValue();
     }
 
-    public ImmutableList<GuiToggleButtonBase> getButtonList()
+    public ImmutableList<IGuiTogglable> getButtonList()
     {
         return this.getButtonListProperty().getValue();
     }
@@ -53,12 +55,12 @@ public class GuiToggleGroup
         this.allowNothing = allowNothing;
     }
 
-    public BaseProperty<GuiToggleButtonBase> getSelectedButtonProperty()
+    public BaseProperty<IGuiTogglable> getSelectedButtonProperty()
     {
         return this.selectedButtonProperty;
     }
 
-    public BaseListProperty<GuiToggleButtonBase> getButtonListProperty()
+    public BaseListProperty<IGuiTogglable> getButtonListProperty()
     {
         return this.buttonListProperty;
     }

@@ -24,13 +24,30 @@ public interface IGuiTogglable
      *         ToggleGroup might disable empty selection or when this Togglable
      *         is already selected.
      */
-    boolean setSelected(boolean selected);
+    public default boolean setSelected(final boolean selected)
+    {
+        if (!selected)
+            if (this.getToggleGroup() == null || this.getToggleGroup().allowNothing()
+                    || this.getToggleGroup().getSelectedButton() != this)
+                this.getSelectedProperty().setValue(false);
+        if (selected)
+            if (this.getToggleGroup() != null && this.getToggleGroup().getSelectedButton() != this)
+            {
+                this.getToggleGroup().setSelectedButton(this);
+                this.getSelectedProperty().setValue(true);
+                return true;
+            }
+        return false;
+    }
 
     /**
      * @return the value of the selected property. When a GuiToggleGroup is set
      *         you are guaranteed that it's the group selected Togglable.
      */
-    boolean isSelected();
+    public default boolean isSelected()
+    {
+        return this.getSelectedProperty().getValue();
+    }
 
     /**
      * @return the internal selected property of the Togglable object.
