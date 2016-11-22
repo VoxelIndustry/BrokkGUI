@@ -13,12 +13,9 @@ public class GuiTogglableButtonBehavior<C extends GuiButtonBase & IGuiTogglable>
     @Override
     public void onClick(final ClickEvent.Left event)
     {
-        if (!this.getModel().isDisabled())
-        {
-            this.getModel().setSelected(!this.getModel().isSelected());
+        super.onClick(event);
 
-            if (this.getModel().isSelected() != this.getModel().isActivated())
-                this.getModel().setActivated(this.getModel().isSelected());
-        }
+        if (!this.getModel().isDisabled())
+            this.getModel().setSelected(!this.getModel().isSelected());
     }
 }

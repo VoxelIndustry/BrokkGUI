@@ -66,7 +66,6 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
                         : GuiLabeledSkinBase.this.getTextPaddingAlignment() == EHAlignment.RIGHT
                                 ? GuiLabeledSkinBase.this.getTextPadding() : 0;
 
-                System.out.println("Padding : " + GuiLabeledSkinBase.this.getTextPaddingAlignment() + " " + padding);
                 if (model.getTextAlignment().isLeft())
                     return model.getxPos() + model.getxTranslate() + padding;
                 else if (model.getTextAlignment().isRight())
