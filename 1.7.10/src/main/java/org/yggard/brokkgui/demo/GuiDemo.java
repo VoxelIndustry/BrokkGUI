@@ -1,11 +1,13 @@
 package org.yggard.brokkgui.demo;
 
 import org.yggard.brokkgui.component.GuiTab;
+import org.yggard.brokkgui.control.GuiToggleGroup;
 import org.yggard.brokkgui.data.EHAlignment;
 import org.yggard.brokkgui.element.GuiButton;
 import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.element.GuiListView;
 import org.yggard.brokkgui.element.GuiProgressBar;
+import org.yggard.brokkgui.element.GuiRadioButton;
 import org.yggard.brokkgui.element.GuiTextfield;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Background;
@@ -80,7 +82,6 @@ public class GuiDemo extends BrokkGuiScreen
         progressBar.setHeight(20);
         progressBar.getSkin().setBorderColor(Color.RED);
         progressBar.getSkin().setBorderThin(1);
-        // pane.addChild(listView, 0.7f, 0.5f);
 
         final GuiTextfield field = new GuiTextfield();
         field.setWidth(200);
@@ -88,6 +89,28 @@ public class GuiDemo extends BrokkGuiScreen
 
         field.getSkin().setBorderColor(Color.BLACK);
         field.getSkin().setBorderThin(1);
+
+        final GuiRelativePane radioButtonPane = new GuiRelativePane();
+
+        final GuiRadioButton radioButton = new GuiRadioButton("Right 1");
+        final GuiRadioButton radioButton2 = new GuiRadioButton("Nothing to see here 2");
+        final GuiRadioButton radioButton3 = new GuiRadioButton("Left 3");
+
+        radioButton.setHeightRatio(0.05f);
+
+        radioButton2.setHeightRatio(0.05f);
+
+        radioButton3.setHeightRatio(0.05f);
+        radioButton3.setLabelAlignment(EHAlignment.LEFT);
+
+        final GuiToggleGroup toggleGroup = new GuiToggleGroup();
+        toggleGroup.setAllowNothing(true);
+
+        toggleGroup.addButtons(radioButton, radioButton2, radioButton3);
+
+        radioButtonPane.addChild(radioButton, 0.5f, 0.2f);
+        radioButtonPane.addChild(radioButton2, 0.5f, 0.4f);
+        radioButtonPane.addChild(radioButton3, 0.5f, 0.6f);
 
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);
@@ -97,6 +120,7 @@ public class GuiDemo extends BrokkGuiScreen
         tabPane.addTab(new GuiTab("Textfield", field));
         tabPane.addTab(new GuiTab("ListView", listView));
         tabPane.addTab(new GuiTab("Progress", progressBar));
+        tabPane.addTab(new GuiTab("RadioButton", radioButtonPane));
 
         tabPane.setDefaultTab(0);
 

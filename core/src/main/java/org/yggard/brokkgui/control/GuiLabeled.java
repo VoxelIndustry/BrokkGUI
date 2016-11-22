@@ -122,19 +122,19 @@ public abstract class GuiLabeled extends GuiControl
     {
         if (expandToText && !this.expandToText())
             this.bindSizeToText();
+        else if (!expandToText && this.expandToText())
+        {
+            this.getWidthProperty().unbind();
+            this.getHeightProperty().unbind();
+        }
         this.expandToTextProperty.setValue(expandToText);
     }
 
-    private void bindSizeToText()
+    protected void bindSizeToText()
     {
-        this.getWidthProperty().bind(new BaseExpression<>(() ->
-        {
-            return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(this.getText());
-        }, this.textProperty));
-
-        this.getHeightProperty().bind(new BaseExpression<>(() ->
-        {
-            return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight();
-        }));
+        this.getWidthProperty().bind(BaseExpression.transform(this.getTextProperty(),
+                text -> BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(text)));
+        this.getHeightProperty().bind(BaseExpression.transform(this.getTextProperty(),
+                text -> BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight()));
     }
 }

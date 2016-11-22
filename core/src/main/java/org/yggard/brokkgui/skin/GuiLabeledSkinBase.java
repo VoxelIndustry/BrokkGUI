@@ -9,6 +9,7 @@ import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.shape.Text;
 
 import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 
 /**
@@ -61,9 +62,11 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
             public Float computeValue()
             {
                 final float padding = GuiLabeledSkinBase.this.getTextPaddingAlignment() == EHAlignment.LEFT
-                        ? -GuiLabeledSkinBase.this.getTextPadding()
+                        ? -GuiLabeledSkinBase.this.getTextPadding() + 2
                         : GuiLabeledSkinBase.this.getTextPaddingAlignment() == EHAlignment.RIGHT
                                 ? GuiLabeledSkinBase.this.getTextPadding() : 0;
+
+                System.out.println("Padding : " + GuiLabeledSkinBase.this.getTextPaddingAlignment() + " " + padding);
                 if (model.getTextAlignment().isLeft())
                     return model.getxPos() + model.getxTranslate() + padding;
                 else if (model.getTextAlignment().isRight())
@@ -71,7 +74,7 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
                             .getGuiHelper().getStringWidth(GuiLabeledSkinBase.this.ellipsedTextProperty.getValue())
                             + padding;
                 else
-                    return model.getxPos() + model.getxTranslate() + model.getWidth() / 2 + padding;
+                    return model.getxPos() + model.getxTranslate() + model.getWidth() / 2 + padding / 2;
             }
         });
         this.text.getyPosProperty().bind(new BaseBinding<Float>()
@@ -93,6 +96,10 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
                     return model.getyPos() + model.getyTranslate() + model.getHeight() / 2;
             }
         });
+
+        this.text.getWidthProperty().bind(BaseExpression.biCombine(model.getWidthProperty(), this.textPaddingProperty,
+                (width, padding) -> width - padding));
+        this.text.setHeight(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
 
         this.bindEllipsed();
     }
@@ -123,6 +130,11 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         return this.textPaddingAlignmentProperty;
     }
 
+    public BaseProperty<String> getEllipsedTextProperty()
+    {
+        return this.ellipsedTextProperty;
+    }
+
     public float getTextPadding()
     {
         return this.getTextPaddingProperty().getValue();
@@ -131,6 +143,11 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
     public EHAlignment getTextPaddingAlignment()
     {
         return this.getTextPaddingAlignmentProperty().getValue();
+    }
+
+    public String getEllipsedText()
+    {
+        return this.ellipsedTextProperty.getValue();
     }
 
     private void bindEllipsed()

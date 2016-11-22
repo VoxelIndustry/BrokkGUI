@@ -12,6 +12,7 @@ import org.yggard.brokkgui.paint.Texture;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -43,8 +44,12 @@ public class GuiHelper implements IGuiHelper
         final int height = (int) (i - g);
         final ScaledResolution sr = new ScaledResolution(this.mc);
         final int factor = sr.getScaleFactor();
-        final int bottomY = (int) (this.mc.currentScreen.height - i);
-        GL11.glScissor((int) (f * factor), bottomY * factor, width * factor, height * factor);
+        final GuiScreen currentScreen = this.mc.currentScreen;
+        if (currentScreen != null)
+        {
+            final int bottomY = (int) (currentScreen.height - i);
+            GL11.glScissor((int) (f * factor), bottomY * factor, width * factor, height * factor);
+        }
     }
 
     // TODO: Handle UP/DOWN/LEFT/RIGHTS alignments combinaisons
@@ -275,9 +280,13 @@ public class GuiHelper implements IGuiHelper
     @Override
     public final void translateVecToScreenSpace(final Vector2i vec)
     {
-        vec.setX((int) (vec.getX() / ((float) this.mc.currentScreen.width / this.mc.displayWidth)));
-        vec.setY((int) ((this.mc.currentScreen.height - vec.getY())
-                / ((float) this.mc.currentScreen.height / this.mc.displayHeight) - 1));
+        final GuiScreen currentScreen = this.mc.currentScreen;
+        if (currentScreen != null)
+        {
+            vec.setX((int) (vec.getX() / ((float) currentScreen.width / this.mc.displayWidth)));
+            vec.setY((int) ((currentScreen.height - vec.getY()) / ((float) currentScreen.height / this.mc.displayHeight)
+                    - 1));
+        }
     }
 
     @Override
