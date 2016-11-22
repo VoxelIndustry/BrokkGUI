@@ -4,6 +4,7 @@ import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.control.GuiToggleGroup;
 import org.yggard.brokkgui.data.EHAlignment;
 import org.yggard.brokkgui.element.GuiButton;
+import org.yggard.brokkgui.element.GuiCheckbox;
 import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.element.GuiListView;
 import org.yggard.brokkgui.element.GuiProgressBar;
@@ -94,23 +95,23 @@ public class GuiDemo extends BrokkGuiScreen
 
         final GuiRadioButton radioButton = new GuiRadioButton("Right 1");
         final GuiRadioButton radioButton2 = new GuiRadioButton("Nothing to see here 2");
-        final GuiRadioButton radioButton3 = new GuiRadioButton("Left 3");
+        final GuiCheckbox checkbox = new GuiCheckbox("Left 3");
 
         radioButton.setHeightRatio(0.05f);
 
         radioButton2.setHeightRatio(0.05f);
 
-        radioButton3.setHeightRatio(0.05f);
-        radioButton3.setLabelAlignment(EHAlignment.LEFT);
+        checkbox.setHeightRatio(0.05f);
+        checkbox.setLabelAlignment(EHAlignment.LEFT);
 
         final GuiToggleGroup toggleGroup = new GuiToggleGroup();
         toggleGroup.setAllowNothing(true);
 
-        toggleGroup.addButtons(radioButton, radioButton2, radioButton3);
+        toggleGroup.addButtons(radioButton, radioButton2, checkbox);
 
         radioButtonPane.addChild(radioButton, 0.5f, 0.2f);
         radioButtonPane.addChild(radioButton2, 0.5f, 0.4f);
-        radioButtonPane.addChild(radioButton3, 0.5f, 0.6f);
+        radioButtonPane.addChild(checkbox, 0.5f, 0.6f);
 
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);

@@ -1,12 +1,21 @@
 package org.yggard.brokkgui.element;
 
 import org.yggard.brokkgui.behavior.GuiTogglableButtonBehavior;
-import org.yggard.brokkgui.control.GuiToggleButtonBase;
 import org.yggard.brokkgui.skin.GuiCheckboxSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
-public class GuiCheckbox extends GuiToggleButtonBase
+public class GuiCheckbox extends GuiRadioButton
 {
+    public GuiCheckbox(final String label)
+    {
+        super(label);
+    }
+
+    public GuiCheckbox()
+    {
+        this("");
+    }
+
     @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
