@@ -26,18 +26,34 @@ public interface IGuiTogglable
      */
     public default boolean setSelected(final boolean selected)
     {
-        if (!selected)
-            if (this.getToggleGroup() == null || this.getToggleGroup().allowNothing()
-                    || this.getToggleGroup().getSelectedButton() != this)
-                this.getSelectedProperty().setValue(false);
-        if (selected)
-            if (this.getToggleGroup() != null && this.getToggleGroup().getSelectedButton() != this)
+        if (!selected && this.isSelected())
+        {
+            if (this.getToggleGroup() == null)
             {
-                this.getToggleGroup().setSelectedButton(this);
+                this.getSelectedProperty().setValue(false);
+                return false;
+            }
+            if (this.getToggleGroup().getSelectedButton() == this && !this.getToggleGroup().allowNothing())
+                return true;
+            this.getToggleGroup().setSelectedButton(null);
+            return false;
+        }
+        if (selected && !this.isSelected())
+        {
+            if (this.getToggleGroup() == null)
+            {
                 this.getSelectedProperty().setValue(true);
                 return true;
             }
-        return false;
+            else
+            {
+                if (this.getToggleGroup().getSelectedButton() == this)
+                    return false;
+                this.getToggleGroup().setSelectedButton(this);
+                return true;
+            }
+        }
+        return this.isSelected();
     }
 
     /**

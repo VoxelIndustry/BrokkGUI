@@ -1,5 +1,7 @@
 package org.yggard.brokkgui.control;
 
+import java.util.Arrays;
+
 import org.yggard.brokkgui.behavior.IGuiTogglable;
 
 import com.google.common.collect.ImmutableList;
@@ -27,6 +29,11 @@ public class GuiToggleGroup
             this.buttonListProperty.getValue()
                     .forEach(button2 -> button2.getSelectedProperty().setValue(button2 == button));
         }
+        else if (this.allowNothing() && button == null)
+        {
+            this.selectedButtonProperty.setValue(null);
+            this.buttonListProperty.getValue().forEach(button2 -> button2.getSelectedProperty().setValue(false));
+        }
     }
 
     public IGuiTogglable getSelectedButton()
@@ -42,7 +49,15 @@ public class GuiToggleGroup
     public void addButton(final GuiToggleButtonBase button)
     {
         if (!this.getButtonListProperty().contains(button))
+        {
             this.getButtonListProperty().add(button);
+            button.setToggleGroup(this);
+        }
+    }
+
+    public void addButtons(final GuiToggleButtonBase... buttons)
+    {
+        Arrays.asList(buttons).forEach(this::addButton);
     }
 
     public boolean allowNothing()
