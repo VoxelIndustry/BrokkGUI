@@ -28,8 +28,8 @@ public abstract class GuiButtonBase extends GuiLabeled
 
     public void setOnActionEvent(final EventHandler<ActionEvent> onActionEvent)
     {
-        this.getEventDispatcher().addHandler(ActionEvent.TYPE, this.onActionEvent);
-        this.onActionEvent = onActionEvent;
         this.getEventDispatcher().removeHandler(ActionEvent.TYPE, this.onActionEvent);
+        this.onActionEvent = onActionEvent;
+        this.getEventDispatcher().addHandler(ActionEvent.TYPE, this.onActionEvent);
     }
 }
