@@ -52,6 +52,7 @@ public class GuiHelper implements IGuiHelper
     public final void drawString(final String string, final int x, final int y, final float zLevel, final Color color,
             final EAlignment alignment, final boolean shadow)
     {
+        this.enableAlpha();
         if (zLevel != 0)
         {
             GL11.glPushMatrix();
@@ -67,6 +68,7 @@ public class GuiHelper implements IGuiHelper
                     y - (alignment.isVerticalCentered() ? this.mc.fontRenderer.FONT_HEIGHT / 2 : 0), color.toInt());
         if (zLevel != 0)
             GL11.glPopMatrix();
+        this.disableAlpha();
     }
 
     @Override
@@ -310,5 +312,15 @@ public class GuiHelper implements IGuiHelper
     public void endScissor()
     {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    }
+
+    public final void enableAlpha()
+    {
+        GL11.glEnable(GL11.GL_BLEND);
+    }
+
+    public final void disableAlpha()
+    {
+        GL11.glDisable(GL11.GL_BLEND);
     }
 }

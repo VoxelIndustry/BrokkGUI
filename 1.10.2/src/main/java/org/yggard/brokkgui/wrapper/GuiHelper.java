@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
@@ -57,6 +58,11 @@ public class GuiHelper implements IGuiHelper
     public final void drawString(final String string, final int x, final int y, final float zLevel, final Color color,
             final EAlignment alignment, final boolean shadow)
     {
+        GlStateManager.enableBlend();
+        // This is a very, very, very ugly hack but I've not seen any other way
+        // to fix this minecraft bug. @see GlStateManager color(float colorRed,
+        // float colorGreen, float colorBlue, float colorAlpha) L 675
+        GlStateManager.color(0, 0, 0, 0);
         if (zLevel != 0)
         {
             GL11.glPushMatrix();
@@ -72,6 +78,7 @@ public class GuiHelper implements IGuiHelper
                     y - (alignment.isVerticalCentered() ? this.mc.fontRendererObj.FONT_HEIGHT / 2 : 0), color.toInt());
         if (zLevel != 0)
             GL11.glPopMatrix();
+        GlStateManager.disableBlend();
     }
 
     @Override

@@ -29,9 +29,13 @@ public class Color
 
     public int toInt()
     {
-        int rtn = (int) (this.getRed() * 255);
-        rtn = (int) ((rtn << 8) + this.getGreen() * 255);
-        rtn = (int) ((rtn << 8) + this.getBlue() * 255);
+        int rtn = 0;
+        rtn = 0;
+        rtn |= (int) (this.getAlpha() * 255) << 24;
+        rtn |= (int) (this.getRed() * 255) << 16;
+        rtn |= (int) (this.getGreen() * 255) << 8;
+        rtn |= (int) (this.getBlue() * 255);
+
         return rtn;
     }
 
