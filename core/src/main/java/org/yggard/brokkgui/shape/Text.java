@@ -2,14 +2,16 @@ package org.yggard.brokkgui.shape;
 
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.TextStyle;
 
 import fr.ourten.teabeans.value.BaseProperty;
 
 public class Text extends GuiShape
 {
     private final BaseProperty<EAlignment> textAlignmentProperty;
-    private final BaseProperty<Boolean>    shadowProperty;
+    private final BaseProperty<TextStyle>  textStyleProperty;
     private final BaseProperty<String>     textProperty;
     private final BaseProperty<Integer>    lineSpacingProperty;
 
@@ -21,7 +23,7 @@ public class Text extends GuiShape
         this.textProperty = new BaseProperty<>(text, "textProperty");
         this.lineSpacingProperty = new BaseProperty<>(1, "lineSpacingProperty");
         this.textAlignmentProperty = new BaseProperty<>(EAlignment.MIDDLE_CENTER, "textAlignmentProperty");
-        this.shadowProperty = new BaseProperty<>(true, "shadowProperty");
+        this.textStyleProperty = new BaseProperty<>(new TextStyle(null), "textStyleProperty");
     }
 
     public Text(final String text)
@@ -34,8 +36,9 @@ public class Text extends GuiShape
     {
         if (pass == EGuiRenderPass.MAIN)
             renderer.getHelper().drawString(this.getText(), (int) (this.getxPos() + this.getxTranslate()),
-                    (int) (this.getyPos() + this.getyTranslate()), this.getzLevel(), this.getColor(),
-                    this.getTextAlignment(), this.hasShadow());
+                    (int) (this.getyPos() + this.getyTranslate()), this.getzLevel(),
+                    this.getTextStyle().getTextColorProperty().getOrDefault(Color.BLACK), this.getTextAlignment(),
+                    this.getTextStyle().useShadow());
     }
 
     public BaseProperty<String> getTextProperty()
@@ -53,9 +56,9 @@ public class Text extends GuiShape
         return this.textAlignmentProperty;
     }
 
-    public BaseProperty<Boolean> getShadowProperty()
+    public BaseProperty<TextStyle> getTextStyleProperty()
     {
-        return this.shadowProperty;
+        return this.textStyleProperty;
     }
 
     public String getText()
@@ -88,13 +91,13 @@ public class Text extends GuiShape
         this.getTextAlignmentProperty().setValue(textAlignment);
     }
 
-    public boolean hasShadow()
+    public TextStyle getTextStyle()
     {
-        return this.getShadowProperty().getValue();
+        return this.getTextStyleProperty().getValue();
     }
 
-    public void setShadow(final boolean hasShadow)
+    public void setTextStyle(final TextStyle textStyle)
     {
-        this.getShadowProperty().setValue(hasShadow);
+        this.getTextStyleProperty().setValue(textStyle);
     }
 }

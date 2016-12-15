@@ -12,7 +12,7 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
 {
     private final Rectangle progressBar;
 
-    public GuiProgressBarSkin(C model, B behaviour)
+    public GuiProgressBarSkin(final C model, final B behaviour)
     {
         super(model, behaviour);
 
@@ -22,9 +22,9 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
             switch (model.getProgressDirection())
             {
                 case CENTER:
-                    return model.getxPos() + ((model.getWidth() - progressBar.getWidth()) / 2);
+                    return model.getxPos() + (model.getWidth() - this.progressBar.getWidth()) / 2;
                 case LEFT:
-                    return model.getxPos() + model.getWidth() - progressBar.getWidth();
+                    return model.getxPos() + model.getWidth() - this.progressBar.getWidth();
                 default:
                     return model.getxPos();
             }
@@ -41,16 +41,15 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
 
         this.getText().getxPosProperty().bind(new BaseExpression<>(() ->
         {
-            return model.getxPos() + (model.getWidth() / 2);
+            return model.getxPos() + model.getWidth() / 2;
         }, model.getxPosProperty(), model.getWidthProperty()));
 
         this.getText().getyPosProperty().bind(new BaseExpression<>(() ->
         {
-            return model.getyPos() + (model.getHeight() / 2);
+            return model.getyPos() + model.getHeight() / 2;
         }, model.getyPosProperty(), model.getHeightProperty()));
 
         this.getText().getTextAlignmentProperty().bind(model.getTextAlignmentProperty());
-        this.getText().getShadowProperty().setValue(false);
         this.getText().getzLevelProperty().bind(new BaseExpression<>(() ->
         {
             return model.getzLevel() + 1;

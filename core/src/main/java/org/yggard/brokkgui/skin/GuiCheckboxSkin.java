@@ -34,7 +34,6 @@ public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBe
         this.box.setLineColor(Color.BLACK);
 
         this.fill.setColor(Color.GRAY);
-        this.fill.setShadow(false);
 
         this.box.getxPosProperty().bind(new BaseBinding<Float>()
         {
