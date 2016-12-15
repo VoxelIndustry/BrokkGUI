@@ -25,7 +25,7 @@ public class GuiRadioButton extends GuiToggleButtonBase
 
         this.labelAlignmentProperty = new BaseProperty<>(EHAlignment.RIGHT, "labelAlignmentProperty");
         this.labelPaddingProperty = new BaseProperty<>(0f, "labelPaddingProperty");
-        this.setTextColor(Color.GRAY);
+        this.setTextColor(Color.BLACK.addAlpha(-0.22f));
         this.setLabelPadding(2);
 
         this.bindSizeToText();
