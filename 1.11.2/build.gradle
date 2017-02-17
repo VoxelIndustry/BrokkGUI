@@ -4,21 +4,20 @@ buildscript {
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
+apply plugin: 'net.minecraftforge.gradle.forge'
 
-apply plugin: 'forge'
-
-minecraft {
-    version = "1.7.10-10.13.4.1614-1.7.10"
-    runDir = "run"
-}
-
-// Really, no idea why this is needed.
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+minecraft {
+    version = "1.11.2-13.20.0.2226"
+    runDir = "run"
+    mappings = "snapshot_20161220"
 }
 
 processResources
@@ -33,20 +32,5 @@ processResources
 
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
-    }
-}
-
-task devJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'dev'
-}
-
-artifacts {
-    archives devJar
-}
-
-publishing.publications {
-    mavenJava(MavenPublication) {
-        artifact source: devJar, classifier: 'dev', extension: 'jar'
     }
 }

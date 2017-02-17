@@ -1,31 +1,31 @@
 package org.yggard.brokkgui.wrapper.impl;
 
+import java.io.IOException;
+
 import org.lwjgl.input.Keyboard;
-import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.wrapper.GuiRenderer;
+import org.yggard.brokkgui.wrapper.container.BrokkGuiContainer;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
 
-public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
+public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
 {
-    private final BrokkGuiScreen brokkgui;
+    private final BrokkGuiContainer<? extends Container> brokkgui;
 
-    private final GuiRenderer    renderer;
+    private final GuiRenderer                            renderer;
 
-    public GuiScreenImpl(final BrokkGuiScreen brokkgui)
+    public GuiContainerImpl(final BrokkGuiContainer<? extends Container> brokkGui)
     {
-        this.brokkgui = brokkgui;
-        this.renderer = new GuiRenderer(Tessellator.instance);
+        super(brokkGui.getContainer());
+        this.brokkgui = brokkGui;
+        this.renderer = new GuiRenderer(Tessellator.getInstance());
         this.brokkgui.setWrapper(this);
-    }
-
-    @Override
-    public boolean doesGuiPauseGame()
-    {
-        return false;
     }
 
     @Override
@@ -45,20 +45,16 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     {
         super.onGuiClosed();
         Keyboard.enableRepeatEvents(false);
-
-        this.brokkgui.onClose();
     }
 
     @Override
-    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks)
+    protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY)
     {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-
         this.brokkgui.render(mouseX, mouseY, partialTicks);
     }
 
     @Override
-    public void mouseClicked(final int mouseX, final int mouseY, final int key)
+    public void mouseClicked(final int mouseX, final int mouseY, final int key) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, key);
 
@@ -66,14 +62,14 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     }
 
     @Override
-    public void handleMouseInput()
+    public void handleMouseInput() throws IOException
     {
         super.handleMouseInput();
         this.brokkgui.handleMouseInput();
     }
 
     @Override
-    public void keyTyped(final char c, final int key)
+    public void keyTyped(final char c, final int key) throws IOException
     {
         super.keyTyped(c, key);
         this.brokkgui.onKeyTyped(c, key);
@@ -82,6 +78,8 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     @Override
     public void askClose()
     {
+        if (this.mc.player != null)
+            this.inventorySlots.onContainerClosed(this.mc.player);
         this.mc.displayGuiScreen(null);
         this.mc.setIngameFocus();
 
@@ -91,7 +89,7 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     @Override
     public void askOpen()
     {
-        this.mc.displayGuiScreen(this);
+        // TODO : Container opening sync
 
         this.brokkgui.onOpen();
     }
@@ -112,5 +110,14 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     public IGuiRenderer getRenderer()
     {
         return this.renderer;
+    }
+
+    @Override
+    protected void handleMouseClick(final Slot slot, final int slotID, final int button, final ClickType flag)
+    {
+        super.handleMouseClick(slot, slotID, button, flag);
+
+        if (slot != null)
+            this.brokkgui.slotClick(slot, button);
     }
 }

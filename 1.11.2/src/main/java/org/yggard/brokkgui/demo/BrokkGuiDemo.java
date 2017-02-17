@@ -32,21 +32,21 @@ public class BrokkGuiDemo
     public void onPreInit(final FMLPreInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new DemoGuiHandler());
-        GameRegistry.registerItem(new Item()
+        GameRegistry.register(new Item()
         {
             @Override
-            public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
-                    EnumHand hand)
+            public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player,
+                    final EnumHand hand)
             {
-                playerIn.setActiveHand(hand);
+                player.setActiveHand(hand);
 
-                if (worldIn.isRemote && !playerIn.isSneaking())
+                if (world.isRemote && !player.isSneaking())
                     Minecraft.getMinecraft().displayGuiScreen(BrokkGuiManager.getBrokkGuiScreen(new GuiDemo()));
-                else if (!worldIn.isRemote && playerIn.isSneaking())
-                    playerIn.openGui(BrokkGuiDemo.INSTANCE, 0, worldIn, (int) playerIn.posX, (int) playerIn.posY,
-                            (int) playerIn.posZ);
-                return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+                else if (!world.isRemote && player.isSneaking())
+                    player.openGui(BrokkGuiDemo.INSTANCE, 0, world, (int) player.posX, (int) player.posY,
+                            (int) player.posZ);
+                return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
             }
-        }.setCreativeTab(CreativeTabs.MISC), "ItemBrokkGuiTest");
+        }.setCreativeTab(CreativeTabs.MISC).setRegistryName("itembrokkguitest"));
     }
 }
