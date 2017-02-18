@@ -1,6 +1,6 @@
 package org.yggard.brokkgui.paint;
 
-public class Color
+public class Color extends GuiPaint
 {
     public static final Color ALPHA      = new Color(0, 0, 0, 0);
     public static final Color GRAY       = new Color(.5f, .5f, .5f);

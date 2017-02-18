@@ -1,7 +1,9 @@
 package org.yggard.brokkgui.shape;
 
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.Texture;
 
 public class Rectangle extends GuiShape
 {
@@ -33,9 +35,19 @@ public class Rectangle extends GuiShape
                 renderer.getHelper().drawColoredEmptyRect(renderer, this.getxPos() + this.getxTranslate(),
                         this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
                         this.getLineColor(), this.getLineWeight());
-            renderer.getHelper().drawColoredRect(renderer, this.getxPos() + this.getxTranslate(),
-                    this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
-                    this.getColor());
+
+            if (this.getFill() instanceof Color)
+                renderer.getHelper().drawColoredRect(renderer, this.getxPos() + this.getxTranslate(),
+                        this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
+                        (Color) this.getFill());
+            else if (this.getFill() instanceof Texture)
+            {
+                final Texture texture = (Texture) this.getFill();
+                renderer.getHelper().bindTexture(texture);
+                renderer.getHelper().drawTexturedRect(renderer, this.getxPos() + this.getxTranslate(),
+                        this.getyPos() + this.getyTranslate(), texture.getUMin(), texture.getVMin(), texture.getUMax(),
+                        texture.getVMax(), this.getWidth(), this.getHeight(), this.getzLevel());
+            }
         }
     }
 }

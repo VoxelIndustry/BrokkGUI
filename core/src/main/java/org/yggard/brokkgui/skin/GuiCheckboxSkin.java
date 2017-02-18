@@ -29,11 +29,11 @@ public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBe
         this.box = new Rectangle();
         this.fill = new Text("✔");
 
-        this.box.setColor(Color.ALPHA);
+        this.box.setFill(Color.ALPHA);
         this.box.setLineWeight(1);
         this.box.setLineColor(Color.BLACK);
 
-        this.fill.setColor(Color.GRAY);
+        this.fill.setFill(Color.GRAY);
 
         this.box.getxPosProperty().bind(new BaseBinding<Float>()
         {

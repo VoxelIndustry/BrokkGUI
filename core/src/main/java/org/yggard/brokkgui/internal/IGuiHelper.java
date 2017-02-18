@@ -29,18 +29,25 @@ public interface IGuiHelper
 
     public void drawString(final String string, final double x, final double y, final float zLevel, final Color color);
 
-    public void drawTexturedModalRect(final IGuiRenderer renderer, final double xStart, final double yStart,
-            final double uMin, final double vMin, final double uMax, final double vMax, final double width,
-            final double height, final float zLevel);
+    public void drawTexturedRect(final IGuiRenderer renderer, final float xStart, final float yStart, final float uMin,
+            final float vMin, final float uMax, final float vMax, final float width, final float height,
+            final float zLevel);
 
-    public void drawTexturedModalRect(final IGuiRenderer renderer, final double xStart, final double yStart,
-            final double uMin, final double vMin, final double width, final double height, final float zLevel);
+    public void drawTexturedRect(final IGuiRenderer renderer, final float xStart, final float yStart, final float uMin,
+            final float vMin, final float width, final float height, final float zLevel);
 
     public void drawColoredEmptyRect(final IGuiRenderer renderer, final float startX, final float startY,
             final float width, final float height, final float zLevel, final Color c, final float thin);
 
     public void drawColoredRect(final IGuiRenderer renderer, final float startX, final float startY, final float width,
             final float height, final float zLevel, final Color c);
+
+    public void drawTexturedCircle(final IGuiRenderer renderer, final float xStart, final float yStart,
+            final float uMin, final float vMin, final float uMax, final float vMax, final float radius,
+            final float zLevel);
+
+    public void drawTexturedCircle(final IGuiRenderer renderer, final float xStart, final float yStart,
+            final float uMin, final float vMin, final float radius, final float zLevel);
 
     public void drawColoredEmptyCircle(final IGuiRenderer renderer, final float startX, final float startY,
             final float radius, final float zLevel, final Color c, final float thin);

@@ -1,7 +1,9 @@
 package org.yggard.brokkgui.shape;
 
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.Texture;
 
 public class Circle extends GuiShape
 {
@@ -32,8 +34,18 @@ public class Circle extends GuiShape
                 renderer.getHelper().drawColoredEmptyCircle(renderer, this.getxTranslate() + this.getxPos(),
                         this.getyTranslate() + this.getyPos(), this.getWidth(), this.getzLevel(), this.getLineColor(),
                         this.getLineWeight());
-            renderer.getHelper().drawColoredCircle(renderer, this.getxTranslate() + this.getxPos(),
-                    this.getyTranslate() + this.getyPos(), this.getWidth(), this.getzLevel(), this.getColor());
+            if (this.getFill() instanceof Color)
+                renderer.getHelper().drawColoredCircle(renderer, this.getxTranslate() + this.getxPos(),
+                        this.getyTranslate() + this.getyPos(), this.getWidth(), this.getzLevel(),
+                        (Color) this.getFill());
+            else if (this.getFill() instanceof Texture)
+            {
+                final Texture texture = (Texture) this.getFill();
+                renderer.getHelper().bindTexture(texture);
+                renderer.getHelper().drawTexturedCircle(renderer, this.getxTranslate() + this.getxPos(),
+                        this.getyTranslate() + this.getyPos(), texture.getUMin(), texture.getVMin(), texture.getUMax(),
+                        texture.getVMax(), this.getWidth(), this.getzLevel());
+            }
         }
     }
 }

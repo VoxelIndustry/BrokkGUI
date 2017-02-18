@@ -13,6 +13,7 @@ import org.yggard.brokkgui.element.GuiTextfield;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.Color;
+import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiRelativePane;
 import org.yggard.brokkgui.panel.GuiTabPane;
 import org.yggard.brokkgui.skin.GuiButtonSkin;
@@ -27,6 +28,8 @@ public class GuiDemo extends BrokkGuiScreen
 
         final GuiRelativePane pane = new GuiRelativePane();
         this.setMainPanel(pane);
+
+        pane.setBackground(new Background(new Texture("brokkguidemo:textures/gui/background.png")));
         final GuiButton button = new GuiButton("Test Button");
 
         button.setWidth(200);
@@ -92,6 +95,7 @@ public class GuiDemo extends BrokkGuiScreen
         field.getSkin().setBorderThin(1);
 
         final GuiRelativePane radioButtonPane = new GuiRelativePane();
+        radioButtonPane.setBackground(new Background(Color.LIGHT_GRAY));
 
         final GuiRadioButton radioButton = new GuiRadioButton("Right 1");
         final GuiRadioButton radioButton2 = new GuiRadioButton("Nothing to see here 2");

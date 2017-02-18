@@ -1,6 +1,7 @@
 package org.yggard.brokkgui.shape;
 
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 
 public class Line extends GuiShape
@@ -32,6 +33,6 @@ public class Line extends GuiShape
         if (pass == EGuiRenderPass.MAIN)
             renderer.getHelper().drawColoredLine(renderer, this.getxPos() + this.getxTranslate(),
                     this.getyPos() + this.getyTranslate(), this.getxPos() + this.getWidth(),
-                    this.getyPos() + this.getHeight(), this.getLineWeight(), this.getzLevel(), this.getColor());
+                    this.getyPos() + this.getHeight(), this.getLineWeight(), this.getzLevel(), (Color) this.getFill());
     }
 }

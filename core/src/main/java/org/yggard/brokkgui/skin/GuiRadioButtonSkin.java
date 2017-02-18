@@ -31,11 +31,11 @@ public class GuiRadioButtonSkin extends GuiLabeledSkinBase<GuiRadioButton, GuiBu
         this.box = new Rectangle();
         this.fill = new Rectangle();
 
-        this.box.setColor(Color.ALPHA);
+        this.box.setFill(Color.ALPHA);
         this.box.setLineWeight(1);
         this.box.setLineColor(Color.BLACK);
 
-        this.fill.setColor(Color.BLACK);
+        this.fill.setFill(Color.BLACK);
 
         this.box.getxPosProperty().bind(new BaseBinding<Float>()
         {

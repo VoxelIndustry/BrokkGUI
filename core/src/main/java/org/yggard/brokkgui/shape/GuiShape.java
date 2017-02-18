@@ -2,25 +2,23 @@ package org.yggard.brokkgui.shape;
 
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.paint.Color;
+import org.yggard.brokkgui.paint.GuiPaint;
 
 import fr.ourten.teabeans.value.BaseProperty;
 
 public abstract class GuiShape extends GuiNode
 {
-    private final BaseProperty<Color> colorProperty;
-    private final BaseProperty<Float> lineWeightProperty;
-    private final BaseProperty<Color> lineColorProperty;
+    private final BaseProperty<Float>    lineWeightProperty;
+    private final BaseProperty<Color>    lineColorProperty;
+
+    private final BaseProperty<GuiPaint> fillProperty;
 
     public GuiShape()
     {
-        this.colorProperty = new BaseProperty<>(Color.WHITE, "colorProperty");
         this.lineWeightProperty = new BaseProperty<>(0F, "lineWeightProperty");
         this.lineColorProperty = new BaseProperty<>(Color.WHITE, "lineColorProperty");
-    }
 
-    public BaseProperty<Color> getColorProperty()
-    {
-        return this.colorProperty;
+        this.fillProperty = new BaseProperty<>(Color.AQUA, "fillProperty");
     }
 
     public BaseProperty<Float> getLineWeightProperty()
@@ -33,14 +31,9 @@ public abstract class GuiShape extends GuiNode
         return this.lineColorProperty;
     }
 
-    public Color getColor()
+    public BaseProperty<GuiPaint> getFillProperty()
     {
-        return this.getColorProperty().getValue();
-    }
-
-    public void setColor(final Color color)
-    {
-        this.getColorProperty().setValue(color);
+        return this.fillProperty;
     }
 
     public float getLineWeight()
@@ -61,5 +54,15 @@ public abstract class GuiShape extends GuiNode
     public void setLineColor(final Color lineColor)
     {
         this.getLineColorProperty().setValue(lineColor);
+    }
+
+    public GuiPaint getFill()
+    {
+        return this.getFillProperty().getValue();
+    }
+
+    public void setFill(final GuiPaint fill)
+    {
+        this.getFillProperty().setValue(fill);
     }
 }

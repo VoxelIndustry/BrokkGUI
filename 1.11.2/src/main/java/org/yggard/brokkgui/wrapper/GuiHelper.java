@@ -103,23 +103,23 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public final void drawTexturedModalRect(final IGuiRenderer renderer, final double xStart, final double yStart,
-            final double uMin, final double vMin, final double uMax, final double vMax, final double width,
-            final double height, final float zLevel)
+    public final void drawTexturedRect(final IGuiRenderer renderer, final float xStart, final float yStart,
+            final float uMin, final float vMin, final float uMax, final float vMax, final float width,
+            final float height, final float zLevel)
     {
-        renderer.beginDrawingQuads();
-        renderer.addVertexWithUV(xStart + 0, yStart + height, zLevel, uMin, vMax);
+        renderer.beginDrawingQuads(true);
+        renderer.addVertexWithUV(xStart, yStart + height, zLevel, uMin, vMax);
         renderer.addVertexWithUV(xStart + width, yStart + height, zLevel, uMax, vMax);
-        renderer.addVertexWithUV(xStart + width, yStart + 0, zLevel, uMax, vMin);
-        renderer.addVertexWithUV(xStart + 0, yStart + 0, zLevel, uMin, vMin);
+        renderer.addVertexWithUV(xStart + width, yStart, zLevel, uMax, vMin);
+        renderer.addVertexWithUV(xStart, yStart, zLevel, uMin, vMin);
         renderer.endDrawing();
     }
 
     @Override
-    public final void drawTexturedModalRect(final IGuiRenderer renderer, final double xStart, final double yStart,
-            final double uMin, final double vMin, final double width, final double height, final float zLevel)
+    public final void drawTexturedRect(final IGuiRenderer renderer, final float xStart, final float yStart,
+            final float uMin, final float vMin, final float width, final float height, final float zLevel)
     {
-        this.drawTexturedModalRect(renderer, xStart, yStart, uMin, vMin, 1, 1, width, height, zLevel);
+        this.drawTexturedRect(renderer, xStart, yStart, uMin, vMin, 1, 1, width, height, zLevel);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class GuiHelper implements IGuiHelper
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        renderer.beginDrawingQuads();
+        renderer.beginDrawingQuads(false);
         GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         renderer.addVertex(startX, startY, zLevel);
         renderer.addVertex(startX, startY + height, zLevel);
@@ -165,7 +165,7 @@ public class GuiHelper implements IGuiHelper
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             OpenGlHelper.glBlendFunc(770, 771, 1, 0);
             GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
-            renderer.beginDrawing(EGuiRenderMode.POINTS);
+            renderer.beginDrawing(EGuiRenderMode.POINTS, false);
             while (x >= y)
             {
                 renderer.addVertex(startX + x, startY + y, zLevel);
@@ -205,7 +205,7 @@ public class GuiHelper implements IGuiHelper
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
-        renderer.beginDrawing(EGuiRenderMode.POINTS);
+        renderer.beginDrawing(EGuiRenderMode.POINTS, false);
         final float r2 = radius * radius;
         final float area = r2 * 4;
         final float rr = radius * 2;
@@ -225,6 +225,41 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
+    public void drawTexturedCircle(final IGuiRenderer renderer, final float xStart, final float yStart,
+            final float uMin, final float vMin, final float uMax, final float vMax, final float radius,
+            final float zLevel)
+    {
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+        renderer.beginDrawing(EGuiRenderMode.POINTS, true);
+        final float r2 = radius * radius;
+        final float area = r2 * 4;
+        final float rr = radius * 2;
+
+        for (int i = 0; i < area; i++)
+        {
+            final float tx = i % rr - radius;
+            final float ty = i / rr - radius;
+
+            if (tx * tx + ty * ty <= r2)
+                renderer.addVertexWithUV(xStart + tx, yStart + ty, zLevel, uMin + tx / rr * (uMax - uMin),
+                        vMin + ty / rr * (vMax - vMin));
+        }
+        renderer.endDrawing();
+        GL11.glColor4f(1, 1, 1, 1);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+    }
+
+    @Override
+    public void drawTexturedCircle(final IGuiRenderer renderer, final float xStart, final float yStart,
+            final float uMin, final float vMin, final float radius, final float zLevel)
+    {
+        this.drawTexturedCircle(renderer, xStart, yStart, uMin, vMin, 1, 1, radius, zLevel);
+    }
+
+    @Override
     public final void drawColoredLine(final IGuiRenderer renderer, final float startX, final float startY,
             final float endX, final float endY, final float lineWeight, final float zLevel, final Color c)
     {
@@ -233,7 +268,7 @@ public class GuiHelper implements IGuiHelper
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 
-        renderer.beginDrawing(EGuiRenderMode.LINE);
+        renderer.beginDrawing(EGuiRenderMode.LINE, false);
         GL11.glLineWidth(lineWeight);
 
         renderer.addVertex(startX, startY, zLevel);

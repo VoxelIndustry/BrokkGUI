@@ -7,6 +7,7 @@ import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.data.ZLevelComparator;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
@@ -15,11 +16,13 @@ import fr.ourten.teabeans.value.BaseProperty;
 
 public class GuiPane extends GuiFather
 {
-    private static final ZLevelComparator ZLEVEL_COMPARATOR = new ZLevelComparator();
-    private final EOverflowPolicy         overflowPolicy;
+    private static final ZLevelComparator  ZLEVEL_COMPARATOR = new ZLevelComparator();
+    private final EOverflowPolicy          overflowPolicy;
 
-    private final BaseProperty<Integer>   borderThinProperty;
-    private final BaseProperty<Color>     borderColorProperty;
+    private final BaseProperty<Integer>    borderThinProperty;
+    private final BaseProperty<Color>      borderColorProperty;
+
+    private final BaseProperty<Background> backgroundProperty;
 
     public GuiPane()
     {
@@ -28,6 +31,16 @@ public class GuiPane extends GuiFather
 
         this.borderThinProperty = new BaseProperty<>(0, "borderThinProperty");
         this.borderColorProperty = new BaseProperty<>(Color.BLACK, "borderColorProperty");
+
+        final Background background = new Background();
+        background.attach(this);
+        this.backgroundProperty = new BaseProperty<>(background, "backgroundProperty");
+
+        this.backgroundProperty.addListener((property, oldValue, newValue) ->
+        {
+            oldValue.detach();
+            newValue.attach(this);
+        });
     }
 
     public void addChild(final GuiNode node)
@@ -76,6 +89,7 @@ public class GuiPane extends GuiFather
             renderer.getHelper().drawColoredEmptyRect(renderer, this.getxPos() + this.getxTranslate(),
                     this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
                     this.getBorderColor(), this.getBorderThin());
+        this.getBackground().renderNode(renderer, pass, mouseX, mouseY);
         super.renderNode(renderer, pass, mouseX, mouseY);
     }
 
@@ -87,6 +101,11 @@ public class GuiPane extends GuiFather
     public BaseProperty<Color> getBorderColorProperty()
     {
         return this.borderColorProperty;
+    }
+
+    public BaseProperty<Background> getBackgroundProperty()
+    {
+        return this.backgroundProperty;
     }
 
     public int getBorderThin()
@@ -109,8 +128,19 @@ public class GuiPane extends GuiFather
         this.getBorderColorProperty().setValue(color);
     }
 
+    @Override
     public EOverflowPolicy getOverflowPolicy()
     {
         return this.overflowPolicy;
+    }
+
+    public Background getBackground()
+    {
+        return this.getBackgroundProperty().getValue();
+    }
+
+    public void setBackground(final Background background)
+    {
+        this.getBackgroundProperty().setValue(background);
     }
 }

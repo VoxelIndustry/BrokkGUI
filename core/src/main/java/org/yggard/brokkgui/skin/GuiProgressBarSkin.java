@@ -34,9 +34,9 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         {
             return model.getWidth() * model.getProgress();
         }, model.getProgressProperty(), model.getWidthProperty()));
-        this.progressBar.getColorProperty().bind(new BaseExpression<>(() ->
+        this.progressBar.getFillProperty().bind(new BaseExpression<>(() ->
         {
-            return model.getBackgroundProperty().getValue().getColor();
+            return model.getBackgroundProperty().getValue().getFill();
         }, model.getBackgroundProperty()));
 
         this.getText().getxPosProperty().bind(new BaseExpression<>(() ->

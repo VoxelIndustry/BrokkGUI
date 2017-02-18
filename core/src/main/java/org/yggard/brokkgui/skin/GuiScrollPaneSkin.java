@@ -85,7 +85,7 @@ public class GuiScrollPaneSkin extends GuiBehaviorSkinBase<ScrollPane, GuiScroll
                                 * GuiScrollPaneSkin.this.getModel().getWidth());
             }
         });
-        this.gripX.getColorProperty().bind(this.getModel().getScrollbarColorProperty());
+        this.gripX.getFillProperty().bind(this.getModel().getScrollbarColorProperty());
         this.gripX.setzLevel(10);
 
         this.gripY = new Rectangle();
@@ -154,7 +154,7 @@ public class GuiScrollPaneSkin extends GuiBehaviorSkinBase<ScrollPane, GuiScroll
             }
         });
 
-        this.gripY.getColorProperty().bind(this.getModel().getScrollbarColorProperty());
+        this.gripY.getFillProperty().bind(this.getModel().getScrollbarColorProperty());
     }
 
     @Override

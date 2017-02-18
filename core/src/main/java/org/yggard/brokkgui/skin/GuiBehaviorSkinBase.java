@@ -23,6 +23,10 @@ public class GuiBehaviorSkinBase<C extends GuiControl, B extends GuiBehaviorBase
         this.backgroundProperty = new BaseProperty<>(new Background(), "backgroundProperty");
         this.backgroundHoveredProperty = new BaseProperty<>(new Background(), "backgroundHoveredProperty");
         this.backgroundDisabledProperty = new BaseProperty<>(new Background(), "backgroundDisabledProperty");
+
+        this.getBackground().attach(model);
+        this.getHoveredBackground().attach(model);
+        this.getDisabledBackground().attach(model);
     }
 
     @Override
@@ -30,20 +34,11 @@ public class GuiBehaviorSkinBase<C extends GuiControl, B extends GuiBehaviorBase
     {
         if (pass == EGuiRenderPass.MAIN)
             if (this.getModel().isDisabled())
-                this.getDisabledBackground().renderBackground(renderer,
-                        this.getModel().getxPos() + this.getModel().getxTranslate(),
-                        this.getModel().getyPos() + this.getModel().getyTranslate(), this.getModel().getWidth(),
-                        this.getModel().getHeight(), this.getModel().getzLevel());
+                this.getDisabledBackground().renderNode(renderer, pass, mouseX, mouseY);
             else if (this.getModel().isHovered())
-                this.getHoveredBackground().renderBackground(renderer,
-                        this.getModel().getxPos() + this.getModel().getxTranslate(),
-                        this.getModel().getyPos() + this.getModel().getyTranslate(), this.getModel().getWidth(),
-                        this.getModel().getHeight(), this.getModel().getzLevel());
+                this.getHoveredBackground().renderNode(renderer, pass, mouseX, mouseY);
             else
-                this.getBackground().renderBackground(renderer,
-                        this.getModel().getxPos() + this.getModel().getxTranslate(),
-                        this.getModel().getyPos() + this.getModel().getyTranslate(), this.getModel().getWidth(),
-                        this.getModel().getHeight(), this.getModel().getzLevel());
+                this.getBackground().renderNode(renderer, pass, mouseX, mouseY);
         super.render(pass, renderer, mouseX, mouseY);
     }
 

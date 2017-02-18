@@ -1,22 +1,19 @@
 package org.yggard.brokkgui.paint;
 
+import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.shape.Rectangle;
 
-public class Background
+public class Background extends Rectangle
 {
-    private Color   color;
-    private Texture texture;
-
-    public Background(final Color color, final Texture texture)
+    public Background(final Texture texture)
     {
-        super();
-        this.color = color;
-        this.texture = texture;
+        this.setFill(texture);
     }
 
     public Background(final Color color)
     {
-        this(color, new Texture());
+        this.setFill(color);
     }
 
     public Background()
@@ -24,36 +21,33 @@ public class Background
         this(Color.ALPHA);
     }
 
-    public void renderBackground(final IGuiRenderer renderer, final float x, final float y, final float width,
-            final float height, final float zLevel)
+    public void attach(final GuiNode node)
     {
-        if (!this.texture.isEmpty())
-        {
-            renderer.getHelper().bindTexture(this.texture);
-            renderer.getHelper().drawTexturedModalRect(renderer, x, y, this.texture.getU(), this.texture.getV(),
-                    this.texture.getS(), this.texture.getT(), width, height, zLevel);
-        }
-        if (this.color.getAlpha() != 0)
-            renderer.getHelper().drawColoredRect(renderer, x, y, width, height, zLevel, this.color);
+        this.getxPosProperty().bind(node.getxPosProperty());
+        this.getyPosProperty().bind(node.getyPosProperty());
+
+        this.getxTranslateProperty().bind(node.getxTranslateProperty());
+        this.getyTranslateProperty().bind(node.getyTranslateProperty());
+
+        this.getWidthProperty().bind(node.getWidthProperty());
+        this.getHeightProperty().bind(node.getHeightProperty());
     }
 
-    public Color getColor()
+    public void detach()
     {
-        return this.color;
+        this.getxPosProperty().unbind();
+        this.getyPosProperty().unbind();
+
+        this.getxTranslateProperty().unbind();
+        this.getyTranslateProperty().unbind();
+
+        this.getWidthProperty().unbind();
+        this.getHeightProperty().unbind();
     }
 
-    public void setColor(final Color color)
+    @Override
+    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
-        this.color = color;
-    }
-
-    public Texture getTexture()
-    {
-        return this.texture;
-    }
-
-    public void setTexture(final Texture texture)
-    {
-        this.texture = texture;
+        super.renderNode(renderer, pass, mouseX, mouseY);
     }
 }

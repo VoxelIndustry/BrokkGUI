@@ -22,16 +22,13 @@ public class GuiRenderer implements IGuiRenderer
     }
 
     @Override
-    public void beginDrawing(final EGuiRenderMode mode)
+    public void beginDrawing(final EGuiRenderMode mode, final boolean texture)
     {
         final int op = this.getGLOpFromMode(mode);
-        this.t.getBuffer().begin(op, DefaultVertexFormats.POSITION);
-    }
-
-    @Override
-    public void beginDrawingQuads()
-    {
-        this.t.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        if (texture)
+            this.t.getBuffer().begin(op, DefaultVertexFormats.POSITION_TEX);
+        else
+            this.t.getBuffer().begin(op, DefaultVertexFormats.POSITION);
     }
 
     @Override

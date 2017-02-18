@@ -5,6 +5,7 @@ import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiTabPane;
 
 /**
@@ -27,14 +28,29 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
             switch (this.getModel().getTabSide())
             {
                 case UP:
-                    renderer.getHelper().drawColoredRect(renderer,
-                            this.getModel().getxPos() + this.getModel().getxTranslate()
-                                    + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
-                                            * this.getModel().getTabsProperty().indexOf(tab),
-                            this.getModel().getyPos() + this.getModel().getyTranslate(),
-                            this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
-                            this.getModel().getHeight() * this.getModel().getTabHeightRatio(),
-                            this.getModel().getzLevel(), this.getBackground().getColor());
+                    if (this.getBackground().getFill() instanceof Color)
+                        renderer.getHelper().drawColoredRect(renderer,
+                                this.getModel().getxPos() + this.getModel().getxTranslate()
+                                        + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
+                                                * this.getModel().getTabsProperty().indexOf(tab),
+                                this.getModel().getyPos() + this.getModel().getyTranslate(),
+                                this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
+                                this.getModel().getHeight() * this.getModel().getTabHeightRatio(),
+                                this.getModel().getzLevel(), (Color) this.getBackground().getFill());
+                    else if (this.getBackground().getFill() instanceof Texture)
+                    {
+                        final Texture texture = (Texture) this.getBackground().getFill();
+                        renderer.getHelper().bindTexture(texture);
+                        renderer.getHelper().drawTexturedRect(renderer,
+                                this.getModel().getxPos() + this.getModel().getxTranslate()
+                                        + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
+                                                * this.getModel().getTabsProperty().indexOf(tab),
+                                this.getModel().getyPos() + this.getModel().getyTranslate(), texture.getUMin(),
+                                texture.getVMin(), texture.getUMax(), texture.getVMax(),
+                                this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
+                                this.getModel().getHeight() * this.getModel().getTabHeightRatio(),
+                                this.getModel().getzLevel());
+                    }
                     renderer.getHelper().drawColoredEmptyRect(renderer,
                             this.getModel().getxPos() + this.getModel().getxTranslate()
                                     + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
