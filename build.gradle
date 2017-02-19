@@ -109,7 +109,7 @@ project(":core") {
 project(":1.11.2") {
     archivesBaseName = "brokkgui-binding-mc1.11.2"
 
-    version = "0.1.1"
+    version = "0.1.2"
     dependencies {
         compile project(":core")
     }
