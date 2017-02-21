@@ -71,11 +71,13 @@ public class GuiHelper implements IGuiHelper
         if (!shadow)
             this.mc.fontRendererObj.drawString(string,
                     x - (alignment.isHorizontalCentered() ? this.mc.fontRendererObj.getStringWidth(string) / 2 : 0),
-                    y - (alignment.isVerticalCentered() ? this.mc.fontRendererObj.FONT_HEIGHT / 2 : 0), color.toInt());
+                    y - (alignment.isVerticalCentered() ? this.mc.fontRendererObj.FONT_HEIGHT / 2 : 0),
+                    color.toRGBAInt());
         else
             this.mc.fontRendererObj.drawStringWithShadow(string,
                     x - (alignment.isHorizontalCentered() ? this.mc.fontRendererObj.getStringWidth(string) / 2 : 0),
-                    y - (alignment.isVerticalCentered() ? this.mc.fontRendererObj.FONT_HEIGHT / 2 : 0), color.toInt());
+                    y - (alignment.isVerticalCentered() ? this.mc.fontRendererObj.FONT_HEIGHT / 2 : 0),
+                    color.toRGBAInt());
         if (zLevel != 0)
             GL11.glPopMatrix();
         GlStateManager.disableBlend();

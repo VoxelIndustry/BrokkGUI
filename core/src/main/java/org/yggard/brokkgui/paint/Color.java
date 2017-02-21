@@ -15,22 +15,44 @@ public class Color extends GuiPaint
 
     public static Color fromHex(final String hex)
     {
-        return hex.startsWith("#") ? new Color(Integer.valueOf(hex.substring(1, 3), 16) / 255.0F,
-                Integer.valueOf(hex.substring(3, 5), 16) / 255.0F, Integer.valueOf(hex.substring(5, 7)) / 255.0F)
-                : new Color(Integer.valueOf(hex.substring(0, 2), 16) / 255.0F,
-                        Integer.valueOf(hex.substring(2, 4), 16) / 255.0F,
-                        Integer.valueOf(hex.substring(4, 6)) / 255.0F);
+        return Color.fromHex(hex, 1);
     }
 
-    public static Color fromInt(final int rgb)
+    public static Color fromHex(final String hex, final float alpha)
+    {
+        final Color rtn = new Color(0, 0, 0);
+
+        final int padding = hex.startsWith("#") ? 1 : 0;
+        rtn.red = Integer.parseInt(hex.substring(padding, 2 + padding), 16) / 255.0F;
+        rtn.green = Integer.parseInt(hex.substring(2 + padding, 4 + padding), 16) / 255.0F;
+        rtn.blue = Integer.parseInt(hex.substring(6 + padding, 8 + padding), 16) / 255.0F;
+        rtn.alpha = alpha;
+        return rtn;
+    }
+
+    public static Color fromRGBInt(final int rgb)
     {
         return new Color(rgb >> 16 & 0xFF, rgb >> 8 & 0xFF, rgb & 0xFF);
     }
 
-    public int toInt()
+    public static Color fromRGBAInt(final int rgba)
+    {
+        return new Color(rgba >> 24 & 0xFF, rgba >> 16 & 0xFF, rgba >> 8 & 0xFF, rgba & 0xFF);
+    }
+
+    public int toRGBInt()
     {
         int rtn = 0;
-        rtn = 0;
+        rtn |= (int) (this.getRed() * 255) << 16;
+        rtn |= (int) (this.getGreen() * 255) << 8;
+        rtn |= (int) (this.getBlue() * 255);
+
+        return rtn;
+    }
+
+    public int toRGBAInt()
+    {
+        int rtn = 0;
         rtn |= (int) (this.getAlpha() * 255) << 24;
         rtn |= (int) (this.getRed() * 255) << 16;
         rtn |= (int) (this.getGreen() * 255) << 8;
