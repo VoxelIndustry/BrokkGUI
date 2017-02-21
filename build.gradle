@@ -97,7 +97,7 @@ subprojects {
 project(":core") {
     archivesBaseName = "brokkgui-core"
 
-    version = "0.3.2"
+    version = "0.3.3"
     dependencies {
         compile "fr.ourten:teabeans:0.4.0"
         compile "org.yggard:hermod:0.1.0"
@@ -109,7 +109,7 @@ project(":core") {
 project(":1.11.2") {
     archivesBaseName = "brokkgui-binding-mc1.11.2"
 
-    version = "0.1.2"
+    version = "0.1.3"
     dependencies {
         compile project(":core")
     }
