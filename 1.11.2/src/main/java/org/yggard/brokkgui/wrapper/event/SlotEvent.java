@@ -11,8 +11,9 @@ import net.minecraft.inventory.Slot;
  */
 public class SlotEvent extends HermodEvent
 {
-    public static final EventType<SlotEvent>       ANY   = new EventType<>("SLOT_EVENT");
-    public static final EventType<SlotEvent.Click> CLICK = new EventType<>(SlotEvent.ANY, "SLOT_CLICK_EVENT");
+    public static final EventType<SlotEvent>       ANY    = new EventType<>("SLOT_EVENT");
+    public static final EventType<SlotEvent.Click> CLICK  = new EventType<>(SlotEvent.ANY, "SLOT_CLICK_EVENT");
+    public static final EventType<Change>          CHANGE = new EventType<>(SlotEvent.ANY, "SLOT_CHANGE_EVENT");
 
     private final Slot                             slot;
 
@@ -42,6 +43,14 @@ public class SlotEvent extends HermodEvent
         public int getKey()
         {
             return this.key;
+        }
+    }
+
+    public static final class Change extends SlotEvent
+    {
+        public Change(final BrokkGuiContainer<?> source, final Slot slot)
+        {
+            super(source, slot);
         }
     }
 }
