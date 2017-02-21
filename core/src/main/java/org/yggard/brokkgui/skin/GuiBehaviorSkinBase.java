@@ -27,6 +27,22 @@ public class GuiBehaviorSkinBase<C extends GuiControl, B extends GuiBehaviorBase
         this.getBackground().attach(model);
         this.getHoveredBackground().attach(model);
         this.getDisabledBackground().attach(model);
+
+        this.backgroundProperty.addListener((property, oldValue, newValue) ->
+        {
+            oldValue.detach();
+            newValue.attach(model);
+        });
+        this.backgroundHoveredProperty.addListener((property, oldValue, newValue) ->
+        {
+            oldValue.detach();
+            newValue.attach(model);
+        });
+        this.backgroundDisabledProperty.addListener((property, oldValue, newValue) ->
+        {
+            oldValue.detach();
+            newValue.attach(model);
+        });
     }
 
     @Override
