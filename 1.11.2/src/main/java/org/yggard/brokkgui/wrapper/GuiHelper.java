@@ -80,6 +80,7 @@ public class GuiHelper implements IGuiHelper
                     color.toRGBAInt());
         if (zLevel != 0)
             GL11.glPopMatrix();
+        GlStateManager.resetColor();
         GlStateManager.disableBlend();
     }
 
@@ -138,19 +139,21 @@ public class GuiHelper implements IGuiHelper
     public final void drawColoredRect(final IGuiRenderer renderer, final float startX, final float startY,
             final float width, final float height, final float zLevel, final Color c)
     {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         renderer.beginDrawingQuads(false);
-        GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         renderer.addVertex(Math.floor(startX), Math.floor(startY), zLevel);
         renderer.addVertex(Math.floor(startX), Math.floor(startY + height), zLevel);
         renderer.addVertex(Math.floor(startX + width), Math.floor(startY + height), zLevel);
         renderer.addVertex(Math.floor(startX + width), Math.floor(startY), zLevel);
         renderer.endDrawing();
-        GL11.glColor4f(1, 1, 1, 1);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.resetColor();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 
     @Override
@@ -163,10 +166,12 @@ public class GuiHelper implements IGuiHelper
             float y = 0;
             float err = 0;
 
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-            GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+            GlStateManager.enableBlend();
+            GlStateManager.disableTexture2D();
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                    GlStateManager.DestFactor.ZERO);
+            GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
             renderer.beginDrawing(EGuiRenderMode.POINTS, false);
             while (x >= y)
             {
@@ -191,9 +196,9 @@ public class GuiHelper implements IGuiHelper
                 }
             }
             renderer.endDrawing();
-            GL11.glColor4f(1, 1, 1, 1);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glDisable(GL11.GL_BLEND);
+            GlStateManager.resetColor();
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableBlend();
         }
         if (thin > 1)
             this.drawColoredEmptyCircle(renderer, startX + 1, startY + 1, radius - 1, zLevel, c, thin - 1);
@@ -203,10 +208,12 @@ public class GuiHelper implements IGuiHelper
     public final void drawColoredCircle(final IGuiRenderer renderer, final float startX, final float startY,
             final float radius, final float zLevel, final Color c)
     {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         renderer.beginDrawing(EGuiRenderMode.POINTS, false);
         final float r2 = radius * radius;
         final float area = r2 * 4;
@@ -221,9 +228,9 @@ public class GuiHelper implements IGuiHelper
                 renderer.addVertex(Math.floor(startX + tx), Math.floor(startY + ty), zLevel);
         }
         renderer.endDrawing();
-        GL11.glColor4f(1, 1, 1, 1);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.resetColor();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 
     @Override
@@ -231,9 +238,6 @@ public class GuiHelper implements IGuiHelper
             final float uMin, final float vMin, final float uMax, final float vMax, final float radius,
             final float zLevel)
     {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         renderer.beginDrawing(EGuiRenderMode.POINTS, true);
         final float r2 = radius * radius;
         final float area = r2 * 4;
@@ -249,9 +253,6 @@ public class GuiHelper implements IGuiHelper
                         uMin + tx / rr * (uMax - uMin), vMin + ty / rr * (vMax - vMin));
         }
         renderer.endDrawing();
-        GL11.glColor4f(1, 1, 1, 1);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
     }
 
     @Override
@@ -265,10 +266,12 @@ public class GuiHelper implements IGuiHelper
     public final void drawColoredLine(final IGuiRenderer renderer, final float startX, final float startY,
             final float endX, final float endY, final float lineWeight, final float zLevel, final Color c)
     {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 
         renderer.beginDrawing(EGuiRenderMode.LINE, false);
         GL11.glLineWidth(lineWeight);
@@ -277,9 +280,9 @@ public class GuiHelper implements IGuiHelper
         renderer.addVertex(Math.floor(endX), Math.floor(endY), zLevel);
 
         renderer.endDrawing();
-        GL11.glColor4f(1, 1, 1, 1);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.resetColor();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 
     public final void drawItemStack(final IGuiRenderer renderer, final float startX, final float startY,
