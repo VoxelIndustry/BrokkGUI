@@ -82,6 +82,11 @@ public class GuiPane extends GuiFather
         this.getChildrensProperty().clear();
     }
 
+    public boolean hasChild(final GuiNode node)
+    {
+        return this.getChildrensProperty().contains(node);
+    }
+
     @Override
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
