@@ -23,8 +23,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiHelper implements IGuiHelper
 {
-    private final RenderItem itemRender;
-    private final Minecraft  mc;
+    private RenderItem      itemRender;
+    private final Minecraft mc;
 
     public GuiHelper()
     {
@@ -110,12 +110,20 @@ public class GuiHelper implements IGuiHelper
             final float uMin, final float vMin, final float uMax, final float vMax, final float width,
             final float height, final float zLevel)
     {
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(1, 1, 1, 1);
         renderer.beginDrawingQuads(true);
         renderer.addVertexWithUV(Math.floor(xStart), Math.floor(yStart + height), zLevel, uMin, vMax);
         renderer.addVertexWithUV(Math.floor(xStart + width), Math.floor(yStart + height), zLevel, uMax, vMax);
         renderer.addVertexWithUV(Math.floor(xStart + width), Math.floor(yStart), zLevel, uMax, vMin);
         renderer.addVertexWithUV(Math.floor(xStart), Math.floor(yStart), zLevel, uMin, vMin);
         renderer.endDrawing();
+        GlStateManager.disableAlpha();
+        GlStateManager.disableBlend();
     }
 
     @Override
@@ -140,6 +148,7 @@ public class GuiHelper implements IGuiHelper
             final float width, final float height, final float zLevel, final Color c)
     {
         GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
@@ -153,6 +162,7 @@ public class GuiHelper implements IGuiHelper
         renderer.endDrawing();
         GlStateManager.resetColor();
         GlStateManager.enableTexture2D();
+        GlStateManager.disableAlpha();
         GlStateManager.disableBlend();
     }
 
@@ -311,16 +321,16 @@ public class GuiHelper implements IGuiHelper
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        final float oldItemZLevel = this.itemRender.zLevel;
-        this.itemRender.zLevel = 200.0F;
+        final float oldItemZLevel = this.getRenderItem().zLevel;
+        this.getRenderItem().zLevel = 100.0F;
         FontRenderer font = null;
         if (stack != null)
             font = stack.getItem().getFontRenderer(stack);
         if (font == null)
             font = this.mc.fontRendererObj;
-        this.itemRender.renderItemAndEffectIntoGUI(stack, (int) startX, (int) startY);
-        this.itemRender.renderItemOverlayIntoGUI(font, stack, (int) startX, (int) startY, displayString);
-        this.itemRender.zLevel = oldItemZLevel;
+        this.getRenderItem().renderItemAndEffectIntoGUI(stack, (int) startX, (int) startY);
+        this.getRenderItem().renderItemOverlayIntoGUI(font, stack, (int) startX, (int) startY, displayString);
+        this.getRenderItem().zLevel = oldItemZLevel;
         GL11.glPopMatrix();
     }
 
@@ -364,5 +374,12 @@ public class GuiHelper implements IGuiHelper
     public void endScissor()
     {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    }
+
+    private RenderItem getRenderItem()
+    {
+        if (this.itemRender == null)
+            this.itemRender = this.mc.getRenderItem();
+        return this.itemRender;
     }
 }
