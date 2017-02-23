@@ -20,28 +20,30 @@ public class GuiBehaviorSkinBase<C extends GuiControl, B extends GuiBehaviorBase
 
         this.behavior = behavior;
 
-        this.backgroundProperty = new BaseProperty<>(new Background(), "backgroundProperty");
-        this.backgroundHoveredProperty = new BaseProperty<>(new Background(), "backgroundHoveredProperty");
-        this.backgroundDisabledProperty = new BaseProperty<>(new Background(), "backgroundDisabledProperty");
-
-        this.getBackground().attach(model);
-        this.getHoveredBackground().attach(model);
-        this.getDisabledBackground().attach(model);
+        this.backgroundProperty = new BaseProperty<>(null, "backgroundProperty");
+        this.backgroundHoveredProperty = new BaseProperty<>(null, "backgroundHoveredProperty");
+        this.backgroundDisabledProperty = new BaseProperty<>(null, "backgroundDisabledProperty");
 
         this.backgroundProperty.addListener((property, oldValue, newValue) ->
         {
-            oldValue.detach();
-            newValue.attach(model);
+            if (oldValue != null)
+                oldValue.detach();
+            if (newValue != null)
+                newValue.attach(model);
         });
         this.backgroundHoveredProperty.addListener((property, oldValue, newValue) ->
         {
-            oldValue.detach();
-            newValue.attach(model);
+            if (oldValue != null)
+                oldValue.detach();
+            if (newValue != null)
+                newValue.attach(model);
         });
         this.backgroundDisabledProperty.addListener((property, oldValue, newValue) ->
         {
-            oldValue.detach();
-            newValue.attach(model);
+            if (oldValue != null)
+                oldValue.detach();
+            if (newValue != null)
+                newValue.attach(model);
         });
     }
 
@@ -49,11 +51,11 @@ public class GuiBehaviorSkinBase<C extends GuiControl, B extends GuiBehaviorBase
     public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
         if (pass == EGuiRenderPass.MAIN)
-            if (this.getModel().isDisabled())
+            if (this.getModel().isDisabled() && this.getBackgroundDisabledProperty().isPresent())
                 this.getDisabledBackground().renderNode(renderer, pass, mouseX, mouseY);
-            else if (this.getModel().isHovered())
+            else if (this.getModel().isHovered() && this.getBackgroundHoveredProperty().isPresent())
                 this.getHoveredBackground().renderNode(renderer, pass, mouseX, mouseY);
-            else
+            else if (this.getBackgroundProperty().isPresent())
                 this.getBackground().renderNode(renderer, pass, mouseX, mouseY);
         super.render(pass, renderer, mouseX, mouseY);
     }

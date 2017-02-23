@@ -36,7 +36,7 @@ public class Rectangle extends GuiShape
                         this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
                         this.getLineColor(), this.getLineWeight());
 
-            if (this.getFill() instanceof Color)
+            if (this.getFill() instanceof Color && ((Color) this.getFill()).getAlpha() != 0)
                 renderer.getHelper().drawColoredRect(renderer, this.getxPos() + this.getxTranslate(),
                         this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
                         (Color) this.getFill());

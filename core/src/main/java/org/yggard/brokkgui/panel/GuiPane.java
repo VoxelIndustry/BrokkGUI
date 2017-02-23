@@ -85,7 +85,7 @@ public class GuiPane extends GuiFather
     @Override
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
-        if (pass == EGuiRenderPass.SPECIAL)
+        if (pass == EGuiRenderPass.SPECIAL && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
             renderer.getHelper().drawColoredEmptyRect(renderer, this.getxPos() + this.getxTranslate(),
                     this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
                     this.getBorderColor(), this.getBorderThin());
