@@ -1,7 +1,6 @@
 package org.yggard.brokkgui.wrapper;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.Vector2i;
 import org.yggard.brokkgui.internal.EGuiRenderMode;
@@ -16,7 +15,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -305,33 +303,35 @@ public class GuiHelper implements IGuiHelper
             final float width, final float height, final float zLevel, final ItemStack stack,
             final String displayString)
     {
-        GL11.glPushMatrix();
-        GL11.glTranslated(-9, -9, 0);
+        GlStateManager.color(1.0F, 1.0F, 1.0F);
 
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(GL11.GL_LIGHTING);
-        RenderHelper.enableGUIStandardItemLighting();
-        GL11.glTranslatef(0.0F, 0.0F, 32.0F);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        final short short1 = 240;
-        final short short2 = 240;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, short1 / 1.0F, short2 / 1.0F);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        final float oldItemZLevel = this.getRenderItem().zLevel;
-        this.getRenderItem().zLevel = 100.0F;
-        FontRenderer font = null;
-        if (stack != null)
-            font = stack.getItem().getFontRenderer(stack);
-        if (font == null)
-            font = this.mc.fontRendererObj;
-        this.getRenderItem().renderItemAndEffectIntoGUI(stack, (int) startX, (int) startY);
-        this.getRenderItem().renderItemOverlayIntoGUI(font, stack, (int) startX, (int) startY, displayString);
-        this.getRenderItem().zLevel = oldItemZLevel;
-        GL11.glPopMatrix();
+        if (!stack.isEmpty())
+        {
+            final float scaleX = width / 18;
+            final float scaleY = height / 18;
+            GL11.glPushMatrix();
+            GL11.glTranslated(-(startX * (scaleX - 1)) - 8 * scaleX, -(startY * (scaleY - 1)) - 8 * scaleY, 0);
+            GlStateManager.scale(scaleX, scaleY, 1);
+            FontRenderer font = stack.getItem().getFontRenderer(stack);
+            if (font == null)
+                font = this.mc.fontRendererObj;
+
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0.0F, 0.0F, 32.0F);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.enableRescaleNormal();
+            GlStateManager.enableLighting();
+            final short short1 = 240;
+            final short short2 = 240;
+            net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, short1 / 1.0F, short2 / 1.0F);
+            this.getRenderItem().renderItemAndEffectIntoGUI(stack, (int) startX, (int) startY);
+            this.getRenderItem().renderItemOverlayIntoGUI(font, stack, (int) startX, (int) startY, displayString);
+            GlStateManager.popMatrix();
+            GlStateManager.disableRescaleNormal();
+            GlStateManager.disableLighting();
+            GL11.glPopMatrix();
+        }
     }
 
     @Override
