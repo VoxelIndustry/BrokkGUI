@@ -2,6 +2,7 @@ package org.yggard.brokkgui.demo;
 
 import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.control.GuiToggleGroup;
+import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.EHAlignment;
 import org.yggard.brokkgui.element.GuiButton;
 import org.yggard.brokkgui.element.GuiCheckbox;
@@ -117,6 +118,21 @@ public class GuiDemo extends BrokkGuiScreen
         radioButtonPane.addChild(radioButton2, 0.5f, 0.4f);
         radioButtonPane.addChild(checkbox, 0.5f, 0.6f);
 
+        final GuiRelativePane labelPane = new GuiRelativePane();
+
+        final GuiLabel left = new GuiLabel("LEFT-CENTER");
+        left.setTextAlignment(EAlignment.LEFT_CENTER);
+
+        final GuiLabel center = new GuiLabel("CENTER");
+        center.setTextAlignment(EAlignment.MIDDLE_CENTER);
+
+        final GuiLabel right = new GuiLabel("RIGHT");
+        right.setTextAlignment(EAlignment.RIGHT_CENTER);
+
+        labelPane.addChild(left, 0, 0.5f);
+        labelPane.addChild(center, 0.5f, 0.5f);
+        labelPane.addChild(right, 1, 0.5f);
+
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);
         tabPane.setHeight(200);
@@ -126,6 +142,7 @@ public class GuiDemo extends BrokkGuiScreen
         tabPane.addTab(new GuiTab("ListView", listView));
         tabPane.addTab(new GuiTab("Progress", progressBar));
         tabPane.addTab(new GuiTab("RadioButton", radioButtonPane));
+        tabPane.addTab(new GuiTab("Labels", labelPane));
 
         tabPane.setDefaultTab(0);
 

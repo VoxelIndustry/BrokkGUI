@@ -51,9 +51,8 @@ public class GuiHelper implements IGuiHelper
         }
     }
 
-    // TODO: Handle UP/DOWN/LEFT/RIGHTS alignments combinaisons
     @Override
-    public final void drawString(final String string, final int x, final int y, final float zLevel, final Color color,
+    public final void drawString(final String string, int x, int y, final float zLevel, final Color color,
             final EAlignment alignment, final boolean shadow)
     {
         GlStateManager.enableBlend();
@@ -66,16 +65,21 @@ public class GuiHelper implements IGuiHelper
             GL11.glPushMatrix();
             GL11.glTranslated(0, 0, zLevel);
         }
+
+        if (alignment.isHorizontalCentered())
+            x -= this.mc.fontRendererObj.getStringWidth(string) / 2;
+        else if (alignment.isRight())
+            x -= this.mc.fontRendererObj.getStringWidth(string);
+
+        if (alignment.isVerticalCentered())
+            y -= this.mc.fontRendererObj.FONT_HEIGHT / 2;
+        else if (alignment.isDown())
+            y -= this.mc.fontRendererObj.FONT_HEIGHT;
+
         if (!shadow)
-            this.mc.fontRendererObj.drawString(string,
-                    x - (alignment.isHorizontalCentered() ? this.mc.fontRendererObj.getStringWidth(string) / 2 : 0),
-                    y - (alignment.isVerticalCentered() ? this.mc.fontRendererObj.FONT_HEIGHT / 2 : 0),
-                    color.toRGBAInt());
+            this.mc.fontRendererObj.drawString(string, x, y, color.toRGBAInt());
         else
-            this.mc.fontRendererObj.drawStringWithShadow(string,
-                    x - (alignment.isHorizontalCentered() ? this.mc.fontRendererObj.getStringWidth(string) / 2 : 0),
-                    y - (alignment.isVerticalCentered() ? this.mc.fontRendererObj.FONT_HEIGHT / 2 : 0),
-                    color.toRGBAInt());
+            this.mc.fontRendererObj.drawStringWithShadow(string, x, y, color.toRGBAInt());
         if (zLevel != 0)
             GL11.glPopMatrix();
         GlStateManager.resetColor();
