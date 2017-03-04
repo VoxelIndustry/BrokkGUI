@@ -42,6 +42,7 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         this.ellipsedTextProperty = new BaseProperty<>("", "ellipsedTextProperty");
 
         // Bindings
+        this.bindEllipsed();
 
         this.text.getTextStyleProperty().bind(model.getTextStyleProperty());
 
@@ -67,11 +68,11 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
                                 ? GuiLabeledSkinBase.this.getTextPadding() : 0;
 
                 if (model.getTextAlignment().isLeft())
-                    return model.getxPos() + model.getxTranslate() + padding;
+                    return model.getxPos() + model.getxTranslate() + padding + BrokkGuiPlatform.getInstance()
+                            .getGuiHelper().getStringWidth(GuiLabeledSkinBase.this.getEllipsedText());
                 else if (model.getTextAlignment().isRight())
                     return model.getxPos() + model.getxTranslate() + model.getWidth() - BrokkGuiPlatform.getInstance()
-                            .getGuiHelper().getStringWidth(GuiLabeledSkinBase.this.ellipsedTextProperty.getValue())
-                            + padding;
+                            .getGuiHelper().getStringWidth(GuiLabeledSkinBase.this.getEllipsedText()) + padding;
                 else
                     return model.getxPos() + model.getxTranslate() + model.getWidth() / 2 + padding / 2;
             }
@@ -99,8 +100,6 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         this.text.getWidthProperty().bind(BaseExpression.biCombine(model.getWidthProperty(), this.textPaddingProperty,
                 (width, padding) -> width - padding));
         this.text.setHeight(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
-
-        this.bindEllipsed();
     }
 
     @Override
