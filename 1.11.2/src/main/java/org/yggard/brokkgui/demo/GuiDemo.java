@@ -132,6 +132,7 @@ public class GuiDemo extends BrokkGuiScreen
         labelPane.addChild(left, 0, 0.5f);
         labelPane.addChild(center, 0.5f, 0.5f);
         labelPane.addChild(right, 1, 0.5f);
+        labelPane.setBackground(new Background(new Color(1, 0, 0, 0.5f)));
 
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);

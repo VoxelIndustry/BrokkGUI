@@ -112,11 +112,7 @@ public class GuiHelper implements IGuiHelper
             final float uMin, final float vMin, final float uMax, final float vMax, final float width,
             final float height, final float zLevel)
     {
-        GlStateManager.enableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                GlStateManager.DestFactor.ZERO);
+        this.enableAlpha();
         GlStateManager.color(1, 1, 1, 1);
         renderer.beginDrawingQuads(true);
         renderer.addVertexWithUV(Math.floor(xStart), Math.floor(yStart + height), zLevel, uMin, vMax);
@@ -124,8 +120,7 @@ public class GuiHelper implements IGuiHelper
         renderer.addVertexWithUV(Math.floor(xStart + width), Math.floor(yStart), zLevel, uMax, vMin);
         renderer.addVertexWithUV(Math.floor(xStart), Math.floor(yStart), zLevel, uMin, vMin);
         renderer.endDrawing();
-        GlStateManager.disableAlpha();
-        GlStateManager.disableBlend();
+        this.disableAlpha();
     }
 
     @Override
@@ -149,12 +144,8 @@ public class GuiHelper implements IGuiHelper
     public final void drawColoredRect(final IGuiRenderer renderer, final float startX, final float startY,
             final float width, final float height, final float zLevel, final Color c)
     {
-        GlStateManager.enableBlend();
-        GlStateManager.enableAlpha();
+        this.enableAlpha();
         GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                GlStateManager.DestFactor.ZERO);
         GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         renderer.beginDrawingQuads(false);
         renderer.addVertex(Math.floor(startX), Math.floor(startY), zLevel);
@@ -164,8 +155,7 @@ public class GuiHelper implements IGuiHelper
         renderer.endDrawing();
         GlStateManager.resetColor();
         GlStateManager.enableTexture2D();
-        GlStateManager.disableAlpha();
-        GlStateManager.disableBlend();
+        this.disableAlpha();
     }
 
     @Override
@@ -178,11 +168,8 @@ public class GuiHelper implements IGuiHelper
             float y = 0;
             float err = 0;
 
-            GlStateManager.enableBlend();
+            this.enableAlpha();
             GlStateManager.disableTexture2D();
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                    GlStateManager.DestFactor.ZERO);
             GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
             renderer.beginDrawing(EGuiRenderMode.POINTS, false);
             while (x >= y)
@@ -210,7 +197,7 @@ public class GuiHelper implements IGuiHelper
             renderer.endDrawing();
             GlStateManager.resetColor();
             GlStateManager.enableTexture2D();
-            GlStateManager.disableBlend();
+            this.disableAlpha();
         }
         if (thin > 1)
             this.drawColoredEmptyCircle(renderer, startX + 1, startY + 1, radius - 1, zLevel, c, thin - 1);
@@ -220,11 +207,8 @@ public class GuiHelper implements IGuiHelper
     public final void drawColoredCircle(final IGuiRenderer renderer, final float startX, final float startY,
             final float radius, final float zLevel, final Color c)
     {
-        GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                GlStateManager.DestFactor.ZERO);
+        this.enableAlpha();
         GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         renderer.beginDrawing(EGuiRenderMode.POINTS, false);
         final float r2 = radius * radius;
@@ -242,7 +226,7 @@ public class GuiHelper implements IGuiHelper
         renderer.endDrawing();
         GlStateManager.resetColor();
         GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
+        this.disableAlpha();
     }
 
     @Override
@@ -278,11 +262,8 @@ public class GuiHelper implements IGuiHelper
     public final void drawColoredLine(final IGuiRenderer renderer, final float startX, final float startY,
             final float endX, final float endY, final float lineWeight, final float zLevel, final Color c)
     {
-        GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                GlStateManager.DestFactor.ZERO);
+        this.enableAlpha();
         GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 
         renderer.beginDrawing(EGuiRenderMode.LINE, false);
@@ -294,7 +275,7 @@ public class GuiHelper implements IGuiHelper
         renderer.endDrawing();
         GlStateManager.resetColor();
         GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
+        this.disableAlpha();
     }
 
     public final void drawItemStack(final IGuiRenderer renderer, final float startX, final float startY,
@@ -378,6 +359,23 @@ public class GuiHelper implements IGuiHelper
     public void endScissor()
     {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    }
+
+    public void enableAlpha()
+    {
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO);
+    }
+
+    public void disableAlpha()
+    {
+        GlStateManager.disableDepth();
+        GlStateManager.disableAlpha();
+        GlStateManager.disableBlend();
     }
 
     private RenderItem getRenderItem()
