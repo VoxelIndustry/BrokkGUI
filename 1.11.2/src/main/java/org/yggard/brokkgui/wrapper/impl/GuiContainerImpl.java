@@ -26,6 +26,17 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
         this.brokkgui = brokkGui;
         this.renderer = new GuiRenderer(Tessellator.getInstance());
         this.brokkgui.setWrapper(this);
+
+        brokkGui.getWidthProperty().addListener((obs, oldValue, newValue) ->
+        {
+            this.width = newValue.intValue();
+            this.guiLeft = (this.width - this.xSize) / 2;
+        });
+        brokkGui.getHeightProperty().addListener((obs, oldValue, newValue) ->
+        {
+            this.height = newValue.intValue();
+            this.guiTop = (this.height - this.ySize) / 2;
+        });
     }
 
     @Override
