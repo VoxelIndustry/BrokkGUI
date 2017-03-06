@@ -1,5 +1,7 @@
 package org.yggard.brokkgui.wrapper;
 
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.Vector2i;
@@ -18,6 +20,8 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.client.config.GuiUtils;
 
 public class GuiHelper implements IGuiHelper
 {
@@ -317,6 +321,22 @@ public class GuiHelper implements IGuiHelper
             GlStateManager.disableLighting();
             GL11.glPopMatrix();
         }
+    }
+
+    public void drawItemStackTooltip(final IGuiRenderer renderer, final int mouseX, final int mouseY,
+            final ItemStack stack)
+    {
+        final List<String> list = stack.getTooltip(this.mc.player, this.mc.gameSettings.advancedItemTooltips);
+
+        for (int i = 0; i < list.size(); ++i)
+        {
+            if (i == 0)
+                list.set(i, stack.getRarity().rarityColor + list.get(i));
+            else
+                list.set(i, TextFormatting.GRAY + list.get(i));
+        }
+        GuiUtils.drawHoveringText(stack, list, mouseX, mouseY, this.mc.displayWidth, this.mc.displayHeight,
+                this.mc.displayWidth, this.mc.fontRendererObj);
     }
 
     @Override

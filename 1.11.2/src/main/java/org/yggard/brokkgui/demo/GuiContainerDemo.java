@@ -2,8 +2,12 @@ package org.yggard.brokkgui.demo;
 
 import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.Texture;
-import org.yggard.brokkgui.panel.GuiRelativePane;
+import org.yggard.brokkgui.panel.GuiAbsolutePane;
 import org.yggard.brokkgui.wrapper.container.BrokkGuiContainer;
+import org.yggard.brokkgui.wrapper.container.ItemStackView;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author Ourten 31 oct. 2016
@@ -24,8 +28,14 @@ public class GuiContainerDemo extends BrokkGuiContainer<ContainerDemo>
         this.setxRelativePos(0.5f);
         this.setyRelativePos(0.5f);
 
-        final GuiRelativePane mainPanel = new GuiRelativePane();
+        final GuiAbsolutePane mainPanel = new GuiAbsolutePane();
         this.setMainPanel(mainPanel);
+
+        final ItemStackView view = new ItemStackView(new ItemStack(Items.APPLE));
+        view.setTooltip(true);
+        view.setWidth(18);
+        view.setHeight(18);
+        mainPanel.addChild(view);
 
         mainPanel.setBackground(new Background(GuiContainerDemo.BACKGROUND));
     }

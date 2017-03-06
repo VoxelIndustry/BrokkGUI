@@ -17,10 +17,13 @@ public class ItemStackView extends GuiControl
     private final BaseProperty<String>    alternateStringProperty;
     private final BaseProperty<ItemStack> stackProperty;
 
+    private final BaseProperty<Boolean>   tooltipProperty;
+
     public ItemStackView(final ItemStack stack)
     {
         this.stackProperty = new BaseProperty<>(stack, "stackProperty");
         this.alternateStringProperty = new BaseProperty<>(null, "alternateStringProperty");
+        this.tooltipProperty = new BaseProperty<>(false, "tooltipProperty");
     }
 
     public ItemStackView()
@@ -36,6 +39,11 @@ public class ItemStackView extends GuiControl
     public BaseProperty<String> getAlternateStringProperty()
     {
         return this.alternateStringProperty;
+    }
+
+    public BaseProperty<Boolean> getTooltipProperty()
+    {
+        return this.tooltipProperty;
     }
 
     public ItemStack getItemStack()
@@ -61,6 +69,16 @@ public class ItemStackView extends GuiControl
     public void setAlternateString(final String alternateString)
     {
         this.alternateStringProperty.setValue(alternateString);
+    }
+
+    public boolean hasTooltip()
+    {
+        return this.getTooltipProperty().getValue();
+    }
+
+    public void setTooltip(final boolean tooltip)
+    {
+        this.getTooltipProperty().setValue(tooltip);
     }
 
     @Override
