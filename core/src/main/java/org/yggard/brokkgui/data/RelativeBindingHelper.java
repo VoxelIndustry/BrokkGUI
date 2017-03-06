@@ -71,12 +71,20 @@ public class RelativeBindingHelper
                     parent.getyPosProperty(), parent.getyTranslateProperty()));
     }
 
+    public static final void bindToPos(final GuiNode toBind, final GuiNode parent, final float addX, final float addY)
+    {
+        toBind.getxPosProperty().bind(BaseExpression.biCombine(parent.getxPosProperty(), parent.getxTranslateProperty(),
+                (x, translate) -> x + translate + addX));
+        toBind.getyPosProperty().bind(BaseExpression.biCombine(parent.getyPosProperty(), parent.getyTranslateProperty(),
+                (y, translate) -> y + translate + addY));
+    }
+
     public static final void bindToPos(final GuiNode toBind, final GuiNode parent)
     {
         toBind.getxPosProperty().bind(BaseExpression.biCombine(parent.getxPosProperty(), parent.getxTranslateProperty(),
-                (x, translate) -> x * translate));
+                (x, translate) -> x + translate));
         toBind.getyPosProperty().bind(BaseExpression.biCombine(parent.getyPosProperty(), parent.getyTranslateProperty(),
-                (y, translate) -> y * translate));
+                (y, translate) -> y + translate));
     }
 
     public static final void bindToCenter(final GuiNode toBind, final GuiNode parent)
