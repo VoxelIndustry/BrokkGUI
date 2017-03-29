@@ -1,6 +1,7 @@
 package org.yggard.brokkgui.wrapper.container;
 
 import org.yggard.brokkgui.control.GuiControl;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
 import fr.ourten.teabeans.value.BaseProperty;
@@ -19,11 +20,15 @@ public class ItemStackView extends GuiControl
 
     private final BaseProperty<Boolean>   tooltipProperty;
 
+    private final BaseProperty<Color> colorProperty;
+
     public ItemStackView(final ItemStack stack)
     {
         this.stackProperty = new BaseProperty<>(stack, "stackProperty");
         this.alternateStringProperty = new BaseProperty<>(null, "alternateStringProperty");
         this.tooltipProperty = new BaseProperty<>(false, "tooltipProperty");
+
+        this.colorProperty = new BaseProperty<>(Color.WHITE, "colorProperty");
     }
 
     public ItemStackView()
@@ -44,6 +49,11 @@ public class ItemStackView extends GuiControl
     public BaseProperty<Boolean> getTooltipProperty()
     {
         return this.tooltipProperty;
+    }
+
+    public BaseProperty<Color> getColorProperty()
+    {
+        return this.colorProperty;
     }
 
     public ItemStack getItemStack()
@@ -79,6 +89,16 @@ public class ItemStackView extends GuiControl
     public void setTooltip(final boolean tooltip)
     {
         this.getTooltipProperty().setValue(tooltip);
+    }
+
+    public Color getColor()
+    {
+        return this.getColorProperty().getValue();
+    }
+
+    public void setColor(Color color)
+    {
+        this.getColorProperty().setValue(color);
     }
 
     @Override

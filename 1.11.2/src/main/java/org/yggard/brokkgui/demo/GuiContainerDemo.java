@@ -1,6 +1,7 @@
 package org.yggard.brokkgui.demo;
 
 import org.yggard.brokkgui.paint.Background;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiAbsolutePane;
 import org.yggard.brokkgui.wrapper.container.BrokkGuiContainer;
@@ -35,6 +36,7 @@ public class GuiContainerDemo extends BrokkGuiContainer<ContainerDemo>
         view.setTooltip(true);
         view.setWidth(18);
         view.setHeight(18);
+        view.setColor(new Color(1, 1, 1, 0.5f));
         mainPanel.addChild(view);
 
         mainPanel.setBackground(new Background(GuiContainerDemo.BACKGROUND));

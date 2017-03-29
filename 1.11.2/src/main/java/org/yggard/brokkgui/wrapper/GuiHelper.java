@@ -1,16 +1,5 @@
 package org.yggard.brokkgui.wrapper;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-import org.yggard.brokkgui.data.EAlignment;
-import org.yggard.brokkgui.data.Vector2i;
-import org.yggard.brokkgui.internal.EGuiRenderMode;
-import org.yggard.brokkgui.internal.IGuiHelper;
-import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.paint.Texture;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -22,16 +11,29 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiUtils;
+import org.lwjgl.opengl.GL11;
+import org.yggard.brokkgui.data.EAlignment;
+import org.yggard.brokkgui.data.Vector2i;
+import org.yggard.brokkgui.internal.EGuiRenderMode;
+import org.yggard.brokkgui.internal.IGuiHelper;
+import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.Color;
+import org.yggard.brokkgui.paint.Texture;
+
+import java.util.List;
 
 public class GuiHelper implements IGuiHelper
 {
-    private RenderItem      itemRender;
-    private final Minecraft mc;
+    private RenderItem                itemRender;
+    private final Minecraft           mc;
+    private final GuiRenderItemHelper itemHelper;
 
     public GuiHelper()
     {
         this.mc = Minecraft.getMinecraft();
         this.itemRender = this.mc.getRenderItem();
+
+        this.itemHelper = new GuiRenderItemHelper();
     }
 
     @Override
@@ -283,14 +285,14 @@ public class GuiHelper implements IGuiHelper
     }
 
     public final void drawItemStack(final IGuiRenderer renderer, final float startX, final float startY,
-            final float width, final float height, final float zLevel, final ItemStack stack)
+            final float width, final float height, final float zLevel, final ItemStack stack, Color color)
     {
-        this.drawItemStack(renderer, startX, startY, width, height, zLevel, stack, null);
+        this.drawItemStack(renderer, startX, startY, width, height, zLevel, stack, null, color);
     }
 
     public final void drawItemStack(final IGuiRenderer renderer, final float startX, final float startY,
             final float width, final float height, final float zLevel, final ItemStack stack,
-            final String displayString)
+            final String displayString, Color color)
     {
         GlStateManager.color(1.0F, 1.0F, 1.0F);
 
@@ -307,14 +309,15 @@ public class GuiHelper implements IGuiHelper
 
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 0.0F, 32.0F);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
             GlStateManager.enableRescaleNormal();
             GlStateManager.enableLighting();
             final short short1 = 240;
             final short short2 = 240;
             net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, short1 / 1.0F, short2 / 1.0F);
-            this.getRenderItem().renderItemAndEffectIntoGUI(stack, (int) startX, (int) startY);
+
+            this.itemHelper.renderItemStack(stack, (int) startX, (int) startY, color);
             this.getRenderItem().renderItemOverlayIntoGUI(font, stack, (int) startX, (int) startY, displayString);
             GlStateManager.popMatrix();
             GlStateManager.disableRescaleNormal();
