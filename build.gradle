@@ -28,6 +28,10 @@ subprojects {
     apply plugin: "maven-publish"
     apply plugin: "com.jfrog.artifactory"
 
+	if (project != rootProject) {
+  		eclipse.project.name = (rootProject.name + project.path).replaceAll(':', '-')
+	}
+
     artifactory {
         contextUrl = "${artifactory_contextUrl}"
         publish {
