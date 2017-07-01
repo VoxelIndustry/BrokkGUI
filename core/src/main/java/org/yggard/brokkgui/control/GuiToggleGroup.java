@@ -1,13 +1,11 @@
 package org.yggard.brokkgui.control;
 
-import java.util.Arrays;
-
-import org.yggard.brokkgui.behavior.IGuiTogglable;
-
-import com.google.common.collect.ImmutableList;
-
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.behavior.IGuiTogglable;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class GuiToggleGroup
 {
@@ -41,7 +39,10 @@ public class GuiToggleGroup
         return this.getSelectedButtonProperty().getValue();
     }
 
-    public ImmutableList<IGuiTogglable> getButtonList()
+    /**
+     * @return an immutable list
+     */
+    public List<IGuiTogglable> getButtonList()
     {
         return this.getButtonListProperty().getValue();
     }

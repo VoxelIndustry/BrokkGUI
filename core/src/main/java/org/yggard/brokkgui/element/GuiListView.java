@@ -1,8 +1,7 @@
 package org.yggard.brokkgui.element;
 
-import java.util.List;
-import java.util.function.Function;
-
+import fr.ourten.teabeans.value.BaseListProperty;
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiListViewBehavior;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiControl;
@@ -11,11 +10,9 @@ import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.skin.GuiListViewSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 public class GuiListView<T> extends GuiControl
 {
@@ -49,7 +46,7 @@ public class GuiListView<T> extends GuiControl
 
     public GuiListView()
     {
-        this(Lists.newArrayList());
+        this(new ArrayList<>());
     }
 
     @Override
@@ -98,7 +95,10 @@ public class GuiListView<T> extends GuiControl
         return this.selectedCellIndexProperty;
     }
 
-    public ImmutableList<T> getElements()
+    /**
+     * @return an immutable list
+     */
+    public List<T> getElements()
     {
         return this.getElementsProperty().getValue();
     }

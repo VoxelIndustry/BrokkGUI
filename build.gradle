@@ -16,7 +16,7 @@ buildscript {
 }
 
 subprojects {
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
 
@@ -101,20 +101,20 @@ subprojects {
 project(":core") {
     archivesBaseName = "brokkgui-core"
 
-    version = "0.4.2"
+    version = "0.4.3"
     dependencies {
-        compile "fr.ourten:teabeans:0.5.0"
-        compile "org.yggard:hermod:0.1.0"
-        compile "org.apache.commons:commons-lang3:3.4"
-        compile "com.google.code.findbugs:jsr305:3.0.1"
+        api "fr.ourten:teabeans:0.5.1"
+        api "org.yggard:hermod:0.1.1"
+        implementation "org.apache.commons:commons-lang3:3.4"
+        implementation "com.google.code.findbugs:jsr305:3.0.1"
     }
 }
 
-project(":1.11.2") {
-    archivesBaseName = "brokkgui-binding-mc1.11.2"
+project(":1.12") {
+    archivesBaseName = "brokkgui-binding-mc1.12"
 
-    version = "0.2.5"
+    version = "0.1.0"
     dependencies {
-        compile project(":core")
+        api project(":core")
     }
 }

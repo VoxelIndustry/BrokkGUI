@@ -1,16 +1,14 @@
 package org.yggard.brokkgui.skin;
 
-import java.util.List;
-
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiControl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 
-import com.google.common.collect.Lists;
-
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiSkinBase<T extends GuiControl> implements IGuiSkin
 {
@@ -29,7 +27,7 @@ public class GuiSkinBase<T extends GuiControl> implements IGuiSkin
         this.borderThinProperty = new BaseProperty<>(0, "borderThinProperty");
         this.borderColorProperty = new BaseProperty<>(Color.BLACK, "borderColorProperty");
 
-        this.childrens = Lists.newArrayList();
+        this.childrens = new ArrayList<>();
     }
 
     public T getModel()

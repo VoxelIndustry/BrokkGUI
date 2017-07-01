@@ -1,13 +1,12 @@
 package org.yggard.brokkgui.control;
 
+import fr.ourten.teabeans.value.BaseListProperty;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
 
-import com.google.common.collect.ImmutableList;
-
-import fr.ourten.teabeans.value.BaseListProperty;
+import java.util.List;
 
 public class GuiFather extends GuiNode
 {
@@ -22,7 +21,10 @@ public class GuiFather extends GuiNode
         this.overflowPolicy = EOverflowPolicy.NONE;
     }
 
-    public ImmutableList<GuiNode> getChildrens()
+    /**
+     * @return an immutable list
+     */
+    public List<GuiNode> getChildrens()
     {
         return this.getChildrensProperty().getValue();
     }

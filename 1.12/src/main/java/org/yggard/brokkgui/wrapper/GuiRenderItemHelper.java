@@ -93,17 +93,17 @@ public class GuiRenderItemHelper
     private void renderModel(IBakedModel model, int color, ItemStack stack)
     {
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
-        vertexbuffer.begin(7, DefaultVertexFormats.ITEM);
+        BufferBuilder BufferBuilder = tessellator.getBuffer();
+        BufferBuilder.begin(7, DefaultVertexFormats.ITEM);
 
         for (EnumFacing facing : EnumFacing.values())
-            this.renderQuads(vertexbuffer, model.getQuads(null, facing, 0L), color, stack);
+            this.renderQuads(BufferBuilder, model.getQuads(null, facing, 0L), color, stack);
 
-        this.renderQuads(vertexbuffer, model.getQuads(null, null, 0L), color, stack);
+        this.renderQuads(BufferBuilder, model.getQuads(null, null, 0L), color, stack);
         tessellator.draw();
     }
 
-    private void renderQuads(VertexBuffer renderer, List<BakedQuad> quads, int color, ItemStack stack)
+    private void renderQuads(BufferBuilder renderer, List<BakedQuad> quads, int color, ItemStack stack)
     {
         boolean flag = color == -1 && !stack.isEmpty();
         int i = 0;

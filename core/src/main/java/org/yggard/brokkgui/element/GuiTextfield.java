@@ -1,5 +1,7 @@
 package org.yggard.brokkgui.element;
 
+import fr.ourten.teabeans.value.BaseListProperty;
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiTextfieldBehavior;
 import org.yggard.brokkgui.behavior.ITextInput;
 import org.yggard.brokkgui.control.GuiControl;
@@ -10,10 +12,7 @@ import org.yggard.brokkgui.skin.GuiTextfieldSkin;
 import org.yggard.brokkgui.validation.BaseTextValidator;
 import org.yggard.hermod.EventHandler;
 
-import com.google.common.collect.ImmutableList;
-
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.List;
 
 /**
  * @author Ourten 2 oct. 2016
@@ -135,7 +134,10 @@ public class GuiTextfield extends GuiControl implements ITextInput
         this.getEditableProperty().setValue(editable);
     }
 
-    public ImmutableList<BaseTextValidator> getValidators()
+    /**
+     * @return an immutable list
+     */
+    public List<BaseTextValidator> getValidators()
     {
         return this.getValidatorsProperty().getValue();
     }

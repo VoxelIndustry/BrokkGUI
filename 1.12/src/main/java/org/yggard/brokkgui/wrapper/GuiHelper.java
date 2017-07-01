@@ -7,6 +7,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
@@ -73,19 +74,19 @@ public class GuiHelper implements IGuiHelper
         }
 
         if (alignment.isHorizontalCentered())
-            x -= this.mc.fontRendererObj.getStringWidth(string) / 2;
+            x -= this.mc.fontRenderer.getStringWidth(string) / 2;
         else if (alignment.isRight())
-            x -= this.mc.fontRendererObj.getStringWidth(string);
+            x -= this.mc.fontRenderer.getStringWidth(string);
 
         if (alignment.isVerticalCentered())
-            y -= this.mc.fontRendererObj.FONT_HEIGHT / 2;
+            y -= this.mc.fontRenderer.FONT_HEIGHT / 2;
         else if (alignment.isDown())
-            y -= this.mc.fontRendererObj.FONT_HEIGHT;
+            y -= this.mc.fontRenderer.FONT_HEIGHT;
 
         if (!shadow)
-            this.mc.fontRendererObj.drawString(string, x, y, color.toRGBAInt());
+            this.mc.fontRenderer.drawString(string, x, y, color.toRGBAInt());
         else
-            this.mc.fontRendererObj.drawStringWithShadow(string, x, y, color.toRGBAInt());
+            this.mc.fontRenderer.drawStringWithShadow(string, x, y, color.toRGBAInt());
         if (zLevel != 0)
             GL11.glPopMatrix();
         GlStateManager.resetColor();
@@ -305,7 +306,7 @@ public class GuiHelper implements IGuiHelper
             GlStateManager.scale(scaleX, scaleY, 1);
             FontRenderer font = stack.getItem().getFontRenderer(stack);
             if (font == null)
-                font = this.mc.fontRendererObj;
+                font = this.mc.fontRenderer;
 
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 0.0F, 32.0F);
@@ -329,7 +330,8 @@ public class GuiHelper implements IGuiHelper
     public void drawItemStackTooltip(final IGuiRenderer renderer, final int mouseX, final int mouseY,
             final ItemStack stack)
     {
-        final List<String> list = stack.getTooltip(this.mc.player, this.mc.gameSettings.advancedItemTooltips);
+        final List<String> list = stack.getTooltip(this.mc.player,  this.mc.gameSettings.advancedItemTooltips ?
+                ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
 
         for (int i = 0; i < list.size(); ++i)
         {
@@ -339,7 +341,7 @@ public class GuiHelper implements IGuiHelper
                 list.set(i, TextFormatting.GRAY + list.get(i));
         }
         GuiUtils.drawHoveringText(stack, list, mouseX, mouseY, this.mc.displayWidth, this.mc.displayHeight,
-                this.mc.displayWidth, this.mc.fontRendererObj);
+                this.mc.displayWidth, this.mc.fontRenderer);
     }
 
     @Override
@@ -357,19 +359,19 @@ public class GuiHelper implements IGuiHelper
     @Override
     public final String trimStringToPixelWidth(final String str, final int pixelWidth)
     {
-        return this.mc.fontRendererObj.trimStringToWidth(str, pixelWidth);
+        return this.mc.fontRenderer.trimStringToWidth(str, pixelWidth);
     }
 
     @Override
     public final float getStringWidth(final String str)
     {
-        return this.mc.fontRendererObj.getStringWidth(str);
+        return this.mc.fontRenderer.getStringWidth(str);
     }
 
     @Override
     public final float getStringHeight()
     {
-        return this.mc.fontRendererObj.FONT_HEIGHT;
+        return this.mc.fontRenderer.FONT_HEIGHT;
     }
 
     @Override

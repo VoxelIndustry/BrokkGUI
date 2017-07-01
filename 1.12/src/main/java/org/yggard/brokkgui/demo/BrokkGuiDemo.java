@@ -1,5 +1,8 @@
 package org.yggard.brokkgui.demo;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.yggard.brokkgui.wrapper.BrokkGuiManager;
 
 import net.minecraft.client.Minecraft;
@@ -32,11 +35,17 @@ public class BrokkGuiDemo
     public void onPreInit(final FMLPreInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new DemoGuiHandler());
-        GameRegistry.register(new Item()
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public void onItemRegister(RegistryEvent.Register<Item> event)
+    {
+        event.getRegistry().register(new Item()
         {
             @Override
             public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player,
-                    final EnumHand hand)
+                                                            final EnumHand hand)
             {
                 player.setActiveHand(hand);
 

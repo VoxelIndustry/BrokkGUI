@@ -116,6 +116,8 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
+classes/
+
 saves/*
 logs/*
 config/*
@@ -128,11 +130,11 @@ usernamecache.json
 Thumbs.db
 
 # Minecraft
-1.11.2/run/
+1.12/run/
 
-1.11.2/saves/*
-1.11.2/logs/*
-1.11.2/config/*
-1.11.2/crash-reports/*
-1.11.2/asm/*
-1.11.2/run/*
+1.12/saves/*
+1.12/logs/*
+1.12/config/*
+1.12/crash-reports/*
+1.12/asm/*
+1.12/run/*

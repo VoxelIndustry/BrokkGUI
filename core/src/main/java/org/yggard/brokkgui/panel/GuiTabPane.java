@@ -1,8 +1,7 @@
 package org.yggard.brokkgui.panel;
 
-import java.util.Arrays;
-import java.util.List;
-
+import fr.ourten.teabeans.value.BaseListProperty;
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiTabPaneBehavior;
 import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.control.GuiControl;
@@ -11,10 +10,8 @@ import org.yggard.brokkgui.policy.EOverflowPolicy;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 import org.yggard.brokkgui.skin.GuiTabPaneSkin;
 
-import com.google.common.collect.ImmutableList;
-
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Ourten 15 oct. 2016
@@ -70,7 +67,10 @@ public class GuiTabPane extends GuiControl
         return this.tabHeightRatioProperty;
     }
 
-    public ImmutableList<GuiTab> getTabs()
+    /**
+     * @return an immutable list
+     */
+    public List<GuiTab> getTabs()
     {
         return this.getTabsProperty().getValue();
     }

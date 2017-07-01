@@ -1,7 +1,7 @@
 package org.yggard.brokkgui.gui;
 
-import java.util.ArrayList;
-
+import fr.ourten.teabeans.binding.BaseExpression;
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.event.WindowEvent;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
@@ -12,10 +12,7 @@ import org.yggard.brokkgui.panel.GuiPane;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
 
-import com.google.common.collect.Lists;
-
-import fr.ourten.teabeans.binding.BaseExpression;
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.ArrayList;
 
 public class BrokkGuiScreen implements IGuiWindow
 {
@@ -46,7 +43,7 @@ public class BrokkGuiScreen implements IGuiWindow
         this.xPosProperty = new BaseProperty<>(0f, "xPosProperty");
         this.yPosProperty = new BaseProperty<>(0f, "yPosProperty");
 
-        this.windows = Lists.newArrayList();
+        this.windows = new ArrayList<>();
 
         this.screenWidthProperty = new BaseProperty<>(0, "screenWidthProperty");
         this.screenHeightProperty = new BaseProperty<>(0, "screenHeightProperty");
