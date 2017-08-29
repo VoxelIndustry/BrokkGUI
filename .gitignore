@@ -104,6 +104,7 @@ local.properties
 
 # IntelliJ
 /out/
+core/out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

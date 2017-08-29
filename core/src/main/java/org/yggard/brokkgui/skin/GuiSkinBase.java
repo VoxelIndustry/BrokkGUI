@@ -1,6 +1,5 @@
 package org.yggard.brokkgui.skin;
 
-import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiControl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
@@ -12,11 +11,8 @@ import java.util.List;
 
 public class GuiSkinBase<T extends GuiControl> implements IGuiSkin
 {
-    private final List<GuiNode>         childrens;
-    private final T                     model;
-
-    private final BaseProperty<Integer> borderThinProperty;
-    private final BaseProperty<Color>   borderColorProperty;
+    private final List<GuiNode> childrens;
+    private final T model;
 
     public GuiSkinBase(final T model)
     {
@@ -24,8 +20,8 @@ public class GuiSkinBase<T extends GuiControl> implements IGuiSkin
             throw new IllegalArgumentException("Cannot pass a null model");
         this.model = model;
 
-        this.borderThinProperty = new BaseProperty<>(0, "borderThinProperty");
-        this.borderColorProperty = new BaseProperty<>(Color.BLACK, "borderColorProperty");
+        this.model.getStyle().registerProperty("-border-thin", 0, Integer.class);
+        this.model.getStyle().registerProperty("-border-color", Color.BLACK, Color.class);
 
         this.childrens = new ArrayList<>();
     }
@@ -44,34 +40,14 @@ public class GuiSkinBase<T extends GuiControl> implements IGuiSkin
                     this.model.getzLevel(), this.getBorderColor(), this.getBorderThin());
     }
 
-    public BaseProperty<Integer> getBorderThinProperty()
-    {
-        return this.borderThinProperty;
-    }
-
-    public BaseProperty<Color> getBorderColorProperty()
-    {
-        return this.borderColorProperty;
-    }
-
     public int getBorderThin()
     {
-        return this.getBorderThinProperty().getValue();
-    }
-
-    public void setBorderThin(final int thinness)
-    {
-        this.getBorderThinProperty().setValue(thinness);
+        return this.getModel().getStyle().getStyleProperty("-border-thin", Integer.class).getValue();
     }
 
     public Color getBorderColor()
     {
-        return this.getBorderColorProperty().getValue();
-    }
-
-    public void setBorderColor(final Color color)
-    {
-        this.getBorderColorProperty().setValue(color);
+        return this.getModel().getStyle().getStyleProperty("-border-color", Color.class).getValue();
     }
 
     public List<GuiNode> getChildrens()

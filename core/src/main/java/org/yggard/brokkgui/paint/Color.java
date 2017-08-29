@@ -3,15 +3,15 @@ package org.yggard.brokkgui.paint;
 public class Color extends GuiPaint
 {
     public static final Color ALPHA      = new Color(0, 0, 0, 0);
-    public static final Color GRAY       = new Color(.5f, .5f, .5f);
-    public static final Color LIGHT_GRAY = new Color(.827f, .827f, .827f);
-    public static final Color RED        = new Color(1, 0, 0);
-    public static final Color GREEN      = new Color(0, 1, 0);
-    public static final Color YELLOW     = new Color(1, 1, 0);
-    public static final Color BLUE       = new Color(0, 0, 1);
-    public static final Color AQUA       = new Color(0, 1, 1);
-    public static final Color WHITE      = new Color(1, 1, 1);
-    public static final Color BLACK      = new Color(0, 0, 0);
+    public static final Color BLACK      = ColorConstants.getColor("black");
+    public static final Color AQUA       = ColorConstants.getColor("aqua");
+    public static final Color WHITE      = ColorConstants.getColor("white");
+    public static final Color RED        = ColorConstants.getColor("red");
+    public static final Color LIGHT_GRAY = ColorConstants.getColor("lightgrey");
+    public static final Color BLUE       = ColorConstants.getColor("blue");
+    public static final Color GRAY       = ColorConstants.getColor("gray");
+    public static final Color GREEN      = ColorConstants.getColor("green");
+    public static final Color YELLOW     = ColorConstants.getColor("yellow");
 
     public static Color fromHex(final String hex)
     {

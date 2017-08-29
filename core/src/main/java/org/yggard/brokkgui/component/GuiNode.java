@@ -1,35 +1,38 @@
 package org.yggard.brokkgui.component;
 
+import fr.ourten.teabeans.value.BaseListProperty;
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
-import org.yggard.brokkgui.event.ClickEvent;
-import org.yggard.brokkgui.event.DisableEvent;
-import org.yggard.brokkgui.event.FocusEvent;
-import org.yggard.brokkgui.event.GuiMouseEvent;
-import org.yggard.brokkgui.event.HoverEvent;
-import org.yggard.brokkgui.event.KeyEvent;
+import org.yggard.brokkgui.event.*;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.style.IStyleable;
+import org.yggard.brokkgui.style.StyleHolder;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
 import org.yggard.hermod.IEventEmitter;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.Collections;
 
-public abstract class GuiNode implements IEventEmitter
+public abstract class GuiNode implements IEventEmitter, IStyleable
 {
     private final BaseProperty<GuiFather> fatherProperty;
-    private final BaseProperty<Float>     xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
+    private final BaseProperty<Float> xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
             widthProperty, heightProperty, widthRatioProperty, heightRatioProperty, zLevelProperty;
 
-    private EventDispatcher               eventDispatcher;
-    private EventHandler<FocusEvent>      onFocusEvent;
-    private EventHandler<DisableEvent>    onDisableEvent;
-    private EventHandler<HoverEvent>      onHoverEvent;
-    private EventHandler<ClickEvent>      onClickEvent;
-    private final BaseProperty<Boolean>   focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
+    private EventDispatcher eventDispatcher;
+    private EventHandler<FocusEvent> onFocusEvent;
+    private EventHandler<DisableEvent> onDisableEvent;
+    private EventHandler<HoverEvent> onHoverEvent;
+    private EventHandler<ClickEvent> onClickEvent;
+    private final BaseProperty<Boolean> focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
+
+    private final BaseProperty<String> styleID;
+    private final BaseListProperty<String> styleClass;
+    private StyleHolder styleHolder;
 
     public GuiNode()
     {
@@ -54,6 +57,10 @@ public abstract class GuiNode implements IEventEmitter
         this.hoveredProperty = new BaseProperty<>(false, "hoveredProperty");
 
         this.focusableProperty = new BaseProperty<>(false, "focusableProperty");
+
+        this.styleID = new BaseProperty<>(null, "styleIDProperty");
+        this.styleClass = new BaseListProperty<>(Collections.emptyList(), "styleClassListProperty");
+        this.styleHolder = new StyleHolder();
     }
 
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
@@ -62,8 +69,7 @@ public abstract class GuiNode implements IEventEmitter
         {
             if (!this.isHovered())
                 this.setHovered(true);
-        }
-        else if (this.isHovered())
+        } else if (this.isHovered())
             this.setHovered(false);
     }
 
@@ -93,7 +99,8 @@ public abstract class GuiNode implements IEventEmitter
                             new ClickEvent.Middle(this, mouseX, mouseY));
                     break;
                 default:
-                    this.getEventDispatcher().dispatchEvent(ClickEvent.TYPE, new ClickEvent(this, mouseX, mouseY, key));
+                    this.getEventDispatcher().dispatchEvent(ClickEvent.TYPE, new ClickEvent(this, mouseX, mouseY,
+                            key));
                     break;
             }
             this.setFocused(!this.isFocused());
@@ -170,7 +177,7 @@ public abstract class GuiNode implements IEventEmitter
 
     /**
      * @return xPos, used for layout management, do not attempt to change the
-     *         property outside the layouting scope.
+     * property outside the layouting scope.
      */
     public float getxPos()
     {
@@ -179,7 +186,7 @@ public abstract class GuiNode implements IEventEmitter
 
     /**
      * @return yPos, used for layout management, do not attempt to change the
-     *         property outside the layouting scope.
+     * property outside the layouting scope.
      */
     public float getyPos()
     {
@@ -453,5 +460,45 @@ public abstract class GuiNode implements IEventEmitter
     private void initEventDispatcher()
     {
         this.eventDispatcher = new EventDispatcher();
+    }
+
+    /////////////////////
+    //     STYLING     //
+    /////////////////////
+
+
+    @Override
+    public void setID(String id)
+    {
+        this.getIDProperty().setValue(id);
+    }
+
+    @Override
+    public String getID()
+    {
+        return this.getIDProperty().getValue();
+    }
+
+    public BaseProperty<String> getIDProperty()
+    {
+        return this.styleID;
+    }
+
+    @Override
+    public BaseListProperty<String> getStyleClass()
+    {
+        return this.styleClass;
+    }
+
+    @Override
+    public StyleHolder getStyle()
+    {
+        return this.styleHolder;
+    }
+
+    @Override
+    public void setStyle(StyleHolder style)
+    {
+        this.styleHolder = style;
     }
 }
