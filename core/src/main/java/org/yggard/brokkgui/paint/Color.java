@@ -32,12 +32,13 @@ public class Color extends GuiPaint
 
     public static Color fromRGBInt(final int rgb)
     {
-        return new Color(rgb >> 16 & 0xFF, rgb >> 8 & 0xFF, rgb & 0xFF);
+        return new Color((rgb >> 16 & 0xFF) / 255f, (rgb >> 8 & 0xFF) / 255f, (rgb & 0xFF) / 255f);
     }
 
     public static Color fromRGBAInt(final int rgba)
     {
-        return new Color(rgba >> 24 & 0xFF, rgba >> 16 & 0xFF, rgba >> 8 & 0xFF, rgba & 0xFF);
+        return new Color((rgba >> 24 & 0xFF) / 255f, (rgba >> 16 & 0xFF) / 255f, (rgba >> 8 & 0xFF) / 255f, (rgba &
+                0xFF) / 255f);
     }
 
     public int toRGBInt()

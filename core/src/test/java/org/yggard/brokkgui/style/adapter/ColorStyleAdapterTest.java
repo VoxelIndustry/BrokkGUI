@@ -52,4 +52,10 @@ public class ColorStyleAdapterTest
 
         assertThat(adapter.decode("aqua")).isEqualTo(color);
     }
+
+    @Test
+    public void testError()
+    {
+        assertThat(adapter.decode("abcdef")).isNull();
+    }
 }

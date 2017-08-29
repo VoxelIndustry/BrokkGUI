@@ -152,6 +152,7 @@ public class ColorConstants
         colors.put("lightslategray", Color.fromHex("778899"));
         colors.put("slategray", Color.fromHex("708090"));
         colors.put("darkslategray", Color.fromHex("2F4F4F"));
+        colors.put("black", Color.fromHex("000000"));
     }
 
     public static Color getColor(String name)

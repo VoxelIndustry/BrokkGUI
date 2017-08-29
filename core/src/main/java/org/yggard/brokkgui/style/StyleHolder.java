@@ -11,12 +11,6 @@ public class StyleHolder
         properties = new HashMap<>();
     }
 
-    public StyleHolder(String css)
-    {
-        this();
-        this.parseCSS(css);
-    }
-
     public void parseCSS(String css)
     {
         for (String property : css.split(";"))
