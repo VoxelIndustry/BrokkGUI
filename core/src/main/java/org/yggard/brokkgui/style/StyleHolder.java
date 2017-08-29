@@ -22,10 +22,13 @@ public class StyleHolder
         for (String property : css.split(";"))
         {
             String[] splitted = property.split(":");
-            String propertyName = splitted[0];
+            String propertyName = splitted[0].trim();
 
-            StyleableProperty<?> styleProp = properties.get(propertyName);
-            styleProp.setValue(StyleDecoder.getInstance().decode(splitted[1], styleProp.getValueClass()));
+            if (properties.containsKey(propertyName))
+            {
+                StyleableProperty<?> styleProp = properties.get(propertyName);
+                styleProp.setValue(StyleDecoder.getInstance().decode(splitted[1].trim(), styleProp.getValueClass()));
+            }
         }
     }
 

@@ -35,9 +35,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         button.setWidth(200);
         button.setHeight(30);
-
-        button.getSkin().setBorderColor(Color.GREEN);
-        button.getSkin().setBorderThin(2);
+        button.setStyle("-border-color: green; -border-thin: 2;");
 
         final Background background = new Background(Color.AQUA);
         final Background hoverBack = new Background(Color.YELLOW);
@@ -62,9 +60,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         listView.setCellHeight(20);
         listView.setCellWidth(100);
-
-        listView.getSkin().setBorderColor(Color.GRAY);
-        listView.getSkin().setBorderThin(1);
+        listView.setStyle("-border-color: gray; -border-thin: 1;");
 
         listView.setPlaceholder(new GuiLabel("I'm a placeholder"));
 
@@ -85,15 +81,13 @@ public class GuiDemo extends BrokkGuiScreen
         });
 
         progressBar.setHeight(20);
-        progressBar.getSkin().setBorderColor(Color.RED);
-        progressBar.getSkin().setBorderThin(1);
+        progressBar.setStyle("-border-color: red; -border-thin: 2;");
 
         final GuiTextfield field = new GuiTextfield();
         field.setWidth(200);
         field.setHeight(40);
 
-        field.getSkin().setBorderColor(Color.BLACK);
-        field.getSkin().setBorderThin(1);
+        field.setStyle("-border-color: black; -border-thin: 1;");
 
         final GuiRelativePane radioButtonPane = new GuiRelativePane();
         radioButtonPane.setBackground(new Background(Color.LIGHT_GRAY));
@@ -137,8 +131,7 @@ public class GuiDemo extends BrokkGuiScreen
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);
         tabPane.setHeight(200);
-        tabPane.getSkin().setBorderColor(Color.YELLOW);
-        tabPane.getSkin().setBorderThin(1);
+        tabPane.setStyle("-border-color: yellow; -border-thin: 1;");
         tabPane.addTab(new GuiTab("Textfield", field));
         tabPane.addTab(new GuiTab("ListView", listView));
         tabPane.addTab(new GuiTab("Progress", progressBar));
@@ -149,8 +142,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         pane.addChild(tabPane);
 
-        this.getMainPanel().setBorderColor(Color.AQUA);
-        this.getMainPanel().setBorderThin(1);
+        this.getMainPanel().setStyle("-border-color: aqua; -border-thin: 1;");
     }
 
     @Override

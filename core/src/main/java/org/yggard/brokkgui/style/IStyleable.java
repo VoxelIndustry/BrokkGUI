@@ -29,7 +29,7 @@ public interface IStyleable
 
 	default void setStyle(String style)
 	{
-		this.setStyle(new StyleHolder(style));
+		this.getStyle().parseCSS(style);
 	}
 
 	void setStyle(StyleHolder style);
