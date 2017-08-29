@@ -2,6 +2,7 @@ package org.yggard.brokkgui.skin;
 
 import org.yggard.brokkgui.behavior.GuiScrollPaneBehavior;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.panel.ScrollPane;
 import org.yggard.brokkgui.policy.EScrollbarPolicy;
@@ -19,6 +20,9 @@ public class GuiScrollPaneSkin extends GuiBehaviorSkinBase<ScrollPane, GuiScroll
     public GuiScrollPaneSkin(final ScrollPane model, final GuiScrollPaneBehavior behavior)
     {
         super(model, behavior);
+
+        this.getModel().getStyle().registerProperty("-grip-x-color", Color.LIGHT_GRAY, Color.class);
+        this.getModel().getStyle().registerProperty("-grip-y-color", Color.LIGHT_GRAY, Color.class);
 
         this.gripX = new Rectangle();
 
@@ -85,7 +89,7 @@ public class GuiScrollPaneSkin extends GuiBehaviorSkinBase<ScrollPane, GuiScroll
                                 * GuiScrollPaneSkin.this.getModel().getWidth());
             }
         });
-        this.gripX.getFillProperty().bind(this.getModel().getScrollbarColorProperty());
+        this.gripX.getFillProperty().bind(this.getModel().getStyle().getStyleProperty("-grip-x-color", Color.class));
         this.gripX.setzLevel(10);
 
         this.gripY = new Rectangle();
@@ -154,7 +158,7 @@ public class GuiScrollPaneSkin extends GuiBehaviorSkinBase<ScrollPane, GuiScroll
             }
         });
 
-        this.gripY.getFillProperty().bind(this.getModel().getScrollbarColorProperty());
+        this.gripY.getFillProperty().bind(this.getModel().getStyle().getStyleProperty("-grip-y-color", Color.class));
     }
 
     @Override

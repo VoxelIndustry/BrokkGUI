@@ -25,8 +25,6 @@ public class ScrollPane extends GuiControl
 
     private EScrollbarPolicy          scrollXPolicy, scrollYPolicy;
 
-    private final BaseProperty<Color> scrollbarColorProperty;
-
     private EventHandler<ScrollEvent> onScrollEvent;
 
     public ScrollPane(final GuiNode node)
@@ -38,8 +36,6 @@ public class ScrollPane extends GuiControl
         this.trueHeightProperty = new BaseProperty<>(0f, "trueHeightProperty");
 
         this.scrollSpeedProperty = new BaseProperty<>(1f, "scrollSpeedProperty");
-
-        this.scrollbarColorProperty = new BaseProperty<>(Color.LIGHT_GRAY, "scrollbarColorProperty");
 
         this.scrollXPolicy = this.scrollYPolicy = EScrollbarPolicy.NEEDED;
         this.setOverflowPolicy(EOverflowPolicy.TRIM_ALL);
@@ -96,11 +92,6 @@ public class ScrollPane extends GuiControl
         return this.trueHeightProperty;
     }
 
-    public BaseProperty<Color> getScrollbarColorProperty()
-    {
-        return this.scrollbarColorProperty;
-    }
-
     public BaseProperty<Float> getScrollSpeedProperty()
     {
         return this.scrollSpeedProperty;
@@ -154,16 +145,6 @@ public class ScrollPane extends GuiControl
     public void setScrollYPolicy(final EScrollbarPolicy scrollYPolicy)
     {
         this.scrollYPolicy = scrollYPolicy;
-    }
-
-    public Color getScrollbarColor()
-    {
-        return this.getScrollbarColorProperty().getValue();
-    }
-
-    public void setScrollbarColor(final Color color)
-    {
-        this.getScrollbarColorProperty().setValue(color);
     }
 
     /**
