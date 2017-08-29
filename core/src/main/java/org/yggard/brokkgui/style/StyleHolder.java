@@ -2,13 +2,17 @@ package org.yggard.brokkgui.style;
 
 import java.util.HashMap;
 
+import fr.ourten.teabeans.value.BaseProperty;
+
 public class StyleHolder
 {
     private HashMap<String, StyleableProperty<?>> properties;
+    private BaseProperty<ICascadeStylable>        parent;
 
-    public StyleHolder()
+    public StyleHolder(BaseProperty<ICascadeStylable> parent)
     {
-        properties = new HashMap<>();
+        this.properties = new HashMap<>();
+        this.parent = parent;
     }
 
     public void parseCSS(String css)
@@ -34,5 +38,13 @@ public class StyleHolder
     public <T> StyleableProperty<T> getStyleProperty(String name, Class<T> clazz)
     {
         return (StyleableProperty<T>) this.properties.get(name);
+    }
+
+    /**
+     * @return the parent
+     */
+    public BaseProperty<ICascadeStylable> getParent()
+    {
+        return parent;
     }
 }

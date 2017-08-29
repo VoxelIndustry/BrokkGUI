@@ -9,6 +9,7 @@ import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.event.*;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.style.ICascadeStylable;
 import org.yggard.brokkgui.style.IStyleable;
 import org.yggard.brokkgui.style.StyleHolder;
 import org.yggard.hermod.EventDispatcher;
@@ -60,7 +61,7 @@ public abstract class GuiNode implements IEventEmitter, IStyleable
 
         this.styleID = new BaseProperty<>(null, "styleIDProperty");
         this.styleClass = new BaseListProperty<>(Collections.emptyList(), "styleClassListProperty");
-        this.styleHolder = new StyleHolder();
+        this.styleHolder = new StyleHolder(new BaseProperty<ICascadeStylable>(this, "cascadeStyleProperty"));
     }
 
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
@@ -500,5 +501,11 @@ public abstract class GuiNode implements IEventEmitter, IStyleable
     public void setStyle(StyleHolder style)
     {
         this.styleHolder = style;
+    }
+
+    @Override
+    public ICascadeStylable getParent()
+    {
+        return this.getFather();
     }
 }

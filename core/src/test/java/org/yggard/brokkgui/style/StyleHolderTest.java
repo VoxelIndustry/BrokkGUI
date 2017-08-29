@@ -13,7 +13,7 @@ public class StyleHolderTest
     @Test
     public void parseSimpleCSS()
     {
-        StyleHolder styleHolder = new StyleHolder();
+        StyleHolder styleHolder = new StyleHolder(null);
 
         styleHolder.registerProperty("-border-thin", 0, Integer.class);
         styleHolder.registerProperty("-border-color", Color.BLACK, Color.class);
