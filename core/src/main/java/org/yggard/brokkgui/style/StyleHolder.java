@@ -7,9 +7,9 @@ import fr.ourten.teabeans.value.BaseProperty;
 public class StyleHolder
 {
     private HashMap<String, StyleableProperty<?>> properties;
-    private BaseProperty<ICascadeStylable>        parent;
+    private BaseProperty<ICascadeStyleable>       parent;
 
-    public StyleHolder(BaseProperty<ICascadeStylable> parent)
+    public StyleHolder(BaseProperty<ICascadeStyleable> parent)
     {
         this.properties = new HashMap<>();
         this.parent = parent;
@@ -43,7 +43,7 @@ public class StyleHolder
     /**
      * @return the parent
      */
-    public BaseProperty<ICascadeStylable> getParent()
+    public BaseProperty<ICascadeStyleable> getParent()
     {
         return parent;
     }

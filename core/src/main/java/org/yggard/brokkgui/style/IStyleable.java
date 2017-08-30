@@ -31,6 +31,4 @@ public interface IStyleable
 	{
 		this.getStyle().parseCSS(style);
 	}
-
-	void setStyle(StyleHolder style);
 }

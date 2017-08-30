@@ -1,4 +1,4 @@
-package org.yggard.brokkgui.style.cascade;
+package org.yggard.brokkgui.style;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.style.ICascadeStylable;
+import org.yggard.brokkgui.style.ICascadeStyleable;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CascadeStylableTest
@@ -39,13 +39,13 @@ public class CascadeStylableTest
     @Test
     public void testHierarchy()
     {
-        ICascadeStylable excepted1 = this.node2;
-        ICascadeStylable excepted2 = this.node1;
-        ICascadeStylable excepted3 = this.node1;
+        ICascadeStyleable excepted1 = this.node2;
+        ICascadeStyleable excepted2 = this.node1;
+        ICascadeStyleable excepted3 = this.node1;
 
-        ICascadeStylable actual1 = this.node3.getParent();
-        ICascadeStylable actual2 = this.node2.getParent();
-        ICascadeStylable actual3 = this.node3.getParent().getParent();
+        ICascadeStyleable actual1 = this.node3.getParent();
+        ICascadeStyleable actual2 = this.node2.getParent();
+        ICascadeStyleable actual3 = this.node3.getParent().getParent();
 
         assertThat(excepted1).isEqualTo(actual1);
         assertThat(excepted2).isEqualTo(actual2);

@@ -9,7 +9,7 @@ import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.event.*;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
-import org.yggard.brokkgui.style.ICascadeStylable;
+import org.yggard.brokkgui.style.ICascadeStyleable;
 import org.yggard.brokkgui.style.IStyleable;
 import org.yggard.brokkgui.style.StyleHolder;
 import org.yggard.hermod.EventDispatcher;
@@ -18,7 +18,7 @@ import org.yggard.hermod.IEventEmitter;
 
 import java.util.Collections;
 
-public abstract class GuiNode implements IEventEmitter, IStyleable, ICascadeStylable
+public abstract class GuiNode implements IEventEmitter, IStyleable, ICascadeStyleable
 {
     private final BaseProperty<GuiFather> fatherProperty;
     private final BaseProperty<Float> xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
@@ -61,7 +61,7 @@ public abstract class GuiNode implements IEventEmitter, IStyleable, ICascadeStyl
 
         this.styleID = new BaseProperty<>(null, "styleIDProperty");
         this.styleClass = new BaseListProperty<>(Collections.emptyList(), "styleClassListProperty");
-        this.styleHolder = new StyleHolder(new BaseProperty<ICascadeStylable>(this, "cascadeStyleProperty"));
+        this.styleHolder = new StyleHolder(new BaseProperty<ICascadeStyleable>(this, "cascadeStyleProperty"));
     }
 
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
@@ -498,13 +498,7 @@ public abstract class GuiNode implements IEventEmitter, IStyleable, ICascadeStyl
     }
 
     @Override
-    public void setStyle(StyleHolder style)
-    {
-        this.styleHolder = style;
-    }
-
-    @Override
-    public ICascadeStylable getParent()
+    public ICascadeStyleable getParent()
     {
         return this.getFather();
     }
