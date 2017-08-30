@@ -15,4 +15,9 @@ public class StyleTree
     {
         return new StyleTree();
     }
+
+    public void addEntry(StyleSelector selectors, String rules)
+    {
+
+    }
 }

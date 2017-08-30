@@ -9,4 +9,9 @@ public interface Tree<N>
     N getParent(N node);
 
     List<N> getChildren(N node);
+
+    default boolean isEmpty()
+    {
+        return this.getRoots().isEmpty();
+    }
 }
