@@ -10,6 +10,8 @@ public interface Tree<N>
 
     List<N> getChildren(N node);
 
+    int size();
+
     default boolean isEmpty()
     {
         return this.getRoots().isEmpty();

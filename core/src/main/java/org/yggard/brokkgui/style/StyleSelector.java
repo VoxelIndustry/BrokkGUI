@@ -1,11 +1,10 @@
 package org.yggard.brokkgui.style;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.*;
 
 public class StyleSelector
 {
-    private EnumMap<StyleSelectorType, ArrayList<String>> selectors;
+    private EnumMap<StyleSelectorType, List<String>> selectors;
     private int computedSpecificity = -1;
 
     public StyleSelector()
@@ -13,12 +12,20 @@ public class StyleSelector
         this.selectors = new EnumMap<>(StyleSelectorType.class);
     }
 
-    public void addSelector(StyleSelectorType type, String selector)
+    public StyleSelector addWildcard()
+    {
+        this.selectors.put(StyleSelectorType.WILDCARD, Collections.singletonList("*"));
+        this.computedSpecificity = 1000;
+        return this;
+    }
+
+    public StyleSelector addSelector(StyleSelectorType type, String selector)
     {
         if (!this.selectors.containsKey(type))
             this.selectors.put(type, new ArrayList<>());
         this.selectors.get(type).add(selector);
         this.computedSpecificity = -1;
+        return this;
     }
 
     public int getSpecificity()
@@ -31,9 +38,14 @@ public class StyleSelector
         return this.computedSpecificity;
     }
 
+    public Map<StyleSelectorType, List<String>> getSelectors()
+    {
+        return selectors;
+    }
+
     public enum StyleSelectorType
     {
-        TYPE(1), CLASS(10), PSEUDOCLASS(10), ID(100);
+        TYPE(1), CLASS(10), PSEUDOCLASS(10), ID(100), WILDCARD(1000);
 
         int specificity;
 

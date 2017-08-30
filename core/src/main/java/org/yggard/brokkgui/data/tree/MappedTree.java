@@ -82,6 +82,12 @@ public class MappedTree<N> implements MutableTree<N>
     }
 
     @Override
+    public int size()
+    {
+        return this.nodeList.size();
+    }
+
+    @Override
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
