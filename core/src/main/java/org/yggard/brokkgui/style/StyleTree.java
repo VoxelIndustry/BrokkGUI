@@ -19,6 +19,7 @@ public class StyleTree
         this.internalTree.add(null, this.wildcard);
     }
 
+    // TODO: agglomeration system
     public StyleTree agglomerate(StyleTree tree)
     {
         return new StyleTree();
