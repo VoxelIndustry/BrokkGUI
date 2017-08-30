@@ -18,7 +18,7 @@ import org.yggard.hermod.IEventEmitter;
 
 import java.util.Collections;
 
-public abstract class GuiNode implements IEventEmitter, IStyleable, ICascadeStyleable
+public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 {
     private final BaseProperty<GuiFather> fatherProperty;
     private final BaseProperty<Float> xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
@@ -466,7 +466,6 @@ public abstract class GuiNode implements IEventEmitter, IStyleable, ICascadeStyl
     /////////////////////
     //     STYLING     //
     /////////////////////
-
 
     @Override
     public void setID(String id)

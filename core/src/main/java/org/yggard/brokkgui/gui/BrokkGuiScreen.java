@@ -1,6 +1,7 @@
 package org.yggard.brokkgui.gui;
 
 import fr.ourten.teabeans.binding.BaseExpression;
+import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.event.WindowEvent;
@@ -9,10 +10,12 @@ import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.panel.GuiPane;
+import org.yggard.brokkgui.style.StylesheetManager;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class BrokkGuiScreen implements IGuiWindow
 {
@@ -20,17 +23,20 @@ public class BrokkGuiScreen implements IGuiWindow
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
 
-    private GuiPane                         mainPanel;
-    private final ArrayList<SubGuiScreen>   windows;
-    private IGuiRenderer                    renderer;
+    private       GuiPane                 mainPanel;
+    private final ArrayList<SubGuiScreen> windows;
+    private       IGuiRenderer            renderer;
 
-    private final BaseProperty<Float>       widthProperty, heightProperty, xPosProperty, yPosProperty;
+    private final BaseProperty<Float> widthProperty, heightProperty, xPosProperty, yPosProperty;
 
-    private final BaseProperty<Float>       xRelativePosProperty, yRelativePosProperty;
+    private final BaseProperty<Float> xRelativePosProperty, yRelativePosProperty;
 
-    private final BaseProperty<Integer>     screenWidthProperty, screenHeightProperty;
+    private final BaseProperty<Integer> screenWidthProperty, screenHeightProperty;
 
-    private IBrokkGuiImpl                   wrapper;
+    private final BaseListProperty<String> stylesheetsProperty;
+    private final BaseProperty<String>     userAgentStylesheetProperty;
+
+    private IBrokkGuiImpl wrapper;
 
     public BrokkGuiScreen(final float xRelativePos, final float yRelativePos, final float width, final float height)
     {
@@ -47,6 +53,11 @@ public class BrokkGuiScreen implements IGuiWindow
 
         this.screenWidthProperty = new BaseProperty<>(0, "screenWidthProperty");
         this.screenHeightProperty = new BaseProperty<>(0, "screenHeightProperty");
+
+        this.stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
+        this.userAgentStylesheetProperty = new BaseProperty<>(null, "userAgentStylesheetProperty");
+
+        this.stylesheetsProperty.addListener(obs -> StylesheetManager.getInstance().refreshStylesheets(this));
 
         this.setMainPanel(new GuiPane());
     }
@@ -340,5 +351,34 @@ public class BrokkGuiScreen implements IGuiWindow
     private void initEventDispatcher()
     {
         this.eventDispatcher = new EventDispatcher();
+    }
+
+    /////////////////////
+    //     STYLING     //
+    /////////////////////
+
+    public BaseListProperty<String> getStylesheetsProperty()
+    {
+        return stylesheetsProperty;
+    }
+
+    public BaseProperty<String> getUserAgentStylesheetProperty()
+    {
+        return userAgentStylesheetProperty;
+    }
+
+    public void addStylesheet(String stylesheetLocation)
+    {
+        this.getStylesheetsProperty().add(stylesheetLocation);
+    }
+
+    public void removeStylesheet(String stylesheetLocation)
+    {
+        this.getStylesheetsProperty().remove(stylesheetLocation);
+    }
+
+    public void setUserAgentStylesheet(String stylesheetLocation)
+    {
+        this.getUserAgentStylesheetProperty().setValue(stylesheetLocation);
     }
 }

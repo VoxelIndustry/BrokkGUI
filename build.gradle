@@ -107,6 +107,7 @@ project(":core") {
         api "org.yggard:hermod:0.1.1"
         implementation "org.apache.commons:commons-lang3:3.4"
         implementation "com.google.code.findbugs:jsr305:3.0.1"
+        implementation "commons-io:commons-io:2.5"
 
         testCompile 'org.assertj:assertj-core-java8:1.0.0m1'
         testCompile 'junit:junit:4.12'
