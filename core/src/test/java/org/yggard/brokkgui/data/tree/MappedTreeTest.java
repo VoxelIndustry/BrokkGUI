@@ -56,8 +56,8 @@ public class MappedTreeTest
     {
         MappedTree<String> tree = new MappedTree<>();
 
-        assertThatExceptionThrownBy(() -> tree.add(null, null)).isInstanceOf(IllegalArgumentException.class);
-        assertThatExceptionThrownBy(() -> tree.getParent(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatExceptionThrownBy(() -> tree.add(null, null)).isInstanceOf(NullPointerException.class);
+        assertThatExceptionThrownBy(() -> tree.getParent(null)).isInstanceOf(NullPointerException.class);
 
         assertThatExceptionThrownBy(() -> tree.add("ROOT", "ROOT")).isInstanceOf(IllegalArgumentException.class);
     }
