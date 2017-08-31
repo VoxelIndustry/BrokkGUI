@@ -1,5 +1,6 @@
 package org.yggard.brokkgui.style;
 
+import org.assertj.core.util.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -19,7 +20,7 @@ public class StyleTreeTest
         StyleSelector selector = new StyleSelector().addSelector(StyleSelector.StyleSelectorType.TYPE, "button");
 
         String[] rules = new String[]{"-text-color: red", "-border-color: white"};
-        tree.addEntry(selector, Arrays.asList(rules));
+        tree.addEntry(selector, Sets.newLinkedHashSet(rules));
 
         assertThat(tree.getInternalTree().getChildren(tree.getWildcard())).hasSize(1);
         assertThat(tree.getInternalTree().getChildren(tree.getWildcard()).get(0).getRules()).contains(rules);
@@ -34,7 +35,7 @@ public class StyleTreeTest
                 .addSelector(StyleSelector.StyleSelectorType.ID, "myButton");
 
         String[] rules = new String[]{"-text-color: red", "-border-color: white"};
-        tree.addEntry(selector, Arrays.asList(rules));
+        tree.addEntry(selector, Sets.newLinkedHashSet(rules));
 
         StyleEntry styleEntry = tree.getInternalTree().getChildren(tree.getInternalTree().getChildren(tree.getWildcard()).get(0)).get(0);
 
@@ -51,10 +52,10 @@ public class StyleTreeTest
                 .addSelector(StyleSelector.StyleSelectorType.ID, "myButton");
 
         String[] rules1 = new String[]{"-text-color: red", "-border-color: white"};
-        tree.addEntry(selector, Arrays.asList(rules1));
+        tree.addEntry(selector, Sets.newLinkedHashSet(rules1));
 
         String[] rules2 = new String[]{"-text-font: Open Sans", "-border-width: 2"};
-        tree.addEntry(selector, Arrays.asList(rules2));
+        tree.addEntry(selector, Sets.newLinkedHashSet(rules2));
 
         assertThat(tree.getInternalTree().getChildren(tree.getInternalTree().getChildren(tree.getWildcard()).get(0))
                 .get(0).getRules()).contains(rules1).contains(rules2);
@@ -68,7 +69,7 @@ public class StyleTreeTest
         StyleSelector selector = new StyleSelector().addSelector(StyleSelector.StyleSelectorType.TYPE, "button")
                 .addSelector(StyleSelector.StyleSelectorType.ID, "myButton");
 
-        tree.addEntry(selector, Arrays.asList("-text-color: red", "-border-color: white"));
+        tree.addEntry(selector, Sets.newLinkedHashSet("-text-color: red", "-border-color: white"));
 
         assertThat(tree.isEmpty()).isFalse();
 

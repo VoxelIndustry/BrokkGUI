@@ -2,22 +2,11 @@ pane {
     -background-color: red;
     -border-color: blue;
     -border-width: 1;
-    -background-color: red;
-    -border-color: blue;
-    -border-width: 1;
 }
 
 pane .snowflakes {
     -border-color: khaki;
-    -background-color: red;
-    -border-color: blue;
-    -border-width: 1;
-    -background-color: red;
-    -border-color: blue;
-    -border-width: 1;
-    -background-color: red;
-    -border-color: blue;
-    -border-width: 1;
+    -border-width: 2;
 }
 
 #cyan {

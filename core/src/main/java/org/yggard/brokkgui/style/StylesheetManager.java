@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class StylesheetManager
@@ -33,11 +33,12 @@ public class StylesheetManager
 
     public void refreshStylesheets(BrokkGuiScreen screen)
     {
+        StyleTree tree = new StyleTree();
         screen.getStylesheetsProperty().getValue().forEach(styleSheet ->
         {
             try
             {
-                this.loadStylesheet(styleSheet);
+                tree.merge(this.loadStylesheet(styleSheet));
             } catch (IOException e)
             {
                 logger.throwing("StylesheetManager", "refreshStyleSheets", e);
@@ -97,7 +98,7 @@ public class StylesheetManager
         if (!content.hasNext())
             return;
         String currentLine = content.nextLine();
-        List<String> elements = new ArrayList<>();
+        Set<String> elements = new HashSet<>();
         while (!StringUtils.contains(currentLine, "}"))
         {
             if (StringUtils.contains(currentLine, "{"))

@@ -86,6 +86,11 @@ public class MappedTree<N> implements MutableTree<N>
         return this.nodeList.size();
     }
 
+    public LinkedHashSet<N> getNodeList()
+    {
+        return nodeList;
+    }
+
     @Override
     public String toString()
     {

@@ -5,6 +5,7 @@ import org.yggard.brokkgui.data.tree.MappedTree;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class StyleTree
 {
@@ -19,13 +20,13 @@ public class StyleTree
         this.internalTree.add(null, this.wildcard);
     }
 
-    // TODO: agglomeration system
-    public StyleTree agglomerate(StyleTree tree)
+    public StyleTree merge(StyleTree tree)
     {
-        return new StyleTree();
+        tree.getInternalTree().getNodeList().forEach(entry -> this.addEntry(entry.getSelector(), entry.getRules()));
+        return this;
     }
 
-    public void addEntry(StyleSelector selectors, List<String> rules)
+    void addEntry(StyleSelector selectors, Set<String> rules)
     {
         StyleEntry lastAdded = this.wildcard;
         for (Map.Entry<StyleSelector.StyleSelectorType, List<String>> entry : selectors.getSelectors().entrySet())
