@@ -1,8 +1,8 @@
 package org.yggard.brokkgui.style;
 
-import java.util.HashMap;
-
 import fr.ourten.teabeans.value.BaseProperty;
+
+import java.util.HashMap;
 
 public class StyleHolder
 {
@@ -25,7 +25,8 @@ public class StyleHolder
             if (properties.containsKey(propertyName))
             {
                 StyleableProperty<?> styleProp = properties.get(propertyName);
-                styleProp.setValue(StyleDecoder.getInstance().decode(splitted[1].trim(), styleProp.getValueClass()));
+                styleProp.setStyle(StyleSource.INLINE, 10_000, StyleDecoder.getInstance().decode(splitted[1].trim(),
+                        styleProp.getValueClass()));
             }
         }
     }
