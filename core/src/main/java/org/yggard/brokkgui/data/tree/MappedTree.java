@@ -1,6 +1,5 @@
 package org.yggard.brokkgui.data.tree;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 public class MappedTree<N> implements MutableTree<N>
@@ -9,7 +8,7 @@ public class MappedTree<N> implements MutableTree<N>
     private final LinkedHashSet<N> nodeList   = new LinkedHashSet<>();
 
     @Override
-    public boolean add(N parent, @Nonnull N node)
+    public boolean add(N parent, N node)
     {
         Objects.requireNonNull(node, "child node cannot be null");
 
@@ -33,7 +32,7 @@ public class MappedTree<N> implements MutableTree<N>
     }
 
     @Override
-    public boolean remove(@Nonnull N node, boolean cascade)
+    public boolean remove(N node, boolean cascade)
     {
         Objects.requireNonNull(node, "node cannot be null");
 
@@ -60,7 +59,7 @@ public class MappedTree<N> implements MutableTree<N>
     }
 
     @Override
-    public N getParent(@Nonnull N node)
+    public N getParent(N node)
     {
         Objects.requireNonNull(node, "node cannot be null");
         return nodeParent.get(node);

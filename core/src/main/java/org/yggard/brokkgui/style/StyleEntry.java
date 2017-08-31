@@ -5,8 +5,8 @@ import java.util.List;
 
 public class StyleEntry
 {
-    private StyleSelector       selector;
-    private List<String> rules;
+    private StyleSelector selector;
+    private List<String>  rules;
 
     public StyleEntry(StyleSelector selector)
     {
@@ -28,5 +28,11 @@ public class StyleEntry
     public List<String> getRules()
     {
         return rules;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "{selector=" + selector + ", rules=" + rules + '}';
     }
 }

@@ -43,9 +43,15 @@ public class StyleSelector
         return selectors;
     }
 
+    @Override
+    public String toString()
+    {
+        return "{selectors=" + selectors + ", specificity=" + this.getSpecificity() + '}';
+    }
+
     public enum StyleSelectorType
     {
-        TYPE(1), CLASS(10), PSEUDOCLASS(10), ID(100), WILDCARD(1000);
+        WILDCARD(1000), TYPE(1), CLASS(10), ID(100), PSEUDOCLASS(10);
 
         int specificity;
 

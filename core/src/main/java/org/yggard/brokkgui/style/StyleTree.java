@@ -40,12 +40,8 @@ public class StyleTree
                 {
                     StyleEntry newEntry = new StyleEntry(new StyleSelector().addSelector(entry.getKey(), selector));
 
-                    StyleEntry previous = lastAdded;
-                    while (previous != this.wildcard)
-                    {
-                        newEntry.getSelector().getSelectors().putAll(previous.getSelector().getSelectors());
-                        previous = this.internalTree.getParent(previous);
-                    }
+                    if (lastAdded != this.wildcard)
+                        newEntry.getSelector().getSelectors().putAll(lastAdded.getSelector().getSelectors());
 
                     this.internalTree.add(lastAdded, newEntry);
                     lastAdded = newEntry;
