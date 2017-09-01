@@ -103,7 +103,7 @@ project(":core") {
 
     version = "0.4.3"
     dependencies {
-        api "fr.ourten:teabeans:0.5.1"
+        api "fr.ourten:teabeans:0.5.3"
         api "org.yggard:hermod:0.1.1"
         implementation "org.apache.commons:commons-lang3:3.4"
         implementation "com.google.code.findbugs:jsr305:3.0.1"

@@ -29,7 +29,6 @@ public class StyleableProperty<T> extends BaseProperty<T>
         return false;
     }
 
-    // TODO: Update teabeans to allow overriding #setPropertyValue
     @Override
     public void setValue(T value)
     {
