@@ -1,4 +1,4 @@
-package org.yggard.brokkgui.style;
+package org.yggard.brokkgui.style.tree;
 
 import java.util.*;
 

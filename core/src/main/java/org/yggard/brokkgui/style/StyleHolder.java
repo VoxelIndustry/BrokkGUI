@@ -1,6 +1,7 @@
 package org.yggard.brokkgui.style;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.style.tree.StyleTree;
 
 import java.util.HashMap;
 import java.util.function.Supplier;

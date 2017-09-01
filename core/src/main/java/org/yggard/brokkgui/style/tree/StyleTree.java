@@ -1,4 +1,4 @@
-package org.yggard.brokkgui.style;
+package org.yggard.brokkgui.style.tree;
 
 import org.yggard.brokkgui.data.tree.MappedTree;
 
@@ -27,7 +27,7 @@ public class StyleTree
     }
 
     //TODO: Rules erasure and priority
-    void addEntry(StyleSelector selectors, Set<String> rules)
+    public void addEntry(StyleSelector selectors, Set<StyleRule> rules)
     {
         StyleEntry lastAdded = this.wildcard;
         for (Map.Entry<StyleSelector.StyleSelectorType, List<String>> entry : selectors.getSelectors().entrySet())
@@ -56,12 +56,12 @@ public class StyleTree
         lastAdded.getRules().addAll(rules);
     }
 
-    MappedTree<StyleEntry> getInternalTree()
+    public MappedTree<StyleEntry> getInternalTree()
     {
         return this.internalTree;
     }
 
-    StyleEntry getWildcard()
+    public StyleEntry getWildcard()
     {
         return this.wildcard;
     }

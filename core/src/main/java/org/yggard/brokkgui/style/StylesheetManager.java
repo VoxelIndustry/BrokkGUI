@@ -3,6 +3,9 @@ package org.yggard.brokkgui.style;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
+import org.yggard.brokkgui.style.tree.StyleRule;
+import org.yggard.brokkgui.style.tree.StyleSelector;
+import org.yggard.brokkgui.style.tree.StyleTree;
 import org.yggard.brokkgui.util.NumberedLineIterator;
 
 import java.io.IOException;
@@ -112,7 +115,7 @@ public class StylesheetManager
         if (!content.hasNext())
             return;
         String currentLine = content.nextLine();
-        Set<String> elements = new HashSet<>();
+        Set<StyleRule> elements = new HashSet<>();
         while (!StringUtils.contains(currentLine, "}"))
         {
             if (StringUtils.contains(currentLine, "{"))
@@ -120,7 +123,8 @@ public class StylesheetManager
                 logger.severe("Found opening bracket at line " + content.getLineNumber() + " while inside a block");
                 return;
             }
-            elements.add(currentLine.replace(';', ' ').trim());
+            String[] rule = currentLine.replace(';', ' ').trim().split(":");
+            elements.add(new StyleRule(rule[0].trim(), rule[1].trim()));
             if (!content.hasNext())
                 return;
             currentLine = content.nextLine();

@@ -6,7 +6,7 @@ import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
-import org.yggard.brokkgui.style.StyleTree;
+import org.yggard.brokkgui.style.tree.StyleTree;
 
 import java.util.List;
 import java.util.function.Supplier;

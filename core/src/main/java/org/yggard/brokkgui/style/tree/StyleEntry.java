@@ -1,14 +1,12 @@
-package org.yggard.brokkgui.style;
+package org.yggard.brokkgui.style.tree;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class StyleEntry
 {
     private StyleSelector selector;
-    private Set<String>   rules;
+    private Set<StyleRule>   rules;
 
     public StyleEntry(StyleSelector selector)
     {
@@ -16,7 +14,7 @@ public class StyleEntry
         this.rules = new HashSet<>();
     }
 
-    public StyleEntry rule(String rule)
+    public StyleEntry rule(StyleRule rule)
     {
         this.rules.add(rule);
         return this;
@@ -27,7 +25,7 @@ public class StyleEntry
         return selector;
     }
 
-    public Set<String> getRules()
+    public Set<StyleRule> getRules()
     {
         return rules;
     }

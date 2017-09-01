@@ -1,5 +1,7 @@
 package org.yggard.brokkgui.style;
 
+import org.yggard.brokkgui.style.tree.StyleTree;
+
 import java.util.function.Supplier;
 
 public interface ICascadeStyleable extends IStyleable

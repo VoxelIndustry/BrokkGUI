@@ -10,7 +10,7 @@ import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.panel.GuiPane;
-import org.yggard.brokkgui.style.StyleTree;
+import org.yggard.brokkgui.style.tree.StyleTree;
 import org.yggard.brokkgui.style.StylesheetManager;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
