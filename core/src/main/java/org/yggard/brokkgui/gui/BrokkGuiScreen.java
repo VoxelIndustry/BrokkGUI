@@ -10,6 +10,7 @@ import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.panel.GuiPane;
+import org.yggard.brokkgui.style.StyleTree;
 import org.yggard.brokkgui.style.StylesheetManager;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
@@ -35,6 +36,8 @@ public class BrokkGuiScreen implements IGuiWindow
 
     private final BaseListProperty<String> stylesheetsProperty;
     private final BaseProperty<String>     userAgentStylesheetProperty;
+    private final BaseProperty<StyleTree>  userAgentStyleTreeProperty;
+    private final BaseProperty<StyleTree>  styleTreeProperty;
 
     private IBrokkGuiImpl wrapper;
 
@@ -56,8 +59,22 @@ public class BrokkGuiScreen implements IGuiWindow
 
         this.stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
         this.userAgentStylesheetProperty = new BaseProperty<>(null, "userAgentStylesheetProperty");
+        this.userAgentStyleTreeProperty = new BaseProperty<>(null, "userAgentStyleTreeProperty");
+        this.styleTreeProperty = new BaseProperty<>(null, "styleTreeProperty");
 
-        this.stylesheetsProperty.addListener(obs -> StylesheetManager.getInstance().refreshStylesheets(this));
+        this.stylesheetsProperty.addListener(obs ->
+        {
+            StylesheetManager.getInstance().refreshStylesheets(this);
+            if (this.getMainPanel() != null)
+                this.getMainPanel().refreshStyle();
+        });
+        this.userAgentStylesheetProperty.addListener(obs ->
+        {
+            StylesheetManager.getInstance().refreshUserAgent(this);
+            StylesheetManager.getInstance().refreshStylesheets(this);
+            if (this.getMainPanel() != null)
+                this.getMainPanel().refreshStyle();
+        });
 
         this.setMainPanel(new GuiPane());
     }
@@ -79,17 +96,14 @@ public class BrokkGuiScreen implements IGuiWindow
         this.renderer = wrapper.getRenderer();
 
         this.xPosProperty.bind(new BaseExpression<>(() ->
-        {
-            return BrokkGuiScreen.this.getScreenWidth() / (1 / BrokkGuiScreen.this.getxRelativePos())
-                    - BrokkGuiScreen.this.getWidth() / 2;
-        }, this.getScreenWidthProperty(), this.getxRelativePosProperty(), this.getWidthProperty()));
+                BrokkGuiScreen.this.getScreenWidth() / (1 / BrokkGuiScreen.this.getxRelativePos())
+                        - BrokkGuiScreen.this.getWidth() / 2, this.getScreenWidthProperty(), this
+                .getxRelativePosProperty(), this.getWidthProperty()));
 
         this.yPosProperty.bind(new BaseExpression<>(() ->
-        {
-            return BrokkGuiScreen.this.getScreenHeight() / (1 / BrokkGuiScreen.this.getyRelativePos())
-                    - BrokkGuiScreen.this.getHeight() / 2;
-        }, this.getyRelativePosProperty(), this.getScreenHeightProperty(), this.getHeightProperty()));
-
+                BrokkGuiScreen.this.getScreenHeight() / (1 / BrokkGuiScreen.this.getyRelativePos())
+                        - BrokkGuiScreen.this.getHeight() / 2, this.getyRelativePosProperty(), this
+                .getScreenHeightProperty(), this.getHeightProperty()));
     }
 
     public void render(final int mouseX, final int mouseY, final float partialTicks)
@@ -210,6 +224,9 @@ public class BrokkGuiScreen implements IGuiWindow
 
         this.mainPanel.getxPosProperty().bind(this.xPosProperty);
         this.mainPanel.getyPosProperty().bind(this.yPosProperty);
+
+        this.mainPanel.setStyleTree(this.getStyleTreeProperty()::getValue);
+        this.mainPanel.refreshStyle();
     }
 
     public BaseProperty<Float> getWidthProperty()
@@ -365,6 +382,31 @@ public class BrokkGuiScreen implements IGuiWindow
     public BaseProperty<String> getUserAgentStylesheetProperty()
     {
         return userAgentStylesheetProperty;
+    }
+
+    private BaseProperty<StyleTree> getStyleTreeProperty()
+    {
+        return this.styleTreeProperty;
+    }
+
+    private BaseProperty<StyleTree> getUserAgentStyleTreeProperty()
+    {
+        return this.userAgentStyleTreeProperty;
+    }
+
+    public void setStyleTree(StyleTree tree)
+    {
+        this.getStyleTreeProperty().setValue(tree);
+    }
+
+    public void setUserAgentStyleTree(StyleTree tree)
+    {
+        this.getUserAgentStyleTreeProperty().setValue(tree);
+    }
+
+    public StyleTree getUserAgentStyleTree()
+    {
+        return this.getUserAgentStyleTreeProperty().getValue();
     }
 
     public void addStylesheet(String stylesheetLocation)

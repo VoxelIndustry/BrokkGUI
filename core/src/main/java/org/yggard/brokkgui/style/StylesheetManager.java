@@ -33,7 +33,7 @@ public class StylesheetManager
 
     public void refreshStylesheets(BrokkGuiScreen screen)
     {
-        StyleTree tree = new StyleTree();
+        StyleTree tree = screen.getUserAgentStyleTree();
         screen.getStylesheetsProperty().getValue().forEach(styleSheet ->
         {
             try
@@ -44,6 +44,20 @@ public class StylesheetManager
                 logger.throwing("StylesheetManager", "refreshStyleSheets", e);
             }
         });
+        screen.setStyleTree(tree);
+    }
+
+    public void refreshUserAgent(BrokkGuiScreen screen)
+    {
+        StyleTree tree = new StyleTree();
+        try
+        {
+            tree.merge(this.loadStylesheet("assets/brokkgui/css/user_agent.css"));
+        } catch (IOException e)
+        {
+            logger.throwing("StylesheetManager", "refreshUserAgentStyleSheets", e);
+        }
+        screen.setUserAgentStyleTree(tree);
     }
 
     StyleTree loadStylesheet(String styleSheet) throws IOException

@@ -19,7 +19,7 @@ public class StyleHolderTest
         styleHolder.registerProperty("-border-color", Color.BLACK, Color.class);
         styleHolder.registerProperty("-color", Color.WHITE, Color.class);
 
-        styleHolder.parseCSS("-color: aqua; -border-color: red; -border-thin: 2;");
+        styleHolder.parseInlineCSS("-color: aqua; -border-color: red; -border-thin: 2;");
 
         assertThat(styleHolder.getStyleProperty("-border-thin", Integer.class).getValue()).isEqualTo(2);
         assertThat(styleHolder.getStyleProperty("-border-color", Color.class).getValue()).isEqualTo(Color.RED);

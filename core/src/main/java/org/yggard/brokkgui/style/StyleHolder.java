@@ -3,11 +3,14 @@ package org.yggard.brokkgui.style;
 import fr.ourten.teabeans.value.BaseProperty;
 
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class StyleHolder
 {
     private HashMap<String, StyleableProperty<?>> properties;
     private BaseProperty<ICascadeStyleable>       parent;
+
+    private Supplier<StyleTree> styleSupplier;
 
     public StyleHolder(BaseProperty<ICascadeStyleable> parent)
     {
@@ -15,7 +18,7 @@ public class StyleHolder
         this.parent = parent;
     }
 
-    public void parseCSS(String css)
+    public void parseInlineCSS(String css)
     {
         for (String property : css.split(";"))
         {
@@ -39,6 +42,19 @@ public class StyleHolder
     public <T> StyleableProperty<T> getStyleProperty(String name, Class<T> clazz)
     {
         return (StyleableProperty<T>) this.properties.get(name);
+    }
+
+    public void setStyleSupplier(Supplier<StyleTree> styleSupplier)
+    {
+        this.styleSupplier = styleSupplier;
+    }
+
+    public void refresh()
+    {
+        if(this.styleSupplier == null)
+            return;
+
+        //TODO: Actual tree unpacking
     }
 
     /**

@@ -29,6 +29,6 @@ public interface IStyleable
 
 	default void setStyle(String style)
 	{
-		this.getStyle().parseCSS(style);
+		this.getStyle().parseInlineCSS(style);
 	}
 }

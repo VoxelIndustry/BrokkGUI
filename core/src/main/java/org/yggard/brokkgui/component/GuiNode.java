@@ -1,5 +1,6 @@
 package org.yggard.brokkgui.component;
 
+import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
@@ -10,13 +11,14 @@ import org.yggard.brokkgui.event.*;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.style.ICascadeStyleable;
-import org.yggard.brokkgui.style.IStyleable;
 import org.yggard.brokkgui.style.StyleHolder;
+import org.yggard.brokkgui.style.StyleTree;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
 import org.yggard.hermod.IEventEmitter;
 
 import java.util.Collections;
+import java.util.function.Supplier;
 
 public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 {
@@ -61,7 +63,10 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
         this.styleID = new BaseProperty<>(null, "styleIDProperty");
         this.styleClass = new BaseListProperty<>(Collections.emptyList(), "styleClassListProperty");
-        this.styleHolder = new StyleHolder(new BaseProperty<ICascadeStyleable>(this, "cascadeStyleProperty"));
+        this.styleHolder = new StyleHolder(new BaseProperty<>(this, "cascadeStyleProperty"));
+
+        this.styleID.addListener((obs, oldValue, newValue) -> this.refreshStyle());
+        this.styleClass.addListener((ListValueChangeListener)(obs, oldValue, newValue) -> this.refreshStyle());
     }
 
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
@@ -500,5 +505,16 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public ICascadeStyleable getParent()
     {
         return this.getFather();
+    }
+
+    @Override
+    public void setStyleTree(Supplier<StyleTree> treeSupplier)
+    {
+        this.getStyle().setStyleSupplier(treeSupplier);
+    }
+
+    public void refreshStyle()
+    {
+        this.getStyle().refresh();
     }
 }

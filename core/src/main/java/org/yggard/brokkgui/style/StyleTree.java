@@ -26,6 +26,7 @@ public class StyleTree
         return this;
     }
 
+    //TODO: Rules erasure and priority
     void addEntry(StyleSelector selectors, Set<String> rules)
     {
         StyleEntry lastAdded = this.wildcard;
