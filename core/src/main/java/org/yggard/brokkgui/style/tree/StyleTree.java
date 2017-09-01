@@ -53,7 +53,7 @@ public class StyleTree
             }
         }
 
-        lastAdded.getRules().addAll(rules);
+        lastAdded.mergeRules(rules);
     }
 
     public MappedTree<StyleEntry> getInternalTree()

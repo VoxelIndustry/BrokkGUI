@@ -5,13 +5,22 @@ import java.util.Set;
 
 public class StyleEntry
 {
-    private StyleSelector selector;
-    private Set<StyleRule>   rules;
+    private StyleSelector  selector;
+    private Set<StyleRule> rules;
 
     public StyleEntry(StyleSelector selector)
     {
         this.selector = selector;
         this.rules = new HashSet<>();
+    }
+
+    public void mergeRules(Set<StyleRule> rules)
+    {
+        rules.forEach(rule ->
+        {
+            if (!this.rules.stream().anyMatch(rule2 -> rule2.getRuleIdentifier().equals(rule.getRuleIdentifier())))
+                this.rules.add(rule);
+        });
     }
 
     public StyleEntry rule(StyleRule rule)
