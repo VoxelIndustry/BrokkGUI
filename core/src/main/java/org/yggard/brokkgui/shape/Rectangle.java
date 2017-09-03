@@ -9,6 +9,8 @@ public class Rectangle extends GuiShape
 {
     public Rectangle(final float xLeft, final float yLeft, final float width, final float height)
     {
+        super("rectangle");
+
         this.setxTranslate(xLeft);
         this.setyTranslate(yLeft);
 

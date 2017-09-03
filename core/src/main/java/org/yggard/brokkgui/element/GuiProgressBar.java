@@ -1,7 +1,6 @@
 package org.yggard.brokkgui.element;
 
-import java.util.Objects;
-
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
 import org.yggard.brokkgui.control.GuiLabeled;
 import org.yggard.brokkgui.data.EAlignment;
@@ -11,7 +10,7 @@ import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.skin.GuiProgressBarSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.Objects;
 
 /**
  * @author Phenix246
@@ -24,7 +23,7 @@ public class GuiProgressBar extends GuiLabeled
 
     public GuiProgressBar(final String text, final float progressRatio)
     {
-        super(text);
+        super("progressbar", text);
         this.progressBarProgressProperty = new BaseProperty<>(0f, "progressBarProgressProperty");
         this.progressBarColorProperty = new BaseProperty<Background>(new Background(Color.WHITE),
                 "progressBarColorProperty");

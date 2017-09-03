@@ -4,17 +4,19 @@ import fr.ourten.teabeans.value.BaseProperty;
 
 public class StyleableProperty<T> extends BaseProperty<T>
 {
-    private final Class<T>    valueClass;
-    private       int         specificitySet;
-    private       StyleSource source;
+    private final Class<T> valueClass;
+    private int            specificitySet;
+    private StyleSource    source;
+    private T              defaultValue;
 
-    public StyleableProperty(T value, String name, Class<T> valueClass)
+    public StyleableProperty(T defaultValue, String name, Class<T> valueClass)
     {
-        super(value, name);
+        super(defaultValue, name);
 
         this.valueClass = valueClass;
         this.source = StyleSource.USER_AGENT;
         this.specificitySet = 0;
+        this.defaultValue = defaultValue;
     }
 
     boolean setStyle(StyleSource source, int specificity, T value)
@@ -37,6 +39,11 @@ public class StyleableProperty<T> extends BaseProperty<T>
         super.setValue(value);
     }
 
+    public void setToDefault()
+    {
+        this.setStyle(StyleSource.USER_AGENT, 0, defaultValue);
+    }
+
     public Class<T> getValueClass()
     {
         return valueClass;
@@ -50,5 +57,10 @@ public class StyleableProperty<T> extends BaseProperty<T>
     public StyleSource getSource()
     {
         return source;
+    }
+
+    public T getDefaultValue()
+    {
+        return defaultValue;
     }
 }

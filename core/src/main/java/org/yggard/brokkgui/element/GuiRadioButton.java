@@ -21,7 +21,7 @@ public class GuiRadioButton extends GuiToggleButtonBase
 
     public GuiRadioButton(final String label)
     {
-        super(label);
+        super("radio-button", label);
 
         this.labelAlignmentProperty = new BaseProperty<>(EHAlignment.RIGHT, "labelAlignmentProperty");
         this.labelPaddingProperty = new BaseProperty<>(0f, "labelPaddingProperty");

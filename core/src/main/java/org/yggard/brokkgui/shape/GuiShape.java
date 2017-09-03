@@ -13,8 +13,9 @@ public abstract class GuiShape extends GuiNode
 
     private final BaseProperty<GuiPaint> fillProperty;
 
-    public GuiShape()
+    public GuiShape(String type)
     {
+        super(type);
         this.lineWeightProperty = new BaseProperty<>(0F, "lineWeightProperty");
         this.lineColorProperty = new BaseProperty<>(Color.WHITE, "lineColorProperty");
 

@@ -17,7 +17,7 @@ public class GuiLink extends GuiLabeled
 
     public GuiLink(final String url, final String text)
     {
-        super(text);
+        super("link", text);
         this.urlProperty = new BaseProperty<>(url, "urlProperty");
         this.setTextColor(Color.BLUE);
     }

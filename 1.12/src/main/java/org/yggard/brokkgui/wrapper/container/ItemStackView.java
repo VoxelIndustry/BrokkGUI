@@ -20,10 +20,12 @@ public class ItemStackView extends GuiControl
 
     private final BaseProperty<Boolean>   tooltipProperty;
 
-    private final BaseProperty<Color> colorProperty;
+    private final BaseProperty<Color>     colorProperty;
 
     public ItemStackView(final ItemStack stack)
     {
+        super("itemstack");
+
         this.stackProperty = new BaseProperty<>(stack, "stackProperty");
         this.alternateStringProperty = new BaseProperty<>(null, "alternateStringProperty");
         this.tooltipProperty = new BaseProperty<>(false, "tooltipProperty");
@@ -73,8 +75,8 @@ public class ItemStackView extends GuiControl
 
     /**
      * @param alternateString
-     *            a string to be displayed in place of the usual itemstack
-     *            quantity number at the down-right corner.
+     *            a string to be displayed in place of the usual itemstack quantity
+     *            number at the down-right corner.
      */
     public void setAlternateString(final String alternateString)
     {

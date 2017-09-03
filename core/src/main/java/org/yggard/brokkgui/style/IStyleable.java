@@ -25,10 +25,14 @@ public interface IStyleable
 
 	BaseListProperty<String> getStyleClass();
 
+	BaseListProperty<String> getActivePseudoClass();
+
 	StyleHolder getStyle();
 
 	default void setStyle(String style)
 	{
 		this.getStyle().parseInlineCSS(style);
 	}
+
+    String getType();
 }

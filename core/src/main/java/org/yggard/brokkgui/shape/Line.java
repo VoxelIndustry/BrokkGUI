@@ -8,6 +8,7 @@ public class Line extends GuiShape
 {
     public Line(final float startX, final float startY, final float endX, final float endY, final float lineWeight)
     {
+        super("line");
         this.setxTranslate(startX);
         this.setyTranslate(startY);
 

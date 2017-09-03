@@ -18,6 +18,8 @@ public class GuiListCell<T> extends GuiLabeled
 
     public GuiListCell(final GuiListView<T> listView, final T item)
     {
+        super("listcell");
+
         this.listView = listView;
 
         this.itemProperty = new BaseProperty<>(item, "itemProperty");

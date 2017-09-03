@@ -1,22 +1,26 @@
 package org.yggard.brokkgui.style;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.style.tree.StyleEntry;
 import org.yggard.brokkgui.style.tree.StyleTree;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class StyleHolder
 {
     private HashMap<String, StyleableProperty<?>> properties;
     private BaseProperty<ICascadeStyleable>       parent;
+    private ICascadeStyleable                     owner;
 
-    private Supplier<StyleTree> styleSupplier;
+    private Supplier<StyleTree>                   styleSupplier;
 
-    public StyleHolder(BaseProperty<ICascadeStyleable> parent)
+    public StyleHolder(ICascadeStyleable owner)
     {
         this.properties = new HashMap<>();
-        this.parent = parent;
+        this.owner = owner;
+        this.parent = new BaseProperty<>(null, "parentProperty");
     }
 
     public void parseInlineCSS(String css)
@@ -29,8 +33,8 @@ public class StyleHolder
             if (properties.containsKey(propertyName))
             {
                 StyleableProperty<?> styleProp = properties.get(propertyName);
-                styleProp.setStyle(StyleSource.INLINE, 10_000, StyleDecoder.getInstance().decode(splitted[1].trim(),
-                        styleProp.getValueClass()));
+                styleProp.setStyle(StyleSource.INLINE, 10_000,
+                        StyleDecoder.getInstance().decode(splitted[1].trim(), styleProp.getValueClass()));
             }
         }
     }
@@ -52,10 +56,22 @@ public class StyleHolder
 
     public void refresh()
     {
-        if(this.styleSupplier == null)
+        if (this.styleSupplier == null)
             return;
 
-        //TODO: Actual tree unpacking
+        StyleTree tree = this.styleSupplier.get();
+        if (tree == null)
+            return;
+        Set<StyleEntry> entries = tree.getEntries(this);
+
+        this.properties.values().forEach(StyleableProperty::setToDefault);
+        entries.forEach(entry -> entry.getRules().forEach(rule ->
+        {
+            if (this.properties.containsKey(rule.getRuleIdentifier()))
+                this.properties.get(rule.getRuleIdentifier()).setStyle(StyleSource.AUTHOR,
+                        entry.getSelector().getSpecificity(), StyleDecoder.getInstance().decode(rule.getRuleValue(),
+                                this.properties.get(rule.getRuleIdentifier()).getValueClass()));
+        }));
     }
 
     /**
@@ -64,5 +80,10 @@ public class StyleHolder
     public BaseProperty<ICascadeStyleable> getParent()
     {
         return parent;
+    }
+
+    public ICascadeStyleable getOwner()
+    {
+        return owner;
     }
 }

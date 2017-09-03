@@ -7,14 +7,14 @@ public abstract class GuiButtonBase extends GuiLabeled
 {
     private EventHandler<ActionEvent> onActionEvent;
 
-    public GuiButtonBase(final String text)
+    public GuiButtonBase(final String type, final String text)
     {
-        super(text);
+        super(type, text);
     }
 
-    public GuiButtonBase()
+    public GuiButtonBase(String type)
     {
-        this("");
+        this(type, "");
     }
 
     public void activate()

@@ -16,7 +16,7 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
 
     public SubGuiScreen()
     {
-
+        super("subscreen");
     }
 
     /**

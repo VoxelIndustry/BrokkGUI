@@ -17,6 +17,8 @@ public class Text extends GuiShape
 
     public Text(final float posX, final float posY, final String text)
     {
+        super("text");
+
         this.setxTranslate(posY);
         this.setyTranslate(posY);
 

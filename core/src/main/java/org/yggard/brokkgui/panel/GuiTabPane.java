@@ -26,6 +26,8 @@ public class GuiTabPane extends GuiControl
 
     public GuiTabPane()
     {
+        super("tabpane");
+
         this.tabsProperty = new BaseListProperty<>(null, "tabsProperty");
         this.selectedTabProperty = new BaseProperty<>(-1, "selectedTabProperty");
         this.defaultTabProperty = new BaseProperty<>(-1, "defaultTabProperty");

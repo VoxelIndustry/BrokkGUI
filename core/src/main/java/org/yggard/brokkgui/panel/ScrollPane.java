@@ -5,7 +5,6 @@ import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiControl;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.event.ScrollEvent;
-import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
 import org.yggard.brokkgui.policy.EScrollbarPolicy;
 import org.yggard.brokkgui.skin.GuiScrollPaneSkin;
@@ -29,6 +28,8 @@ public class ScrollPane extends GuiControl
 
     public ScrollPane(final GuiNode node)
     {
+        super("scrollpane");
+
         this.scrollXProperty = new BaseProperty<>(0f, "scrollXProperty");
         this.scrollYProperty = new BaseProperty<>(0f, "scrollYProperty");
 
@@ -149,8 +150,8 @@ public class ScrollPane extends GuiControl
 
     /**
      *
-     * @return the ScrollSpeed value of the ScrollPane. It represent the
-     *         multiplier used on the mouse delta when scrolling. Default is 1.
+     * @return the ScrollSpeed value of the ScrollPane. It represent the multiplier
+     *         used on the mouse delta when scrolling. Default is 1.
      */
     public float getScrollSpeed()
     {

@@ -15,14 +15,15 @@ import java.util.Arrays;
 
 public class GuiPane extends GuiFather
 {
-    private static final ZLevelComparator ZLEVEL_COMPARATOR = new ZLevelComparator();
-    private final EOverflowPolicy overflowPolicy;
+    private static final ZLevelComparator  ZLEVEL_COMPARATOR = new ZLevelComparator();
+    private final EOverflowPolicy          overflowPolicy;
 
     private final BaseProperty<Background> backgroundProperty;
 
     public GuiPane()
     {
-        super();
+        super("pane");
+
         this.overflowPolicy = EOverflowPolicy.NONE;
 
         this.getStyle().registerProperty("-border-thin", 0, Integer.class);

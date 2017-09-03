@@ -66,8 +66,8 @@ public class StylesheetManager
     StyleTree loadStylesheet(String styleSheet) throws IOException
     {
         InputStream input = StylesheetManager.class.getResourceAsStream(styleSheet);
-        NumberedLineIterator iterator = new NumberedLineIterator(new InputStreamReader(input, Charsets.toCharset
-                (StandardCharsets.UTF_8)));
+        NumberedLineIterator iterator = new NumberedLineIterator(
+                new InputStreamReader(input, Charsets.toCharset(StandardCharsets.UTF_8)));
         StyleTree tree = new StyleTree();
 
         while (iterator.hasNext())
@@ -77,7 +77,7 @@ public class StylesheetManager
                 continue;
 
             if (line.contains("{"))
-                readBlock(readSelector(iterator, line), tree, iterator);
+                readBlock(readSelector(line), tree, iterator);
             else
                 logger.severe("Expected { at line " + (iterator.getLineNumber()));
         }
@@ -85,7 +85,7 @@ public class StylesheetManager
         return tree;
     }
 
-    private StyleSelector readSelector(NumberedLineIterator content, String currentLine)
+    private StyleSelector readSelector(String currentLine)
     {
         StyleSelector rtn = new StyleSelector();
         String selector = currentLine;

@@ -11,8 +11,10 @@ public abstract class GuiControl extends GuiFather implements IGuiSkinnable
 {
     private final BaseProperty<GuiSkinBase<?>> skinProperty;
 
-    public GuiControl()
+    public GuiControl(String type)
     {
+        super(type);
+
         this.skinProperty = new BaseProperty<>(null, "skinProperty");
     }
 

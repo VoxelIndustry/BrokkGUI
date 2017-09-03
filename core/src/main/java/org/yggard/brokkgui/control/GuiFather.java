@@ -15,10 +15,12 @@ public class GuiFather extends GuiNode
 {
     private final BaseListProperty<GuiNode> childrensProperty;
 
-    private EOverflowPolicy overflowPolicy;
+    private EOverflowPolicy                 overflowPolicy;
 
-    public GuiFather()
+    public GuiFather(String type)
     {
+        super(type);
+
         this.childrensProperty = new BaseListProperty<>(null, "childrensProperty");
 
         this.overflowPolicy = EOverflowPolicy.NONE;
@@ -81,7 +83,7 @@ public class GuiFather extends GuiNode
     }
 
     /////////////////////
-    //     STYLING     //
+    // STYLING //
     /////////////////////
 
     @Override

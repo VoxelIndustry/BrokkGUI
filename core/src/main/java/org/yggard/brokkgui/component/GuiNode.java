@@ -22,23 +22,27 @@ import java.util.function.Supplier;
 
 public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 {
-    private final BaseProperty<GuiFather> fatherProperty;
-    private final BaseProperty<Float> xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
+    private final BaseProperty<GuiFather>  fatherProperty;
+    private final BaseProperty<Float>      xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
             widthProperty, heightProperty, widthRatioProperty, heightRatioProperty, zLevelProperty;
 
-    private EventDispatcher eventDispatcher;
-    private EventHandler<FocusEvent> onFocusEvent;
-    private EventHandler<DisableEvent> onDisableEvent;
-    private EventHandler<HoverEvent> onHoverEvent;
-    private EventHandler<ClickEvent> onClickEvent;
-    private final BaseProperty<Boolean> focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
+    private EventDispatcher                eventDispatcher;
+    private EventHandler<FocusEvent>       onFocusEvent;
+    private EventHandler<DisableEvent>     onDisableEvent;
+    private EventHandler<HoverEvent>       onHoverEvent;
+    private EventHandler<ClickEvent>       onClickEvent;
+    private final BaseProperty<Boolean>    focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
 
-    private final BaseProperty<String> styleID;
+    private final BaseProperty<String>     styleID;
     private final BaseListProperty<String> styleClass;
-    private StyleHolder styleHolder;
+    private final BaseListProperty<String> activePseudoClass;
+    private String                         type;
+    private StyleHolder                    styleHolder;
 
-    public GuiNode()
+    public GuiNode(String type)
     {
+        this.type = type;
+
         this.xPosProperty = new BaseProperty<>(0f, "xPosProperty");
         this.yPosProperty = new BaseProperty<>(0f, "yPosProperty");
 
@@ -63,10 +67,13 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
         this.styleID = new BaseProperty<>(null, "styleIDProperty");
         this.styleClass = new BaseListProperty<>(Collections.emptyList(), "styleClassListProperty");
-        this.styleHolder = new StyleHolder(new BaseProperty<>(this, "cascadeStyleProperty"));
+        this.activePseudoClass = new BaseListProperty<>(Collections.emptyList(), "activePseudoClassListProperty");
+        this.styleHolder = new StyleHolder(this);
 
         this.styleID.addListener((obs, oldValue, newValue) -> this.refreshStyle());
-        this.styleClass.addListener((ListValueChangeListener)(obs, oldValue, newValue) -> this.refreshStyle());
+        this.styleClass.addListener((ListValueChangeListener<String>) (obs, oldValue, newValue) -> this.refreshStyle());
+        this.activePseudoClass
+                .addListener((ListValueChangeListener<String>) (obs, oldValue, newValue) -> this.refreshStyle());
     }
 
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
@@ -75,7 +82,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         {
             if (!this.isHovered())
                 this.setHovered(true);
-        } else if (this.isHovered())
+        }
+        else if (this.isHovered())
             this.setHovered(false);
     }
 
@@ -105,8 +113,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
                             new ClickEvent.Middle(this, mouseX, mouseY));
                     break;
                 default:
-                    this.getEventDispatcher().dispatchEvent(ClickEvent.TYPE, new ClickEvent(this, mouseX, mouseY,
-                            key));
+                    this.getEventDispatcher().dispatchEvent(ClickEvent.TYPE, new ClickEvent(this, mouseX, mouseY, key));
                     break;
             }
             this.setFocused(!this.isFocused());
@@ -183,7 +190,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     /**
      * @return xPos, used for layout management, do not attempt to change the
-     * property outside the layouting scope.
+     *         property outside the layouting scope.
      */
     public float getxPos()
     {
@@ -192,7 +199,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     /**
      * @return yPos, used for layout management, do not attempt to change the
-     * property outside the layouting scope.
+     *         property outside the layouting scope.
      */
     public float getyPos()
     {
@@ -208,8 +215,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     /**
-     * Set the translation of this component to this specified value, usable
-     * outside layouting scope.
+     * Set the translation of this component to this specified value, usable outside
+     * layouting scope.
      *
      * @param xTranslate
      */
@@ -227,8 +234,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     /**
-     * Set the translation of this component to this specified value, usable
-     * outside layouting scope.
+     * Set the translation of this component to this specified value, usable outside
+     * layouting scope.
      *
      * @param yTranslate
      */
@@ -267,8 +274,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     /**
-     * Allow to set the width of the node relatively to the width of his parent.
-     * Use absolute setWidth to cancel the binding or set the width ratio to -1
+     * Allow to set the width of the node relatively to the width of his parent. Use
+     * absolute setWidth to cancel the binding or set the width ratio to -1
      *
      * @param ratio
      */
@@ -287,9 +294,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     /**
-     * Allow to set the height of the node relatively to the height of his
-     * parent. Use absolute setHeight to cancel the binding or set the height
-     * ratio to -1
+     * Allow to set the height of the node relatively to the height of his parent.
+     * Use absolute setHeight to cancel the binding or set the height ratio to -1
      *
      * @param ratio
      */
@@ -313,8 +319,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     /**
-     * Internal method for the layouting system. A developper should never have
-     * to use it.
+     * Internal method for the layouting system. A developper should never have to
+     * use it.
      *
      * @param father
      */
@@ -469,7 +475,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     /////////////////////
-    //     STYLING     //
+    // STYLING //
     /////////////////////
 
     @Override
@@ -516,5 +522,22 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public void refreshStyle()
     {
         this.getStyle().refresh();
+    }
+
+    @Override
+    public String getType()
+    {
+        return type;
+    }
+
+    @Override
+    public BaseListProperty<String> getActivePseudoClass()
+    {
+        return activePseudoClass;
+    }
+
+    protected void setType(String type)
+    {
+        this.type = type;
     }
 }

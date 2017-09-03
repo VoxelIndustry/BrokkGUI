@@ -9,6 +9,8 @@ public class Circle extends GuiShape
 {
     public Circle(final float xPosition, final float yPosition, final float radius)
     {
+        super("circle");
+
         this.setxTranslate(xPosition);
         this.setyTranslate(yPosition);
         this.setWidth(radius);

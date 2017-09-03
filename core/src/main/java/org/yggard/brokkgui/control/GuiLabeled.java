@@ -17,8 +17,10 @@ public abstract class GuiLabeled extends GuiControl
     private final BaseProperty<String>     ellipsisProperty;
     private final BaseProperty<Boolean>    expandToTextProperty;
 
-    public GuiLabeled(final String text)
+    public GuiLabeled(String type, final String text)
     {
+        super(type);
+
         this.textStyleProperty = new BaseProperty<>(new TextStyle(Color.BLACK), "textStyleProperty");
         this.textProperty = new BaseProperty<>(text, "textProperty");
         this.textAlignmentProperty = new BaseProperty<>(EAlignment.MIDDLE_CENTER, "textAlignmentProperty");
@@ -28,9 +30,9 @@ public abstract class GuiLabeled extends GuiControl
         this.bindSizeToText();
     }
 
-    public GuiLabeled()
+    public GuiLabeled(String type)
     {
-        this("");
+        this(type, "");
     }
 
     @Override

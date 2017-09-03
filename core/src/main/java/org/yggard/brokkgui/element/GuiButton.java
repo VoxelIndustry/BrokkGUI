@@ -10,7 +10,7 @@ public class GuiButton extends GuiButtonBase
 {
     public GuiButton(final String text)
     {
-        super(text);
+        super("button", text);
         this.setTextAlignment(EAlignment.MIDDLE_CENTER);
     }
 
