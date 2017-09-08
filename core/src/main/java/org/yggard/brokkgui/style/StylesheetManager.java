@@ -97,15 +97,15 @@ public class StylesheetManager
         {
             if (part.contains(":"))
             {
-                rtn.addSelector(StyleSelector.StyleSelectorType.PSEUDOCLASS, part.split(":")[1]);
+                rtn.setSelector(StyleSelector.StyleSelectorType.PSEUDOCLASS, part.split(":")[1]);
                 part = part.split(":")[0];
             }
             if (part.startsWith("#"))
-                rtn.addSelector(StyleSelector.StyleSelectorType.ID, part.substring(1));
+                rtn.setSelector(StyleSelector.StyleSelectorType.ID, part.substring(1));
             else if (part.startsWith("."))
-                rtn.addSelector(StyleSelector.StyleSelectorType.CLASS, part.substring(1));
+                rtn.setSelector(StyleSelector.StyleSelectorType.CLASS, part.substring(1));
             else
-                rtn.addSelector(StyleSelector.StyleSelectorType.TYPE, part);
+                rtn.setSelector(StyleSelector.StyleSelectorType.TYPE, part);
         }
         return rtn;
     }

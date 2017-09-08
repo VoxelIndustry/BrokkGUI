@@ -3,7 +3,9 @@ package org.yggard.brokkgui.style.tree;
 import org.yggard.brokkgui.data.tree.MappedTree;
 import org.yggard.brokkgui.style.StyleHolder;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class StyleTree
 {
@@ -28,29 +30,23 @@ public class StyleTree
     public void addEntry(StyleSelector selectors, Set<StyleRule> rules)
     {
         StyleEntry lastAdded = this.wildcard;
-        for (Map.Entry<StyleSelector.StyleSelectorType, List<String>> entry : selectors.getSelectors().entrySet())
+        Optional<StyleEntry> match = internalTree.getChildren(lastAdded).stream()
+                .filter(styleEntry -> styleEntry.getSelector().getSelector().equals(selectors.getSelector())
+                        && styleEntry.getSelector().getType().equals(selectors.getType())).findFirst();
+
+        if (!match.isPresent())
         {
-            for (String selector : entry.getValue())
-            {
-                Optional<StyleEntry> match = internalTree.getChildren(lastAdded).stream()
-                        .filter(styleEntry -> styleEntry.getSelector().getSelectors().containsKey(entry.getKey())
-                                && styleEntry.getSelector().getSelectors().get(entry.getKey()).contains(selector))
-                        .findFirst();
+            StyleEntry newEntry = new StyleEntry(new StyleSelector().setSelector(selectors.getType(), selectors
+                    .getSelector()));
 
-                if (!match.isPresent())
-                {
-                    StyleEntry newEntry = new StyleEntry(new StyleSelector().addSelector(entry.getKey(), selector));
+            if (lastAdded != this.wildcard)
+                newEntry.getSelector().setInheritedSpecificity(lastAdded.getSelector().getSpecificity());
 
-                    if (lastAdded != this.wildcard)
-                        newEntry.getSelector().setInheritedSpecificity(lastAdded.getSelector().getSpecificity());
-
-                    this.internalTree.add(lastAdded, newEntry);
-                    lastAdded = newEntry;
-                }
-                else
-                    lastAdded = match.get();
-            }
+            this.internalTree.add(lastAdded, newEntry);
+            lastAdded = newEntry;
         }
+        else
+            lastAdded = match.get();
 
         lastAdded.mergeRules(rules);
     }

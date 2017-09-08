@@ -2,31 +2,25 @@ package org.yggard.brokkgui.style.tree;
 
 import org.yggard.brokkgui.style.StyleHolder;
 
-import java.util.*;
-
 public class StyleSelector
 {
-    private EnumMap<StyleSelectorType, List<String>> selectors;
-    private int                                      computedSpecificity  = -1;
-    private int                                      inheritedSpecificity = 0;
-
-    public StyleSelector()
-    {
-        this.selectors = new EnumMap<>(StyleSelectorType.class);
-    }
+    private StyleSelectorType type;
+    private String            selector;
+    private int computedSpecificity  = -1;
+    private int inheritedSpecificity = 0;
 
     public StyleSelector addWildcard()
     {
-        this.selectors.put(StyleSelectorType.WILDCARD, Collections.singletonList("*"));
+        this.type = StyleSelectorType.WILDCARD;
+        this.selector = "*";
         this.computedSpecificity = 1000;
         return this;
     }
 
-    public StyleSelector addSelector(StyleSelectorType type, String selector)
+    public StyleSelector setSelector(StyleSelectorType type, String selector)
     {
-        if (!this.selectors.containsKey(type))
-            this.selectors.put(type, new ArrayList<>());
-        this.selectors.get(type).add(selector);
+        this.type = type;
+        this.selector = selector;
         this.computedSpecificity = -1;
         return this;
     }
@@ -36,14 +30,19 @@ public class StyleSelector
         if (this.computedSpecificity == -1)
         {
             this.computedSpecificity = this.inheritedSpecificity;
-            this.selectors.forEach((type, list) -> this.computedSpecificity += list.size() * type.getSpecificity());
+            this.computedSpecificity += this.type.getSpecificity();
         }
         return this.computedSpecificity;
     }
 
-    public Map<StyleSelectorType, List<String>> getSelectors()
+    public String getSelector()
     {
-        return selectors;
+        return selector;
+    }
+
+    public StyleSelectorType getType()
+    {
+        return type;
     }
 
     public void setInheritedSpecificity(int inheritedSpecificity)
@@ -53,29 +52,26 @@ public class StyleSelector
 
     public boolean match(StyleHolder styleHolder)
     {
-        for (Map.Entry<StyleSelectorType, List<String>> selector : this.selectors.entrySet())
+        switch (type)
         {
-            switch (selector.getKey())
-            {
-                case WILDCARD:
-                    return true;
-                case TYPE:
-                    if (!selector.getValue().stream().allMatch(styleHolder.getOwner().getType()::equals))
-                        return false;
-                    break;
-                case CLASS:
-                    if (!styleHolder.getOwner().getStyleClass().getValue().containsAll(selector.getValue()))
-                        return false;
-                    break;
-                case ID:
-                    if (!selector.getValue().stream().allMatch(styleHolder.getOwner().getID()::equals))
-                        return false;
-                    break;
-                case PSEUDOCLASS:
-                    if (!styleHolder.getOwner().getActivePseudoClass().getValue().containsAll(selector.getValue()))
-                        return false;
-                    break;
-            }
+            case WILDCARD:
+                return true;
+            case TYPE:
+                if (!selector.equals(styleHolder.getOwner().getType()))
+                    return false;
+                break;
+            case CLASS:
+                if (!styleHolder.getOwner().getStyleClass().getValue().contains(selector))
+                    return false;
+                break;
+            case ID:
+                if (!selector.equals(styleHolder.getOwner().getID()))
+                    return false;
+                break;
+            case PSEUDOCLASS:
+                if (!styleHolder.getOwner().getActivePseudoClass().getValue().contains(selector))
+                    return false;
+                break;
         }
         return true;
     }
@@ -83,7 +79,7 @@ public class StyleSelector
     @Override
     public String toString()
     {
-        return "{selectors=" + selectors + ", specificity=" + this.getSpecificity() + '}';
+        return "{selector=" + selector + ", specificity=" + this.getSpecificity() + '}';
     }
 
     public enum StyleSelectorType
