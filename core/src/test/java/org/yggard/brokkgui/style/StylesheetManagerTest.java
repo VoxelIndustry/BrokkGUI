@@ -3,10 +3,7 @@ package org.yggard.brokkgui.style;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.yggard.brokkgui.style.tree.StyleEntry;
-import org.yggard.brokkgui.style.tree.StyleRule;
-import org.yggard.brokkgui.style.tree.StyleSelector;
-import org.yggard.brokkgui.style.tree.StyleTree;
+import org.yggard.brokkgui.style.tree.*;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -33,10 +30,10 @@ public class StylesheetManagerTest
         assertThat(tree.getInternalTree().getChildren(tree.getWildcard())).hasSize(2);
 
         Optional<StyleEntry> pane = tree.getInternalTree().getChildren(tree.getWildcard()).stream().filter(entry ->
-                entry.getSelector().getType().equals(StyleSelector.StyleSelectorType.TYPE)).findFirst();
+                entry.getSelector().getType().equals(StyleSelectorType.TYPE)).findFirst();
 
         assertThat(pane).isPresent();
-        assertThat(pane.get().getSelector().getType()).isEqualTo(StyleSelector.StyleSelectorType.TYPE);
+        assertThat(pane.get().getSelector().getType()).isEqualTo(StyleSelectorType.TYPE);
         assertThat(pane.get().getSelector().getSelector()).isEqualTo("pane");
         assertThat(pane.get().getRules()).contains(new StyleRule("-background-color", "red"), new StyleRule
                 ("-border-color", "blue"), new StyleRule("-border-width", "1"));

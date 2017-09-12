@@ -4,7 +4,8 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.style.tree.StyleRule;
-import org.yggard.brokkgui.style.tree.StyleSelector;
+import org.yggard.brokkgui.style.tree.StyleSelectorList;
+import org.yggard.brokkgui.style.tree.StyleSelectorType;
 import org.yggard.brokkgui.style.tree.StyleTree;
 import org.yggard.brokkgui.util.NumberedLineIterator;
 
@@ -85,9 +86,9 @@ public class StylesheetManager
         return tree;
     }
 
-    private StyleSelector readSelector(String currentLine)
+    private StyleSelectorList readSelector(String currentLine)
     {
-        StyleSelector rtn = new StyleSelector();
+        StyleSelectorList rtn = new StyleSelectorList();
         String selector = currentLine;
 
         selector = selector.replace('{', ' ').trim();
@@ -95,22 +96,25 @@ public class StylesheetManager
         String[] splitted = selector.split(" ");
         for (String part : splitted)
         {
+            String pseudoClass = null;
             if (part.contains(":"))
             {
-                rtn.setSelector(StyleSelector.StyleSelectorType.PSEUDOCLASS, part.split(":")[1]);
+                pseudoClass = part.split(":")[1];
                 part = part.split(":")[0];
             }
             if (part.startsWith("#"))
-                rtn.setSelector(StyleSelector.StyleSelectorType.ID, part.substring(1));
+                rtn.add(StyleSelectorType.ID, part.substring(1));
             else if (part.startsWith("."))
-                rtn.setSelector(StyleSelector.StyleSelectorType.CLASS, part.substring(1));
+                rtn.add(StyleSelectorType.CLASS, part.substring(1));
             else
-                rtn.setSelector(StyleSelector.StyleSelectorType.TYPE, part);
+                rtn.add(StyleSelectorType.TYPE, part);
+            if (pseudoClass != null)
+                rtn.add(StyleSelectorType.PSEUDOCLASS, pseudoClass);
         }
         return rtn;
     }
 
-    private void readBlock(StyleSelector selector, StyleTree tree, NumberedLineIterator content)
+    private void readBlock(StyleSelectorList selectors, StyleTree tree, NumberedLineIterator content)
     {
         if (!content.hasNext())
             return;
@@ -129,6 +133,6 @@ public class StylesheetManager
                 return;
             currentLine = content.nextLine();
         }
-        tree.addEntry(selector, elements);
+        tree.addEntry(selectors, elements);
     }
 }

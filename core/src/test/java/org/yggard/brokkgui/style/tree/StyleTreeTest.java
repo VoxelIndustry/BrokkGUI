@@ -15,7 +15,7 @@ public class StyleTreeTest
     {
         StyleTree tree = new StyleTree();
 
-        StyleSelector selector = new StyleSelector().setSelector(StyleSelector.StyleSelectorType.TYPE, "button");
+        StyleSelectorList selector = new StyleSelectorList().add(StyleSelectorType.TYPE, "button");
 
         StyleRule[] rules = new StyleRule[]{new StyleRule("-text-color", "red"), new StyleRule("-border-color",
                 "white")};
@@ -30,8 +30,8 @@ public class StyleTreeTest
     {
         StyleTree tree = new StyleTree();
 
-        StyleSelector selector = new StyleSelector().setSelector(StyleSelector.StyleSelectorType.TYPE, "button")
-                .setSelector(StyleSelector.StyleSelectorType.ID, "myButton");
+        StyleSelectorList selector = new StyleSelectorList().add(StyleSelectorType.TYPE, "button")
+                .add(StyleSelectorType.ID, "myButton");
 
         StyleRule[] rules = new StyleRule[]{new StyleRule("-text-color", "red"), new StyleRule("-border-color",
                 "white")};
@@ -41,7 +41,8 @@ public class StyleTreeTest
                 .getWildcard()).get(0)).get(0);
 
         assertThat(styleEntry.getRules()).contains(rules);
-        assertThat(styleEntry.getSelector().getSpecificity()).isEqualTo(selector.getSpecificity());
+        assertThat(styleEntry.getSelector().getSpecificity()).isEqualTo(StyleSelectorType.TYPE.getSpecificity() +
+                StyleSelectorType.ID.getSpecificity());
     }
 
     @Test
@@ -49,8 +50,8 @@ public class StyleTreeTest
     {
         StyleTree tree = new StyleTree();
 
-        StyleSelector selector = new StyleSelector().setSelector(StyleSelector.StyleSelectorType.TYPE, "button")
-                .setSelector(StyleSelector.StyleSelectorType.ID, "myButton");
+        StyleSelectorList selector = new StyleSelectorList().add(StyleSelectorType.TYPE, "button")
+                .add(StyleSelectorType.ID, "myButton");
 
         StyleRule[] rules1 = new StyleRule[]{new StyleRule("-text-color", "red"), new StyleRule("-border-color",
                 "white")};
@@ -69,8 +70,8 @@ public class StyleTreeTest
     {
         StyleTree tree = new StyleTree();
 
-        StyleSelector selector = new StyleSelector().setSelector(StyleSelector.StyleSelectorType.TYPE, "button")
-                .setSelector(StyleSelector.StyleSelectorType.ID, "myButton");
+        StyleSelectorList selector = new StyleSelectorList().add(StyleSelectorType.TYPE, "button")
+                .add(StyleSelectorType.ID, "myButton");
 
         tree.addEntry(selector, Sets.newLinkedHashSet(new StyleRule("-text-color", "red"), new StyleRule
                 ("-border-color", "white")));
