@@ -10,8 +10,8 @@ import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.panel.GuiPane;
-import org.yggard.brokkgui.style.tree.StyleTree;
 import org.yggard.brokkgui.style.StylesheetManager;
+import org.yggard.brokkgui.style.tree.StyleTree;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
 
@@ -70,7 +70,7 @@ public class BrokkGuiScreen implements IGuiWindow
         });
         this.userAgentStylesheetProperty.addListener(obs ->
         {
-            StylesheetManager.getInstance().refreshUserAgent(this);
+            StylesheetManager.getInstance().refreshStylesheets(this);
             StylesheetManager.getInstance().refreshStylesheets(this);
             if (this.getMainPanel() != null)
                 this.getMainPanel().refreshStyle();

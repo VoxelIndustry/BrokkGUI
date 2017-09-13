@@ -21,12 +21,6 @@ public class StyleTree
         this.internalTree.add(null, this.wildcard);
     }
 
-    public StyleTree merge(StyleTree tree)
-    {
-        //TODO : Rework with the StyleSelectorList
-        return this;
-    }
-
     // TODO: Rules erasure and priority
     public void addEntry(StyleSelectorList selectors, Set<StyleRule> rules)
     {

@@ -60,30 +60,4 @@ public class StylesheetManagerTest
         assertThat(tree.getInternalTree().getChildren(cyan.get()).get(0).getRules()).contains(new StyleRule
                 ("-background-color", "lightblue"));*/
     }
-
-    @Test
-    public void merge()
-    {
-        StyleTree tree = null;
-        try
-        {
-            tree = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test.css");
-            tree.merge(StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test2.css"));
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-       /* Optional<StyleEntry> pane = tree.getInternalTree().getChildren(tree.getWildcard()).stream().filter(entry ->
-                entry.getSelector().getSelector().containsKey(StyleSelector.StyleSelectorType.TYPE)).findFirst();
-
-        assertThat(tree.getInternalTree().getChildren(pane.get()).get(0).getRules()).contains(new StyleRule
-                        ("-border-color", "khaki"),
-                new StyleRule("-font-width", "10"), new StyleRule("-font-family", "Open Sans"));
-
-        Optional<StyleEntry> cyan = tree.getInternalTree().getChildren(tree.getWildcard()).stream().filter(entry ->
-                entry.getSelector().getSelector().containsKey(StyleSelector.StyleSelectorType.ID)).findFirst();
-        assertThat(cyan.get().getRules()).contains(new StyleRule("-background-color", "cyan"), new StyleRule
-                ("-text-decoration", "underline"));*/
-    }
 }

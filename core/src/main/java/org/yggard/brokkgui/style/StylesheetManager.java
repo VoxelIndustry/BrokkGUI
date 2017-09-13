@@ -1,6 +1,7 @@
 package org.yggard.brokkgui.style;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.style.tree.StyleRule;
@@ -38,51 +39,41 @@ public class StylesheetManager
     public void refreshStylesheets(BrokkGuiScreen screen)
     {
         StyleTree tree = screen.getUserAgentStyleTree();
-        screen.getStylesheetsProperty().getValue().forEach(styleSheet ->
+
+        try
         {
-            try
-            {
-                tree.merge(this.loadStylesheet(styleSheet));
-            } catch (IOException e)
-            {
-                logger.throwing("StylesheetManager", "refreshStyleSheets", e);
-            }
-        });
+            tree = this.loadStylesheet(ArrayUtils.addAll(new String[]{screen.getUserAgentStylesheetProperty()
+                    .getValue()}, screen.getStylesheetsProperty().getValue().toArray(new String[screen
+                    .getStylesheetsProperty().size()])));
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         screen.setStyleTree(tree);
     }
 
-    public void refreshUserAgent(BrokkGuiScreen screen)
+    StyleTree loadStylesheet(String... styleSheets) throws IOException
     {
         StyleTree tree = new StyleTree();
-        try
+
+        for (String styleSheet : styleSheets)
         {
-            tree.merge(this.loadStylesheet("assets/brokkgui/css/user_agent.css"));
-        } catch (IOException e)
-        {
-            logger.throwing("StylesheetManager", "refreshUserAgentStyleSheets", e);
+            InputStream input = StylesheetManager.class.getResourceAsStream(styleSheet);
+            NumberedLineIterator iterator = new NumberedLineIterator(
+                    new InputStreamReader(input, Charsets.toCharset(StandardCharsets.UTF_8)));
+            while (iterator.hasNext())
+            {
+                String line = iterator.nextLine();
+                if (StringUtils.isEmpty(line))
+                    continue;
+
+                if (line.contains("{"))
+                    readBlock(readSelector(line), tree, iterator);
+                else
+                    logger.severe("Expected { at line " + (iterator.getLineNumber()));
+            }
+            input.close();
         }
-        screen.setUserAgentStyleTree(tree);
-    }
-
-    StyleTree loadStylesheet(String styleSheet) throws IOException
-    {
-        InputStream input = StylesheetManager.class.getResourceAsStream(styleSheet);
-        NumberedLineIterator iterator = new NumberedLineIterator(
-                new InputStreamReader(input, Charsets.toCharset(StandardCharsets.UTF_8)));
-        StyleTree tree = new StyleTree();
-
-        while (iterator.hasNext())
-        {
-            String line = iterator.nextLine();
-            if (StringUtils.isEmpty(line))
-                continue;
-
-            if (line.contains("{"))
-                readBlock(readSelector(line), tree, iterator);
-            else
-                logger.severe("Expected { at line " + (iterator.getLineNumber()));
-        }
-        input.close();
         return tree;
     }
 
