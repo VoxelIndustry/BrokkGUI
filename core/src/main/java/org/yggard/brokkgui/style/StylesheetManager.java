@@ -4,10 +4,7 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
-import org.yggard.brokkgui.style.tree.StyleRule;
-import org.yggard.brokkgui.style.tree.StyleSelectorList;
-import org.yggard.brokkgui.style.tree.StyleSelectorType;
-import org.yggard.brokkgui.style.tree.StyleTree;
+import org.yggard.brokkgui.style.tree.*;
 import org.yggard.brokkgui.util.NumberedLineIterator;
 
 import java.io.IOException;
@@ -77,9 +74,9 @@ public class StylesheetManager
         return tree;
     }
 
-    private StyleSelectorList readSelector(String currentLine)
+    private StyleSelector readSelector(String currentLine)
     {
-        StyleSelectorList rtn = new StyleSelectorList();
+        StyleSelector rtn = new StyleSelector();
         String selector = currentLine;
 
         selector = selector.replace('{', ' ').trim();
@@ -105,7 +102,7 @@ public class StylesheetManager
         return rtn;
     }
 
-    private void readBlock(StyleSelectorList selectors, StyleTree tree, NumberedLineIterator content)
+    private void readBlock(StyleSelector selectors, StyleTree tree, NumberedLineIterator content)
     {
         if (!content.hasNext())
             return;

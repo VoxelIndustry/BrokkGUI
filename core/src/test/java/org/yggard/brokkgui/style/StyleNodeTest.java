@@ -34,4 +34,37 @@ public class StyleNodeTest
         assertThat(pane.getBorderColor()).isEqualTo(ColorConstants.getColor("khaki"));
         assertThat(pane.getBorderThin()).isEqualTo(2);
     }
+
+    @Test
+    public void testHierarchicBorder()
+    {
+        StyleTree tree = null;
+        try
+        {
+            tree = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test_hierarchic_border.css");
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        StyleTree finalTree = tree;
+
+        GuiPane pane = new GuiPane();
+        pane.getStyleClass().add("myPane");
+        pane.setStyleTree(() -> finalTree);
+        pane.refreshStyle();
+
+        GuiPane childPane = new GuiPane();
+        childPane.getStyleClass().add("myChildPane");
+        pane.addChild(childPane);
+        childPane.setStyleTree(() -> finalTree);
+        childPane.refreshStyle();
+
+        GuiPane fakeChildPane = new GuiPane();
+        fakeChildPane.getStyleClass().add("myChildPane");
+        fakeChildPane.setStyleTree(() -> finalTree);
+        fakeChildPane.refreshStyle();
+
+        assertThat(pane.getBorderColor()).isEqualTo(ColorConstants.getColor("khaki"));
+        assertThat(pane.getBorderThin()).isEqualTo(2);
+    }
 }

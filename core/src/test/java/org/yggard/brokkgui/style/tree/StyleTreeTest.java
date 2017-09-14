@@ -15,7 +15,7 @@ public class StyleTreeTest
     {
         StyleTree tree = new StyleTree();
 
-        StyleSelectorList selector = new StyleSelectorList().add(StyleSelectorType.TYPE, "button");
+        StyleSelector selector = new StyleSelector().add(StyleSelectorType.TYPE, "button");
 
         StyleRule[] rules = new StyleRule[]{new StyleRule("-text-color", "red"), new StyleRule("-border-color",
                 "white")};
@@ -30,7 +30,7 @@ public class StyleTreeTest
     {
         StyleTree tree = new StyleTree();
 
-        StyleSelectorList selector = new StyleSelectorList().add(StyleSelectorType.TYPE, "button")
+        StyleSelector selector = new StyleSelector().add(StyleSelectorType.TYPE, "button")
                 .add(StyleSelectorType.ID, "myButton");
 
         StyleRule[] rules = new StyleRule[]{new StyleRule("-text-color", "red"), new StyleRule("-border-color",
@@ -50,7 +50,7 @@ public class StyleTreeTest
     {
         StyleTree tree = new StyleTree();
 
-        StyleSelectorList selector = new StyleSelectorList().add(StyleSelectorType.TYPE, "button")
+        StyleSelector selector = new StyleSelector().add(StyleSelectorType.TYPE, "button")
                 .add(StyleSelectorType.ID, "myButton");
 
         StyleRule[] rules1 = new StyleRule[]{new StyleRule("-text-color", "red"), new StyleRule("-border-color",
@@ -70,7 +70,7 @@ public class StyleTreeTest
     {
         StyleTree tree = new StyleTree();
 
-        StyleSelectorList selector = new StyleSelectorList().add(StyleSelectorType.TYPE, "button")
+        StyleSelector selector = new StyleSelector().add(StyleSelectorType.TYPE, "button")
                 .add(StyleSelectorType.ID, "myButton");
 
         tree.addEntry(selector, Sets.newLinkedHashSet(new StyleRule("-text-color", "red"), new StyleRule
