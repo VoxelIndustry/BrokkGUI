@@ -6,7 +6,7 @@ import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
-import org.yggard.brokkgui.style.tree.StyleTree;
+import org.yggard.brokkgui.style.tree.StyleList;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -87,7 +87,7 @@ public class GuiFather extends GuiNode
     /////////////////////
 
     @Override
-    public void setStyleTree(Supplier<StyleTree> treeSupplier)
+    public void setStyleTree(Supplier<StyleList> treeSupplier)
     {
         super.setStyleTree(treeSupplier);
 

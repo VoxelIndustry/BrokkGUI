@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.yggard.brokkgui.paint.ColorConstants;
 import org.yggard.brokkgui.panel.GuiPane;
-import org.yggard.brokkgui.style.tree.StyleTree;
+import org.yggard.brokkgui.style.tree.StyleList;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class StyleNodeTest
     @Test
     public void testSimpleBorder()
     {
-        StyleTree tree = null;
+        StyleList tree = null;
         try
         {
             tree = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test_simple_border.css");
@@ -27,7 +27,7 @@ public class StyleNodeTest
         }
 
         GuiPane pane = new GuiPane();
-        StyleTree finalTree = tree;
+        StyleList finalTree = tree;
         pane.setStyleTree(() -> finalTree);
         pane.refreshStyle();
 
@@ -38,7 +38,7 @@ public class StyleNodeTest
     @Test
     public void testHierarchicBorder()
     {
-        StyleTree tree = null;
+        StyleList tree = null;
         try
         {
             tree = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test_hierarchic_border.css");
@@ -46,7 +46,7 @@ public class StyleNodeTest
         {
             e.printStackTrace();
         }
-        StyleTree finalTree = tree;
+        StyleList finalTree = tree;
 
         GuiPane pane = new GuiPane();
         pane.getStyleClass().add("myPane");

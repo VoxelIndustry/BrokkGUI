@@ -8,12 +8,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class StyleTreeTest
+public class StyleListTest
 {
     @Test
     public void addEntrySimple()
     {
-        StyleTree tree = new StyleTree();
+        StyleList tree = new StyleList();
 
         StyleSelector selector = new StyleSelector().add(StyleSelectorType.TYPE, "button");
 
@@ -21,14 +21,14 @@ public class StyleTreeTest
                 "white")};
         tree.addEntry(selector, Sets.newLinkedHashSet(rules));
 
-        assertThat(tree.getInternalTree().getChildren(tree.getWildcard())).hasSize(1);
-        assertThat(tree.getInternalTree().getChildren(tree.getWildcard()).get(0).getRules()).contains(rules);
+        assertThat(tree.getInternalStyleList()).hasSize(2);
+        assertThat(tree.getInternalStyleList().get(1).getRules()).contains(rules);
     }
 
     @Test
     public void addEntryComposite()
     {
-        StyleTree tree = new StyleTree();
+        StyleList tree = new StyleList();
 
         StyleSelector selector = new StyleSelector().add(StyleSelectorType.TYPE, "button")
                 .add(StyleSelectorType.ID, "myButton");
@@ -37,8 +37,7 @@ public class StyleTreeTest
                 "white")};
         tree.addEntry(selector, Sets.newLinkedHashSet(rules));
 
-        StyleEntry styleEntry = tree.getInternalTree().getChildren(tree.getInternalTree().getChildren(tree
-                .getWildcard()).get(0)).get(0);
+        StyleEntry styleEntry = tree.getInternalStyleList().get(1);
 
         assertThat(styleEntry.getRules()).contains(rules);
         assertThat(styleEntry.getSelector().getSpecificity()).isEqualTo(StyleSelectorType.TYPE.getSpecificity() +
@@ -48,7 +47,7 @@ public class StyleTreeTest
     @Test
     public void addEntryMerge()
     {
-        StyleTree tree = new StyleTree();
+        StyleList tree = new StyleList();
 
         StyleSelector selector = new StyleSelector().add(StyleSelectorType.TYPE, "button")
                 .add(StyleSelectorType.ID, "myButton");
@@ -61,14 +60,13 @@ public class StyleTreeTest
                 "2")};
         tree.addEntry(selector, Sets.newLinkedHashSet(rules2));
 
-        assertThat(tree.getInternalTree().getChildren(tree.getInternalTree().getChildren(tree.getWildcard()).get(0))
-                .get(0).getRules()).contains(rules1).contains(rules2);
+        assertThat(tree.getInternalStyleList().get(1).getRules()).contains(rules1).contains(rules2);
     }
 
     @Test
     public void clear()
     {
-        StyleTree tree = new StyleTree();
+        StyleList tree = new StyleList();
 
         StyleSelector selector = new StyleSelector().add(StyleSelectorType.TYPE, "button")
                 .add(StyleSelectorType.ID, "myButton");

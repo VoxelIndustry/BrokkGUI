@@ -12,7 +12,7 @@ import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.style.ICascadeStyleable;
 import org.yggard.brokkgui.style.StyleHolder;
-import org.yggard.brokkgui.style.tree.StyleTree;
+import org.yggard.brokkgui.style.tree.StyleList;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
 import org.yggard.hermod.IEventEmitter;
@@ -514,7 +514,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     @Override
-    public void setStyleTree(Supplier<StyleTree> treeSupplier)
+    public void setStyleTree(Supplier<StyleList> treeSupplier)
     {
         this.getStyle().setStyleSupplier(treeSupplier);
     }

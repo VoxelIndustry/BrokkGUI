@@ -5,10 +5,10 @@ import java.util.Set;
 
 public class StyleEntry
 {
-    private StyleSelector  selector;
+    private IStyleSelector  selector;
     private Set<StyleRule> rules;
 
-    public StyleEntry(StyleSelector selector)
+    public StyleEntry(IStyleSelector selector)
     {
         this.selector = selector;
         this.rules = new HashSet<>();
@@ -29,7 +29,7 @@ public class StyleEntry
         return this;
     }
 
-    public StyleSelector getSelector()
+    public IStyleSelector getSelector()
     {
         return selector;
     }

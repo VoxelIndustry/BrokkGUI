@@ -56,19 +56,19 @@ public class StyleSelector implements IStyleSelector
                 case WILDCARD:
                     return true;
                 case TYPE:
-                    if (!selector.equals(styleHolder.getOwner().getType()))
+                    if (!selector.getValue().equals(styleHolder.getOwner().getType()))
                         return false;
                     break;
                 case CLASS:
-                    if (!styleHolder.getOwner().getStyleClass().getValue().contains(selector))
+                    if (!styleHolder.getOwner().getStyleClass().getValue().contains(selector.getValue()))
                         return false;
                     break;
                 case ID:
-                    if (!selector.equals(styleHolder.getOwner().getID()))
+                    if (!selector.getValue().equals(styleHolder.getOwner().getID()))
                         return false;
                     break;
                 case PSEUDOCLASS:
-                    if (!styleHolder.getOwner().getActivePseudoClass().getValue().contains(selector))
+                    if (!styleHolder.getOwner().getActivePseudoClass().getValue().contains(selector.getValue()))
                         return false;
                     break;
             }
@@ -77,14 +77,17 @@ public class StyleSelector implements IStyleSelector
     }
 
     @Override
+    public boolean match(IStyleSelector selector)
+    {
+        if (!(selector instanceof StyleSelector))
+            return false;
+        StyleSelector other = (StyleSelector) selector;
+        return this.selectors.size() == other.selectors.size() && this.selectors.containsAll(other.selectors);
+    }
+
+    @Override
     public String toString()
     {
         return "{" + selectors.toString() + ", specificity=" + this.getSpecificity() + '}';
-    }
-
-    public boolean containsAll(List<Pair<StyleSelectorType,String>> selectors)
-    {
-        // TODO: Content check
-        return false;
     }
 }

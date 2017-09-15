@@ -11,7 +11,7 @@ import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.panel.GuiPane;
 import org.yggard.brokkgui.style.StylesheetManager;
-import org.yggard.brokkgui.style.tree.StyleTree;
+import org.yggard.brokkgui.style.tree.StyleList;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
 
@@ -36,8 +36,8 @@ public class BrokkGuiScreen implements IGuiWindow
 
     private final BaseListProperty<String> stylesheetsProperty;
     private final BaseProperty<String>     userAgentStylesheetProperty;
-    private final BaseProperty<StyleTree>  userAgentStyleTreeProperty;
-    private final BaseProperty<StyleTree>  styleTreeProperty;
+    private final BaseProperty<StyleList>  userAgentStyleTreeProperty;
+    private final BaseProperty<StyleList>  styleTreeProperty;
 
     private IBrokkGuiImpl wrapper;
 
@@ -384,27 +384,27 @@ public class BrokkGuiScreen implements IGuiWindow
         return userAgentStylesheetProperty;
     }
 
-    private BaseProperty<StyleTree> getStyleTreeProperty()
+    private BaseProperty<StyleList> getStyleTreeProperty()
     {
         return this.styleTreeProperty;
     }
 
-    private BaseProperty<StyleTree> getUserAgentStyleTreeProperty()
+    private BaseProperty<StyleList> getUserAgentStyleTreeProperty()
     {
         return this.userAgentStyleTreeProperty;
     }
 
-    public void setStyleTree(StyleTree tree)
+    public void setStyleTree(StyleList tree)
     {
         this.getStyleTreeProperty().setValue(tree);
     }
 
-    public void setUserAgentStyleTree(StyleTree tree)
+    public void setUserAgentStyleTree(StyleList tree)
     {
         this.getUserAgentStyleTreeProperty().setValue(tree);
     }
 
-    public StyleTree getUserAgentStyleTree()
+    public StyleList getUserAgentStyleTree()
     {
         return this.getUserAgentStyleTreeProperty().getValue();
     }

@@ -2,7 +2,7 @@ package org.yggard.brokkgui.style;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.style.tree.StyleEntry;
-import org.yggard.brokkgui.style.tree.StyleTree;
+import org.yggard.brokkgui.style.tree.StyleList;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -14,7 +14,7 @@ public class StyleHolder
     private BaseProperty<ICascadeStyleable>       parent;
     private ICascadeStyleable                     owner;
 
-    private Supplier<StyleTree>                   styleSupplier;
+    private Supplier<StyleList> styleSupplier;
 
     public StyleHolder(ICascadeStyleable owner)
     {
@@ -49,7 +49,7 @@ public class StyleHolder
         return (StyleableProperty<T>) this.properties.get(name);
     }
 
-    public void setStyleSupplier(Supplier<StyleTree> styleSupplier)
+    public void setStyleSupplier(Supplier<StyleList> styleSupplier)
     {
         this.styleSupplier = styleSupplier;
     }
@@ -59,7 +59,7 @@ public class StyleHolder
         if (this.styleSupplier == null)
             return;
 
-        StyleTree tree = this.styleSupplier.get();
+        StyleList tree = this.styleSupplier.get();
         if (tree == null)
             return;
         Set<StyleEntry> entries = tree.getEntries(this);

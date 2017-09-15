@@ -6,8 +6,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.yggard.brokkgui.style.tree.*;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,16 +15,16 @@ public class StylesheetManagerTest
     @Test
     public void parseSimpleCSS()
     {
-        StyleTree tree = null;
+        StyleList list = null;
         try
         {
-            tree = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test.css");
+            list = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test.css");
         } catch (IOException e)
         {
             e.printStackTrace();
         }
 
-        assertThat(tree).isNotNull();
-        assertThat(tree.getInternalTree().getChildren(tree.getWildcard())).hasSize(2);
+        assertThat(list).isNotNull();
+        assertThat(list.getInternalStyleList()).hasSize(3);
     }
 }

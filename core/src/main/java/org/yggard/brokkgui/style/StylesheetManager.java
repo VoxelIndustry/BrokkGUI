@@ -35,7 +35,7 @@ public class StylesheetManager
 
     public void refreshStylesheets(BrokkGuiScreen screen)
     {
-        StyleTree tree = screen.getUserAgentStyleTree();
+        StyleList tree = screen.getUserAgentStyleTree();
 
         try
         {
@@ -49,9 +49,9 @@ public class StylesheetManager
         screen.setStyleTree(tree);
     }
 
-    StyleTree loadStylesheet(String... styleSheets) throws IOException
+    StyleList loadStylesheet(String... styleSheets) throws IOException
     {
-        StyleTree tree = new StyleTree();
+        StyleList tree = new StyleList();
 
         for (String styleSheet : styleSheets)
         {
@@ -102,7 +102,7 @@ public class StylesheetManager
         return rtn;
     }
 
-    private void readBlock(StyleSelector selectors, StyleTree tree, NumberedLineIterator content)
+    private void readBlock(StyleSelector selectors, StyleList tree, NumberedLineIterator content)
     {
         if (!content.hasNext())
             return;
