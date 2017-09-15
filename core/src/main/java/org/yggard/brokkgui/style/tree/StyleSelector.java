@@ -20,7 +20,7 @@ public class StyleSelector implements IStyleSelector
     public StyleSelector addWildcard()
     {
         this.add(StyleSelectorType.WILDCARD, "*");
-        this.computedSpecificity = 1000;
+        this.computedSpecificity = 0;
         return this;
     }
 

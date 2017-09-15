@@ -18,7 +18,7 @@ public class StyleEntry
     {
         rules.forEach(rule ->
         {
-            if (!this.rules.stream().anyMatch(rule2 -> rule2.getRuleIdentifier().equals(rule.getRuleIdentifier())))
+            if (this.rules.stream().noneMatch(rule2 -> rule2.getRuleIdentifier().equals(rule.getRuleIdentifier())))
                 this.rules.add(rule);
         });
     }

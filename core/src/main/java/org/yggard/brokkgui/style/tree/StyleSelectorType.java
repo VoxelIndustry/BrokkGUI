@@ -2,7 +2,7 @@ package org.yggard.brokkgui.style.tree;
 
 public enum StyleSelectorType
 {
-    WILDCARD(1000), TYPE(1), CLASS(10), ID(100), PSEUDOCLASS(10);
+    WILDCARD(0), TYPE(1), CLASS(10), ID(100), PSEUDOCLASS(10);
 
     int specificity;
 
