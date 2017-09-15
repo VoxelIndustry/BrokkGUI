@@ -25,6 +25,6 @@ public class StylesheetManagerTest
         }
 
         assertThat(list).isNotNull();
-        assertThat(list.getInternalStyleList()).hasSize(3);
+        assertThat(list.getInternalStyleList()).hasSize(5);
     }
 }
