@@ -9,7 +9,7 @@ import java.util.List;
 public class StyleSelector implements IStyleSelector
 {
     private final List<Pair<StyleSelectorType, String>> selectors;
-    private       int                                   computedSpecificity;
+    protected     int                                   computedSpecificity;
 
     public StyleSelector()
     {
@@ -51,27 +51,10 @@ public class StyleSelector implements IStyleSelector
     {
         for (Pair<StyleSelectorType, String> selector : this.selectors)
         {
-            switch (selector.getKey())
-            {
-                case WILDCARD:
-                    return true;
-                case TYPE:
-                    if (!selector.getValue().equals(styleHolder.getOwner().getType()))
-                        return false;
-                    break;
-                case CLASS:
-                    if (!styleHolder.getOwner().getStyleClass().getValue().contains(selector.getValue()))
-                        return false;
-                    break;
-                case ID:
-                    if (!selector.getValue().equals(styleHolder.getOwner().getID()))
-                        return false;
-                    break;
-                case PSEUDOCLASS:
-                    if (!styleHolder.getOwner().getActivePseudoClass().getValue().contains(selector.getValue()))
-                        return false;
-                    break;
-            }
+            if (selector.getKey() == StyleSelectorType.WILDCARD)
+                return true;
+            if (!this.checkSelector(selector, styleHolder))
+                return false;
         }
         return true;
     }
@@ -83,6 +66,32 @@ public class StyleSelector implements IStyleSelector
             return false;
         StyleSelector other = (StyleSelector) selector;
         return this.selectors.size() == other.selectors.size() && this.selectors.containsAll(other.selectors);
+    }
+
+    protected boolean checkSelector(Pair<StyleSelectorType, String> selector, StyleHolder styleHolder)
+    {
+        switch (selector.getKey())
+        {
+            case WILDCARD:
+                return true;
+            case TYPE:
+                if (!selector.getValue().equals(styleHolder.getOwner().getType()))
+                    return false;
+                break;
+            case CLASS:
+                if (!styleHolder.getOwner().getStyleClass().getValue().contains(selector.getValue()))
+                    return false;
+                break;
+            case ID:
+                if (!selector.getValue().equals(styleHolder.getOwner().getID()))
+                    return false;
+                break;
+            case PSEUDOCLASS:
+                if (!styleHolder.getOwner().getActivePseudoClass().getValue().contains(selector.getValue()))
+                    return false;
+                break;
+        }
+        return true;
     }
 
     @Override
