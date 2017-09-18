@@ -62,6 +62,8 @@ public class StyleSelector implements IStyleSelector
     @Override
     public boolean match(IStyleSelector selector)
     {
+        if(selector == this)
+            return true;
         if (!(selector instanceof StyleSelector))
             return false;
         StyleSelector other = (StyleSelector) selector;

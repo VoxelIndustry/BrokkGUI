@@ -67,7 +67,7 @@ public class StyleSelectorHierarchic extends StyleSelector
                         valid = true;
                         break;
                     }
-                    if (!this.checkSelector(selector, styleHolder.getParent().getValue().getStyle()))
+                    if (!this.checkSelector(selector, current.getValue().getStyle()))
                         valid = false;
                 }
                 if (valid)
@@ -75,6 +75,7 @@ public class StyleSelectorHierarchic extends StyleSelector
                     matched = true;
                     break;
                 }
+                current = current.getValue().getStyle().getParent();
             }
             if (!matched)
                 return false;
@@ -85,6 +86,8 @@ public class StyleSelectorHierarchic extends StyleSelector
     @Override
     public boolean match(IStyleSelector selector)
     {
+        if (selector == this)
+            return true;
         if (!(selector instanceof StyleSelectorHierarchic))
             return false;
         StyleSelectorHierarchic other = (StyleSelectorHierarchic) selector;
