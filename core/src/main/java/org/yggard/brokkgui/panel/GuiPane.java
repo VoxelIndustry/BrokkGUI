@@ -35,7 +35,7 @@ public class GuiPane extends GuiFather
 
         this.backgroundProperty.addListener((property, oldValue, newValue) ->
         {
-            oldValue.detach();
+            oldValue.detach(this);
             newValue.attach(this);
         });
     }

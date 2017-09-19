@@ -18,6 +18,7 @@ public class Background extends Rectangle
 
     public Background()
     {
+        this.setType("background");
     }
 
     public void attach(final GuiNode node)
@@ -30,9 +31,11 @@ public class Background extends Rectangle
 
         this.getWidthProperty().bind(node.getWidthProperty());
         this.getHeightProperty().bind(node.getHeightProperty());
+
+        node.getStyle().registerAlias("background", this.getStyle());
     }
 
-    public void detach()
+    public void detach(GuiNode oldNode)
     {
         this.getxPosProperty().unbind();
         this.getyPosProperty().unbind();
@@ -42,6 +45,8 @@ public class Background extends Rectangle
 
         this.getWidthProperty().unbind();
         this.getHeightProperty().unbind();
+
+        oldNode.getStyle().removeAlias("background");
     }
 
     @Override

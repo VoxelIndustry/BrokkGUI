@@ -16,11 +16,15 @@ public class StyleHolder
 
     private Supplier<StyleList> styleSupplier;
 
+    private HashMap<String, StyleHolder> subAliases;
+
     public StyleHolder(ICascadeStyleable owner)
     {
         this.properties = new HashMap<>();
         this.owner = owner;
         this.parent = new BaseProperty<>(null, "parentProperty");
+
+        this.subAliases = new HashMap<>();
     }
 
     public void parseInlineCSS(String css)
@@ -30,13 +34,29 @@ public class StyleHolder
             String[] splitted = property.split(":");
             String propertyName = splitted[0].trim();
 
-            if (properties.containsKey(propertyName))
-            {
-                StyleableProperty<?> styleProp = properties.get(propertyName);
-                styleProp.setStyle(StyleSource.INLINE, 10_000,
-                        StyleDecoder.getInstance().decode(splitted[1].trim(), styleProp.getValueClass()));
-            }
+            if (this.hasProperty(propertyName))
+                this.setProperty(propertyName, splitted[1].trim(), StyleSource.INLINE,
+                        10_000);
+            this.subAliases.keySet().stream().filter(name -> propertyName.startsWith('-' + name)).findFirst()
+                    .ifPresent(name ->
+                    {
+                        String mappedName = propertyName.replaceFirst('-' + name, "");
+                        if (this.subAliases.get(name).hasProperty(mappedName))
+                            this.subAliases.get(name).setProperty(mappedName, splitted[1].trim(), StyleSource
+                                    .INLINE, 10_000);
+                    });
         }
+    }
+
+    private boolean hasProperty(String property)
+    {
+        return this.properties.containsKey(property);
+    }
+
+    private void setProperty(String name, String value, StyleSource source, int specificity)
+    {
+        this.properties.get(name).setStyle(source, specificity, StyleDecoder.getInstance().decode(value, this
+                .properties.get(name).getValueClass()));
     }
 
     public <T> void registerProperty(String name, T defaultValue, Class<T> valueClass)
@@ -67,10 +87,18 @@ public class StyleHolder
         this.properties.values().forEach(StyleableProperty::setToDefault);
         entries.forEach(entry -> entry.getRules().forEach(rule ->
         {
-            if (this.properties.containsKey(rule.getRuleIdentifier()))
-                this.properties.get(rule.getRuleIdentifier()).setStyle(StyleSource.AUTHOR,
-                        entry.getSelector().getSpecificity(), StyleDecoder.getInstance().decode(rule.getRuleValue(),
-                                this.properties.get(rule.getRuleIdentifier()).getValueClass()));
+            if (this.hasProperty(rule.getRuleIdentifier()))
+                this.setProperty(rule.getRuleIdentifier(), rule.getRuleValue(), StyleSource.AUTHOR,
+                        entry.getSelector().getSpecificity());
+            this.subAliases.keySet().stream().filter(name -> rule.getRuleIdentifier().startsWith('-' + name))
+                    .findFirst()
+                    .ifPresent(name ->
+                    {
+                        String mappedName = rule.getRuleIdentifier().replaceFirst('-' + name, "");
+                        if (this.subAliases.get(name).hasProperty(mappedName))
+                            this.subAliases.get(name).setProperty(mappedName, rule.getRuleValue(), StyleSource
+                                    .INLINE, 10_000);
+                    });
         }));
     }
 
@@ -85,5 +113,15 @@ public class StyleHolder
     public ICascadeStyleable getOwner()
     {
         return owner;
+    }
+
+    public void registerAlias(String name, StyleHolder subType)
+    {
+        this.subAliases.put(name, subType);
+    }
+
+    public void removeAlias(String name)
+    {
+        this.subAliases.remove(name);
     }
 }

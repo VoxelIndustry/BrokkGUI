@@ -27,21 +27,21 @@ public class GuiBehaviorSkinBase<C extends GuiControl, B extends GuiBehaviorBase
         this.backgroundProperty.addListener((property, oldValue, newValue) ->
         {
             if (oldValue != null)
-                oldValue.detach();
+                oldValue.detach(model);
             if (newValue != null)
                 newValue.attach(model);
         });
         this.backgroundHoveredProperty.addListener((property, oldValue, newValue) ->
         {
             if (oldValue != null)
-                oldValue.detach();
+                oldValue.detach(model);
             if (newValue != null)
                 newValue.attach(model);
         });
         this.backgroundDisabledProperty.addListener((property, oldValue, newValue) ->
         {
             if (oldValue != null)
-                oldValue.detach();
+                oldValue.detach(model);
             if (newValue != null)
                 newValue.attach(model);
         });
