@@ -6,7 +6,7 @@ import org.yggard.brokkgui.paint.EGuiRenderPass;
 
 public class Line extends GuiShape
 {
-    public Line(final float startX, final float startY, final float endX, final float endY, final float lineWeight)
+    public Line(final float startX, final float startY, final float endX, final float endY)
     {
         super("line");
         this.setxTranslate(startX);
@@ -14,13 +14,11 @@ public class Line extends GuiShape
 
         this.setWidth(endX);
         this.setHeight(endY);
-
-        this.setLineWeight(lineWeight);
     }
 
     public Line(final float endX, final float endY)
     {
-        this(0, 0, endX, endY, 1);
+        this(0, 0, endX, endY);
     }
 
     public Line()
@@ -34,6 +32,6 @@ public class Line extends GuiShape
         if (pass == EGuiRenderPass.MAIN)
             renderer.getHelper().drawColoredLine(renderer, this.getxPos() + this.getxTranslate(),
                     this.getyPos() + this.getyTranslate(), this.getxPos() + this.getWidth(),
-                    this.getyPos() + this.getHeight(), this.getLineWeight(), this.getzLevel(), (Color) this.getFill());
+                    this.getyPos() + this.getHeight(), this.getLineWeight(), this.getzLevel(), this.getColor());
     }
 }

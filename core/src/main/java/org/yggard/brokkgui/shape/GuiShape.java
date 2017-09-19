@@ -2,68 +2,37 @@ package org.yggard.brokkgui.shape;
 
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.paint.GuiPaint;
-
-import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.paint.Texture;
 
 public abstract class GuiShape extends GuiNode
 {
-    private final BaseProperty<Float>    lineWeightProperty;
-    private final BaseProperty<Color>    lineColorProperty;
-
-    private final BaseProperty<GuiPaint> fillProperty;
-
     public GuiShape(String type)
     {
         super(type);
-        this.lineWeightProperty = new BaseProperty<>(0F, "lineWeightProperty");
-        this.lineColorProperty = new BaseProperty<>(Color.WHITE, "lineColorProperty");
 
-        this.fillProperty = new BaseProperty<>(Color.AQUA, "fillProperty");
+        this.getStyle().registerProperty("-line-weight", 0, Integer.class);
+        this.getStyle().registerProperty("-line-color", Color.WHITE, Color.class);
+        this.getStyle().registerProperty("-color", Color.ALPHA, Color.class);
+        this.getStyle().registerProperty("-texture", Texture.EMPTY, Texture.class);
     }
 
-    public BaseProperty<Float> getLineWeightProperty()
+    public int getLineWeight()
     {
-        return this.lineWeightProperty;
-    }
-
-    public BaseProperty<Color> getLineColorProperty()
-    {
-        return this.lineColorProperty;
-    }
-
-    public BaseProperty<GuiPaint> getFillProperty()
-    {
-        return this.fillProperty;
-    }
-
-    public float getLineWeight()
-    {
-        return this.getLineWeightProperty().getValue();
-    }
-
-    public void setLineWeight(final float lineWeight)
-    {
-        this.getLineWeightProperty().setValue(lineWeight);
+        return this.getStyle().getStyleProperty("-line-weight", Integer.class).getValue();
     }
 
     public Color getLineColor()
     {
-        return this.getLineColorProperty().getValue();
+        return this.getStyle().getStyleProperty("-line-color", Color.class).getValue();
     }
 
-    public void setLineColor(final Color lineColor)
+    public Color getColor()
     {
-        this.getLineColorProperty().setValue(lineColor);
+        return this.getStyle().getStyleProperty("-color", Color.class).getValue();
     }
 
-    public GuiPaint getFill()
+    public Texture getTexture()
     {
-        return this.getFillProperty().getValue();
-    }
-
-    public void setFill(final GuiPaint fill)
-    {
-        this.getFillProperty().setValue(fill);
+        return this.getStyle().getStyleProperty("-texture", Texture.class).getValue();
     }
 }

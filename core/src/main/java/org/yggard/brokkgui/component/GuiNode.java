@@ -337,6 +337,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
             RelativeBindingHelper.bindHeightRelative(this, father, this.getHeightRatioProperty());
 
         this.getStyle().getParent().setValue(father);
+        this.refreshStyle();
     }
 
     public BaseProperty<Boolean> getFocusedProperty()

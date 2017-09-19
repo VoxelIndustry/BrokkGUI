@@ -2,6 +2,8 @@ package org.yggard.brokkgui.paint;
 
 public class Texture extends GuiPaint
 {
+    public static final Texture EMPTY = new Texture();
+
     private final String resource;
     private final float  uMin, vMin, uMax, vMax;
 

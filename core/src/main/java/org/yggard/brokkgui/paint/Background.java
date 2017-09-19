@@ -8,17 +8,16 @@ public class Background extends Rectangle
 {
     public Background(final Texture texture)
     {
-        this.setFill(texture);
+        this.getStyle().getStyleProperty("-texture", Texture.class).setValue(texture);
     }
 
     public Background(final Color color)
     {
-        this.setFill(color);
+        this.getStyle().getStyleProperty("-color", Color.class).setValue(color);
     }
 
     public Background()
     {
-        this(Color.ALPHA);
     }
 
     public void attach(final GuiNode node)
