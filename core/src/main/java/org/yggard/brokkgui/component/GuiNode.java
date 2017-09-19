@@ -22,22 +22,22 @@ import java.util.function.Supplier;
 
 public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 {
-    private final BaseProperty<GuiFather>  fatherProperty;
-    private final BaseProperty<Float>      xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
+    private final BaseProperty<GuiFather> fatherProperty;
+    private final BaseProperty<Float>     xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
             widthProperty, heightProperty, widthRatioProperty, heightRatioProperty, zLevelProperty;
 
-    private EventDispatcher                eventDispatcher;
-    private EventHandler<FocusEvent>       onFocusEvent;
-    private EventHandler<DisableEvent>     onDisableEvent;
-    private EventHandler<HoverEvent>       onHoverEvent;
-    private EventHandler<ClickEvent>       onClickEvent;
-    private final BaseProperty<Boolean>    focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
+    private       EventDispatcher            eventDispatcher;
+    private       EventHandler<FocusEvent>   onFocusEvent;
+    private       EventHandler<DisableEvent> onDisableEvent;
+    private       EventHandler<HoverEvent>   onHoverEvent;
+    private       EventHandler<ClickEvent>   onClickEvent;
+    private final BaseProperty<Boolean>      focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
 
     private final BaseProperty<String>     styleID;
     private final BaseListProperty<String> styleClass;
     private final BaseListProperty<String> activePseudoClass;
-    private String                         type;
-    private StyleHolder                    styleHolder;
+    private       String                   type;
+    private       StyleHolder              styleHolder;
 
     public GuiNode(String type)
     {
@@ -74,6 +74,36 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.styleClass.addListener((ListValueChangeListener<String>) (obs, oldValue, newValue) -> this.refreshStyle());
         this.activePseudoClass
                 .addListener((ListValueChangeListener<String>) (obs, oldValue, newValue) -> this.refreshStyle());
+
+        this.getEventDispatcher().addHandler(HoverEvent.TYPE, e ->
+        {
+            if (e.isEntering())
+                this.getActivePseudoClass().remove("hover");
+            else
+                this.getActivePseudoClass().add("hover");
+        });
+
+        this.getEventDispatcher().addHandler(DisableEvent.TYPE, e ->
+        {
+            if (e.isDisabled())
+            {
+                this.getActivePseudoClass().remove("enabled");
+                this.getActivePseudoClass().add("disabled");
+            }
+            else
+            {
+                this.getActivePseudoClass().remove("disabled");
+                this.getActivePseudoClass().add("enabled");
+            }
+        });
+
+        this.getEventDispatcher().addHandler(FocusEvent.TYPE, e ->
+        {
+            if (e.isFocused())
+                this.getActivePseudoClass().remove("focus");
+            else
+                this.getActivePseudoClass().add("focus");
+        });
     }
 
     public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
@@ -190,7 +220,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     /**
      * @return xPos, used for layout management, do not attempt to change the
-     *         property outside the layouting scope.
+     * property outside the layouting scope.
      */
     public float getxPos()
     {
@@ -199,7 +229,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     /**
      * @return yPos, used for layout management, do not attempt to change the
-     *         property outside the layouting scope.
+     * property outside the layouting scope.
      */
     public float getyPos()
     {
