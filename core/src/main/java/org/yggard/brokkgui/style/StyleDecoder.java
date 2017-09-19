@@ -1,8 +1,10 @@
 package org.yggard.brokkgui.style;
 
 import org.yggard.brokkgui.paint.Color;
+import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.style.adapter.ColorStyleAdapter;
 import org.yggard.brokkgui.style.adapter.IStyleAdapter;
+import org.yggard.brokkgui.style.adapter.TextureStyleAdapter;
 
 import java.util.HashMap;
 
@@ -47,5 +49,6 @@ public class StyleDecoder
         this.registerStyleAdapter(Long.class, Long::parseLong);
 
         this.registerStyleAdapter(Color.class, new ColorStyleAdapter());
+        this.registerStyleAdapter(Texture.class, new TextureStyleAdapter());
     }
 }
