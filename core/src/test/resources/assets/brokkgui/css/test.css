@@ -4,7 +4,7 @@ pane {
     -border-width: 1;
 }
 
-pane .snowflakes {
+pane > .snowflakes {
     -border-color: khaki;
     -border-width: 2;
 }

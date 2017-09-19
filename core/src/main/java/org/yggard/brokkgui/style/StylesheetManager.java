@@ -74,15 +74,33 @@ public class StylesheetManager
         return tree;
     }
 
-    private StyleSelector readSelector(String currentLine)
+    private IStyleSelector readSelector(String currentLine)
     {
-        StyleSelector rtn = new StyleSelector();
         String selector = currentLine;
 
-        selector = selector.replace('{', ' ').trim();
+        selector = selector.replace('{', ' ').trim().replace(" ", "");
 
-        String[] splitted = selector.split(" ");
-        for (String part : splitted)
+        if (selector.contains(">"))
+            return parseHierarchicSelector(selector);
+        else
+            return parseSimpleSelector(selector);
+    }
+
+    private IStyleSelector parseHierarchicSelector(String selector)
+    {
+        boolean direct = false;
+
+        if (selector.charAt(selector.indexOf('>') + 1) != '>')
+            direct = true;
+        String[] splitted = selector.split(direct ? ">" : ">>", 2);
+        return new StyleSelectorHierarchic(parseSimpleSelector(splitted[0]), splitted[1].contains(">") ?
+                parseHierarchicSelector(splitted[1]) : parseSimpleSelector(splitted[1]), direct);
+    }
+
+    private IStyleSelector parseSimpleSelector(String selector)
+    {
+        StyleSelector rtn = new StyleSelector();
+        for (String part : selector.split("(?=[.#:])"))
         {
             String pseudoClass = null;
             if (part.contains(":"))
@@ -102,7 +120,7 @@ public class StylesheetManager
         return rtn;
     }
 
-    private void readBlock(StyleSelector selectors, StyleList tree, NumberedLineIterator content)
+    private void readBlock(IStyleSelector selectors, StyleList tree, NumberedLineIterator content)
     {
         if (!content.hasNext())
             return;

@@ -1,40 +1,43 @@
 package org.yggard.brokkgui.style.tree;
 
 import fr.ourten.teabeans.value.BaseProperty;
-import org.apache.commons.lang3.tuple.Pair;
 import org.yggard.brokkgui.style.ICascadeStyleable;
 import org.yggard.brokkgui.style.StyleHolder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class StyleSelectorHierarchic extends StyleSelector
+public class StyleSelectorHierarchic implements IStyleSelector
 {
-    private final List<Pair<StyleSelectorType, String>> parentSelectors;
-    private final boolean                               directChild;
+    private final IStyleSelector parentSelector;
+    private final IStyleSelector childSelector;
+    private final boolean        directChild;
 
-    public StyleSelectorHierarchic(boolean directChild)
+    public StyleSelectorHierarchic(IStyleSelector parentSelector, IStyleSelector childSelector, boolean directChild)
     {
+        this.parentSelector = parentSelector;
+        this.childSelector = childSelector;
         this.directChild = directChild;
-        this.parentSelectors = new ArrayList<>();
-    }
-
-    public StyleSelector addParent(StyleSelectorType type, String selector)
-    {
-        this.parentSelectors.add(Pair.of(type, selector));
-        this.computedSpecificity = -1;
-        return this;
     }
 
     public int getSpecificity()
     {
-        if (this.computedSpecificity == -1)
-        {
-            this.computedSpecificity = super.getSpecificity();
-            for (Pair<StyleSelectorType, String> selector : this.parentSelectors)
-                this.computedSpecificity += selector.getKey().getSpecificity();
-        }
-        return this.computedSpecificity;
+        return childSelector.getSpecificity() + parentSelector.getSpecificity();
+    }
+
+    @Override
+    public IStyleSelector add(StyleSelectorType type, String selector)
+    {
+        return this.addChild(type, selector);
+    }
+
+    public IStyleSelector addChild(StyleSelectorType type, String selector)
+    {
+        this.childSelector.add(type, selector);
+        return this;
+    }
+
+    public IStyleSelector addParent(StyleSelectorType type, String selector)
+    {
+        this.parentSelector.add(type, selector);
+        return this;
     }
 
     public boolean match(StyleHolder styleHolder)
@@ -44,13 +47,8 @@ public class StyleSelectorHierarchic extends StyleSelector
 
         if (this.isDirectChild())
         {
-            for (Pair<StyleSelectorType, String> selector : this.parentSelectors)
-            {
-                if (selector.getKey() == StyleSelectorType.WILDCARD)
-                    return true;
-                if (!this.checkSelector(selector, styleHolder.getParent().getValue().getStyle()))
-                    return false;
-            }
+            if (!this.parentSelector.match(styleHolder.getParent().getValue().getStyle()))
+                return false;
         }
         else
         {
@@ -59,18 +57,7 @@ public class StyleSelectorHierarchic extends StyleSelector
             boolean matched = false;
             while (current.isPresent())
             {
-                boolean valid = true;
-                for (Pair<StyleSelectorType, String> selector : this.parentSelectors)
-                {
-                    if (selector.getKey() == StyleSelectorType.WILDCARD)
-                    {
-                        valid = true;
-                        break;
-                    }
-                    if (!this.checkSelector(selector, current.getValue().getStyle()))
-                        valid = false;
-                }
-                if (valid)
+                if (this.parentSelector.match(current.getValue().getStyle()))
                 {
                     matched = true;
                     break;
@@ -80,7 +67,7 @@ public class StyleSelectorHierarchic extends StyleSelector
             if (!matched)
                 return false;
         }
-        return super.match(styleHolder);
+        return this.childSelector.match(styleHolder);
     }
 
     @Override
@@ -91,11 +78,8 @@ public class StyleSelectorHierarchic extends StyleSelector
         if (!(selector instanceof StyleSelectorHierarchic))
             return false;
         StyleSelectorHierarchic other = (StyleSelectorHierarchic) selector;
-        return this.isDirectChild() == other.isDirectChild() &&
-                this.getSelectors().size() == other.getSelectors().size() &&
-                this.getSelectors().containsAll(other.getSelectors()) &&
-                this.getParentSelectors().size() == other.getParentSelectors().size() &&
-                this.getParentSelectors().containsAll(other.getParentSelectors());
+        return this.isDirectChild() == other.isDirectChild() && this.childSelector.match(other.childSelector) &&
+                this.parentSelector.match(other.parentSelector);
     }
 
     public boolean isDirectChild()
@@ -103,17 +87,20 @@ public class StyleSelectorHierarchic extends StyleSelector
         return directChild;
     }
 
-    public List<Pair<StyleSelectorType, String>> getParentSelectors()
+    public IStyleSelector getParentSelector()
     {
-        return parentSelectors;
+        return parentSelector;
+    }
+
+    public IStyleSelector getChildSelector()
+    {
+        return childSelector;
     }
 
     @Override
     public String toString()
     {
-        return "StyleSelectorHierarchic{" +
-                "parentSelectors=" + parentSelectors +
-                ", directChild=" + directChild +
-                "} " + super.toString();
+        return "StyleSelectorHierarchic{" + "parentSelector=" + parentSelector + ", childSelector=" + childSelector +
+                ", directChild=" + directChild + "}";
     }
 }

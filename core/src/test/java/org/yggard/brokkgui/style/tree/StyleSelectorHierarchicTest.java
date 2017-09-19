@@ -13,7 +13,7 @@ public class StyleSelectorHierarchicTest
     @Test
     public void directChild()
     {
-        StyleSelectorHierarchic selector = new StyleSelectorHierarchic(true);
+        StyleSelectorHierarchic selector = new StyleSelectorHierarchic(new StyleSelector(), new StyleSelector(), true);
         selector.add(StyleSelectorType.ID, "myID");
         selector.addParent(StyleSelectorType.CLASS, "test");
 
@@ -34,7 +34,7 @@ public class StyleSelectorHierarchicTest
     @Test
     public void distantChild()
     {
-        StyleSelectorHierarchic selector = new StyleSelectorHierarchic(false);
+        StyleSelectorHierarchic selector = new StyleSelectorHierarchic(new StyleSelector(), new StyleSelector(), false);
         selector.add(StyleSelectorType.ID, "myID");
         selector.addParent(StyleSelectorType.CLASS, "test");
 
@@ -58,9 +58,10 @@ public class StyleSelectorHierarchicTest
     @Test
     public void match()
     {
-        StyleSelectorHierarchic selector = new StyleSelectorHierarchic(true);
-        StyleSelectorHierarchic identical = new StyleSelectorHierarchic(true);
-        StyleSelectorHierarchic different = new StyleSelectorHierarchic(false);
+        StyleSelectorHierarchic selector = new StyleSelectorHierarchic(new StyleSelector(), new StyleSelector(), true);
+        StyleSelectorHierarchic identical = new StyleSelectorHierarchic(new StyleSelector(), new StyleSelector(), true);
+        StyleSelectorHierarchic different = new StyleSelectorHierarchic(new StyleSelector(), new StyleSelector(),
+                false);
 
         selector.add(StyleSelectorType.ID, "myID");
         selector.addParent(StyleSelectorType.CLASS, "test");
@@ -79,7 +80,7 @@ public class StyleSelectorHierarchicTest
     @Test
     public void computedSpecificity()
     {
-        StyleSelectorHierarchic selector = new StyleSelectorHierarchic(true);
+        StyleSelectorHierarchic selector = new StyleSelectorHierarchic(new StyleSelector(), new StyleSelector(), true);
         selector.add(StyleSelectorType.CLASS, "someClass");
         selector.add(StyleSelectorType.ID, "someID");
         selector.addParent(StyleSelectorType.PSEUDOCLASS, "hovered");
@@ -94,7 +95,7 @@ public class StyleSelectorHierarchicTest
     @Test
     public void matchWildcard()
     {
-        StyleSelectorHierarchic direct = new StyleSelectorHierarchic(true);
+        StyleSelectorHierarchic direct = new StyleSelectorHierarchic(new StyleSelector(), new StyleSelector(), true);
         direct.addParent(StyleSelectorType.WILDCARD, "");
         direct.add(StyleSelectorType.ID, "someID");
 
@@ -106,7 +107,7 @@ public class StyleSelectorHierarchicTest
 
         assertThat(direct.match(child.getStyle())).isTrue();
 
-        StyleSelectorHierarchic indirect = new StyleSelectorHierarchic(false);
+        StyleSelectorHierarchic indirect = new StyleSelectorHierarchic(new StyleSelector(), new StyleSelector(), false);
         indirect.addParent(StyleSelectorType.WILDCARD, "");
         indirect.add(StyleSelectorType.ID, "someID");
 

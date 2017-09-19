@@ -16,7 +16,7 @@ public class StyleList
         this.styleList.add(this.wildcard);
     }
 
-    public void addEntry(StyleSelector selectors, Set<StyleRule> rules)
+    public void addEntry(IStyleSelector selectors, Set<StyleRule> rules)
     {
         StyleEntry lastAdded;
 

@@ -1,4 +1,4 @@
-pane .snowflakes {
+pane > .snowflakes {
     -font-width: 10;
     -font-family: Open Sans;
 }

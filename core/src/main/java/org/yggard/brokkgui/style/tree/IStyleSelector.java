@@ -9,4 +9,6 @@ public interface IStyleSelector
     boolean match(IStyleSelector selector);
 
     int getSpecificity();
+
+    IStyleSelector add(StyleSelectorType type, String selector);
 }

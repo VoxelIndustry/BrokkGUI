@@ -3,6 +3,6 @@
     -border-color: khaki;
 }
 
-.myPane .myChildPane {
+.myPane > .myChildPane {
     -border-color: red;
 }
