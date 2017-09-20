@@ -84,7 +84,9 @@ public class StyleHolder
             return;
         Set<StyleEntry> entries = tree.getEntries(this);
 
-        this.properties.values().forEach(StyleableProperty::setToDefault);
+        this.properties.values().stream().filter(property ->
+                property.getSource() == StyleSource.AUTHOR || property.getSource() == StyleSource.USER_AGENT)
+                .forEach(StyleableProperty::setToDefault);
         entries.forEach(entry -> entry.getRules().forEach(rule ->
         {
             if (this.hasProperty(rule.getRuleIdentifier()))
@@ -97,7 +99,7 @@ public class StyleHolder
                         String mappedName = rule.getRuleIdentifier().replaceFirst('-' + name, "");
                         if (this.subAliases.get(name).hasProperty(mappedName))
                             this.subAliases.get(name).setProperty(mappedName, rule.getRuleValue(), StyleSource
-                                    .INLINE, 10_000);
+                                    .AUTHOR, entry.getSelector().getSpecificity());
                     });
         }));
     }

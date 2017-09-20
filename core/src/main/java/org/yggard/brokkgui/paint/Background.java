@@ -33,6 +33,7 @@ public class Background extends Rectangle
         this.getHeightProperty().bind(node.getHeightProperty());
 
         node.getStyle().registerAlias("background", this.getStyle());
+        node.refreshStyle();
     }
 
     public void detach(GuiNode oldNode)

@@ -3,6 +3,7 @@ package org.yggard.brokkgui.style;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.ColorConstants;
 import org.yggard.brokkgui.panel.GuiPane;
 import org.yggard.brokkgui.style.tree.StyleList;
@@ -66,5 +67,37 @@ public class StyleNodeTest
 
         assertThat(pane.getBorderColor()).isEqualTo(ColorConstants.getColor("khaki"));
         assertThat(pane.getBorderThin()).isEqualTo(2);
+    }
+
+    @Test
+    public void testBackgroundAlias()
+    {
+        StyleList tree = null;
+        try
+        {
+            tree = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test_background_alias.css");
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        StyleList finalTree = tree;
+
+        GuiPane pane = new GuiPane();
+        pane.setStyleTree(() -> finalTree);
+        pane.refreshStyle();
+
+        assertThat(pane.getBackground().getColor()).isEqualTo(ColorConstants.getColor("limegreen"));
+
+        pane.setStyle("-background-color: red;");
+
+        assertThat(pane.getBackground().getColor()).isEqualTo(Color.RED);
+
+        // TODO: Fix inline style save on alias transfer
+/*        Background old = pane.getBackground();
+
+        pane.setBackground(new Background());
+
+        assertThat(pane.getBackground().getColor()).isEqualTo(Color.RED);
+        assertThat(pane.getBackground()).isNotEqualTo(old);*/
     }
 }
