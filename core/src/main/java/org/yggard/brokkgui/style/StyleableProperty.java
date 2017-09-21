@@ -19,7 +19,7 @@ public class StyleableProperty<T> extends BaseProperty<T>
         this.defaultValue = defaultValue;
     }
 
-    boolean setStyle(StyleSource source, int specificity, T value)
+    public boolean setStyle(StyleSource source, int specificity, T value)
     {
         if (source.ordinal() >= this.source.ordinal() && specificity >= this.specificitySet)
         {

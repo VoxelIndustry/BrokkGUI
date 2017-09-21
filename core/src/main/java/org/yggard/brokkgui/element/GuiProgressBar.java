@@ -18,17 +18,15 @@ import java.util.Objects;
 public class GuiProgressBar extends GuiLabeled
 {
     private final BaseProperty<Float>       progressBarProgressProperty;
-    private final BaseProperty<Background>  progressBarColorProperty;
+    private final BaseProperty<Background>  backgroundProperty;
     private final BaseProperty<EHAlignment> progressBarProgressDirection;
 
     public GuiProgressBar(final String text, final float progressRatio)
     {
         super("progressbar", text);
-        this.progressBarProgressProperty = new BaseProperty<>(0f, "progressBarProgressProperty");
-        this.progressBarColorProperty = new BaseProperty<Background>(new Background(Color.WHITE),
-                "progressBarColorProperty");
-        this.progressBarProgressDirection = new BaseProperty<EHAlignment>(EHAlignment.RIGHT,
-                "progressBarProgressDirection");
+        this.progressBarProgressProperty = new BaseProperty<>(0f, "progressProperty");
+        this.backgroundProperty = new BaseProperty<>(new Background(Color.WHITE), "backgroundProperty");
+        this.progressBarProgressDirection = new BaseProperty<>(EHAlignment.RIGHT, "progressDirectionProperty");
 
         this.progressBarProgressProperty.setChecker((old, set) ->
         {
@@ -39,6 +37,13 @@ public class GuiProgressBar extends GuiLabeled
 
         this.progressBarProgressProperty.setValue(progressRatio);
         this.getTextAlignmentProperty().setValue(EAlignment.MIDDLE_CENTER);
+
+        this.backgroundProperty.getValue().attach(this);
+        this.backgroundProperty.addListener((property, oldValue, newValue) ->
+        {
+            oldValue.detach(this);
+            newValue.attach(this);
+        });
     }
 
     public GuiProgressBar(final String text)
@@ -69,7 +74,7 @@ public class GuiProgressBar extends GuiLabeled
 
     public BaseProperty<Background> getBackgroundProperty()
     {
-        return this.progressBarColorProperty;
+        return this.backgroundProperty;
     }
 
     public BaseProperty<EHAlignment> getProgressDirectionProperty()

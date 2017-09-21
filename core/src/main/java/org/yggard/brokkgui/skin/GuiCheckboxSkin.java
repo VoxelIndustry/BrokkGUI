@@ -11,6 +11,7 @@ import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.shape.Rectangle;
 import org.yggard.brokkgui.shape.Text;
+import org.yggard.brokkgui.style.StyleSource;
 
 public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBehavior<GuiCheckbox>>
 {
@@ -28,19 +29,15 @@ public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBe
         this.box = new Rectangle();
         this.fill = new Text("✔");
 
-        this.getModel().getStyle().registerProperty("-box-background-color", Color.ALPHA, Color.class);
-        this.getModel().getStyle().registerProperty("-box-line-color", Color.BLACK, Color.class);
-        this.getModel().getStyle().registerProperty("-box-fill-color", Color.GRAY, Color.class);
-        this.getModel().getStyle().registerProperty("-box-line", 1f, Float.class);
+        this.getModel().getStyle().registerAlias("box", this.box.getStyle());
+        this.getModel().getStyle().registerAlias("fill", this.fill.getStyle());
 
-        // TODO: Replace with aliases
-     /*   this.box.getFillProperty().bind(this.getModel().getStyle().getStyleProperty("-box-background-color", Color
-     .class));
-        this.box.getLineColorProperty().bind(this.getModel().getStyle().getStyleProperty("-box-line-color", Color
-        .class));
-        this.box.getLineWeightProperty().bind(this.getModel().getStyle().getStyleProperty("-box-line", Float.class));
+        this.box.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0, Color.ALPHA);
+        this.box.getStyle().getStyleProperty("-line-color", Color.class).setStyle(StyleSource.USER_AGENT, 0,
+                Color.BLACK);
+        this.box.getStyle().getStyleProperty("-line-weight", Integer.class).setStyle(StyleSource.USER_AGENT, 0, 1);
 
-        this.fill.getFillProperty().bind(this.getModel().getStyle().getStyleProperty("-box-fill-color", Color.class));*/
+        this.fill.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0, Color.GRAY);
 
         this.box.getxPosProperty().bind(new BaseBinding<Float>()
         {

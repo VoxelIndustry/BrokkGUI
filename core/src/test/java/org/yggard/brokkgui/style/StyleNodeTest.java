@@ -91,13 +91,5 @@ public class StyleNodeTest
         pane.setStyle("-background-color: red;");
 
         assertThat(pane.getBackground().getColor()).isEqualTo(Color.RED);
-
-        // TODO: Fix inline style save on alias transfer
-/*        Background old = pane.getBackground();
-
-        pane.setBackground(new Background());
-
-        assertThat(pane.getBackground().getColor()).isEqualTo(Color.RED);
-        assertThat(pane.getBackground()).isNotEqualTo(old);*/
     }
 }
