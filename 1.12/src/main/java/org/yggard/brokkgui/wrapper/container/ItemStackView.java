@@ -35,7 +35,7 @@ public class ItemStackView extends GuiControl
 
     public ItemStackView()
     {
-        this(null);
+        this(ItemStack.EMPTY);
     }
 
     public BaseProperty<ItemStack> getStackProperty()
