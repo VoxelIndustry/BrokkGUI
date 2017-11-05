@@ -27,6 +27,8 @@ public class GuiDemo extends BrokkGuiScreen
     {
         super(0.5f, 0.5f, 200, 200);
 
+        this.addStylesheet("/assets/brokkguidemo/gui/css/demo.css");
+
         final GuiRelativePane pane = new GuiRelativePane();
         this.setMainPanel(pane);
 
@@ -142,7 +144,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         pane.addChild(tabPane);
 
-        this.getMainPanel().setStyle("-border-color: aqua; -border-thin: 1;");
+        this.getMainPanel().setID("mainpane");
     }
 
     @Override

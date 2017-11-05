@@ -58,7 +58,7 @@ public class BrokkGuiScreen implements IGuiWindow
         this.screenHeightProperty = new BaseProperty<>(0, "screenHeightProperty");
 
         this.stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
-        this.userAgentStylesheetProperty = new BaseProperty<>(null, "userAgentStylesheetProperty");
+        this.userAgentStylesheetProperty = new BaseProperty<>("/assets/brokkgui/css/user_agent.css", "userAgentStylesheetProperty");
         this.userAgentStyleTreeProperty = new BaseProperty<>(null, "userAgentStyleTreeProperty");
         this.styleTreeProperty = new BaseProperty<>(null, "styleTreeProperty");
 
@@ -417,10 +417,5 @@ public class BrokkGuiScreen implements IGuiWindow
     public void removeStylesheet(String stylesheetLocation)
     {
         this.getStylesheetsProperty().remove(stylesheetLocation);
-    }
-
-    public void setUserAgentStylesheet(String stylesheetLocation)
-    {
-        this.getUserAgentStylesheetProperty().setValue(stylesheetLocation);
     }
 }
