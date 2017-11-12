@@ -318,7 +318,7 @@ public class GuiHelper implements IGuiHelper
             net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, short1 / 1.0F, short2 / 1.0F);
 
-            this.itemHelper.renderItemStack(stack, (int) startX, (int) startY, color);
+            this.itemHelper.renderItemStack(stack, (int) startX, (int) startY, zLevel, color);
             this.getRenderItem().renderItemOverlayIntoGUI(font, stack, (int) startX, (int) startY, displayString);
             GlStateManager.popMatrix();
             GlStateManager.disableRescaleNormal();

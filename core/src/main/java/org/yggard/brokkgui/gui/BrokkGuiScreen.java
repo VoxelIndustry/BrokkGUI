@@ -106,14 +106,11 @@ public class BrokkGuiScreen implements IGuiWindow
                 .getScreenHeightProperty(), this.getHeightProperty()));
     }
 
-    public void render(final int mouseX, final int mouseY, final float partialTicks)
+    public void render(final int mouseX, final int mouseY, EGuiRenderPass pass)
     {
-        for (final EGuiRenderPass pass : EGuiRenderPass.VALUES)
-        {
-            this.renderer.beginPass(pass);
-            this.mainPanel.renderNode(this.renderer, pass, mouseX, mouseY);
-            this.renderer.endPass(pass);
-        }
+        this.renderer.beginPass(pass);
+        this.mainPanel.renderNode(this.renderer, pass, mouseX, mouseY);
+        this.renderer.endPass(pass);
 
         if (!this.windows.isEmpty())
             for (int i = this.windows.size() - 1; i >= 0; i--)
@@ -123,12 +120,9 @@ public class BrokkGuiScreen implements IGuiWindow
                             5 + i, Color.BLACK.addAlpha(-0.5f));
                 this.windows.get(i).setzLevel(5 + i);
 
-                for (final EGuiRenderPass pass : EGuiRenderPass.VALUES)
-                {
-                    this.renderer.beginPass(pass);
-                    this.windows.get(i).renderNode(this.renderer, pass, mouseX, mouseY);
-                    this.renderer.endPass(pass);
-                }
+                this.renderer.beginPass(pass);
+                this.windows.get(i).renderNode(this.renderer, pass, mouseX, mouseY);
+                this.renderer.endPass(pass);
             }
     }
 

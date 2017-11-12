@@ -1,18 +1,19 @@
 package org.yggard.brokkgui.wrapper.impl;
 
-import java.io.IOException;
-
-import org.lwjgl.input.Keyboard;
-import org.yggard.brokkgui.internal.IBrokkGuiImpl;
-import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.wrapper.GuiRenderer;
-import org.yggard.brokkgui.wrapper.container.BrokkGuiContainer;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import org.lwjgl.input.Keyboard;
+import org.yggard.brokkgui.internal.IBrokkGuiImpl;
+import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.wrapper.GuiRenderer;
+import org.yggard.brokkgui.wrapper.container.BrokkGuiContainer;
+
+import java.io.IOException;
 
 public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
 {
@@ -68,7 +69,16 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     @Override
     protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY)
     {
-        this.brokkgui.render(mouseX, mouseY, partialTicks);
+        this.brokkgui.render(mouseX, mouseY, EGuiRenderPass.MAIN);
+        this.brokkgui.render(mouseX, mouseY, EGuiRenderPass.HOVER);
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    {
+        GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
+        this.brokkgui.render(mouseX, mouseY, EGuiRenderPass.SPECIAL);
+        GlStateManager.translate(this.guiLeft, this.guiTop, 0);
     }
 
     @Override
