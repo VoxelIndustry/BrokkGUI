@@ -112,7 +112,7 @@ public class StylesheetManager
                 rtn.add(StyleSelectorType.ID, part.substring(1));
             else if (part.startsWith("."))
                 rtn.add(StyleSelectorType.CLASS, part.substring(1));
-            else
+            else if(pseudoClass == null)
                 rtn.add(StyleSelectorType.TYPE, part);
             if (pseudoClass != null)
                 rtn.add(StyleSelectorType.PSEUDOCLASS, pseudoClass);
@@ -133,7 +133,7 @@ public class StylesheetManager
                 logger.severe("Found opening bracket at line " + content.getLineNumber() + " while inside a block");
                 return;
             }
-            String[] rule = currentLine.replace(';', ' ').trim().split(":");
+            String[] rule = currentLine.replace(';', ' ').trim().split(":",2);
             elements.add(new StyleRule(rule[0].trim(), rule[1].trim()));
             if (!content.hasNext())
                 return;

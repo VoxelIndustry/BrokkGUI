@@ -45,9 +45,7 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         this.bindEllipsed();
 
         this.text.getTextStyleProperty().bind(model.getTextStyleProperty());
-
         this.text.getTextProperty().bind(this.ellipsedTextProperty);
-
         this.text.getzLevelProperty().bind(model.getzLevelProperty());
 
         this.text.getxPosProperty().bind(new BaseBinding<Float>()
@@ -65,7 +63,8 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
                 final float padding = GuiLabeledSkinBase.this.getTextPaddingAlignment() == EHAlignment.LEFT
                         ? -GuiLabeledSkinBase.this.getTextPadding() + 2
                         : GuiLabeledSkinBase.this.getTextPaddingAlignment() == EHAlignment.RIGHT
-                                ? GuiLabeledSkinBase.this.getTextPadding() : 0;
+                                ? GuiLabeledSkinBase.this.getTextPadding()
+                                : 0;
 
                 if (model.getTextAlignment().isLeft())
                     return model.getxPos() + model.getxTranslate() + padding + BrokkGuiPlatform.getInstance()

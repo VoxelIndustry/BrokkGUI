@@ -78,31 +78,25 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.getEventDispatcher().addHandler(HoverEvent.TYPE, e ->
         {
             if (e.isEntering())
-                this.getActivePseudoClass().remove("hover");
-            else
                 this.getActivePseudoClass().add("hover");
+            else
+                this.getActivePseudoClass().remove("hover");
         });
 
         this.getEventDispatcher().addHandler(DisableEvent.TYPE, e ->
         {
             if (e.isDisabled())
-            {
-                this.getActivePseudoClass().remove("enabled");
-                this.getActivePseudoClass().add("disabled");
-            }
+                this.getActivePseudoClass().replace("enabled", "disabled");
             else
-            {
-                this.getActivePseudoClass().remove("disabled");
-                this.getActivePseudoClass().add("enabled");
-            }
+                this.getActivePseudoClass().replace("disabled", "enabled");
         });
 
         this.getEventDispatcher().addHandler(FocusEvent.TYPE, e ->
         {
             if (e.isFocused())
-                this.getActivePseudoClass().remove("focus");
-            else
                 this.getActivePseudoClass().add("focus");
+            else
+                this.getActivePseudoClass().remove("focus");
         });
     }
 
@@ -367,6 +361,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
             RelativeBindingHelper.bindHeightRelative(this, father, this.getHeightRatioProperty());
 
         this.getStyle().getParent().setValue(father);
+        if (father != null)
+            this.setStyleTree(father.getStyle().getStyleSupplier());
         this.refreshStyle();
     }
 
@@ -438,6 +434,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void setHovered(final boolean hovered)
     {
+        if(this.isDisabled())
+            return;
         this.getHoveredProperty().setValue(hovered);
         this.getEventDispatcher().dispatchEvent(HoverEvent.TYPE, new HoverEvent(this, hovered));
     }

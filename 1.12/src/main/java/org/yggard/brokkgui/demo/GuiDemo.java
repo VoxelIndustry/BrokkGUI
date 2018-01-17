@@ -1,25 +1,17 @@
 package org.yggard.brokkgui.demo;
 
+import fr.ourten.teabeans.binding.BaseBinding;
 import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.control.GuiToggleGroup;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.EHAlignment;
-import org.yggard.brokkgui.element.GuiButton;
-import org.yggard.brokkgui.element.GuiCheckbox;
-import org.yggard.brokkgui.element.GuiLabel;
-import org.yggard.brokkgui.element.GuiListView;
-import org.yggard.brokkgui.element.GuiProgressBar;
-import org.yggard.brokkgui.element.GuiRadioButton;
-import org.yggard.brokkgui.element.GuiTextfield;
+import org.yggard.brokkgui.element.*;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiRelativePane;
 import org.yggard.brokkgui.panel.GuiTabPane;
-import org.yggard.brokkgui.skin.GuiButtonSkin;
-
-import fr.ourten.teabeans.binding.BaseBinding;
 
 public class GuiDemo extends BrokkGuiScreen
 {
@@ -38,20 +30,6 @@ public class GuiDemo extends BrokkGuiScreen
         button.setWidth(200);
         button.setHeight(30);
         button.setStyle("-border-color: green; -border-thin: 2;");
-
-        final Background background = new Background(Color.AQUA);
-        final Background hoverBack = new Background(Color.YELLOW);
-        final Background disableBack = new Background(Color.RED);
-
-        ((GuiButtonSkin) button.getSkin()).setBackground(background);
-        ((GuiButtonSkin) button.getSkin()).setHoveredBackground(hoverBack);
-        ((GuiButtonSkin) button.getSkin()).setDisabledBackground(disableBack);
-
-        final GuiButton b2 = new GuiButton("B2");
-
-        ((GuiButtonSkin) b2.getSkin()).setBackground(background);
-        ((GuiButtonSkin) b2.getSkin()).setHoveredBackground(hoverBack);
-        ((GuiButtonSkin) b2.getSkin()).setDisabledBackground(disableBack);
 
         button.setOnClickEvent(e -> System.out.println("clicked"));
 

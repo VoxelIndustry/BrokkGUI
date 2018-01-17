@@ -26,7 +26,10 @@ public class ItemStackViewSkin extends GuiBehaviorSkinBase<ItemStackView, ItemSt
                     this.getModel().getyPos() + this.getModel().getyTranslate() + this.getModel().getHeight() / 2,
                     this.getModel().getWidth(), this.getModel().getHeight(), this.getModel().getzLevel(),
                     this.getModel().getItemStack(), this.getModel().getAlternateString(), this.getModel().getColor());
-            if (this.getModel().isHovered() && this.getModel().hasTooltip())
+        }
+        else if(pass == EGuiRenderPass.HOVER)
+        {
+            if (this.getModel().isHovered() && this.getModel().hasTooltip() && !this.getModel().getItemStack().isEmpty())
                 ((GuiHelper) renderer.getHelper()).drawItemStackTooltip(renderer, mouseX, mouseY,
                         this.getModel().getItemStack());
         }

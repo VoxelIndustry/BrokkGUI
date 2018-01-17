@@ -30,6 +30,13 @@ public class Color extends GuiPaint
         return rtn;
     }
 
+    public String toHex()
+    {
+        return "#" + String.format("%02X", (int) (this.red * 255)) +
+                String.format("%02X", (int) (this.green * 255)) +
+                String.format("%02X", (int) (this.blue * 255));
+    }
+
     public static Color fromRGBInt(final int rgb)
     {
         return new Color((rgb >> 16 & 0xFF) / 255f, (rgb >> 8 & 0xFF) / 255f, (rgb & 0xFF) / 255f);

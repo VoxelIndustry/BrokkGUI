@@ -1,11 +1,10 @@
 package org.yggard.brokkgui.wrapper.container;
 
+import fr.ourten.teabeans.value.BaseProperty;
+import net.minecraft.item.ItemStack;
 import org.yggard.brokkgui.control.GuiControl;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.skin.GuiSkinBase;
-
-import fr.ourten.teabeans.value.BaseProperty;
-import net.minecraft.item.ItemStack;
 
 /**
  * @author Ourten 29 oct. 2016

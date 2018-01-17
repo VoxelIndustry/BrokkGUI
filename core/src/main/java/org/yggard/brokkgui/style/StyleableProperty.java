@@ -23,12 +23,17 @@ public class StyleableProperty<T> extends BaseProperty<T>
     {
         if (source.ordinal() >= this.source.ordinal() && specificity >= this.specificitySet)
         {
-            this.source = source;
-            this.specificitySet = specificity;
-            super.setValue(value);
+            internalSetStyle(source, specificity, value);
             return true;
         }
         return false;
+    }
+
+    private void internalSetStyle(StyleSource source, int specificity, T value)
+    {
+        this.source = source;
+        this.specificitySet = specificity;
+        super.setValue(value);
     }
 
     @Override
@@ -41,7 +46,7 @@ public class StyleableProperty<T> extends BaseProperty<T>
 
     public void setToDefault()
     {
-        this.setStyle(StyleSource.USER_AGENT, 0, defaultValue);
+        this.internalSetStyle(StyleSource.USER_AGENT, 0, defaultValue);
     }
 
     public Class<T> getValueClass()

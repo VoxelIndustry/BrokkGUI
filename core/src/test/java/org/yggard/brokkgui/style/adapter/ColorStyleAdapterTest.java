@@ -25,6 +25,10 @@ public class ColorStyleAdapterTest
         Color color = Color.fromHex("#ffaa25");
 
         assertThat(adapter.decode("#ffaa25")).isEqualTo(color);
+
+        Color color2 = Color.fromHex("#aaff25", 0.3f);
+
+        assertThat(adapter.decode("#aaff25 30%")).isEqualTo(color2);
     }
 
     @Test

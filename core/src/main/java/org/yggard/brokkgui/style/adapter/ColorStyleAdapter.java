@@ -9,7 +9,18 @@ public class ColorStyleAdapter implements IStyleAdapter<Color>
     public Color decode(String style)
     {
         if (style.startsWith("#"))
+        {
+            if(!style.contains(" "))
             return Color.fromHex(style);
+            else
+            {
+                String[] splitted = style.split(" ");
+                String rgb = splitted[0];
+                float alpha = Float.parseFloat(splitted[1].substring(0, splitted[1].length() -1)) / 100;
+
+                return Color.fromHex(rgb, alpha);
+            }
+        }
         if (style.startsWith("rgb"))
         {
             boolean alpha = style.startsWith("rgba");

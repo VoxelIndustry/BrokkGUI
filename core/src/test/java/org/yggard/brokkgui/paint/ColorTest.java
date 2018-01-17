@@ -17,6 +17,13 @@ public class ColorTest
     }
 
     @Test
+    public void hexTranslation()
+    {
+        assertThat(Color.fromHex("#00FFFF")).isEqualTo(Color.AQUA);
+        assertThat(Color.AQUA.toHex()).isEqualToIgnoringCase("#00FFFF");
+    }
+
+    @Test
     public void copy()
     {
         assertThat(Color.from(Color.RED)).isEqualTo(Color.RED);

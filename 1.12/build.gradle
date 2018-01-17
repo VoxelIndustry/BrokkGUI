@@ -15,9 +15,9 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12-14.21.1.2387"
+    version = "1.12.2-14.23.1.2584"
     runDir = "run"
-    mappings = "snapshot_20170624"
+    mappings = "snapshot_20171010"
 }
 
 processResources

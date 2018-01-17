@@ -31,7 +31,7 @@ public class StyleHolder
     {
         for (String property : css.split(";"))
         {
-            String[] splitted = property.split(":");
+            String[] splitted = property.split(":", 2);
             String propertyName = splitted[0].trim();
 
             if (this.hasProperty(propertyName))
@@ -69,6 +69,11 @@ public class StyleHolder
         return (StyleableProperty<T>) this.properties.get(name);
     }
 
+    public Supplier<StyleList> getStyleSupplier()
+    {
+        return this.styleSupplier;
+    }
+
     public void setStyleSupplier(Supplier<StyleList> styleSupplier)
     {
         this.styleSupplier = styleSupplier;
@@ -84,14 +89,15 @@ public class StyleHolder
             return;
         Set<StyleEntry> entries = tree.getEntries(this);
 
-        this.properties.values().stream().filter(property ->
-                property.getSource() == StyleSource.AUTHOR || property.getSource() == StyleSource.USER_AGENT)
-                .forEach(StyleableProperty::setToDefault);
+        this.resetToDefault();
+        this.subAliases.values().forEach(StyleHolder::resetToDefault);
         entries.forEach(entry -> entry.getRules().forEach(rule ->
         {
             if (this.hasProperty(rule.getRuleIdentifier()))
                 this.setProperty(rule.getRuleIdentifier(), rule.getRuleValue(), StyleSource.AUTHOR,
                         entry.getSelector().getSpecificity());
+            // WTF resetToDefault not working ?
+            // Need a better solution to reset aliases, it might destroy unwanted data!
             this.subAliases.keySet().stream().filter(name -> rule.getRuleIdentifier().startsWith('-' + name))
                     .findFirst()
                     .ifPresent(name ->
@@ -125,5 +131,12 @@ public class StyleHolder
     public void removeAlias(String name)
     {
         this.subAliases.remove(name);
+    }
+
+    void resetToDefault()
+    {
+        this.properties.values().stream().filter(property ->
+                property.getSource() == StyleSource.AUTHOR || property.getSource() == StyleSource.USER_AGENT)
+                .forEach(StyleableProperty::setToDefault);
     }
 }

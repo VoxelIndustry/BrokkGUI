@@ -6,19 +6,28 @@ import org.yggard.brokkgui.shape.Rectangle;
 
 public class Background extends Rectangle
 {
+    public static final Background EMPTY = new Background(Color.ALPHA);
+
     public Background(final Texture texture)
     {
+        this();
         this.getStyle().getStyleProperty("-texture", Texture.class).setValue(texture);
     }
 
     public Background(final Color color)
     {
+        this();
         this.getStyle().getStyleProperty("-color", Color.class).setValue(color);
     }
 
     public Background()
     {
         this.setType("background");
+
+        this.getStyle().getStyleProperty("-color", Color.class).addListener((obs, oldValue, newValue) ->
+        {
+            System.out.println("Color: " + oldValue.toHex() + " " + newValue.toHex());
+        });
     }
 
     public void attach(final GuiNode node)
@@ -33,7 +42,6 @@ public class Background extends Rectangle
         this.getHeightProperty().bind(node.getHeightProperty());
 
         node.getStyle().registerAlias("background", this.getStyle());
-        node.refreshStyle();
     }
 
     public void detach(GuiNode oldNode)

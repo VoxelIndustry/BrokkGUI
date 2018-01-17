@@ -8,8 +8,6 @@ import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.validation.BaseTextValidator;
 
-import fr.ourten.teabeans.value.BaseProperty;
-
 /**
  * @author Ourten 2 oct. 2016
  */
