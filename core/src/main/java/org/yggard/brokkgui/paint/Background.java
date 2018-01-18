@@ -23,11 +23,6 @@ public class Background extends Rectangle
     public Background()
     {
         this.setType("background");
-
-        this.getStyle().getStyleProperty("-color", Color.class).addListener((obs, oldValue, newValue) ->
-        {
-            System.out.println("Color: " + oldValue.toHex() + " " + newValue.toHex());
-        });
     }
 
     public void attach(final GuiNode node)

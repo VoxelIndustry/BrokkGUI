@@ -86,9 +86,23 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.getEventDispatcher().addHandler(DisableEvent.TYPE, e ->
         {
             if (e.isDisabled())
-                this.getActivePseudoClass().replace("enabled", "disabled");
+            {
+                if (!this.getActivePseudoClass().contains("disabled") &&
+                        this.getActivePseudoClass().contains("enabled"))
+                    this.getActivePseudoClass().replace("enabled", "disabled");
+                else if (!this.getActivePseudoClass().contains("enabled") &&
+                        !this.getActivePseudoClass().contains("disabled"))
+                    this.getActivePseudoClass().add("disabled");
+            }
             else
-                this.getActivePseudoClass().replace("disabled", "enabled");
+            {
+                if (!this.getActivePseudoClass().contains("enabled") &&
+                        this.getActivePseudoClass().contains("disabled"))
+                    this.getActivePseudoClass().replace("disabled", "enabled");
+                else if (!this.getActivePseudoClass().contains("disabled") &&
+                        !this.getActivePseudoClass().contains("enabled"))
+                    this.getActivePseudoClass().add("enabled");
+            }
         });
 
         this.getEventDispatcher().addHandler(FocusEvent.TYPE, e ->
@@ -423,6 +437,10 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void setDisabled(final boolean disable)
     {
+        if(this.isHovered())
+            this.setHovered(false);
+        if(this.isFocused())
+            this.setFocused(false);
         this.getDisabledProperty().setValue(disable);
         this.getEventDispatcher().dispatchEvent(DisableEvent.TYPE, new DisableEvent(this, disable));
     }
@@ -434,7 +452,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void setHovered(final boolean hovered)
     {
-        if(this.isDisabled())
+        if (this.isDisabled())
             return;
         this.getHoveredProperty().setValue(hovered);
         this.getEventDispatcher().dispatchEvent(HoverEvent.TYPE, new HoverEvent(this, hovered));
