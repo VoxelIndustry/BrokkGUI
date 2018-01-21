@@ -1,6 +1,6 @@
 package org.yggard.brokkgui.style;
 
-import fr.ourten.teabeans.value.BaseListProperty;
+import fr.ourten.teabeans.value.BaseSetProperty;
 
 public interface IStyleable
 {
@@ -23,9 +23,9 @@ public interface IStyleable
 		this.getStyleClass().clear();
 	}
 
-	BaseListProperty<String> getStyleClass();
+	BaseSetProperty<String> getStyleClass();
 
-	BaseListProperty<String> getActivePseudoClass();
+	BaseSetProperty<String> getActivePseudoClass();
 
 	StyleHolder getStyle();
 

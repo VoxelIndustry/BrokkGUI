@@ -1,8 +1,8 @@
 package org.yggard.brokkgui.component;
 
 import fr.ourten.teabeans.listener.ListValueChangeListener;
-import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.value.BaseSetProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.control.GuiFather;
@@ -33,11 +33,11 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     private       EventHandler<ClickEvent>   onClickEvent;
     private final BaseProperty<Boolean>      focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
 
-    private final BaseProperty<String>     styleID;
-    private final BaseListProperty<String> styleClass;
-    private final BaseListProperty<String> activePseudoClass;
-    private       String                   type;
-    private       StyleHolder              styleHolder;
+    private final BaseProperty<String>    styleID;
+    private final BaseSetProperty<String> styleClass;
+    private final BaseSetProperty<String> activePseudoClass;
+    private       String                  type;
+    private       StyleHolder             styleHolder;
 
     public GuiNode(String type)
     {
@@ -66,8 +66,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.focusableProperty = new BaseProperty<>(false, "focusableProperty");
 
         this.styleID = new BaseProperty<>(null, "styleIDProperty");
-        this.styleClass = new BaseListProperty<>(Collections.emptyList(), "styleClassListProperty");
-        this.activePseudoClass = new BaseListProperty<>(Collections.emptyList(), "activePseudoClassListProperty");
+        this.styleClass = new BaseSetProperty<>(Collections.emptySet(), "styleClassListProperty");
+        this.activePseudoClass = new BaseSetProperty<>(Collections.emptySet(), "activePseudoClassListProperty");
         this.styleHolder = new StyleHolder(this);
 
         this.styleID.addListener((obs, oldValue, newValue) -> this.refreshStyle());
@@ -437,9 +437,9 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void setDisabled(final boolean disable)
     {
-        if(this.isHovered())
+        if (this.isHovered())
             this.setHovered(false);
-        if(this.isFocused())
+        if (this.isFocused())
             this.setFocused(false);
         this.getDisabledProperty().setValue(disable);
         this.getEventDispatcher().dispatchEvent(DisableEvent.TYPE, new DisableEvent(this, disable));
@@ -545,7 +545,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     @Override
-    public BaseListProperty<String> getStyleClass()
+    public BaseSetProperty<String> getStyleClass()
     {
         return this.styleClass;
     }
@@ -580,7 +580,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     @Override
-    public BaseListProperty<String> getActivePseudoClass()
+    public BaseSetProperty<String> getActivePseudoClass()
     {
         return activePseudoClass;
     }

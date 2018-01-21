@@ -64,6 +64,11 @@ public class StyleHolder
         this.properties.put(name, new StyleableProperty<>(defaultValue, name, valueClass));
     }
 
+    public void removeProperty(String name)
+    {
+        this.properties.remove(name);
+    }
+
     public <T> StyleableProperty<T> getStyleProperty(String name, Class<T> clazz)
     {
         return (StyleableProperty<T>) this.properties.get(name);
@@ -96,8 +101,6 @@ public class StyleHolder
             if (this.hasProperty(rule.getRuleIdentifier()))
                 this.setProperty(rule.getRuleIdentifier(), rule.getRuleValue(), StyleSource.AUTHOR,
                         entry.getSelector().getSpecificity());
-            // WTF resetToDefault not working ?
-            // Need a better solution to reset aliases, it might destroy unwanted data!
             this.subAliases.keySet().stream().filter(name -> rule.getRuleIdentifier().startsWith('-' + name))
                     .findFirst()
                     .ifPresent(name ->

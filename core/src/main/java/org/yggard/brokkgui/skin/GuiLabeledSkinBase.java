@@ -44,7 +44,17 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         // Bindings
         this.bindEllipsed();
 
-        this.text.getTextStyleProperty().bind(model.getTextStyleProperty());
+
+        this.text.getTextStyle().bind(this.getModel());
+
+        this.text.getTextStyleProperty().addListener((obs, oldValue, newValue) ->
+        {
+            if (oldValue != null)
+                oldValue.unbind(this.getModel());
+            newValue.bind(this.getModel());
+            this.getModel().refreshStyle();
+        });
+
         this.text.getTextProperty().bind(this.ellipsedTextProperty);
         this.text.getzLevelProperty().bind(model.getzLevelProperty());
 

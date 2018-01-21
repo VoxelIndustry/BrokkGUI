@@ -29,7 +29,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         button.setWidth(200);
         button.setHeight(30);
-        button.setStyle("-border-color: green; -border-thin: 2;");
+        button.setStyle("-border-color: green; -border-thin: 2; -text-color: khaki");
 
         button.setOnClickEvent(e -> System.out.println("clicked"));
 
@@ -79,6 +79,7 @@ public class GuiDemo extends BrokkGuiScreen
         radioButton.setHeightRatio(0.05f);
 
         radioButton2.setHeightRatio(0.05f);
+        radioButton2.setStyle("-text-color: green");
 
         checkbox.setHeightRatio(0.05f);
         checkbox.setLabelAlignment(EHAlignment.LEFT);

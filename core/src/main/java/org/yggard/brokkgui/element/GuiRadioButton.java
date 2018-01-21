@@ -1,15 +1,13 @@
 package org.yggard.brokkgui.element;
 
+import fr.ourten.teabeans.binding.BaseExpression;
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.behavior.GuiTogglableButtonBehavior;
 import org.yggard.brokkgui.control.GuiToggleButtonBase;
 import org.yggard.brokkgui.data.EHAlignment;
-import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.skin.GuiRadioButtonSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
-
-import fr.ourten.teabeans.binding.BaseExpression;
-import fr.ourten.teabeans.value.BaseProperty;
 
 /**
  * @author Ourten 18 nov. 2016
@@ -25,7 +23,7 @@ public class GuiRadioButton extends GuiToggleButtonBase
 
         this.labelAlignmentProperty = new BaseProperty<>(EHAlignment.RIGHT, "labelAlignmentProperty");
         this.labelPaddingProperty = new BaseProperty<>(0f, "labelPaddingProperty");
-        this.setTextColor(Color.BLACK.addAlpha(-0.22f));
+        this.setStyle("-text-color: #000000 78%");
         this.setLabelPadding(2);
 
         this.bindSizeToText();

@@ -10,59 +10,54 @@ import org.yggard.brokkgui.paint.Texture;
  */
 public interface IGuiHelper
 {
-    public void bindTexture(final Texture texture);
+    void bindTexture(Texture texture);
 
-    public void beginScissor();
+    void beginScissor();
 
-    public void endScissor();
+    void endScissor();
 
-    public void scissorBox(final float f, final float g, final float h, final float i);
+    void scissorBox(float f, float g, float h, float i);
 
-    public void drawString(final String string, final int x, final int y, final float zLevel, final Color color,
-            final EAlignment alignment, final boolean shadow);
+    void drawString(String string, int x, int y, float zLevel, Color textColor, Color shadowColor,
+                    EAlignment alignment);
 
-    public void drawString(final String string, final double x, final double y, final float zLevel, final Color color,
-            final boolean shadow);
+    void drawString(String string, double x, double y, float zLevel, Color textColor, Color shadowColor);
 
-    public void drawString(final String string, final double x, final double y, final float zLevel, final Color color,
-            final EAlignment alignment);
+    void drawString(String string, double x, double y, float zLevel, Color textColor, EAlignment alignment);
 
-    public void drawString(final String string, final double x, final double y, final float zLevel, final Color color);
+    void drawString(String string, double x, double y, float zLevel, Color textColor);
 
-    public void drawTexturedRect(final IGuiRenderer renderer, final float xStart, final float yStart, final float uMin,
-            final float vMin, final float uMax, final float vMax, final float width, final float height,
-            final float zLevel);
+    void drawTexturedRect(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
+                          float vMax, float width, float height, float zLevel);
 
-    public void drawTexturedRect(final IGuiRenderer renderer, final float xStart, final float yStart, final float uMin,
-            final float vMin, final float width, final float height, final float zLevel);
+    void drawTexturedRect(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin, float width,
+                          float height, float zLevel);
 
-    public void drawColoredEmptyRect(final IGuiRenderer renderer, final float startX, final float startY,
-            final float width, final float height, final float zLevel, final Color c, final float thin);
+    void drawColoredEmptyRect(IGuiRenderer renderer, float startX, float startY, float width, float height,
+                              float zLevel, Color c, float thin);
 
-    public void drawColoredRect(final IGuiRenderer renderer, final float startX, final float startY, final float width,
-            final float height, final float zLevel, final Color c);
+    void drawColoredRect(IGuiRenderer renderer, float startX, float startY, float width, float height, float zLevel,
+                         Color color);
 
-    public void drawTexturedCircle(final IGuiRenderer renderer, final float xStart, final float yStart,
-            final float uMin, final float vMin, final float uMax, final float vMax, final float radius,
-            final float zLevel);
+    void drawTexturedCircle(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
+                            float vMax, float radius, float zLevel);
 
-    public void drawTexturedCircle(final IGuiRenderer renderer, final float xStart, final float yStart,
-            final float uMin, final float vMin, final float radius, final float zLevel);
+    void drawTexturedCircle(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin, float radius,
+                            float zLevel);
 
-    public void drawColoredEmptyCircle(final IGuiRenderer renderer, final float startX, final float startY,
-            final float radius, final float zLevel, final Color c, final float thin);
+    void drawColoredEmptyCircle(IGuiRenderer renderer, float startX, float startY, float radius, float zLevel,
+                                Color color, float thin);
 
-    public void drawColoredCircle(final IGuiRenderer renderer, final float startX, final float startY,
-            final float radius, final float zLevel, final Color c);
+    void drawColoredCircle(IGuiRenderer renderer, float startX, float startY, float radius, float zLevel, Color c);
 
-    public void drawColoredLine(final IGuiRenderer renderer, final float startX, final float startY, final float endX,
-            final float endY, final float lineWeight, final float zLevel, final Color c);
+    void drawColoredLine(IGuiRenderer renderer, float startX, float startY, float endX, float endY, float lineWeight,
+                         float zLevel, Color c);
 
-    public void translateVecToScreenSpace(final Vector2i vec);
+    void translateVecToScreenSpace(Vector2i vec);
 
-    public String trimStringToPixelWidth(final String str, final int pixelWidth);
+    String trimStringToPixelWidth(String str, int pixelWidth);
 
-    public float getStringWidth(final String str);
+    float getStringWidth(String str);
 
-    public float getStringHeight();
+    float getStringHeight();
 }

@@ -1,12 +1,11 @@
 package org.yggard.brokkgui.shape;
 
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.paint.TextStyle;
-
-import fr.ourten.teabeans.value.BaseProperty;
 
 public class Text extends GuiShape
 {
@@ -19,7 +18,7 @@ public class Text extends GuiShape
     {
         super("text");
 
-        this.setxTranslate(posY);
+        this.setxTranslate(posX);
         this.setyTranslate(posY);
 
         this.textProperty = new BaseProperty<>(text, "textProperty");
@@ -39,8 +38,8 @@ public class Text extends GuiShape
         if (pass == EGuiRenderPass.MAIN)
             renderer.getHelper().drawString(this.getText(), (int) (this.getxPos() + this.getxTranslate()),
                     (int) (this.getyPos() + this.getyTranslate()), this.getzLevel(),
-                    this.getTextStyle().getTextColorProperty().getOrDefault(Color.BLACK), this.getTextAlignment(),
-                    this.getTextStyle().useShadow());
+                    this.getTextStyle().getTextColor(), this.getTextStyle().useShadow() ? this.getTextStyle()
+                            .getShadowColor() : Color.ALPHA, this.getTextAlignment());
     }
 
     public BaseProperty<String> getTextProperty()

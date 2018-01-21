@@ -1,27 +1,22 @@
 package org.yggard.brokkgui.control;
 
-import org.yggard.brokkgui.BrokkGuiPlatform;
-import org.yggard.brokkgui.data.EAlignment;
-import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.paint.TextStyle;
-
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.BrokkGuiPlatform;
+import org.yggard.brokkgui.data.EAlignment;
 
 public abstract class GuiLabeled extends GuiControl
 {
-    private final BaseProperty<TextStyle>  textStyleProperty;
     private final BaseProperty<EAlignment> textAlignmentProperty;
     private final BaseProperty<String>     textProperty;
 
-    private final BaseProperty<String>     ellipsisProperty;
-    private final BaseProperty<Boolean>    expandToTextProperty;
+    private final BaseProperty<String>  ellipsisProperty;
+    private final BaseProperty<Boolean> expandToTextProperty;
 
     public GuiLabeled(String type, final String text)
     {
         super(type);
 
-        this.textStyleProperty = new BaseProperty<>(new TextStyle(Color.BLACK), "textStyleProperty");
         this.textProperty = new BaseProperty<>(text, "textProperty");
         this.textAlignmentProperty = new BaseProperty<>(EAlignment.MIDDLE_CENTER, "textAlignmentProperty");
         this.ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
@@ -61,11 +56,6 @@ public abstract class GuiLabeled extends GuiControl
         return this.textProperty;
     }
 
-    public BaseProperty<TextStyle> getTextStyleProperty()
-    {
-        return this.textStyleProperty;
-    }
-
     public BaseProperty<String> getEllipsisProperty()
     {
         return this.ellipsisProperty;
@@ -94,26 +84,6 @@ public abstract class GuiLabeled extends GuiControl
     public void setText(final String text)
     {
         this.getTextProperty().setValue(text);
-    }
-
-    public TextStyle getTextStyle()
-    {
-        return this.getTextStyleProperty().getValue();
-    }
-
-    public void setTextStyle(final TextStyle textStyle)
-    {
-        this.getTextStyleProperty().setValue(textStyle);
-    }
-
-    public Color getTextColor()
-    {
-        return this.getTextStyle().getTextColor();
-    }
-
-    public void setTextColor(final Color textColor)
-    {
-        this.getTextStyle().setTextColor(textColor);
     }
 
     public String getEllipsis()
