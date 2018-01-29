@@ -64,6 +64,8 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     {
         super.onGuiClosed();
         Keyboard.enableRepeatEvents(false);
+
+        this.brokkgui.onClose();
     }
 
     @Override

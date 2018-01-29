@@ -39,6 +39,8 @@ public class BrokkGuiScreen implements IGuiWindow
     private final BaseProperty<StyleList>  userAgentStyleTreeProperty;
     private final BaseProperty<StyleList>  styleTreeProperty;
 
+    private final ListenerPool listenerPool;
+
     private IBrokkGuiImpl wrapper;
 
     public BrokkGuiScreen(final float xRelativePos, final float yRelativePos, final float width, final float height)
@@ -56,6 +58,8 @@ public class BrokkGuiScreen implements IGuiWindow
 
         this.screenWidthProperty = new BaseProperty<>(0, "screenWidthProperty");
         this.screenHeightProperty = new BaseProperty<>(0, "screenHeightProperty");
+
+        this.listenerPool = new ListenerPool();
 
         this.stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
         this.userAgentStylesheetProperty = new BaseProperty<>("/assets/brokkgui/css/user_agent.css", "userAgentStylesheetProperty");
@@ -193,6 +197,7 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public void onClose()
     {
+        this.listenerPool.clear();
         this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
@@ -331,6 +336,11 @@ public class BrokkGuiScreen implements IGuiWindow
     public int getScreenHeight()
     {
         return this.getScreenHeightProperty().getValue();
+    }
+
+    public ListenerPool getListeners()
+    {
+        return this.listenerPool;
     }
 
     /////////////////////
