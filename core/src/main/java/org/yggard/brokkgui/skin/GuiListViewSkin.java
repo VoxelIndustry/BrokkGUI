@@ -1,9 +1,6 @@
 package org.yggard.brokkgui.skin;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import fr.ourten.teabeans.listener.ListValueChangeListener;
 import org.yggard.brokkgui.behavior.GuiListViewBehavior;
 import org.yggard.brokkgui.element.GuiListCell;
 import org.yggard.brokkgui.element.GuiListView;
@@ -11,7 +8,9 @@ import org.yggard.brokkgui.event.ClickEvent;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 
-import fr.ourten.teabeans.listener.ListValueChangeListener;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class GuiListViewSkin<T> extends GuiBehaviorSkinBase<GuiListView<T>, GuiListViewBehavior<T>>
 {

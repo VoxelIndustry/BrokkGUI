@@ -27,7 +27,7 @@ public class Circle extends GuiShape
     }
 
     @Override
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
         if (pass == EGuiRenderPass.MAIN)
         {

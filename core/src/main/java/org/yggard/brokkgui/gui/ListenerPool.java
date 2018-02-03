@@ -19,15 +19,15 @@ public class ListenerPool
 
     public ListenerPool()
     {
-        this.invalidationMap = new IdentityHashMap<>();
-        this.valueChangeMap = new IdentityHashMap<>();
-        this.listValueChangeMap = new IdentityHashMap<>();
+        this.invalidationMap = new IdentityHashMap<>(8);
+        this.valueChangeMap = new IdentityHashMap<>(8);
+        this.listValueChangeMap = new IdentityHashMap<>(8);
     }
 
     public void attach(Observable obs, ValueInvalidationListener listener)
     {
         if (!this.invalidationMap.containsKey(obs))
-            this.invalidationMap.put(obs, new ArrayList<>());
+            this.invalidationMap.put(obs, new ArrayList<>(4));
         this.invalidationMap.get(obs).add(listener);
 
         obs.addListener(listener);
@@ -36,7 +36,7 @@ public class ListenerPool
     public <T> void attach(ObservableValue<T> obs, ValueChangeListener<T> listener)
     {
         if (!this.valueChangeMap.containsKey(obs))
-            this.valueChangeMap.put(obs, new ArrayList<>());
+            this.valueChangeMap.put(obs, new ArrayList<>(4));
         this.valueChangeMap.get(obs).add(listener);
 
         obs.addListener(listener);
@@ -45,7 +45,7 @@ public class ListenerPool
     public <T> void attach(ListProperty<T> obs, ListValueChangeListener<T> listener)
     {
         if (!this.listValueChangeMap.containsKey(obs))
-            this.listValueChangeMap.put(obs, new ArrayList<>());
+            this.listValueChangeMap.put(obs, new ArrayList<>(4));
         this.listValueChangeMap.get(obs).add(listener);
 
         obs.addListener(listener);

@@ -1,12 +1,12 @@
 package org.yggard.brokkgui.control;
 
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 import org.yggard.brokkgui.skin.IGuiSkinnable;
-
-import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.style.StyleSource;
 
 public abstract class GuiControl extends GuiFather implements IGuiSkinnable
 {
@@ -29,13 +29,21 @@ public abstract class GuiControl extends GuiFather implements IGuiSkinnable
             if (newValue != null)
                 newValue.attach(this);
         });
+        this.getStyle().registerProperty("-opacity", 1D, Double.class);
     }
 
     @Override
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int
+            mouseY)
     {
-        super.renderNode(renderer, pass, mouseX, mouseY);
+        if (this.getOpacity() != 1)
+            renderer.getHelper().startAlphaMask(this.getOpacity());
+
+        super.renderContent(renderer, pass, mouseX, mouseY);
         this.getSkin().render(pass, renderer, mouseX, mouseY);
+
+        if (this.getOpacity() != 1)
+            renderer.getHelper().closeAlphaMask();
     }
 
     protected abstract GuiSkinBase<?> makeDefaultSkin();
@@ -77,5 +85,20 @@ public abstract class GuiControl extends GuiFather implements IGuiSkinnable
     public void setBackground(Background background)
     {
         this.getBackgroundProperty().setValue(background);
+    }
+
+    public BaseProperty<Double> getOpacityProperty()
+    {
+        return this.getStyle().getStyleProperty("-opacity", Double.class);
+    }
+
+    public double getOpacity()
+    {
+        return this.getOpacityProperty().getValue();
+    }
+
+    public void setOpacity(double opacity)
+    {
+        this.getStyle().getStyleProperty("-opacity", Double.class).setStyle(StyleSource.CODE, 0, opacity);
     }
 }

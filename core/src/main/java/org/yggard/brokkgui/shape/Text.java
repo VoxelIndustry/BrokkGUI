@@ -33,7 +33,7 @@ public class Text extends GuiShape
     }
 
     @Override
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
         if (pass == EGuiRenderPass.MAIN)
             renderer.getHelper().drawString(this.getText(), (int) (this.getxPos() + this.getxTranslate()),

@@ -1,7 +1,6 @@
 package org.yggard.brokkgui.paint;
 
 import org.yggard.brokkgui.component.GuiNode;
-import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.shape.Rectangle;
 
 public class Background extends Rectangle
@@ -51,11 +50,5 @@ public class Background extends Rectangle
         this.getHeightProperty().unbind();
 
         oldNode.getStyle().removeAlias("background");
-    }
-
-    @Override
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
-    {
-        super.renderNode(renderer, pass, mouseX, mouseY);
     }
 }

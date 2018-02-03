@@ -10,6 +10,7 @@ import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
+import org.yggard.brokkgui.panel.GuiAbsolutePane;
 import org.yggard.brokkgui.panel.GuiRelativePane;
 import org.yggard.brokkgui.panel.GuiTabPane;
 
@@ -93,7 +94,8 @@ public class GuiDemo extends BrokkGuiScreen
         radioButtonPane.addChild(radioButton2, 0.5f, 0.4f);
         radioButtonPane.addChild(checkbox, 0.5f, 0.6f);
 
-        final GuiRelativePane labelPane = new GuiRelativePane();
+        final GuiAbsolutePane labelPane = new GuiAbsolutePane();
+        labelPane.setOpacity(0.5);
 
         final GuiLabel left = new GuiLabel("LEFT-CENTER");
         left.setTextAlignment(EAlignment.LEFT_CENTER);
@@ -104,10 +106,10 @@ public class GuiDemo extends BrokkGuiScreen
         final GuiLabel right = new GuiLabel("RIGHT");
         right.setTextAlignment(EAlignment.RIGHT_CENTER);
 
-        labelPane.addChild(left, 0, 0.5f);
-        labelPane.addChild(center, 0.5f, 0.5f);
-        labelPane.addChild(right, 1, 0.5f);
-        labelPane.setBackground(new Background(new Color(1, 0, 0, 0.5f)));
+        labelPane.addChild(left, 0, 95);
+        labelPane.addChild(center, 100, 95);
+        labelPane.addChild(right, 200, 95);
+        labelPane.setBackground(new Background(new Color(1, 0, 0)));
 
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);

@@ -32,6 +32,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     private       EventHandler<HoverEvent>   onHoverEvent;
     private       EventHandler<ClickEvent>   onClickEvent;
     private final BaseProperty<Boolean>      focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
+    private final BaseProperty<Boolean> visibleProperty;
 
     private final BaseProperty<String>    styleID;
     private final BaseSetProperty<String> styleClass;
@@ -64,6 +65,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.hoveredProperty = new BaseProperty<>(false, "hoveredProperty");
 
         this.focusableProperty = new BaseProperty<>(false, "focusableProperty");
+
+        this.visibleProperty = new BaseProperty<>(true, "visibleProperty");
 
         this.styleID = new BaseProperty<>(null, "styleIDProperty");
         this.styleClass = new BaseSetProperty<>(Collections.emptySet(), "styleClassListProperty");
@@ -114,16 +117,23 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         });
     }
 
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public final void renderNode(IGuiRenderer renderer, EGuiRenderPass pass, int mouseX, int mouseY)
     {
-        if (this.isPointInside(mouseX, mouseY))
+        if (this.isVisible())
         {
-            if (!this.isHovered())
-                this.setHovered(true);
+            if (this.isPointInside(mouseX, mouseY))
+            {
+                if (!this.isHovered())
+                    this.setHovered(true);
+            }
+            else if (this.isHovered())
+                this.setHovered(false);
+
+            this.renderContent(renderer, pass, mouseX, mouseY);
         }
-        else if (this.isHovered())
-            this.setHovered(false);
     }
+
+    protected abstract void renderContent(IGuiRenderer renderer, EGuiRenderPass pass, int mouseX, int mouseY);
 
     public void handleMouseInput()
     {
@@ -134,7 +144,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void handleClick(final int mouseX, final int mouseY, final int key)
     {
-        if (!this.isDisabled())
+        if (!this.isDisabled() && this.isVisible())
         {
             switch (key)
             {
@@ -400,6 +410,11 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         return this.focusableProperty;
     }
 
+    public BaseProperty<Boolean> getVisibleProperty()
+    {
+        return visibleProperty;
+    }
+
     public boolean isFocused()
     {
         return this.getFocusableProperty().getValue();
@@ -456,6 +471,16 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
             return;
         this.getHoveredProperty().setValue(hovered);
         this.getEventDispatcher().dispatchEvent(HoverEvent.TYPE, new HoverEvent(this, hovered));
+    }
+
+    public boolean isVisible()
+    {
+        return this.getVisibleProperty().getValue();
+    }
+
+    public void setVisible(boolean visible)
+    {
+        this.getVisibleProperty().setValue(visible);
     }
 
     /////////////////////

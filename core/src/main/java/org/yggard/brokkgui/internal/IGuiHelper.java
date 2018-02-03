@@ -60,4 +60,8 @@ public interface IGuiHelper
     float getStringWidth(String str);
 
     float getStringHeight();
+
+    void startAlphaMask(double opacity);
+
+    void closeAlphaMask();
 }

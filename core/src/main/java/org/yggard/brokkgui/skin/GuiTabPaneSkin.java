@@ -78,6 +78,6 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
             }
         });
         if (this.getModel().getSelectedTab() != null)
-            this.getModel().getSelectedTab().renderNode(renderer, pass, mouseX, mouseY);
+            this.getModel().getSelectedTab().renderChild(renderer, pass, mouseX, mouseY);
     }
 }

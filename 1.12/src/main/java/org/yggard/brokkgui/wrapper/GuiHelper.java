@@ -29,12 +29,16 @@ public class GuiHelper implements IGuiHelper
     private Minecraft           mc;
     private GuiRenderItemHelper itemHelper;
 
+    private double alphaMask;
+
     public GuiHelper()
     {
         this.mc = Minecraft.getMinecraft();
         this.itemRender = this.mc.getRenderItem();
 
         this.itemHelper = new GuiRenderItemHelper();
+
+        this.alphaMask = 1;
     }
 
     @Override
@@ -83,9 +87,9 @@ public class GuiHelper implements IGuiHelper
         else if (alignment.isDown())
             y -= this.mc.fontRenderer.FONT_HEIGHT;
 
-        if (shadowColor.getAlpha() != 1)
-            this.mc.fontRenderer.drawString(string, x + 1, y + 1, shadowColor.toRGBAInt(), false);
-        this.mc.fontRenderer.drawString(string, x, y, textColor.toRGBAInt(), false);
+        if (shadowColor.getAlpha() != 0)
+            this.mc.fontRenderer.drawString(string, x + 1, y + 1, this.applyAlphaMask(shadowColor).toRGBAInt(), false);
+        this.mc.fontRenderer.drawString(string, x, y, this.applyAlphaMask(textColor).toRGBAInt(), false);
         if (zLevel != 0)
             GL11.glPopMatrix();
         GlStateManager.resetColor();
@@ -115,7 +119,7 @@ public class GuiHelper implements IGuiHelper
                                  float uMax, float vMax, float width, float height, float zLevel)
     {
         this.enableAlpha();
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color(1, 1, 1, (float) (1 * this.alphaMask));
         renderer.beginDrawingQuads(true);
         renderer.addVertexWithUV(Math.floor(xStart), Math.floor(yStart + height), zLevel, uMin, vMax);
         renderer.addVertexWithUV(Math.floor(xStart + width), Math.floor(yStart + height), zLevel, uMax, vMax);
@@ -148,7 +152,7 @@ public class GuiHelper implements IGuiHelper
     {
         this.enableAlpha();
         GlStateManager.disableTexture2D();
-        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), (float) (color.getAlpha() * alphaMask));
         renderer.beginDrawingQuads(false);
         renderer.addVertex(Math.floor(startX), Math.floor(startY), zLevel);
         renderer.addVertex(Math.floor(startX), Math.floor(startY + height), zLevel);
@@ -172,7 +176,8 @@ public class GuiHelper implements IGuiHelper
 
             this.enableAlpha();
             GlStateManager.disableTexture2D();
-            GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+            GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), (float) (color.getAlpha() *
+                    alphaMask));
             renderer.beginDrawing(EGuiRenderMode.POINTS, false);
             while (x >= y)
             {
@@ -211,7 +216,7 @@ public class GuiHelper implements IGuiHelper
     {
         GlStateManager.disableTexture2D();
         this.enableAlpha();
-        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), (float) (c.getAlpha() * alphaMask));
         renderer.beginDrawing(EGuiRenderMode.POINTS, false);
         float r2 = radius * radius;
         float area = r2 * 4;
@@ -234,9 +239,10 @@ public class GuiHelper implements IGuiHelper
     @Override
     public void drawTexturedCircle(IGuiRenderer renderer, float xStart, float yStart,
                                    float uMin, float vMin, float uMax, float vMax,
-                                   float radius,
-                                   float zLevel)
+                                   float radius, float zLevel)
     {
+        this.enableAlpha();
+        GlStateManager.color(1,1,1, (float) alphaMask);
         renderer.beginDrawing(EGuiRenderMode.POINTS, true);
         float r2 = radius * radius;
         float area = r2 * 4;
@@ -252,6 +258,7 @@ public class GuiHelper implements IGuiHelper
                         uMin + tx / rr * (uMax - uMin), vMin + ty / rr * (vMax - vMin));
         }
         renderer.endDrawing();
+        this.disableAlpha();
     }
 
     @Override
@@ -268,7 +275,7 @@ public class GuiHelper implements IGuiHelper
     {
         GlStateManager.disableTexture2D();
         this.enableAlpha();
-        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), (float) (c.getAlpha() * alphaMask));
 
         renderer.beginDrawing(EGuiRenderMode.LINE, false);
         GL11.glLineWidth(lineWeight);
@@ -316,7 +323,7 @@ public class GuiHelper implements IGuiHelper
             net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, short1 / 1.0F, short2 / 1.0F);
 
-            this.itemHelper.renderItemStack(stack, (int) startX, (int) startY, zLevel, color);
+            this.itemHelper.renderItemStack(stack, (int) startX, (int) startY, zLevel, applyAlphaMask(color));
             this.getRenderItem().renderItemOverlayIntoGUI(font, stack, (int) startX, (int) startY, displayString);
             GlStateManager.popMatrix();
             GlStateManager.disableRescaleNormal();
@@ -384,7 +391,31 @@ public class GuiHelper implements IGuiHelper
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
-    public void enableAlpha()
+    @Override
+    public void startAlphaMask(double opacity)
+    {
+        this.alphaMask = opacity;
+        this.enableAlpha();
+    }
+
+    @Override
+    public void closeAlphaMask()
+    {
+        this.alphaMask = 1;
+        this.disableAlpha();
+    }
+
+    private Color applyAlphaMask(Color src)
+    {
+        if (this.alphaMask == 1)
+            return src;
+        Color result = Color.from(src);
+
+        result.setAlpha((float) (src.getAlpha() * this.alphaMask));
+        return result;
+    }
+
+    private void enableAlpha()
     {
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
@@ -394,7 +425,7 @@ public class GuiHelper implements IGuiHelper
                 GlStateManager.DestFactor.ZERO);
     }
 
-    public void disableAlpha()
+    private void disableAlpha()
     {
         GlStateManager.disableDepth();
         GlStateManager.disableAlpha();

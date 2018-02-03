@@ -56,10 +56,8 @@ public class GuiFather extends GuiNode
     }
 
     @Override
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
-        super.renderNode(renderer, pass, mouseX, mouseY);
-
         if ((this.getOverflowPolicy() == EOverflowPolicy.TRIM && pass == EGuiRenderPass.MAIN)
                 || (pass == EGuiRenderPass.SPECIAL && this.getOverflowPolicy() == EOverflowPolicy.TRIM_ALL))
         {
