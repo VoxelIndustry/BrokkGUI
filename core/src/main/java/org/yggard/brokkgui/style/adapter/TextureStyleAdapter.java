@@ -17,12 +17,12 @@ public class TextureStyleAdapter implements IStyleAdapter<Texture>
             case 1:
                 return new Texture(splitted[0].replace("\"", "").trim());
             case 3:
-                return new Texture(splitted[0].replace("\"", "").trim(), Integer.parseInt(splitted[1].trim()),
-                        Integer.parseInt(splitted[2].trim()));
+                return new Texture(splitted[0].replace("\"", "").trim(), Float.parseFloat(splitted[1].trim()),
+                        Float.parseFloat(splitted[2].trim()));
             case 5:
-                return new Texture(splitted[0].replace("\"", "").trim(), Integer.parseInt(splitted[1].trim()),
-                        Integer.parseInt(splitted[2].trim()), Integer.parseInt(splitted[3].trim()),
-                        Integer.parseInt(splitted[4].trim()));
+                return new Texture(splitted[0].replace("\"", "").trim(), Float.parseFloat(splitted[1].trim()),
+                        Float.parseFloat(splitted[2].trim()), Float.parseFloat(splitted[3].trim()),
+                        Float.parseFloat(splitted[4].trim()));
             default:
                 return null;
         }
