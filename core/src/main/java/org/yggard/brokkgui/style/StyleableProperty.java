@@ -4,10 +4,10 @@ import fr.ourten.teabeans.value.BaseProperty;
 
 public class StyleableProperty<T> extends BaseProperty<T>
 {
-    private final Class<T> valueClass;
-    private int            specificitySet;
-    private StyleSource    source;
-    private T              defaultValue;
+    private final Class<T>    valueClass;
+    private       int         specificitySet;
+    private       StyleSource source;
+    private       T           defaultValue;
 
     public StyleableProperty(T defaultValue, String name, Class<T> valueClass)
     {
@@ -21,7 +21,8 @@ public class StyleableProperty<T> extends BaseProperty<T>
 
     public boolean setStyle(StyleSource source, int specificity, T value)
     {
-        if (source.ordinal() >= this.source.ordinal() && specificity >= this.specificitySet)
+        if (source.ordinal() > this.source.ordinal() || (source.ordinal() == this.source.ordinal() &&
+                specificity >= this.specificitySet))
         {
             internalSetStyle(source, specificity, value);
             return true;
