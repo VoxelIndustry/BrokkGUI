@@ -167,8 +167,6 @@ public class GuiScrollPaneSkin extends GuiBehaviorSkinBase<ScrollPane, GuiScroll
     public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
         super.render(pass, renderer, mouseX, mouseY);
-        if (!this.getModel().getChildrens().isEmpty())
-            this.getModel().getChildrens().get(0).renderNode(renderer, pass, mouseX, mouseY);
         if (pass == EGuiRenderPass.SPECIAL)
         {
             if (this.getModel().getScrollXPolicy() == EScrollbarPolicy.ALWAYS

@@ -58,8 +58,8 @@ public class GuiFather extends GuiNode
     @Override
     public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
-        if ((this.getOverflowPolicy() == EOverflowPolicy.TRIM && pass == EGuiRenderPass.MAIN)
-                || (pass == EGuiRenderPass.SPECIAL && this.getOverflowPolicy() == EOverflowPolicy.TRIM_ALL))
+        if ((this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM.ordinal() && pass == EGuiRenderPass.MAIN)
+                || (pass == EGuiRenderPass.SPECIAL && this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM_ALL.ordinal()))
         {
             renderer.getHelper().beginScissor();
             renderer.getHelper().scissorBox(this.getxPos() + this.getxTranslate(),
