@@ -7,6 +7,7 @@ import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.style.tree.*;
 import org.yggard.brokkgui.util.NumberedLineIterator;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -56,6 +57,8 @@ public class StylesheetManager
         for (String styleSheet : styleSheets)
         {
             InputStream input = StylesheetManager.class.getResourceAsStream(styleSheet);
+            if (input == null)
+                throw new FileNotFoundException("Cannot load stylesheet " + styleSheet);
             NumberedLineIterator iterator = new NumberedLineIterator(
                     new InputStreamReader(input, Charsets.toCharset(StandardCharsets.UTF_8)));
             while (iterator.hasNext())
@@ -112,7 +115,7 @@ public class StylesheetManager
                 rtn.add(StyleSelectorType.ID, part.substring(1));
             else if (part.startsWith("."))
                 rtn.add(StyleSelectorType.CLASS, part.substring(1));
-            else if(pseudoClass == null)
+            else if (pseudoClass == null)
                 rtn.add(StyleSelectorType.TYPE, part);
             if (pseudoClass != null)
                 rtn.add(StyleSelectorType.PSEUDOCLASS, pseudoClass);
@@ -133,7 +136,7 @@ public class StylesheetManager
                 logger.severe("Found opening bracket at line " + content.getLineNumber() + " while inside a block");
                 return;
             }
-            String[] rule = currentLine.replace(';', ' ').trim().split(":",2);
+            String[] rule = currentLine.replace(';', ' ').trim().split(":", 2);
             elements.add(new StyleRule(rule[0].trim(), rule[1].trim()));
             if (!content.hasNext())
                 return;
