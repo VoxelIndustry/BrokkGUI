@@ -67,10 +67,7 @@ public class GuiHelper implements IGuiHelper
                            EAlignment alignment)
     {
         GlStateManager.enableBlend();
-        // This is a very, very, very ugly hack but I've not seen any other way
-        // to fix this minecraft bug. @see GlStateManager color(float colorRed,
-        // float colorGreen, float colorBlue, float colorAlpha) L 675
-        GlStateManager.color(0, 0, 0, 0);
+        GlStateManager.resetColor();
         if (zLevel != 0)
         {
             GL11.glPushMatrix();
