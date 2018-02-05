@@ -1,5 +1,8 @@
 package org.yggard.brokkgui.style;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -7,6 +10,7 @@ import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.style.tree.*;
 import org.yggard.brokkgui.util.NumberedLineIterator;
 
+import javax.annotation.Nonnull;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +18,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class StylesheetManager
@@ -29,9 +35,23 @@ public class StylesheetManager
 
     private Logger logger;
 
+    private LoadingCache<String, StyleList> styleCache;
+
     private StylesheetManager()
     {
         logger = Logger.getLogger("BrokkGui CSS Loader");
+
+        this.styleCache = CacheBuilder.newBuilder()
+                .maximumSize(100)
+                .expireAfterAccess(10, TimeUnit.MINUTES)
+                .build(new CacheLoader<String, StyleList>()
+                {
+                    @Override
+                    public StyleList load(@Nonnull String stylesheet) throws IOException
+                    {
+                        return loadStylesheet(stylesheet);
+                    }
+                });
     }
 
     public void refreshStylesheets(BrokkGuiScreen screen)
@@ -40,41 +60,47 @@ public class StylesheetManager
 
         try
         {
-            tree = this.loadStylesheet(ArrayUtils.addAll(new String[]{screen.getUserAgentStylesheetProperty()
+            tree = this.loadStylesheets(ArrayUtils.addAll(new String[]{screen.getUserAgentStylesheetProperty()
                     .getValue()}, screen.getStylesheetsProperty().getValue().toArray(new String[screen
                     .getStylesheetsProperty().size()])));
-        } catch (IOException e)
+        } catch (ExecutionException e)
         {
             e.printStackTrace();
         }
         screen.setStyleTree(tree);
     }
 
-    StyleList loadStylesheet(String... styleSheets) throws IOException
+    StyleList loadStylesheets(String... styleSheets) throws ExecutionException
     {
-        StyleList tree = new StyleList();
+        StyleList list = new StyleList();
 
         for (String styleSheet : styleSheets)
-        {
-            InputStream input = StylesheetManager.class.getResourceAsStream(styleSheet);
-            if (input == null)
-                throw new FileNotFoundException("Cannot load stylesheet " + styleSheet);
-            NumberedLineIterator iterator = new NumberedLineIterator(
-                    new InputStreamReader(input, Charsets.toCharset(StandardCharsets.UTF_8)));
-            while (iterator.hasNext())
-            {
-                String line = iterator.nextLine();
-                if (StringUtils.isEmpty(line))
-                    continue;
+            list.merge(this.styleCache.get(styleSheet));
+        return list;
+    }
 
-                if (line.contains("{"))
-                    readBlock(readSelector(line), tree, iterator);
-                else
-                    logger.severe("Expected { at line " + (iterator.getLineNumber()));
-            }
-            input.close();
+    StyleList loadStylesheet(String styleSheet) throws IOException
+    {
+        StyleList list = new StyleList();
+
+        InputStream input = StylesheetManager.class.getResourceAsStream(styleSheet);
+        if (input == null)
+            throw new FileNotFoundException("Cannot load stylesheet " + styleSheet);
+        NumberedLineIterator iterator = new NumberedLineIterator(
+                new InputStreamReader(input, Charsets.toCharset(StandardCharsets.UTF_8)));
+        while (iterator.hasNext())
+        {
+            String line = iterator.nextLine();
+            if (StringUtils.isEmpty(line))
+                continue;
+
+            if (line.contains("{"))
+                readBlock(readSelector(line), list, iterator);
+            else
+                logger.severe("Expected { at line " + iterator.getLineNumber());
         }
-        return tree;
+        input.close();
+        return list;
     }
 
     private IStyleSelector readSelector(String currentLine)

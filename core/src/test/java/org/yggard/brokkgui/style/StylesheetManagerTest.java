@@ -3,9 +3,12 @@ package org.yggard.brokkgui.style;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.yggard.brokkgui.style.tree.*;
+import org.yggard.brokkgui.style.tree.StyleList;
+import org.yggard.brokkgui.style.tree.StyleSelector;
+import org.yggard.brokkgui.style.tree.StyleSelectorHierarchic;
+import org.yggard.brokkgui.style.tree.StyleSelectorType;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,8 +21,8 @@ public class StylesheetManagerTest
         StyleList list = null;
         try
         {
-            list = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test.css");
-        } catch (IOException e)
+            list = StylesheetManager.getInstance().loadStylesheets("/assets/brokkgui/css/test.css");
+        } catch (ExecutionException e)
         {
             e.printStackTrace();
         }

@@ -16,6 +16,11 @@ public class StyleList
         this.styleList.add(this.wildcard);
     }
 
+    public void merge(StyleList src)
+    {
+        src.getInternalStyleList().forEach(entry -> this.addEntry(entry.getSelector(), entry.getRules()));
+    }
+
     public void addEntry(IStyleSelector selectors, Set<StyleRule> rules)
     {
         StyleEntry lastAdded;

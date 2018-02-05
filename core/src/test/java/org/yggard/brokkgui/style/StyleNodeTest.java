@@ -8,7 +8,7 @@ import org.yggard.brokkgui.paint.ColorConstants;
 import org.yggard.brokkgui.panel.GuiPane;
 import org.yggard.brokkgui.style.tree.StyleList;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,8 +21,8 @@ public class StyleNodeTest
         StyleList tree = null;
         try
         {
-            tree = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test_simple_border.css");
-        } catch (IOException e)
+            tree = StylesheetManager.getInstance().loadStylesheets("/assets/brokkgui/css/test_simple_border.css");
+        } catch (ExecutionException e)
         {
             e.printStackTrace();
         }
@@ -42,8 +42,8 @@ public class StyleNodeTest
         StyleList tree = null;
         try
         {
-            tree = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test_hierarchic_border.css");
-        } catch (IOException e)
+            tree = StylesheetManager.getInstance().loadStylesheets("/assets/brokkgui/css/test_hierarchic_border.css");
+        } catch (ExecutionException e)
         {
             e.printStackTrace();
         }
@@ -75,8 +75,8 @@ public class StyleNodeTest
         StyleList tree = null;
         try
         {
-            tree = StylesheetManager.getInstance().loadStylesheet("/assets/brokkgui/css/test_background_alias.css");
-        } catch (IOException e)
+            tree = StylesheetManager.getInstance().loadStylesheets("/assets/brokkgui/css/test_background_alias.css");
+        } catch (ExecutionException e)
         {
             e.printStackTrace();
         }
