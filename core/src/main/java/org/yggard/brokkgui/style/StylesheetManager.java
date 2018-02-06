@@ -7,7 +7,9 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
-import org.yggard.brokkgui.style.tree.*;
+import org.yggard.brokkgui.style.tree.IStyleSelector;
+import org.yggard.brokkgui.style.tree.StyleList;
+import org.yggard.brokkgui.style.tree.StyleRule;
 import org.yggard.brokkgui.util.NumberedLineIterator;
 
 import javax.annotation.Nonnull;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -36,6 +39,7 @@ public class StylesheetManager
     private Logger logger;
 
     private LoadingCache<String, StyleList> styleCache;
+    private StyleSelectorParser             selectorParser;
 
     private StylesheetManager()
     {
@@ -52,6 +56,8 @@ public class StylesheetManager
                         return loadStylesheet(stylesheet);
                     }
                 });
+
+        this.selectorParser = new StyleSelectorParser();
     }
 
     public void refreshStylesheets(BrokkGuiScreen screen)
@@ -95,7 +101,13 @@ public class StylesheetManager
                 continue;
 
             if (line.contains("{"))
-                readBlock(readSelector(line), list, iterator);
+            {
+                IStyleSelector[] selectors = selectorParser.readSelectors(line);
+                Set<StyleRule> rules = readBlock(iterator);
+
+                for (IStyleSelector selector : selectors)
+                    list.addEntry(selector, rules);
+            }
             else
                 logger.severe("Expected { at line " + iterator.getLineNumber());
         }
@@ -103,56 +115,10 @@ public class StylesheetManager
         return list;
     }
 
-    private IStyleSelector readSelector(String currentLine)
-    {
-        String selector = currentLine;
-
-        selector = selector.replace('{', ' ').trim().replace(" ", "");
-
-        if (selector.contains(">"))
-            return parseHierarchicSelector(selector);
-        else
-            return parseSimpleSelector(selector);
-    }
-
-    private IStyleSelector parseHierarchicSelector(String selector)
-    {
-        boolean direct = false;
-
-        if (selector.charAt(selector.indexOf('>') + 1) != '>')
-            direct = true;
-        String[] splitted = selector.split(direct ? ">" : ">>", 2);
-        return new StyleSelectorHierarchic(parseSimpleSelector(splitted[0]), splitted[1].contains(">") ?
-                parseHierarchicSelector(splitted[1]) : parseSimpleSelector(splitted[1]), direct);
-    }
-
-    private IStyleSelector parseSimpleSelector(String selector)
-    {
-        StyleSelector rtn = new StyleSelector();
-        for (String part : selector.split("(?=[.#:])"))
-        {
-            String pseudoClass = null;
-            if (part.contains(":"))
-            {
-                pseudoClass = part.split(":")[1];
-                part = part.split(":")[0];
-            }
-            if (part.startsWith("#"))
-                rtn.add(StyleSelectorType.ID, part.substring(1));
-            else if (part.startsWith("."))
-                rtn.add(StyleSelectorType.CLASS, part.substring(1));
-            else if (pseudoClass == null)
-                rtn.add(StyleSelectorType.TYPE, part);
-            if (pseudoClass != null)
-                rtn.add(StyleSelectorType.PSEUDOCLASS, pseudoClass);
-        }
-        return rtn;
-    }
-
-    private void readBlock(IStyleSelector selectors, StyleList tree, NumberedLineIterator content)
+    private Set<StyleRule> readBlock(NumberedLineIterator content)
     {
         if (!content.hasNext())
-            return;
+            return Collections.emptySet();
         String currentLine = content.nextLine();
         Set<StyleRule> elements = new HashSet<>();
         while (!StringUtils.contains(currentLine, "}"))
@@ -160,14 +126,14 @@ public class StylesheetManager
             if (StringUtils.contains(currentLine, "{"))
             {
                 logger.severe("Found opening bracket at line " + content.getLineNumber() + " while inside a block");
-                return;
+                return Collections.emptySet();
             }
             String[] rule = currentLine.replace(';', ' ').trim().split(":", 2);
             elements.add(new StyleRule(rule[0].trim(), rule[1].trim()));
             if (!content.hasNext())
-                return;
+                return Collections.emptySet();
             currentLine = content.nextLine();
         }
-        tree.addEntry(selectors, elements);
+        return elements;
     }
 }
