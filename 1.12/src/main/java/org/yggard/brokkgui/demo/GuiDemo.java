@@ -1,31 +1,26 @@
 package org.yggard.brokkgui.demo;
 
+import fr.ourten.teabeans.binding.BaseBinding;
 import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.control.GuiToggleGroup;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.EHAlignment;
-import org.yggard.brokkgui.element.GuiButton;
-import org.yggard.brokkgui.element.GuiCheckbox;
-import org.yggard.brokkgui.element.GuiLabel;
-import org.yggard.brokkgui.element.GuiListView;
-import org.yggard.brokkgui.element.GuiProgressBar;
-import org.yggard.brokkgui.element.GuiRadioButton;
-import org.yggard.brokkgui.element.GuiTextfield;
+import org.yggard.brokkgui.element.*;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
+import org.yggard.brokkgui.panel.GuiAbsolutePane;
 import org.yggard.brokkgui.panel.GuiRelativePane;
 import org.yggard.brokkgui.panel.GuiTabPane;
-import org.yggard.brokkgui.skin.GuiButtonSkin;
-
-import fr.ourten.teabeans.binding.BaseBinding;
 
 public class GuiDemo extends BrokkGuiScreen
 {
     public GuiDemo()
     {
         super(0.5f, 0.5f, 200, 200);
+
+        this.addStylesheet("/assets/brokkguidemo/gui/css/demo.css");
 
         final GuiRelativePane pane = new GuiRelativePane();
         this.setMainPanel(pane);
@@ -35,23 +30,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         button.setWidth(200);
         button.setHeight(30);
-
-        button.getSkin().setBorderColor(Color.GREEN);
-        button.getSkin().setBorderThin(2);
-
-        final Background background = new Background(Color.AQUA);
-        final Background hoverBack = new Background(Color.YELLOW);
-        final Background disableBack = new Background(Color.RED);
-
-        ((GuiButtonSkin) button.getSkin()).setBackground(background);
-        ((GuiButtonSkin) button.getSkin()).setHoveredBackground(hoverBack);
-        ((GuiButtonSkin) button.getSkin()).setDisabledBackground(disableBack);
-
-        final GuiButton b2 = new GuiButton("B2");
-
-        ((GuiButtonSkin) b2.getSkin()).setBackground(background);
-        ((GuiButtonSkin) b2.getSkin()).setHoveredBackground(hoverBack);
-        ((GuiButtonSkin) b2.getSkin()).setDisabledBackground(disableBack);
+        button.setStyle("-border-color: green; -border-thin: 2; -text-color: khaki");
 
         button.setOnClickEvent(e -> System.out.println("clicked"));
 
@@ -62,9 +41,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         listView.setCellHeight(20);
         listView.setCellWidth(100);
-
-        listView.getSkin().setBorderColor(Color.GRAY);
-        listView.getSkin().setBorderThin(1);
+        listView.setStyle("-border-color: gray; -border-thin: 1;");
 
         listView.setPlaceholder(new GuiLabel("I'm a placeholder"));
 
@@ -85,15 +62,13 @@ public class GuiDemo extends BrokkGuiScreen
         });
 
         progressBar.setHeight(20);
-        progressBar.getSkin().setBorderColor(Color.RED);
-        progressBar.getSkin().setBorderThin(1);
+        progressBar.setStyle("-border-color: red; -border-thin: 2;");
 
         final GuiTextfield field = new GuiTextfield();
         field.setWidth(200);
         field.setHeight(40);
 
-        field.getSkin().setBorderColor(Color.BLACK);
-        field.getSkin().setBorderThin(1);
+        field.setStyle("-border-color: black; -border-thin: 1;");
 
         final GuiRelativePane radioButtonPane = new GuiRelativePane();
         radioButtonPane.setBackground(new Background(Color.LIGHT_GRAY));
@@ -105,6 +80,7 @@ public class GuiDemo extends BrokkGuiScreen
         radioButton.setHeightRatio(0.05f);
 
         radioButton2.setHeightRatio(0.05f);
+        radioButton2.setStyle("-text-color: green");
 
         checkbox.setHeightRatio(0.05f);
         checkbox.setLabelAlignment(EHAlignment.LEFT);
@@ -118,7 +94,8 @@ public class GuiDemo extends BrokkGuiScreen
         radioButtonPane.addChild(radioButton2, 0.5f, 0.4f);
         radioButtonPane.addChild(checkbox, 0.5f, 0.6f);
 
-        final GuiRelativePane labelPane = new GuiRelativePane();
+        final GuiAbsolutePane labelPane = new GuiAbsolutePane();
+        labelPane.setOpacity(0.5);
 
         final GuiLabel left = new GuiLabel("LEFT-CENTER");
         left.setTextAlignment(EAlignment.LEFT_CENTER);
@@ -129,16 +106,15 @@ public class GuiDemo extends BrokkGuiScreen
         final GuiLabel right = new GuiLabel("RIGHT");
         right.setTextAlignment(EAlignment.RIGHT_CENTER);
 
-        labelPane.addChild(left, 0, 0.5f);
-        labelPane.addChild(center, 0.5f, 0.5f);
-        labelPane.addChild(right, 1, 0.5f);
-        labelPane.setBackground(new Background(new Color(1, 0, 0, 0.5f)));
+        labelPane.addChild(left, 0, 95);
+        labelPane.addChild(center, 100, 95);
+        labelPane.addChild(right, 200, 95);
+        labelPane.setBackground(new Background(new Color(1, 0, 0)));
 
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);
         tabPane.setHeight(200);
-        tabPane.getSkin().setBorderColor(Color.YELLOW);
-        tabPane.getSkin().setBorderThin(1);
+        tabPane.setStyle("-border-color: yellow; -border-thin: 1;");
         tabPane.addTab(new GuiTab("Textfield", field));
         tabPane.addTab(new GuiTab("ListView", listView));
         tabPane.addTab(new GuiTab("Progress", progressBar));
@@ -149,8 +125,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         pane.addChild(tabPane);
 
-        this.getMainPanel().setBorderColor(Color.AQUA);
-        this.getMainPanel().setBorderThin(1);
+        this.getMainPanel().setID("mainpane");
     }
 
     @Override

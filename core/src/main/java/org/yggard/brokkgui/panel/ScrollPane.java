@@ -5,7 +5,6 @@ import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiControl;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.event.ScrollEvent;
-import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
 import org.yggard.brokkgui.policy.EScrollbarPolicy;
 import org.yggard.brokkgui.skin.GuiScrollPaneSkin;
@@ -25,12 +24,12 @@ public class ScrollPane extends GuiControl
 
     private EScrollbarPolicy          scrollXPolicy, scrollYPolicy;
 
-    private final BaseProperty<Color> scrollbarColorProperty;
-
     private EventHandler<ScrollEvent> onScrollEvent;
 
     public ScrollPane(final GuiNode node)
     {
+        super("scrollpane");
+
         this.scrollXProperty = new BaseProperty<>(0f, "scrollXProperty");
         this.scrollYProperty = new BaseProperty<>(0f, "scrollYProperty");
 
@@ -38,8 +37,6 @@ public class ScrollPane extends GuiControl
         this.trueHeightProperty = new BaseProperty<>(0f, "trueHeightProperty");
 
         this.scrollSpeedProperty = new BaseProperty<>(1f, "scrollSpeedProperty");
-
-        this.scrollbarColorProperty = new BaseProperty<>(Color.LIGHT_GRAY, "scrollbarColorProperty");
 
         this.scrollXPolicy = this.scrollYPolicy = EScrollbarPolicy.NEEDED;
         this.setOverflowPolicy(EOverflowPolicy.TRIM_ALL);
@@ -94,11 +91,6 @@ public class ScrollPane extends GuiControl
     public BaseProperty<Float> getTrueHeightProperty()
     {
         return this.trueHeightProperty;
-    }
-
-    public BaseProperty<Color> getScrollbarColorProperty()
-    {
-        return this.scrollbarColorProperty;
     }
 
     public BaseProperty<Float> getScrollSpeedProperty()
@@ -156,20 +148,10 @@ public class ScrollPane extends GuiControl
         this.scrollYPolicy = scrollYPolicy;
     }
 
-    public Color getScrollbarColor()
-    {
-        return this.getScrollbarColorProperty().getValue();
-    }
-
-    public void setScrollbarColor(final Color color)
-    {
-        this.getScrollbarColorProperty().setValue(color);
-    }
-
     /**
      *
-     * @return the ScrollSpeed value of the ScrollPane. It represent the
-     *         multiplier used on the mouse delta when scrolling. Default is 1.
+     * @return the ScrollSpeed value of the ScrollPane. It represent the multiplier
+     *         used on the mouse delta when scrolling. Default is 1.
      */
     public float getScrollSpeed()
     {

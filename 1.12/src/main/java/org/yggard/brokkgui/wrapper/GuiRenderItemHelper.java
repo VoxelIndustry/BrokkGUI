@@ -31,8 +31,10 @@ public class GuiRenderItemHelper
         this.itemRender = this.mc.getRenderItem();
     }
 
-    public void renderItemStack(ItemStack stack, int x, int y, Color color)
+    public void renderItemStack(ItemStack stack, int x, int y, float zLevel, Color color)
     {
+        GlStateManager.translate(0.0F, 0.0F, 32.0F);
+
         IBakedModel model = this.getRenderItem().getItemModelMesher().getItemModel(stack);
         model = model.getOverrides().handleItemState(model, stack, null, Minecraft.getMinecraft().player);
 
@@ -44,7 +46,7 @@ public class GuiRenderItemHelper
         GlStateManager.alphaFunc(516, 0.1F);
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        this.setupGuiTransform(x, y, model.isGui3d(), 50);
+        this.setupGuiTransform(x, y, model.isGui3d(), (int) zLevel + 50);
         model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model,
                 ItemCameraTransforms.TransformType.GUI, false);
 
@@ -115,7 +117,7 @@ public class GuiRenderItemHelper
 
             if (flag && bakedquad.hasTintIndex())
             {
-                k = this.mc.getItemColors().getColorFromItemstack(stack, bakedquad.getTintIndex());
+                k = this.mc.getItemColors().colorMultiplier(stack, bakedquad.getTintIndex());
 
                 if (EntityRenderer.anaglyphEnable)
                     k = TextureUtil.anaglyphColor(k);

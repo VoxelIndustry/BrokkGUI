@@ -25,9 +25,11 @@ import java.util.List;
 
 public class GuiHelper implements IGuiHelper
 {
-    private RenderItem                itemRender;
-    private final Minecraft           mc;
-    private final GuiRenderItemHelper itemHelper;
+    private RenderItem          itemRender;
+    private Minecraft           mc;
+    private GuiRenderItemHelper itemHelper;
+
+    private double alphaMask;
 
     public GuiHelper()
     {
@@ -35,38 +37,37 @@ public class GuiHelper implements IGuiHelper
         this.itemRender = this.mc.getRenderItem();
 
         this.itemHelper = new GuiRenderItemHelper();
+
+        this.alphaMask = 1;
     }
 
     @Override
-    public final void bindTexture(final Texture texture)
+    public void bindTexture(Texture texture)
     {
         this.mc.renderEngine.bindTexture(new ResourceLocation(texture.getResource()));
     }
 
     @Override
-    public final void scissorBox(final float f, final float g, final float h, final float i)
+    public void scissorBox(float f, float g, float h, float i)
     {
-        final int width = (int) (h - f);
-        final int height = (int) (i - g);
-        final ScaledResolution sr = new ScaledResolution(this.mc);
-        final int factor = sr.getScaleFactor();
-        final GuiScreen currentScreen = this.mc.currentScreen;
+        int width = (int) (h - f);
+        int height = (int) (i - g);
+        ScaledResolution sr = new ScaledResolution(this.mc);
+        int factor = sr.getScaleFactor();
+        GuiScreen currentScreen = this.mc.currentScreen;
         if (currentScreen != null)
         {
-            final int bottomY = (int) (currentScreen.height - i);
+            int bottomY = (int) (currentScreen.height - i);
             GL11.glScissor((int) (f * factor), bottomY * factor, width * factor, height * factor);
         }
     }
 
     @Override
-    public final void drawString(final String string, int x, int y, final float zLevel, final Color color,
-            final EAlignment alignment, final boolean shadow)
+    public void drawString(String string, int x, int y, float zLevel, Color textColor, Color shadowColor,
+                           EAlignment alignment)
     {
         GlStateManager.enableBlend();
-        // This is a very, very, very ugly hack but I've not seen any other way
-        // to fix this minecraft bug. @see GlStateManager color(float colorRed,
-        // float colorGreen, float colorBlue, float colorAlpha) L 675
-        GlStateManager.color(0, 0, 0, 0);
+        GlStateManager.resetColor();
         if (zLevel != 0)
         {
             GL11.glPushMatrix();
@@ -83,10 +84,9 @@ public class GuiHelper implements IGuiHelper
         else if (alignment.isDown())
             y -= this.mc.fontRenderer.FONT_HEIGHT;
 
-        if (!shadow)
-            this.mc.fontRenderer.drawString(string, x, y, color.toRGBAInt());
-        else
-            this.mc.fontRenderer.drawStringWithShadow(string, x, y, color.toRGBAInt());
+        if (shadowColor.getAlpha() != 0)
+            this.mc.fontRenderer.drawString(string, x + 1, y + 1, this.applyAlphaMask(shadowColor).toRGBAInt(), false);
+        this.mc.fontRenderer.drawString(string, x, y, this.applyAlphaMask(textColor).toRGBAInt(), false);
         if (zLevel != 0)
             GL11.glPopMatrix();
         GlStateManager.resetColor();
@@ -94,33 +94,29 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public final void drawString(final String string, final double x, final double y, final float zLevel,
-            final Color color, final boolean shadow)
+    public void drawString(String string, double x, double y, float zLevel, Color textColor, Color shadowColor)
     {
-        this.drawString(string, (int) x, (int) y, zLevel, color, EAlignment.LEFT_UP, shadow);
+        this.drawString(string, (int) x, (int) y, zLevel, textColor, shadowColor, EAlignment.LEFT_UP);
     }
 
     @Override
-    public final void drawString(final String string, final double x, final double y, final float zLevel,
-            final Color color, final EAlignment alignment)
+    public void drawString(String string, double x, double y, float zLevel, Color textColor, EAlignment alignment)
     {
-        this.drawString(string, (int) x, (int) y, zLevel, color, alignment, true);
+        this.drawString(string, (int) x, (int) y, zLevel, textColor, Color.ALPHA, alignment);
     }
 
     @Override
-    public final void drawString(final String string, final double x, final double y, final float zLevel,
-            final Color color)
+    public void drawString(String string, double x, double y, float zLevel, Color textColor)
     {
-        this.drawString(string, (int) x, (int) y, zLevel, color, EAlignment.LEFT_UP, true);
+        this.drawString(string, (int) x, (int) y, zLevel, textColor, Color.ALPHA, EAlignment.LEFT_UP);
     }
 
     @Override
-    public final void drawTexturedRect(final IGuiRenderer renderer, final float xStart, final float yStart,
-            final float uMin, final float vMin, final float uMax, final float vMax, final float width,
-            final float height, final float zLevel)
+    public void drawTexturedRect(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin,
+                                 float uMax, float vMax, float width, float height, float zLevel)
     {
         this.enableAlpha();
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color(1, 1, 1, (float) (1 * this.alphaMask));
         renderer.beginDrawingQuads(true);
         renderer.addVertexWithUV(Math.floor(xStart), Math.floor(yStart + height), zLevel, uMin, vMax);
         renderer.addVertexWithUV(Math.floor(xStart + width), Math.floor(yStart + height), zLevel, uMax, vMax);
@@ -131,15 +127,15 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public final void drawTexturedRect(final IGuiRenderer renderer, final float xStart, final float yStart,
-            final float uMin, final float vMin, final float width, final float height, final float zLevel)
+    public void drawTexturedRect(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin,
+                                 float width, float height, float zLevel)
     {
         this.drawTexturedRect(renderer, xStart, yStart, uMin, vMin, 1, 1, width, height, zLevel);
     }
 
     @Override
-    public final void drawColoredEmptyRect(final IGuiRenderer renderer, final float startX, final float startY,
-            final float width, final float height, final float zLevel, final Color c, final float thin)
+    public void drawColoredEmptyRect(IGuiRenderer renderer, float startX, float startY, float width, float height,
+                                     float zLevel, Color c, float thin)
     {
         this.drawColoredRect(renderer, startX, startY, width - thin, thin, zLevel, c);
         this.drawColoredRect(renderer, startX + width - thin, startY, thin, height - thin, zLevel, c);
@@ -148,12 +144,12 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public final void drawColoredRect(final IGuiRenderer renderer, final float startX, final float startY,
-            final float width, final float height, final float zLevel, final Color c)
+    public void drawColoredRect(IGuiRenderer renderer, float startX, float startY,
+                                float width, float height, float zLevel, Color color)
     {
         this.enableAlpha();
         GlStateManager.disableTexture2D();
-        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), (float) (color.getAlpha() * alphaMask));
         renderer.beginDrawingQuads(false);
         renderer.addVertex(Math.floor(startX), Math.floor(startY), zLevel);
         renderer.addVertex(Math.floor(startX), Math.floor(startY + height), zLevel);
@@ -166,8 +162,8 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public final void drawColoredEmptyCircle(final IGuiRenderer renderer, final float startX, final float startY,
-            final float radius, final float zLevel, final Color c, final float thin)
+    public void drawColoredEmptyCircle(IGuiRenderer renderer, float startX, float startY, float radius, float zLevel,
+                                       Color color, float thin)
     {
         if (thin > 0)
         {
@@ -177,7 +173,8 @@ public class GuiHelper implements IGuiHelper
 
             this.enableAlpha();
             GlStateManager.disableTexture2D();
-            GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+            GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), (float) (color.getAlpha() *
+                    alphaMask));
             renderer.beginDrawing(EGuiRenderMode.POINTS, false);
             while (x >= y)
             {
@@ -207,25 +204,25 @@ public class GuiHelper implements IGuiHelper
             this.disableAlpha();
         }
         if (thin > 1)
-            this.drawColoredEmptyCircle(renderer, startX + 1, startY + 1, radius - 1, zLevel, c, thin - 1);
+            this.drawColoredEmptyCircle(renderer, startX + 1, startY + 1, radius - 1, zLevel, color, thin - 1);
     }
 
     @Override
-    public final void drawColoredCircle(final IGuiRenderer renderer, final float startX, final float startY,
-            final float radius, final float zLevel, final Color c)
+    public void drawColoredCircle(IGuiRenderer renderer, float startX, float startY,
+                                  float radius, float zLevel, Color c)
     {
         GlStateManager.disableTexture2D();
         this.enableAlpha();
-        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), (float) (c.getAlpha() * alphaMask));
         renderer.beginDrawing(EGuiRenderMode.POINTS, false);
-        final float r2 = radius * radius;
-        final float area = r2 * 4;
-        final float rr = radius * 2;
+        float r2 = radius * radius;
+        float area = r2 * 4;
+        float rr = radius * 2;
 
         for (int i = 0; i < area; i++)
         {
-            final float tx = i % rr - radius;
-            final float ty = i / rr - radius;
+            float tx = i % rr - radius;
+            float ty = i / rr - radius;
 
             if (tx * tx + ty * ty <= r2)
                 renderer.addVertex(Math.floor(startX + tx), Math.floor(startY + ty), zLevel);
@@ -237,41 +234,45 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public void drawTexturedCircle(final IGuiRenderer renderer, final float xStart, final float yStart,
-            final float uMin, final float vMin, final float uMax, final float vMax, final float radius,
-            final float zLevel)
+    public void drawTexturedCircle(IGuiRenderer renderer, float xStart, float yStart,
+                                   float uMin, float vMin, float uMax, float vMax,
+                                   float radius, float zLevel)
     {
+        this.enableAlpha();
+        GlStateManager.color(1,1,1, (float) alphaMask);
         renderer.beginDrawing(EGuiRenderMode.POINTS, true);
-        final float r2 = radius * radius;
-        final float area = r2 * 4;
-        final float rr = radius * 2;
+        float r2 = radius * radius;
+        float area = r2 * 4;
+        float rr = radius * 2;
 
         for (int i = 0; i < area; i++)
         {
-            final float tx = i % rr - radius;
-            final float ty = i / rr - radius;
+            float tx = i % rr - radius;
+            float ty = i / rr - radius;
 
             if (tx * tx + ty * ty <= r2)
                 renderer.addVertexWithUV(Math.floor(xStart + tx), Math.floor(yStart + ty), zLevel,
                         uMin + tx / rr * (uMax - uMin), vMin + ty / rr * (vMax - vMin));
         }
         renderer.endDrawing();
+        this.disableAlpha();
     }
 
     @Override
-    public void drawTexturedCircle(final IGuiRenderer renderer, final float xStart, final float yStart,
-            final float uMin, final float vMin, final float radius, final float zLevel)
+    public void drawTexturedCircle(IGuiRenderer renderer, float xStart, float yStart,
+                                   float uMin, float vMin, float radius, float zLevel)
     {
         this.drawTexturedCircle(renderer, xStart, yStart, uMin, vMin, 1, 1, radius, zLevel);
     }
 
     @Override
-    public final void drawColoredLine(final IGuiRenderer renderer, final float startX, final float startY,
-            final float endX, final float endY, final float lineWeight, final float zLevel, final Color c)
+    public void drawColoredLine(IGuiRenderer renderer, float startX, float startY,
+                                float endX, float endY, float lineWeight, float zLevel,
+                                Color c)
     {
         GlStateManager.disableTexture2D();
         this.enableAlpha();
-        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        GlStateManager.color(c.getRed(), c.getGreen(), c.getBlue(), (float) (c.getAlpha() * alphaMask));
 
         renderer.beginDrawing(EGuiRenderMode.LINE, false);
         GL11.glLineWidth(lineWeight);
@@ -285,22 +286,23 @@ public class GuiHelper implements IGuiHelper
         this.disableAlpha();
     }
 
-    public final void drawItemStack(final IGuiRenderer renderer, final float startX, final float startY,
-            final float width, final float height, final float zLevel, final ItemStack stack, Color color)
+    public void drawItemStack(IGuiRenderer renderer, float startX, float startY,
+                              float width, float height, float zLevel, ItemStack stack,
+                              Color color)
     {
         this.drawItemStack(renderer, startX, startY, width, height, zLevel, stack, null, color);
     }
 
-    public final void drawItemStack(final IGuiRenderer renderer, final float startX, final float startY,
-            final float width, final float height, final float zLevel, final ItemStack stack,
-            final String displayString, Color color)
+    public void drawItemStack(IGuiRenderer renderer, float startX, float startY,
+                              float width, float height, float zLevel, ItemStack stack,
+                              String displayString, Color color)
     {
         GlStateManager.color(1.0F, 1.0F, 1.0F);
 
         if (!stack.isEmpty())
         {
-            final float scaleX = width / 18;
-            final float scaleY = height / 18;
+            float scaleX = width / 18;
+            float scaleY = height / 18;
             GL11.glPushMatrix();
             GL11.glTranslated(-(startX * (scaleX - 1)) - 8 * scaleX, -(startY * (scaleY - 1)) - 8 * scaleY, 0);
             GlStateManager.scale(scaleX, scaleY, 1);
@@ -313,12 +315,12 @@ public class GuiHelper implements IGuiHelper
 
             GlStateManager.enableRescaleNormal();
             GlStateManager.enableLighting();
-            final short short1 = 240;
-            final short short2 = 240;
+            short short1 = 240;
+            short short2 = 240;
             net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, short1 / 1.0F, short2 / 1.0F);
 
-            this.itemHelper.renderItemStack(stack, (int) startX, (int) startY, color);
+            this.itemHelper.renderItemStack(stack, (int) startX, (int) startY, zLevel, applyAlphaMask(color));
             this.getRenderItem().renderItemOverlayIntoGUI(font, stack, (int) startX, (int) startY, displayString);
             GlStateManager.popMatrix();
             GlStateManager.disableRescaleNormal();
@@ -327,10 +329,10 @@ public class GuiHelper implements IGuiHelper
         }
     }
 
-    public void drawItemStackTooltip(final IGuiRenderer renderer, final int mouseX, final int mouseY,
-            final ItemStack stack)
+    public void drawItemStackTooltip(IGuiRenderer renderer, int mouseX, int mouseY,
+                                     ItemStack stack)
     {
-        final List<String> list = stack.getTooltip(this.mc.player,  this.mc.gameSettings.advancedItemTooltips ?
+        List<String> list = stack.getTooltip(this.mc.player, this.mc.gameSettings.advancedItemTooltips ?
                 ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
 
         for (int i = 0; i < list.size(); ++i)
@@ -345,9 +347,9 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public final void translateVecToScreenSpace(final Vector2i vec)
+    public void translateVecToScreenSpace(Vector2i vec)
     {
-        final GuiScreen currentScreen = this.mc.currentScreen;
+        GuiScreen currentScreen = this.mc.currentScreen;
         if (currentScreen != null)
         {
             vec.setX((int) (vec.getX() / ((float) currentScreen.width / this.mc.displayWidth)));
@@ -357,19 +359,19 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public final String trimStringToPixelWidth(final String str, final int pixelWidth)
+    public String trimStringToPixelWidth(String str, int pixelWidth)
     {
         return this.mc.fontRenderer.trimStringToWidth(str, pixelWidth);
     }
 
     @Override
-    public final float getStringWidth(final String str)
+    public float getStringWidth(String str)
     {
         return this.mc.fontRenderer.getStringWidth(str);
     }
 
     @Override
-    public final float getStringHeight()
+    public float getStringHeight()
     {
         return this.mc.fontRenderer.FONT_HEIGHT;
     }
@@ -386,7 +388,31 @@ public class GuiHelper implements IGuiHelper
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
-    public void enableAlpha()
+    @Override
+    public void startAlphaMask(double opacity)
+    {
+        this.alphaMask = opacity;
+        this.enableAlpha();
+    }
+
+    @Override
+    public void closeAlphaMask()
+    {
+        this.alphaMask = 1;
+        this.disableAlpha();
+    }
+
+    private Color applyAlphaMask(Color src)
+    {
+        if (this.alphaMask == 1)
+            return src;
+        Color result = Color.from(src);
+
+        result.setAlpha((float) (src.getAlpha() * this.alphaMask));
+        return result;
+    }
+
+    private void enableAlpha()
     {
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
@@ -396,7 +422,7 @@ public class GuiHelper implements IGuiHelper
                 GlStateManager.DestFactor.ZERO);
     }
 
-    public void disableAlpha()
+    private void disableAlpha()
     {
         GlStateManager.disableDepth();
         GlStateManager.disableAlpha();

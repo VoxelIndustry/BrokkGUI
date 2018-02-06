@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.6.1"
     }
 }
 
@@ -85,7 +85,7 @@ subprojects {
             }
         }
     }
-	
+
 	// Add references to core project
 	tasks.cleanEclipse.doLast {
 		project.configurations.stream()
@@ -101,19 +101,25 @@ subprojects {
 project(":core") {
     archivesBaseName = "brokkgui-core"
 
-    version = "0.4.3"
+    version = "1.0.0-06-SNAPSHOT"
     dependencies {
-        api "fr.ourten:teabeans:0.5.1"
-        api "org.yggard:hermod:0.1.1"
+        api "fr.ourten:teabeans:0.7.0"
+        api "org.yggard:hermod:0.1.2"
         implementation "org.apache.commons:commons-lang3:3.4"
         implementation "com.google.code.findbugs:jsr305:3.0.1"
+        implementation "commons-io:commons-io:2.5"
+        implementation "com.google.guava:guava:21.0"
+
+        testCompile 'org.assertj:assertj-core-java8:1.0.0m1'
+        testCompile 'junit:junit:4.12'
+        testCompile 'org.mockito:mockito-core:2.8.47'
     }
 }
 
 project(":1.12") {
     archivesBaseName = "brokkgui-binding-mc1.12"
 
-    version = "0.1.1"
+    version = "1.0.0-06-SNAPSHOT"
     dependencies {
         api project(":core")
     }

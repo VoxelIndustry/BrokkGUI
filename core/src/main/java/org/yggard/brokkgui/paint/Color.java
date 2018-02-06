@@ -3,15 +3,15 @@ package org.yggard.brokkgui.paint;
 public class Color extends GuiPaint
 {
     public static final Color ALPHA      = new Color(0, 0, 0, 0);
-    public static final Color GRAY       = new Color(.5f, .5f, .5f);
-    public static final Color LIGHT_GRAY = new Color(.827f, .827f, .827f);
-    public static final Color RED        = new Color(1, 0, 0);
-    public static final Color GREEN      = new Color(0, 1, 0);
-    public static final Color YELLOW     = new Color(1, 1, 0);
-    public static final Color BLUE       = new Color(0, 0, 1);
-    public static final Color AQUA       = new Color(0, 1, 1);
-    public static final Color WHITE      = new Color(1, 1, 1);
-    public static final Color BLACK      = new Color(0, 0, 0);
+    public static final Color BLACK      = ColorConstants.getColor("black");
+    public static final Color AQUA       = ColorConstants.getColor("aqua");
+    public static final Color WHITE      = ColorConstants.getColor("white");
+    public static final Color RED        = ColorConstants.getColor("red");
+    public static final Color LIGHT_GRAY = ColorConstants.getColor("lightgrey");
+    public static final Color BLUE       = ColorConstants.getColor("blue");
+    public static final Color GRAY       = ColorConstants.getColor("gray");
+    public static final Color GREEN      = ColorConstants.getColor("green");
+    public static final Color YELLOW     = ColorConstants.getColor("yellow");
 
     public static Color fromHex(final String hex)
     {
@@ -30,14 +30,22 @@ public class Color extends GuiPaint
         return rtn;
     }
 
+    public String toHex()
+    {
+        return "#" + String.format("%02X", (int) (this.red * 255)) +
+                String.format("%02X", (int) (this.green * 255)) +
+                String.format("%02X", (int) (this.blue * 255));
+    }
+
     public static Color fromRGBInt(final int rgb)
     {
-        return new Color(rgb >> 16 & 0xFF, rgb >> 8 & 0xFF, rgb & 0xFF);
+        return new Color((rgb >> 16 & 0xFF) / 255f, (rgb >> 8 & 0xFF) / 255f, (rgb & 0xFF) / 255f);
     }
 
     public static Color fromRGBAInt(final int rgba)
     {
-        return new Color(rgba >> 24 & 0xFF, rgba >> 16 & 0xFF, rgba >> 8 & 0xFF, rgba & 0xFF);
+        return new Color((rgba >> 24 & 0xFF) / 255f, (rgba >> 16 & 0xFF) / 255f, (rgba >> 8 & 0xFF) / 255f, (rgba &
+                0xFF) / 255f);
     }
 
     public int toRGBInt()

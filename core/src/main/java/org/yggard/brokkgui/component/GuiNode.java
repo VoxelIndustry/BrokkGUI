@@ -1,38 +1,49 @@
 package org.yggard.brokkgui.component;
 
+import fr.ourten.teabeans.listener.ListValueChangeListener;
+import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.value.BaseSetProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
-import org.yggard.brokkgui.event.ClickEvent;
-import org.yggard.brokkgui.event.DisableEvent;
-import org.yggard.brokkgui.event.FocusEvent;
-import org.yggard.brokkgui.event.GuiMouseEvent;
-import org.yggard.brokkgui.event.HoverEvent;
-import org.yggard.brokkgui.event.KeyEvent;
+import org.yggard.brokkgui.event.*;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.style.ICascadeStyleable;
+import org.yggard.brokkgui.style.StyleHolder;
+import org.yggard.brokkgui.style.tree.StyleList;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
 import org.yggard.hermod.IEventEmitter;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.Collections;
+import java.util.function.Supplier;
 
-public abstract class GuiNode implements IEventEmitter
+public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 {
     private final BaseProperty<GuiFather> fatherProperty;
     private final BaseProperty<Float>     xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
             widthProperty, heightProperty, widthRatioProperty, heightRatioProperty, zLevelProperty;
 
-    private EventDispatcher               eventDispatcher;
-    private EventHandler<FocusEvent>      onFocusEvent;
-    private EventHandler<DisableEvent>    onDisableEvent;
-    private EventHandler<HoverEvent>      onHoverEvent;
-    private EventHandler<ClickEvent>      onClickEvent;
-    private final BaseProperty<Boolean>   focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
+    private       EventDispatcher            eventDispatcher;
+    private       EventHandler<FocusEvent>   onFocusEvent;
+    private       EventHandler<DisableEvent> onDisableEvent;
+    private       EventHandler<HoverEvent>   onHoverEvent;
+    private       EventHandler<ClickEvent>   onClickEvent;
+    private final BaseProperty<Boolean>      focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
+    private final BaseProperty<Boolean> visibleProperty;
 
-    public GuiNode()
+    private final BaseProperty<String>    styleID;
+    private final BaseSetProperty<String> styleClass;
+    private final BaseSetProperty<String> activePseudoClass;
+    private       String                  type;
+    private       StyleHolder             styleHolder;
+
+    public GuiNode(String type)
     {
+        this.type = type;
+
         this.xPosProperty = new BaseProperty<>(0f, "xPosProperty");
         this.yPosProperty = new BaseProperty<>(0f, "yPosProperty");
 
@@ -54,18 +65,75 @@ public abstract class GuiNode implements IEventEmitter
         this.hoveredProperty = new BaseProperty<>(false, "hoveredProperty");
 
         this.focusableProperty = new BaseProperty<>(false, "focusableProperty");
+
+        this.visibleProperty = new BaseProperty<>(true, "visibleProperty");
+
+        this.styleID = new BaseProperty<>(null, "styleIDProperty");
+        this.styleClass = new BaseSetProperty<>(Collections.emptySet(), "styleClassListProperty");
+        this.activePseudoClass = new BaseSetProperty<>(Collections.emptySet(), "activePseudoClassListProperty");
+        this.styleHolder = new StyleHolder(this);
+
+        this.styleID.addListener((obs, oldValue, newValue) -> this.refreshStyle());
+        this.styleClass.addListener((ListValueChangeListener<String>) (obs, oldValue, newValue) -> this.refreshStyle());
+        this.activePseudoClass
+                .addListener((ListValueChangeListener<String>) (obs, oldValue, newValue) -> this.refreshStyle());
+
+        this.getEventDispatcher().addHandler(HoverEvent.TYPE, e ->
+        {
+            if (e.isEntering())
+                this.getActivePseudoClass().add("hover");
+            else
+                this.getActivePseudoClass().remove("hover");
+        });
+
+        this.getEventDispatcher().addHandler(DisableEvent.TYPE, e ->
+        {
+            if (e.isDisabled())
+            {
+                if (!this.getActivePseudoClass().contains("disabled") &&
+                        this.getActivePseudoClass().contains("enabled"))
+                    this.getActivePseudoClass().replace("enabled", "disabled");
+                else if (!this.getActivePseudoClass().contains("enabled") &&
+                        !this.getActivePseudoClass().contains("disabled"))
+                    this.getActivePseudoClass().add("disabled");
+            }
+            else
+            {
+                if (!this.getActivePseudoClass().contains("enabled") &&
+                        this.getActivePseudoClass().contains("disabled"))
+                    this.getActivePseudoClass().replace("disabled", "enabled");
+                else if (!this.getActivePseudoClass().contains("disabled") &&
+                        !this.getActivePseudoClass().contains("enabled"))
+                    this.getActivePseudoClass().add("enabled");
+            }
+        });
+
+        this.getEventDispatcher().addHandler(FocusEvent.TYPE, e ->
+        {
+            if (e.isFocused())
+                this.getActivePseudoClass().add("focus");
+            else
+                this.getActivePseudoClass().remove("focus");
+        });
     }
 
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public final void renderNode(IGuiRenderer renderer, EGuiRenderPass pass, int mouseX, int mouseY)
     {
-        if (this.isPointInside(mouseX, mouseY))
+        if (this.isVisible())
         {
-            if (!this.isHovered())
-                this.setHovered(true);
+            if (this.isPointInside(mouseX, mouseY))
+            {
+                if (!this.isHovered())
+                    this.setHovered(true);
+            }
+            else if (this.isHovered())
+                this.setHovered(false);
+
+            this.renderContent(renderer, pass, mouseX, mouseY);
         }
-        else if (this.isHovered())
-            this.setHovered(false);
     }
+
+    protected abstract void renderContent(IGuiRenderer renderer, EGuiRenderPass pass, int mouseX, int mouseY);
 
     public void handleMouseInput()
     {
@@ -76,7 +144,7 @@ public abstract class GuiNode implements IEventEmitter
 
     public void handleClick(final int mouseX, final int mouseY, final int key)
     {
-        if (!this.isDisabled())
+        if (!this.isDisabled() && this.isVisible())
         {
             switch (key)
             {
@@ -170,7 +238,7 @@ public abstract class GuiNode implements IEventEmitter
 
     /**
      * @return xPos, used for layout management, do not attempt to change the
-     *         property outside the layouting scope.
+     * property outside the layouting scope.
      */
     public float getxPos()
     {
@@ -179,7 +247,7 @@ public abstract class GuiNode implements IEventEmitter
 
     /**
      * @return yPos, used for layout management, do not attempt to change the
-     *         property outside the layouting scope.
+     * property outside the layouting scope.
      */
     public float getyPos()
     {
@@ -195,8 +263,8 @@ public abstract class GuiNode implements IEventEmitter
     }
 
     /**
-     * Set the translation of this component to this specified value, usable
-     * outside layouting scope.
+     * Set the translation of this component to this specified value, usable outside
+     * layouting scope.
      *
      * @param xTranslate
      */
@@ -214,8 +282,8 @@ public abstract class GuiNode implements IEventEmitter
     }
 
     /**
-     * Set the translation of this component to this specified value, usable
-     * outside layouting scope.
+     * Set the translation of this component to this specified value, usable outside
+     * layouting scope.
      *
      * @param yTranslate
      */
@@ -254,8 +322,8 @@ public abstract class GuiNode implements IEventEmitter
     }
 
     /**
-     * Allow to set the width of the node relatively to the width of his parent.
-     * Use absolute setWidth to cancel the binding or set the width ratio to -1
+     * Allow to set the width of the node relatively to the width of his parent. Use
+     * absolute setWidth to cancel the binding or set the width ratio to -1
      *
      * @param ratio
      */
@@ -274,9 +342,8 @@ public abstract class GuiNode implements IEventEmitter
     }
 
     /**
-     * Allow to set the height of the node relatively to the height of his
-     * parent. Use absolute setHeight to cancel the binding or set the height
-     * ratio to -1
+     * Allow to set the height of the node relatively to the height of his parent.
+     * Use absolute setHeight to cancel the binding or set the height ratio to -1
      *
      * @param ratio
      */
@@ -300,8 +367,8 @@ public abstract class GuiNode implements IEventEmitter
     }
 
     /**
-     * Internal method for the layouting system. A developper should never have
-     * to use it.
+     * Internal method for the layouting system. A developper should never have to
+     * use it.
      *
      * @param father
      */
@@ -316,6 +383,11 @@ public abstract class GuiNode implements IEventEmitter
             RelativeBindingHelper.bindWidthRelative(this, father, this.getWidthRatioProperty());
         if (father != null && this.getHeightRatio() != -1)
             RelativeBindingHelper.bindHeightRelative(this, father, this.getHeightRatioProperty());
+
+        this.getStyle().getParent().setValue(father);
+        if (father != null)
+            this.setStyleTree(father.getStyle().getStyleSupplier());
+        this.refreshStyle();
     }
 
     public BaseProperty<Boolean> getFocusedProperty()
@@ -336,6 +408,11 @@ public abstract class GuiNode implements IEventEmitter
     public BaseProperty<Boolean> getFocusableProperty()
     {
         return this.focusableProperty;
+    }
+
+    public BaseProperty<Boolean> getVisibleProperty()
+    {
+        return visibleProperty;
     }
 
     public boolean isFocused()
@@ -375,6 +452,10 @@ public abstract class GuiNode implements IEventEmitter
 
     public void setDisabled(final boolean disable)
     {
+        if (this.isHovered())
+            this.setHovered(false);
+        if (this.isFocused())
+            this.setFocused(false);
         this.getDisabledProperty().setValue(disable);
         this.getEventDispatcher().dispatchEvent(DisableEvent.TYPE, new DisableEvent(this, disable));
     }
@@ -386,8 +467,20 @@ public abstract class GuiNode implements IEventEmitter
 
     public void setHovered(final boolean hovered)
     {
+        if (this.isDisabled())
+            return;
         this.getHoveredProperty().setValue(hovered);
         this.getEventDispatcher().dispatchEvent(HoverEvent.TYPE, new HoverEvent(this, hovered));
+    }
+
+    public boolean isVisible()
+    {
+        return this.getVisibleProperty().getValue();
+    }
+
+    public void setVisible(boolean visible)
+    {
+        this.getVisibleProperty().setValue(visible);
     }
 
     /////////////////////
@@ -453,5 +546,72 @@ public abstract class GuiNode implements IEventEmitter
     private void initEventDispatcher()
     {
         this.eventDispatcher = new EventDispatcher();
+    }
+
+    /////////////////////
+    // STYLING //
+    /////////////////////
+
+    @Override
+    public void setID(String id)
+    {
+        this.getIDProperty().setValue(id);
+    }
+
+    @Override
+    public String getID()
+    {
+        return this.getIDProperty().getValue();
+    }
+
+    public BaseProperty<String> getIDProperty()
+    {
+        return this.styleID;
+    }
+
+    @Override
+    public BaseSetProperty<String> getStyleClass()
+    {
+        return this.styleClass;
+    }
+
+    @Override
+    public StyleHolder getStyle()
+    {
+        return this.styleHolder;
+    }
+
+    @Override
+    public ICascadeStyleable getParent()
+    {
+        return this.getFather();
+    }
+
+    @Override
+    public void setStyleTree(Supplier<StyleList> treeSupplier)
+    {
+        this.getStyle().setStyleSupplier(treeSupplier);
+    }
+
+    public void refreshStyle()
+    {
+        this.getStyle().refresh();
+    }
+
+    @Override
+    public String getType()
+    {
+        return type;
+    }
+
+    @Override
+    public BaseSetProperty<String> getActivePseudoClass()
+    {
+        return activePseudoClass;
+    }
+
+    protected void setType(String type)
+    {
+        this.type = type;
     }
 }

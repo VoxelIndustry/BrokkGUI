@@ -9,7 +9,7 @@ public class GuiLabel extends GuiLabeled
 {
     public GuiLabel(final String text)
     {
-        super(text);
+        super("label", text);
     }
 
     public GuiLabel()

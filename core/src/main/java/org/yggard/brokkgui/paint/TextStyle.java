@@ -1,8 +1,9 @@
 package org.yggard.brokkgui.paint;
 
-import javax.annotation.Nonnull;
-
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.component.GuiNode;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Ourten 15 déc. 2016
@@ -12,6 +13,8 @@ public class TextStyle
     private final BaseProperty<Color>   textColorProperty;
     private final BaseProperty<Color>   shadowColorProperty;
     private final BaseProperty<Boolean> shadowProperty;
+
+    private GuiNode owner;
 
     public TextStyle(final Color textColor, final Color shadowColor, final boolean shadow)
     {
@@ -30,48 +33,36 @@ public class TextStyle
         this(textColor, null, false);
     }
 
-    public BaseProperty<Color> getTextColorProperty()
-    {
-        return this.textColorProperty;
-    }
-
-    public BaseProperty<Color> getShadowColorProperty()
-    {
-        return this.shadowColorProperty;
-    }
-
-    public BaseProperty<Boolean> getShadowProperty()
-    {
-        return this.shadowProperty;
-    }
-
     public Color getTextColor()
     {
-        return this.getTextColorProperty().getValue();
-    }
-
-    public void setTextColor(final Color textColor)
-    {
-        this.getTextColorProperty().setValue(textColor);
+        return this.owner.getStyle().getStyleProperty("-text-color", Color.class).getValue();
     }
 
     public Color getShadowColor()
     {
-        return this.getShadowColorProperty().getValue();
-    }
-
-    public void setShadowColor(final Color shadowColor)
-    {
-        this.getShadowColorProperty().setValue(shadowColor);
+        return this.owner.getStyle().getStyleProperty("-text-shadow-color", Color.class).getValue();
     }
 
     public boolean useShadow()
     {
-        return this.getShadowProperty().getValue();
+        return this.owner.getStyle().getStyleProperty("-text-shadow", Boolean.class).getValue();
     }
 
-    public void setShadow(final boolean useShadow)
+    public void bind(GuiNode node)
     {
-        this.getShadowProperty().setValue(useShadow);
+        node.getStyle().registerProperty("-text-color", Color.BLACK, Color.class);
+        node.getStyle().registerProperty("-text-shadow-color", Color.WHITE, Color.class);
+        node.getStyle().registerProperty("-text-shadow", true, Boolean.class);
+
+        this.owner = node;
+    }
+
+    public void unbind(GuiNode node)
+    {
+        node.getStyle().removeProperty("-text-color");
+        node.getStyle().removeProperty("-text-shadow-color");
+        node.getStyle().removeProperty("-text-shadow");
+
+        this.owner = null;
     }
 }

@@ -1,12 +1,10 @@
 package org.yggard.brokkgui.element;
 
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiLinkBehavior;
 import org.yggard.brokkgui.control.GuiLabeled;
-import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.skin.GuiLabeledSkinBase;
 import org.yggard.brokkgui.skin.GuiSkinBase;
-
-import fr.ourten.teabeans.value.BaseProperty;
 
 /**
  * @author Ourten 15 oct. 2016
@@ -17,9 +15,9 @@ public class GuiLink extends GuiLabeled
 
     public GuiLink(final String url, final String text)
     {
-        super(text);
+        super("link", text);
         this.urlProperty = new BaseProperty<>(url, "urlProperty");
-        this.setTextColor(Color.BLUE);
+        this.setStyle("-text-color: blue");
     }
 
     public GuiLink(final String url)

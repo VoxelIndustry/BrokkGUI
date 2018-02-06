@@ -1,59 +1,51 @@
 package org.yggard.brokkgui.skin;
 
+import fr.ourten.teabeans.binding.BaseExpression;
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
 import org.yggard.brokkgui.element.GuiProgressBar;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.shape.Rectangle;
-
-import fr.ourten.teabeans.binding.BaseExpression;
+import org.yggard.brokkgui.style.StyleSource;
 
 public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorBase<C>> extends GuiLabeledSkinBase<C, B>
 {
-    private final Rectangle progressBar;
+    private final Rectangle track;
 
     public GuiProgressBarSkin(final C model, final B behaviour)
     {
         super(model, behaviour);
 
-        this.progressBar = new Rectangle(model.getxPos(), model.getyPos(), model.getWidth(), model.getHeight());
-        this.progressBar.getxPosProperty().bind(new BaseExpression<>(() ->
+        this.track = new Rectangle(model.getxPos(), model.getyPos(), model.getWidth(), model.getHeight());
+        this.track.getxPosProperty().bind(new BaseExpression<>(() ->
         {
             switch (model.getProgressDirection())
             {
                 case CENTER:
-                    return model.getxPos() + (model.getWidth() - this.progressBar.getWidth()) / 2;
+                    return model.getxPos() + (model.getWidth() - this.track.getWidth()) / 2;
                 case LEFT:
-                    return model.getxPos() + model.getWidth() - this.progressBar.getWidth();
+                    return model.getxPos() + model.getWidth() - this.track.getWidth();
                 default:
                     return model.getxPos();
             }
         }, model.getxPosProperty(), model.getWidthProperty(), model.getProgressDirectionProperty()));
-        this.progressBar.getyPosProperty().bind(model.getyPosProperty());
-        this.progressBar.getWidthProperty().bind(new BaseExpression<>(() ->
-        {
-            return model.getWidth() * model.getProgress();
-        }, model.getProgressProperty(), model.getWidthProperty()));
-        this.progressBar.getFillProperty().bind(new BaseExpression<>(() ->
-        {
-            return model.getBackgroundProperty().getValue().getFill();
-        }, model.getBackgroundProperty()));
+        this.track.getyPosProperty().bind(model.getyPosProperty());
+        this.track.getWidthProperty().bind(new BaseExpression<>(() ->
+                model.getWidth() * model.getProgress(), model.getProgressProperty(), model.getWidthProperty()));
+
+        this.getModel().getStyle().registerAlias("track", this.track.getStyle());
+        this.track.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0, Color.RED);
 
         this.getText().getxPosProperty().bind(new BaseExpression<>(() ->
-        {
-            return model.getxPos() + model.getWidth() / 2;
-        }, model.getxPosProperty(), model.getWidthProperty()));
+                model.getxPos() + model.getWidth() / 2, model.getxPosProperty(), model.getWidthProperty()));
 
         this.getText().getyPosProperty().bind(new BaseExpression<>(() ->
-        {
-            return model.getyPos() + model.getHeight() / 2;
-        }, model.getyPosProperty(), model.getHeightProperty()));
+                model.getyPos() + model.getHeight() / 2, model.getyPosProperty(), model.getHeightProperty()));
 
         this.getText().getTextAlignmentProperty().bind(model.getTextAlignmentProperty());
         this.getText().getzLevelProperty().bind(new BaseExpression<>(() ->
-        {
-            return model.getzLevel() + 1;
-        }, model.getzLevelProperty()));
+                model.getzLevel() + 1, model.getzLevelProperty()));
 
     }
 
@@ -61,11 +53,8 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
     public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
         super.render(pass, renderer, mouseX, mouseY);
-        this.progressBar.renderNode(renderer, pass, mouseX, mouseY);
-    }
 
-    public Rectangle getProgressBar()
-    {
-        return this.progressBar;
+        this.getModel().getBackground().renderNode(renderer, pass, mouseX, mouseY);
+        this.track.renderNode(renderer, pass, mouseX, mouseY);
     }
 }

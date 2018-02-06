@@ -9,6 +9,7 @@ public class GuiCheckbox extends GuiRadioButton
     public GuiCheckbox(final String label)
     {
         super(label);
+        this.setType("checkbox");
     }
 
     public GuiCheckbox()

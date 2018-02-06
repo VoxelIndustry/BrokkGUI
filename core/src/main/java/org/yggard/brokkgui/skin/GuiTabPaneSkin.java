@@ -28,24 +28,23 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
             switch (this.getModel().getTabSide())
             {
                 case UP:
-                    if (this.getBackgroundProperty().isPresent() && this.getBackground().getFill() instanceof Color)
+                    if (this.getBackground().getColor().getAlpha() != 0)
                         renderer.getHelper().drawColoredRect(renderer,
                                 this.getModel().getxPos() + this.getModel().getxTranslate()
                                         + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
-                                                * this.getModel().getTabsProperty().indexOf(tab),
+                                        * this.getModel().getTabsProperty().indexOf(tab),
                                 this.getModel().getyPos() + this.getModel().getyTranslate(),
                                 this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
                                 this.getModel().getHeight() * this.getModel().getTabHeightRatio(),
-                                this.getModel().getzLevel(), (Color) this.getBackground().getFill());
-                    else if (this.getBackgroundProperty().isPresent()
-                            && this.getBackground().getFill() instanceof Texture)
+                                this.getModel().getzLevel(), this.getBackground().getColor());
+                    else if (this.getBackground().getTexture() != Texture.EMPTY)
                     {
-                        final Texture texture = (Texture) this.getBackground().getFill();
+                        final Texture texture = this.getBackground().getTexture();
                         renderer.getHelper().bindTexture(texture);
                         renderer.getHelper().drawTexturedRect(renderer,
                                 this.getModel().getxPos() + this.getModel().getxTranslate()
                                         + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
-                                                * this.getModel().getTabsProperty().indexOf(tab),
+                                        * this.getModel().getTabsProperty().indexOf(tab),
                                 this.getModel().getyPos() + this.getModel().getyTranslate(), texture.getUMin(),
                                 texture.getVMin(), texture.getUMax(), texture.getVMax(),
                                 this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
@@ -55,7 +54,7 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
                     renderer.getHelper().drawColoredEmptyRect(renderer,
                             this.getModel().getxPos() + this.getModel().getxTranslate()
                                     + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
-                                            * this.getModel().getTabsProperty().indexOf(tab),
+                                    * this.getModel().getTabsProperty().indexOf(tab),
                             this.getModel().getyPos() + this.getModel().getyTranslate(),
                             this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
                             this.getModel().getHeight() * this.getModel().getTabHeightRatio(),
@@ -63,7 +62,7 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
                     renderer.getHelper().drawString(tab.getText(),
                             this.getModel().getxPos() + this.getModel().getxTranslate() + 2
                                     + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
-                                            * this.getModel().getTabsProperty().indexOf(tab),
+                                    * this.getModel().getTabsProperty().indexOf(tab),
                             this.getModel().getyPos() + this.getModel().getyTranslate() + 2,
                             this.getModel().getzLevel(), Color.WHITE, EAlignment.LEFT_DOWN);
                     break;
@@ -79,6 +78,6 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
             }
         });
         if (this.getModel().getSelectedTab() != null)
-            this.getModel().getSelectedTab().renderNode(renderer, pass, mouseX, mouseY);
+            this.getModel().getSelectedTab().renderChild(renderer, pass, mouseX, mouseY);
     }
 }

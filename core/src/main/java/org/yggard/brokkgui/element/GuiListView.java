@@ -30,6 +30,8 @@ public class GuiListView<T> extends GuiControl
 
     public GuiListView(final List<T> elements)
     {
+        super("listview");
+
         this.elementsProperty = new BaseListProperty<>(elements, "elementsListProperty");
 
         this.editableProperty = new BaseProperty<>(false, "editableProperty");

@@ -1,5 +1,7 @@
 package org.yggard.brokkgui.skin;
 
+import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.binding.BaseExpression;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.behavior.GuiButtonBehavior;
 import org.yggard.brokkgui.data.EHAlignment;
@@ -9,9 +11,7 @@ import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.shape.Rectangle;
 import org.yggard.brokkgui.shape.Text;
-
-import fr.ourten.teabeans.binding.BaseBinding;
-import fr.ourten.teabeans.binding.BaseExpression;
+import org.yggard.brokkgui.style.StyleSource;
 
 public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBehavior<GuiCheckbox>>
 {
@@ -29,11 +29,15 @@ public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBe
         this.box = new Rectangle();
         this.fill = new Text("✔");
 
-        this.box.setFill(Color.ALPHA);
-        this.box.setLineWeight(1);
-        this.box.setLineColor(Color.BLACK);
+        this.getModel().getStyle().registerAlias("box", this.box.getStyle());
+        this.getModel().getStyle().registerAlias("fill", this.fill.getStyle());
 
-        this.fill.setFill(Color.GRAY);
+        this.box.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0, Color.ALPHA);
+        this.box.getStyle().getStyleProperty("-line-color", Color.class).setStyle(StyleSource.USER_AGENT, 0,
+                Color.BLACK);
+        this.box.getStyle().getStyleProperty("-line-weight", Integer.class).setStyle(StyleSource.USER_AGENT, 0, 1);
+
+        this.fill.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0, Color.GRAY);
 
         this.box.getxPosProperty().bind(new BaseBinding<Float>()
         {
@@ -77,7 +81,7 @@ public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBe
                 else if (model.getLabelAlignment().equals(EHAlignment.LEFT))
                     return model.getxPos() + model.getxTranslate()
                             + BrokkGuiPlatform.getInstance().getGuiHelper()
-                                    .getStringWidth(GuiCheckboxSkin.this.getEllipsedText())
+                            .getStringWidth(GuiCheckboxSkin.this.getEllipsedText())
                             + 3 + GuiCheckboxSkin.this.fill.getWidth() / 2;
                 else
                     return model.getxPos() + model.getxTranslate() + model.getWidth() / 2

@@ -8,20 +8,16 @@ import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.validation.BaseTextValidator;
 
-import fr.ourten.teabeans.value.BaseProperty;
-
 /**
  * @author Ourten 2 oct. 2016
  */
 public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBase<T, GuiTextfieldBehavior<T>>
 {
-    private final BaseProperty<Color> textColorProperty;
-
     public GuiTextfieldSkin(final T model, final GuiTextfieldBehavior<T> behaviour)
     {
         super(model, behaviour);
 
-        this.textColorProperty = new BaseProperty<>(Color.WHITE, "textColorProperty");
+        this.getModel().getStyle().registerProperty("-text-color", Color.WHITE, Color.class);
     }
 
     @Override
@@ -85,18 +81,8 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
         }
     }
 
-    public BaseProperty<Color> getTextColorProperty()
-    {
-        return this.textColorProperty;
-    }
-
     public Color getTextColor()
     {
-        return this.getTextColorProperty().getValue();
-    }
-
-    public void setTextColor(final Color textColor)
-    {
-        this.getTextColorProperty().setValue(textColor);
+        return this.getModel().getStyle().getStyleProperty("-text-color", Color.class).getValue();
     }
 }

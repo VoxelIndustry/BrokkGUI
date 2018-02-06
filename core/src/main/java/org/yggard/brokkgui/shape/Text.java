@@ -1,12 +1,11 @@
 package org.yggard.brokkgui.shape;
 
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.paint.TextStyle;
-
-import fr.ourten.teabeans.value.BaseProperty;
 
 public class Text extends GuiShape
 {
@@ -17,7 +16,9 @@ public class Text extends GuiShape
 
     public Text(final float posX, final float posY, final String text)
     {
-        this.setxTranslate(posY);
+        super("text");
+
+        this.setxTranslate(posX);
         this.setyTranslate(posY);
 
         this.textProperty = new BaseProperty<>(text, "textProperty");
@@ -32,13 +33,13 @@ public class Text extends GuiShape
     }
 
     @Override
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
         if (pass == EGuiRenderPass.MAIN)
             renderer.getHelper().drawString(this.getText(), (int) (this.getxPos() + this.getxTranslate()),
                     (int) (this.getyPos() + this.getyTranslate()), this.getzLevel(),
-                    this.getTextStyle().getTextColorProperty().getOrDefault(Color.BLACK), this.getTextAlignment(),
-                    this.getTextStyle().useShadow());
+                    this.getTextStyle().getTextColor(), this.getTextStyle().useShadow() ? this.getTextStyle()
+                            .getShadowColor() : Color.ALPHA, this.getTextAlignment());
     }
 
     public BaseProperty<String> getTextProperty()

@@ -164,7 +164,7 @@ public class GuiTab
         this.getSelectedProperty().setValue(selected);
     }
 
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderChild(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
         if (this.getContent() != null)
             this.getContent().renderNode(renderer, pass, mouseX, mouseY);

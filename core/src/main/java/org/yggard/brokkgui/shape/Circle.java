@@ -1,7 +1,6 @@
 package org.yggard.brokkgui.shape;
 
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.paint.Texture;
 
@@ -9,6 +8,8 @@ public class Circle extends GuiShape
 {
     public Circle(final float xPosition, final float yPosition, final float radius)
     {
+        super("circle");
+
         this.setxTranslate(xPosition);
         this.setyTranslate(yPosition);
         this.setWidth(radius);
@@ -26,7 +27,7 @@ public class Circle extends GuiShape
     }
 
     @Override
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
     {
         if (pass == EGuiRenderPass.MAIN)
         {
@@ -34,13 +35,13 @@ public class Circle extends GuiShape
                 renderer.getHelper().drawColoredEmptyCircle(renderer, this.getxTranslate() + this.getxPos(),
                         this.getyTranslate() + this.getyPos(), this.getWidth(), this.getzLevel(), this.getLineColor(),
                         this.getLineWeight());
-            if (this.getFill() instanceof Color)
+            if (this.getColor().getAlpha() != 0)
                 renderer.getHelper().drawColoredCircle(renderer, this.getxTranslate() + this.getxPos(),
                         this.getyTranslate() + this.getyPos(), this.getWidth(), this.getzLevel(),
-                        (Color) this.getFill());
-            else if (this.getFill() instanceof Texture)
+                        this.getColor());
+            if (this.getTexture() != Texture.EMPTY)
             {
-                final Texture texture = (Texture) this.getFill();
+                final Texture texture = this.getTexture();
                 renderer.getHelper().bindTexture(texture);
                 renderer.getHelper().drawTexturedCircle(renderer, this.getxTranslate() + this.getxPos(),
                         this.getyTranslate() + this.getyPos(), texture.getUMin(), texture.getVMin(), texture.getUMax(),

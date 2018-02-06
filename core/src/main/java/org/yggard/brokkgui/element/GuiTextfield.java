@@ -34,6 +34,8 @@ public class GuiTextfield extends GuiControl implements ITextInput
 
     public GuiTextfield(final String text)
     {
+        super("textfield");
+
         this.textProperty = new BaseProperty<>(text, "textProperty");
         this.promptTextProperty = new BaseProperty<>("", "promptTextProperty");
 
@@ -182,8 +184,8 @@ public class GuiTextfield extends GuiControl implements ITextInput
     }
 
     /**
-     * Set the maximum text length this Textfield will be able to contain.
-     * Setting this value to -1 will allow infinite.
+     * Set the maximum text length this Textfield will be able to contain. Setting
+     * this value to -1 will allow infinite.
      *
      * @param length
      */

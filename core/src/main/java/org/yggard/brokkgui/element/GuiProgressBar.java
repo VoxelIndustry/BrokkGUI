@@ -1,7 +1,6 @@
 package org.yggard.brokkgui.element;
 
-import java.util.Objects;
-
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
 import org.yggard.brokkgui.control.GuiLabeled;
 import org.yggard.brokkgui.data.EAlignment;
@@ -11,7 +10,7 @@ import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.skin.GuiProgressBarSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.Objects;
 
 /**
  * @author Phenix246
@@ -19,17 +18,15 @@ import fr.ourten.teabeans.value.BaseProperty;
 public class GuiProgressBar extends GuiLabeled
 {
     private final BaseProperty<Float>       progressBarProgressProperty;
-    private final BaseProperty<Background>  progressBarColorProperty;
+    private final BaseProperty<Background>  backgroundProperty;
     private final BaseProperty<EHAlignment> progressBarProgressDirection;
 
     public GuiProgressBar(final String text, final float progressRatio)
     {
-        super(text);
-        this.progressBarProgressProperty = new BaseProperty<>(0f, "progressBarProgressProperty");
-        this.progressBarColorProperty = new BaseProperty<Background>(new Background(Color.WHITE),
-                "progressBarColorProperty");
-        this.progressBarProgressDirection = new BaseProperty<EHAlignment>(EHAlignment.RIGHT,
-                "progressBarProgressDirection");
+        super("progressbar", text);
+        this.progressBarProgressProperty = new BaseProperty<>(0f, "progressProperty");
+        this.backgroundProperty = new BaseProperty<>(new Background(Color.WHITE), "backgroundProperty");
+        this.progressBarProgressDirection = new BaseProperty<>(EHAlignment.RIGHT, "progressDirectionProperty");
 
         this.progressBarProgressProperty.setChecker((old, set) ->
         {
@@ -40,6 +37,13 @@ public class GuiProgressBar extends GuiLabeled
 
         this.progressBarProgressProperty.setValue(progressRatio);
         this.getTextAlignmentProperty().setValue(EAlignment.MIDDLE_CENTER);
+
+        this.backgroundProperty.getValue().attach(this);
+        this.backgroundProperty.addListener((property, oldValue, newValue) ->
+        {
+            oldValue.detach(this);
+            newValue.attach(this);
+        });
     }
 
     public GuiProgressBar(final String text)
@@ -70,7 +74,7 @@ public class GuiProgressBar extends GuiLabeled
 
     public BaseProperty<Background> getBackgroundProperty()
     {
-        return this.progressBarColorProperty;
+        return this.backgroundProperty;
     }
 
     public BaseProperty<EHAlignment> getProgressDirectionProperty()

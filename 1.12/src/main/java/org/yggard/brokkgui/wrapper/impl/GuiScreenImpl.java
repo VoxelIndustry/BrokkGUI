@@ -1,15 +1,15 @@
 package org.yggard.brokkgui.wrapper.impl;
 
-import java.io.IOException;
-
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.input.Keyboard;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.wrapper.GuiRenderer;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.Tessellator;
+import java.io.IOException;
 
 public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
 {
@@ -56,7 +56,9 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        this.brokkgui.render(mouseX, mouseY, partialTicks);
+        this.brokkgui.render(mouseX, mouseY, EGuiRenderPass.MAIN);
+        this.brokkgui.render(mouseX, mouseY, EGuiRenderPass.HOVER);
+        this.brokkgui.render(mouseX, mouseY, EGuiRenderPass.SPECIAL);
     }
 
     @Override

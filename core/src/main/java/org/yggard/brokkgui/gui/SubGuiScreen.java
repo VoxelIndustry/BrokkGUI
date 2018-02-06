@@ -2,8 +2,6 @@ package org.yggard.brokkgui.gui;
 
 import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.event.WindowEvent;
-import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.hermod.EventHandler;
 
 public class SubGuiScreen extends GuiFather implements IGuiWindow
@@ -16,7 +14,7 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
 
     public SubGuiScreen()
     {
-
+        super("subscreen");
     }
 
     /**
@@ -59,12 +57,6 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
     public void close()
     {
         this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
-    }
-
-    @Override
-    public void renderNode(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
-    {
-        super.renderNode(renderer, pass, mouseX, mouseY);
     }
 
     public void setOnOpenEvent(final EventHandler<WindowEvent.Open> onOpenEvent)
