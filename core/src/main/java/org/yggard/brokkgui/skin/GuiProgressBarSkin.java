@@ -4,10 +4,8 @@ import fr.ourten.teabeans.binding.BaseExpression;
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
 import org.yggard.brokkgui.element.GuiProgressBar;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.shape.Rectangle;
-import org.yggard.brokkgui.style.StyleSource;
 
 public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorBase<C>> extends GuiLabeledSkinBase<C, B>
 {
@@ -35,7 +33,6 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
                 model.getWidth() * model.getProgress(), model.getProgressProperty(), model.getWidthProperty()));
 
         this.getModel().getStyle().registerAlias("track", this.track.getStyle());
-        this.track.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0, Color.RED);
 
         this.getText().getxPosProperty().bind(new BaseExpression<>(() ->
                 model.getxPos() + model.getWidth() / 2, model.getxPosProperty(), model.getWidthProperty()));

@@ -7,11 +7,9 @@ import org.yggard.brokkgui.behavior.GuiButtonBehavior;
 import org.yggard.brokkgui.data.EHAlignment;
 import org.yggard.brokkgui.element.GuiCheckbox;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.shape.Rectangle;
 import org.yggard.brokkgui.shape.Text;
-import org.yggard.brokkgui.style.StyleSource;
 
 public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBehavior<GuiCheckbox>>
 {
@@ -31,13 +29,6 @@ public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBe
 
         this.getModel().getStyle().registerAlias("box", this.box.getStyle());
         this.getModel().getStyle().registerAlias("fill", this.fill.getStyle());
-
-        this.box.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0, Color.ALPHA);
-        this.box.getStyle().getStyleProperty("-line-color", Color.class).setStyle(StyleSource.USER_AGENT, 0,
-                Color.BLACK);
-        this.box.getStyle().getStyleProperty("-line-weight", Integer.class).setStyle(StyleSource.USER_AGENT, 0, 1);
-
-        this.fill.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0, Color.GRAY);
 
         this.box.getxPosProperty().bind(new BaseBinding<Float>()
         {
@@ -95,6 +86,16 @@ public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBe
         this.fill.getWidthProperty().bind(BaseExpression.transform(this.fill.getTextProperty(),
                 BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
         this.fill.getHeightProperty().bind(this.fill.getWidthProperty());
+
+        this.fill.getTextStyle().bind(this.getModel());
+
+        this.fill.getTextStyleProperty().addListener((obs, oldValue, newValue) ->
+        {
+            if (oldValue != null)
+                oldValue.unbind(this.getModel());
+            newValue.bind(this.getModel());
+            this.getModel().refreshStyle();
+        });
     }
 
     @Override

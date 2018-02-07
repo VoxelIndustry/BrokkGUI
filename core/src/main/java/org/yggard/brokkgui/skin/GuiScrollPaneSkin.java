@@ -3,12 +3,10 @@ package org.yggard.brokkgui.skin;
 import fr.ourten.teabeans.binding.BaseBinding;
 import org.yggard.brokkgui.behavior.GuiScrollPaneBehavior;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.EGuiRenderPass;
 import org.yggard.brokkgui.panel.ScrollPane;
 import org.yggard.brokkgui.policy.EScrollbarPolicy;
 import org.yggard.brokkgui.shape.Rectangle;
-import org.yggard.brokkgui.style.StyleSource;
 
 /**
  * @author Ourten 9 oct. 2016
@@ -156,11 +154,6 @@ public class GuiScrollPaneSkin extends GuiBehaviorSkinBase<ScrollPane, GuiScroll
 
         this.getModel().getStyle().registerAlias("grip-x", this.gripX.getStyle());
         this.getModel().getStyle().registerAlias("grip-y", this.gripY.getStyle());
-
-        this.gripX.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0,
-                Color.LIGHT_GRAY);
-        this.gripY.getStyle().getStyleProperty("-color", Color.class).setStyle(StyleSource.USER_AGENT, 0,
-                Color.LIGHT_GRAY);
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.yggard.hermod.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 
 public class BrokkGuiScreen implements IGuiWindow
 {
@@ -62,23 +63,10 @@ public class BrokkGuiScreen implements IGuiWindow
         this.listenerPool = new ListenerPool();
 
         this.stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
-        this.userAgentStylesheetProperty = new BaseProperty<>("/assets/brokkgui/css/user_agent.css", "userAgentStylesheetProperty");
+        this.userAgentStylesheetProperty = new BaseProperty<>(null,
+                "userAgentStylesheetProperty");
         this.userAgentStyleTreeProperty = new BaseProperty<>(null, "userAgentStyleTreeProperty");
         this.styleTreeProperty = new BaseProperty<>(null, "styleTreeProperty");
-
-        this.stylesheetsProperty.addListener(obs ->
-        {
-            StylesheetManager.getInstance().refreshStylesheets(this);
-            if (this.getMainPanel() != null)
-                this.getMainPanel().refreshStyle();
-        });
-        this.userAgentStylesheetProperty.addListener(obs ->
-        {
-            StylesheetManager.getInstance().refreshStylesheets(this);
-            StylesheetManager.getInstance().refreshStylesheets(this);
-            if (this.getMainPanel() != null)
-                this.getMainPanel().refreshStyle();
-        });
 
         this.setMainPanel(new GuiPane());
     }
@@ -108,6 +96,28 @@ public class BrokkGuiScreen implements IGuiWindow
                 BrokkGuiScreen.this.getScreenHeight() / (1 / BrokkGuiScreen.this.getyRelativePos())
                         - BrokkGuiScreen.this.getHeight() / 2, this.getyRelativePosProperty(), this
                 .getScreenHeightProperty(), this.getHeightProperty()));
+
+        this.stylesheetsProperty.addListener(obs ->
+        {
+            StylesheetManager.getInstance().refreshStylesheets(this);
+            if (this.getMainPanel() != null)
+                this.getMainPanel().refreshStyle();
+        });
+        this.userAgentStylesheetProperty.addListener((obs, oldValue, newValue) ->
+        {
+            try
+            {
+                this.setUserAgentStyleTree(StylesheetManager.getInstance().getStyleList(newValue));
+            } catch (ExecutionException e)
+            {
+                e.printStackTrace();
+            }
+            if (!this.stylesheetsProperty.isEmpty())
+                StylesheetManager.getInstance().refreshStylesheets(this);
+            if (this.getMainPanel() != null)
+                this.getMainPanel().refreshStyle();
+        });
+        this.userAgentStylesheetProperty.setValue("/assets/brokkgui/css/user_agent.css");
     }
 
     public void render(final int mouseX, final int mouseY, EGuiRenderPass pass)
@@ -132,6 +142,7 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public void initGui()
     {
+
     }
 
     public void onClick(final int mouseX, final int mouseY, final int key)
@@ -225,7 +236,8 @@ public class BrokkGuiScreen implements IGuiWindow
         this.mainPanel.getyPosProperty().bind(this.yPosProperty);
 
         this.mainPanel.setStyleTree(this.getStyleTreeProperty()::getValue);
-        this.mainPanel.refreshStyle();
+        if (this.wrapper != null)
+            this.mainPanel.refreshStyle();
     }
 
     public BaseProperty<Float> getWidthProperty()

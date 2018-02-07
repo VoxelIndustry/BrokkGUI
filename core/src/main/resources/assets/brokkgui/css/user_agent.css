@@ -1,0 +1,22 @@
+scrollpane {
+    -grip-x-color: lightgrey;
+    -grip-y-color: lightgrey;
+}
+
+progressbar {
+    -track-color: red;
+}
+
+radio-button {
+    -box-color: rgba(0, 0, 0, 0);
+    -box-line-color: black;
+    -box-line-weight: 1;
+    -fill-color: black;
+}
+
+checkbox {
+    -box-color: rgba(0, 0, 0, 0);
+    -box-line-color: black;
+    -box-line-weight: 1;
+    -fill-color: gray;
+}
