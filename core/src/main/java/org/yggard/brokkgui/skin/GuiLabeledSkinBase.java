@@ -156,30 +156,25 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         this.ellipsedTextProperty.bind(new BaseBinding<String>()
         {
             {
-                super.bind(GuiLabeledSkinBase.this.getModel().getTextProperty(),
-                        GuiLabeledSkinBase.this.getModel().getExpandToTextProperty(),
-                        GuiLabeledSkinBase.this.getModel().getWidthProperty(),
-                        GuiLabeledSkinBase.this.getModel().getEllipsisProperty(),
-                        GuiLabeledSkinBase.this.textPaddingProperty);
+                super.bind(getModel().getTextProperty(), getModel().getExpandToTextProperty(),
+                        getModel().getWidthProperty(), getModel().getEllipsisProperty(), textPaddingProperty);
             }
 
             @Override
             public String computeValue()
             {
-                if (!GuiLabeledSkinBase.this.getModel().expandToText() && GuiLabeledSkinBase.this.getModel().getWidth()
-                        - GuiLabeledSkinBase.this.textPaddingProperty.getValue() < BrokkGuiPlatform.getInstance()
-                        .getGuiHelper().getStringWidth(GuiLabeledSkinBase.this.getModel().getText()))
+                if (!getModel().expandToText() && getModel().getWidth() - textPaddingProperty.getValue()
+                        < BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText()))
                 {
                     String trimmed = BrokkGuiPlatform.getInstance().getGuiHelper().trimStringToPixelWidth(
-                            GuiLabeledSkinBase.this.getModel().getText(),
-                            (int) (GuiLabeledSkinBase.this.getModel().getWidth()
-                                    - GuiLabeledSkinBase.this.textPaddingProperty.getValue()));
+                            getModel().getText(), (int) (getModel().getWidth() - textPaddingProperty.getValue()));
 
-                    trimmed = trimmed.substring(0,
-                            trimmed.length() - GuiLabeledSkinBase.this.getModel().getEllipsis().length());
-                    return trimmed + GuiLabeledSkinBase.this.getModel().getEllipsis();
+                    if (trimmed.length() < getModel().getEllipsis().length())
+                        return "";
+                    trimmed = trimmed.substring(0, trimmed.length() - getModel().getEllipsis().length());
+                    return trimmed + getModel().getEllipsis();
                 }
-                return GuiLabeledSkinBase.this.getModel().getText();
+                return getModel().getText();
             }
         });
     }
