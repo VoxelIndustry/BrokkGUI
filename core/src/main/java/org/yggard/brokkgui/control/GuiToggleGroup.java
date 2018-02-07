@@ -47,7 +47,7 @@ public class GuiToggleGroup
         return this.getButtonListProperty().getValue();
     }
 
-    public void addButton(final GuiToggleButtonBase button)
+    public void addButton(final GuiToggleButton button)
     {
         if (!this.getButtonListProperty().contains(button))
         {
@@ -56,7 +56,7 @@ public class GuiToggleGroup
         }
     }
 
-    public void addButtons(final GuiToggleButtonBase... buttons)
+    public void addButtons(final GuiToggleButton... buttons)
     {
         Arrays.asList(buttons).forEach(this::addButton);
     }

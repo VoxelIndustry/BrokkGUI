@@ -4,7 +4,7 @@ import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.behavior.GuiTogglableButtonBehavior;
-import org.yggard.brokkgui.control.GuiToggleButtonBase;
+import org.yggard.brokkgui.control.GuiToggleButton;
 import org.yggard.brokkgui.data.EHAlignment;
 import org.yggard.brokkgui.skin.GuiRadioButtonSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
@@ -12,7 +12,7 @@ import org.yggard.brokkgui.skin.GuiSkinBase;
 /**
  * @author Ourten 18 nov. 2016
  */
-public class GuiRadioButton extends GuiToggleButtonBase
+public class GuiRadioButton extends GuiToggleButton
 {
     private final BaseProperty<Float>       labelPaddingProperty;
     private final BaseProperty<EHAlignment> labelAlignmentProperty;

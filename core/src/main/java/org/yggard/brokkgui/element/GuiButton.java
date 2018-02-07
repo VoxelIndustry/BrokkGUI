@@ -22,6 +22,6 @@ public class GuiButton extends GuiButtonBase
     @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
-        return new GuiButtonSkin(this, new GuiButtonBehavior<>(this));
+        return new GuiButtonSkin<>(this, new GuiButtonBehavior<>(this));
     }
 }
