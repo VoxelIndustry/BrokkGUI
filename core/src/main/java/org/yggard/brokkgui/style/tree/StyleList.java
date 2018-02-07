@@ -61,9 +61,9 @@ public class StyleList
         return this.styleList.size() == 1 && this.wildcard.getRules().isEmpty();
     }
 
-    public Set<StyleEntry> getEntries(StyleHolder styleHolder)
+    public List<StyleEntry> getEntries(StyleHolder styleHolder)
     {
-        Set<StyleEntry> entries = new HashSet<>();
+        List<StyleEntry> entries = new ArrayList<>();
 
         entries.add(this.wildcard);
         this.styleList.forEach(entry ->

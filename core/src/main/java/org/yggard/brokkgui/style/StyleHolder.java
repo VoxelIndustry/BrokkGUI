@@ -5,7 +5,7 @@ import org.yggard.brokkgui.style.tree.StyleEntry;
 import org.yggard.brokkgui.style.tree.StyleList;
 
 import java.util.HashMap;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class StyleHolder
@@ -92,7 +92,7 @@ public class StyleHolder
         StyleList tree = this.styleSupplier.get();
         if (tree == null)
             return;
-        Set<StyleEntry> entries = tree.getEntries(this);
+        List<StyleEntry> entries = tree.getEntries(this);
 
         this.resetToDefault();
         this.subAliases.values().forEach(StyleHolder::resetToDefault);
