@@ -1,6 +1,6 @@
 package org.yggard.brokkgui.style.tree;
 
-import org.assertj.core.util.Sets;
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -19,7 +19,7 @@ public class StyleListTest
 
         StyleRule[] rules = new StyleRule[]{new StyleRule("-text-color", "red"), new StyleRule("-border-color",
                 "white")};
-        tree.addEntry(selector, Sets.newLinkedHashSet(rules));
+        tree.addEntry(selector, Lists.newArrayList(rules));
 
         assertThat(tree.getInternalStyleList()).hasSize(2);
         assertThat(tree.getInternalStyleList().get(1).getRules()).contains(rules);
@@ -35,7 +35,7 @@ public class StyleListTest
 
         StyleRule[] rules = new StyleRule[]{new StyleRule("-text-color", "red"), new StyleRule("-border-color",
                 "white")};
-        tree.addEntry(selector, Sets.newLinkedHashSet(rules));
+        tree.addEntry(selector, Lists.newArrayList(rules));
 
         StyleEntry styleEntry = tree.getInternalStyleList().get(1);
 
@@ -54,11 +54,11 @@ public class StyleListTest
 
         StyleRule[] rules1 = new StyleRule[]{new StyleRule("-text-color", "red"), new StyleRule("-border-color",
                 "white")};
-        tree.addEntry(selector, Sets.newLinkedHashSet(rules1));
+        tree.addEntry(selector, Lists.newArrayList(rules1));
 
         StyleRule[] rules2 = new StyleRule[]{new StyleRule("-text-font", "Open Sans"), new StyleRule("-border-width",
                 "2")};
-        tree.addEntry(selector, Sets.newLinkedHashSet(rules2));
+        tree.addEntry(selector, Lists.newArrayList(rules2));
 
         assertThat(tree.getInternalStyleList().get(1).getRules()).contains(rules1).contains(rules2);
     }
@@ -71,7 +71,7 @@ public class StyleListTest
         StyleSelector selector = new StyleSelector().add(StyleSelectorType.TYPE, "button")
                 .add(StyleSelectorType.ID, "myButton");
 
-        tree.addEntry(selector, Sets.newLinkedHashSet(new StyleRule("-text-color", "red"), new StyleRule
+        tree.addEntry(selector, Lists.newArrayList(new StyleRule("-text-color", "red"), new StyleRule
                 ("-border-color", "white")));
 
         assertThat(tree.isEmpty()).isFalse();

@@ -21,7 +21,7 @@ public class StyleList
         src.getInternalStyleList().forEach(entry -> this.addEntry(entry.getSelector(), entry.getRules()));
     }
 
-    public void addEntry(IStyleSelector selectors, Set<StyleRule> rules)
+    public void addEntry(IStyleSelector selectors, List<StyleRule> rules)
     {
         StyleEntry lastAdded;
 

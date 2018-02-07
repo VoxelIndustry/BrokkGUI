@@ -1,31 +1,32 @@
 package org.yggard.brokkgui.style.tree;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StyleEntry
 {
     private IStyleSelector  selector;
-    private Set<StyleRule> rules;
+    private List<StyleRule> rules;
 
     public StyleEntry(IStyleSelector selector)
     {
         this.selector = selector;
-        this.rules = new HashSet<>();
+        this.rules = new ArrayList<>();
     }
 
-    public void mergeRules(Set<StyleRule> rules)
+    public void mergeRules(List<StyleRule> rules)
     {
         rules.forEach(rule ->
         {
             if (this.rules.stream().noneMatch(rule2 -> rule2.getRuleIdentifier().equals(rule.getRuleIdentifier())))
-                this.rules.add(rule);
+                this.rule(rule);
         });
     }
 
     public StyleEntry rule(StyleRule rule)
     {
-        this.rules.add(rule);
+        if (!this.rules.contains(rule))
+            this.rules.add(rule);
         return this;
     }
 
@@ -34,7 +35,7 @@ public class StyleEntry
         return selector;
     }
 
-    public Set<StyleRule> getRules()
+    public List<StyleRule> getRules()
     {
         return rules;
     }
