@@ -9,9 +9,11 @@ import org.yggard.brokkgui.data.ESide;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 import org.yggard.brokkgui.skin.GuiTabPaneSkin;
+import org.yggard.brokkgui.style.tree.StyleList;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * @author Ourten 15 oct. 2016
@@ -20,9 +22,9 @@ public class GuiTabPane extends GuiControl
 {
     private final BaseListProperty<GuiTab> tabsProperty;
     private final BaseProperty<Integer>    selectedTabProperty, defaultTabProperty;
-    private final BaseProperty<ESide>      sideProperty;
+    private final BaseProperty<ESide> sideProperty;
 
-    private final BaseProperty<Float>      tabHeightRatioProperty;
+    private final BaseProperty<Float> tabHeightRatioProperty;
 
     public GuiTabPane()
     {
@@ -186,5 +188,33 @@ public class GuiTabPane extends GuiControl
     public void setTabHeightRatio(final float tabHeight)
     {
         this.getTabHeightRatioProperty().setValue(tabHeight);
+    }
+
+    /////////////////////
+    // STYLING //
+    /////////////////////
+
+    @Override
+    public void setStyleTree(Supplier<StyleList> treeSupplier)
+    {
+        super.setStyleTree(treeSupplier);
+
+        this.getTabs().forEach(node ->
+        {
+            if (node.getContent() != null)
+                node.getContent().setStyleTree(treeSupplier);
+        });
+    }
+
+    @Override
+    public void refreshStyle()
+    {
+        super.refreshStyle();
+
+        this.getTabs().forEach(node ->
+        {
+            if (node.getContent() != null)
+                node.getContent().refreshStyle();
+        });
     }
 }

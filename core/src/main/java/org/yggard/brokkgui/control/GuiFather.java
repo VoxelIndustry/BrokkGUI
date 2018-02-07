@@ -28,7 +28,10 @@ public class GuiFather extends GuiNode
         this.childrensProperty.addListener((ListValueChangeListener<GuiNode>) (obs, oldValue, newValue) ->
         {
             if (newValue != null)
+            {
+                newValue.setStyleTree(this.getStyle().getStyleSupplier());
                 newValue.refreshStyle();
+            }
         });
     }
 
@@ -97,6 +100,6 @@ public class GuiFather extends GuiNode
     {
         super.refreshStyle();
 
-        this.getChildrens().forEach(node -> node.getStyle().refresh());
+        this.getChildrens().forEach(GuiNode::refreshStyle);
     }
 }
