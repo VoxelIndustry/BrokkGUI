@@ -14,12 +14,14 @@ import java.io.IOException;
 public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
 {
     private final BrokkGuiScreen brokkgui;
+    private final String         modID;
 
-    private final GuiRenderer    renderer;
+    private final GuiRenderer renderer;
 
-    public GuiScreenImpl(final BrokkGuiScreen brokkgui)
+    GuiScreenImpl(String modID, BrokkGuiScreen brokkgui)
     {
         this.brokkgui = brokkgui;
+        this.modID = modID;
         this.renderer = new GuiRenderer(Tessellator.getInstance());
         this.brokkgui.setWrapper(this);
     }
@@ -116,5 +118,11 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     public IGuiRenderer getRenderer()
     {
         return this.renderer;
+    }
+
+    @Override
+    public String getThemeID()
+    {
+        return this.modID;
     }
 }

@@ -1,4 +1,4 @@
-package org.yggard.brokkgui.style;
+package org.yggard.brokkgui.style.parser;
 
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
@@ -34,7 +34,7 @@ public class StyleDecoder
     }
 
     @SuppressWarnings("unchecked")
-    <T> T decode(String value, Class<?> valueClass)
+    public <T> T decode(String value, Class<?> valueClass)
     {
         return (T) this.styleAdapters.get(valueClass).decode(value);
     }

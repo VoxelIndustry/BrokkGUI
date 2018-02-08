@@ -1,6 +1,7 @@
 package org.yggard.brokkgui.style;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.style.parser.StyleDecoder;
 import org.yggard.brokkgui.style.tree.StyleEntry;
 import org.yggard.brokkgui.style.tree.StyleList;
 

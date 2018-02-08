@@ -18,13 +18,15 @@ import java.io.IOException;
 public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
 {
     private final BrokkGuiContainer<? extends Container> brokkgui;
+    private       String                                 modID;
 
-    private final GuiRenderer                            renderer;
+    private final GuiRenderer renderer;
 
-    public GuiContainerImpl(final BrokkGuiContainer<? extends Container> brokkGui)
+    GuiContainerImpl(String modID, BrokkGuiContainer<? extends Container> brokkGui)
     {
         super(brokkGui.getContainer());
         this.brokkgui = brokkGui;
+        this.modID = modID;
         this.renderer = new GuiRenderer(Tessellator.getInstance());
         this.brokkgui.setWrapper(this);
 
@@ -140,6 +142,12 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     public IGuiRenderer getRenderer()
     {
         return this.renderer;
+    }
+
+    @Override
+    public String getThemeID()
+    {
+        return this.modID;
     }
 
     @Override

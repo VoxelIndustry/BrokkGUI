@@ -1,4 +1,4 @@
-package org.yggard.brokkgui.style;
+package org.yggard.brokkgui.style.parser;
 
 import org.apache.commons.lang3.StringUtils;
 import org.yggard.brokkgui.style.tree.IStyleSelector;

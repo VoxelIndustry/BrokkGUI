@@ -1,7 +1,8 @@
-package org.yggard.brokkgui.style;
+package org.yggard.brokkgui.style.parser;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yggard.brokkgui.style.parser.StyleSelectorParser;
 import org.yggard.brokkgui.style.tree.IStyleSelector;
 import org.yggard.brokkgui.style.tree.StyleSelector;
 import org.yggard.brokkgui.style.tree.StyleSelectorHierarchic;

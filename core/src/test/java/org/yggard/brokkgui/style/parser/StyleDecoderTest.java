@@ -1,4 +1,4 @@
-package org.yggard.brokkgui.style;
+package org.yggard.brokkgui.style.parser;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,6 +1,6 @@
 package org.yggard.brokkgui.demo;
 
-import org.yggard.brokkgui.wrapper.BrokkGuiManager;
+import org.yggard.brokkgui.wrapper.impl.BrokkGuiManager;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;

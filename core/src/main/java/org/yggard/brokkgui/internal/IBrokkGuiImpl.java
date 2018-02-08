@@ -11,4 +11,6 @@ public interface IBrokkGuiImpl
     void askClose();
 
     IGuiRenderer getRenderer();
+
+    String getThemeID();
 }

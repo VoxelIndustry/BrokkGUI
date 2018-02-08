@@ -17,7 +17,6 @@ import org.yggard.hermod.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
 
 public class BrokkGuiScreen implements IGuiWindow
 {
@@ -36,8 +35,6 @@ public class BrokkGuiScreen implements IGuiWindow
     private final BaseProperty<Integer> screenWidthProperty, screenHeightProperty;
 
     private final BaseListProperty<String> stylesheetsProperty;
-    private final BaseProperty<String>     userAgentStylesheetProperty;
-    private final BaseProperty<StyleList>  userAgentStyleTreeProperty;
     private final BaseProperty<StyleList>  styleTreeProperty;
 
     private final ListenerPool listenerPool;
@@ -63,9 +60,6 @@ public class BrokkGuiScreen implements IGuiWindow
         this.listenerPool = new ListenerPool();
 
         this.stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
-        this.userAgentStylesheetProperty = new BaseProperty<>(null,
-                "userAgentStylesheetProperty");
-        this.userAgentStyleTreeProperty = new BaseProperty<>(null, "userAgentStyleTreeProperty");
         this.styleTreeProperty = new BaseProperty<>(null, "styleTreeProperty");
 
         this.setMainPanel(new GuiPane());
@@ -103,21 +97,10 @@ public class BrokkGuiScreen implements IGuiWindow
             if (this.getMainPanel() != null)
                 this.getMainPanel().refreshStyle();
         });
-        this.userAgentStylesheetProperty.addListener((obs, oldValue, newValue) ->
-        {
-            try
-            {
-                this.setUserAgentStyleTree(StylesheetManager.getInstance().getStyleList(newValue));
-            } catch (ExecutionException e)
-            {
-                e.printStackTrace();
-            }
-            if (!this.stylesheetsProperty.isEmpty())
-                StylesheetManager.getInstance().refreshStylesheets(this);
-            if (this.getMainPanel() != null)
-                this.getMainPanel().refreshStyle();
-        });
-        this.userAgentStylesheetProperty.setValue("/assets/brokkgui/css/user_agent.css");
+
+        StylesheetManager.getInstance().refreshStylesheets(this);
+        if (this.getMainPanel() != null)
+            this.getMainPanel().refreshStyle();
     }
 
     public void render(final int mouseX, final int mouseY, EGuiRenderPass pass)
@@ -395,34 +378,14 @@ public class BrokkGuiScreen implements IGuiWindow
         return stylesheetsProperty;
     }
 
-    public BaseProperty<String> getUserAgentStylesheetProperty()
-    {
-        return userAgentStylesheetProperty;
-    }
-
     private BaseProperty<StyleList> getStyleTreeProperty()
     {
         return this.styleTreeProperty;
     }
 
-    private BaseProperty<StyleList> getUserAgentStyleTreeProperty()
-    {
-        return this.userAgentStyleTreeProperty;
-    }
-
     public void setStyleTree(StyleList tree)
     {
         this.getStyleTreeProperty().setValue(tree);
-    }
-
-    public void setUserAgentStyleTree(StyleList tree)
-    {
-        this.getUserAgentStyleTreeProperty().setValue(tree);
-    }
-
-    public StyleList getUserAgentStyleTree()
-    {
-        return this.getUserAgentStyleTreeProperty().getValue();
     }
 
     public void addStylesheet(String stylesheetLocation)
@@ -433,5 +396,10 @@ public class BrokkGuiScreen implements IGuiWindow
     public void removeStylesheet(String stylesheetLocation)
     {
         this.getStylesheetsProperty().remove(stylesheetLocation);
+    }
+
+    public String getThemeID()
+    {
+        return this.wrapper.getThemeID();
     }
 }

@@ -2,7 +2,9 @@ package org.yggard.brokkgui.style.tree;
 
 import org.yggard.brokkgui.style.StyleHolder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class StyleList
 {
@@ -16,9 +18,16 @@ public class StyleList
         this.styleList.add(this.wildcard);
     }
 
-    public void merge(StyleList src)
+    public StyleList(StyleList original)
+    {
+        this();
+        this.merge(original);
+    }
+
+    public StyleList merge(StyleList src)
     {
         src.getInternalStyleList().forEach(entry -> this.addEntry(entry.getSelector(), entry.getRules()));
+        return this;
     }
 
     public void addEntry(IStyleSelector selectors, List<StyleRule> rules)
