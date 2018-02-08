@@ -120,20 +120,21 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public final void renderNode(IGuiRenderer renderer, EGuiRenderPass pass, int mouseX, int mouseY)
     {
         if (this.isVisible())
-        {
-            if (this.isPointInside(mouseX, mouseY))
-            {
-                if (!this.isHovered())
-                    this.setHovered(true);
-            }
-            else if (this.isHovered())
-                this.setHovered(false);
-
             this.renderContent(renderer, pass, mouseX, mouseY);
-        }
     }
 
     protected abstract void renderContent(IGuiRenderer renderer, EGuiRenderPass pass, int mouseX, int mouseY);
+
+    public void handleHover(int mouseX, int mouseY, boolean hovered)
+    {
+        if(this.isVisible())
+        {
+            if(hovered && !this.isHovered())
+                this.setHovered(true);
+            else if(!hovered && this.isHovered())
+                this.setHovered(false);
+        }
+    }
 
     public void handleMouseInput()
     {

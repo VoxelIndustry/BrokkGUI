@@ -41,6 +41,8 @@ public class BrokkGuiScreen implements IGuiWindow
 
     private IBrokkGuiImpl wrapper;
 
+    private int cachedMouseX, cachedMouseY;
+
     public BrokkGuiScreen(final float xRelativePos, final float yRelativePos, final float width, final float height)
     {
         this.widthProperty = new BaseProperty<>(width, "widthProperty");
@@ -61,6 +63,9 @@ public class BrokkGuiScreen implements IGuiWindow
 
         this.stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
         this.styleTreeProperty = new BaseProperty<>(null, "styleTreeProperty");
+
+        this.cachedMouseX = -1;
+        this.cachedMouseY = -1;
 
         this.setMainPanel(new GuiPane());
     }
@@ -105,6 +110,13 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public void render(final int mouseX, final int mouseY, EGuiRenderPass pass)
     {
+        if (this.cachedMouseX != mouseX || this.cachedMouseY != mouseY)
+        {
+            this.mainPanel.handleHover(mouseX, mouseY, this.mainPanel.isPointInside(mouseX, mouseY));
+            this.cachedMouseX = mouseX;
+            this.cachedMouseY = mouseY;
+        }
+
         this.renderer.beginPass(pass);
         this.mainPanel.renderNode(this.renderer, pass, mouseX, mouseY);
         this.renderer.endPass(pass);

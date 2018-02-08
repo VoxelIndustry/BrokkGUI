@@ -15,7 +15,7 @@ public class GuiFather extends GuiNode
 {
     private final BaseListProperty<GuiNode> childrensProperty;
 
-    private EOverflowPolicy                 overflowPolicy;
+    private EOverflowPolicy overflowPolicy;
 
     public GuiFather(String type)
     {
@@ -59,10 +59,12 @@ public class GuiFather extends GuiNode
     }
 
     @Override
-    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int
+            mouseY)
     {
         if ((this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM.ordinal() && pass == EGuiRenderPass.MAIN)
-                || (pass == EGuiRenderPass.SPECIAL && this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM_ALL.ordinal()))
+                || (pass == EGuiRenderPass.SPECIAL && this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM_ALL
+                .ordinal()))
         {
             renderer.getHelper().beginScissor();
             renderer.getHelper().scissorBox(this.getxPos() + this.getxTranslate(),
@@ -79,12 +81,26 @@ public class GuiFather extends GuiNode
     public void handleClick(final int mouseX, final int mouseY, final int key)
     {
         super.handleClick(mouseX, mouseY, key);
-        this.getChildrens().stream().filter(node -> node.isPointInside(mouseX, mouseY))
+
+        this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
                 .forEach(child -> child.handleClick(mouseX, mouseY, key));
     }
 
+    @Override
+    public void handleHover(int mouseX, int mouseY, boolean hovered)
+    {
+        super.handleHover(mouseX, mouseY, hovered);
+
+        if (hovered)
+            this.getChildrens().forEach(child ->
+                    child.handleHover(mouseX, mouseY, child.isPointInside(mouseX, mouseY)));
+        else
+            this.getChildrens().forEach(child -> child.handleHover(mouseX, mouseY, false));
+
+    }
+
     /////////////////////
-    // STYLING //
+    //     STYLING     //
     /////////////////////
 
     @Override
