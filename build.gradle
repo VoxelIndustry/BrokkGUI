@@ -124,3 +124,12 @@ project(":1.12") {
         api project(":core")
     }
 }
+
+project(":1.7") {
+    archivesBaseName = "brokkgui-binding-mc1.7"
+
+    version = "1.0.0-09-SNAPSHOT"
+    dependencies {
+        api project(":core")
+    }
+}

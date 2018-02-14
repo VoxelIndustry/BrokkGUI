@@ -1,0 +1,16 @@
+[
+{
+  "modid": "brokkguidemo",
+  "name": "BrokkGuiDemo",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Ourten"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

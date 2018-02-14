@@ -138,4 +138,6 @@ Thumbs.db
 1.12/config/*
 1.12/crash-reports/*
 1.12/asm/*
-1.12/run/*
+*/run/*
+
+1.7/out/
