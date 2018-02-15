@@ -8,7 +8,7 @@ import org.yggard.brokkgui.event.WindowEvent;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.panel.GuiPane;
 import org.yggard.brokkgui.style.StylesheetManager;
 import org.yggard.brokkgui.style.tree.StyleList;
@@ -108,7 +108,7 @@ public class BrokkGuiScreen implements IGuiWindow
             this.getMainPanel().refreshStyle();
     }
 
-    public void render(final int mouseX, final int mouseY, EGuiRenderPass pass)
+    public void render(final int mouseX, final int mouseY, RenderPass pass)
     {
         if (this.cachedMouseX != mouseX || this.cachedMouseY != mouseY)
         {

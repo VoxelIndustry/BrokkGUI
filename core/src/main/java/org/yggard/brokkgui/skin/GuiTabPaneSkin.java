@@ -4,7 +4,7 @@ import org.yggard.brokkgui.behavior.GuiTabPaneBehavior;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiTabPane;
 
@@ -19,7 +19,7 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
     }
 
     @Override
-    public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
+    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
         super.render(pass, renderer, mouseX, mouseY);
 

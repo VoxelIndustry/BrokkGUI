@@ -1,7 +1,7 @@
 package org.yggard.brokkgui.shape;
 
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.paint.Texture;
 
 public class Rectangle extends GuiShape
@@ -28,9 +28,9 @@ public class Rectangle extends GuiShape
     }
 
     @Override
-    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(final IGuiRenderer renderer, final RenderPass pass, final int mouseX, final int mouseY)
     {
-        if (pass == EGuiRenderPass.MAIN)
+        if (pass == RenderPass.MAIN)
         {
             if (this.getLineWeight() > 0)
                 renderer.getHelper().drawColoredEmptyRect(renderer, this.getxPos() + this.getxTranslate(),

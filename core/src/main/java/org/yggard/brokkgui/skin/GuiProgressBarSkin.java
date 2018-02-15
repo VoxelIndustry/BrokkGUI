@@ -4,7 +4,7 @@ import fr.ourten.teabeans.binding.BaseExpression;
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
 import org.yggard.brokkgui.element.GuiProgressBar;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.shape.Rectangle;
 
 public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorBase<C>> extends GuiLabeledSkinBase<C, B>
@@ -47,7 +47,7 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
     }
 
     @Override
-    public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
+    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
         super.render(pass, renderer, mouseX, mouseY);
 

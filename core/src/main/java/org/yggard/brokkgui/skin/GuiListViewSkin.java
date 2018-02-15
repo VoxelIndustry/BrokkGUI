@@ -6,7 +6,7 @@ import org.yggard.brokkgui.element.GuiListCell;
 import org.yggard.brokkgui.element.GuiListView;
 import org.yggard.brokkgui.event.ClickEvent;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +54,7 @@ public class GuiListViewSkin<T> extends GuiBehaviorSkinBase<GuiListView<T>, GuiL
     }
 
     @Override
-    public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
+    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
         super.render(pass, renderer, mouseX, mouseY);
 

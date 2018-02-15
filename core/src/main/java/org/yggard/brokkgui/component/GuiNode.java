@@ -9,7 +9,7 @@ import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.event.*;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.style.ICascadeStyleable;
 import org.yggard.brokkgui.style.StyleHolder;
 import org.yggard.brokkgui.style.tree.StyleList;
@@ -117,21 +117,21 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         });
     }
 
-    public final void renderNode(IGuiRenderer renderer, EGuiRenderPass pass, int mouseX, int mouseY)
+    public final void renderNode(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
         if (this.isVisible())
             this.renderContent(renderer, pass, mouseX, mouseY);
     }
 
-    protected abstract void renderContent(IGuiRenderer renderer, EGuiRenderPass pass, int mouseX, int mouseY);
+    protected abstract void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY);
 
     public void handleHover(int mouseX, int mouseY, boolean hovered)
     {
-        if(this.isVisible())
+        if (this.isVisible())
         {
-            if(hovered && !this.isHovered())
+            if (hovered && !this.isHovered())
                 this.setHovered(true);
-            else if(!hovered && this.isHovered())
+            else if (!hovered && this.isHovered())
                 this.setHovered(false);
         }
     }

@@ -4,7 +4,7 @@ import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.value.BaseListProperty;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
 import org.yggard.brokkgui.style.tree.StyleList;
 
@@ -59,11 +59,10 @@ public class GuiFather extends GuiNode
     }
 
     @Override
-    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int
-            mouseY)
+    public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
-        if ((this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM.ordinal() && pass == EGuiRenderPass.MAIN)
-                || (pass == EGuiRenderPass.SPECIAL && this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM_ALL
+        if ((this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM.ordinal() && pass == RenderPass.MAIN)
+                || (pass == RenderPass.SPECIAL && this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM_ALL
                 .ordinal()))
         {
             renderer.getHelper().beginScissor();

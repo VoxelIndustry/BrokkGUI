@@ -8,7 +8,7 @@ import org.yggard.brokkgui.data.ZLevelComparator;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
 import org.yggard.brokkgui.style.StyleSource;
 
@@ -87,13 +87,13 @@ public class GuiPane extends GuiFather
     }
 
     @Override
-    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int
+    public void renderContent(final IGuiRenderer renderer, final RenderPass pass, final int mouseX, final int
             mouseY)
     {
         if (this.getOpacity() != 1)
             renderer.getHelper().startAlphaMask(this.getOpacity());
 
-        if (pass == EGuiRenderPass.SPECIAL && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
+        if (pass == RenderPass.SPECIAL && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
             renderer.getHelper().drawColoredEmptyRect(renderer, this.getxPos() + this.getxTranslate(),
                     this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
                     this.getBorderColor(), this.getBorderThin());

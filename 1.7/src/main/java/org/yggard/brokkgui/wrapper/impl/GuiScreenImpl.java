@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.wrapper.GuiRenderer;
 
 public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
@@ -56,9 +56,9 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        this.brokkgui.render(mouseX, mouseY, EGuiRenderPass.MAIN);
-        this.brokkgui.render(mouseX, mouseY, EGuiRenderPass.HOVER);
-        this.brokkgui.render(mouseX, mouseY, EGuiRenderPass.SPECIAL);
+        this.brokkgui.render(mouseX, mouseY, RenderPass.MAIN);
+        this.brokkgui.render(mouseX, mouseY, RenderPass.HOVER);
+        this.brokkgui.render(mouseX, mouseY, RenderPass.SPECIAL);
     }
 
     @Override

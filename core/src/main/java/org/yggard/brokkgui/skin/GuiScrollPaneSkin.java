@@ -3,7 +3,7 @@ package org.yggard.brokkgui.skin;
 import fr.ourten.teabeans.binding.BaseBinding;
 import org.yggard.brokkgui.behavior.GuiScrollPaneBehavior;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.panel.ScrollPane;
 import org.yggard.brokkgui.policy.EScrollbarPolicy;
 import org.yggard.brokkgui.shape.Rectangle;
@@ -157,29 +157,29 @@ public class GuiScrollPaneSkin extends GuiBehaviorSkinBase<ScrollPane, GuiScroll
     }
 
     @Override
-    public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
+    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
         super.render(pass, renderer, mouseX, mouseY);
-        if (pass == EGuiRenderPass.SPECIAL)
+        if (pass == RenderPass.SPECIAL)
         {
             if (this.getModel().getScrollXPolicy() == EScrollbarPolicy.ALWAYS
                     || this.getModel().getScrollXPolicy() == EScrollbarPolicy.NEEDED)
                 if (this.getModel().getWidth() >= this.getModel().getTrueWidth())
                 {
                     if (this.getModel().getScrollXPolicy() == EScrollbarPolicy.ALWAYS)
-                        this.gripX.renderNode(renderer, EGuiRenderPass.MAIN, mouseX, mouseY);
+                        this.gripX.renderNode(renderer, RenderPass.MAIN, mouseX, mouseY);
                 }
                 else
-                    this.gripX.renderNode(renderer, EGuiRenderPass.MAIN, mouseX, mouseY);
+                    this.gripX.renderNode(renderer, RenderPass.MAIN, mouseX, mouseY);
             if (this.getModel().getScrollYPolicy() == EScrollbarPolicy.ALWAYS
                     || this.getModel().getScrollYPolicy() == EScrollbarPolicy.NEEDED)
                 if (this.getModel().getHeight() >= this.getModel().getTrueHeight())
                 {
                     if (this.getModel().getScrollYPolicy() == EScrollbarPolicy.ALWAYS)
-                        this.gripY.renderNode(renderer, EGuiRenderPass.MAIN, mouseX, mouseY);
+                        this.gripY.renderNode(renderer, RenderPass.MAIN, mouseX, mouseY);
                 }
                 else
-                    this.gripY.renderNode(renderer, EGuiRenderPass.MAIN, mouseX, mouseY);
+                    this.gripY.renderNode(renderer, RenderPass.MAIN, mouseX, mouseY);
         }
     }
 }

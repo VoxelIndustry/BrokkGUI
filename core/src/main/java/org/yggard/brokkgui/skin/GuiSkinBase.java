@@ -4,7 +4,7 @@ import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiControl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +32,9 @@ public class GuiSkinBase<T extends GuiControl> implements IGuiSkin
     }
 
     @Override
-    public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
+    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
-        if (pass == EGuiRenderPass.SPECIAL && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
+        if (pass == RenderPass.SPECIAL && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
             renderer.getHelper().drawColoredEmptyRect(renderer, this.model.getxPos() + this.model.getxTranslate(),
                     this.model.getyPos() + this.model.getyTranslate(), this.model.getWidth(), this.model.getHeight(),
                     this.model.getzLevel(), this.getBorderColor(), this.getBorderThin());

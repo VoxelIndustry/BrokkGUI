@@ -7,7 +7,7 @@ import org.yggard.brokkgui.behavior.GuiButtonBehavior;
 import org.yggard.brokkgui.data.EHAlignment;
 import org.yggard.brokkgui.element.GuiCheckbox;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.shape.Rectangle;
 import org.yggard.brokkgui.shape.Text;
 
@@ -99,7 +99,7 @@ public class GuiCheckboxSkin extends GuiLabeledSkinBase<GuiCheckbox, GuiButtonBe
     }
 
     @Override
-    public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
+    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
         super.render(pass, renderer, mouseX, mouseY);
 

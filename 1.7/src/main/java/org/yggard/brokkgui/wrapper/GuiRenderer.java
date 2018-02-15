@@ -1,13 +1,12 @@
 package org.yggard.brokkgui.wrapper;
 
+import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.internal.EGuiRenderMode;
 import org.yggard.brokkgui.internal.IGuiHelper;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
-
-import net.minecraft.client.renderer.Tessellator;
+import org.yggard.brokkgui.paint.RenderPass;
 
 public class GuiRenderer implements IGuiRenderer
 {
@@ -52,13 +51,13 @@ public class GuiRenderer implements IGuiRenderer
     }
 
     @Override
-    public void beginPass(final EGuiRenderPass pass)
+    public void beginPass(final RenderPass pass)
     {
 
     }
 
     @Override
-    public void endPass(final EGuiRenderPass pass)
+    public void endPass(final RenderPass pass)
     {
 
     }

@@ -4,7 +4,7 @@ import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.paint.TextStyle;
 
 public class Text extends GuiShape
@@ -33,9 +33,9 @@ public class Text extends GuiShape
     }
 
     @Override
-    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(final IGuiRenderer renderer, final RenderPass pass, final int mouseX, final int mouseY)
     {
-        if (pass == EGuiRenderPass.MAIN)
+        if (pass == RenderPass.MAIN)
             renderer.getHelper().drawString(this.getText(), (int) (this.getxPos() + this.getxTranslate()),
                     (int) (this.getyPos() + this.getyTranslate()), this.getzLevel(),
                     this.getTextStyle().getTextColor(), this.getTextStyle().useShadow() ? this.getTextStyle()

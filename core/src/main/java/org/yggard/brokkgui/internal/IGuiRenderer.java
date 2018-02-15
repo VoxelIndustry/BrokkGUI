@@ -1,15 +1,15 @@
 package org.yggard.brokkgui.internal;
 
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 
 /**
  * @author Ourten 5 oct. 2016
  */
 public interface IGuiRenderer
 {
-    void beginPass(EGuiRenderPass pass);
+    void beginPass(RenderPass pass);
 
-    void endPass(EGuiRenderPass pass);
+    void endPass(RenderPass pass);
 
     void beginDrawing(EGuiRenderMode mode, boolean texture);
 

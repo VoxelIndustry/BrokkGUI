@@ -1,14 +1,13 @@
 package org.yggard.brokkgui.component;
 
-import org.yggard.brokkgui.data.ESide;
-import org.yggard.brokkgui.data.RelativeBindingHelper;
-import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
-import org.yggard.brokkgui.panel.GuiTabPane;
-
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.RelativeBindingHelper;
+import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.RenderPass;
+import org.yggard.brokkgui.panel.GuiTabPane;
 
 /**
  * @author Ourten 15 oct. 2016
@@ -164,7 +163,7 @@ public class GuiTab
         this.getSelectedProperty().setValue(selected);
     }
 
-    public void renderChild(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int mouseY)
+    public void renderChild(final IGuiRenderer renderer, final RenderPass pass, final int mouseX, final int mouseY)
     {
         if (this.getContent() != null)
             this.getContent().renderNode(renderer, pass, mouseX, mouseY);

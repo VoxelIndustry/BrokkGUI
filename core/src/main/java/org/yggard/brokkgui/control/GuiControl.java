@@ -3,7 +3,7 @@ package org.yggard.brokkgui.control;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Background;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 import org.yggard.brokkgui.skin.IGuiSkinnable;
 import org.yggard.brokkgui.style.StyleSource;
@@ -33,7 +33,7 @@ public abstract class GuiControl extends GuiFather implements IGuiSkinnable
     }
 
     @Override
-    public void renderContent(final IGuiRenderer renderer, final EGuiRenderPass pass, final int mouseX, final int
+    public void renderContent(final IGuiRenderer renderer, final RenderPass pass, final int mouseX, final int
             mouseY)
     {
         if (this.getOpacity() != 1)

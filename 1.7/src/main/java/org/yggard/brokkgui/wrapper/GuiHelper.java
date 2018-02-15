@@ -19,6 +19,7 @@ import org.yggard.brokkgui.internal.EGuiRenderMode;
 import org.yggard.brokkgui.internal.IGuiHelper;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.paint.Texture;
 
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ import java.util.List;
 
 public class GuiHelper implements IGuiHelper
 {
+    public static RenderPass ITEM_MAIN  = RenderPass.create("item_main", 0);
+    public static RenderPass ITEM_HOVER = RenderPass.create("item_hover", 1);
+
     private       RenderItem          itemRender;
     private final Minecraft           mc;
     private final GuiRenderItemHelper itemHelper;

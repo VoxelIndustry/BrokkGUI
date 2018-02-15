@@ -19,12 +19,16 @@ import org.yggard.brokkgui.internal.EGuiRenderMode;
 import org.yggard.brokkgui.internal.IGuiHelper;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.paint.Texture;
 
 import java.util.List;
 
 public class GuiHelper implements IGuiHelper
 {
+    public static RenderPass ITEM_MAIN  = RenderPass.create("item_main", 0);
+    public static RenderPass ITEM_HOVER = RenderPass.create("item_hover", 1);
+
     private RenderItem          itemRender;
     private Minecraft           mc;
     private GuiRenderItemHelper itemHelper;
@@ -239,7 +243,7 @@ public class GuiHelper implements IGuiHelper
                                    float radius, float zLevel)
     {
         this.enableAlpha();
-        GlStateManager.color(1,1,1, (float) alphaMask);
+        GlStateManager.color(1, 1, 1, (float) alphaMask);
         renderer.beginDrawing(EGuiRenderMode.POINTS, true);
         float r2 = radius * radius;
         float area = r2 * 4;

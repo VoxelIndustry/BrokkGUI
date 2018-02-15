@@ -5,7 +5,7 @@ import org.yggard.brokkgui.behavior.GuiTextfieldBehavior;
 import org.yggard.brokkgui.element.GuiTextfield;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
-import org.yggard.brokkgui.paint.EGuiRenderPass;
+import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.validation.BaseTextValidator;
 
 /**
@@ -21,11 +21,11 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
     }
 
     @Override
-    public void render(final EGuiRenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
+    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
         super.render(pass, renderer, mouseX, mouseY);
 
-        if (pass == EGuiRenderPass.MAIN)
+        if (pass == RenderPass.MAIN)
         {
             final Color color = !this.getModel().isValid() ? Color.RED : this.getTextColor();
 
@@ -62,7 +62,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 renderer.getHelper().drawString(this.getModel().getText(), x + 3, y + 3, this.getModel().getzLevel(),
                         color);
             }
-            else if (pass == EGuiRenderPass.SPECIAL)
+            else if (pass == RenderPass.SPECIAL)
                 if (!this.getModel().isValid())
                 {
                     int i = 0;
