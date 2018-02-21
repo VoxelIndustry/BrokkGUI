@@ -188,7 +188,8 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
         return pos;
     }
     
-    protected int nextWordPosition() {
+    protected int nextWordPosition() 
+    {
         if(getModel().getCursorPosition() == getModel().getText().length())
             return getModel().getCursorPosition();
         String text = getModel().getText();

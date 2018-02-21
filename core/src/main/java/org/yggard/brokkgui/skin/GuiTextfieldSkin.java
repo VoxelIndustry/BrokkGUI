@@ -43,7 +43,8 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             }
             
             @Override
-            public String computeValue() {
+            public String computeValue() 
+            {
                 return trimTextToWidth(getModel().getPromptText(), getModel().getPromptEllipsisProperty().getValue(),
                         (int) (getModel().getWidth() - getModel().getTextPaddingProperty().getValue() * 2), 
                         BrokkGuiPlatform.getInstance().getGuiHelper());
