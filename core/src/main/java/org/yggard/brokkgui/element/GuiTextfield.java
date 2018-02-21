@@ -19,13 +19,14 @@ import java.util.List;
  */
 public class GuiTextfield extends GuiControl implements ITextInput
 {
-    private final BaseProperty<String>                textProperty, promptTextProperty;
+    private final BaseProperty<String>                textProperty, promptTextProperty, promptEllipsisProperty;
 
     private final BaseProperty<Boolean>               promptTextAlwaysDisplayedProperty, editableProperty,
             validatedProperty;
 
     private final BaseProperty<Integer>               maxTextLengthProperty;
     private final BaseProperty<Integer>               cursorPositionProperty;
+    private final BaseProperty<Float>                 textPaddingProperty;
 
     private final BaseListProperty<BaseTextValidator> validatorsProperty;
 
@@ -38,9 +39,11 @@ public class GuiTextfield extends GuiControl implements ITextInput
 
         this.textProperty = new BaseProperty<>(text, "textProperty");
         this.promptTextProperty = new BaseProperty<>("", "promptTextProperty");
+        this.promptEllipsisProperty = new BaseProperty<>("...", "promptEllipsisProperty");
 
         this.maxTextLengthProperty = new BaseProperty<>(-1, "maxTextLength");
         this.cursorPositionProperty = new BaseProperty<>(0, "cursorPositionProperty");
+        this.textPaddingProperty = new BaseProperty<>(2.0f, "textPaddingProperty");
 
         this.promptTextAlwaysDisplayedProperty = new BaseProperty<>(false, "promptTextAlwaysDisplayedProperty");
         this.editableProperty = new BaseProperty<>(true, "editableProperty");
@@ -100,6 +103,16 @@ public class GuiTextfield extends GuiControl implements ITextInput
     public BaseProperty<Integer> getCursorPositionProperty()
     {
         return this.cursorPositionProperty;
+    }
+    
+    public BaseProperty<Float> getTextPaddingProperty()
+    {
+        return this.textPaddingProperty;
+    }
+    
+    public BaseProperty<String> getPromptEllipsisProperty()
+    {
+        return this.promptEllipsisProperty;
     }
 
     @Override
@@ -212,6 +225,26 @@ public class GuiTextfield extends GuiControl implements ITextInput
     public void setPromptTextAlwaysDisplayed(final boolean always)
     {
         this.getPromptTextAlwaysDisplayedProperty().setValue(always);
+    }
+    
+    public void setPromptEllipsis(String ellipsis) 
+    {
+        this.getPromptEllipsisProperty().setValue(ellipsis);
+    }
+    
+    public String getPromptEllipsis()
+    {
+        return this.getPromptEllipsisProperty().getValue();
+    }
+    
+    public void setTextPadding(float padding)
+    {
+        this.getTextPaddingProperty().setValue(padding);
+    }
+    
+    public float getTextPadding()
+    {
+        return this.getTextPaddingProperty().getValue();
     }
 
     ////////////
