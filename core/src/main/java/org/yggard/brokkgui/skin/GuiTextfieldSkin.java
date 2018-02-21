@@ -20,6 +20,10 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
 {
     
     private final BaseProperty<String> ellipsedPromptProperty;
+    private final BaseProperty<Integer> displayOffsetProperty;
+    // Here to keep last value of the displayOffsetProperty
+    private int displayOffset = 0;
+    private final BaseProperty<String> displayedTextProperty;
     
     public GuiTextfieldSkin(final T model, final GuiTextfieldBehavior<T> behaviour)
     {
@@ -28,6 +32,8 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
         this.getModel().getStyle().registerProperty("-text-color", Color.WHITE, Color.class);
         
         this.ellipsedPromptProperty = new BaseProperty<>("", "ellipsedPromptProperty");
+        this.displayOffsetProperty = new BaseProperty<>(0, "displayOffsetProperty");
+        this.displayedTextProperty = new BaseProperty<>("", "displayedTextProperty");
         
         this.ellipsedPromptProperty.bind(new BaseBinding<String>()
         {
@@ -44,6 +50,53 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             }
             
         });
+        
+        displayOffsetProperty.bind(new BaseBinding<Integer>() 
+        {
+            
+            {
+                super.bind(getModel().getCursorPositionProperty(), getModel().getTextPaddingProperty(), getModel().getWidthProperty());
+            }
+
+            @Override
+            public Integer computeValue() 
+            {
+                if(getModel().getCursorPosition() <= displayOffset)
+                {
+                    displayOffset = getModel().getCursorPosition();
+                    return displayOffset;
+                }
+                IGuiHelper helper = BrokkGuiPlatform.getInstance().getGuiHelper();
+                while(helper.getStringWidth(getModel().getText().substring(
+                        displayOffset, 
+                        getModel().getCursorPosition())) > getModel().getWidth() - 2 * getModel().getTextPaddingProperty().getValue())
+                {
+                    displayOffset++;
+                }
+                displayOffset = Math.max(0, displayOffset);
+                return displayOffset;
+            }
+            
+        });
+        
+        displayedTextProperty.bind(new BaseBinding<String>() 
+        {
+            {
+                super.bind(displayOffsetProperty, getModel().getTextProperty());
+            }
+
+            @Override
+            public String computeValue() 
+            {
+                String rightPart = getModel().getText().substring(displayOffsetProperty.getValue());
+                IGuiHelper helper = BrokkGuiPlatform.getInstance().getGuiHelper();
+                while(helper.getStringWidth(rightPart) > getModel().getWidth() - 2 * getModel().getTextPaddingProperty().getValue())
+                {
+                    rightPart = rightPart.substring(0, rightPart.length() - 1);
+                }
+                return rightPart;
+            }
+        });
     }
 
     @Override
@@ -59,35 +112,35 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             {
                 final float x = this.getModel().getxPos() + this.getModel().getxTranslate();
                 final float y = this.getModel().getyPos() + this.getModel().getyTranslate();
+                final float padding = this.getModel().getTextPadding();
+
+                // Prompt text
                 if (!StringUtils.isEmpty(this.getModel().getPromptText())
                         && (this.getModel().isPromptTextAlwaysDisplayed()
                                 || StringUtils.isEmpty(this.getModel().getText())))
-                    renderer.getHelper().drawString(this.ellipsedPromptProperty.getValue(), x + getModel().getTextPadding(),
-                            y + getModel().getTextPadding(), this.getModel().getzLevel(), color.shade(0.5f));
-                if (this.getModel().getCursorPosition() == this.getModel().getText().length())
+                {
+                    renderer.getHelper().drawString(this.ellipsedPromptProperty.getValue(), x + padding,
+                            y + this.getModel().getTextPaddingProperty().getValue(),
+                            this.getModel().getzLevel(), color.shade(0.5f));
+                }
+                
+                // Text shadow
+                renderer.getHelper().drawString(this.displayedTextProperty.getValue(), x + padding + 1, 
+                        y + padding + 1, this.getModel().getzLevel(), color.shade(0.7f));
+                
+                // Cursor
+                if (this.getModel().getFocusedProperty().getValue())
+                {
                     renderer.getHelper().drawColoredRect(renderer,
-                            x + getModel().getTextPadding() + 1 + renderer.getHelper().getStringWidth(
-                                    this.getModel().getText().substring(0, this.getModel().getCursorPosition())),
-                            y + renderer.getHelper().getStringHeight() + getModel().getTextPadding() - 1, 5, 1,
-                            this.getModel().getzLevel(), color.shade(0.7f));
-                renderer.getHelper().drawString(this.getModel().getText(), x + getModel().getTextPadding() + 1, 
-                        y + getModel().getTextPadding() + 1, this.getModel().getzLevel(), color.shade(0.7f));
-
-                if (this.getModel().getCursorPosition() != this.getModel().getText().length())
-                    renderer.getHelper().drawColoredRect(renderer,
-                            x + getModel().getTextPadding() + renderer.getHelper().getStringWidth(
-                                    this.getModel().getText().substring(0, this.getModel().getCursorPosition())),
-                            y + getModel().getTextPadding() - 1, 1, renderer.getHelper().getStringHeight() + 1,
-                            this.getModel().getzLevel(), color.shade(0.3f));
-                else
-                    renderer.getHelper().drawColoredRect(renderer,
-                            x + getModel().getTextPadding() + renderer.getHelper().getStringWidth(
-                                    this.getModel().getText().substring(0, this.getModel().getCursorPosition())),
-                            y + renderer.getHelper().getStringHeight() + 1, 5, 1, this.getModel().getzLevel(),
-                            color.shade(0.3f));
-                renderer.getHelper().drawString(this.getModel().getText(), x + getModel().getTextPadding(),
-                        y + getModel().getTextPadding(), this.getModel().getzLevel(),
-                        color);
+                            x + padding - 1 + renderer.getHelper().getStringWidth(
+                                    this.getModel().getText().substring(this.displayOffsetProperty.getValue(),
+                                            this.getModel().getCursorPosition())), y + padding - 1, 1, 
+                            renderer.getHelper().getStringHeight() + 1, this.getModel().getzLevel(), color.shade(0.3f));
+                }
+                
+                // Text
+                renderer.getHelper().drawString(this.displayedTextProperty.getValue(), x + padding,
+                        y + padding, this.getModel().getzLevel(), color);
             }
             else if (pass == RenderPass.SPECIAL)
                 if (!this.getModel().isValid())
