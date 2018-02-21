@@ -14,6 +14,9 @@ import org.yggard.brokkgui.internal.IKeyboardUtil;
  */
 public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBase<T>
 {
+    
+    static final Pattern ALPHA_NUM_REGEX = Pattern.compile("[a-zA-Z0-9]");
+    
     private final IKeyboardUtil keyboard = BrokkGuiPlatform.getInstance().getKeyboardUtil();
 
     public GuiTextfieldBehavior(final T model)
@@ -148,8 +151,6 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
         }
     }
     
-    private static final Pattern alphaNumRegex = Pattern.compile("[a-zA-Z0-9]");
-    
     protected int previousWordPosition() 
     {
         String textBeforeCursor = getModel().getText().substring(0, getModel().getCursorPosition());
@@ -161,7 +162,7 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
         while(pos > 0) 
         {
             String charAtPos = textBeforeCursor.charAt(pos - 1) + "";
-            if(alphaNumRegex.matcher(charAtPos).matches()) 
+            if(ALPHA_NUM_REGEX.matcher(charAtPos).matches()) 
             {
                 foundCharacter = true;
                 pos--;
@@ -205,7 +206,7 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
             {
                 break;
             } 
-            else if(!alphaNumRegex.matcher(charAtPos).matches() && pos != getModel().getCursorPosition())
+            else if(!ALPHA_NUM_REGEX.matcher(charAtPos).matches() && pos != getModel().getCursorPosition())
             {
                 break;
             }

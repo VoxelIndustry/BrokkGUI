@@ -52,8 +52,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
         });
         
         displayOffsetProperty.bind(new BaseBinding<Integer>() 
-        {
-            
+        {   
             {
                 super.bind(getModel().getCursorPositionProperty(), getModel().getTextPaddingProperty(), getModel().getWidthProperty());
             }
@@ -69,7 +68,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 IGuiHelper helper = BrokkGuiPlatform.getInstance().getGuiHelper();
                 while(helper.getStringWidth(getModel().getText().substring(
                         displayOffset, 
-                        getModel().getCursorPosition())) > getModel().getWidth() - 2 * getModel().getTextPaddingProperty().getValue())
+                        getModel().getCursorPosition())) > getModel().getWidth() - 2 * getModel().getTextPadding())
                 {
                     displayOffset++;
                 }
@@ -90,7 +89,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             {
                 String rightPart = getModel().getText().substring(displayOffsetProperty.getValue());
                 IGuiHelper helper = BrokkGuiPlatform.getInstance().getGuiHelper();
-                while(helper.getStringWidth(rightPart) > getModel().getWidth() - 2 * getModel().getTextPaddingProperty().getValue())
+                while(helper.getStringWidth(rightPart) > getModel().getWidth() - 2 * getModel().getTextPadding())
                 {
                     rightPart = rightPart.substring(0, rightPart.length() - 1);
                 }
@@ -113,7 +112,6 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 final float x = this.getModel().getxPos() + this.getModel().getxTranslate();
                 final float y = this.getModel().getyPos() + this.getModel().getyTranslate();
                 final float padding = this.getModel().getTextPadding();
-
                 // Prompt text
                 if (!StringUtils.isEmpty(this.getModel().getPromptText())
                         && (this.getModel().isPromptTextAlwaysDisplayed()
@@ -123,11 +121,9 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                             y + this.getModel().getTextPaddingProperty().getValue(),
                             this.getModel().getzLevel(), color.shade(0.5f));
                 }
-                
-                // Text shadow
-                renderer.getHelper().drawString(this.displayedTextProperty.getValue(), x + padding + 1, 
-                        y + padding + 1, this.getModel().getzLevel(), color.shade(0.7f));
-                
+                // Text
+                renderer.getHelper().drawString(this.displayedTextProperty.getValue(), x + padding,
+                        y + padding, this.getModel().getzLevel(), color, color.shade(0.7f)); 
                 // Cursor
                 if (this.getModel().getFocusedProperty().getValue())
                 {
@@ -136,11 +132,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                                     this.getModel().getText().substring(this.displayOffsetProperty.getValue(),
                                             this.getModel().getCursorPosition())), y + padding - 1, 1, 
                             renderer.getHelper().getStringHeight() + 1, this.getModel().getzLevel(), color.shade(0.3f));
-                }
-                
-                // Text
-                renderer.getHelper().drawString(this.displayedTextProperty.getValue(), x + padding,
-                        y + padding, this.getModel().getzLevel(), color);
+                }  
             }
             else if (pass == RenderPass.SPECIAL)
                 if (!this.getModel().isValid())
@@ -166,12 +158,13 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
         return this.getModel().getStyle().getStyleProperty("-text-color", Color.class).getValue();
     }
     
-    public String trimTextToWidth(String textToTrim, String ellips, int width, IGuiHelper helper) {
+    public String trimTextToWidth(String textToTrim, String ellipsis, int width, IGuiHelper helper) 
+    {
         String trimmed = helper.trimStringToPixelWidth(textToTrim, width);
         if(!trimmed.equals(textToTrim))
         {
-            if(trimmed.length() >= ellips.length())
-                trimmed = trimmed.substring(0, trimmed.length() - ellips.length()) + ellips;
+            if(trimmed.length() >= ellipsis.length())
+                trimmed = trimmed.substring(0, trimmed.length() - ellipsis.length()) + ellipsis;
             else
                 trimmed = "";
         }
