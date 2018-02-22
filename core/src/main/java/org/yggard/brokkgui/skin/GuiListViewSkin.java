@@ -1,24 +1,31 @@
 package org.yggard.brokkgui.skin;
 
-import fr.ourten.teabeans.listener.ListValueChangeListener;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.yggard.brokkgui.behavior.GuiListViewBehavior;
+import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.element.GuiListCell;
 import org.yggard.brokkgui.element.GuiListView;
 import org.yggard.brokkgui.event.ClickEvent;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.RenderPass;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import fr.ourten.teabeans.listener.ListValueChangeListener;
+import fr.ourten.teabeans.value.BaseListProperty;
 
 public class GuiListViewSkin<T> extends GuiBehaviorSkinBase<GuiListView<T>, GuiListViewBehavior<T>>
 {
     private List<GuiListCell<T>> listCell;
+    
+    private BaseListProperty<GuiNode> childrenProperty;
 
-    public GuiListViewSkin(final GuiListView<T> model, final GuiListViewBehavior<T> behaviour)
+    public GuiListViewSkin(final GuiListView<T> model, final GuiListViewBehavior<T> behaviour, BaseListProperty<GuiNode> childrenProperty)
     {
         super(model, behaviour);
+        
+        this.childrenProperty = childrenProperty;
 
         this.reloadAllCells();
 
@@ -29,9 +36,7 @@ public class GuiListViewSkin<T> extends GuiBehaviorSkinBase<GuiListView<T>, GuiL
     }
 
     /**
-     * Used to transfer ClickEvent to the right node inside the ListView. If the
-     * list does not contains any GuiListCell it's forwarded to the placeholder
-     * node.
+     * Used to set the selected slot value.
      *
      * @param e
      */
@@ -45,12 +50,8 @@ public class GuiListViewSkin<T> extends GuiBehaviorSkinBase<GuiListView<T>, GuiL
             if (rtn.isPresent())
             {
                 this.getBehavior().selectCell(this.listCell.indexOf(rtn.get()));
-                rtn.get().handleClick(e.getMouseX(), e.getMouseY(), e.getKey());
             }
         }
-        else if (this.getModel().getPlaceholder() != null
-                && this.getModel().getPlaceholder().isPointInside(e.getMouseX(), e.getMouseY()))
-            this.getModel().getPlaceholder().handleClick(e.getMouseX(), e.getMouseY(), e.getKey());
     }
 
     @Override
@@ -66,7 +67,34 @@ public class GuiListViewSkin<T> extends GuiBehaviorSkinBase<GuiListView<T>, GuiL
 
     public void reloadAllCells()
     {
+        if(this.listCell != null)
+        {
+                this.listCell.forEach(cell -> 
+                {
+                    cell.setFather(null);
+                    this.childrenProperty.remove(cell);
+                });
+        }
+        if(this.getModel().getPlaceholder() != null)
+        {
+            this.getModel().getPlaceholder().setFather(null);
+            this.childrenProperty.remove(this.getModel().getPlaceholder());
+        }
+        
         this.listCell = this.getModel().getElements().stream().map(this.getModel().getCellFactory()::apply)
                 .collect(Collectors.toList());
+        
+
+        this.listCell.forEach(cell -> 
+        {
+            this.childrenProperty.add(cell);
+            cell.setFather(getModel());
+        });
+        
+        if(this.listCell.isEmpty() && this.getModel().getPlaceholder() != null)
+        {
+            this.childrenProperty.add(this.getModel().getPlaceholder());
+            this.getModel().getPlaceholder().setFather(this.getModel());
+        }
     }
 }

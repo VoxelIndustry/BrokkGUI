@@ -22,10 +22,6 @@ public class GuiTabPaneBehavior<T extends GuiTabPane> extends GuiBehaviorBase<T>
 
         if (tab != null && this.getModel().getSelectedTab() != tab)
             this.getModel().setSelectedTab(tab);
-        else if (tab == null && this.getModel().getSelectedTab() != null
-                && this.getModel().getSelectedTab().getContent() != null)
-            this.getModel().getSelectedTab().getContent().handleClick(event.getMouseX(), event.getMouseY(),
-                    event.getKey());
     }
 
     private GuiTab getClickedTab(final int pointX, final int pointY)
