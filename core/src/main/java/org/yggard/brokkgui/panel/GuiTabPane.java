@@ -38,6 +38,23 @@ public class GuiTabPane extends GuiControl
         this.tabHeightRatioProperty = new BaseProperty<>(.1f, "tabHeightRatioProperty");
 
         this.setOverflowPolicy(EOverflowPolicy.TRIM_ALL);
+        
+        this.selectedTabProperty.addListener((obs, oldValue, newValue) ->
+        {
+            if(oldValue >= 0 && oldValue < tabsProperty.size())
+            {
+                GuiTab oldTab = tabsProperty.get(oldValue);
+                oldTab.getContent().setFather(null);
+                this.getChildrensProperty().remove(oldTab.getContent());
+            }
+            
+            if(newValue >= 0 && oldValue < tabsProperty.size())
+            {
+                GuiTab newTab = tabsProperty.get(newValue);
+                this.getChildrensProperty().add(newTab.getContent());
+                newTab.getContent().setFather(this);
+            }
+        });
     }
 
     @Override

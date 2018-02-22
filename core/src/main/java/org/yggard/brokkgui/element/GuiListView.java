@@ -1,7 +1,9 @@
 package org.yggard.brokkgui.element;
 
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
 import org.yggard.brokkgui.behavior.GuiListViewBehavior;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiControl;
@@ -10,9 +12,8 @@ import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.skin.GuiListViewSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
+import fr.ourten.teabeans.value.BaseListProperty;
+import fr.ourten.teabeans.value.BaseProperty;
 
 public class GuiListView<T> extends GuiControl
 {
@@ -54,7 +55,7 @@ public class GuiListView<T> extends GuiControl
     @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
-        return new GuiListViewSkin<>(this, new GuiListViewBehavior<>(this));
+        return new GuiListViewSkin<>(this, new GuiListViewBehavior<>(this), this.getChildrensProperty());
     }
 
     public BaseListProperty<T> getElementsProperty()
