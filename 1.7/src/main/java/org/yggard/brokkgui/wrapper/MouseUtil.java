@@ -19,4 +19,14 @@ public class MouseUtil implements IMouseUtil
     {
         return Mouse.getEventButton();
     }
+
+    public int getMouseX()
+    {
+        return Mouse.getX();
+    }
+
+    public int getMouseY()
+    {
+        return Mouse.getY();
+    }
 }

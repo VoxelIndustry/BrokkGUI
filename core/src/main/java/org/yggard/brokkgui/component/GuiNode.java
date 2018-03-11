@@ -136,7 +136,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         }
     }
 
-    public void handleMouseInput()
+    public void handleMouseInput(int mouseX, int mouseY)
     {
         if (BrokkGuiPlatform.getInstance().getMouseUtil().getEventDWheel() != 0)
             this.getEventDispatcher().dispatchEvent(GuiMouseEvent.WHEEL,

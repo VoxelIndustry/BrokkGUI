@@ -3,6 +3,7 @@ package org.yggard.brokkgui.gui;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.event.WindowEvent;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
@@ -155,8 +156,10 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public void handleMouseInput()
     {
-        if (GuiFocusManager.getInstance().getFocusedNode() != null)
-            GuiFocusManager.getInstance().getFocusedNode().handleMouseInput();
+        int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
+        int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+        if (this.getMainPanel().isPointInside(mouseX, mouseY))
+            this.getMainPanel().handleMouseInput(mouseX, mouseY);
     }
 
     public void onKeyTyped(final char c, final int key)

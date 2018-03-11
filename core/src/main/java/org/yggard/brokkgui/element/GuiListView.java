@@ -1,10 +1,11 @@
 package org.yggard.brokkgui.element;
 
+import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiListViewBehavior;
 import org.yggard.brokkgui.component.GuiNode;
-import org.yggard.brokkgui.control.GuiControl;
+import org.yggard.brokkgui.control.GuiScrollableBase;
 import org.yggard.brokkgui.data.EOrientation;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.skin.GuiListViewSkin;
@@ -14,19 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class GuiListView<T> extends GuiControl
+public class GuiListView<T> extends GuiScrollableBase
 {
-    private final BaseProperty<Boolean>                               editableProperty;
+    private final BaseProperty<Boolean> editableProperty;
 
-    private final BaseListProperty<T>                                 elementsProperty;
-    private final BaseProperty<GuiNode>                               placeholderProperty;
-    private final BaseProperty<EOrientation>                          orientationProperty;
+    private final BaseListProperty<T>        elementsProperty;
+    private final BaseProperty<GuiNode>      placeholderProperty;
+    private final BaseProperty<EOrientation> orientationProperty;
 
     private final BaseProperty<Function<T, ? extends GuiListCell<T>>> cellFactoryProperty;
 
-    private final BaseProperty<Float>                                 cellWidthProperty, cellHeightProperty;
+    private final BaseProperty<Float> cellWidthProperty, cellHeightProperty;
 
-    private final BaseProperty<Integer>                               selectedCellIndexProperty;
+    private final BaseProperty<Integer> selectedCellIndexProperty;
 
     public GuiListView(final List<T> elements)
     {
@@ -44,6 +45,27 @@ public class GuiListView<T> extends GuiControl
         this.cellHeightProperty = new BaseProperty<>(0f, "cellHeightProperty");
 
         this.selectedCellIndexProperty = new BaseProperty<>(-1, "selectedCellIndexProperty");
+
+        this.getChildrensProperty().addListener(obs ->
+        {
+            if (this.getChildrensProperty().size() == 1 && !this.getPlaceholder().isVisible())
+                this.getPlaceholder().setVisible(true);
+            else if (this.getChildrensProperty().size() != 1 && this.getPlaceholder().isVisible())
+                this.getPlaceholder().setVisible(false);
+        });
+
+        this.getTrueHeightProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                this.bind(cellHeightProperty, elementsProperty);
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                return getCellHeight() * getElements().size();
+            }
+        });
     }
 
     public GuiListView()
@@ -54,7 +76,7 @@ public class GuiListView<T> extends GuiControl
     @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
-        return new GuiListViewSkin<>(this, new GuiListViewBehavior<>(this));
+        return new GuiListViewSkin<>(this, new GuiListViewBehavior<>(this, this::getChildrensProperty));
     }
 
     public BaseListProperty<T> getElementsProperty()
@@ -132,12 +154,23 @@ public class GuiListView<T> extends GuiControl
         {
             this.getPlaceholder().getxPosProperty().unbind();
             this.getPlaceholder().getyPosProperty().unbind();
+            this.getPlaceholder().setFather(null);
+            this.getChildrensProperty().remove(this.getPlaceholder());
         }
 
         this.getPlaceholderProperty().setValue(placeholder);
 
         if (this.getPlaceholder() != null)
+        {
             RelativeBindingHelper.bindToCenter(placeholder, this);
+            this.getPlaceholder().setFather(this);
+            this.getChildrensProperty().add(this.getPlaceholder());
+
+            if (this.getChildrensProperty().size() == 1)
+                this.getPlaceholder().setVisible(true);
+            else
+                this.getPlaceholder().setVisible(false);
+        }
     }
 
     public EOrientation getOrientation()
@@ -162,7 +195,7 @@ public class GuiListView<T> extends GuiControl
 
     public Function<T, ? extends GuiListCell<T>> getCellFactory()
     {
-        if (this.getCellFactoryProperty().getValue() == null)
+        if (!this.getCellFactoryProperty().isPresent())
             this.setCellFactory(this.getDefaultCellFactory());
         return this.getCellFactoryProperty().getValue();
     }

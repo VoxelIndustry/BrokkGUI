@@ -5,6 +5,7 @@ import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.control.GuiToggleGroup;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.EHAlignment;
+import org.yggard.brokkgui.demo.category.ListViewDemo;
 import org.yggard.brokkgui.element.*;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Background;
@@ -33,17 +34,6 @@ public class GuiDemo extends BrokkGuiScreen
         button.setStyle("-border-color: green; -border-thin: 2; -text-color: khaki");
 
         button.setOnClickEvent(e -> System.out.println("clicked"));
-
-        final GuiListView<String> listView = new GuiListView<>();
-
-        listView.setWidth(100);
-        listView.setHeight(30);
-
-        listView.setCellHeight(20);
-        listView.setCellWidth(100);
-        listView.setStyle("-border-color: gray; -border-thin: 1;");
-
-        listView.setPlaceholder(new GuiLabel("I'm a placeholder"));
 
         final GuiProgressBar progressBar = new GuiProgressBar(0.5f);
         progressBar.setProgressDirection(EHAlignment.CENTER);
@@ -116,7 +106,7 @@ public class GuiDemo extends BrokkGuiScreen
         tabPane.setHeight(200);
         tabPane.setStyle("-border-color: yellow; -border-thin: 1;");
         tabPane.addTab(new GuiTab("Textfield", field));
-        tabPane.addTab(new GuiTab("ListView", listView));
+        tabPane.addTab(new GuiTab("ListView", new ListViewDemo()));
         tabPane.addTab(new GuiTab("Progress", progressBar));
         tabPane.addTab(new GuiTab("RadioButton", radioButtonPane));
         tabPane.addTab(new GuiTab("Labels", labelPane));

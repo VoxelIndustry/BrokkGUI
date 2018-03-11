@@ -11,7 +11,7 @@ public class GuiFocusManager
 {
     private static volatile GuiFocusManager INSTANCE;
 
-    public static final GuiFocusManager getInstance()
+    public static GuiFocusManager getInstance()
     {
         if (GuiFocusManager.INSTANCE == null)
             synchronized (GuiFocusManager.class)

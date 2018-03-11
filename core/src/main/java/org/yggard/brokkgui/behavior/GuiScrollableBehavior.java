@@ -1,23 +1,23 @@
 package org.yggard.brokkgui.behavior;
 
 import org.yggard.brokkgui.BrokkGuiPlatform;
+import org.yggard.brokkgui.control.GuiScrollableBase;
 import org.yggard.brokkgui.event.GuiMouseEvent;
 import org.yggard.brokkgui.event.ScrollEvent;
-import org.yggard.brokkgui.panel.ScrollPane;
 
 /**
  * @author Ourten 9 oct. 2016
  */
-public class GuiScrollPaneBehavior extends GuiBehaviorBase<ScrollPane>
+public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehaviorBase<C>
 {
-    public GuiScrollPaneBehavior(final ScrollPane model)
+    public GuiScrollableBehavior(final C model)
     {
         super(model);
 
         this.getModel().getEventDispatcher().addHandler(GuiMouseEvent.WHEEL, this::onMouseWheel);
     }
 
-    public void onMouseWheel(final GuiMouseEvent.Wheel event)
+    private void onMouseWheel(final GuiMouseEvent.Wheel event)
     {
         float scrolled;
         final boolean vertical = !BrokkGuiPlatform.getInstance().getKeyboardUtil().isCtrlKeyDown();

@@ -8,4 +8,8 @@ public interface IMouseUtil
     int getEventButton();
 
     int getEventDWheel();
+
+    int getMouseX();
+
+    int getMouseY();
 }
