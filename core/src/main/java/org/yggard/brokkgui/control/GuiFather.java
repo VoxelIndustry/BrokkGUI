@@ -62,13 +62,12 @@ public class GuiFather extends GuiNode
     public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
         if ((this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM.ordinal() && pass == RenderPass.MAIN)
-                || (pass == RenderPass.SPECIAL && this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM_ALL
-                .ordinal()))
+                || (this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM_ALL.ordinal()))
         {
             renderer.getHelper().beginScissor();
             renderer.getHelper().scissorBox(this.getxPos() + this.getxTranslate(),
-                    this.getyPos() + this.getyTranslate(), this.getxPos() + this.getxTranslate() + this.getWidth(),
-                    this.getyPos() + this.getyTranslate() + this.getHeight());
+                    this.getyPos() + this.getyTranslate(), this.getxPos() + this.getxTranslate() + this.getWidth() - 1,
+                    this.getyPos() + this.getyTranslate() + this.getHeight() - 1);
             this.getChildrens().forEach(child -> child.renderNode(renderer, pass, mouseX, mouseY));
             renderer.getHelper().endScissor();
         }
