@@ -158,6 +158,7 @@ public class BrokkGuiScreen implements IGuiWindow
     {
         int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+
         if (this.getMainPanel().isPointInside(mouseX, mouseY))
             this.getMainPanel().handleMouseInput(mouseX, mouseY);
     }

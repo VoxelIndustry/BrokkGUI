@@ -1,5 +1,6 @@
 package org.yggard.brokkgui.wrapper;
 
+import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Mouse;
 import org.yggard.brokkgui.internal.IMouseUtil;
 
@@ -22,11 +23,16 @@ public class MouseUtil implements IMouseUtil
 
     public int getMouseX()
     {
-        return Mouse.getX();
+        if (Minecraft.getMinecraft().currentScreen == null)
+            return Mouse.getX();
+        return Mouse.getX() * Minecraft.getMinecraft().currentScreen.width / Minecraft.getMinecraft().displayWidth;
     }
 
     public int getMouseY()
     {
-        return Mouse.getY();
+        if (Minecraft.getMinecraft().currentScreen == null)
+            return Mouse.getY();
+        return Minecraft.getMinecraft().currentScreen.height - Mouse.getEventY() *
+                Minecraft.getMinecraft().currentScreen.height / Minecraft.getMinecraft().displayHeight - 1;
     }
 }

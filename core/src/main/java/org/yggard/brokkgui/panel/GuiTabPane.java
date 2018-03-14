@@ -137,9 +137,17 @@ public class GuiTabPane extends GuiControl
 
     public void setSelectedTab(final int index)
     {
-        this.getTabs().stream().filter(tab -> tab.isSelected()).forEach(tab -> tab.setSelected(false));
+        this.getTabs().stream().filter(GuiTab::isSelected).forEach(tab ->
+        {
+            tab.setSelected(false);
+            this.getChildrensProperty().remove(tab.getContent());
+        });
+
         if (this.getTab(index) != null)
+        {
             this.getTab(index).setSelected(true);
+            this.getChildrensProperty().add(this.getTab(index).getContent());
+        }
         this.getSelectedTabProperty().setValue(index);
     }
 

@@ -2,3 +2,14 @@ mainpane {
     -border-color: aqua;
     -border-width: 1;
 }
+
+listcell > button:hover {
+    -background-color: #FFCDD2;
+    -border-color: #F0F4C3;
+}
+
+listcell > button {
+    -background-color: #E57373;
+    -border-color: #DCE775;
+    -border-thin: 1;
+}

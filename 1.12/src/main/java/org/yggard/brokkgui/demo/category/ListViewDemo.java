@@ -1,5 +1,6 @@
 package org.yggard.brokkgui.demo.category;
 
+import org.yggard.brokkgui.element.GuiButton;
 import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.element.GuiListView;
 import org.yggard.brokkgui.panel.GuiRelativePane;
@@ -10,19 +11,40 @@ public class ListViewDemo extends GuiRelativePane
 {
     public ListViewDemo()
     {
-        final GuiListView<String> listView = new GuiListView<>();
+        final GuiListView<String> labelList = new GuiListView<>();
 
-        listView.setWidth(100);
-        listView.setHeight(30);
+        labelList.setWidth(75);
+        labelList.setHeight(30);
 
-        listView.setCellHeight(20);
-        listView.setCellWidth(100);
-        listView.setStyle("-border-color: gray; -border-thin: 1;");
+        labelList.setCellHeight(20);
+        labelList.setCellWidth(75);
+        labelList.setStyle("-border-color: gray; -border-thin: 1;");
 
-        listView.setPlaceholder(new GuiLabel("I'm a placeholder"));
+        labelList.setPlaceholder(new GuiLabel("I'm a placeholder"));
 
-        listView.setElements(Arrays.asList("One", "Two", "Three"));
+        labelList.setElements(Arrays.asList("One", "Two", "Three"));
 
-        this.addChild(listView, 0.5f, 0.5f);
+        this.addChild(labelList, 0.25f, 0.5f);
+
+        final GuiListView<GuiButton> buttonList = new GuiListView<>();
+
+        buttonList.setWidth(75);
+        buttonList.setHeight(30);
+
+        buttonList.setCellHeight(20);
+        buttonList.setCellWidth(75);
+        buttonList.setStyle("-border-color: gray; -border-thin: 1;");
+
+        buttonList.setPlaceholder(new GuiLabel("I'm a placeholder"));
+
+        GuiButton button1 = new GuiButton("HEY 1");
+
+        GuiButton button2 = new GuiButton("HELLO");
+
+        GuiButton button3 = new GuiButton("LALALA");
+
+        buttonList.setElements(Arrays.asList(button1, button2, button3));
+
+        this.addChild(buttonList, 0.75f, 0.5f);
     }
 }
