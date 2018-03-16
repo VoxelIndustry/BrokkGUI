@@ -31,16 +31,18 @@ public class GuiListCell<T> extends GuiLabeled
         {
             {
                 super.bind(listView.getxPosProperty(), getWidthProperty(),
-                        listView.getOrientationProperty(), listView.getScrollXProperty());
+                        listView.getOrientationProperty(), listView.getScrollXProperty(),
+                        listView.getCellXPaddingProperty());
             }
 
             @Override
             public Float computeValue()
             {
                 if (listView.getOrientation() == EOrientation.HORIZONTAL)
-                    return listView.getxPos() + listView.getScrollX() +
-                            +listView.getElements().indexOf(GuiListCell.this.getItem()) * GuiListCell.this.getWidth()
-                            + GuiListCell.this.getWidth() / 2;
+                    return listView.getxPos() + listView.getScrollX()
+                            + listView.getElements().indexOf(GuiListCell.this.getItem()) * GuiListCell.this.getWidth()
+                            + GuiListCell.this.getWidth() / 2
+                            + listView.getCellXPadding() * listView.getElements().indexOf(GuiListCell.this.getItem());
                 else
                     return listView.getxPos() + listView.getScrollX();
             }
@@ -50,7 +52,8 @@ public class GuiListCell<T> extends GuiLabeled
         {
             {
                 super.bind(listView.getyPosProperty(), GuiListCell.this.getHeightProperty(),
-                        listView.getOrientationProperty(), listView.getScrollYProperty());
+                        listView.getOrientationProperty(), listView.getScrollYProperty(),
+                        listView.getCellYPaddingProperty());
             }
 
             @Override
@@ -58,7 +61,8 @@ public class GuiListCell<T> extends GuiLabeled
             {
                 if (listView.getOrientation() == EOrientation.VERTICAL)
                     return listView.getyPos() + listView.getScrollY()
-                            + listView.getElements().indexOf(GuiListCell.this.getItem()) * GuiListCell.this.getHeight();
+                            + listView.getElements().indexOf(GuiListCell.this.getItem()) * GuiListCell.this.getHeight()
+                            + listView.getCellYPadding() * listView.getElements().indexOf(GuiListCell.this.getItem());
                 else
                     return listView.getyPos() + listView.getScrollY();
             }

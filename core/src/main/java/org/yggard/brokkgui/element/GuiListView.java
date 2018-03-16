@@ -26,6 +26,7 @@ public class GuiListView<T> extends GuiScrollableBase
     private final BaseProperty<Function<T, ? extends GuiListCell<T>>> cellFactoryProperty;
 
     private final BaseProperty<Float> cellWidthProperty, cellHeightProperty;
+    private final BaseProperty<Float> cellXPaddingProperty, cellYPaddingProperty;
 
     private final BaseProperty<Integer> selectedCellIndexProperty;
 
@@ -44,26 +45,49 @@ public class GuiListView<T> extends GuiScrollableBase
         this.cellWidthProperty = new BaseProperty<>(0f, "cellWidthProperty");
         this.cellHeightProperty = new BaseProperty<>(0f, "cellHeightProperty");
 
+        this.cellXPaddingProperty = new BaseProperty<>(0f, "cellXPaddingProperty");
+        this.cellYPaddingProperty = new BaseProperty<>(0f, "cellYPaddingProperty");
+
         this.selectedCellIndexProperty = new BaseProperty<>(-1, "selectedCellIndexProperty");
 
         this.getChildrensProperty().addListener(obs ->
         {
+            if (!this.getPlaceholderProperty().isPresent())
+                return;
+
             if (this.getChildrensProperty().size() == 1 && !this.getPlaceholder().isVisible())
                 this.getPlaceholder().setVisible(true);
             else if (this.getChildrensProperty().size() != 1 && this.getPlaceholder().isVisible())
                 this.getPlaceholder().setVisible(false);
         });
 
-        this.getTrueHeightProperty().bind(new BaseBinding<Float>()
+        this.getTrueWidthProperty().bind(new BaseBinding<Float>()
         {
             {
-                this.bind(cellHeightProperty, elementsProperty);
+                this.bind(orientationProperty, cellWidthProperty, cellXPaddingProperty, elementsProperty);
             }
 
             @Override
             public Float computeValue()
             {
-                return getCellHeight() * getElements().size();
+                if (getOrientation().equals(EOrientation.HORIZONTAL))
+                    return getCellWidth() * getElements().size() + getCellXPadding() * (getElements().size() - 1);
+                return getCellWidth();
+            }
+        });
+
+        this.getTrueHeightProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                this.bind(orientationProperty, cellHeightProperty, cellYPaddingProperty, elementsProperty);
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                if (getOrientation().equals(EOrientation.VERTICAL))
+                    return getCellHeight() * getElements().size() + getCellYPadding() * (getElements().size() - 1);
+                return getCellHeight();
             }
         });
     }
@@ -119,6 +143,16 @@ public class GuiListView<T> extends GuiScrollableBase
         return this.selectedCellIndexProperty;
     }
 
+    public BaseProperty<Float> getCellXPaddingProperty()
+    {
+        return cellXPaddingProperty;
+    }
+
+    public BaseProperty<Float> getCellYPaddingProperty()
+    {
+        return cellYPaddingProperty;
+    }
+
     /**
      * @return an immutable list
      */
@@ -131,6 +165,21 @@ public class GuiListView<T> extends GuiScrollableBase
     {
         this.getElementsProperty().clear();
         this.getElementsProperty().addAll(elements);
+    }
+
+    public void addElement(T element)
+    {
+        this.getElementsProperty().add(element);
+    }
+
+    public boolean removeElement(T element)
+    {
+        return this.getElementsProperty().remove(element);
+    }
+
+    public boolean hasElement(T element)
+    {
+        return this.getElementsProperty().contains(element);
     }
 
     public boolean isEditable()
@@ -243,6 +292,26 @@ public class GuiListView<T> extends GuiScrollableBase
     public void setCellHeight(final float cellHeight)
     {
         this.getCellHeightProperty().setValue(cellHeight);
+    }
+
+    public float getCellXPadding()
+    {
+        return this.getCellXPaddingProperty().getValue();
+    }
+
+    public void setCellXPadding(float cellXPadding)
+    {
+        this.getCellXPaddingProperty().setValue(cellXPadding);
+    }
+
+    public float getCellYPadding()
+    {
+        return this.getCellYPaddingProperty().getValue();
+    }
+
+    public void setCellYPadding(float cellYPadding)
+    {
+        this.getCellYPaddingProperty().setValue(cellYPadding);
     }
 
     public int getSelectedCellIndex()
