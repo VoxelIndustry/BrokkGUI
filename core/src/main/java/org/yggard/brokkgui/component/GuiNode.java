@@ -293,6 +293,21 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.getyTranslateProperty().setValue(yTranslate);
     }
 
+    /**
+     * Helper method to set the translation in one call.
+     * <p>
+     * Set the translation of this component to this specified value, usable outside
+     * layouting scope.
+     *
+     * @param xTranslate
+     * @param yTranslate
+     */
+    public void setTranslate(float xTranslate, float yTranslate)
+    {
+        this.setxTranslate(xTranslate);
+        this.setyTranslate(yTranslate);
+    }
+
     public float getWidth()
     {
         return this.getWidthProperty().getValue();
@@ -315,6 +330,18 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         if (this.getHeightProperty().isBound())
             this.getHeightProperty().unbind();
         this.getHeightProperty().setValue(height);
+    }
+
+    /**
+     * Helper method to set the width and height of the Node in one call.
+     *
+     * @param width
+     * @param height
+     */
+    public void setSize(float width, float height)
+    {
+        this.setWidth(width);
+        this.setHeight(height);
     }
 
     public float getWidthRatio()
@@ -355,6 +382,18 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         else if (!this.getHeightProperty().isBound() && this.getFather() != null)
             RelativeBindingHelper.bindHeightRelative(this, this.getFather(), this.getHeightRatioProperty());
         this.getHeightRatioProperty().setValue(ratio);
+    }
+
+    /**
+     * Helper method to set the width ratio and height ratio in one call.
+     *
+     * @param widthRatio
+     * @param heightRatio
+     */
+    public void setSizeRatio(float widthRatio, float heightRatio)
+    {
+        this.setWidthRatio(widthRatio);
+        this.setHeightRatio(heightRatio);
     }
 
     public BaseProperty<GuiFather> getFatherProperty()

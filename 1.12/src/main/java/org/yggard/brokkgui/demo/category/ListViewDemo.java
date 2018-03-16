@@ -28,22 +28,16 @@ public class ListViewDemo extends GuiRelativePane
 
         final GuiListView<GuiButton> buttonList = new GuiListView<>();
 
-        buttonList.setWidth(75);
-        buttonList.setHeight(30);
+        buttonList.setSize(75, 30);
 
         buttonList.setCellHeight(20);
         buttonList.setCellWidth(75);
-        buttonList.setStyle("-border-color: gray; -border-thin: 1;");
-
-        buttonList.setPlaceholder(new GuiLabel("I'm a placeholder"));
 
         GuiButton button1 = new GuiButton("HEY 1");
-
         GuiButton button2 = new GuiButton("HELLO");
-
         GuiButton button3 = new GuiButton("LALALA");
-
         buttonList.setElements(Arrays.asList(button1, button2, button3));
+        buttonList.setCellYPadding(1);
 
         this.addChild(buttonList, 0.75f, 0.5f);
     }

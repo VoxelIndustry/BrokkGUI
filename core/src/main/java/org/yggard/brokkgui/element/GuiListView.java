@@ -294,6 +294,12 @@ public class GuiListView<T> extends GuiScrollableBase
         this.getCellHeightProperty().setValue(cellHeight);
     }
 
+    public void setCellSize(float cellWidth, float cellHeight)
+    {
+        this.setCellWidth(cellWidth);
+        this.setCellHeight(cellHeight);
+    }
+
     public float getCellXPadding()
     {
         return this.getCellXPaddingProperty().getValue();
@@ -312,6 +318,12 @@ public class GuiListView<T> extends GuiScrollableBase
     public void setCellYPadding(float cellYPadding)
     {
         this.getCellYPaddingProperty().setValue(cellYPadding);
+    }
+
+    public void setCellPadding(float cellXPadding, float cellYPadding)
+    {
+        this.setCellXPadding(cellXPadding);
+        this.setCellYPadding(cellYPadding);
     }
 
     public int getSelectedCellIndex()
