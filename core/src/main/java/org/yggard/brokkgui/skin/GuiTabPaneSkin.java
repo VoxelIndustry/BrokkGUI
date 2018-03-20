@@ -27,7 +27,7 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
             switch (this.getModel().getTabSide())
             {
                 case UP:
-                    if (this.getBackground().getColor().getAlpha() != 0)
+                    if (this.getModel().getBackgroundColor().getAlpha() != 0)
                         renderer.getHelper().drawColoredRect(renderer,
                                 this.getModel().getxPos() + this.getModel().getxTranslate()
                                         + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
@@ -35,10 +35,10 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
                                 this.getModel().getyPos() + this.getModel().getyTranslate(),
                                 this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
                                 this.getModel().getHeight() * this.getModel().getTabHeightRatio(),
-                                this.getModel().getzLevel(), this.getBackground().getColor());
-                    else if (this.getBackground().getTexture() != Texture.EMPTY)
+                                this.getModel().getzLevel(), this.getModel().getBackgroundColor());
+                    else if (this.getModel().getBackgroundTexture() != Texture.EMPTY)
                     {
-                        final Texture texture = this.getBackground().getTexture();
+                        final Texture texture = this.getModel().getBackgroundTexture();
                         renderer.getHelper().bindTexture(texture);
                         renderer.getHelper().drawTexturedRect(renderer,
                                 this.getModel().getxPos() + this.getModel().getxTranslate()

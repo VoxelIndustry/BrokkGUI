@@ -258,12 +258,12 @@ public class GuiListView<T> extends GuiScrollableBase
             if (T == null)
             {
                 cell.setGraphic(null);
-                cell.setText(null);
+                cell.setText("");
             }
             else if (T instanceof GuiNode)
             {
                 cell.setGraphic((GuiNode) T);
-                cell.setText(null);
+                cell.setText("");
             }
             else
             {

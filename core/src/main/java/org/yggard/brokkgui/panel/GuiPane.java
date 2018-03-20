@@ -6,7 +6,6 @@ import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.data.ZLevelComparator;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
@@ -17,8 +16,6 @@ public class GuiPane extends GuiFather
     private static final ZLevelComparator ZLEVEL_COMPARATOR = new ZLevelComparator();
     private final EOverflowPolicy overflowPolicy;
 
-    private final BaseProperty<Background> backgroundProperty;
-
     public GuiPane()
     {
         super("pane");
@@ -28,15 +25,6 @@ public class GuiPane extends GuiFather
         this.getStyle().registerProperty("-border-thin", 0, Integer.class);
         this.getStyle().registerProperty("-border-color", Color.BLACK, Color.class);
 
-        final Background background = new Background();
-        background.attach(this);
-        this.backgroundProperty = new BaseProperty<>(background, "backgroundProperty");
-
-        this.backgroundProperty.addListener((property, oldValue, newValue) ->
-        {
-            oldValue.detach(this);
-            newValue.attach(this);
-        });
         this.getStyle().registerProperty("-opacity", 1D, Double.class);
     }
 
@@ -76,20 +64,14 @@ public class GuiPane extends GuiFather
         if (this.getOpacity() != 1)
             renderer.getHelper().startAlphaMask(this.getOpacity());
 
-        if (pass == RenderPass.SPECIAL && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
+        if (pass == RenderPass.FOREGROUND && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
             renderer.getHelper().drawColoredEmptyRect(renderer, this.getxPos() + this.getxTranslate(),
                     this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
                     this.getBorderColor(), this.getBorderThin());
-        this.getBackground().renderNode(renderer, pass, mouseX, mouseY);
         super.renderContent(renderer, pass, mouseX, mouseY);
 
         if (this.getOpacity() != 1)
             renderer.getHelper().closeAlphaMask();
-    }
-
-    public BaseProperty<Background> getBackgroundProperty()
-    {
-        return this.backgroundProperty;
     }
 
     public int getBorderThin()
@@ -106,16 +88,6 @@ public class GuiPane extends GuiFather
     public EOverflowPolicy getOverflowPolicy()
     {
         return this.overflowPolicy;
-    }
-
-    public Background getBackground()
-    {
-        return this.getBackgroundProperty().getValue();
-    }
-
-    public void setBackground(final Background background)
-    {
-        this.getBackgroundProperty().setValue(background);
     }
 
     public BaseProperty<Double> getOpacityProperty()

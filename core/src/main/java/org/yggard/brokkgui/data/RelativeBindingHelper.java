@@ -1,57 +1,53 @@
 package org.yggard.brokkgui.data;
 
-import org.yggard.brokkgui.component.GuiNode;
-
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.ObservableValue;
+import org.yggard.brokkgui.component.GuiNode;
 
 /**
  * @author Ourten 9 oct. 2016
  */
 public class RelativeBindingHelper
 {
-    public static final void bindSizeRelative(final GuiNode toBind, final GuiNode parent, final float widthRatio,
-            final float heightRatio)
+    public static void bindSizeRelative(GuiNode toBind, GuiNode parent, float widthRatio, float heightRatio)
     {
         RelativeBindingHelper.bindWidthRelative(toBind, parent, widthRatio);
         RelativeBindingHelper.bindHeightRelative(toBind, parent, heightRatio);
     }
 
-    public static final void bindWidthRelative(final GuiNode toBind, final GuiNode parent, final float widthRatio)
+    public static void bindWidthRelative(GuiNode toBind, GuiNode parent, float widthRatio)
     {
         toBind.getWidthProperty().bind(
                 BaseExpression.constantCombine(parent.getWidthProperty(), widthRatio, (width, ratio) -> width * ratio));
     }
 
-    public static final void bindHeightRelative(final GuiNode toBind, final GuiNode parent, final float heightRatio)
+    public static void bindHeightRelative(GuiNode toBind, GuiNode parent, float heightRatio)
     {
         toBind.getHeightProperty().bind(BaseExpression.constantCombine(parent.getHeightProperty(), heightRatio,
                 (height, ratio) -> height * ratio));
     }
 
-    public static final void bindSizeRelative(final GuiNode toBind, final GuiNode parent,
-            final ObservableValue<Float> widthRatio, final ObservableValue<Float> heightRatio)
+    public static void bindSizeRelative(GuiNode toBind, GuiNode parent, ObservableValue<Float> widthRatio,
+                                        ObservableValue<Float> heightRatio)
     {
         RelativeBindingHelper.bindWidthRelative(toBind, parent, widthRatio);
         RelativeBindingHelper.bindHeightRelative(toBind, parent, heightRatio);
     }
 
-    public static final void bindWidthRelative(final GuiNode toBind, final GuiNode parent,
-            final ObservableValue<Float> widthRatio)
+    public static void bindWidthRelative(GuiNode toBind, GuiNode parent, ObservableValue<Float> widthRatio)
     {
         toBind.getWidthProperty()
                 .bind(BaseExpression.biCombine(parent.getWidthProperty(), widthRatio, (width, ratio) -> width * ratio));
     }
 
-    public static final void bindHeightRelative(final GuiNode toBind, final GuiNode parent,
-            final ObservableValue<Float> heightRatio)
+    public static void bindHeightRelative(GuiNode toBind, GuiNode parent, ObservableValue<Float> heightRatio)
     {
         toBind.getHeightProperty().bind(
                 BaseExpression.biCombine(parent.getHeightProperty(), heightRatio, (height, ratio) -> height * ratio));
     }
 
-    public static final void bindToPos(final GuiNode toBind, final GuiNode parent, final ObservableValue<Float> addX,
-            final ObservableValue<Float> addY)
+    public static void bindToPos(GuiNode toBind, GuiNode parent, ObservableValue<Float> addX, ObservableValue<Float>
+            addY)
     {
         if (addX != null)
             toBind.getxPosProperty()
@@ -71,7 +67,7 @@ public class RelativeBindingHelper
                     parent.getyPosProperty(), parent.getyTranslateProperty()));
     }
 
-    public static final void bindToPos(final GuiNode toBind, final GuiNode parent, final float addX, final float addY)
+    public static void bindToPos(GuiNode toBind, GuiNode parent, float addX, float addY)
     {
         toBind.getxPosProperty().bind(BaseExpression.biCombine(parent.getxPosProperty(), parent.getxTranslateProperty(),
                 (x, translate) -> x + translate + addX));
@@ -79,7 +75,7 @@ public class RelativeBindingHelper
                 (y, translate) -> y + translate + addY));
     }
 
-    public static final void bindToPos(final GuiNode toBind, final GuiNode parent)
+    public static void bindToPos(GuiNode toBind, GuiNode parent)
     {
         toBind.getxPosProperty().bind(BaseExpression.biCombine(parent.getxPosProperty(), parent.getxTranslateProperty(),
                 (x, translate) -> x + translate));
@@ -87,7 +83,7 @@ public class RelativeBindingHelper
                 (y, translate) -> y + translate));
     }
 
-    public static final void bindToCenter(final GuiNode toBind, final GuiNode parent)
+    public static void bindToCenter(GuiNode toBind, GuiNode parent)
     {
         toBind.getxPosProperty()
                 .bind(BaseExpression.tetraCombine(parent.getxPosProperty(),
@@ -99,15 +95,30 @@ public class RelativeBindingHelper
                         (yPos, height, yTranslate, childHeight) -> yPos + yTranslate + (height / 2 - childHeight / 2)));
     }
 
-    public static final void bindToRelative(final GuiNode toBind, final GuiNode parent, final float ratioX,
-            final float ratioY)
+    public static void bindToCenter(GuiNode toBind, GuiNode parent, float addX, float addY)
+    {
+        toBind.getxPosProperty()
+                .bind(BaseExpression.tetraCombine(parent.getxPosProperty(),
+                        parent.getWidthProperty(), parent.getxTranslateProperty(), toBind.getWidthProperty(),
+                        (xPos, width, xTranslate, childWidth) ->
+                                xPos + xTranslate + (width / 2 - childWidth / 2) + addX));
+        toBind.getyPosProperty()
+                .bind(BaseExpression.tetraCombine(parent.getyPosProperty(),
+                        parent.getHeightProperty(), parent.getyTranslateProperty(), toBind.getHeightProperty(),
+                        (yPos, height, yTranslate, childHeight) ->
+                                yPos + yTranslate + (height / 2 - childHeight / 2) + addY));
+    }
+
+    public static void bindToRelative(GuiNode toBind, GuiNode parent, float ratioX, float ratioY)
     {
         toBind.getxPosProperty().bind(BaseExpression.tetraCombine(parent.getxPosProperty(), parent.getWidthProperty(),
                 parent.getxTranslateProperty(), toBind.getWidthProperty(),
                 (xPos, width, xTranslate, childWidth) -> xPos + xTranslate + (width / (1 / ratioX) - childWidth / 2)));
+
         toBind.getyPosProperty()
                 .bind(BaseExpression.tetraCombine(parent.getyPosProperty(), parent.getHeightProperty(),
-                        parent.getyTranslateProperty(), toBind.getHeightProperty(), (yPos, height, yTranslate,
-                                childHeight) -> yPos + yTranslate + (height / (1 / ratioY) - childHeight / 2)));
+                        parent.getyTranslateProperty(), toBind.getHeightProperty(),
+                        (yPos, height, yTranslate, childHeight) ->
+                                yPos + yTranslate + (height / (1 / ratioY) - childHeight / 2)));
     }
 }

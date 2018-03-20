@@ -70,9 +70,10 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     @Override
     protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY)
     {
+        this.brokkgui.render(mouseX, mouseY, RenderPass.BACKGROUND);
         this.brokkgui.render(mouseX, mouseY, RenderPass.MAIN);
+        this.brokkgui.render(mouseX, mouseY, RenderPass.FOREGROUND);
         this.brokkgui.render(mouseX, mouseY, RenderPass.HOVER);
-        this.brokkgui.render(mouseX, mouseY, RenderPass.SPECIAL);
     }
 
     @Override

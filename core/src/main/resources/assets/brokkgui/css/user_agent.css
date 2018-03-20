@@ -1,22 +1,27 @@
-scrollpane {
-    -grip-x-color: lightgrey;
-    -grip-y-color: lightgrey;
+scrollpane > .grip-x, scrollpane > .grip-y {
+    -color: lightgrey;
 }
 
-progressbar {
-    -track-color: red;
+progressbar > .track {
+    -color: red;
 }
 
-radio-button {
-    -box-color: rgba(0, 0, 0, 0);
-    -box-line-color: black;
-    -box-line-weight: 1;
-    -fill-color: black;
+radio-button >> .box {
+    -color: rgba(0, 0, 0, 0);
+    -line-color: black;
+    -line-weight: 1;
 }
 
-checkbox {
-    -box-color: rgba(0, 0, 0, 0);
-    -box-line-color: black;
-    -box-line-weight: 1;
-    -fill-color: gray;
+radio-button >> .mark {
+    -color: black;
+}
+
+checkbox >> .box {
+    -color: rgba(0, 0, 0, 0);
+    -line-color: black;
+    -line-weight: 1;
+}
+
+checkbox >> .mark {
+    -color: gray;
 }

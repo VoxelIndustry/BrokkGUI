@@ -86,10 +86,10 @@ public class StyleNodeTest
         pane.setStyleTree(() -> finalTree);
         pane.refreshStyle();
 
-        assertThat(pane.getBackground().getColor()).isEqualTo(ColorConstants.getColor("limegreen"));
+        assertThat(pane.getBackgroundColor()).isEqualTo(ColorConstants.getColor("limegreen"));
 
         pane.setStyle("-background-color: red;");
 
-        assertThat(pane.getBackground().getColor()).isEqualTo(Color.RED);
+        assertThat(pane.getBackgroundColor()).isEqualTo(Color.RED);
     }
 }

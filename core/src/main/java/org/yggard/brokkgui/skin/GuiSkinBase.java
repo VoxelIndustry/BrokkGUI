@@ -34,7 +34,7 @@ public class GuiSkinBase<T extends GuiControl> implements IGuiSkin
     @Override
     public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
     {
-        if (pass == RenderPass.SPECIAL && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
+        if (pass == RenderPass.FOREGROUND && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
             renderer.getHelper().drawColoredEmptyRect(renderer, this.model.getxPos() + this.model.getxTranslate(),
                     this.model.getyPos() + this.model.getyTranslate(), this.model.getWidth(), this.model.getHeight(),
                     this.model.getzLevel(), this.getBorderColor(), this.getBorderThin());

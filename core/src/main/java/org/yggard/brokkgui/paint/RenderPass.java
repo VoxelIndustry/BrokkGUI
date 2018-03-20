@@ -2,9 +2,10 @@ package org.yggard.brokkgui.paint;
 
 public class RenderPass
 {
-    public static final RenderPass MAIN    = new RenderPass("main", 0);
-    public static final RenderPass HOVER   = new RenderPass("hover", 1);
-    public static final RenderPass SPECIAL = new RenderPass("special", 2);
+    public static final RenderPass BACKGROUND = new RenderPass("background", 0);
+    public static final RenderPass MAIN       = new RenderPass("main", 1);
+    public static final RenderPass FOREGROUND = new RenderPass("foreground", 2);
+    public static final RenderPass HOVER      = new RenderPass("hover", 3);
 
     /**
      * Create a new RenderPass according to parameters.

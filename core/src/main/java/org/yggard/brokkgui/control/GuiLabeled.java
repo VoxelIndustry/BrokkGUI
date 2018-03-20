@@ -8,6 +8,8 @@ import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.ESide;
 import org.yggard.brokkgui.data.RectOffset;
 
+import javax.annotation.Nonnull;
+
 public abstract class GuiLabeled extends GuiControl
 {
     private final BaseProperty<EAlignment> textAlignmentProperty;
@@ -119,7 +121,7 @@ public abstract class GuiLabeled extends GuiControl
         return this.getTextProperty().getValue();
     }
 
-    public void setText(final String text)
+    public void setText(@Nonnull final String text)
     {
         this.getTextProperty().setValue(text);
     }

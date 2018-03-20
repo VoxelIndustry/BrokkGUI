@@ -9,9 +9,12 @@ import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.event.*;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.RenderPass;
+import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.style.ICascadeStyleable;
 import org.yggard.brokkgui.style.StyleHolder;
+import org.yggard.brokkgui.style.StyleSource;
 import org.yggard.brokkgui.style.tree.StyleList;
 import org.yggard.hermod.EventDispatcher;
 import org.yggard.hermod.EventHandler;
@@ -115,12 +118,68 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
             else
                 this.getActivePseudoClass().remove("focus");
         });
+
+        this.getStyle().registerProperty("-background-color", Color.ALPHA, Color.class);
+        this.getStyle().registerProperty("-foreground-color", Color.ALPHA, Color.class);
+
+        this.getStyle().registerProperty("-background-texture", Texture.EMPTY, Texture.class);
+        this.getStyle().registerProperty("-foreground-texture", Texture.EMPTY, Texture.class);
     }
 
     public final void renderNode(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
         if (this.isVisible())
+        {
+            if (pass == RenderPass.BACKGROUND)
+            {
+                if (this.getBackgroundTexture() != Texture.EMPTY)
+                {
+                    Texture background = this.getBackgroundTexture();
+
+                    renderer.getHelper().bindTexture(background);
+                    renderer.getHelper().drawTexturedRect(renderer,
+                            this.getxPos() + this.getxTranslate(),
+                            this.getyPos() + this.getyTranslate(),
+                            background.getUMin(), background.getVMin(), background.getUMax(), background.getVMax(),
+                            this.getWidth(), this.getHeight(), this.getzLevel());
+                }
+                if (this.getBackgroundColor().getAlpha() != 0)
+                {
+                    Color background = this.getBackgroundColor();
+
+                    renderer.getHelper().drawColoredRect(renderer,
+                            this.getxPos() + this.getxTranslate(),
+                            this.getyPos() + this.getyTranslate(),
+                            this.getWidth(), this.getHeight(), this.getzLevel(),
+                            background);
+                }
+            }
+            if (pass == RenderPass.FOREGROUND)
+            {
+                if (this.getForegroundTexture() != Texture.EMPTY)
+                {
+                    Texture foreground = this.getForegroundTexture();
+
+                    renderer.getHelper().bindTexture(foreground);
+                    renderer.getHelper().drawTexturedRect(renderer,
+                            this.getxPos() + this.getxTranslate(),
+                            this.getyPos() + this.getyTranslate(),
+                            foreground.getUMin(), foreground.getVMin(), foreground.getUMax(), foreground.getVMax(),
+                            this.getWidth(), this.getHeight(), this.getzLevel());
+                }
+                if (this.getForegroundColor().getAlpha() != 0)
+                {
+                    Color foreground = this.getForegroundColor();
+
+                    renderer.getHelper().drawColoredRect(renderer,
+                            this.getxPos() + this.getxTranslate(),
+                            this.getyPos() + this.getyTranslate(),
+                            this.getWidth(), this.getHeight(), this.getzLevel(),
+                            foreground);
+                }
+            }
             this.renderContent(renderer, pass, mouseX, mouseY);
+        }
     }
 
     protected abstract void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY);
@@ -414,10 +473,6 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
      */
     public void setFather(final GuiFather father)
     {
-        if (this.getHeightProperty().isBound())
-            this.getHeightProperty().unbind();
-        if (this.getWidthProperty().isBound())
-            this.getWidthProperty().unbind();
         this.getFatherProperty().setValue(father);
         if (father != null && this.getWidthRatio() != -1)
             RelativeBindingHelper.bindWidthRelative(this, father, this.getWidthRatioProperty());
@@ -428,6 +483,50 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         if (father != null)
             this.setStyleTree(father.getStyle().getStyleSupplier());
         this.refreshStyle();
+    }
+
+    public Texture getBackgroundTexture()
+    {
+        return this.getStyle().getStyleProperty("-background-texture", Texture.class).getValue();
+    }
+
+    public void setBackgroundTexture(Texture texture)
+    {
+        this.getStyle().getStyleProperty("-background-texture", Texture.class)
+                .setStyle(StyleSource.CODE, 10_000, texture);
+    }
+
+    public Color getBackgroundColor()
+    {
+        return this.getStyle().getStyleProperty("-background-color", Color.class).getValue();
+    }
+
+    public void setBackgroundColor(Color color)
+    {
+        this.getStyle().getStyleProperty("-background-color", Color.class)
+                .setStyle(StyleSource.CODE, 10_000, color);
+    }
+
+    public Texture getForegroundTexture()
+    {
+        return this.getStyle().getStyleProperty("-foreground-texture", Texture.class).getValue();
+    }
+
+    public void setForegroundTexture(Texture texture)
+    {
+        this.getStyle().getStyleProperty("-foreground-texture", Texture.class)
+                .setStyle(StyleSource.CODE, 10_000, texture);
+    }
+
+    public Color getForegroundColor()
+    {
+        return this.getStyle().getStyleProperty("-foreground-color", Color.class).getValue();
+    }
+
+    public void setForegroundColor(Color color)
+    {
+        this.getStyle().getStyleProperty("-foreground-color", Color.class)
+                .setStyle(StyleSource.CODE, 10_000, color);
     }
 
     public BaseProperty<Boolean> getFocusedProperty()

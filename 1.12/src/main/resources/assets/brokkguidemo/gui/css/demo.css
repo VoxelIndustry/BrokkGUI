@@ -8,8 +8,24 @@ listcell > button:hover {
     -border-color: #F0F4C3;
 }
 
+listcell > button:hover >> text {
+    -color: yellow;
+}
+
 listcell > button {
     -background-color: #E57373;
     -border-color: #DCE775;
     -border-thin: 1;
+}
+
+listcell > button >> text {
+    -shadow: false;
+}
+
+radio-button {
+    -background-color: #E0E0E0;
+}
+
+checkbox {
+    -background-color: #E0E0E0;
 }

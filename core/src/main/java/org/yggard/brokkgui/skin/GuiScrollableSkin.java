@@ -3,8 +3,6 @@ package org.yggard.brokkgui.skin;
 import fr.ourten.teabeans.binding.BaseBinding;
 import org.yggard.brokkgui.behavior.GuiScrollableBehavior;
 import org.yggard.brokkgui.control.GuiScrollableBase;
-import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.policy.EScrollbarPolicy;
 import org.yggard.brokkgui.shape.Rectangle;
 
@@ -153,34 +151,56 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
             }
         });
 
-        this.getModel().getStyle().registerAlias("grip-x", this.gripX.getStyle());
-        this.getModel().getStyle().registerAlias("grip-y", this.gripY.getStyle());
-    }
+        this.getModel().addChild(this.gripX);
+        this.getModel().addChild(this.gripY);
 
-    @Override
-    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
-    {
-        super.render(pass, renderer, mouseX, mouseY);
-        if (pass == RenderPass.SPECIAL)
+        this.gripX.getStyleClass().add("grip-x");
+        this.gripY.getStyleClass().add("grip-y");
+
+        this.gripX.getVisibleProperty().bind(new BaseBinding<Boolean>()
         {
-            if (this.getModel().getScrollXPolicy() == EScrollbarPolicy.ALWAYS
-                    || this.getModel().getScrollXPolicy() == EScrollbarPolicy.NEEDED)
-                if (this.getModel().getWidth() >= this.getModel().getTrueWidth())
+            {
+                super.bind(getModel().getScrollXPolicyProperty(),
+                        getModel().getWidthProperty(),
+                        getModel().getTrueWidthProperty());
+            }
+
+            @Override
+            public Boolean computeValue()
+            {
+                if (getModel().getScrollXPolicy() == EScrollbarPolicy.ALWAYS
+                        || getModel().getScrollXPolicy() == EScrollbarPolicy.NEEDED)
                 {
-                    if (this.getModel().getScrollXPolicy() == EScrollbarPolicy.ALWAYS)
-                        this.gripX.renderNode(renderer, RenderPass.MAIN, mouseX, mouseY);
+                    if (getModel().getWidth() >= getModel().getTrueWidth())
+                        return getModel().getScrollXPolicy() == EScrollbarPolicy.ALWAYS;
+                    else
+                        return true;
                 }
-                else
-                    this.gripX.renderNode(renderer, RenderPass.MAIN, mouseX, mouseY);
-            if (this.getModel().getScrollYPolicy() == EScrollbarPolicy.ALWAYS
-                    || this.getModel().getScrollYPolicy() == EScrollbarPolicy.NEEDED)
-                if (this.getModel().getHeight() >= this.getModel().getTrueHeight())
+                return false;
+            }
+        });
+
+        this.gripY.getVisibleProperty().bind(new BaseBinding<Boolean>()
+        {
+            {
+                super.bind(getModel().getScrollYPolicyProperty(),
+                        getModel().getHeightProperty(),
+                        getModel().getTrueHeightProperty());
+            }
+
+            @Override
+            public Boolean computeValue()
+            {
+                if (getModel().getScrollYPolicy() == EScrollbarPolicy.ALWAYS
+                        || getModel().getScrollYPolicy() == EScrollbarPolicy.NEEDED)
                 {
-                    if (this.getModel().getScrollYPolicy() == EScrollbarPolicy.ALWAYS)
-                        this.gripY.renderNode(renderer, RenderPass.MAIN, mouseX, mouseY);
+                    if (getModel().getHeight() >= getModel().getTrueHeight())
+                        return getModel().getScrollYPolicy() == EScrollbarPolicy.ALWAYS;
+                    else
+                        return true;
                 }
-                else
-                    this.gripY.renderNode(renderer, RenderPass.MAIN, mouseX, mouseY);
-        }
+                return false;
+            }
+        });
     }
 }

@@ -12,7 +12,7 @@ public abstract class GuiScrollableBase extends GuiControl
     private final BaseProperty<Float> trueWidthProperty, trueHeightProperty;
     private final BaseProperty<Float> scrollSpeedProperty;
 
-    private EScrollbarPolicy scrollXPolicy, scrollYPolicy;
+    private final BaseProperty<EScrollbarPolicy> scrollXPolicyProperty, scrollYPolicyProperty;
 
     private EventHandler<ScrollEvent> onScrollEvent;
 
@@ -28,7 +28,8 @@ public abstract class GuiScrollableBase extends GuiControl
 
         this.scrollSpeedProperty = new BaseProperty<>(1f, "scrollSpeedProperty");
 
-        this.scrollXPolicy = this.scrollYPolicy = EScrollbarPolicy.NEEDED;
+        this.scrollXPolicyProperty = new BaseProperty<>(EScrollbarPolicy.NEEDED, "scrollXPolicyProperty");
+        this.scrollYPolicyProperty = new BaseProperty<>(EScrollbarPolicy.NEEDED, "scrollYPolicyProperty");
         this.setOverflowPolicy(EOverflowPolicy.TRIM_ALL);
 
         this.setFocusable(true);
@@ -89,24 +90,34 @@ public abstract class GuiScrollableBase extends GuiControl
         return this.getTrueHeightProperty().getValue();
     }
 
-    public EScrollbarPolicy getScrollXPolicy()
+    public BaseProperty<EScrollbarPolicy> getScrollXPolicyProperty()
     {
-        return this.scrollXPolicy;
+        return this.scrollXPolicyProperty;
     }
 
-    public void setScrollXPolicy(final EScrollbarPolicy scrollXPolicy)
+    public BaseProperty<EScrollbarPolicy> getScrollYPolicyProperty()
     {
-        this.scrollXPolicy = scrollXPolicy;
+        return this.scrollYPolicyProperty;
+    }
+
+    public EScrollbarPolicy getScrollXPolicy()
+    {
+        return this.getScrollXPolicyProperty().getValue();
+    }
+
+    public void setScrollXPolicy(EScrollbarPolicy policy)
+    {
+        this.getScrollXPolicyProperty().setValue(policy);
     }
 
     public EScrollbarPolicy getScrollYPolicy()
     {
-        return this.scrollYPolicy;
+        return this.getScrollYPolicyProperty().getValue();
     }
 
-    public void setScrollYPolicy(final EScrollbarPolicy scrollYPolicy)
+    public void setScrollYPolicy(EScrollbarPolicy policy)
     {
-        this.scrollYPolicy = scrollYPolicy;
+        this.getScrollYPolicyProperty().setValue(policy);
     }
 
     /**

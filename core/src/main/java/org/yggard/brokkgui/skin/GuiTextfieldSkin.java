@@ -135,7 +135,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                             renderer.getHelper().getStringHeight() + 1, this.getModel().getzLevel(), color.shade(0.3f));
                 }  
             }
-            else if (pass == RenderPass.SPECIAL)
+            else if (pass == RenderPass.HOVER)
                 if (!this.getModel().isValid())
                 {
                     int i = 0;

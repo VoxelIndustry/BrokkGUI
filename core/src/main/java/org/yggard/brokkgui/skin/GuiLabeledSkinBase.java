@@ -8,8 +8,6 @@ import org.yggard.brokkgui.behavior.GuiBehaviorBase;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiLabeled;
 import org.yggard.brokkgui.data.ESide;
-import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.shape.Text;
 
 /**
@@ -29,20 +27,21 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         super(model, behaviour);
 
         this.text = new Text(model.getText());
-        this.text.setStyle("-line-color: green; -line-weight: 1;");
 
         this.ellipsedTextProperty = new BaseProperty<>("", "ellipsedTextProperty");
 
         // Bindings
         this.bindEllipsed();
 
-        this.getModel().getStyle().registerAlias("text", this.text.getStyle());
+        this.text.getStyleClass().add("text");
 
         this.getModel().getIconProperty().addListener((obs, oldValue, newValue) ->
         {
+            if(oldValue != null)
+                getModel().removeChild(oldValue);
             if (newValue != null)
             {
-                getModel().getStyle().registerAlias("icon", newValue.getStyle());
+                getModel().getStyleClass().add("icon");
                 this.bindIcon(newValue);
             }
         });
@@ -133,17 +132,8 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         this.text.getWidthProperty().bind(BaseExpression.transform(this.getEllipsedTextProperty(),
                 BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
         this.text.setHeight(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
-    }
 
-    @Override
-    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
-    {
-        super.render(pass, renderer, mouseX, mouseY);
-
-        this.text.renderNode(renderer, pass, mouseX, mouseY);
-
-        if (this.getModel().getIconProperty().isPresent())
-            this.getModel().getIcon().renderNode(renderer, pass, mouseX, mouseY);
+        getModel().addChild(text);
     }
 
     /**
@@ -228,6 +218,8 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
 
     private void bindIcon(GuiNode icon)
     {
+        this.getModel().addChild(icon);
+
         icon.getxPosProperty().bind(new BaseBinding<Float>()
         {
             {

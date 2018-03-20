@@ -8,7 +8,6 @@ import org.yggard.brokkgui.data.EHAlignment;
 import org.yggard.brokkgui.data.ESide;
 import org.yggard.brokkgui.element.*;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
-import org.yggard.brokkgui.paint.Background;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiAbsolutePane;
@@ -26,7 +25,7 @@ public class GuiDemo extends BrokkGuiScreen
         final GuiRelativePane pane = new GuiRelativePane();
         this.setMainPanel(pane);
 
-        pane.setBackground(new Background(new Texture("brokkguidemo:textures/gui/background.png")));
+        pane.setBackgroundTexture(new Texture("brokkguidemo:textures/gui/background.png"));
         final GuiButton button = new GuiButton("Test Button");
 
         button.setWidth(200);
@@ -72,7 +71,7 @@ public class GuiDemo extends BrokkGuiScreen
         field.setStyle("-border-color: black; -border-thin: 1;");
 
         final GuiRelativePane radioButtonPane = new GuiRelativePane();
-        radioButtonPane.setBackground(new Background(Color.LIGHT_GRAY));
+        radioButtonPane.setBackgroundColor(Color.LIGHT_GRAY);
 
         final GuiRadioButton radioButton = new GuiRadioButton("Right 1");
         final GuiRadioButton radioButton2 = new GuiRadioButton("Nothing to see here 2");
@@ -84,7 +83,7 @@ public class GuiDemo extends BrokkGuiScreen
         radioButton2.setStyle("-text-color: green");
 
         checkbox.setHeightRatio(0.05f);
-        checkbox.setIconSide(ESide.LEFT);
+        checkbox.setButtonSide(ESide.LEFT);
 
         final GuiToggleGroup toggleGroup = new GuiToggleGroup();
         toggleGroup.setAllowNothing(true);
@@ -110,7 +109,7 @@ public class GuiDemo extends BrokkGuiScreen
         labelPane.addChild(left, 0, 95);
         labelPane.addChild(center, 100, 95);
         labelPane.addChild(right, 200, 95);
-        labelPane.setBackground(new Background(new Color(1, 0, 0)));
+        labelPane.setBackgroundColor(new Color(1, 0, 0));
 
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);

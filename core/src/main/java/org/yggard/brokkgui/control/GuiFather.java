@@ -57,7 +57,7 @@ public class GuiFather extends GuiNode
     public void addChilds(final GuiNode... nodes)
     {
         for (final GuiNode node : nodes)
-           this.addChild(node);
+            this.addChild(node);
     }
 
     public void removeChild(final GuiNode node)
@@ -96,7 +96,8 @@ public class GuiFather extends GuiNode
     @Override
     public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
-        if ((this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM.ordinal() && pass == RenderPass.MAIN)
+        if ((this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM.ordinal()
+                && pass.getPriority() <= RenderPass.FOREGROUND.getPriority())
                 || (this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM_ALL.ordinal()))
         {
             renderer.getHelper().beginScissor();

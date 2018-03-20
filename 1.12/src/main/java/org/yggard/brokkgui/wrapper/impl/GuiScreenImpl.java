@@ -59,9 +59,10 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        this.brokkgui.render(mouseX, mouseY, RenderPass.BACKGROUND);
         this.brokkgui.render(mouseX, mouseY, RenderPass.MAIN);
+        this.brokkgui.render(mouseX, mouseY, RenderPass.FOREGROUND);
         this.brokkgui.render(mouseX, mouseY, RenderPass.HOVER);
-        this.brokkgui.render(mouseX, mouseY, RenderPass.SPECIAL);
 
         this.brokkgui.render(mouseX, mouseY, GuiHelper.ITEM_MAIN);
         this.brokkgui.render(mouseX, mouseY, GuiHelper.ITEM_HOVER);

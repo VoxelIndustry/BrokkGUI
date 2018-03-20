@@ -2,36 +2,66 @@ package org.yggard.brokkgui.element;
 
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
-import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.behavior.GuiTogglableButtonBehavior;
+import org.yggard.brokkgui.component.GuiNode;
+import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.control.GuiToggleButton;
-import org.yggard.brokkgui.data.EHAlignment;
+import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.RectOffset;
+import org.yggard.brokkgui.data.RelativeBindingHelper;
+import org.yggard.brokkgui.shape.Rectangle;
 import org.yggard.brokkgui.skin.GuiRadioButtonSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
-/**
- * @author Ourten 18 nov. 2016
- */
 public class GuiRadioButton extends GuiToggleButton
 {
-    private final BaseProperty<Float>       labelPaddingProperty;
-    private final BaseProperty<EHAlignment> labelAlignmentProperty;
+    private final BaseProperty<ESide>   buttonSideProperty;
+    private final BaseProperty<GuiNode> buttonNodeProperty;
 
-    public GuiRadioButton(final String label)
+    public GuiRadioButton(String text)
     {
-        super("radio-button", label);
+        super("radio-button", text);
 
-        this.labelAlignmentProperty = new BaseProperty<>(EHAlignment.RIGHT, "labelAlignmentProperty");
-        this.labelPaddingProperty = new BaseProperty<>(0f, "labelPaddingProperty");
-        this.setStyle("-text-color: #000000 78%");
-        this.setLabelPadding(2);
+        this.buttonSideProperty = new BaseProperty<>(ESide.LEFT, "buttonSideProperty");
+        this.buttonNodeProperty = new BaseProperty<>(new RadioButtonContent(this), "buttonNodeProperty");
 
-        this.bindSizeToText();
+        this.setExpandToLabel(true);
+        this.getLabel().setTextPadding(new RectOffset(0, 2, 0, 0));
     }
 
     public GuiRadioButton()
     {
         this("");
+    }
+
+    public BaseProperty<ESide> getButtonSideProperty()
+    {
+        return buttonSideProperty;
+    }
+
+    public BaseProperty<GuiNode> getButtonNodeProperty()
+    {
+        return buttonNodeProperty;
+    }
+
+    public void setButtonSide(ESide side)
+    {
+        this.getButtonSideProperty().setValue(side);
+    }
+
+    public ESide getButtonSide()
+    {
+        return this.getButtonSideProperty().getValue();
+    }
+
+    public void setButtonNode(GuiNode buttonNode)
+    {
+        this.getButtonNodeProperty().setValue(buttonNode);
+    }
+
+    public GuiNode getButtonNode()
+    {
+        return this.getButtonNodeProperty().getValue();
     }
 
     @Override
@@ -40,48 +70,48 @@ public class GuiRadioButton extends GuiToggleButton
         return new GuiRadioButtonSkin(this, new GuiTogglableButtonBehavior<>(this));
     }
 
-    public BaseProperty<Float> getLabelPaddingProperty()
+    public static class RadioButtonContent extends GuiFather
     {
-        return this.labelPaddingProperty;
-    }
+        private Rectangle box;
+        private Rectangle mark;
 
-    public BaseProperty<EHAlignment> getLabelAlignmentProperty()
-    {
-        return this.labelAlignmentProperty;
-    }
-
-    public float getLabelPadding()
-    {
-        return this.getLabelPaddingProperty().getValue();
-    }
-
-    public void setLabelPadding(final float labelPadding)
-    {
-        this.getLabelPaddingProperty().setValue(labelPadding);
-    }
-
-    public EHAlignment getLabelAlignment()
-    {
-        return this.getLabelAlignmentProperty().getValue();
-    }
-
-    public void setLabelAlignment(final EHAlignment alignment)
-    {
-        this.getLabelAlignmentProperty().setValue(alignment);
-    }
-
-    @Override
-    protected void bindSizeToText()
-    {
-        if (this.getLabelPaddingProperty() != null)
+        public RadioButtonContent(GuiRadioButton parent)
         {
-            this.getWidthProperty().bind(BaseExpression.triCombine(this.getTextProperty(),
-                    this.getLabelPaddingProperty(), this.getHeightProperty(),
-                    (text, padding,
-                            height) -> (BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(this.getText())
-                                    + this.getHeight() + this.getLabelPadding())));
-            this.getHeightProperty().bind(BaseExpression.transform(this.getTextProperty(),
-                    text -> BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight()));
+            super("radiobutton-content");
+
+            this.setHeightRatio(1);
+            this.getWidthProperty().bind(this.getHeightProperty());
+
+            this.box = new Rectangle();
+            this.mark = new Rectangle();
+
+            this.box.getStyleClass().add("box");
+            this.mark.getStyleClass().add("mark");
+
+            this.addChild(this.box);
+            RelativeBindingHelper.bindToCenter(this.box, this);
+
+            this.addChild(this.mark);
+            RelativeBindingHelper.bindToCenter(this.mark, this);
+
+            this.box.getWidthProperty().bind(this.box.getHeightProperty());
+            this.box.getHeightProperty().bind(this.getHeightProperty());
+
+            this.mark.getWidthProperty().bind(this.mark.getHeightProperty());
+            this.mark.getHeightProperty().bind(BaseExpression.transform(this.box.getHeightProperty(),
+                    height -> height - 4));
+
+            this.mark.getVisibleProperty().bind(parent.getSelectedProperty());
+        }
+
+        public GuiNode getBox()
+        {
+            return this.box;
+        }
+
+        public GuiNode getMark()
+        {
+            return this.mark;
         }
     }
 }

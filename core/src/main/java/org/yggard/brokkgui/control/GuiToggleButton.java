@@ -3,6 +3,7 @@ package org.yggard.brokkgui.control;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiTogglableButtonBehavior;
 import org.yggard.brokkgui.behavior.IGuiTogglable;
+import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.skin.GuiButtonSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
@@ -11,9 +12,9 @@ public class GuiToggleButton extends GuiButtonBase implements IGuiTogglable
     private final BaseProperty<Boolean>        selectedProperty;
     private final BaseProperty<GuiToggleGroup> toggleGroupProperty;
 
-    public GuiToggleButton(final String type, final String label)
+    public GuiToggleButton(String type, String text, GuiNode icon)
     {
-        super(type, label);
+        super(type, text, icon);
 
         this.selectedProperty = new BaseProperty<>(false, "selectedProperty");
         this.toggleGroupProperty = new BaseProperty<>(null, "toggleGroupProperty");
@@ -25,6 +26,11 @@ public class GuiToggleButton extends GuiButtonBase implements IGuiTogglable
             else
                 this.getActivePseudoClass().remove("active");
         });
+    }
+
+    public GuiToggleButton(String type, String text)
+    {
+        this(type, text, null);
     }
 
     public GuiToggleButton(String type)

@@ -36,6 +36,10 @@ processResources {
 task devJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'dev'
+
+    duplicatesStrategy = 'exclude'
+    exclude('org/yggard/brokkgui/demo/**')
+    exclude('assets/brokkguidemo/**')
 }
 
 artifacts {
@@ -45,5 +49,13 @@ artifacts {
 publishing.publications {
     mavenJava(MavenPublication) {
         artifact source: devJar, classifier: 'dev', extension: 'jar'
+    }
+}
+
+apply plugin: 'idea'
+
+idea {
+    module {
+        inheritOutputDirs = true
     }
 }

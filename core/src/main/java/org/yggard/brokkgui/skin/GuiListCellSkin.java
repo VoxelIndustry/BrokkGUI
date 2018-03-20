@@ -17,7 +17,7 @@ public class GuiListCellSkin<T> extends GuiLabeledSkinBase<GuiListCell<T>, GuiBe
     {
         super.render(pass, renderer, mouseX, mouseY);
 
-        if (this.getModel().getGraphic() != null)
+        if (this.getModel().getGraphicProperty().isPresent())
             this.getModel().getGraphic().renderNode(renderer, pass, mouseX, mouseY);
     }
 }
