@@ -32,9 +32,9 @@ public class StyleSelectorParser
     IStyleSelector readSingleSelector(String selector)
     {
         if (selector.contains(">"))
-            return parseHierarchicSelector(selector);
+            return parseHierarchic(selector);
         else
-            return parseSimpleSelector(selector);
+            return parseSimple(selector);
     }
 
     String cleanSelector(String selector)
@@ -59,18 +59,22 @@ public class StyleSelectorParser
         return cleanSelector.toString();
     }
 
-    IStyleSelector parseHierarchicSelector(String selector)
+    IStyleSelector parseHierarchic(String selector)
     {
         boolean direct = false;
 
-        if (selector.charAt(selector.indexOf('>') + 1) != '>')
+        if (selector.charAt(selector.lastIndexOf('>') - 1) != '>')
             direct = true;
-        String[] split = selector.split(direct ? ">" : ">>", 2);
-        return new StyleSelectorHierarchic(parseSimpleSelector(split[0]), split[1].contains(">") ?
-                parseHierarchicSelector(split[1]) : parseSimpleSelector(split[1]), direct);
+
+        String[] split = selector.split("[>]+(?=[^>]*$)");
+
+        if (!split[0].contains(">"))
+            return new StyleSelectorHierarchic(parseSimple(split[0]), parseSimple(split[1]), direct);
+        else
+            return new StyleSelectorHierarchic(parseHierarchic(split[0]), parseSimple(split[1]), direct);
     }
 
-    IStyleSelector parseSimpleSelector(String selector)
+    IStyleSelector parseSimple(String selector)
     {
         StyleSelector rtn = new StyleSelector();
         for (String part : selector.split("(?=[.#:])"))
