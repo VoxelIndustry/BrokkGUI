@@ -2,7 +2,6 @@ package org.yggard.brokkgui.style.parser;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.yggard.brokkgui.style.parser.StyleSelectorParser;
 import org.yggard.brokkgui.style.tree.IStyleSelector;
 import org.yggard.brokkgui.style.tree.StyleSelector;
 import org.yggard.brokkgui.style.tree.StyleSelectorHierarchic;
@@ -80,13 +79,12 @@ public class StyleSelectorParserTest
 
         StyleSelectorHierarchic selector = (StyleSelectorHierarchic) twoGenerationSelectors[0];
 
-        assertThat(selector.getParentSelector().match(grandparent)).isTrue();
-        assertThat(selector.isDirectChild()).isFalse();
+        assertThat(selector.getParentSelector().match(new StyleSelectorHierarchic(grandparent, parent, false))).isTrue();
+        assertThat(selector.isDirectChild()).isTrue();
 
-        assertThat(selector.getChildSelector()).isInstanceOf(StyleSelectorHierarchic.class);
-        assertThat(((StyleSelectorHierarchic) selector.getChildSelector()).isDirectChild()).isTrue();
+        assertThat(selector.getChildSelector()).isInstanceOf(StyleSelector.class);
+        assertThat(selector.getParentSelector()).isInstanceOf(StyleSelectorHierarchic.class);
 
-        assertThat(((StyleSelectorHierarchic) selector.getChildSelector()).getParentSelector().match(parent)).isTrue();
-        assertThat(((StyleSelectorHierarchic) selector.getChildSelector()).getChildSelector().match(child)).isTrue();
+        assertThat(((StyleSelectorHierarchic) selector.getParentSelector()).getParentSelector().match(grandparent)).isTrue();
     }
 }
