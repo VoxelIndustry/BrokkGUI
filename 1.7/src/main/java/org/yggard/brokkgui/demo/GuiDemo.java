@@ -5,6 +5,7 @@ import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.control.GuiToggleGroup;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.EHAlignment;
+import org.yggard.brokkgui.data.ESide;
 import org.yggard.brokkgui.element.*;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Background;
@@ -83,7 +84,7 @@ public class GuiDemo extends BrokkGuiScreen
         radioButton2.setStyle("-text-color: green");
 
         checkbox.setHeightRatio(0.05f);
-        checkbox.setLabelAlignment(EHAlignment.LEFT);
+        checkbox.setIconSide(ESide.LEFT);
 
         final GuiToggleGroup toggleGroup = new GuiToggleGroup();
         toggleGroup.setAllowNothing(true);

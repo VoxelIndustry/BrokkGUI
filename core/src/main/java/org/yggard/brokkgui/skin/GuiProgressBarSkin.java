@@ -40,7 +40,6 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         this.getText().getyPosProperty().bind(new BaseExpression<>(() ->
                 model.getyPos() + model.getHeight() / 2, model.getyPosProperty(), model.getHeightProperty()));
 
-        this.getText().getTextAlignmentProperty().bind(model.getTextAlignmentProperty());
         this.getText().getzLevelProperty().bind(new BaseExpression<>(() ->
                 model.getzLevel() + 1, model.getzLevelProperty()));
 

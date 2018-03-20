@@ -13,7 +13,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
-import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.Vector2i;
 import org.yggard.brokkgui.internal.EGuiRenderMode;
 import org.yggard.brokkgui.internal.IGuiHelper;
@@ -67,8 +66,7 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public void drawString(String string, int x, int y, float zLevel, Color textColor, Color shadowColor,
-                           EAlignment alignment)
+    public void drawString(String string, int x, int y, float zLevel, Color textColor, Color shadowColor)
     {
         GlStateManager.enableBlend();
         GlStateManager.resetColor();
@@ -77,16 +75,6 @@ public class GuiHelper implements IGuiHelper
             GL11.glPushMatrix();
             GL11.glTranslated(0, 0, zLevel);
         }
-
-        if (alignment.isHorizontalCentered())
-            x -= this.mc.fontRenderer.getStringWidth(string) / 2;
-        else if (alignment.isRight())
-            x -= this.mc.fontRenderer.getStringWidth(string);
-
-        if (alignment.isVerticalCentered())
-            y -= this.mc.fontRenderer.FONT_HEIGHT / 2;
-        else if (alignment.isDown())
-            y -= this.mc.fontRenderer.FONT_HEIGHT;
 
         if (shadowColor.getAlpha() != 0)
             this.mc.fontRenderer.drawString(string, x + 1, y + 1, this.applyAlphaMask(shadowColor).toRGBAInt(), false);
@@ -100,19 +88,13 @@ public class GuiHelper implements IGuiHelper
     @Override
     public void drawString(String string, double x, double y, float zLevel, Color textColor, Color shadowColor)
     {
-        this.drawString(string, (int) x, (int) y, zLevel, textColor, shadowColor, EAlignment.LEFT_UP);
-    }
-
-    @Override
-    public void drawString(String string, double x, double y, float zLevel, Color textColor, EAlignment alignment)
-    {
-        this.drawString(string, (int) x, (int) y, zLevel, textColor, Color.ALPHA, alignment);
+        this.drawString(string, (int) x, (int) y, zLevel, textColor, shadowColor);
     }
 
     @Override
     public void drawString(String string, double x, double y, float zLevel, Color textColor)
     {
-        this.drawString(string, (int) x, (int) y, zLevel, textColor, Color.ALPHA, EAlignment.LEFT_UP);
+        this.drawString(string, (int) x, (int) y, zLevel, textColor, Color.ALPHA);
     }
 
     @Override

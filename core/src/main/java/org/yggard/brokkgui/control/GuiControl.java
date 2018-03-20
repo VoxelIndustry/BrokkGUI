@@ -39,8 +39,8 @@ public abstract class GuiControl extends GuiFather implements IGuiSkinnable
         if (this.getOpacity() != 1)
             renderer.getHelper().startAlphaMask(this.getOpacity());
 
-        super.renderContent(renderer, pass, mouseX, mouseY);
         this.getSkin().render(pass, renderer, mouseX, mouseY);
+        super.renderContent(renderer, pass, mouseX, mouseY);
 
         if (this.getOpacity() != 1)
             renderer.getHelper().closeAlphaMask();

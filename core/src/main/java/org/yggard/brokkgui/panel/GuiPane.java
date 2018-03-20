@@ -12,8 +12,6 @@ import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
 import org.yggard.brokkgui.style.StyleSource;
 
-import java.util.Arrays;
-
 public class GuiPane extends GuiFather
 {
     private static final ZLevelComparator ZLEVEL_COMPARATOR = new ZLevelComparator();
@@ -42,34 +40,24 @@ public class GuiPane extends GuiFather
         this.getStyle().registerProperty("-opacity", 1D, Double.class);
     }
 
+    @Override
     public void addChild(final GuiNode node)
     {
-        this.getChildrensProperty().add(node);
-        node.setFather(this);
+        super.addChild(node);
 
         RelativeBindingHelper.bindToCenter(node, this);
     }
 
-    public void addChilds(final GuiNode... nodes)
-    {
-        this.getChildrensProperty().addAll(Arrays.asList(nodes));
-
-        for (final GuiNode node : nodes)
-        {
-            node.setFather(this);
-            RelativeBindingHelper.bindToCenter(node, this);
-        }
-    }
-
+    @Override
     public void removeChild(final GuiNode node)
     {
-        this.getChildrensProperty().remove(node);
+        super.removeChild(node);
 
-        node.setFather(null);
         node.getxPosProperty().unbind();
         node.getyPosProperty().unbind();
     }
 
+    @Override
     public void clearChilds()
     {
         this.getChildrensProperty().getValue().forEach(node ->
@@ -79,11 +67,6 @@ public class GuiPane extends GuiFather
             node.getyPosProperty().unbind();
         });
         this.getChildrensProperty().clear();
-    }
-
-    public boolean hasChild(final GuiNode node)
-    {
-        return this.getChildrensProperty().contains(node);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.yggard.brokkgui.skin;
 
 import org.yggard.brokkgui.behavior.GuiTabPaneBehavior;
-import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.RenderPass;
@@ -64,7 +63,7 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
                                     + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
                                     * this.getModel().getTabsProperty().indexOf(tab),
                             this.getModel().getyPos() + this.getModel().getyTranslate() + 2,
-                            this.getModel().getzLevel(), Color.WHITE, EAlignment.LEFT_DOWN);
+                            this.getModel().getzLevel(), Color.WHITE);
                     break;
                 // TODO : tab render for every possible sides
                 case DOWN:

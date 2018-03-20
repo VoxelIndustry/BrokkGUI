@@ -48,6 +48,41 @@ public class GuiFather extends GuiNode
         return this.childrensProperty;
     }
 
+    public void addChild(final GuiNode node)
+    {
+        this.getChildrensProperty().add(node);
+        node.setFather(this);
+    }
+
+    public void addChilds(final GuiNode... nodes)
+    {
+        for (final GuiNode node : nodes)
+           this.addChild(node);
+    }
+
+    public void removeChild(final GuiNode node)
+    {
+        this.getChildrensProperty().remove(node);
+
+        node.setFather(null);
+    }
+
+    public void clearChilds()
+    {
+        this.getChildrensProperty().getValue().forEach(node ->
+        {
+            node.setFather(null);
+            node.getxPosProperty().unbind();
+            node.getyPosProperty().unbind();
+        });
+        this.getChildrensProperty().clear();
+    }
+
+    public boolean hasChild(final GuiNode node)
+    {
+        return this.getChildrensProperty().contains(node);
+    }
+
     public EOverflowPolicy getOverflowPolicy()
     {
         return this.overflowPolicy;
@@ -66,8 +101,8 @@ public class GuiFather extends GuiNode
         {
             renderer.getHelper().beginScissor();
             renderer.getHelper().scissorBox(this.getxPos() + this.getxTranslate(),
-                    this.getyPos() + this.getyTranslate(), this.getxPos() + this.getxTranslate() + this.getWidth() - 1,
-                    this.getyPos() + this.getyTranslate() + this.getHeight() - 1);
+                    this.getyPos() + this.getyTranslate(), this.getxPos() + this.getxTranslate() + this.getWidth(),
+                    this.getyPos() + this.getyTranslate() + this.getHeight());
             this.getChildrens().forEach(child -> child.renderNode(renderer, pass, mouseX, mouseY));
             renderer.getHelper().endScissor();
         }
@@ -121,8 +156,7 @@ public class GuiFather extends GuiNode
     @Override
     public void refreshStyle()
     {
-        super.refreshStyle();
-
         this.getChildrens().forEach(GuiNode::refreshStyle);
+        super.refreshStyle();
     }
 }

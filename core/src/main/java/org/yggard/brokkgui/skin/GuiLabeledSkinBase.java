@@ -5,8 +5,9 @@ import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
+import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiLabeled;
-import org.yggard.brokkgui.data.EHAlignment;
+import org.yggard.brokkgui.data.ESide;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.shape.Text;
@@ -14,40 +15,39 @@ import org.yggard.brokkgui.shape.Text;
 /**
  * @param <C> the labeled gui control this skin must render
  * @param <B> an overly simplified behaviour only here for architecture
- *            cleanlyness purpose
+ *            purpose
  * @author Ourten
  */
 public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<C>> extends GuiBehaviorSkinBase<C, B>
 {
     private final Text text;
 
-    private final BaseProperty<Float>       textPaddingProperty;
-    private final BaseProperty<EHAlignment> textPaddingAlignmentProperty;
-    private final BaseProperty<String>      ellipsedTextProperty;
+    private final BaseProperty<String> ellipsedTextProperty;
 
     public GuiLabeledSkinBase(final C model, final B behaviour)
     {
         super(model, behaviour);
 
         this.text = new Text(model.getText());
-
-        this.textPaddingProperty = new BaseProperty<>(0f, "textPaddingProperty");
-        this.textPaddingAlignmentProperty = new BaseProperty<>(EHAlignment.CENTER, "textPaddingAlignmentProperty");
+        this.text.setStyle("-line-color: green; -line-weight: 1;");
 
         this.ellipsedTextProperty = new BaseProperty<>("", "ellipsedTextProperty");
 
         // Bindings
         this.bindEllipsed();
 
-        this.text.getTextStyle().bind(this.getModel());
+        this.getModel().getStyle().registerAlias("text", this.text.getStyle());
 
-        this.text.getTextStyleProperty().addListener((obs, oldValue, newValue) ->
+        this.getModel().getIconProperty().addListener((obs, oldValue, newValue) ->
         {
-            if (oldValue != null)
-                oldValue.unbind(this.getModel());
-            newValue.bind(this.getModel());
-            this.getModel().refreshStyle();
+            if (newValue != null)
+            {
+                getModel().getStyle().registerAlias("icon", newValue.getStyle());
+                this.bindIcon(newValue);
+            }
         });
+        if (model.getIconProperty().isPresent())
+            this.bindIcon(model.getIcon());
 
         this.text.getTextProperty().bind(this.ellipsedTextProperty);
         this.text.getzLevelProperty().bind(model.getzLevelProperty());
@@ -55,53 +55,83 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         this.text.getxPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(model.getTextAlignmentProperty(), model.getxPosProperty(), model.getxTranslateProperty(),
-                        model.getWidthProperty(), GuiLabeledSkinBase.this.ellipsedTextProperty,
-                        GuiLabeledSkinBase.this.textPaddingProperty,
-                        GuiLabeledSkinBase.this.textPaddingAlignmentProperty);
+                super.bind(model.getTextAlignmentProperty(),
+                        model.getxPosProperty(),
+                        model.getxTranslateProperty(),
+                        model.getWidthProperty(),
+                        model.getIconProperty(),
+                        model.getIconSideProperty(),
+                        model.getIconPaddingProperty(),
+                        model.getTextPaddingProperty(),
+                        getEllipsedTextProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                final float padding = GuiLabeledSkinBase.this.getTextPaddingAlignment() == EHAlignment.LEFT
-                        ? -GuiLabeledSkinBase.this.getTextPadding() + 2
-                        : GuiLabeledSkinBase.this.getTextPaddingAlignment() == EHAlignment.RIGHT
-                        ? GuiLabeledSkinBase.this.getTextPadding()
-                        : 0;
+                float iconWidth = 0;
+                if (model.getIconProperty().isPresent() && model.getIconSide().isHorizontal())
+                    iconWidth = model.getIcon().getWidth() + model.getIconPadding();
 
                 if (model.getTextAlignment().isLeft())
-                    return model.getxPos() + model.getxTranslate() + padding + BrokkGuiPlatform.getInstance()
-                            .getGuiHelper().getStringWidth(GuiLabeledSkinBase.this.getEllipsedText());
+                    return model.getxPos() + model.getxTranslate() + model.getTextPadding().getLeft()
+                            + (model.getIconSide() == ESide.LEFT ? iconWidth : 0);
                 else if (model.getTextAlignment().isRight())
-                    return model.getxPos() + model.getxTranslate() + model.getWidth() - BrokkGuiPlatform.getInstance()
-                            .getGuiHelper().getStringWidth(GuiLabeledSkinBase.this.getEllipsedText()) + padding;
+                    return model.getxPos() + model.getxTranslate()
+                            + model.getWidth()
+                            - model.getTextPadding().getRight()
+                            - BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getEllipsedText())
+                            - (model.getIconSide() == ESide.RIGHT ? iconWidth : 0);
                 else
-                    return model.getxPos() + model.getxTranslate() + model.getWidth() / 2 + padding / 2;
+                    return model.getxPos() + model.getxTranslate()
+                            + model.getTextPadding().getLeft()
+                            + (model.getIconSide() == ESide.LEFT ? iconWidth : 0)
+                            + getAvailableTextWidth() / 2
+                            - BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getEllipsedText()) / 2
+                            - model.getTextPadding().getRight();
             }
         });
         this.text.getyPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(model.getTextAlignmentProperty(), model.getyPosProperty(), model.getyTranslateProperty(),
-                        model.getHeightProperty());
+                super.bind(model.getTextAlignmentProperty(),
+                        model.getyPosProperty(),
+                        model.getyTranslateProperty(),
+                        model.getHeightProperty(),
+                        model.getIconProperty(),
+                        model.getIconSideProperty(),
+                        model.getIconPaddingProperty(),
+                        model.getTextPaddingProperty());
             }
 
             @Override
             public Float computeValue()
             {
+                float iconHeight = 0;
+                if (model.getIconProperty().isPresent() && model.getIconSide().isVertical())
+                    iconHeight = model.getIcon().getHeight() + model.getIconPadding();
+
                 if (model.getTextAlignment().isUp())
-                    return model.getyPos() + model.getyTranslate();
+                    return model.getyPos() + model.getyTranslate() + model.getTextPadding().getTop()
+                            + (model.getIconSide() == ESide.UP ? iconHeight : 0);
                 else if (model.getTextAlignment().isDown())
-                    return model.getyPos() + model.getyTranslate() + model.getHeight()
-                            - BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight();
+                    return model.getyPos() + model.getyTranslate()
+                            + model.getHeight()
+                            - model.getTextPadding().getBottom()
+                            - BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight()
+                            - (model.getIconSide() == ESide.DOWN ? iconHeight : 0);
                 else
-                    return model.getyPos() + model.getyTranslate() + model.getHeight() / 2;
+                    return model.getyPos() + model.getyTranslate() + model.getHeight() / 2
+                            + (model.getIconSide() == ESide.UP ? iconHeight :
+                            (model.getIconSide() == ESide.DOWN ? -iconHeight : 0)) / 2
+                            - BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight() / 2
+                            + model.getTextPadding().getTop()
+                            - model.getTextPadding().getBottom();
             }
         });
 
-        this.text.getWidthProperty().bind(BaseExpression.biCombine(model.getWidthProperty(), this.textPaddingProperty,
-                (width, padding) -> width - padding));
+        this.text.getWidthProperty().bind(BaseExpression.transform(this.getEllipsedTextProperty(),
+                BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
         this.text.setHeight(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
     }
 
@@ -111,6 +141,9 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         super.render(pass, renderer, mouseX, mouseY);
 
         this.text.renderNode(renderer, pass, mouseX, mouseY);
+
+        if (this.getModel().getIconProperty().isPresent())
+            this.getModel().getIcon().renderNode(renderer, pass, mouseX, mouseY);
     }
 
     /**
@@ -121,29 +154,9 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         return this.text;
     }
 
-    public BaseProperty<Float> getTextPaddingProperty()
-    {
-        return this.textPaddingProperty;
-    }
-
-    public BaseProperty<EHAlignment> getTextPaddingAlignmentProperty()
-    {
-        return this.textPaddingAlignmentProperty;
-    }
-
     public BaseProperty<String> getEllipsedTextProperty()
     {
         return this.ellipsedTextProperty;
-    }
-
-    public float getTextPadding()
-    {
-        return this.getTextPaddingProperty().getValue();
-    }
-
-    public EHAlignment getTextPaddingAlignment()
-    {
-        return this.getTextPaddingAlignmentProperty().getValue();
     }
 
     public String getEllipsedText()
@@ -156,18 +169,23 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         this.ellipsedTextProperty.bind(new BaseBinding<String>()
         {
             {
-                super.bind(getModel().getTextProperty(), getModel().getExpandToTextProperty(),
-                        getModel().getWidthProperty(), getModel().getEllipsisProperty(), textPaddingProperty);
+                super.bind(getModel().getTextProperty(),
+                        getModel().getExpandToTextProperty(),
+                        getModel().getWidthProperty(),
+                        getModel().getEllipsisProperty(),
+                        getModel().getTextPaddingProperty(),
+                        getModel().getIconPaddingProperty(),
+                        getModel().getIconSideProperty(),
+                        getModel().getIconProperty());
             }
 
             @Override
             public String computeValue()
             {
-                if (!getModel().expandToText() && getModel().getWidth() - textPaddingProperty.getValue()
-                        < BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText()))
+                if (!getModel().expandToText() && getModel().getWidth() < getExpandedWidth())
                 {
                     String trimmed = BrokkGuiPlatform.getInstance().getGuiHelper().trimStringToPixelWidth(
-                            getModel().getText(), (int) (getModel().getWidth() - textPaddingProperty.getValue()));
+                            getModel().getText(), (int) (getAvailableTextWidth()));
 
                     if (trimmed.length() < getModel().getEllipsis().length())
                         return "";
@@ -175,6 +193,94 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
                     return trimmed + getModel().getEllipsis();
                 }
                 return getModel().getText();
+            }
+        });
+    }
+
+    private float getExpandedWidth()
+    {
+        if (getModel().getIconProperty().isPresent())
+        {
+            if (getModel().getIconSide().isHorizontal())
+                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText())
+                        + getModel().getTextPadding().getLeft() + getModel().getTextPadding().getRight()
+                        + getModel().getIcon().getWidth() + getModel().getIconPadding();
+            else
+                return Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText()),
+                        getModel().getIcon().getWidth())
+                        + getModel().getTextPadding().getLeft() + getModel().getTextPadding().getRight();
+        }
+        return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText())
+                + getModel().getTextPadding().getLeft() + getModel().getTextPadding().getRight();
+    }
+
+    private float getAvailableTextWidth()
+    {
+        if (getModel().getIconProperty().isPresent() && getModel().getIconSide().isHorizontal())
+        {
+            return getModel().getWidth()
+                    - getModel().getTextPadding().getLeft() - getModel().getTextPadding().getRight()
+                    - getModel().getIcon().getWidth() - getModel().getIconPadding();
+        }
+        return getModel().getWidth()
+                - getModel().getTextPadding().getLeft() - getModel().getTextPadding().getRight();
+    }
+
+    private void bindIcon(GuiNode icon)
+    {
+        icon.getxPosProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(getModel().getIconSideProperty(),
+                        getModel().getxPosProperty(),
+                        getModel().getxTranslateProperty(),
+                        getModel().getTextPaddingProperty(),
+                        getModel().getWidthProperty(),
+                        icon.getWidthProperty());
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                if (getModel().getIconSide() == ESide.LEFT)
+                    return getModel().getxPos() + getModel().getxTranslate()
+                            + getModel().getTextPadding().getLeft();
+                if (getModel().getIconSide() == ESide.RIGHT)
+                    return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth()
+                            - getModel().getTextPadding().getRight()
+                            - icon.getWidth();
+                return getModel().getxPos() + getModel().getxTranslate()
+                        + getModel().getWidth() / 2 - icon.getWidth() / 2
+                        + getModel().getTextPadding().getLeft()
+                        - getModel().getTextPadding().getRight();
+            }
+        });
+
+        icon.getyPosProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(getModel().getIconSideProperty(),
+                        getModel().getyPosProperty(),
+                        getModel().getyTranslateProperty(),
+                        getModel().getTextPaddingProperty(),
+                        getModel().getHeightProperty(),
+                        icon.getHeightProperty());
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                if (getModel().getIconSide() == ESide.UP)
+                    return getModel().getyPos() + getModel().getyTranslate()
+                            + getModel().getTextPadding().getTop();
+                if (getModel().getIconSide() == ESide.DOWN)
+                    return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight()
+                            - getModel().getTextPadding().getBottom()
+                            - icon.getHeight();
+                return getModel().getyPos() + getModel().getyTranslate()
+                        + getModel().getHeight() / 2 - icon.getHeight() / 2
+                        + getModel().getTextPadding().getTop()
+                        - getModel().getTextPadding().getBottom();
             }
         });
     }

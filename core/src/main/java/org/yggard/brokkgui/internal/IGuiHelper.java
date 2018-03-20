@@ -1,6 +1,5 @@
 package org.yggard.brokkgui.internal;
 
-import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.Vector2i;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
@@ -18,12 +17,9 @@ public interface IGuiHelper
 
     void scissorBox(float f, float g, float h, float i);
 
-    void drawString(String string, int x, int y, float zLevel, Color textColor, Color shadowColor,
-                    EAlignment alignment);
+    void drawString(String string, int x, int y, float zLevel, Color textColor, Color shadowColor);
 
     void drawString(String string, double x, double y, float zLevel, Color textColor, Color shadowColor);
-
-    void drawString(String string, double x, double y, float zLevel, Color textColor, EAlignment alignment);
 
     void drawString(String string, double x, double y, float zLevel, Color textColor);
 

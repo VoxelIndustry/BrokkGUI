@@ -407,7 +407,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     /**
-     * Internal method for the layouting system. A developper should never have to
+     * Internal method for the layouting system. A developer should never have to
      * use it.
      *
      * @param father

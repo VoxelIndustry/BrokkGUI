@@ -11,7 +11,7 @@ public class ListViewDemo extends GuiRelativePane
 {
     public ListViewDemo()
     {
-        final GuiListView<String> labelList = new GuiListView<>();
+        GuiListView<String> labelList = new GuiListView<>();
 
         labelList.setWidth(75);
         labelList.setHeight(30);
