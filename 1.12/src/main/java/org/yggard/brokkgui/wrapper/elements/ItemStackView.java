@@ -1,4 +1,4 @@
-package org.yggard.brokkgui.wrapper.container;
+package org.yggard.brokkgui.wrapper.elements;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.minecraft.item.ItemStack;
@@ -17,7 +17,7 @@ public class ItemStackView extends GuiControl
     private final BaseProperty<String>    alternateStringProperty;
     private final BaseProperty<ItemStack> stackProperty;
 
-    private final BaseProperty<Boolean>   tooltipProperty;
+    private final BaseProperty<Boolean> itemTooltipProperty;
 
     private final BaseProperty<Color>     colorProperty;
 
@@ -27,7 +27,7 @@ public class ItemStackView extends GuiControl
 
         this.stackProperty = new BaseProperty<>(stack, "stackProperty");
         this.alternateStringProperty = new BaseProperty<>(null, "alternateStringProperty");
-        this.tooltipProperty = new BaseProperty<>(false, "tooltipProperty");
+        this.itemTooltipProperty = new BaseProperty<>(false, "itemTooltipProperty");
 
         this.colorProperty = new BaseProperty<>(Color.WHITE, "colorProperty");
     }
@@ -47,9 +47,9 @@ public class ItemStackView extends GuiControl
         return this.alternateStringProperty;
     }
 
-    public BaseProperty<Boolean> getTooltipProperty()
+    public BaseProperty<Boolean> getItemTooltipProperty()
     {
-        return this.tooltipProperty;
+        return this.itemTooltipProperty;
     }
 
     public BaseProperty<Color> getColorProperty()
@@ -82,14 +82,14 @@ public class ItemStackView extends GuiControl
         this.alternateStringProperty.setValue(alternateString);
     }
 
-    public boolean hasTooltip()
+    public boolean hasItemTooltip()
     {
-        return this.getTooltipProperty().getValue();
+        return this.getItemTooltipProperty().getValue();
     }
 
-    public void setTooltip(final boolean tooltip)
+    public void setItemTooltip(final boolean tooltip)
     {
-        this.getTooltipProperty().setValue(tooltip);
+        this.getItemTooltipProperty().setValue(tooltip);
     }
 
     public Color getColor()

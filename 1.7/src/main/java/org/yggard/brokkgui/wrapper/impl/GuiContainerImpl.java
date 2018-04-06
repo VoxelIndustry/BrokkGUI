@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.internal.PopupHandler;
 import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.wrapper.GuiHelper;
 import org.yggard.brokkgui.wrapper.GuiRenderer;
@@ -74,6 +75,11 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
         this.brokkgui.render(mouseX, mouseY, RenderPass.MAIN);
         this.brokkgui.render(mouseX, mouseY, RenderPass.FOREGROUND);
         this.brokkgui.render(mouseX, mouseY, RenderPass.HOVER);
+
+        PopupHandler.getInstance().renderPopupInPass(this.renderer, RenderPass.BACKGROUND, mouseX, mouseY);
+        PopupHandler.getInstance().renderPopupInPass(this.renderer, RenderPass.MAIN, mouseX, mouseY);
+        PopupHandler.getInstance().renderPopupInPass(this.renderer, RenderPass.FOREGROUND, mouseX, mouseY);
+        PopupHandler.getInstance().renderPopupInPass(this.renderer, RenderPass.HOVER, mouseX, mouseY);
     }
 
     @Override
@@ -82,6 +88,9 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
         GL11.glTranslatef(-this.guiLeft, -this.guiTop, 0);
         this.brokkgui.render(mouseX, mouseY, GuiHelper.ITEM_MAIN);
         this.brokkgui.render(mouseX, mouseY, GuiHelper.ITEM_HOVER);
+
+        PopupHandler.getInstance().renderPopupInPass(this.renderer, GuiHelper.ITEM_MAIN, mouseX, mouseY);
+        PopupHandler.getInstance().renderPopupInPass(this.renderer, GuiHelper.ITEM_HOVER, mouseX, mouseY);
         GL11.glTranslatef(this.guiLeft, this.guiTop, 0);
     }
 

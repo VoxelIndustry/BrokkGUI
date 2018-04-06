@@ -6,6 +6,8 @@ import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.event.ActionEvent;
 import org.yggard.hermod.EventHandler;
 
+import javax.annotation.Nonnull;
+
 public abstract class GuiButtonBase extends GuiControl
 {
     private EventHandler<ActionEvent> onActionEvent;
@@ -57,6 +59,36 @@ public abstract class GuiButtonBase extends GuiControl
     public boolean expandToLabel()
     {
         return this.getExpandToLabelProperty().getValue();
+    }
+
+    public String getText()
+    {
+        return label.getText();
+    }
+
+    public void setText(@Nonnull String text)
+    {
+        label.setText(text);
+    }
+
+    public String getEllipsis()
+    {
+        return label.getEllipsis();
+    }
+
+    public void setEllipsis(String ellipsis)
+    {
+        label.setEllipsis(ellipsis);
+    }
+
+    public GuiNode getIcon()
+    {
+        return label.getIcon();
+    }
+
+    public void setIcon(GuiNode icon)
+    {
+        label.setIcon(icon);
     }
 
     /////////////////////

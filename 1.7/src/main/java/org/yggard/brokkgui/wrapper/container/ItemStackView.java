@@ -48,7 +48,7 @@ public class ItemStackView extends GuiControl
         return this.alternateStringProperty;
     }
 
-    public BaseProperty<Boolean> getTooltipProperty()
+    public BaseProperty<Boolean> getItemTooltipProperty()
     {
         return this.tooltipProperty;
     }
@@ -85,12 +85,12 @@ public class ItemStackView extends GuiControl
 
     public boolean hasTooltip()
     {
-        return this.getTooltipProperty().getValue();
+        return this.getItemTooltipProperty().getValue();
     }
 
     public void setTooltip(final boolean tooltip)
     {
-        this.getTooltipProperty().setValue(tooltip);
+        this.getItemTooltipProperty().setValue(tooltip);
     }
 
     public Color getColor()

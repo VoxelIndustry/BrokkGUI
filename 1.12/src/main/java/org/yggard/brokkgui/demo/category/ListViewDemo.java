@@ -1,9 +1,12 @@
 package org.yggard.brokkgui.demo.category;
 
+import net.minecraft.util.text.TextFormatting;
+import org.yggard.brokkgui.control.GuiTooltip;
 import org.yggard.brokkgui.element.GuiButton;
 import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.element.GuiListView;
 import org.yggard.brokkgui.panel.GuiRelativePane;
+import org.yggard.brokkgui.wrapper.elements.MCTooltip;
 
 import java.util.Arrays;
 
@@ -38,6 +41,9 @@ public class ListViewDemo extends GuiRelativePane
         GuiButton button3 = new GuiButton("LALALA");
         buttonList.setElements(Arrays.asList(button1, button2, button3));
         buttonList.setCellYPadding(1);
+
+        button1.setTooltip(new GuiTooltip("This is a button"));
+        button2.setTooltip(MCTooltip.build().line(TextFormatting.RED + "Another button").create());
 
         this.addChild(buttonList, 0.75f, 0.5f);
     }

@@ -8,6 +8,7 @@ import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.event.WindowEvent;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.internal.PopupHandler;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.panel.GuiPane;
@@ -208,6 +209,7 @@ public class BrokkGuiScreen implements IGuiWindow
     public void onClose()
     {
         this.listenerPool.clear();
+        PopupHandler.getInstance().clearPopups();
         this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 

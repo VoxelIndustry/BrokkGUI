@@ -1,4 +1,4 @@
-package org.yggard.brokkgui.wrapper.container;
+package org.yggard.brokkgui.wrapper.elements;
 
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
 

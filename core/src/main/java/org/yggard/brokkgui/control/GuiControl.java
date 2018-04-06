@@ -2,6 +2,7 @@ package org.yggard.brokkgui.control;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.internal.IGuiRenderer;
+import org.yggard.brokkgui.internal.PopupHandler;
 import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 import org.yggard.brokkgui.skin.IGuiSkinnable;
@@ -10,19 +11,34 @@ import org.yggard.brokkgui.style.StyleSource;
 public abstract class GuiControl extends GuiFather implements IGuiSkinnable
 {
     private final BaseProperty<GuiSkinBase<?>> skinProperty;
+    private final BaseProperty<GuiTooltip>     tooltipProperty;
 
     public GuiControl(String type)
     {
         super(type);
 
         this.skinProperty = new BaseProperty<>(null, "skinProperty");
+        this.tooltipProperty = new BaseProperty<>(null, "tooltipProperty");
+
+        this.tooltipProperty.addListener((obs, oldValue, newValue) ->
+        {
+            if (oldValue != null)
+            {
+                PopupHandler.getInstance().removePopup(oldValue);
+                oldValue.setOwner(null);
+            }
+            if (newValue != null)
+            {
+                PopupHandler.getInstance().addPopup(newValue);
+                newValue.setOwner(this);
+            }
+        });
 
         this.getStyle().registerProperty("-opacity", 1D, Double.class);
     }
 
     @Override
-    public void renderContent(final IGuiRenderer renderer, final RenderPass pass, final int mouseX, final int
-            mouseY)
+    public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
         if (this.getOpacity() != 1)
             renderer.getHelper().startAlphaMask(this.getOpacity());
@@ -73,5 +89,20 @@ public abstract class GuiControl extends GuiFather implements IGuiSkinnable
     public void setOpacity(double opacity)
     {
         this.getStyle().getStyleProperty("-opacity", Double.class).setStyle(StyleSource.CODE, 0, opacity);
+    }
+
+    public BaseProperty<GuiTooltip> getTooltipProperty()
+    {
+        return this.tooltipProperty;
+    }
+
+    public GuiTooltip getTooltip()
+    {
+        return this.getTooltipProperty().getValue();
+    }
+
+    public void setTooltip(GuiTooltip tooltip)
+    {
+        this.getTooltipProperty().setValue(tooltip);
     }
 }

@@ -1,4 +1,4 @@
-package org.yggard.brokkgui.wrapper.container;
+package org.yggard.brokkgui.wrapper.elements;
 
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.RenderPass;
@@ -29,7 +29,7 @@ public class ItemStackViewSkin extends GuiBehaviorSkinBase<ItemStackView, ItemSt
         }
         else if (pass == GuiHelper.ITEM_HOVER)
         {
-            if (this.getModel().isHovered() && this.getModel().hasTooltip() &&
+            if (this.getModel().isHovered() && this.getModel().hasItemTooltip() &&
                     !this.getModel().getItemStack().isEmpty())
                 ((GuiHelper) renderer.getHelper()).drawItemStackTooltip(renderer, mouseX, mouseY,
                         this.getModel().getItemStack());

@@ -6,7 +6,7 @@ import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiAbsolutePane;
 import org.yggard.brokkgui.wrapper.container.BrokkGuiContainer;
-import org.yggard.brokkgui.wrapper.container.ItemStackView;
+import org.yggard.brokkgui.wrapper.elements.ItemStackView;
 
 /**
  * @author Ourten 31 oct. 2016
@@ -31,7 +31,7 @@ public class GuiContainerDemo extends BrokkGuiContainer<ContainerDemo>
         this.setMainPanel(mainPanel);
 
         final ItemStackView view = new ItemStackView(new ItemStack(Items.APPLE));
-        view.setTooltip(true);
+        view.setItemTooltip(true);
         view.setWidth(18);
         view.setHeight(18);
         view.setColor(new Color(1, 1, 1, 0.5f));

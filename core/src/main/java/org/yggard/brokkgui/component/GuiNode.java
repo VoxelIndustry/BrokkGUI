@@ -128,58 +128,58 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public final void renderNode(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
-        if (this.isVisible())
+        if (!this.isVisible())
+            return;
+
+        if (pass == RenderPass.BACKGROUND)
         {
-            if (pass == RenderPass.BACKGROUND)
+            if (this.getBackgroundTexture() != Texture.EMPTY)
             {
-                if (this.getBackgroundTexture() != Texture.EMPTY)
-                {
-                    Texture background = this.getBackgroundTexture();
+                Texture background = this.getBackgroundTexture();
 
-                    renderer.getHelper().bindTexture(background);
-                    renderer.getHelper().drawTexturedRect(renderer,
-                            this.getxPos() + this.getxTranslate(),
-                            this.getyPos() + this.getyTranslate(),
-                            background.getUMin(), background.getVMin(), background.getUMax(), background.getVMax(),
-                            this.getWidth(), this.getHeight(), this.getzLevel());
-                }
-                if (this.getBackgroundColor().getAlpha() != 0)
-                {
-                    Color background = this.getBackgroundColor();
-
-                    renderer.getHelper().drawColoredRect(renderer,
-                            this.getxPos() + this.getxTranslate(),
-                            this.getyPos() + this.getyTranslate(),
-                            this.getWidth(), this.getHeight(), this.getzLevel(),
-                            background);
-                }
+                renderer.getHelper().bindTexture(background);
+                renderer.getHelper().drawTexturedRect(renderer,
+                        this.getxPos() + this.getxTranslate(),
+                        this.getyPos() + this.getyTranslate(),
+                        background.getUMin(), background.getVMin(), background.getUMax(), background.getVMax(),
+                        this.getWidth(), this.getHeight(), this.getzLevel());
             }
-            if (pass == RenderPass.FOREGROUND)
+            if (this.getBackgroundColor().getAlpha() != 0)
             {
-                if (this.getForegroundTexture() != Texture.EMPTY)
-                {
-                    Texture foreground = this.getForegroundTexture();
+                Color background = this.getBackgroundColor();
 
-                    renderer.getHelper().bindTexture(foreground);
-                    renderer.getHelper().drawTexturedRect(renderer,
-                            this.getxPos() + this.getxTranslate(),
-                            this.getyPos() + this.getyTranslate(),
-                            foreground.getUMin(), foreground.getVMin(), foreground.getUMax(), foreground.getVMax(),
-                            this.getWidth(), this.getHeight(), this.getzLevel());
-                }
-                if (this.getForegroundColor().getAlpha() != 0)
-                {
-                    Color foreground = this.getForegroundColor();
-
-                    renderer.getHelper().drawColoredRect(renderer,
-                            this.getxPos() + this.getxTranslate(),
-                            this.getyPos() + this.getyTranslate(),
-                            this.getWidth(), this.getHeight(), this.getzLevel(),
-                            foreground);
-                }
+                renderer.getHelper().drawColoredRect(renderer,
+                        this.getxPos() + this.getxTranslate(),
+                        this.getyPos() + this.getyTranslate(),
+                        this.getWidth(), this.getHeight(), this.getzLevel(),
+                        background);
             }
-            this.renderContent(renderer, pass, mouseX, mouseY);
         }
+        if (pass == RenderPass.FOREGROUND)
+        {
+            if (this.getForegroundTexture() != Texture.EMPTY)
+            {
+                Texture foreground = this.getForegroundTexture();
+
+                renderer.getHelper().bindTexture(foreground);
+                renderer.getHelper().drawTexturedRect(renderer,
+                        this.getxPos() + this.getxTranslate(),
+                        this.getyPos() + this.getyTranslate(),
+                        foreground.getUMin(), foreground.getVMin(), foreground.getUMax(), foreground.getVMax(),
+                        this.getWidth(), this.getHeight(), this.getzLevel());
+            }
+            if (this.getForegroundColor().getAlpha() != 0)
+            {
+                Color foreground = this.getForegroundColor();
+
+                renderer.getHelper().drawColoredRect(renderer,
+                        this.getxPos() + this.getxTranslate(),
+                        this.getyPos() + this.getyTranslate(),
+                        this.getWidth(), this.getHeight(), this.getzLevel(),
+                        foreground);
+            }
+        }
+        this.renderContent(renderer, pass, mouseX, mouseY);
     }
 
     protected abstract void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY);
