@@ -117,7 +117,7 @@ public class GuiRenderItemHelper
 
             if (flag && bakedquad.hasTintIndex())
             {
-                k = this.mc.getItemColors().colorMultiplier(stack, bakedquad.getTintIndex());
+                k = this.mc.getItemColors().getColorFromItemstack(stack, bakedquad.getTintIndex());
 
                 if (EntityRenderer.anaglyphEnable)
                     k = TextureUtil.anaglyphColor(k);

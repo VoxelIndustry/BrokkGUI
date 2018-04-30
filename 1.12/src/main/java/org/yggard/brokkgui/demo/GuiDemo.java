@@ -2,15 +2,17 @@ package org.yggard.brokkgui.demo;
 
 import fr.ourten.teabeans.binding.BaseBinding;
 import org.yggard.brokkgui.component.GuiTab;
+import org.yggard.brokkgui.component.ToastManager;
+import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.EHAlignment;
+import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.demo.category.LabelDemo;
 import org.yggard.brokkgui.demo.category.ListViewDemo;
 import org.yggard.brokkgui.demo.category.RadioButtonDemo;
-import org.yggard.brokkgui.element.GuiButton;
-import org.yggard.brokkgui.element.GuiProgressBar;
-import org.yggard.brokkgui.element.GuiTextfield;
+import org.yggard.brokkgui.element.*;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Texture;
+import org.yggard.brokkgui.panel.GuiAbsolutePane;
 import org.yggard.brokkgui.panel.GuiRelativePane;
 import org.yggard.brokkgui.panel.GuiTabPane;
 
@@ -74,6 +76,24 @@ public class GuiDemo extends BrokkGuiScreen
         pane.addChild(tabPane);
 
         this.getMainPanel().setID("mainpane");
+
+        ToastManager toastManager = new ToastManager(this);
+        toastManager.setPosX(300);
+        toastManager.setPosY(300);
+        toastManager.setToastAlignment(EAlignment.MIDDLE_CENTER);
+
+        GuiAbsolutePane toastPane = new GuiAbsolutePane();
+        GuiLabel label = new GuiLabel("I Left T Middle");
+        label.setWidth(100);
+        label.setTextPadding(new RectOffset(2, 0, 2, 0));
+        label.setStyle("-border-color: gray; -border-thin: 1;");
+        toastPane.addChild(toastPane);
+        toastPane.setStyle("-background-color: black;");
+
+        GuiToast toast = new GuiToast(toastPane, 10_000L);
+        toast.setWidth(200);
+        toast.setHeight(30);
+        toastManager.addToast(toast);
     }
 
     @Override
