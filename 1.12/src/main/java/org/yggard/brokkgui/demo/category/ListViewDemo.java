@@ -2,6 +2,7 @@ package org.yggard.brokkgui.demo.category;
 
 import net.minecraft.util.text.TextFormatting;
 import org.yggard.brokkgui.control.GuiTooltip;
+import org.yggard.brokkgui.demo.GuiDemo;
 import org.yggard.brokkgui.element.GuiButton;
 import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.element.GuiListView;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 
 public class ListViewDemo extends GuiRelativePane
 {
-    public ListViewDemo()
+    public ListViewDemo(GuiDemo gui)
     {
         GuiListView<String> labelList = new GuiListView<>();
 
@@ -46,5 +47,11 @@ public class ListViewDemo extends GuiRelativePane
         button2.setTooltip(MCTooltip.build().line(TextFormatting.RED + "Another button").create());
 
         this.addChild(buttonList, 0.75f, 0.5f);
+
+        GuiLabel toastLabel = new GuiLabel("You clicked on the button!");
+        toastLabel.addStyleClass("toast-label");
+        toastLabel.setWidth(150);
+        toastLabel.setHeight(20);
+        button1.setOnActionEvent(e -> gui.toastManager.addToast(toastLabel, 3000L));
     }
 }

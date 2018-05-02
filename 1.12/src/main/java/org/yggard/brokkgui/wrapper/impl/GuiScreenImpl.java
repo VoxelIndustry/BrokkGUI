@@ -139,4 +139,9 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     {
         return this.modID;
     }
+
+    public BrokkGuiScreen getGui()
+    {
+        return brokkgui;
+    }
 }

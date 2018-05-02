@@ -9,7 +9,10 @@ import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.demo.category.LabelDemo;
 import org.yggard.brokkgui.demo.category.ListViewDemo;
 import org.yggard.brokkgui.demo.category.RadioButtonDemo;
-import org.yggard.brokkgui.element.*;
+import org.yggard.brokkgui.element.GuiButton;
+import org.yggard.brokkgui.element.GuiLabel;
+import org.yggard.brokkgui.element.GuiProgressBar;
+import org.yggard.brokkgui.element.GuiTextfield;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiRelativePane;
@@ -17,6 +20,8 @@ import org.yggard.brokkgui.panel.GuiTabPane;
 
 public class GuiDemo extends BrokkGuiScreen
 {
+    public ToastManager toastManager;
+
     public GuiDemo()
     {
         super(0.5f, 0.5f, 200, 200);
@@ -65,7 +70,7 @@ public class GuiDemo extends BrokkGuiScreen
         tabPane.setHeight(200);
         tabPane.setStyle("-border-color: yellow; -border-thin: 1;");
         tabPane.addTab(new GuiTab("Textfield", field));
-        tabPane.addTab(new GuiTab("ListView", new ListViewDemo()));
+        tabPane.addTab(new GuiTab("ListView", new ListViewDemo(this)));
         tabPane.addTab(new GuiTab("Progress", progressBar));
         tabPane.addTab(new GuiTab("RadioButton", new RadioButtonDemo()));
         tabPane.addTab(new GuiTab("Labels", new LabelDemo()));
@@ -76,14 +81,14 @@ public class GuiDemo extends BrokkGuiScreen
 
         this.getMainPanel().setID("mainpane");
 
-        ToastManager toastManager = new ToastManager(this);
+        this.toastManager = new ToastManager(this);
         toastManager.setRelativeXPos(0.5f);
         toastManager.setRelativeYPos(0.98f);
         toastManager.setToastAlignment(EAlignment.MIDDLE_UP);
 
         GuiLabel label = new GuiLabel("Toast");
+        label.addStyleClass("toast-label");
         label.setTextPadding(new RectOffset(2, 0, 2, 0));
-        label.setStyle("-background-color: gray;");
         label.setWidth(150);
         label.setHeight(20);
         toastManager.addToast(label, 5_000L);

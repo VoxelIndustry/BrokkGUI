@@ -60,7 +60,7 @@ public class ToastManager
                 Pair<GuiNode, Long> next = toastQueue.poll();
                 current.setValue(next.getKey());
                 toastHolder.setContent(current.getValue());
-                toastHolder.setCurrentTime(0);
+                toastHolder.resetCurrentTime();
                 toastHolder.setLifeTime(next.getValue());
                 PopupHandler.getInstance().addPopup(toastHolder);
             }
@@ -115,9 +115,9 @@ public class ToastManager
         else
         {
             current.setValue(toastContent);
-            toastHolder.setContent(current.getValue());
-            toastHolder.setCurrentTime(0);
+            toastHolder.resetCurrentTime();
             toastHolder.setLifeTime(lifeTime);
+            toastHolder.setContent(current.getValue());
             PopupHandler.getInstance().addPopup(toastHolder);
         }
     }

@@ -107,12 +107,13 @@ public class GuiToast extends GuiFather implements IGuiPopup
         return this.getCurrentTimeProperty().getValue();
     }
 
-    public void setCurrentTime(long currentTime)
+    public void resetCurrentTime()
     {
-        this.getCurrentTimeProperty().setValue(currentTime);
+        this.getCurrentTimeProperty().setValue(0L);
+        this.millisStart = 0;
     }
 
-    public void addCurrentTime(long currentLife)
+    private void addCurrentTime(long currentLife)
     {
         this.getCurrentTimeProperty().setValue(this.getCurrentTime() + currentLife);
     }

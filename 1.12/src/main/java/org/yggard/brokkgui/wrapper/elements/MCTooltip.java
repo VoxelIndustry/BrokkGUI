@@ -2,6 +2,7 @@ package org.yggard.brokkgui.wrapper.elements;
 
 import fr.ourten.teabeans.value.BaseListProperty;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiTooltip;
@@ -60,8 +61,10 @@ public class MCTooltip extends GuiNode
     @Override
     protected void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
+        GlStateManager.pushAttrib();
         GuiUtils.drawHoveringText(lines.getValue(), (int) this.getxPos(), (int) this.getyPos(),
                 Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight,
                 Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().fontRenderer);
+        GlStateManager.popAttrib();
     }
 }

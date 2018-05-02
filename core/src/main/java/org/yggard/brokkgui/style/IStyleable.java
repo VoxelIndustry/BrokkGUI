@@ -35,4 +35,6 @@ public interface IStyleable
 	}
 
     String getType();
+
+	void refreshStyle();
 }

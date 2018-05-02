@@ -732,6 +732,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.getStyle().setStyleSupplier(treeSupplier);
     }
 
+    @Override
     public void refreshStyle()
     {
         this.getStyle().refresh();

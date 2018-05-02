@@ -103,11 +103,13 @@ public class BrokkGuiScreen implements IGuiWindow
             StylesheetManager.getInstance().refreshStylesheets(this);
             if (this.getMainPanel() != null)
                 this.getMainPanel().refreshStyle();
+            PopupHandler.getInstance().refreshStyle();
         });
 
         StylesheetManager.getInstance().refreshStylesheets(this);
         if (this.getMainPanel() != null)
             this.getMainPanel().refreshStyle();
+        PopupHandler.getInstance().setStyleSupplier(this.getStyleTreeProperty()::getValue);
     }
 
     public void render(final int mouseX, final int mouseY, RenderPass pass)
@@ -115,6 +117,7 @@ public class BrokkGuiScreen implements IGuiWindow
         if (this.cachedMouseX != mouseX || this.cachedMouseY != mouseY)
         {
             this.mainPanel.handleHover(mouseX, mouseY, this.mainPanel.isPointInside(mouseX, mouseY));
+            PopupHandler.getInstance().handleHover(mouseX, mouseY);
             this.cachedMouseX = mouseX;
             this.cachedMouseY = mouseY;
         }
@@ -153,6 +156,7 @@ public class BrokkGuiScreen implements IGuiWindow
         }
         else if (this.mainPanel.isPointInside(mouseX, mouseY))
             this.mainPanel.handleClick(mouseX, mouseY, key);
+        PopupHandler.getInstance().handleClick(mouseX, mouseY, key);
     }
 
     public void handleMouseInput()

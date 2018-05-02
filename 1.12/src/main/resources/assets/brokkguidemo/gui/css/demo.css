@@ -29,3 +29,15 @@ radio-button {
 checkbox {
     -background-color: #E0E0E0;
 }
+
+.toast-label {
+    -background-color: gray;
+}
+
+.toast-label:hover {
+    -background-color: #c0d6e4 70%;
+}
+
+.toast-label text {
+    -shadow: false;
+}
