@@ -1,35 +1,35 @@
 package org.yggard.brokkgui.element;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.component.IGuiPopup;
 import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.panel.GuiAbsolutePane;
-import org.yggard.brokkgui.panel.GuiPane;
 
 public class GuiToast extends GuiFather implements IGuiPopup
 {
-    private final BaseProperty<GuiPane> contentPanelProperty;
-    private final BaseProperty<Float>   lifeTimeProperty;
-    private final BaseProperty<Float>   currentTimeProperty;
+    private final BaseProperty<GuiNode> contentProperty;
+    private final BaseProperty<Long>    lifeTimeProperty;
+    private final BaseProperty<Long>    currentTimeProperty;
 
-    private float millisStart;
+    private long millisStart;
 
-    public GuiToast(GuiPane contentPanel, float lifeTime)
+    public GuiToast(GuiNode content, long lifeTime)
     {
         super("toast");
 
-        this.contentPanelProperty = new BaseProperty<>(null, "contentPanelProperty");
+        this.contentProperty = new BaseProperty<>(null, "contentProperty");
 
-        this.contentPanelProperty.addListener((obs, oldValue, newValue) ->
+        this.contentProperty.addListener((obs, oldValue, newValue) ->
         {
             if (oldValue != null)
             {
                 this.removeChild(oldValue);
-                oldValue.getWidthProperty().unbind();
-                oldValue.getHeightProperty().unbind();
+                this.getWidthProperty().unbind();
+                this.getHeightProperty().unbind();
                 oldValue.getxPosProperty().unbind();
                 oldValue.getyPosProperty().unbind();
             }
@@ -38,18 +38,18 @@ public class GuiToast extends GuiFather implements IGuiPopup
             {
                 this.addChild(newValue);
                 RelativeBindingHelper.bindToPos(newValue, this);
-                newValue.getWidthProperty().bind(this.getWidthProperty());
-                newValue.getHeightProperty().bind(this.getHeightProperty());
+                this.getWidthProperty().bind(newValue.getWidthProperty());
+                this.getHeightProperty().bind(newValue.getHeightProperty());
             }
         });
 
-        this.contentPanelProperty.setValue(contentPanel);
+        this.contentProperty.setValue(content);
 
         this.lifeTimeProperty = new BaseProperty<>(lifeTime, "lifeTimeProperty");
-        this.currentTimeProperty = new BaseProperty<>(0F, "currentTimeProperty");
+        this.currentTimeProperty = new BaseProperty<>(0L, "currentTimeProperty");
     }
 
-    public GuiToast(float lifeTime)
+    public GuiToast(long lifeTime)
     {
         this(new GuiAbsolutePane(), lifeTime);
     }
@@ -63,56 +63,56 @@ public class GuiToast extends GuiFather implements IGuiPopup
         {
             if (millisStart == 0)
                 millisStart = System.currentTimeMillis();
-            currentTimeProperty.setValue(System.currentTimeMillis() - millisStart);
+            currentTimeProperty.setValue((System.currentTimeMillis() - millisStart));
         }
     }
 
-    public BaseProperty<GuiPane> getContentPanelProperty()
+    public BaseProperty<GuiNode> getContentProperty()
     {
-        return contentPanelProperty;
+        return contentProperty;
     }
 
-    public BaseProperty<Float> getLifeTimeProperty()
+    public BaseProperty<Long> getLifeTimeProperty()
     {
         return lifeTimeProperty;
     }
 
-    public BaseProperty<Float> getCurrentTimeProperty()
+    public BaseProperty<Long> getCurrentTimeProperty()
     {
         return currentTimeProperty;
     }
 
-    public GuiPane getContentPanel()
+    public GuiNode getContent()
     {
-        return this.getContentPanelProperty().getValue();
+        return this.getContentProperty().getValue();
     }
 
-    public void setContentPanel(GuiPane contentPane)
+    public void setContent(GuiNode content)
     {
-        this.getContentPanelProperty().setValue(contentPane);
+        this.getContentProperty().setValue(content);
     }
 
-    public float getLifeTime()
+    public long getLifeTime()
     {
         return this.getLifeTimeProperty().getValue();
     }
 
-    public void setLifeTime(float lifeTime)
+    public void setLifeTime(long lifeTime)
     {
         this.getLifeTimeProperty().setValue(lifeTime);
     }
 
-    public float getCurrentTime()
+    public long getCurrentTime()
     {
         return this.getCurrentTimeProperty().getValue();
     }
 
-    public void setCurrentTime(float currentTime)
+    public void setCurrentTime(long currentTime)
     {
         this.getCurrentTimeProperty().setValue(currentTime);
     }
 
-    public void addCurrentTime(float currentLife)
+    public void addCurrentTime(long currentLife)
     {
         this.getCurrentTimeProperty().setValue(this.getCurrentTime() + currentLife);
     }

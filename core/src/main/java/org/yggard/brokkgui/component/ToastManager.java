@@ -1,7 +1,9 @@
 package org.yggard.brokkgui.component;
 
 import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
+import org.apache.commons.lang3.tuple.Pair;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.element.GuiToast;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
@@ -16,13 +18,16 @@ public class ToastManager
 
     private final BaseProperty<Float>      xPosProperty;
     private final BaseProperty<Float>      yPosProperty;
+    private final BaseProperty<Float>      relativeXPosProperty;
+    private final BaseProperty<Float>      relativeYPosProperty;
     private final BaseProperty<EAlignment> toastAlignmentProperty;
 
-    private final BaseProperty<Float>    toastExitXProperty;
-    private final BaseProperty<Float>    toastExitYProperty;
-    private final BaseProperty<GuiToast> current;
+    private final BaseProperty<Float>   toastExitXProperty;
+    private final BaseProperty<Float>   toastExitYProperty;
+    private final BaseProperty<GuiNode> current;
 
-    private Queue<GuiToast> toastQueue;
+    private GuiToast                   toastHolder;
+    private Queue<Pair<GuiNode, Long>> toastQueue;
 
     public ToastManager(BrokkGuiScreen screen)
     {
@@ -30,6 +35,8 @@ public class ToastManager
 
         this.xPosProperty = new BaseProperty<>(0f, "xPosProperty");
         this.yPosProperty = new BaseProperty<>(0f, "yPosProperty");
+        this.relativeXPosProperty = new BaseProperty<>(-1f, "relativeXPosProperty");
+        this.relativeYPosProperty = new BaseProperty<>(-1f, "relativeYPosProperty");
         this.toastAlignmentProperty = new BaseProperty<>(EAlignment.MIDDLE_CENTER, "toastAlignmentProperty");
 
         this.toastExitXProperty = new BaseProperty<>(0f, "toastExitXProperty");
@@ -37,75 +44,81 @@ public class ToastManager
 
         this.toastQueue = new ArrayDeque<>();
         this.current = new BaseProperty<>(null, "currentToastProperty");
-    }
+        this.toastHolder = new GuiToast(null, 0L);
 
-    public void addToast(GuiToast toast)
-    {
-        toast.getCurrentTimeProperty().addListener((obs, oldValue, newValue) ->
+        toastHolder.getCurrentTimeProperty().addListener((obs, oldValue, newValue) ->
         {
-            if (!(newValue >= toast.getLifeTime()) || current.getValue() != toast)
+            if (!(newValue > toastHolder.getLifeTime()))
                 return;
-            toast.getxPosProperty().unbind();
-            toast.getyPosProperty().unbind();
-            toast.getCurrentTimeProperty().unbind();
 
-            PopupHandler.getInstance().removePopup(toast);
+            PopupHandler.getInstance().removePopup(toastHolder);
             current.setValue(null);
+            toastHolder.setContent(null);
 
             if (!toastQueue.isEmpty())
             {
-                current.setValue(toastQueue.poll());
-                PopupHandler.getInstance().addPopup(current.getValue());
+                Pair<GuiNode, Long> next = toastQueue.poll();
+                current.setValue(next.getKey());
+                toastHolder.setContent(current.getValue());
+                toastHolder.setCurrentTime(0);
+                toastHolder.setLifeTime(next.getValue());
+                PopupHandler.getInstance().addPopup(toastHolder);
             }
         });
 
-        toast.getxPosProperty().bind(new BaseBinding<Float>()
+        toastHolder.getxPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(xPosProperty, getToastAlignmentProperty(), toast.getWidthProperty(),
+                super.bind(xPosProperty, getToastAlignmentProperty(), toastHolder.getWidthProperty(),
                         getToastExitXProperty(), current);
             }
 
             @Override
             public Float computeValue()
             {
-                float offset = (current.getValue() == toast ? 0 : getToastExitXProperty().getValue());
+                float offset = (current.getValue() == toastHolder.getContent() ? 0 : getToastExitXProperty().getValue());
 
                 if (getToastAlignmentProperty().getValue().isLeft())
-                    return xPosProperty.getValue() - toast.getWidth() + offset;
+                    return xPosProperty.getValue() - toastHolder.getWidth() + offset;
                 else if (getToastAlignmentProperty().getValue().isRight())
                     return xPosProperty.getValue() + offset;
                 else
-                    return xPosProperty.getValue() - toast.getWidth() / 2 + offset;
+                    return xPosProperty.getValue() - toastHolder.getWidth() / 2 + offset;
             }
         });
-        toast.getyPosProperty().bind(new BaseBinding<Float>()
+        toastHolder.getyPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(yPosProperty, getToastAlignmentProperty(), toast.getHeightProperty(),
+                super.bind(yPosProperty, getToastAlignmentProperty(), toastHolder.getHeightProperty(),
                         getToastExitYProperty(), current);
             }
 
             @Override
             public Float computeValue()
             {
-                float offset = (current.getValue() == toast ? 0 : getToastExitYProperty().getValue());
+                float offset = (current.getValue() == toastHolder.getContent()? 0 : getToastExitYProperty().getValue());
 
                 if (getToastAlignmentProperty().getValue().isUp())
-                    return yPosProperty.getValue() - toast.getHeight() + offset;
+                    return yPosProperty.getValue() - toastHolder.getHeight() + offset;
                 else if (getToastAlignmentProperty().getValue().isDown())
                     return yPosProperty.getValue() + offset;
                 else
-                    return yPosProperty.getValue() - toast.getHeight() / 2 + offset;
+                    return yPosProperty.getValue() - toastHolder.getHeight() / 2 + offset;
             }
         });
+    }
 
-        if (current != null)
-            this.toastQueue.add(toast);
+    public void addToast(GuiNode toastContent, Long lifeTime)
+    {
+        if (current.isPresent())
+            toastQueue.add(Pair.of(toastContent, lifeTime));
         else
         {
-            this.current.setValue(toast);
-            PopupHandler.getInstance().addPopup(current.getValue());
+            current.setValue(toastContent);
+            toastHolder.setContent(current.getValue());
+            toastHolder.setCurrentTime(0);
+            toastHolder.setLifeTime(lifeTime);
+            PopupHandler.getInstance().addPopup(toastHolder);
         }
     }
 
@@ -132,6 +145,16 @@ public class ToastManager
     public BaseProperty<Float> getyPosProperty()
     {
         return yPosProperty;
+    }
+
+    public BaseProperty<Float> getRelativeXPosProperty()
+    {
+        return relativeXPosProperty;
+    }
+
+    public BaseProperty<Float> getRelativeYPosProperty()
+    {
+        return relativeYPosProperty;
     }
 
     public EAlignment getToastAlignment()
@@ -171,6 +194,8 @@ public class ToastManager
 
     public void setPosX(float posX)
     {
+        if (this.getxPosProperty().isBound())
+            this.getxPosProperty().unbind();
         this.getxPosProperty().setValue(posX);
     }
 
@@ -181,6 +206,44 @@ public class ToastManager
 
     public void setPosY(float posY)
     {
+        if (this.getyPosProperty().isBound())
+            this.getyPosProperty().unbind();
         this.getyPosProperty().setValue(posY);
+    }
+
+    public float getRelativeXPos()
+    {
+        return this.getRelativeXPosProperty().getValue();
+    }
+
+    public void setRelativeXPos(float relativeXPos)
+    {
+        if (relativeXPos == -1)
+            this.getxPosProperty().unbind();
+        else if (!this.getxPosProperty().isBound() && this.screen != null)
+        {
+            this.getxPosProperty().bind(BaseExpression.biCombine(this.getRelativeXPosProperty(),
+                    screen.getScreenWidthProperty(),
+                    (relativeX, screenWidth) -> screenWidth * relativeX));
+        }
+        this.getRelativeXPosProperty().setValue(relativeXPos);
+    }
+
+    public float getRelativeYPos()
+    {
+        return this.getRelativeYPosProperty().getValue();
+    }
+
+    public void setRelativeYPos(float relativeYPos)
+    {
+        if (relativeYPos == -1)
+            this.getyPosProperty().unbind();
+        else if (!this.getyPosProperty().isBound() && this.screen != null)
+        {
+            this.getyPosProperty().bind(BaseExpression.biCombine(this.getRelativeYPosProperty(),
+                    screen.getScreenHeightProperty(),
+                    (relativeY, screenHeight) -> screenHeight * relativeY));
+        }
+        this.getRelativeYPosProperty().setValue(relativeYPos);
     }
 }

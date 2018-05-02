@@ -18,10 +18,12 @@ public class PopupHandler
     }
 
     private List<IGuiPopup> popups;
+    private List<IGuiPopup> toRemove;
 
     private PopupHandler()
     {
         this.popups = new ArrayList<>();
+        this.toRemove = new ArrayList<>();
     }
 
     public void addPopup(IGuiPopup popup)
@@ -31,7 +33,7 @@ public class PopupHandler
 
     public boolean removePopup(IGuiPopup popup)
     {
-        return this.popups.remove(popup);
+        return this.toRemove.add(popup);
     }
 
     public boolean isPopupPresent(IGuiPopup popup)
@@ -46,6 +48,9 @@ public class PopupHandler
 
     public void renderPopupInPass(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
+        this.popups.removeIf(toRemove::contains);
+        toRemove.clear();
+
         this.popups.forEach(popup -> popup.renderNode(renderer, pass, mouseX, mouseY));
     }
 }
