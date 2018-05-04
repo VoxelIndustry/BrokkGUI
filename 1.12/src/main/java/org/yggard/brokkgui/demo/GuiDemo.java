@@ -9,10 +9,10 @@ import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.demo.category.LabelDemo;
 import org.yggard.brokkgui.demo.category.ListViewDemo;
 import org.yggard.brokkgui.demo.category.RadioButtonDemo;
+import org.yggard.brokkgui.demo.category.TextFieldDemo;
 import org.yggard.brokkgui.element.GuiButton;
 import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.element.GuiProgressBar;
-import org.yggard.brokkgui.element.GuiTextfield;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiRelativePane;
@@ -59,17 +59,11 @@ public class GuiDemo extends BrokkGuiScreen
         progressBar.setHeight(20);
         progressBar.setStyle("-border-color: red; -border-thin: 2;");
 
-        final GuiTextfield field = new GuiTextfield();
-        field.setWidth(200);
-        field.setHeight(40);
-
-        field.setStyle("-border-color: black; -border-thin: 1;");
-
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);
         tabPane.setHeight(200);
         tabPane.setStyle("-border-color: yellow; -border-thin: 1;");
-        tabPane.addTab(new GuiTab("Textfield", field));
+        tabPane.addTab(new GuiTab("Textfield", new TextFieldDemo()));
         tabPane.addTab(new GuiTab("ListView", new ListViewDemo(this)));
         tabPane.addTab(new GuiTab("Progress", progressBar));
         tabPane.addTab(new GuiTab("RadioButton", new RadioButtonDemo()));

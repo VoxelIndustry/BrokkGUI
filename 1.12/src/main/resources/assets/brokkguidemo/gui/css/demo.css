@@ -41,3 +41,19 @@ checkbox {
 .toast-label text {
     -shadow: false;
 }
+
+#autocomplete {
+    -background-color: #BDBDBD;
+}
+
+#autocomplete .complete-popup {
+    -background-color: #F5F5F5 50%;
+}
+
+#autocomplete .complete-popup text {
+    -shadow: false;
+}
+
+#autocomplete .complete-popup label:select,  #autocomplete .complete-popup label:hover {
+    -background-color: #BDBDBD 50%;
+}

@@ -1,7 +1,5 @@
 package org.yggard.brokkgui.behavior;
 
-import java.util.regex.Pattern;
-
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.element.GuiTextfield;
 import org.yggard.brokkgui.event.CursorMoveEvent;
@@ -9,15 +7,16 @@ import org.yggard.brokkgui.event.KeyEvent;
 import org.yggard.brokkgui.event.TextTypedEvent;
 import org.yggard.brokkgui.internal.IKeyboardUtil;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Ourten 2 oct. 2016
  */
 public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBase<T>
 {
-    
     static final Pattern ALPHA_NUM_REGEX = Pattern.compile("[a-zA-Z0-9]");
     
-    private final IKeyboardUtil keyboard = BrokkGuiPlatform.getInstance().getKeyboardUtil();
+    protected final IKeyboardUtil keyboard = BrokkGuiPlatform.getInstance().getKeyboardUtil();
 
     public GuiTextfieldBehavior(final T model)
     {
@@ -26,7 +25,7 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
         this.getModel().getEventDispatcher().addHandler(KeyEvent.TYPE, this::onKeyTyped);
     }
 
-    public void onKeyTyped(final KeyEvent event)
+    protected void onKeyTyped(final KeyEvent event)
     {
         final String oldText = this.getModel().getText();
         boolean contentChanged = false;

@@ -147,6 +147,8 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public void onClick(final int mouseX, final int mouseY, final int key)
     {
+        PopupHandler.getInstance().handleClick(mouseX, mouseY, key);
+
         if (!this.windows.isEmpty())
         {
             if (this.windows.get(0).isPointInside(mouseX, mouseY))
@@ -154,9 +156,13 @@ public class BrokkGuiScreen implements IGuiWindow
             else if (this.windows.get(0).closeOnClick())
                 this.removeSubGui(this.windows.get(0));
         }
-        else if (this.mainPanel.isPointInside(mouseX, mouseY))
-            this.mainPanel.handleClick(mouseX, mouseY, key);
-        PopupHandler.getInstance().handleClick(mouseX, mouseY, key);
+        else
+        {
+            if (this.mainPanel.isPointInside(mouseX, mouseY))
+                this.mainPanel.handleClick(mouseX, mouseY, key);
+            else
+                GuiFocusManager.getInstance().requestFocus(null);
+        }
     }
 
     public void handleMouseInput()

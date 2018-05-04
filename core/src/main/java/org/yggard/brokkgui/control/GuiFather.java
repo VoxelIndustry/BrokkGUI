@@ -6,14 +6,17 @@ import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.RenderPass;
 import org.yggard.brokkgui.policy.EOverflowPolicy;
+import org.yggard.brokkgui.style.ICascadeStyleable;
 import org.yggard.brokkgui.style.tree.StyleList;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 public class GuiFather extends GuiNode
 {
     private final BaseListProperty<GuiNode> childrensProperty;
+    private final List<ICascadeStyleable>   styleChilds;
 
     private EOverflowPolicy overflowPolicy;
 
@@ -29,10 +32,17 @@ public class GuiFather extends GuiNode
         {
             if (newValue != null)
             {
-                newValue.setStyleTree(this.getStyle().getStyleSupplier());
-                newValue.refreshStyle();
+                this.addStyleChild(newValue);
+                newValue.setFather(this);
+            }
+            if (oldValue != null)
+            {
+                this.removeStyleChild(oldValue);
+                oldValue.setFather(null);
             }
         });
+
+        this.styleChilds = new ArrayList<>();
     }
 
     /**
@@ -51,7 +61,6 @@ public class GuiFather extends GuiNode
     public void addChild(final GuiNode node)
     {
         this.getChildrensProperty().add(node);
-        node.setFather(this);
     }
 
     public void addChilds(final GuiNode... nodes)
@@ -63,15 +72,14 @@ public class GuiFather extends GuiNode
     public void removeChild(final GuiNode node)
     {
         this.getChildrensProperty().remove(node);
-
-        node.setFather(null);
+        node.getxPosProperty().unbind();
+        node.getyPosProperty().unbind();
     }
 
     public void clearChilds()
     {
         this.getChildrensProperty().getValue().forEach(node ->
         {
-            node.setFather(null);
             node.getxPosProperty().unbind();
             node.getyPosProperty().unbind();
         });
@@ -81,6 +89,21 @@ public class GuiFather extends GuiNode
     public boolean hasChild(final GuiNode node)
     {
         return this.getChildrensProperty().contains(node);
+    }
+
+    public void addStyleChild(ICascadeStyleable styleable)
+    {
+        if (this.styleChilds.contains(styleable))
+            return;
+        this.styleChilds.add(styleable);
+        styleable.setStyleTree(this.getStyle().getStyleSupplier());
+        styleable.setParent(this);
+        styleable.refreshStyle();
+    }
+
+    public boolean removeStyleChild(ICascadeStyleable styleable)
+    {
+        return this.styleChilds.remove(styleable);
     }
 
     public EOverflowPolicy getOverflowPolicy()
@@ -151,13 +174,13 @@ public class GuiFather extends GuiNode
     {
         super.setStyleTree(treeSupplier);
 
-        this.getChildrens().forEach(node -> node.setStyleTree(treeSupplier));
+        this.styleChilds.forEach(node -> node.setStyleTree(treeSupplier));
     }
 
     @Override
     public void refreshStyle()
     {
-        this.getChildrens().forEach(GuiNode::refreshStyle);
+        this.styleChilds.forEach(ICascadeStyleable::refreshStyle);
         super.refreshStyle();
     }
 }

@@ -224,7 +224,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
                     this.getEventDispatcher().dispatchEvent(ClickEvent.TYPE, new ClickEvent(this, mouseX, mouseY, key));
                     break;
             }
-            this.setFocused(!this.isFocused());
+            this.setFocused();
         }
     }
 
@@ -556,16 +556,13 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public boolean isFocused()
     {
-        return this.getFocusableProperty().getValue();
+        return this.getFocusedProperty().getValue();
     }
 
-    public void setFocused(final boolean focused)
+    public void setFocused()
     {
         if (!this.isDisabled() && this.isFocusable())
-            if (focused)
-                GuiFocusManager.getInstance().requestFocus(this);
-            else
-                GuiFocusManager.getInstance().requestFocus(null);
+            GuiFocusManager.getInstance().requestFocus(this);
     }
 
     public void internalSetFocused(final boolean focused)
@@ -576,12 +573,12 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public boolean isFocusable()
     {
-        return this.getFocusedProperty().getValue();
+        return this.getFocusableProperty().getValue();
     }
 
     public void setFocusable(final boolean focusable)
     {
-        this.getFocusedProperty().setValue(focusable);
+        this.getFocusableProperty().setValue(focusable);
     }
 
     public boolean isDisabled()
@@ -594,7 +591,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         if (this.isHovered())
             this.setHovered(false);
         if (this.isFocused())
-            this.setFocused(false);
+            this.setFocused();
         this.getDisabledProperty().setValue(disable);
         this.getEventDispatcher().dispatchEvent(DisableEvent.TYPE, new DisableEvent(this, disable));
     }
@@ -753,5 +750,11 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     protected void setType(String type)
     {
         this.type = type;
+    }
+
+    @Override
+    public void setParent(ICascadeStyleable styleable)
+    {
+        this.getStyle().getParent().setValue(styleable);
     }
 }
