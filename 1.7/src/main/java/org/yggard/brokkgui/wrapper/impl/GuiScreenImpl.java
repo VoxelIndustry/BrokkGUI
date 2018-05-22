@@ -3,6 +3,8 @@ package org.yggard.brokkgui.wrapper.impl;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.input.Keyboard;
+import org.yggard.brokkgui.BrokkGuiPlatform;
+import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
@@ -93,7 +95,9 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     @Override
     public void keyTyped(final char c, final int key)
     {
-        super.keyTyped(c, key);
+        if (key == BrokkGuiPlatform.getInstance().getKeyboardUtil().getKeyCode("ESCAPE") ||
+                GuiFocusManager.getInstance().getFocusedNode() == null)
+            super.keyTyped(c, key);
         this.brokkgui.onKeyTyped(c, key);
     }
 

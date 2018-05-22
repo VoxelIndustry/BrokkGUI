@@ -7,6 +7,8 @@ import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import org.lwjgl.input.Keyboard;
+import org.yggard.brokkgui.BrokkGuiPlatform;
+import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.internal.PopupHandler;
@@ -116,7 +118,9 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     @Override
     public void keyTyped(final char c, final int key) throws IOException
     {
-        super.keyTyped(c, key);
+        if (key == BrokkGuiPlatform.getInstance().getKeyboardUtil().getKeyCode("ESCAPE") ||
+                GuiFocusManager.getInstance().getFocusedNode() == null)
+            super.keyTyped(c, key);
         this.brokkgui.onKeyTyped(c, key);
     }
 

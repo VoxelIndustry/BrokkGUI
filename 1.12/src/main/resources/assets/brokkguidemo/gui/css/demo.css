@@ -54,6 +54,6 @@ checkbox {
     -shadow: false;
 }
 
-#autocomplete .complete-popup label:select,  #autocomplete .complete-popup label:hover {
+#autocomplete .complete-popup label:select, #autocomplete .complete-popup label:hover {
     -background-color: #BDBDBD 50%;
 }

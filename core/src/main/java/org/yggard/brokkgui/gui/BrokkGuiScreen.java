@@ -218,6 +218,7 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public void onClose()
     {
+        GuiFocusManager.getInstance().requestFocus(null);
         this.listenerPool.clear();
         PopupHandler.getInstance().clearPopups();
         this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
