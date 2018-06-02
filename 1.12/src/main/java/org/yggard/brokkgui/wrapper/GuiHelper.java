@@ -7,10 +7,13 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 import org.yggard.brokkgui.data.Vector2i;
@@ -330,6 +333,29 @@ public class GuiHelper implements IGuiHelper
         }
         GuiUtils.drawHoveringText(stack, list, mouseX, mouseY, this.mc.displayWidth, this.mc.displayHeight,
                 this.mc.displayWidth, this.mc.fontRenderer);
+    }
+
+    public void drawFluidStack(IGuiRenderer renderer, float startX, float startY, float width, float height,
+                               float zLevel, FluidStack stack, boolean flowing)
+    {
+        this.mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        ResourceLocation still = flowing ? stack.getFluid().getFlowing(stack) : stack.getFluid().getStill(stack);
+        TextureAtlasSprite sprite = this.mc.getTextureMapBlocks().getAtlasSprite(still.toString());
+
+        int iconHeight = sprite.getIconHeight();
+        float offsetHeight = height;
+
+        int iteration = 0;
+        while (offsetHeight != 0)
+        {
+            float curHeight = offsetHeight < iconHeight ? offsetHeight : iconHeight;
+            this.drawTexturedRect(renderer, startX, startY + height - offsetHeight,
+                    sprite.getMinU(), sprite.getMinV(), sprite.getMaxU(), sprite.getMaxV(), width, curHeight, zLevel);
+            offsetHeight -= curHeight;
+            iteration++;
+            if (iteration > 50)
+                break;
+        }
     }
 
     @Override
