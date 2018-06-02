@@ -13,7 +13,7 @@ import org.yggard.brokkgui.wrapper.elements.ItemStackView;
  */
 public class GuiContainerDemo extends BrokkGuiContainer<ContainerDemo>
 {
-    private static final int     xSize      = 176, ySize = 166;
+    private static final int     xSize      = 176, ySize = 200;
 
     private static final Texture BACKGROUND = new Texture("brokkguidemo:textures/gui/container_background.png", 0, 0,
             GuiContainerDemo.xSize / 256.0f, GuiContainerDemo.ySize / 256.0f);
