@@ -81,18 +81,23 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.activePseudoClass
                 .addListener((ListValueChangeListener<String>) (obs, oldValue, newValue) -> this.refreshStyle());
 
-        this.getEventDispatcher().addHandler(HoverEvent.TYPE, e ->
+        this.getHoveredProperty().addListener(obs ->
         {
-            if (e.isEntering())
+            if (this.isHovered())
                 this.getActivePseudoClass().add("hover");
             else
                 this.getActivePseudoClass().remove("hover");
         });
 
-        this.getEventDispatcher().addHandler(DisableEvent.TYPE, e ->
+        this.getDisabledProperty().addListener(obs ->
         {
-            if (e.isDisabled())
+            if (this.isDisabled())
             {
+                if (this.isHovered())
+                    this.setHovered(false);
+                if (this.isFocused())
+                    GuiFocusManager.getInstance().requestFocus(null);
+
                 if (!this.getActivePseudoClass().contains("disabled") &&
                         this.getActivePseudoClass().contains("enabled"))
                     this.getActivePseudoClass().replace("enabled", "disabled");
@@ -111,9 +116,9 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
             }
         });
 
-        this.getEventDispatcher().addHandler(FocusEvent.TYPE, e ->
+        this.getFocusedProperty().addListener(obs ->
         {
-            if (e.isFocused())
+            if (this.isFocused())
                 this.getActivePseudoClass().add("focus");
             else
                 this.getActivePseudoClass().remove("focus");
@@ -588,10 +593,6 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void setDisabled(final boolean disable)
     {
-        if (this.isHovered())
-            this.setHovered(false);
-        if (this.isFocused())
-            this.setFocused();
         this.getDisabledProperty().setValue(disable);
         this.getEventDispatcher().dispatchEvent(DisableEvent.TYPE, new DisableEvent(this, disable));
     }
@@ -603,7 +604,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void setHovered(final boolean hovered)
     {
-        if (this.isDisabled())
+        if (this.isDisabled() && hovered)
             return;
         this.getHoveredProperty().setValue(hovered);
         this.getEventDispatcher().dispatchEvent(HoverEvent.TYPE, new HoverEvent(this, hovered));
