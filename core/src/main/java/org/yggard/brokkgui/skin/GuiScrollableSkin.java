@@ -19,7 +19,6 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
         super(model, behavior);
 
         this.gripX = new Rectangle();
-
         this.gripX.getxPosProperty().bind(new BaseBinding<Float>()
         {
             {
@@ -154,8 +153,8 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
         this.getModel().addChild(this.gripX);
         this.getModel().addChild(this.gripY);
 
-        this.gripX.getStyleClass().add("grip-x");
-        this.gripY.getStyleClass().add("grip-y");
+        this.gripX.addStyleClass("grip-x");
+        this.gripY.addStyleClass("grip-y");
 
         this.gripX.getVisibleProperty().bind(new BaseBinding<Boolean>()
         {

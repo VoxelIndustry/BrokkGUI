@@ -6,10 +6,7 @@ import org.yggard.brokkgui.component.ToastManager;
 import org.yggard.brokkgui.data.EAlignment;
 import org.yggard.brokkgui.data.EHAlignment;
 import org.yggard.brokkgui.data.RectOffset;
-import org.yggard.brokkgui.demo.category.LabelDemo;
-import org.yggard.brokkgui.demo.category.ListViewDemo;
-import org.yggard.brokkgui.demo.category.RadioButtonDemo;
-import org.yggard.brokkgui.demo.category.TextFieldDemo;
+import org.yggard.brokkgui.demo.category.*;
 import org.yggard.brokkgui.element.GuiButton;
 import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.element.GuiProgressBar;
@@ -68,6 +65,7 @@ public class GuiDemo extends BrokkGuiScreen
         tabPane.addTab(new GuiTab("Progress", progressBar));
         tabPane.addTab(new GuiTab("RadioButton", new RadioButtonDemo()));
         tabPane.addTab(new GuiTab("Labels", new LabelDemo()));
+        tabPane.addTab(new GuiTab("Scroll", new ScrollDemo()));
 
         tabPane.setDefaultTab(0);
 

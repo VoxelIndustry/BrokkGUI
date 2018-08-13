@@ -8,7 +8,7 @@ listcell > button:hover {
     -border-color: #F0F4C3;
 }
 
-listcell > button:hover >> text {
+listcell > button:hover > > text {
     -color: yellow;
 }
 
@@ -18,7 +18,7 @@ listcell > button {
     -border-thin: 1;
 }
 
-listcell > button >> text {
+listcell > button > > text {
     -shadow: false;
 }
 
@@ -56,4 +56,13 @@ checkbox {
 
 #autocomplete .complete-popup label:select, #autocomplete .complete-popup label:hover {
     -background-color: #BDBDBD 50%;
+}
+
+scrollpane .grip-y {
+    -texture: url("brokkguidemo:textures/gui/scrollbar.png");
+    -color: rgba(0, 0, 0, 0);
+}
+
+#vertscroll-rect {
+    -background-texture: url("brokkguidemo:textures/gui/vert_scroll.png");
 }
