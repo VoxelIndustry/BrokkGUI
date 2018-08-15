@@ -6,17 +6,21 @@ package org.yggard.brokkgui.internal;
 public interface IKeyboardUtil
 {
     /**
-     *
      * @return if a key passed in parameter is translatable to a char writtable
-     *         into a textfield
+     * into a textfield
      */
-    public boolean isKeyValidChar(final int key);
+    boolean isKeyValidChar(final int key);
 
-    public boolean isCtrlKeyDown();
+    boolean isCtrlKeyDown();
 
-    public String getClipboardString();
+    /**
+     * @return if SHIFT_LEFT or SHIFT_RIGHT are down
+     */
+    boolean isShiftKeyDown();
 
-    public int getKeyCode(String keyName);
+    String getClipboardString();
 
-    public String getKeyName(int keyCode);
+    int getKeyCode(String keyName);
+
+    String getKeyName(int keyCode);
 }

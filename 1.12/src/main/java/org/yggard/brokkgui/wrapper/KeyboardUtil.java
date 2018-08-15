@@ -1,25 +1,24 @@
 package org.yggard.brokkgui.wrapper;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 import org.yggard.brokkgui.internal.IKeyboardUtil;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatAllowedCharacters;
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 
 public class KeyboardUtil implements IKeyboardUtil
 {
     @Override
-    public final boolean isKeyValidChar(final int key)
+    public boolean isKeyValidChar(int key)
     {
         return ChatAllowedCharacters.isAllowedCharacter(Keyboard.getEventCharacter());
     }
 
     @Override
-    public final boolean isCtrlKeyDown()
+    public boolean isCtrlKeyDown()
     {
         return Minecraft.IS_RUNNING_ON_MAC
                 ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA)
@@ -27,16 +26,22 @@ public class KeyboardUtil implements IKeyboardUtil
     }
 
     @Override
-    public final String getClipboardString()
+    public boolean isShiftKeyDown()
+    {
+        return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+    }
+
+    @Override
+    public String getClipboardString()
     {
         try
         {
-            final Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard()
-                    .getContents((Object) null);
+            Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard()
+                    .getContents(null);
 
             if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.stringFlavor))
                 return (String) transferable.getTransferData(DataFlavor.stringFlavor);
-        } catch (final Exception exception)
+        } catch (Exception exception)
         {
             ;
         }
@@ -45,13 +50,13 @@ public class KeyboardUtil implements IKeyboardUtil
     }
 
     @Override
-    public int getKeyCode(final String keyName)
+    public int getKeyCode(String keyName)
     {
         return Keyboard.getKeyIndex(keyName);
     }
 
     @Override
-    public String getKeyName(final int keyCode)
+    public String getKeyName(int keyCode)
     {
         return Keyboard.getKeyName(keyCode);
     }

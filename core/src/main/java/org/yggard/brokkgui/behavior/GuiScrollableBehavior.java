@@ -10,24 +10,24 @@ import org.yggard.brokkgui.event.ScrollEvent;
  */
 public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehaviorBase<C>
 {
-    public GuiScrollableBehavior(final C model)
+    public GuiScrollableBehavior(C model)
     {
         super(model);
 
         this.getModel().getEventDispatcher().addHandler(GuiMouseEvent.WHEEL, this::onMouseWheel);
     }
 
-    private void onMouseWheel(final GuiMouseEvent.Wheel event)
+    private void onMouseWheel(GuiMouseEvent.Wheel event)
     {
         float scrolled;
-        final boolean vertical = !BrokkGuiPlatform.getInstance().getKeyboardUtil().isCtrlKeyDown();
+        boolean vertical = !BrokkGuiPlatform.getInstance().getKeyboardUtil().isShiftKeyDown();
 
         if (vertical)
         {
             if (this.getModel().getHeight() >= this.getModel().getTrueHeight())
                 return;
 
-            scrolled = event.getDwheel() / 10 * this.getModel().getScrollSpeed();
+            scrolled = event.getDwheel() / 10f * this.getModel().getScrollSpeed();
             if (this.getModel().getScrollY() + scrolled <= this.getModel().getHeight() - this.getModel().getTrueHeight()
                     && event.getDwheel() < 0)
                 scrolled = this.getModel().getHeight() - this.getModel().getTrueHeight() - this.getModel().getScrollY();
@@ -40,7 +40,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
             if (this.getModel().getWidth() >= this.getModel().getTrueWidth())
                 return;
 
-            scrolled = event.getDwheel() / 10 * this.getModel().getScrollSpeed();
+            scrolled = event.getDwheel() / 10f * this.getModel().getScrollSpeed();
             if (this.getModel().getScrollX() + scrolled <= this.getModel().getWidth() - this.getModel().getTrueWidth()
                     && event.getDwheel() < 0)
                 scrolled = this.getModel().getWidth() - this.getModel().getTrueWidth() - this.getModel().getScrollX();

@@ -59,10 +59,19 @@ checkbox {
 }
 
 scrollpane .grip-y {
-    -texture: url("brokkguidemo:textures/gui/scrollbar.png");
+    -texture: url("brokkguidemo:textures/gui/scrollbar_vert.png");
+    -color: rgba(0, 0, 0, 0);
+}
+
+scrollpane .grip-x {
+    -texture: url("brokkguidemo:textures/gui/scrollbar_horiz.png");
     -color: rgba(0, 0, 0, 0);
 }
 
 #vertscroll-rect {
     -background-texture: url("brokkguidemo:textures/gui/vert_scroll.png");
+}
+
+#horiscroll-rect {
+    -background-texture: url("brokkguidemo:textures/gui/horiz_scroll.png");
 }

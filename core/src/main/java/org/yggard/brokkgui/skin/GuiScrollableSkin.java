@@ -14,7 +14,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
 {
     private final Rectangle gripX, gripY;
 
-    public GuiScrollableSkin(final C model, final B behavior)
+    public GuiScrollableSkin(C model, B behavior)
     {
         super(model, behavior);
 
@@ -22,64 +22,62 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
         this.gripX.getxPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(GuiScrollableSkin.this.getModel().getxPosProperty(),
-                        GuiScrollableSkin.this.getModel().getxTranslateProperty(),
-                        GuiScrollableSkin.this.getModel().getScrollXProperty(),
-                        GuiScrollableSkin.this.getModel().getTrueWidthProperty(),
-                        GuiScrollableSkin.this.getModel().getWidthProperty(),
-                        GuiScrollableSkin.this.gripX.getWidthProperty());
+                super.bind(getModel().getxPosProperty(),
+                        getModel().getxTranslateProperty(),
+                        getModel().getScrollXProperty(),
+                        getModel().getTrueWidthProperty(),
+                        getModel().getWidthProperty(),
+                        gripX.getWidthProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                if (GuiScrollableSkin.this.getModel().getWidth() >= GuiScrollableSkin.this.getModel().getTrueWidth())
-                    return GuiScrollableSkin.this.getModel().getxPos()
-                            + GuiScrollableSkin.this.getModel().getxTranslate();
+                if (getModel().getWidth() >= getModel().getTrueWidth())
+                    return getModel().getxPos() + getModel().getxTranslate();
                 else
                 {
-                    final float area = GuiScrollableSkin.this.getModel().getTrueWidth()
-                            - GuiScrollableSkin.this.getModel().getWidth();
-                    final float ratio = GuiScrollableSkin.this.getModel().getScrollX() / area;
-                    final float size = GuiScrollableSkin.this.getModel().getWidth()
-                            - GuiScrollableSkin.this.gripX.getWidth();
-                    return GuiScrollableSkin.this.getModel().getxPos()
-                            + GuiScrollableSkin.this.getModel().getxTranslate() + size * ratio;
+                    float area = getModel().getTrueWidth() - getModel().getWidth();
+                    float ratio = getModel().getScrollX() / area;
+                    float size = getModel().getWidth() - gripX.getWidth();
+
+                    return getModel().getxPos() + getModel().getxTranslate() - size * ratio;
                 }
             }
         });
         this.gripX.getyPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(GuiScrollableSkin.this.getModel().getyPosProperty(),
-                        GuiScrollableSkin.this.getModel().getyTranslateProperty(),
-                        GuiScrollableSkin.this.getModel().getHeightProperty(),
-                        GuiScrollableSkin.this.gripX.getHeightProperty());
+                super.bind(getModel().getyPosProperty(),
+                        getModel().getyTranslateProperty(),
+                        getModel().getHeightProperty(),
+                        gripX.getHeightProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                return GuiScrollableSkin.this.getModel().getyPos() + GuiScrollableSkin.this.getModel().getyTranslate()
-                        + GuiScrollableSkin.this.getModel().getHeight() - GuiScrollableSkin.this.gripX.getHeight();
+                return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() - gripX.getHeight();
             }
         });
-        this.gripX.setHeight(5);
+        this.gripX.getHeightProperty().bind(this.getModel().getGripXHeightProperty());
         this.gripX.getWidthProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(GuiScrollableSkin.this.getModel().getWidthProperty(),
-                        GuiScrollableSkin.this.getModel().getTrueWidthProperty());
+                super.bind(getModel().getWidthProperty(),
+                        getModel().getTrueWidthProperty(),
+                        getModel().getGripXWidthProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                if (GuiScrollableSkin.this.getModel().getWidth() >= GuiScrollableSkin.this.getModel().getTrueWidth())
-                    return GuiScrollableSkin.this.getModel().getWidth();
-                return Math.min(10,
-                        GuiScrollableSkin.this.getModel().getWidth() / GuiScrollableSkin.this.getModel().getTrueWidth()
-                                * GuiScrollableSkin.this.getModel().getWidth());
+                if (getModel().getGripXWidth() != 0)
+                    return getModel().getGripXWidth();
+
+                if (getModel().getWidth() >= getModel().getTrueWidth())
+                    return getModel().getWidth();
+                return Math.min(10, getModel().getWidth() / getModel().getTrueWidth() * getModel().getWidth());
             }
         });
         this.gripX.setzLevel(10);
@@ -88,65 +86,63 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
         this.gripY.getxPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(GuiScrollableSkin.this.getModel().getxPosProperty(),
-                        GuiScrollableSkin.this.getModel().getxTranslateProperty(),
-                        GuiScrollableSkin.this.getModel().getWidthProperty(),
-                        GuiScrollableSkin.this.gripY.getHeightProperty());
+                super.bind(getModel().getxPosProperty(),
+                        getModel().getxTranslateProperty(),
+                        getModel().getWidthProperty(),
+                        gripY.getHeightProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                return GuiScrollableSkin.this.getModel().getxPos() + GuiScrollableSkin.this.getModel().getxTranslate()
-                        + GuiScrollableSkin.this.getModel().getWidth() - GuiScrollableSkin.this.gripY.getHeight();
+                return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - gripY.getHeight();
             }
         });
         this.gripY.getyPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(GuiScrollableSkin.this.getModel().getyPosProperty(),
-                        GuiScrollableSkin.this.getModel().getyTranslateProperty(),
-                        GuiScrollableSkin.this.getModel().getScrollYProperty(),
-                        GuiScrollableSkin.this.getModel().getTrueHeightProperty(),
-                        GuiScrollableSkin.this.getModel().getHeightProperty(),
-                        GuiScrollableSkin.this.gripY.getHeightProperty());
+                super.bind(getModel().getyPosProperty(),
+                        getModel().getyTranslateProperty(),
+                        getModel().getScrollYProperty(),
+                        getModel().getTrueHeightProperty(),
+                        getModel().getHeightProperty(),
+                        gripY.getHeightProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                if (GuiScrollableSkin.this.getModel().getHeight() >= GuiScrollableSkin.this.getModel().getTrueHeight())
-                    return GuiScrollableSkin.this.getModel().getyPos()
-                            + GuiScrollableSkin.this.getModel().getyTranslate();
+                if (getModel().getHeight() >= getModel().getTrueHeight())
+                    return getModel().getyPos()
+                            + getModel().getyTranslate();
                 else
                 {
-                    final float area = GuiScrollableSkin.this.getModel().getTrueHeight()
-                            - GuiScrollableSkin.this.getModel().getHeight();
-                    final float ratio = GuiScrollableSkin.this.getModel().getScrollY() / area;
-                    final float size = GuiScrollableSkin.this.getModel().getHeight()
-                            - GuiScrollableSkin.this.gripY.getHeight();
-                    return GuiScrollableSkin.this.getModel().getyPos()
-                            + GuiScrollableSkin.this.getModel().getyTranslate() + size * ratio;
+                    float area = getModel().getTrueHeight() - getModel().getHeight();
+                    float ratio = getModel().getScrollY() / area;
+                    float size = getModel().getHeight() - gripY.getHeight();
+
+                    return getModel().getyPos() + getModel().getyTranslate() - size * ratio;
                 }
             }
         });
-        this.gripY.setWidth(20);
+        this.gripY.getWidthProperty().bind(this.getModel().getGripYWidthProperty());
         this.gripY.getHeightProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(GuiScrollableSkin.this.getModel().getHeightProperty(),
-                        GuiScrollableSkin.this.getModel().getTrueHeightProperty());
+                super.bind(getModel().getHeightProperty(),
+                        getModel().getTrueHeightProperty(),
+                        getModel().getGripYHeightProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                if (GuiScrollableSkin.this.getModel().getHeight() >= GuiScrollableSkin.this.getModel().getTrueHeight())
-                    return GuiScrollableSkin.this.getModel().getHeight();
-                return Math.min(10,
-                        GuiScrollableSkin.this.getModel().getHeight()
-                                / GuiScrollableSkin.this.getModel().getTrueHeight()
-                                * GuiScrollableSkin.this.getModel().getHeight());
+                if (getModel().getGripYHeight() != 0)
+                    return getModel().getGripYHeight();
+
+                if (getModel().getHeight() >= getModel().getTrueHeight())
+                    return getModel().getHeight();
+                return Math.min(10, getModel().getHeight() / getModel().getTrueHeight() * getModel().getHeight());
             }
         });
 
