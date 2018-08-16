@@ -36,6 +36,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     private       EventHandler<ClickEvent>   onClickEvent;
     private final BaseProperty<Boolean>      focusedProperty, disabledProperty, hoveredProperty, focusableProperty;
     private final BaseProperty<Boolean> visibleProperty;
+    private final BaseProperty<Boolean> draggedProperty;
+    private       int                   draggedX, draggedY;
 
     private final BaseProperty<String>    styleID;
     private final BaseSetProperty<String> styleClass;
@@ -70,6 +72,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.focusableProperty = new BaseProperty<>(false, "focusableProperty");
 
         this.visibleProperty = new BaseProperty<>(true, "visibleProperty");
+
+        this.draggedProperty = new BaseProperty<>(false, "draggedProperty");
 
         this.styleID = new BaseProperty<>(null, "styleIDProperty");
         this.styleClass = new BaseSetProperty<>(Collections.emptySet(), "styleClassListProperty");
@@ -209,27 +213,60 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void handleClick(final int mouseX, final int mouseY, final int key)
     {
-        if (!this.isDisabled() && this.isVisible())
+        if (this.isDisabled() || !this.isVisible())
+            return;
+        switch (key)
         {
-            switch (key)
-            {
-                case 0:
-                    this.getEventDispatcher().dispatchEvent(ClickEvent.Left.TYPE,
-                            new ClickEvent.Left(this, mouseX, mouseY));
-                    break;
-                case 1:
-                    this.getEventDispatcher().dispatchEvent(ClickEvent.Right.TYPE,
-                            new ClickEvent.Right(this, mouseX, mouseY));
-                    break;
-                case 2:
-                    this.getEventDispatcher().dispatchEvent(ClickEvent.Middle.TYPE,
-                            new ClickEvent.Middle(this, mouseX, mouseY));
-                    break;
-                default:
-                    this.getEventDispatcher().dispatchEvent(ClickEvent.TYPE, new ClickEvent(this, mouseX, mouseY, key));
-                    break;
-            }
-            this.setFocused();
+            case 0:
+                this.getEventDispatcher().dispatchEvent(ClickEvent.Left.TYPE,
+                        new ClickEvent.Left(this, mouseX, mouseY));
+                break;
+            case 1:
+                this.getEventDispatcher().dispatchEvent(ClickEvent.Right.TYPE,
+                        new ClickEvent.Right(this, mouseX, mouseY));
+                break;
+            case 2:
+                this.getEventDispatcher().dispatchEvent(ClickEvent.Middle.TYPE,
+                        new ClickEvent.Middle(this, mouseX, mouseY));
+                break;
+            default:
+                this.getEventDispatcher().dispatchEvent(ClickEvent.TYPE, new ClickEvent(this, mouseX, mouseY, key));
+                break;
+        }
+        this.setFocused();
+    }
+
+    public void handleClickDrag(int mouseX, int mouseY, int key, int originalMouseX, int originalMouseY)
+    {
+        if (this.isDisabled() || !this.isVisible())
+            return;
+
+        if (!this.isDragged())
+        {
+            this.getDraggedProperty().setValue(true);
+            this.getEventDispatcher().dispatchEvent(GuiMouseEvent.DRAG_START,
+                    new GuiMouseEvent.DragStart(this, mouseX, mouseY, key));
+        }
+        this.draggedX = mouseX - originalMouseX;
+        this.draggedY = mouseY - originalMouseY;
+
+
+
+        this.getEventDispatcher().dispatchEvent(GuiMouseEvent.DRAGGING,
+                new GuiMouseEvent.Dragging(this, mouseX, mouseY, key, draggedX, draggedY));
+    }
+
+    public void handleClickStop(int mouseX, int mouseY, int key, int originalMouseX, int originalMouseY)
+    {
+        if (this.isDisabled() || !this.isVisible())
+            return;
+
+        if (this.isDragged())
+        {
+            this.getEventDispatcher().dispatchEvent(GuiMouseEvent.DRAG_STOP,
+                    new GuiMouseEvent.DragStop(this, mouseX, mouseY, key, draggedX, draggedY));
+            this.draggedX = 0;
+            this.draggedY = 0;
         }
     }
 
@@ -559,6 +596,11 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         return visibleProperty;
     }
 
+    public BaseProperty<Boolean> getDraggedProperty()
+    {
+        return draggedProperty;
+    }
+
     public boolean isFocused()
     {
         return this.getFocusedProperty().getValue();
@@ -618,6 +660,21 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public void setVisible(boolean visible)
     {
         this.getVisibleProperty().setValue(visible);
+    }
+
+    public boolean isDragged()
+    {
+        return this.getDraggedProperty().getValue();
+    }
+
+    public int getDraggedX()
+    {
+        return draggedX;
+    }
+
+    public int getDraggedY()
+    {
+        return draggedY;
     }
 
     /////////////////////

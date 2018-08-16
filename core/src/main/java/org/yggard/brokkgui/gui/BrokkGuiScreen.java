@@ -44,6 +44,7 @@ public class BrokkGuiScreen implements IGuiWindow
     private IBrokkGuiImpl wrapper;
 
     private int cachedMouseX, cachedMouseY;
+    private int lastClickX, lastClickY;
 
     public BrokkGuiScreen(final float xRelativePos, final float yRelativePos, final float width, final float height)
     {
@@ -68,6 +69,9 @@ public class BrokkGuiScreen implements IGuiWindow
 
         this.cachedMouseX = -1;
         this.cachedMouseY = -1;
+
+        this.lastClickX = -1;
+        this.lastClickY = -1;
 
         this.setMainPanel(new GuiPane());
     }
@@ -163,6 +167,23 @@ public class BrokkGuiScreen implements IGuiWindow
             else
                 GuiFocusManager.getInstance().requestFocus(null);
         }
+
+        this.lastClickX = mouseX;
+        this.lastClickY = mouseY;
+    }
+
+    public void onClickDrag(int mouseX, int mouseY, int key, long timeSinceDrag)
+    {
+        if (this.mainPanel.isPointInside(lastClickX, lastClickY))
+            this.mainPanel.handleClickDrag(mouseX, mouseY, key, lastClickX, lastClickY);
+    }
+
+    public void onClickStop(int mouseX, int mouseY, int key)
+    {
+        if (this.mainPanel.isPointInside(lastClickX, lastClickY))
+            this.mainPanel.handleClickStop(mouseX, mouseY, key, lastClickX, lastClickY);
+        this.lastClickX = -1;
+        this.lastClickY = -1;
     }
 
     public void handleMouseInput()

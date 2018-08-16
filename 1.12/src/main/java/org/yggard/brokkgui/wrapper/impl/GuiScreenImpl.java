@@ -88,6 +88,22 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     }
 
     @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick)
+    {
+        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+
+        this.brokkgui.onClickDrag(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state)
+    {
+        super.mouseReleased(mouseX, mouseY, state);
+
+        this.brokkgui.onClickStop(mouseX, mouseY, state);
+    }
+
+    @Override
     public void handleMouseInput() throws IOException
     {
         super.handleMouseInput();

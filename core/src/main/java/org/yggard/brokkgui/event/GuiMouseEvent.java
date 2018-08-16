@@ -16,7 +16,6 @@ public class GuiMouseEvent extends GuiInputEvent
     public static final EventType<GuiMouseEvent.DragStop>  DRAG_STOP  = new EventType<>(GuiMouseEvent.ANY,
             "DRAG_STOP_EVENT");
 
-
     private final int mouseX, mouseY;
 
     public GuiMouseEvent(final GuiNode source, final int mouseX, final int mouseY)

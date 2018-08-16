@@ -144,6 +144,24 @@ public class GuiFather extends GuiNode
     }
 
     @Override
+    public void handleClickDrag(int mouseX, int mouseY, int key, int originalMouseX, int originalMouseY)
+    {
+        super.handleClickDrag(mouseX, mouseY, key, originalMouseX, originalMouseY);
+
+        this.getChildrens().stream().filter(child -> child.isPointInside(originalMouseX, originalMouseY))
+                .forEach(child -> child.handleClickDrag(mouseX, mouseY, key, originalMouseX, originalMouseY));
+    }
+
+    @Override
+    public void handleClickStop(int mouseX, int mouseY, int key, int originalMouseX, int originalMouseY)
+    {
+        super.handleClickStop(mouseX, mouseY, key, originalMouseX, originalMouseY);
+
+        this.getChildrens().stream().filter(child -> child.isPointInside(originalMouseX, originalMouseY))
+                .forEach(child -> child.handleClickStop(mouseX, mouseY, key, originalMouseX, originalMouseY));
+    }
+
+    @Override
     public void handleHover(int mouseX, int mouseY, boolean hovered)
     {
         super.handleHover(mouseX, mouseY, hovered);

@@ -17,6 +17,48 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
 
         this.getModel().getEventDispatcher().addHandler(GuiMouseEvent.WHEEL, this::onMouseWheel);
         this.getModel().getEventDispatcher().addHandler(ClickEvent.TYPE, this::onClick);
+        this.getModel().getEventDispatcher().addHandler(GuiMouseEvent.DRAGGING, this::onMouseDrag);
+    }
+
+    private void onMouseDrag(GuiMouseEvent.Dragging event)
+    {
+        // Min X to select the vertical grip
+        float gripYMinX =
+                getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - getModel().getGripYWidth();
+
+        if (getModel().getTrueHeight() > getModel().getHeight() && event.getMouseX() - event.getDragX() > gripYMinX)
+        {
+            float ratio =
+                    (event.getMouseY() - getModel().getyPos() - getModel().getyTranslate()) / getModel().getHeight();
+            float minY = getModel().getyPos() + getModel().getyTranslate();
+            float maxY = minY + getModel().getHeight();
+
+            if (event.getMouseY() > minY && event.getMouseY() < maxY)
+                getModel().setScrollY((getModel().getTrueHeight() - getModel().getHeight()) * -ratio);
+            else if (event.getMouseY() <= minY)
+                getModel().setScrollY(0);
+            else
+                getModel().setScrollY(-(getModel().getTrueHeight() - getModel().getHeight()));
+        }
+
+        // Min Y to select the horizontal grip
+        float gripXMinY =
+                getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() - getModel().getGripXHeight();
+
+        if (getModel().getTrueWidth() > getModel().getWidth() && event.getMouseY() - event.getDragY() > gripXMinY)
+        {
+            float ratio =
+                    (event.getMouseX() - getModel().getxPos() - getModel().getxTranslate()) / getModel().getWidth();
+            float minX = getModel().getxPos() + getModel().getxTranslate();
+            float maxX = minX + getModel().getWidth();
+
+            if (event.getMouseX() > minX && event.getMouseX() < maxX)
+                getModel().setScrollX((getModel().getTrueWidth() - getModel().getWidth()) * -ratio);
+            else if (event.getMouseX() <= minX)
+                getModel().setScrollX(0);
+            else
+                getModel().setScrollX(-(getModel().getTrueWidth() - getModel().getWidth()));
+        }
     }
 
     private void onClick(ClickEvent event)
