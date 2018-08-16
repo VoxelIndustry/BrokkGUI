@@ -2,6 +2,7 @@ package org.yggard.brokkgui.behavior;
 
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.control.GuiScrollableBase;
+import org.yggard.brokkgui.event.ClickEvent;
 import org.yggard.brokkgui.event.GuiMouseEvent;
 import org.yggard.brokkgui.event.ScrollEvent;
 
@@ -15,6 +16,31 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         super(model);
 
         this.getModel().getEventDispatcher().addHandler(GuiMouseEvent.WHEEL, this::onMouseWheel);
+        this.getModel().getEventDispatcher().addHandler(ClickEvent.TYPE, this::onClick);
+    }
+
+    private void onClick(ClickEvent event)
+    {
+        // Min X to select the vertical grip
+        float gripYMinX =
+                getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - getModel().getGripYWidth();
+
+        if (getModel().getTrueHeight() > getModel().getHeight() && event.getMouseX() > gripYMinX)
+        {
+            float ratio =
+                    (event.getMouseY() - getModel().getyPos() - getModel().getyTranslate()) / getModel().getHeight();
+            getModel().setScrollY((getModel().getTrueHeight() - getModel().getHeight()) * -ratio);
+        }
+
+        // Min Y to select the horizontal grip
+        float gripXMinY =
+                getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() - getModel().getGripXHeight();
+        if (getModel().getTrueWidth() > getModel().getWidth() && event.getMouseY() > gripXMinY)
+        {
+            float ratio =
+                    (event.getMouseX() - getModel().getxPos() - getModel().getxTranslate()) / getModel().getWidth();
+            getModel().setScrollX((getModel().getTrueWidth() - getModel().getWidth()) * -ratio);
+        }
     }
 
     private void onMouseWheel(GuiMouseEvent.Wheel event)

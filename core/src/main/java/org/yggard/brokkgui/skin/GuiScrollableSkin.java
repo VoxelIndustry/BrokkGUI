@@ -89,13 +89,13 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                 super.bind(getModel().getxPosProperty(),
                         getModel().getxTranslateProperty(),
                         getModel().getWidthProperty(),
-                        gripY.getHeightProperty());
+                        gripY.getWidthProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - gripY.getHeight();
+                return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - gripY.getWidth();
             }
         });
         this.gripY.getyPosProperty().bind(new BaseBinding<Float>()

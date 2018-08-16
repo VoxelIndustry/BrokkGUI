@@ -13,6 +13,7 @@ public class ScrollDemo extends GuiRelativePane
         verticalScroll.setHeightRatio(0.5f);
         verticalScroll.setGripYWidth(12);
         verticalScroll.setGripYHeight(24);
+      //  verticalScroll.setStyle("-border-color: red; -border-thin: 1;");
 
         Rectangle rectangle = new Rectangle();
         rectangle.setWidth(64);
