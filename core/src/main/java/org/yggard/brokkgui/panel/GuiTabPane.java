@@ -11,8 +11,7 @@ import org.yggard.brokkgui.skin.GuiSkinBase;
 import org.yggard.brokkgui.skin.GuiTabPaneSkin;
 import org.yggard.brokkgui.style.tree.StyleList;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -24,7 +23,11 @@ public class GuiTabPane extends GuiControl
     private final BaseProperty<Integer>    selectedTabProperty, defaultTabProperty;
     private final BaseProperty<ESide> sideProperty;
 
-    private final BaseProperty<Float> tabHeightRatioProperty;
+    private final BaseProperty<Float> tabHeaderWidthProperty;
+    private final BaseProperty<Float> tabHeaderHeightProperty;
+
+    private final Map<GuiTab, TabHeaderFactory> tabHeaderFactories;
+    private       TabHeaderFactory              globalTabHeaderFactory;
 
     public GuiTabPane()
     {
@@ -35,9 +38,12 @@ public class GuiTabPane extends GuiControl
         this.defaultTabProperty = new BaseProperty<>(-1, "defaultTabProperty");
         this.sideProperty = new BaseProperty<>(ESide.UP, "sideProperty");
 
-        this.tabHeightRatioProperty = new BaseProperty<>(.1f, "tabHeightRatioProperty");
+        this.tabHeaderWidthProperty = new BaseProperty<>(-1f, "tabHeaderWidthProperty");
+        this.tabHeaderHeightProperty = new BaseProperty<>(20f, "tabHeaderHeightProperty");
 
         this.setOverflowPolicy(EOverflowPolicy.TRIM_ALL);
+
+        this.tabHeaderFactories = new HashMap<>();
     }
 
     @Override
@@ -66,9 +72,14 @@ public class GuiTabPane extends GuiControl
         return this.sideProperty;
     }
 
-    public BaseProperty<Float> getTabHeightRatioProperty()
+    public BaseProperty<Float> getTabHeaderWidthProperty()
     {
-        return this.tabHeightRatioProperty;
+        return tabHeaderWidthProperty;
+    }
+
+    public BaseProperty<Float> getTabHeaderHeightProperty()
+    {
+        return tabHeaderHeightProperty;
     }
 
     /**
@@ -109,6 +120,11 @@ public class GuiTabPane extends GuiControl
         if (index != -1 && index < this.getTabsProperty().size())
             return this.getTabsProperty().get(index);
         return null;
+    }
+
+    public int getTabIndex(GuiTab tab)
+    {
+        return this.getTabs().indexOf(tab);
     }
 
     private void setupTab(final GuiTab tab)
@@ -188,14 +204,59 @@ public class GuiTabPane extends GuiControl
         this.getSideProperty().setValue(side);
     }
 
-    public float getTabHeightRatio()
+    public float getTabHeaderWidth()
     {
-        return this.getTabHeightRatioProperty().getValue();
+        return this.getTabHeaderWidthProperty().getValue();
     }
 
-    public void setTabHeightRatio(final float tabHeight)
+    /**
+     * Control the maximum width of tab headers, setting it to -1 use the default width of each elements
+     *
+     * @param tabHeaderWidth
+     */
+    public void setTabHeaderWidth(float tabHeaderWidth)
     {
-        this.getTabHeightRatioProperty().setValue(tabHeight);
+        this.getTabHeaderWidthProperty().setValue(tabHeaderWidth);
+    }
+
+    public float getTabHeaderHeight()
+    {
+        return this.getTabHeaderHeightProperty().getValue();
+    }
+
+    /**
+     * Control the maximum height of tab headers, setting it to -1 use the default height of each elements
+     *
+     * @param tabHeaderHeight
+     */
+    public void setTabHeaderHeight(float tabHeaderHeight)
+    {
+        this.getTabHeaderHeightProperty().setValue(tabHeaderHeight);
+    }
+
+    public void setGlobalTabHeaderFactory(TabHeaderFactory factory)
+    {
+        this.globalTabHeaderFactory = factory;
+    }
+
+    public TabHeaderFactory getGlobalTabHeaderFactory()
+    {
+        return this.globalTabHeaderFactory;
+    }
+
+    public void setTabHeaderFactory(GuiTab tab, TabHeaderFactory factory)
+    {
+        this.tabHeaderFactories.put(tab, factory);
+    }
+
+    public void removeTabHeaderFactory(GuiTab tab)
+    {
+        this.tabHeaderFactories.remove(tab);
+    }
+
+    public Optional<TabHeaderFactory> getTabHeaderFactory(GuiTab tab)
+    {
+        return Optional.ofNullable(this.tabHeaderFactories.getOrDefault(tab, this.globalTabHeaderFactory));
     }
 
     /////////////////////

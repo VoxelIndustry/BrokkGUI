@@ -90,7 +90,7 @@ public class GuiTab
     {
         if (tabPane != null && this.getContent() != null)
             this.setupContent(tabPane, this.getContent());
-        else if (this.getContent() != null && tabPane == null)
+        else if (this.getContent() != null)
             this.disposeContent();
         this.getTabPaneProperty().setValue(tabPane);
     }
@@ -101,14 +101,14 @@ public class GuiTab
         {
             if (pane.getTabSide() == ESide.LEFT)
                 return pane.getWidth() / 10 + 1;
-            return 1f;
+            return 0f;
         }, pane.getSideProperty(), pane.getWidthProperty());
 
         final BaseBinding<Float> yPadding = new BaseExpression<>(() ->
         {
             if (pane.getTabSide() == ESide.UP)
                 return pane.getHeight() / 10 + 1;
-            return 1f;
+            return 0f;
         }, pane.getSideProperty(), pane.getHeightProperty());
 
         this.getContent().setFather(pane);

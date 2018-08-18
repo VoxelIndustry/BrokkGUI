@@ -57,9 +57,8 @@ public class GuiDemo extends BrokkGuiScreen
         progressBar.setStyle("-border-color: red; -border-thin: 2;");
 
         final GuiTabPane tabPane = new GuiTabPane();
-        tabPane.setWidth(190);
+        tabPane.setWidth(200);
         tabPane.setHeight(200);
-        tabPane.setStyle("-border-color: yellow; -border-thin: 1;");
         tabPane.addTab(new GuiTab("Textfield", new TextFieldDemo()));
         tabPane.addTab(new GuiTab("ListView", new ListViewDemo(this)));
         tabPane.addTab(new GuiTab("Progress", progressBar));
