@@ -66,8 +66,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                     return displayOffset;
                 }
                 IGuiHelper helper = BrokkGuiPlatform.getInstance().getGuiHelper();
-                while (helper.getStringWidth(getModel().getText().substring(
-                        displayOffset,
+                while (helper.getStringWidth(getModel().getText().substring(displayOffset,
                         getModel().getCursorPosition())) > getModel().getWidth() - 2 * getModel().getTextPadding())
                 {
                     displayOffset++;
@@ -127,7 +126,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                             this.getModel().getzLevel(), color.shade(0.5f));
                 }
                 // Text
-                renderer.getHelper().drawString(this.displayedTextProperty.getValue(), x + padding,
+                renderer.getHelper().drawString(this.getDisplayedText(), x + padding,
                         y + padding, this.getModel().getzLevel(), color, color.shade(0.7f));
                 // Cursor
                 if (this.getModel().getFocusedProperty().getValue())
@@ -156,6 +155,11 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                         i++;
                     }
             }
+    }
+
+    public String getDisplayedText()
+    {
+        return displayedTextProperty.getValue();
     }
 
     public Color getTextColor()
