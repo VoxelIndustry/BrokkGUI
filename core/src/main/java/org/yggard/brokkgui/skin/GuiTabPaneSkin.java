@@ -1,16 +1,18 @@
 package org.yggard.brokkgui.skin;
 
 import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.binding.BaseExpression;
+import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
 import org.yggard.brokkgui.behavior.GuiTabPaneBehavior;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.component.GuiTab;
+import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.element.GuiLabel;
+import org.yggard.brokkgui.event.ClickEvent;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.RenderPass;
-import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiTabPane;
 
 import java.util.ArrayList;
@@ -21,11 +23,14 @@ import java.util.List;
  */
 public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T, GuiTabPaneBehavior<T>>
 {
-    private List<GuiNode> tabHeaders;
+    private List<GuiNode>         tabHeaders;
+    private BaseProperty<Boolean> headerDirtyProperty;
 
     public GuiTabPaneSkin(final T model, final GuiTabPaneBehavior<T> behavior)
     {
         super(model, behavior);
+
+        this.headerDirtyProperty = new BaseProperty<>(Boolean.FALSE, "headerDirtyProperty");
 
         this.tabHeaders = new ArrayList<>();
         model.getTabsProperty().addListener(this::onTabChange);
@@ -33,13 +38,21 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
 
         model.getTabHeaderWidthProperty().addListener(this::refreshAll);
         model.getTabHeaderHeightProperty().addListener(this::refreshAll);
+
+        getModel().getEventDispatcher().addHandler(ClickEvent.TYPE, this::onClick);
     }
 
     private void refreshLayout(GuiNode from)
     {
-        if(from != null)
+        if (from != null)
         {
-            
+            int index = tabHeaders.indexOf(from);
+            float lastSpacing = (float) tabHeaders.stream()
+                    .filter(header -> tabHeaders.indexOf(header) < index)
+                    .mapToDouble(GuiNode::getWidth).sum();
+
+            for (GuiNode header : tabHeaders.subList(index + 1, tabHeaders.size()))
+                header.getxPosProperty().setValue(getModel().getxPos() + getModel().getxTranslate() + lastSpacing);
         }
     }
 
@@ -79,27 +92,38 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
         header.addStyleClass("tab-header");
         getModel().addStyleChild(header);
 
+        header.getWidthProperty().addListener(this::onHeaderWidthChange);
         header.getxPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(getModel().get);
+                super.bind(getModel().getxPosProperty(), getModel().getxTranslateProperty(), headerDirtyProperty);
             }
 
             @Override
             public Float computeValue()
             {
-                return null;
+                float lastSpacing = (float) tabHeaders.stream()
+                        .filter(candidate -> tabHeaders.indexOf(candidate) < getModel().getTabIndex(guiTab))
+                        .mapToDouble(GuiNode::getWidth).sum();
+                return getModel().getxPos() + getModel().getxTranslate() + lastSpacing;
             }
         });
+        header.getyPosProperty().bind(BaseExpression.biCombine(getModel().getyPosProperty(),
+                getModel().getyTranslateProperty(), (y, translate) -> y + translate));
 
         tabHeaders.add(getModel().getTabIndex(guiTab), header);
+    }
+
+    private void onHeaderWidthChange(Observable obs)
+    {
+        this.headerDirtyProperty.setValue(true);
     }
 
     private GuiNode defaultHeaderFactory(GuiTab guiTab, float maxWidth, float maxHeight)
     {
         GuiLabel label = new GuiLabel(guiTab.getText());
         label.getTextProperty().bind(guiTab.getTextProperty());
-
+        label.setTextPadding(new RectOffset(0, 2, 0, 2));
         if (maxWidth != -1)
             label.setWidth(maxWidth);
         else
@@ -116,61 +140,27 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
     {
         super.render(pass, renderer, mouseX, mouseY);
 
-        this.getModel().getTabs().forEach(tab ->
-        {
-            switch (this.getModel().getTabSide())
-            {
-                case UP:
-                    if (this.getModel().getBackgroundColor().getAlpha() != 0)
-                        renderer.getHelper().drawColoredRect(renderer,
-                                this.getModel().getxPos() + this.getModel().getxTranslate()
-                                        + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
-                                        * this.getModel().getTabsProperty().indexOf(tab),
-                                this.getModel().getyPos() + this.getModel().getyTranslate(),
-                                this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
-                                this.getModel().getHeight() * this.getModel().getTabHeightRatio(),
-                                this.getModel().getzLevel(), this.getModel().getBackgroundColor());
-                    else if (this.getModel().getBackgroundTexture() != Texture.EMPTY)
-                    {
-                        final Texture texture = this.getModel().getBackgroundTexture();
-                        renderer.getHelper().bindTexture(texture);
-                        renderer.getHelper().drawTexturedRect(renderer,
-                                this.getModel().getxPos() + this.getModel().getxTranslate()
-                                        + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
-                                        * this.getModel().getTabsProperty().indexOf(tab),
-                                this.getModel().getyPos() + this.getModel().getyTranslate(), texture.getUMin(),
-                                texture.getVMin(), texture.getUMax(), texture.getVMax(),
-                                this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
-                                this.getModel().getHeight() * this.getModel().getTabHeightRatio(),
-                                this.getModel().getzLevel());
-                    }
-                    renderer.getHelper().drawColoredEmptyRect(renderer,
-                            this.getModel().getxPos() + this.getModel().getxTranslate()
-                                    + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
-                                    * this.getModel().getTabsProperty().indexOf(tab),
-                            this.getModel().getyPos() + this.getModel().getyTranslate(),
-                            this.getModel().getWidth() / this.getModel().getTabsProperty().size(),
-                            this.getModel().getHeight() * this.getModel().getTabHeightRatio(),
-                            this.getModel().getzLevel(), this.getBorderColor(), this.getBorderThin());
-                    renderer.getHelper().drawString(tab.getText(),
-                            this.getModel().getxPos() + this.getModel().getxTranslate() + 2
-                                    + this.getModel().getWidth() / this.getModel().getTabsProperty().size()
-                                    * this.getModel().getTabsProperty().indexOf(tab),
-                            this.getModel().getyPos() + this.getModel().getyTranslate() + 2,
-                            this.getModel().getzLevel(), Color.WHITE);
-                    break;
-                // TODO : tab render for every possible sides
-                case DOWN:
-                    break;
-                case LEFT:
-                    break;
-                case RIGHT:
-                    break;
-                default:
-                    break;
-            }
-        });
+        this.tabHeaders.forEach(node -> node.renderNode(renderer, pass, mouseX, mouseY));
+
         if (this.getModel().getSelectedTab() != null)
             this.getModel().getSelectedTab().renderChild(renderer, pass, mouseX, mouseY);
+    }
+
+    ////////////
+    // EVENTS //
+    ////////////
+
+    public void onClick(ClickEvent event)
+    {
+        GuiTab tab = this.getClickedTab(event.getMouseX(), event.getMouseY());
+
+        if (tab != null && getModel().getSelectedTab() != tab)
+            getModel().setSelectedTab(tab);
+    }
+
+    private GuiTab getClickedTab(int pointX, int pointY)
+    {
+        return this.tabHeaders.stream().filter(node -> node.isPointInside(pointX, pointY))
+                .map(header -> getModel().getTab(tabHeaders.indexOf(header))).findFirst().orElse(null);
     }
 }

@@ -117,28 +117,28 @@ public class GuiTab
         content.getWidthProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(pane.getWidthProperty(), pane.getSideProperty(), pane.getTabHeightRatioProperty());
+                super.bind(pane.getWidthProperty(), pane.getSideProperty(), pane.getTabHeaderWidthProperty());
             }
 
             @Override
             public Float computeValue()
             {
                 if (pane.getTabSide().equals(ESide.LEFT) || pane.getTabSide().equals(ESide.RIGHT))
-                    return pane.getWidth() - pane.getWidth() * pane.getTabHeightRatio();
+                    return pane.getWidth() - pane.getTabHeaderWidth();
                 return pane.getWidth();
             }
         });
         content.getHeightProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(pane.getHeightProperty(), pane.getSideProperty(), pane.getTabHeightRatioProperty());
+                super.bind(pane.getHeightProperty(), pane.getSideProperty(), pane.getTabHeaderHeightProperty());
             }
 
             @Override
             public Float computeValue()
             {
                 if (pane.getTabSide().equals(ESide.UP) || pane.getTabSide().equals(ESide.DOWN))
-                    return pane.getHeight() - pane.getHeight() * pane.getTabHeightRatio();
+                    return pane.getHeight() - pane.getTabHeaderHeight();
                 return pane.getHeight();
             }
         });
