@@ -47,7 +47,7 @@ public class GuiTextfield extends GuiControl implements ITextInput
 
         this.maxTextLengthProperty = new BaseProperty<>(-1, "maxTextLength");
         this.cursorPosProperty = new BaseProperty<>(0, "cursorPosProperty");
-        this.textPaddingProperty = new BaseProperty<>(new RectOffset(0, 1, 0, 1), "textPaddingProperty");
+        this.textPaddingProperty = new BaseProperty<>(new RectOffset(2), "textPaddingProperty");
 
         this.promptTextAlwaysDisplayedProperty = new BaseProperty<>(false, "promptTextAlwaysDisplayedProperty");
         this.editableProperty = new BaseProperty<>(true, "editableProperty");
@@ -286,8 +286,8 @@ public class GuiTextfield extends GuiControl implements ITextInput
             {
                 return Math.max(getHeight(),
                         Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getPromptText()),
-                        BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())) +
-                        getTextPadding().getLeft() + getTextPadding().getRight());
+                                BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())) +
+                                getTextPadding().getLeft() + getTextPadding().getRight());
             }
         });
     }

@@ -1,6 +1,5 @@
 package org.yggard.brokkgui.demo.category;
 
-import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.element.GuiTextfield;
 import org.yggard.brokkgui.element.GuiTextfieldComplete;
 import org.yggard.brokkgui.panel.GuiAbsolutePane;
@@ -30,7 +29,6 @@ public class TextFieldDemo extends GuiAbsolutePane
 
         GuiTextfield expandField = new GuiTextfield();
         expandField.setHeight(20);
-        expandField.setTextPadding(new RectOffset(0, 2, 0, 2));
         expandField.setExpandToText(true);
 
         expandField.setStyle("-border-color: black; -border-thin: 1;");

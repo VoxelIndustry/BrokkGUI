@@ -25,3 +25,13 @@ checkbox >> .box {
 checkbox >> .mark {
     -color: gray;
 }
+
+textfield .text {
+    -color: white;
+    -shadow-color: #4c4c4c;
+}
+
+textfield .prompt {
+    -color: #7f7f7f;
+    -shadow: false;
+}

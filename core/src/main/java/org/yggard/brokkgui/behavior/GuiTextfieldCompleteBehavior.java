@@ -22,7 +22,7 @@ public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extend
 
         if (!e.isFocused() && skin.isCompletePopupShown())
             skin.hideCompletePopup();
-        else if(e.isFocused() && !skin.isCompletePopupShown() &&
+        else if (e.isFocused() && !skin.isCompletePopupShown() &&
                 this.getModel().getText().length() >= this.getModel().getCharBeforeCompletion())
             skin.showCompletePopup();
 
@@ -54,16 +54,19 @@ public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extend
                 skin.selectSuggestion(skin.getActualSuggestionSize() - 1);
                 tempText = this.getModel().getText();
                 this.getModel().setText(skin.getSelectedValue());
+                this.moveCursorToMax();
             }
             else if (current > 0)
             {
                 skin.selectSuggestion(current - 1);
                 this.getModel().setText(skin.getSelectedValue());
+                this.moveCursorToMax();
             }
             else
             {
                 skin.deselect();
                 this.getModel().setText(tempText);
+                this.moveCursorToMax();
             }
         }
         else if (event.getKey() == this.keyboard.getKeyCode("DOWN"))
@@ -76,14 +79,27 @@ public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extend
             {
                 skin.selectSuggestion(current + 1);
                 this.getModel().setText(skin.getSelectedValue());
+                this.moveCursorToMax();
             }
             else
             {
                 skin.deselect();
                 this.getModel().setText(tempText);
+                this.moveCursorToMax();
             }
+        }
+        else if (event.getKey() == this.keyboard.getKeyCode("RETURN") ||
+                event.getKey() == this.keyboard.getKeyCode("NUMPADENTER"))
+        {
+            skin.deselect();
+            skin.hideCompletePopup();
         }
         else if (skin.hasSelected())
             skin.deselect();
+    }
+
+    private void moveCursorToMax()
+    {
+        getModel().setCursorPos(getModel().getText().length());
     }
 }
