@@ -221,6 +221,8 @@ public abstract class GuiScrollableBase extends GuiControl
 
     public void setOnScrollEvent(final EventHandler<ScrollEvent> onScrollEvent)
     {
+        this.getEventDispatcher().removeHandler(ScrollEvent.TYPE, this.onScrollEvent);
         this.onScrollEvent = onScrollEvent;
+        this.getEventDispatcher().addHandler(ScrollEvent.TYPE, this.onScrollEvent);
     }
 }

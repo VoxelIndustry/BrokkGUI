@@ -303,7 +303,9 @@ public class GuiTextfield extends GuiControl implements ITextInput
 
     public void setOnTextTyped(final EventHandler<TextTypedEvent> onTextTyped)
     {
+        this.getEventDispatcher().removeHandler(TextTypedEvent.TYPE, this.onTextTyped);
         this.onTextTyped = onTextTyped;
+        this.getEventDispatcher().addHandler(TextTypedEvent.TYPE, this.onTextTyped);
     }
 
     public EventHandler<CursorMoveEvent> getOnCursorMoveEvent()
@@ -313,6 +315,8 @@ public class GuiTextfield extends GuiControl implements ITextInput
 
     public void setOnCursorMoveEvent(final EventHandler<CursorMoveEvent> onCursorMoveEvent)
     {
+        this.getEventDispatcher().removeHandler(CursorMoveEvent.TYPE, this.onCursorMoveEvent);
         this.onCursorMoveEvent = onCursorMoveEvent;
+        this.getEventDispatcher().addHandler(CursorMoveEvent.TYPE, this.onCursorMoveEvent);
     }
 }
