@@ -193,7 +193,7 @@ public abstract class GuiLabeled extends GuiControl
         this.expandToTextProperty.setValue(expandToText);
     }
 
-    protected void bindSizeToText()
+    private void bindSizeToText()
     {
         this.getWidthProperty().bind(new BaseBinding<Float>()
         {

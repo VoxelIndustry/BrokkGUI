@@ -1,10 +1,13 @@
 package org.yggard.brokkgui.element;
 
+import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
+import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.behavior.GuiTextfieldBehavior;
 import org.yggard.brokkgui.behavior.ITextInput;
 import org.yggard.brokkgui.control.GuiControl;
+import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.event.CursorMoveEvent;
 import org.yggard.brokkgui.event.TextTypedEvent;
 import org.yggard.brokkgui.skin.GuiSkinBase;
@@ -19,19 +22,20 @@ import java.util.List;
  */
 public class GuiTextfield extends GuiControl implements ITextInput
 {
-    private final BaseProperty<String>                textProperty, promptTextProperty, promptEllipsisProperty;
+    private final BaseProperty<String> textProperty, promptTextProperty, promptEllipsisProperty;
 
-    private final BaseProperty<Boolean>               promptTextAlwaysDisplayedProperty, editableProperty,
+    private final BaseProperty<Boolean> promptTextAlwaysDisplayedProperty, editableProperty,
             validatedProperty;
+    private final BaseProperty<Boolean> expandToTextProperty;
 
-    private final BaseProperty<Integer>               maxTextLengthProperty;
-    private final BaseProperty<Integer>               cursorPositionProperty;
-    private final BaseProperty<Float>                 textPaddingProperty;
+    private final BaseProperty<Integer>    maxTextLengthProperty;
+    private final BaseProperty<Integer>    cursorPosProperty;
+    private final BaseProperty<RectOffset> textPaddingProperty;
 
     private final BaseListProperty<BaseTextValidator> validatorsProperty;
 
-    private EventHandler<TextTypedEvent>              onTextTyped;
-    private EventHandler<CursorMoveEvent>             onCursorMoveEvent;
+    private EventHandler<TextTypedEvent>  onTextTyped;
+    private EventHandler<CursorMoveEvent> onCursorMoveEvent;
 
     public GuiTextfield(final String text)
     {
@@ -42,12 +46,14 @@ public class GuiTextfield extends GuiControl implements ITextInput
         this.promptEllipsisProperty = new BaseProperty<>("...", "promptEllipsisProperty");
 
         this.maxTextLengthProperty = new BaseProperty<>(-1, "maxTextLength");
-        this.cursorPositionProperty = new BaseProperty<>(0, "cursorPositionProperty");
-        this.textPaddingProperty = new BaseProperty<>(2.0f, "textPaddingProperty");
+        this.cursorPosProperty = new BaseProperty<>(0, "cursorPosProperty");
+        this.textPaddingProperty = new BaseProperty<>(new RectOffset(0, 1, 0, 1), "textPaddingProperty");
 
         this.promptTextAlwaysDisplayedProperty = new BaseProperty<>(false, "promptTextAlwaysDisplayedProperty");
         this.editableProperty = new BaseProperty<>(true, "editableProperty");
         this.validatedProperty = new BaseProperty<>(true, "validatedProperty");
+
+        this.expandToTextProperty = new BaseProperty<>(false, "expandToTextProperty");
 
         this.validatorsProperty = new BaseListProperty<>(null, "validatorsProperty");
 
@@ -100,19 +106,24 @@ public class GuiTextfield extends GuiControl implements ITextInput
         return this.maxTextLengthProperty;
     }
 
-    public BaseProperty<Integer> getCursorPositionProperty()
+    public BaseProperty<Integer> getCursorPosProperty()
     {
-        return this.cursorPositionProperty;
+        return this.cursorPosProperty;
     }
-    
-    public BaseProperty<Float> getTextPaddingProperty()
+
+    public BaseProperty<RectOffset> getTextPaddingProperty()
     {
         return this.textPaddingProperty;
     }
-    
+
     public BaseProperty<String> getPromptEllipsisProperty()
     {
         return this.promptEllipsisProperty;
+    }
+
+    public BaseProperty<Boolean> getExpandToTextProperty()
+    {
+        return expandToTextProperty;
     }
 
     @Override
@@ -207,14 +218,14 @@ public class GuiTextfield extends GuiControl implements ITextInput
         this.getMaxTextLengthProperty().setValue(length);
     }
 
-    public int getCursorPosition()
+    public int getCursorPos()
     {
-        return this.getCursorPositionProperty().getValue();
+        return this.getCursorPosProperty().getValue();
     }
 
-    public void setCursorPosition(final int cursorPos)
+    public void setCursorPos(final int cursorPos)
     {
-        this.getCursorPositionProperty().setValue(cursorPos);
+        this.getCursorPosProperty().setValue(cursorPos);
     }
 
     public boolean isPromptTextAlwaysDisplayed()
@@ -226,25 +237,59 @@ public class GuiTextfield extends GuiControl implements ITextInput
     {
         this.getPromptTextAlwaysDisplayedProperty().setValue(always);
     }
-    
-    public void setPromptEllipsis(String ellipsis) 
+
+    public void setPromptEllipsis(String ellipsis)
     {
         this.getPromptEllipsisProperty().setValue(ellipsis);
     }
-    
+
     public String getPromptEllipsis()
     {
         return this.getPromptEllipsisProperty().getValue();
     }
-    
-    public void setTextPadding(float padding)
+
+    public void setTextPadding(RectOffset padding)
     {
         this.getTextPaddingProperty().setValue(padding);
     }
-    
-    public float getTextPadding()
+
+    public RectOffset getTextPadding()
     {
         return this.getTextPaddingProperty().getValue();
+    }
+
+    public boolean expandToText()
+    {
+        return this.expandToTextProperty.getValue();
+    }
+
+    public void setExpandToText(boolean expandToText)
+    {
+        if (expandToText && !this.expandToText())
+            this.bindSizeToText();
+        else if (!expandToText && this.expandToText())
+            this.getWidthProperty().unbind();
+        this.expandToTextProperty.setValue(expandToText);
+    }
+
+    private void bindSizeToText()
+    {
+        this.getWidthProperty().bind(new BaseBinding<Float>()
+        {
+            {
+                super.bind(getTextProperty(),
+                        getTextPaddingProperty(), getHeightProperty());
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                return Math.max(getHeight(),
+                        Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getPromptText()),
+                        BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())) +
+                        getTextPadding().getLeft() + getTextPadding().getRight());
+            }
+        });
     }
 
     ////////////
