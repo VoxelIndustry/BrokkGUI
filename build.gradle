@@ -116,6 +116,15 @@ project(":core") {
     }
 }
 
+project(":1.11") {
+    archivesBaseName = "brokkgui-binding-mc1.11"
+
+    version = "1.0.0-25-SNAPSHOT"
+    dependencies {
+        api project(":core")
+    }
+}
+
 project(":1.12") {
     archivesBaseName = "brokkgui-binding-mc1.12"
 
