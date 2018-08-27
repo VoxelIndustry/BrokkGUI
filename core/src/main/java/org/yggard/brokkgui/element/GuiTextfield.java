@@ -223,9 +223,15 @@ public class GuiTextfield extends GuiControl implements ITextInput
         return this.getCursorPosProperty().getValue();
     }
 
-    public void setCursorPos(final int cursorPos)
+    public void setCursorPos(int cursorPos)
     {
-        this.getCursorPosProperty().setValue(cursorPos);
+        if (cursorPos >= 0 && cursorPos <= this.getText().length())
+        {
+            if (this.getOnCursorMoveEvent() != null)
+                this.getEventDispatcher().dispatchEvent(CursorMoveEvent.TYPE,
+                        new CursorMoveEvent(this, this.getCursorPos(), cursorPos));
+            this.getCursorPosProperty().setValue(cursorPos);
+        }
     }
 
     public boolean isPromptTextAlwaysDisplayed()

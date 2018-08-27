@@ -181,10 +181,17 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
 
         private void refreshSuggestions(String text)
         {
-            if (StringUtils.isEmpty(text))
+            if (StringUtils.isEmpty(text) && model.getCharBeforeCompletion() != 0)
                 return;
 
             this.clearChilds();
+
+            if (StringUtils.isEmpty(text))
+            {
+                labelList.forEach(label ->
+                        this.addChild(label, 0, model.getCellHeight() * getChildrensProperty().size()));
+                return;
+            }
 
             String toSearch = text.toLowerCase().trim();
             labelList.stream().filter(label -> label.getText().toLowerCase().contains(toSearch))
