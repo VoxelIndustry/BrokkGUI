@@ -5,12 +5,14 @@ import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.GuiFocusManager;
+import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.event.WindowEvent;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.internal.PopupHandler;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.RenderPass;
+import org.yggard.brokkgui.paint.RenderTarget;
 import org.yggard.brokkgui.panel.GuiPane;
 import org.yggard.brokkgui.style.StylesheetManager;
 import org.yggard.brokkgui.style.tree.StyleList;
@@ -108,40 +110,69 @@ public class BrokkGuiScreen implements IGuiWindow
             if (this.getMainPanel() != null)
                 this.getMainPanel().refreshStyle();
             PopupHandler.getInstance().refreshStyle();
+
+            this.windows.forEach(GuiFather::refreshStyle);
         });
 
         StylesheetManager.getInstance().refreshStylesheets(this);
         if (this.getMainPanel() != null)
             this.getMainPanel().refreshStyle();
+        this.windows.forEach(GuiFather::refreshStyle);
         PopupHandler.getInstance().setStyleSupplier(this.getStyleTreeProperty()::getValue);
     }
 
-    public void render(final int mouseX, final int mouseY, RenderPass pass)
+    public void render(int mouseX, int mouseY, RenderTarget target, RenderPass... passes)
     {
-        if (this.cachedMouseX != mouseX || this.cachedMouseY != mouseY)
+        switch (target)
         {
-            this.mainPanel.handleHover(mouseX, mouseY, this.mainPanel.isPointInside(mouseX, mouseY));
-            PopupHandler.getInstance().handleHover(mouseX, mouseY);
-            this.cachedMouseX = mouseX;
-            this.cachedMouseY = mouseY;
+            case MAIN:
+                if (this.cachedMouseX != mouseX || this.cachedMouseY != mouseY)
+                {
+                    if (!this.windows.isEmpty() && this.windows.stream().anyMatch(gui ->
+                            gui.isPointInside(mouseX, mouseY)))
+                    {
+                        this.windows.forEach(gui -> gui.handleHover(mouseX, mouseY, gui.isPointInside(mouseX, mouseY)));
+                        this.mainPanel.handleHover(mouseX, mouseY, false);
+                    }
+                    else
+                    {
+                        this.windows.forEach(gui -> gui.handleHover(mouseX, mouseY, false));
+                        this.mainPanel.handleHover(mouseX, mouseY, this.mainPanel.isPointInside(mouseX, mouseY));
+                    }
+
+                    PopupHandler.getInstance().handleHover(mouseX, mouseY);
+                    this.cachedMouseX = mouseX;
+                    this.cachedMouseY = mouseY;
+                }
+
+                for (RenderPass pass : passes)
+                {
+                    this.renderer.beginPass(pass);
+                    this.mainPanel.renderNode(this.renderer, pass, mouseX, mouseY);
+                    this.renderer.endPass(pass);
+                }
+                break;
+            case WINDOW:
+                if (!this.windows.isEmpty())
+                    for (int i = this.windows.size() - 1; i >= 0; i--)
+                    {
+                        if (this.windows.get(i).hasWarFog())
+                            this.renderer.getHelper().drawColoredRect(this.renderer, 0, 0, this.getWidth(),
+                                    this.getHeight(), 5 + i, Color.BLACK.addAlpha(-0.5f));
+
+                        for (RenderPass pass : passes)
+                        {
+                            this.renderer.beginPass(pass);
+                            this.windows.get(i).renderNode(this.renderer, pass, mouseX, mouseY);
+                            this.renderer.endPass(pass);
+                        }
+                    }
+                break;
+            case POPUP:
+                for (RenderPass pass : passes)
+                    PopupHandler.getInstance().renderPopupInPass(renderer, pass, mouseX, mouseY);
+                break;
         }
-
-        this.renderer.beginPass(pass);
-        this.mainPanel.renderNode(this.renderer, pass, mouseX, mouseY);
-        this.renderer.endPass(pass);
-
-        if (!this.windows.isEmpty())
-            for (int i = this.windows.size() - 1; i >= 0; i--)
-            {
-                if (this.windows.get(i).hasWarFog())
-                    this.renderer.getHelper().drawColoredRect(this.renderer, 0, 0, this.getWidth(), this.getHeight(),
-                            5 + i, Color.BLACK.addAlpha(-0.5f));
-                this.windows.get(i).setzLevel(5 + i);
-
-                this.renderer.beginPass(pass);
-                this.windows.get(i).renderNode(this.renderer, pass, mouseX, mouseY);
-                this.renderer.endPass(pass);
-            }
     }
 
     public void initGui()
@@ -205,12 +236,18 @@ public class BrokkGuiScreen implements IGuiWindow
     {
         this.windows.add(0, subGui);
         subGui.open();
+
+        subGui.setStyleTree(this.getStyleTreeProperty()::getValue);
+        if (this.wrapper != null)
+            subGui.refreshStyle();
     }
 
     public void removeSubGui(final SubGuiScreen subGui)
     {
         subGui.close();
         this.windows.remove(subGui);
+
+        subGui.setStyleTree(null);
     }
 
     public boolean hasSubGui(final SubGuiScreen subGui)

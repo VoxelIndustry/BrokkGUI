@@ -313,7 +313,7 @@ public class GuiHelper implements IGuiHelper
                     displayString);
             GL11.glPopMatrix();
             GL11.glDisable(32826);
-            GL11.glDisable(GL11.GL_LIGHTING);
+            RenderHelper.enableGUIStandardItemLighting();
             GL11.glPopMatrix();
         }
     }

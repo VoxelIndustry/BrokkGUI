@@ -9,12 +9,13 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
 
-    private boolean                         closeOnClick;
-    private boolean                         hasWarFog;
+    private boolean closeOnClick;
+    private boolean hasWarFog;
 
     public SubGuiScreen()
     {
         super("subscreen");
+        this.setzLevel(300);
     }
 
     /**

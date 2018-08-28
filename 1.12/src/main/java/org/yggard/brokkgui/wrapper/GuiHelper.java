@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -292,8 +293,8 @@ public class GuiHelper implements IGuiHelper
         {
             float scaleX = width / 18;
             float scaleY = height / 18;
-            GL11.glPushMatrix();
-            GL11.glTranslated(-(startX * (scaleX - 1)) - 8 * scaleX, -(startY * (scaleY - 1)) - 8 * scaleY, 0);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(-(startX * (scaleX - 1)) - 8 * scaleX, -(startY * (scaleY - 1)) - 8 * scaleY, 0);
             GlStateManager.scale(scaleX, scaleY, 1);
             FontRenderer font = stack.getItem().getFontRenderer(stack);
             if (font == null)
@@ -313,8 +314,8 @@ public class GuiHelper implements IGuiHelper
             this.getRenderItem().renderItemOverlayIntoGUI(font, stack, (int) startX, (int) startY, displayString);
             GlStateManager.popMatrix();
             GlStateManager.disableRescaleNormal();
-            GlStateManager.disableLighting();
-            GL11.glPopMatrix();
+            RenderHelper.enableGUIStandardItemLighting();
+            GlStateManager.popMatrix();
         }
     }
 

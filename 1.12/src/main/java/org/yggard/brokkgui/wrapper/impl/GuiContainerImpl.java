@@ -2,6 +2,7 @@ package org.yggard.brokkgui.wrapper.impl;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
@@ -11,8 +12,8 @@ import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
-import org.yggard.brokkgui.internal.PopupHandler;
 import org.yggard.brokkgui.paint.RenderPass;
+import org.yggard.brokkgui.paint.RenderTarget;
 import org.yggard.brokkgui.wrapper.GuiHelper;
 import org.yggard.brokkgui.wrapper.GuiRenderer;
 import org.yggard.brokkgui.wrapper.container.BrokkGuiContainer;
@@ -86,28 +87,24 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY)
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
     {
-        this.brokkgui.render(mouseX, mouseY, RenderPass.BACKGROUND);
-        this.brokkgui.render(mouseX, mouseY, RenderPass.MAIN);
-        this.brokkgui.render(mouseX, mouseY, RenderPass.FOREGROUND);
-        this.brokkgui.render(mouseX, mouseY, RenderPass.HOVER);
-
-        PopupHandler.getInstance().renderPopupInPass(this.renderer, RenderPass.BACKGROUND, mouseX, mouseY);
-        PopupHandler.getInstance().renderPopupInPass(this.renderer, RenderPass.MAIN, mouseX, mouseY);
-        PopupHandler.getInstance().renderPopupInPass(this.renderer, RenderPass.FOREGROUND, mouseX, mouseY);
-        PopupHandler.getInstance().renderPopupInPass(this.renderer, RenderPass.HOVER, mouseX, mouseY);
+        this.brokkgui.render(mouseX, mouseY, RenderTarget.MAIN,
+                RenderPass.BACKGROUND, RenderPass.MAIN, RenderPass.FOREGROUND, RenderPass.HOVER);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
-        this.brokkgui.render(mouseX, mouseY, GuiHelper.ITEM_MAIN);
-        this.brokkgui.render(mouseX, mouseY, GuiHelper.ITEM_HOVER);
+        this.brokkgui.render(mouseX, mouseY, RenderTarget.MAIN, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);
+        RenderHelper.disableStandardItemLighting();
+        this.brokkgui.render(mouseX, mouseY, RenderTarget.WINDOW, RenderPass.BACKGROUND, RenderPass.MAIN,
+                RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);
+        RenderHelper.disableStandardItemLighting();
+        this.brokkgui.render(mouseX, mouseY, RenderTarget.POPUP, RenderPass.BACKGROUND, RenderPass.MAIN,
+                RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);
 
-        PopupHandler.getInstance().renderPopupInPass(this.renderer, GuiHelper.ITEM_MAIN, mouseX, mouseY);
-        PopupHandler.getInstance().renderPopupInPass(this.renderer, GuiHelper.ITEM_HOVER, mouseX, mouseY);
         GlStateManager.translate(this.guiLeft, this.guiTop, 0);
     }
 

@@ -4,6 +4,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.yggard.brokkgui.gui.SubGuiScreen;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
 import org.yggard.brokkgui.panel.GuiAbsolutePane;
@@ -44,9 +45,19 @@ public class GuiContainerDemo extends BrokkGuiContainer<ContainerDemo>
         fluidStackView.setWidth(18);
         fluidStackView.setHeight(64);
         fluidStackView.setFlowing(true);
+        fluidStackView.setOnClickEvent(e -> this.addSubGui(new SubWindow()));
 
         mainPanel.addChild(fluidStackView, 4, 4);
 
         mainPanel.setBackgroundTexture(GuiContainerDemo.BACKGROUND);
+    }
+
+    private static class SubWindow extends SubGuiScreen
+    {
+        public SubWindow()
+        {
+            this.setBackgroundColor(Color.GRAY);
+            this.setSize(128, 128);
+        }
     }
 }
