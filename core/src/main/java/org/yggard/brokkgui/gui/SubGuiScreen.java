@@ -1,5 +1,6 @@
 package org.yggard.brokkgui.gui;
 
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.event.WindowEvent;
 import org.yggard.hermod.EventHandler;
@@ -9,13 +10,23 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
 
+    private final BaseProperty<Float> xRelativePosProperty, yRelativePosProperty;
+
     private boolean closeOnClick;
     private boolean hasWarFog;
 
-    public SubGuiScreen()
+    public SubGuiScreen(float xRelativePos, float yRelativePos)
     {
         super("subscreen");
         this.setzLevel(300);
+
+        this.xRelativePosProperty = new BaseProperty<>(xRelativePos, "xRelativePosProperty");
+        this.yRelativePosProperty = new BaseProperty<>(yRelativePos, "yRelativePosProperty");
+    }
+
+    public SubGuiScreen()
+    {
+        this(0, 0);
     }
 
     /**
@@ -42,6 +53,36 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
     public void setWarFog(final boolean warFog)
     {
         this.hasWarFog = warFog;
+    }
+
+    public BaseProperty<Float> getxRelativePosProperty()
+    {
+        return this.xRelativePosProperty;
+    }
+
+    public BaseProperty<Float> getyRelativePosProperty()
+    {
+        return this.yRelativePosProperty;
+    }
+
+    public float getxRelativePos()
+    {
+        return this.getxRelativePosProperty().getValue();
+    }
+
+    public void setxRelativePos(final float xRelativePos)
+    {
+        this.getxRelativePosProperty().setValue(xRelativePos);
+    }
+
+    public float getyRelativePos()
+    {
+        return this.getyRelativePosProperty().getValue();
+    }
+
+    public void setyRelativePos(final float yRelativePos)
+    {
+        this.getyRelativePosProperty().setValue(yRelativePos);
     }
 
     /////////////////////

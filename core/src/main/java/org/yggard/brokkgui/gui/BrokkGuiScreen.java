@@ -235,6 +235,15 @@ public class BrokkGuiScreen implements IGuiWindow
     public void addSubGui(final SubGuiScreen subGui)
     {
         this.windows.add(0, subGui);
+
+        subGui.getxPosProperty().bind(new BaseExpression<>(() -> getScreenWidth() / (1 / subGui.getxRelativePos())
+                - subGui.getWidth() / 2, subGui.getxRelativePosProperty(), this.getScreenWidthProperty(),
+                subGui.getWidthProperty()));
+
+        subGui.getyPosProperty().bind(new BaseExpression<>(() -> getScreenHeight() / (1 / subGui.getyRelativePos())
+                - subGui.getHeight() / 2, subGui.getyRelativePosProperty(), this.getScreenHeightProperty(),
+                subGui.getHeightProperty()));
+
         subGui.open();
 
         subGui.setStyleTree(this.getStyleTreeProperty()::getValue);
@@ -245,6 +254,9 @@ public class BrokkGuiScreen implements IGuiWindow
     public void removeSubGui(final SubGuiScreen subGui)
     {
         subGui.close();
+
+        subGui.getxPosProperty().unbind();
+        subGui.getyPosProperty().unbind();
         this.windows.remove(subGui);
 
         subGui.setStyleTree(null);

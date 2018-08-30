@@ -1,5 +1,6 @@
 package org.yggard.brokkgui.gui;
 
+import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.hermod.IEventEmitter;
 
 /**
@@ -10,4 +11,12 @@ public interface IGuiWindow extends IEventEmitter
     void open();
 
     void close();
+
+    float getxRelativePos();
+
+    float getyRelativePos();
+
+    BaseProperty<Float> getxRelativePosProperty();
+
+    BaseProperty<Float> getyRelativePosProperty();
 }
