@@ -1,9 +1,11 @@
 package org.yggard.brokkgui.demo;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.gui.SubGuiScreen;
 import org.yggard.brokkgui.paint.Color;
 import org.yggard.brokkgui.paint.Texture;
@@ -56,8 +58,31 @@ public class GuiContainerDemo extends BrokkGuiContainer<ContainerDemo>
     {
         public SubWindow()
         {
+            super(0.5f, 0.5f);
             this.setBackgroundColor(Color.GRAY);
             this.setSize(128, 128);
+
+            GuiAbsolutePane mainPanel = new GuiAbsolutePane();
+            mainPanel.setWidthRatio(1);
+            mainPanel.setHeightRatio(1);
+            this.addChild(mainPanel);
+            RelativeBindingHelper.bindToPos(mainPanel, this);
+
+            ItemStackView view = new ItemStackView(new ItemStack(Items.APPLE));
+            view.setItemTooltip(true);
+            view.setWidth(18);
+            view.setHeight(18);
+         //   mainPanel.addChild(view, 0, 0);
+
+            for (int x = 0; x < 5; x++)
+            {
+                ItemStackView blockView = new ItemStackView(new ItemStack(Blocks.DIRT, 64));
+                blockView.setItemTooltip(true);
+                blockView.setWidth(18);
+                blockView.setHeight(18);
+                blockView.setzLevel(301);
+                mainPanel.addChild(blockView, 18 * x, 18);
+            }
         }
     }
 }

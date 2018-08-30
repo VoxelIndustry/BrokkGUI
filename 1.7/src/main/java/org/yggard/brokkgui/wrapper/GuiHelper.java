@@ -26,8 +26,8 @@ import java.util.List;
 
 public class GuiHelper implements IGuiHelper
 {
-    public static RenderPass ITEM_MAIN  = RenderPass.create("item_main", 0);
-    public static RenderPass ITEM_HOVER = RenderPass.create("item_hover", 1);
+    public static RenderPass ITEM_MAIN  = RenderPass.create("item_main", 1);
+    public static RenderPass ITEM_HOVER = RenderPass.create("item_hover", 3);
 
     private       RenderItem          itemRender;
     private final Minecraft           mc;
