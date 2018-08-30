@@ -74,7 +74,9 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+
+        if (brokkgui.allowContainerHover(mouseX, mouseY))
+            this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override

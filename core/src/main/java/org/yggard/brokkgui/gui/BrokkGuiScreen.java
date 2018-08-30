@@ -21,6 +21,7 @@ import org.yggard.hermod.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 
 public class BrokkGuiScreen implements IGuiWindow
 {
@@ -175,6 +176,11 @@ public class BrokkGuiScreen implements IGuiWindow
         }
     }
 
+    public boolean allowContainerHover(int mouseX, int mouseY)
+    {
+        return this.windows.isEmpty() || this.windows.stream().noneMatch(gui -> gui.isPointInside(mouseX, mouseY));
+    }
+
     public void initGui()
     {
 
@@ -222,6 +228,17 @@ public class BrokkGuiScreen implements IGuiWindow
         int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
 
+        if (!this.windows.isEmpty())
+        {
+            Optional<SubGuiScreen> match =
+                    this.windows.stream().filter(gui -> gui.isPointInside(mouseX, mouseY)).findFirst();
+
+            if (match.isPresent())
+            {
+                match.get().handleMouseInput(mouseX, mouseY);
+                return;
+            }
+        }
         if (this.getMainPanel().isPointInside(mouseX, mouseY))
             this.getMainPanel().handleMouseInput(mouseX, mouseY);
     }
