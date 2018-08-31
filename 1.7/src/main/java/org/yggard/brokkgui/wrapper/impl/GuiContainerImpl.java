@@ -101,6 +101,7 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
         this.brokkgui.render(mouseX, mouseY, RenderTarget.POPUP, RenderPass.BACKGROUND, RenderPass.MAIN,
                 RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);
 
+        this.brokkgui.renderLast(mouseX, mouseY);
         GL11.glTranslatef(this.guiLeft, this.guiTop, 0);
     }
 

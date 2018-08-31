@@ -80,7 +80,8 @@ public class GuiHelper implements IGuiHelper
         }
 
         if (shadowColor.getAlpha() != 0)
-            this.mc.fontRendererObj.drawString(string, x + 1, y + 1, this.applyAlphaMask(shadowColor).toRGBAInt(), false);
+            this.mc.fontRendererObj.drawString(string, x + 1, y + 1, this.applyAlphaMask(shadowColor).toRGBAInt(),
+                    false);
         this.mc.fontRendererObj.drawString(string, x, y, this.applyAlphaMask(textColor).toRGBAInt(), false);
         if (zLevel != 0)
             GL11.glPopMatrix();
@@ -107,10 +108,10 @@ public class GuiHelper implements IGuiHelper
         this.enableAlpha();
         GlStateManager.color(1, 1, 1, (float) (1 * this.alphaMask));
         renderer.beginDrawingQuads(true);
-        renderer.addVertexWithUV(Math.floor(xStart), Math.floor(yStart + height), zLevel, uMin, vMax);
-        renderer.addVertexWithUV(Math.floor(xStart + width), Math.floor(yStart + height), zLevel, uMax, vMax);
-        renderer.addVertexWithUV(Math.floor(xStart + width), Math.floor(yStart), zLevel, uMax, vMin);
-        renderer.addVertexWithUV(Math.floor(xStart), Math.floor(yStart), zLevel, uMin, vMin);
+        renderer.addVertexWithUV(xStart, yStart + height, zLevel, uMin, vMax);
+        renderer.addVertexWithUV(xStart + width, yStart + height, zLevel, uMax, vMax);
+        renderer.addVertexWithUV(xStart + width, yStart, zLevel, uMax, vMin);
+        renderer.addVertexWithUV(xStart, yStart, zLevel, uMin, vMin);
         renderer.endDrawing();
         this.disableAlpha();
     }
@@ -140,10 +141,10 @@ public class GuiHelper implements IGuiHelper
         GlStateManager.disableTexture2D();
         GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), (float) (color.getAlpha() * alphaMask));
         renderer.beginDrawingQuads(false);
-        renderer.addVertex(Math.floor(startX), Math.floor(startY), zLevel);
-        renderer.addVertex(Math.floor(startX), Math.floor(startY + height), zLevel);
-        renderer.addVertex(Math.floor(startX + width), Math.floor(startY + height), zLevel);
-        renderer.addVertex(Math.floor(startX + width), Math.floor(startY), zLevel);
+        renderer.addVertex(startX, startY, zLevel);
+        renderer.addVertex(startX, startY + height, zLevel);
+        renderer.addVertex(startX + width, startY + height, zLevel);
+        renderer.addVertex(startX + width, startY, zLevel);
         renderer.endDrawing();
         GlStateManager.resetColor();
         GlStateManager.enableTexture2D();
@@ -167,17 +168,17 @@ public class GuiHelper implements IGuiHelper
             renderer.beginDrawing(EGuiRenderMode.POINTS, false);
             while (x >= y)
             {
-                renderer.addVertex(Math.floor(startX + x), Math.floor(startY + y), zLevel);
-                renderer.addVertex(Math.floor(startX + y), Math.floor(startY + x), zLevel);
+                renderer.addVertex(startX + x, startY + y, zLevel);
+                renderer.addVertex(startX + y, startY + x, zLevel);
 
-                renderer.addVertex(Math.floor(startX - y), Math.floor(startY + x), zLevel);
-                renderer.addVertex(Math.floor(startX - x), Math.floor(startY + y), zLevel);
+                renderer.addVertex(startX - y, startY + x, zLevel);
+                renderer.addVertex(startX - x, startY + y, zLevel);
 
-                renderer.addVertex(Math.floor(startX - x), Math.floor(startY - y), zLevel);
-                renderer.addVertex(Math.floor(startX - y), Math.floor(startY - x), zLevel);
+                renderer.addVertex(startX - x, startY - y, zLevel);
+                renderer.addVertex(startX - y, startY - x, zLevel);
 
-                renderer.addVertex(Math.floor(startX + y), Math.floor(startY - x), zLevel);
-                renderer.addVertex(Math.floor(startX + x), Math.floor(startY - y), zLevel);
+                renderer.addVertex(startX + y, startY - x, zLevel);
+                renderer.addVertex(startX + x, startY - y, zLevel);
 
                 y += 1;
                 err += 1 + 2 * y;
@@ -214,7 +215,7 @@ public class GuiHelper implements IGuiHelper
             float ty = i / rr - radius;
 
             if (tx * tx + ty * ty <= r2)
-                renderer.addVertex(Math.floor(startX + tx), Math.floor(startY + ty), zLevel);
+                renderer.addVertex(startX + tx, startY + ty, zLevel);
         }
         renderer.endDrawing();
         GlStateManager.resetColor();
@@ -240,7 +241,7 @@ public class GuiHelper implements IGuiHelper
             float ty = i / rr - radius;
 
             if (tx * tx + ty * ty <= r2)
-                renderer.addVertexWithUV(Math.floor(xStart + tx), Math.floor(yStart + ty), zLevel,
+                renderer.addVertexWithUV(xStart + tx, yStart + ty, zLevel,
                         uMin + tx / rr * (uMax - uMin), vMin + ty / rr * (vMax - vMin));
         }
         renderer.endDrawing();
@@ -266,8 +267,8 @@ public class GuiHelper implements IGuiHelper
         renderer.beginDrawing(EGuiRenderMode.LINE, false);
         GL11.glLineWidth(lineWeight);
 
-        renderer.addVertex(Math.floor(startX), Math.floor(startY), zLevel);
-        renderer.addVertex(Math.floor(endX), Math.floor(endY), zLevel);
+        renderer.addVertex(startX, startY, zLevel);
+        renderer.addVertex(endX, endY, zLevel);
 
         renderer.endDrawing();
         GlStateManager.resetColor();

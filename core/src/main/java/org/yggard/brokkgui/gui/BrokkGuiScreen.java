@@ -6,6 +6,7 @@ import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.control.GuiFather;
+import org.yggard.brokkgui.debug.DebugRenderer;
 import org.yggard.brokkgui.event.WindowEvent;
 import org.yggard.brokkgui.internal.IBrokkGuiImpl;
 import org.yggard.brokkgui.internal.IGuiRenderer;
@@ -21,6 +22,7 @@ import org.yggard.hermod.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class BrokkGuiScreen implements IGuiWindow
@@ -48,6 +50,8 @@ public class BrokkGuiScreen implements IGuiWindow
 
     private int cachedMouseX, cachedMouseY;
     private int lastClickX, lastClickY;
+
+    private DebugRenderer debugRenderer = null;
 
     public BrokkGuiScreen(final float xRelativePos, final float yRelativePos, final float width, final float height)
     {
@@ -176,6 +180,27 @@ public class BrokkGuiScreen implements IGuiWindow
         }
     }
 
+    /**
+     * Called after every render passes and render targets have been made. Used for debug rendering.
+     *
+     * @param mouseX current x position of the mouse
+     * @param mouseY current y position of the mouse
+     */
+    public void renderLast(int mouseX, int mouseY)
+    {
+        if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && this.debugRenderer == null)
+        {
+            this.renderer.getHelper().drawColoredEmptyRect(this.renderer, 1, 1,
+                    this.renderer.getHelper().getStringWidth("DEBUG") + 2,
+                    this.renderer.getHelper().getStringHeight() + 2,
+                    400, Color.RED, 1f);
+            this.renderer.getHelper().drawString("DEBUG", 2, 2, 400, Color.WHITE, Color.ALPHA);
+        }
+
+        if (this.debugRenderer != null)
+            this.debugRenderer.render(this.renderer, mouseX, mouseY);
+    }
+
     public boolean allowContainerHover(int mouseX, int mouseY)
     {
         return this.windows.isEmpty() || this.windows.stream().noneMatch(gui -> gui.isPointInside(mouseX, mouseY));
@@ -188,6 +213,14 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public void onClick(final int mouseX, final int mouseY, final int key)
     {
+        if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && this.debugRenderer == null)
+        {
+            if (mouseX > 0 && mouseY > 0 && mouseX < this.renderer.getHelper().getStringWidth("DEBUG") && mouseY < this.renderer.getHelper().getStringHeight())
+                this.debugRenderer = new DebugRenderer(this);
+        }
+        else if (this.debugRenderer != null)
+            this.debugRenderer.onClick(mouseX, mouseY);
+
         PopupHandler.getInstance().handleClick(mouseX, mouseY, key);
 
         if (!this.windows.isEmpty())
@@ -227,6 +260,9 @@ public class BrokkGuiScreen implements IGuiWindow
     {
         int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+
+        if(this.debugRenderer != null)
+            this.debugRenderer.onMouseInput();
 
         if (!this.windows.isEmpty())
         {
@@ -282,6 +318,11 @@ public class BrokkGuiScreen implements IGuiWindow
     public boolean hasSubGui(final SubGuiScreen subGui)
     {
         return this.windows.contains(subGui);
+    }
+
+    public List<SubGuiScreen> getSubGuis()
+    {
+        return Collections.unmodifiableList(this.windows);
     }
 
     @Override

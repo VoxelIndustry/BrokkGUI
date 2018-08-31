@@ -66,7 +66,7 @@ public class GuiDemo extends BrokkGuiScreen
         tabPane.addTab(new GuiTab("Labels", new LabelDemo()));
         tabPane.addTab(new GuiTab("Scroll", new ScrollDemo()));
 
-        tabPane.setDefaultTab(0);
+        tabPane.setDefaultTab(5);
 
         pane.addChild(tabPane);
 

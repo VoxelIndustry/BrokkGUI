@@ -3,6 +3,7 @@ package org.yggard.brokkgui.demo;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.wrapper.impl.BrokkGuiManager;
 
 import net.minecraft.client.Minecraft;
@@ -35,6 +36,7 @@ public class BrokkGuiDemo
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new DemoGuiHandler());
         MinecraftForge.EVENT_BUS.register(this);
+        BrokkGuiPlatform.getInstance().enableRenderDebug(true);
     }
 
     @SubscribeEvent

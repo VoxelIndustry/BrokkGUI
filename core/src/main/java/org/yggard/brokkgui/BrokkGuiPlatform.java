@@ -27,6 +27,8 @@ public class BrokkGuiPlatform
     private IMouseUtil    mouseUtil;
     private String        platformName;
 
+    private boolean enableRenderDebug;
+
     private BrokkGuiPlatform()
     {
 
@@ -70,5 +72,15 @@ public class BrokkGuiPlatform
     public void setGuiHelper(final IGuiHelper guiHelper)
     {
         this.guiHelper = guiHelper;
+    }
+
+    public boolean isRenderDebugEnabled()
+    {
+        return enableRenderDebug;
+    }
+
+    public void enableRenderDebug(boolean enableRenderDebug)
+    {
+        this.enableRenderDebug = enableRenderDebug;
     }
 }
