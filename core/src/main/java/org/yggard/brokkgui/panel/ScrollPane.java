@@ -12,6 +12,8 @@ import org.yggard.brokkgui.skin.GuiSkinBase;
  */
 public class ScrollPane extends GuiScrollableBase
 {
+    private GuiNode contentNode;
+
     public ScrollPane(final GuiNode node)
     {
         super("scrollpane");
@@ -27,22 +29,17 @@ public class ScrollPane extends GuiScrollableBase
 
     public void setChild(final GuiNode node)
     {
-        if (!this.getChildrens().isEmpty())
+        if(contentNode != null)
         {
-            this.getChildrensProperty().get(0).getxPosProperty().unbind();
-            this.getChildrensProperty().get(0).getyPosProperty().unbind();
-            this.getChildrensProperty().get(0).setFather(null);
-            this.getChildrensProperty().clear();
-
             this.getTrueWidthProperty().unbind();
             this.getTrueHeightProperty().unbind();
+            this.removeChild(contentNode);
         }
 
-        this.getChildrensProperty().add(node);
-
+        this.contentNode = node;
+        this.addChild(node);
         RelativeBindingHelper.bindToPos(node, this, this.getScrollXProperty(), this.getScrollYProperty());
 
-        node.setFather(this);
         this.getTrueWidthProperty().bind(node.getWidthProperty());
         this.getTrueHeightProperty().bind(node.getHeightProperty());
     }
