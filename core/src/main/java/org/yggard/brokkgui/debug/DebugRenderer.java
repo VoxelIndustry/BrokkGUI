@@ -75,16 +75,17 @@ public class DebugRenderer
             return;
         }
 
-        this.drawTextBox(renderer, getNodeText(openedRoot), openedRoot.getxPos(),
-                openedRoot.getyPos() + openedRoot.getHeight());
+        this.drawTextBox(renderer, getNodeText(openedRoot), openedRoot.getxPos() + openedRoot.getxTranslate(),
+                openedRoot.getyPos() + openedRoot.getyTranslate() + openedRoot.getHeight());
         this.drawAccordion(renderer, openedRoot, "Root", accordionScrollX, accordionScrollY);
 
         if (hoveredNode != null)
         {
-            this.drawTextBox(renderer, getNodeText(hoveredNode), hoveredNode.getxPos(),
-                    hoveredNode.getyPos() + hoveredNode.getHeight());
-            renderer.getHelper().drawColoredEmptyRect(renderer, hoveredNode.getxPos(), hoveredNode.getyPos(),
-                    hoveredNode.getWidth(), hoveredNode.getHeight(), 300, borderColor, 0.5f);
+            this.drawTextBox(renderer, getNodeText(hoveredNode), hoveredNode.getxPos() + hoveredNode.getxTranslate(),
+                    hoveredNode.getyPos() + hoveredNode.getyTranslate() + hoveredNode.getHeight());
+            renderer.getHelper().drawColoredEmptyRect(renderer, hoveredNode.getxPos() + hoveredNode.getxTranslate(),
+                    hoveredNode.getyPos() + hoveredNode.getyTranslate(), hoveredNode.getWidth(),
+                    hoveredNode.getHeight(), 300, borderColor, 0.5f);
         }
     }
 
@@ -141,9 +142,9 @@ public class DebugRenderer
         this.openedNodes.add(root);
 
         renderer.getHelper().drawColoredRect(renderer, startX, 0, startX + 100, 1500, 400, boxColor);
-        renderer.getHelper().drawString(rootName, startX + 0.5f, startY+1, 300, textColor, Color.ALPHA);
+        renderer.getHelper().drawString(rootName, startX + 0.5f, startY + 1, 300, textColor, Color.ALPHA);
 
-        this.drawAccordionLevel(renderer, root, startX, startY+renderer.getHelper().getStringHeight() + 2, 0);
+        this.drawAccordionLevel(renderer, root, startX, startY + renderer.getHelper().getStringHeight() + 2, 0);
     }
 
     private int drawAccordionLevel(IGuiRenderer renderer, GuiFather parent, float startX, float startY, int depth)
