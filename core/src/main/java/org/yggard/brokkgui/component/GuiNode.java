@@ -7,6 +7,7 @@ import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.GuiFocusManager;
 import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
+import org.yggard.brokkgui.data.Rotation;
 import org.yggard.brokkgui.event.*;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.Color;
@@ -28,6 +29,9 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     private final BaseProperty<GuiFather> fatherProperty;
     private final BaseProperty<Float>     xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,
             widthProperty, heightProperty, widthRatioProperty, heightRatioProperty, zLevelProperty;
+
+    private final BaseProperty<Rotation> rotationProperty;
+    private final BaseProperty<Float>    scaleXProperty, scaleYProperty, scaleZProperty;
 
     private       EventDispatcher            eventDispatcher;
     private       EventHandler<FocusEvent>   onFocusEvent;
@@ -62,6 +66,11 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.heightRatioProperty = new BaseProperty<>(-1f, "heightRatioProperty");
 
         this.zLevelProperty = new BaseProperty<>(0f, "zLevelProperty");
+
+        this.rotationProperty = new BaseProperty<>(Rotation.NONE, "rotationProperty");
+        this.scaleXProperty = new BaseProperty<>(1f, "scaleXProperty");
+        this.scaleYProperty = new BaseProperty<>(1f, "scaleYProperty");
+        this.scaleZProperty = new BaseProperty<>(1f, "scaleZProperty");
 
         this.fatherProperty = new BaseProperty<>(null, "fatherProperty");
 
@@ -188,7 +197,52 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
                         foreground);
             }
         }
+
+        boolean createdMatrix = false;
+        if (this.getRotation() != Rotation.NONE && this.getRotation().getAngle() % 360 != 0)
+        {
+            createdMatrix = true;
+            renderer.beginMatrix();
+
+            float translateX, translateY;
+
+            if (this.getRotation().getOrigin().isRelativePos())
+            {
+                translateX = this.getRotation().getOrigin().getOriginX() * this.getWidth();
+                translateY = this.getRotation().getOrigin().getOriginY() * this.getHeight();
+            }
+            else
+            {
+                translateX = this.getRotation().getOrigin().getOriginX();
+                translateY = this.getRotation().getOrigin().getOriginY();
+            }
+
+            translateX += this.getxPos() + this.getxTranslate();
+            translateY += this.getyPos() + this.getyTranslate();
+
+            renderer.translateMatrix(translateX, translateY, 0);
+            renderer.rotateMatrix(this.getRotation().getAngle(), 0, 0, 1);
+            renderer.translateMatrix(-translateX, -translateY, 0);
+        }
+
+        if (this.getScaleX() != 1 || this.getScaleY() != 1 || this.getScaleZ() != 1)
+        {
+            if (!createdMatrix)
+            {
+                createdMatrix = true;
+                renderer.beginMatrix();
+            }
+            renderer.translateMatrix(this.getxPos() + this.getxTranslate() + this.getWidth() / 2,
+                    this.getyPos() + this.getyTranslate() + this.getHeight() / 2, 0);
+            renderer.scaleMatrix(this.getScaleX(), this.getScaleY(), this.getScaleZ());
+            renderer.translateMatrix(-(this.getxPos() + this.getxTranslate() + this.getWidth() / 2),
+                    -(this.getyPos() + this.getyTranslate() + this.getHeight() / 2), 0);
+        }
+
         this.renderContent(renderer, pass, mouseX, mouseY);
+
+        if (createdMatrix)
+            renderer.endMatrix();
     }
 
     protected abstract void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY);
@@ -249,7 +303,6 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         }
         this.draggedX = mouseX - originalMouseX;
         this.draggedY = mouseY - originalMouseY;
-
 
 
         this.getEventDispatcher().dispatchEvent(GuiMouseEvent.DRAGGING,
@@ -336,6 +389,26 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public BaseProperty<Float> getHeightRatioProperty()
     {
         return this.heightRatioProperty;
+    }
+
+    public BaseProperty<Rotation> getRotationProperty()
+    {
+        return rotationProperty;
+    }
+
+    public BaseProperty<Float> getScaleXProperty()
+    {
+        return scaleXProperty;
+    }
+
+    public BaseProperty<Float> getScaleYProperty()
+    {
+        return scaleYProperty;
+    }
+
+    public BaseProperty<Float> getScaleZProperty()
+    {
+        return scaleZProperty;
     }
 
     /**
@@ -495,6 +568,53 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     {
         this.setWidthRatio(widthRatio);
         this.setHeightRatio(heightRatio);
+    }
+
+    public Rotation getRotation()
+    {
+        return this.getRotationProperty().getValue();
+    }
+
+    public void setRotation(Rotation rotation)
+    {
+        this.getRotationProperty().setValue(rotation);
+    }
+
+    public float getScaleX()
+    {
+        return this.getScaleXProperty().getValue();
+    }
+
+    public void setScaleX(float scaleX)
+    {
+        this.getScaleXProperty().setValue(scaleX);
+    }
+
+    public float getScaleY()
+    {
+        return this.getScaleYProperty().getValue();
+    }
+
+    public void setScaleY(float scaleY)
+    {
+        this.getScaleYProperty().setValue(scaleY);
+    }
+
+    public float getScaleZ()
+    {
+        return this.getScaleZProperty().getValue();
+    }
+
+    public void setScaleZ(float scaleZ)
+    {
+        this.getScaleZProperty().setValue(scaleZ);
+    }
+
+    public void setScale(float scale)
+    {
+        this.setScaleX(scale);
+        this.setScaleY(scale);
+        this.setScaleZ(scale);
     }
 
     public BaseProperty<GuiFather> getFatherProperty()

@@ -25,4 +25,14 @@ public interface IGuiRenderer
     void addVertexWithUV(final double x, final double y, final double z, final double u, final double v);
 
     IGuiHelper getHelper();
+
+    void beginMatrix();
+
+    void endMatrix();
+
+    void translateMatrix(float posX, float posY, float posZ);
+
+    void rotateMatrix(float rotation, float x, float y, float z);
+
+    void scaleMatrix(float scaleX, float scaleY, float scaleZ);
 }

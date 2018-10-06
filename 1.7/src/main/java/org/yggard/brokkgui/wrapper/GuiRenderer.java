@@ -51,6 +51,36 @@ public class GuiRenderer implements IGuiRenderer
     }
 
     @Override
+    public void beginMatrix()
+    {
+        GL11.glPushMatrix();
+    }
+
+    @Override
+    public void endMatrix()
+    {
+        GL11.glPopMatrix();
+    }
+
+    @Override
+    public void translateMatrix(float posX, float posY, float posZ)
+    {
+        GL11.glTranslatef(posX, posY, posZ);
+    }
+
+    @Override
+    public void rotateMatrix(float rotation, float x, float y, float z)
+    {
+        GL11.glRotatef(rotation, x, y, z);
+    }
+
+    @Override
+    public void scaleMatrix(float scaleX, float scaleY, float scaleZ)
+    {
+        GL11.glScalef(scaleX, scaleY, scaleZ);
+    }
+
+    @Override
     public void beginPass(final RenderPass pass)
     {
 

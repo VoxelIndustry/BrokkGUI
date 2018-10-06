@@ -1,5 +1,6 @@
 package org.yggard.brokkgui.wrapper;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
@@ -52,6 +53,36 @@ public class GuiRenderer implements IGuiRenderer
     public IGuiHelper getHelper()
     {
         return this.helper;
+    }
+
+    @Override
+    public void beginMatrix()
+    {
+        GlStateManager.pushMatrix();
+    }
+
+    @Override
+    public void endMatrix()
+    {
+        GlStateManager.popMatrix();
+    }
+
+    @Override
+    public void translateMatrix(float posX, float posY, float posZ)
+    {
+        GlStateManager.translate(posX, posY, posZ);
+    }
+
+    @Override
+    public void rotateMatrix(float rotation, float x, float y, float z)
+    {
+        GlStateManager.rotate(rotation, x, y, z);
+    }
+
+    @Override
+    public void scaleMatrix(float scaleX, float scaleY, float scaleZ)
+    {
+        GlStateManager.scale(scaleX, scaleY, scaleZ);
     }
 
     @Override
