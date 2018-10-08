@@ -20,8 +20,8 @@ public class GuiSkinBase<T extends GuiControl> implements IGuiSkin
             throw new IllegalArgumentException("Cannot pass a null model");
         this.model = model;
 
-        this.model.getStyle().registerProperty("-border-thin", 0, Integer.class);
-        this.model.getStyle().registerProperty("-border-color", Color.BLACK, Color.class);
+        this.model.getStyle().registerProperty("border-thin", 0, Integer.class);
+        this.model.getStyle().registerProperty("border-color", Color.BLACK, Color.class);
 
         this.childrens = new ArrayList<>();
     }

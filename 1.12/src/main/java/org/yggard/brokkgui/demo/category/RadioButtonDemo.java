@@ -2,6 +2,7 @@ package org.yggard.brokkgui.demo.category;
 
 import org.yggard.brokkgui.control.GuiToggleGroup;
 import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.Rotation;
 import org.yggard.brokkgui.element.GuiCheckbox;
 import org.yggard.brokkgui.element.GuiRadioButton;
 import org.yggard.brokkgui.panel.GuiAbsolutePane;
@@ -17,7 +18,8 @@ public class RadioButtonDemo extends GuiAbsolutePane
         GuiRadioButton radioButton = new GuiRadioButton("Right 1");
         radioButton.getLabel().setIcon(icon);
         radioButton.setHeight(10);
-
+        radioButton.setRotation(Rotation.build().fromCenter().angle(90).create());
+        radioButton.setScale(2);
 
         GuiRadioButton radioButton2 = new GuiRadioButton("Nothing to see here 2");
         radioButton2.setHeight(10);

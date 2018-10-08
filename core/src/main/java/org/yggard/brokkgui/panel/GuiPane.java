@@ -22,10 +22,10 @@ public class GuiPane extends GuiFather
 
         this.overflowPolicy = EOverflowPolicy.NONE;
 
-        this.getStyle().registerProperty("-border-thin", 0, Integer.class);
-        this.getStyle().registerProperty("-border-color", Color.BLACK, Color.class);
+        this.getStyle().registerProperty("border-thin", 0, Integer.class);
+        this.getStyle().registerProperty("border-color", Color.BLACK, Color.class);
 
-        this.getStyle().registerProperty("-opacity", 1D, Double.class);
+        this.getStyle().registerProperty("opacity", 1D, Double.class);
     }
 
     @Override

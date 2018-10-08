@@ -42,7 +42,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
 
         text.addStyleClass("text");
         promptText.addStyleClass("prompt");
-        getModel().getStyle().registerProperty("-cursor-color", Color.WHITE.shade(0.3f), Color.class);
+        getModel().getStyle().registerProperty("cursor-color", Color.WHITE.shade(0.3f), Color.class);
 
         text.getTextProperty().bind(this.displayedTextProperty);
         text.getzLevelProperty().bind(model.getzLevelProperty());

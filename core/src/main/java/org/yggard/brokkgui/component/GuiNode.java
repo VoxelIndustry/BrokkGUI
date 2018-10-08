@@ -137,11 +137,11 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
                 this.getActivePseudoClass().remove("focus");
         });
 
-        this.getStyle().registerProperty("-background-color", Color.ALPHA, Color.class);
-        this.getStyle().registerProperty("-foreground-color", Color.ALPHA, Color.class);
+        this.getStyle().registerProperty("background-color", Color.ALPHA, Color.class);
+        this.getStyle().registerProperty("foreground-color", Color.ALPHA, Color.class);
 
-        this.getStyle().registerProperty("-background-texture", Texture.EMPTY, Texture.class);
-        this.getStyle().registerProperty("-foreground-texture", Texture.EMPTY, Texture.class);
+        this.getStyle().registerProperty("background-texture", Texture.EMPTY, Texture.class);
+        this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
     }
 
     public final void renderNode(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
@@ -649,45 +649,45 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public Texture getBackgroundTexture()
     {
-        return this.getStyle().getStyleProperty("-background-texture", Texture.class).getValue();
+        return this.getStyle().getStyleProperty("background-texture", Texture.class).getValue();
     }
 
     public void setBackgroundTexture(Texture texture)
     {
-        this.getStyle().getStyleProperty("-background-texture", Texture.class)
+        this.getStyle().getStyleProperty("background-texture", Texture.class)
                 .setStyle(StyleSource.CODE, 10_000, texture);
     }
 
     public Color getBackgroundColor()
     {
-        return this.getStyle().getStyleProperty("-background-color", Color.class).getValue();
+        return this.getStyle().getStyleProperty("background-color", Color.class).getValue();
     }
 
     public void setBackgroundColor(Color color)
     {
-        this.getStyle().getStyleProperty("-background-color", Color.class)
+        this.getStyle().getStyleProperty("background-color", Color.class)
                 .setStyle(StyleSource.CODE, 10_000, color);
     }
 
     public Texture getForegroundTexture()
     {
-        return this.getStyle().getStyleProperty("-foreground-texture", Texture.class).getValue();
+        return this.getStyle().getStyleProperty("foreground-texture", Texture.class).getValue();
     }
 
     public void setForegroundTexture(Texture texture)
     {
-        this.getStyle().getStyleProperty("-foreground-texture", Texture.class)
+        this.getStyle().getStyleProperty("foreground-texture", Texture.class)
                 .setStyle(StyleSource.CODE, 10_000, texture);
     }
 
     public Color getForegroundColor()
     {
-        return this.getStyle().getStyleProperty("-foreground-color", Color.class).getValue();
+        return this.getStyle().getStyleProperty("foreground-color", Color.class).getValue();
     }
 
     public void setForegroundColor(Color color)
     {
-        this.getStyle().getStyleProperty("-foreground-color", Color.class)
+        this.getStyle().getStyleProperty("foreground-color", Color.class)
                 .setStyle(StyleSource.CODE, 10_000, color);
     }
 

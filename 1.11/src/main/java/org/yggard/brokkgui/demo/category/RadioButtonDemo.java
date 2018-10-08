@@ -12,7 +12,7 @@ public class RadioButtonDemo extends GuiAbsolutePane
     public RadioButtonDemo()
     {
         Rectangle icon = new Rectangle(8, 8);
-        icon.setStyle("-color: red;");
+        icon.setStyle("color: red;");
 
         GuiRadioButton radioButton = new GuiRadioButton("Right 1");
         radioButton.getLabel().setIcon(icon);
@@ -22,7 +22,7 @@ public class RadioButtonDemo extends GuiAbsolutePane
         GuiRadioButton radioButton2 = new GuiRadioButton("Nothing to see here 2");
         radioButton2.setHeight(10);
         radioButton2.setButtonSide(ESide.RIGHT);
-        radioButton2.setStyle("-border-color: blue; -border-thin: 1;");
+        radioButton2.setStyle("border-color: blue; border-thin: 1;");
 
         GuiCheckbox checkbox = new GuiCheckbox("Left 3");
         checkbox.setHeight(10);

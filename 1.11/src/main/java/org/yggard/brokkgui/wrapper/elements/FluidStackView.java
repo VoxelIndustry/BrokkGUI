@@ -15,7 +15,7 @@ public class FluidStackView extends GuiControl
 
         this.fluidStackProperty = new BaseProperty<>(stack, "fluidStackProperty");
 
-        this.getStyle().registerProperty("-flowing", false, Boolean.class);
+        this.getStyle().registerProperty("flowing", false, Boolean.class);
     }
 
     @Override

@@ -72,7 +72,6 @@ public class GuiContainerDemo extends BrokkGuiContainer<ContainerDemo>
             view.setItemTooltip(true);
             view.setWidth(18);
             view.setHeight(18);
-         //   mainPanel.addChild(view, 0, 0);
 
             for (int x = 0; x < 5; x++)
             {

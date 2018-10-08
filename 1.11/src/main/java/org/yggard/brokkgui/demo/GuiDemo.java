@@ -33,7 +33,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         button.setWidth(200);
         button.setHeight(30);
-        button.setStyle("-border-color: green; -border-thin: 2; -text-color: khaki");
+        button.setStyle("border-color: green; border-thin: 2; text-color: khaki");
 
         button.setOnClickEvent(e -> System.out.println("clicked"));
 
@@ -54,7 +54,7 @@ public class GuiDemo extends BrokkGuiScreen
         });
 
         progressBar.setHeight(20);
-        progressBar.setStyle("-border-color: red; -border-thin: 2;");
+        progressBar.setStyle("border-color: red; border-thin: 2;");
 
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(200);

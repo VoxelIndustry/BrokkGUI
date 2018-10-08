@@ -20,8 +20,8 @@ public class Text extends GuiShape
         this.textProperty = new BaseProperty<>(text, "textProperty");
         this.lineSpacingProperty = new BaseProperty<>(1, "lineSpacingProperty");
 
-        this.getStyle().registerProperty("-shadow-color", Color.WHITE, Color.class);
-        this.getStyle().registerProperty("-shadow", true, Boolean.class);
+        this.getStyle().registerProperty("shadow-color", Color.WHITE, Color.class);
+        this.getStyle().registerProperty("shadow", true, Boolean.class);
     }
 
     public Text(final String text)

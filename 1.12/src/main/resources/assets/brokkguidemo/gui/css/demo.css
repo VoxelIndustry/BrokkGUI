@@ -1,77 +1,77 @@
 mainpane {
-    -border-color: aqua;
-    -border-width: 1;
+    border-color: aqua;
+    border-width: 1;
 }
 
 listcell > button:hover {
-    -background-color: #FFCDD2;
-    -border-color: #F0F4C3;
+    background-color: #FFCDD2;
+    border-color: #F0F4C3;
 }
 
 listcell > button:hover > > text {
-    -color: yellow;
+    color: yellow;
 }
 
 listcell > button {
-    -background-color: #E57373;
-    -border-color: #DCE775;
-    -border-thin: 1;
+    background-color: #E57373;
+    border-color: #DCE775;
+    border-thin: 1;
 }
 
 listcell > button > > text {
-    -shadow: false;
+    shadow: false;
 }
 
 radio-button {
-    -background-color: #E0E0E0;
+    background-color: #E0E0E0;
 }
 
 checkbox {
-    -background-color: #E0E0E0;
+    background-color: #E0E0E0;
 }
 
 .toast-label {
-    -background-color: gray;
+    background-color: gray;
 }
 
 .toast-label:hover {
-    -background-color: #c0d6e4 70%;
+    background-color: #c0d6e4 70%;
 }
 
 .toast-label text {
-    -shadow: false;
+    shadow: false;
 }
 
 #autocomplete {
-    -background-color: #BDBDBD;
+    background-color: #BDBDBD;
 }
 
 #autocomplete .complete-popup {
-    -background-color: #F5F5F5 50%;
+    background-color: #F5F5F5 50%;
 }
 
 #autocomplete .complete-popup text {
-    -shadow: false;
+    shadow: false;
 }
 
 #autocomplete .complete-popup label:select, #autocomplete .complete-popup label:hover {
-    -background-color: #BDBDBD 50%;
+    background-color: #BDBDBD 50%;
 }
 
 scrollpane .grip-y {
-    -texture: url("brokkguidemo:textures/gui/scrollbar_vert.png");
-    -color: rgba(0, 0, 0, 0);
+    texture: url("brokkguidemo:textures/gui/scrollbar_vert.png");
+    color: rgba(0, 0, 0, 0);
 }
 
 scrollpane .grip-x {
-    -texture: url("brokkguidemo:textures/gui/scrollbar_horiz.png");
-    -color: rgba(0, 0, 0, 0);
+    texture: url("brokkguidemo:textures/gui/scrollbar_horiz.png");
+    color: rgba(0, 0, 0, 0);
 }
 
 #vertscroll-rect {
-    -background-texture: url("brokkguidemo:textures/gui/vert_scroll.png");
+    background-texture: url("brokkguidemo:textures/gui/vert_scroll.png");
 }
 
 #horiscroll-rect {
-    -background-texture: url("brokkguidemo:textures/gui/horiz_scroll.png");
+    background-texture: url("brokkguidemo:textures/gui/horiz_scroll.png");
 }

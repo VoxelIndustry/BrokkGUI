@@ -30,7 +30,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         button.setWidth(200);
         button.setHeight(30);
-        button.setStyle("-border-color: green; -border-thin: 2; -text-color: khaki");
+        button.setStyle("border-color: green; border-thin: 2; text-color: khaki");
 
         button.setOnClickEvent(e -> System.out.println("clicked"));
 
@@ -41,7 +41,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         listView.setCellHeight(20);
         listView.setCellWidth(100);
-        listView.setStyle("-border-color: gray; -border-thin: 1;");
+        listView.setStyle("border-color: gray; border-thin: 1;");
 
         listView.setPlaceholder(new GuiLabel("I'm a placeholder"));
 
@@ -62,13 +62,13 @@ public class GuiDemo extends BrokkGuiScreen
         });
 
         progressBar.setHeight(20);
-        progressBar.setStyle("-border-color: red; -border-thin: 2;");
+        progressBar.setStyle("border-color: red; border-thin: 2;");
 
         final GuiTextfield field = new GuiTextfield();
         field.setWidth(200);
         field.setHeight(40);
 
-        field.setStyle("-border-color: black; -border-thin: 1;");
+        field.setStyle("border-color: black; border-thin: 1;");
 
         final GuiRelativePane radioButtonPane = new GuiRelativePane();
         radioButtonPane.setBackgroundColor(Color.LIGHT_GRAY);
@@ -80,7 +80,7 @@ public class GuiDemo extends BrokkGuiScreen
         radioButton.setHeightRatio(0.05f);
 
         radioButton2.setHeightRatio(0.05f);
-        radioButton2.setStyle("-text-color: green");
+        radioButton2.setStyle("text-color: green");
 
         checkbox.setHeightRatio(0.05f);
         checkbox.setButtonSide(ESide.LEFT);
@@ -114,7 +114,7 @@ public class GuiDemo extends BrokkGuiScreen
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(190);
         tabPane.setHeight(200);
-        tabPane.setStyle("-border-color: yellow; -border-thin: 1;");
+        tabPane.setStyle("border-color: yellow; border-thin: 1;");
         tabPane.addTab(new GuiTab("Textfield", field));
         tabPane.addTab(new GuiTab("ListView", listView));
         tabPane.addTab(new GuiTab("Progress", progressBar));

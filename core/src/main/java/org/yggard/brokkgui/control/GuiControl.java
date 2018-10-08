@@ -34,7 +34,7 @@ public abstract class GuiControl extends GuiFather implements IGuiSkinnable
             }
         });
 
-        this.getStyle().registerProperty("-opacity", 1D, Double.class);
+        this.getStyle().registerProperty("opacity", 1D, Double.class);
     }
 
     @Override
