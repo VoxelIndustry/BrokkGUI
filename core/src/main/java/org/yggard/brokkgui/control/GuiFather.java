@@ -5,7 +5,7 @@ import fr.ourten.teabeans.value.BaseListProperty;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.RenderPass;
-import org.yggard.brokkgui.policy.EOverflowPolicy;
+import org.yggard.brokkgui.policy.GuiOverflowPolicy;
 import org.yggard.brokkgui.style.ICascadeStyleable;
 import org.yggard.brokkgui.style.tree.StyleList;
 
@@ -18,7 +18,7 @@ public class GuiFather extends GuiNode
     private final BaseListProperty<GuiNode> childrensProperty;
     private final List<ICascadeStyleable>   styleChilds;
 
-    private EOverflowPolicy overflowPolicy;
+    private GuiOverflowPolicy guiOverflowPolicy;
 
     public GuiFather(String type)
     {
@@ -26,7 +26,7 @@ public class GuiFather extends GuiNode
 
         this.childrensProperty = new BaseListProperty<>(null, "childrensProperty");
 
-        this.overflowPolicy = EOverflowPolicy.NONE;
+        this.guiOverflowPolicy = GuiOverflowPolicy.NONE;
 
         this.childrensProperty.addListener((ListValueChangeListener<GuiNode>) (obs, oldValue, newValue) ->
         {
@@ -106,22 +106,22 @@ public class GuiFather extends GuiNode
         return this.styleChilds.remove(styleable);
     }
 
-    public EOverflowPolicy getOverflowPolicy()
+    public GuiOverflowPolicy getGuiOverflowPolicy()
     {
-        return this.overflowPolicy;
+        return this.guiOverflowPolicy;
     }
 
-    public void setOverflowPolicy(final EOverflowPolicy overflowPolicy)
+    public void setGuiOverflowPolicy(final GuiOverflowPolicy guiOverflowPolicy)
     {
-        this.overflowPolicy = overflowPolicy;
+        this.guiOverflowPolicy = guiOverflowPolicy;
     }
 
     @Override
     public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
-        if ((this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM.ordinal()
+        if ((this.getGuiOverflowPolicy().ordinal() >= GuiOverflowPolicy.TRIM.ordinal()
                 && pass.getPriority() <= RenderPass.FOREGROUND.getPriority())
-                || (this.getOverflowPolicy().ordinal() >= EOverflowPolicy.TRIM_ALL.ordinal()))
+                || (this.getGuiOverflowPolicy().ordinal() >= GuiOverflowPolicy.TRIM_ALL.ordinal()))
         {
             renderer.getHelper().beginScissor();
             renderer.getHelper().scissorBox(this.getxPos() + this.getxTranslate(),

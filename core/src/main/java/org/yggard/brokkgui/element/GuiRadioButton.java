@@ -6,7 +6,7 @@ import org.yggard.brokkgui.behavior.GuiTogglableButtonBehavior;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiFather;
 import org.yggard.brokkgui.control.GuiToggleButton;
-import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.shape.Rectangle;
@@ -15,14 +15,14 @@ import org.yggard.brokkgui.skin.GuiSkinBase;
 
 public class GuiRadioButton extends GuiToggleButton
 {
-    private final BaseProperty<ESide>   buttonSideProperty;
-    private final BaseProperty<GuiNode> buttonNodeProperty;
+    private final BaseProperty<RectSide> buttonSideProperty;
+    private final BaseProperty<GuiNode>  buttonNodeProperty;
 
     public GuiRadioButton(String text)
     {
         super("radio-button", text);
 
-        this.buttonSideProperty = new BaseProperty<>(ESide.LEFT, "buttonSideProperty");
+        this.buttonSideProperty = new BaseProperty<>(RectSide.LEFT, "buttonSideProperty");
         this.buttonNodeProperty = new BaseProperty<>(new RadioButtonContent(this), "buttonNodeProperty");
 
         this.setExpandToLabel(true);
@@ -34,7 +34,7 @@ public class GuiRadioButton extends GuiToggleButton
         this("");
     }
 
-    public BaseProperty<ESide> getButtonSideProperty()
+    public BaseProperty<RectSide> getButtonSideProperty()
     {
         return buttonSideProperty;
     }
@@ -44,12 +44,12 @@ public class GuiRadioButton extends GuiToggleButton
         return buttonNodeProperty;
     }
 
-    public void setButtonSide(ESide side)
+    public void setButtonSide(RectSide side)
     {
         this.getButtonSideProperty().setValue(side);
     }
 
-    public ESide getButtonSide()
+    public RectSide getButtonSide()
     {
         return this.getButtonSideProperty().getValue();
     }

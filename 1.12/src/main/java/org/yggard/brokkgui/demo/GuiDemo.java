@@ -3,8 +3,8 @@ package org.yggard.brokkgui.demo;
 import fr.ourten.teabeans.binding.BaseBinding;
 import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.component.ToastManager;
-import org.yggard.brokkgui.data.EAlignment;
-import org.yggard.brokkgui.data.EHAlignment;
+import org.yggard.brokkgui.data.RectAlignment;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.demo.category.*;
 import org.yggard.brokkgui.element.GuiButton;
@@ -38,7 +38,7 @@ public class GuiDemo extends BrokkGuiScreen
         button.setOnClickEvent(e -> System.out.println("clicked"));
 
         final GuiProgressBar progressBar = new GuiProgressBar(0.5f);
-        progressBar.setProgressDirection(EHAlignment.CENTER);
+        progressBar.setProgressDirection(RectSide.RIGHT);
         progressBar.setWidth(200);
         progressBar.getTextProperty().bind(new BaseBinding<String>()
         {
@@ -75,7 +75,7 @@ public class GuiDemo extends BrokkGuiScreen
         this.toastManager = new ToastManager(this);
         toastManager.setRelativeXPos(0.5f);
         toastManager.setRelativeYPos(0.98f);
-        toastManager.setToastAlignment(EAlignment.MIDDLE_UP);
+        toastManager.setToastAlignment(RectAlignment.MIDDLE_UP);
 
         GuiLabel label = new GuiLabel("Toast");
         label.addStyleClass("toast-label");

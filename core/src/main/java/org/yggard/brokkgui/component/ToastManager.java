@@ -4,7 +4,7 @@ import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.apache.commons.lang3.tuple.Pair;
-import org.yggard.brokkgui.data.EAlignment;
+import org.yggard.brokkgui.data.RectAlignment;
 import org.yggard.brokkgui.element.GuiToast;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.internal.PopupHandler;
@@ -16,11 +16,11 @@ public class ToastManager
 {
     private final BrokkGuiScreen screen;
 
-    private final BaseProperty<Float>      xPosProperty;
-    private final BaseProperty<Float>      yPosProperty;
-    private final BaseProperty<Float>      relativeXPosProperty;
-    private final BaseProperty<Float>      relativeYPosProperty;
-    private final BaseProperty<EAlignment> toastAlignmentProperty;
+    private final BaseProperty<Float>         xPosProperty;
+    private final BaseProperty<Float>         yPosProperty;
+    private final BaseProperty<Float>         relativeXPosProperty;
+    private final BaseProperty<Float>         relativeYPosProperty;
+    private final BaseProperty<RectAlignment> toastAlignmentProperty;
 
     private final BaseProperty<Float>   toastExitXProperty;
     private final BaseProperty<Float>   toastExitYProperty;
@@ -37,7 +37,7 @@ public class ToastManager
         this.yPosProperty = new BaseProperty<>(0f, "yPosProperty");
         this.relativeXPosProperty = new BaseProperty<>(-1f, "relativeXPosProperty");
         this.relativeYPosProperty = new BaseProperty<>(-1f, "relativeYPosProperty");
-        this.toastAlignmentProperty = new BaseProperty<>(EAlignment.MIDDLE_CENTER, "toastAlignmentProperty");
+        this.toastAlignmentProperty = new BaseProperty<>(RectAlignment.MIDDLE_CENTER, "toastAlignmentProperty");
 
         this.toastExitXProperty = new BaseProperty<>(0f, "toastExitXProperty");
         this.toastExitYProperty = new BaseProperty<>(-100f, "toastExitYProperty");
@@ -122,7 +122,7 @@ public class ToastManager
         }
     }
 
-    public BaseProperty<EAlignment> getToastAlignmentProperty()
+    public BaseProperty<RectAlignment> getToastAlignmentProperty()
     {
         return toastAlignmentProperty;
     }
@@ -157,12 +157,12 @@ public class ToastManager
         return relativeYPosProperty;
     }
 
-    public EAlignment getToastAlignment()
+    public RectAlignment getToastAlignment()
     {
         return this.getToastAlignmentProperty().getValue();
     }
 
-    public void setToastAlignment(EAlignment toastAlignment)
+    public void setToastAlignment(RectAlignment toastAlignment)
     {
         this.getToastAlignmentProperty().setValue(toastAlignment);
     }

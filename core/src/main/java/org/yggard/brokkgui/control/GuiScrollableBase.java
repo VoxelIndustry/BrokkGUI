@@ -2,8 +2,8 @@ package org.yggard.brokkgui.control;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.event.ScrollEvent;
-import org.yggard.brokkgui.policy.EOverflowPolicy;
-import org.yggard.brokkgui.policy.EScrollbarPolicy;
+import org.yggard.brokkgui.policy.GuiOverflowPolicy;
+import org.yggard.brokkgui.policy.GuiScrollbarPolicy;
 import org.yggard.hermod.EventHandler;
 
 public abstract class GuiScrollableBase extends GuiControl
@@ -13,7 +13,7 @@ public abstract class GuiScrollableBase extends GuiControl
     private final BaseProperty<Float> scrollSpeedProperty;
     private final BaseProperty<Float> gripXWidthProperty, gripXHeightProperty, gripYWidthProperty, gripYHeightProperty;
 
-    private final BaseProperty<EScrollbarPolicy> scrollXPolicyProperty, scrollYPolicyProperty;
+    private final BaseProperty<GuiScrollbarPolicy> scrollXPolicyProperty, scrollYPolicyProperty;
 
     private EventHandler<ScrollEvent> onScrollEvent;
 
@@ -34,9 +34,9 @@ public abstract class GuiScrollableBase extends GuiControl
         this.gripYWidthProperty = new BaseProperty<>(20f, "gripYWidthProperty");
         this.gripYHeightProperty = new BaseProperty<>(0f, "gripYHeightProperty");
 
-        this.scrollXPolicyProperty = new BaseProperty<>(EScrollbarPolicy.NEEDED, "scrollXPolicyProperty");
-        this.scrollYPolicyProperty = new BaseProperty<>(EScrollbarPolicy.NEEDED, "scrollYPolicyProperty");
-        this.setOverflowPolicy(EOverflowPolicy.TRIM_ALL);
+        this.scrollXPolicyProperty = new BaseProperty<>(GuiScrollbarPolicy.NEEDED, "scrollXPolicyProperty");
+        this.scrollYPolicyProperty = new BaseProperty<>(GuiScrollbarPolicy.NEEDED, "scrollYPolicyProperty");
+        this.setGuiOverflowPolicy(GuiOverflowPolicy.TRIM_ALL);
 
         this.setFocusable(true);
     }
@@ -116,32 +116,32 @@ public abstract class GuiScrollableBase extends GuiControl
         return this.getTrueHeightProperty().getValue();
     }
 
-    public BaseProperty<EScrollbarPolicy> getScrollXPolicyProperty()
+    public BaseProperty<GuiScrollbarPolicy> getScrollXPolicyProperty()
     {
         return this.scrollXPolicyProperty;
     }
 
-    public BaseProperty<EScrollbarPolicy> getScrollYPolicyProperty()
+    public BaseProperty<GuiScrollbarPolicy> getScrollYPolicyProperty()
     {
         return this.scrollYPolicyProperty;
     }
 
-    public EScrollbarPolicy getScrollXPolicy()
+    public GuiScrollbarPolicy getScrollXPolicy()
     {
         return this.getScrollXPolicyProperty().getValue();
     }
 
-    public void setScrollXPolicy(EScrollbarPolicy policy)
+    public void setScrollXPolicy(GuiScrollbarPolicy policy)
     {
         this.getScrollXPolicyProperty().setValue(policy);
     }
 
-    public EScrollbarPolicy getScrollYPolicy()
+    public GuiScrollbarPolicy getScrollYPolicy()
     {
         return this.getScrollYPolicyProperty().getValue();
     }
 
-    public void setScrollYPolicy(EScrollbarPolicy policy)
+    public void setScrollYPolicy(GuiScrollbarPolicy policy)
     {
         this.getScrollYPolicyProperty().setValue(policy);
     }

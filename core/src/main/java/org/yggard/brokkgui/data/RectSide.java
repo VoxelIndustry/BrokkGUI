@@ -3,7 +3,7 @@ package org.yggard.brokkgui.data;
 /**
  * @author Ourten 15 oct. 2016
  */
-public enum ESide
+public enum RectSide
 {
     UP, DOWN, LEFT, RIGHT;
 

@@ -3,8 +3,8 @@ package org.yggard.brokkgui.element;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
 import org.yggard.brokkgui.control.GuiLabeled;
-import org.yggard.brokkgui.data.EAlignment;
-import org.yggard.brokkgui.data.EHAlignment;
+import org.yggard.brokkgui.data.RectAlignment;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.skin.GuiProgressBarSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
@@ -13,14 +13,14 @@ import org.yggard.brokkgui.skin.GuiSkinBase;
  */
 public class GuiProgressBar extends GuiLabeled
 {
-    private final BaseProperty<Float>       progressBarProgressProperty;
-    private final BaseProperty<EHAlignment> progressBarProgressDirection;
+    private final BaseProperty<Float>    progressBarProgressProperty;
+    private final BaseProperty<RectSide> progressBarProgressDirection;
 
     public GuiProgressBar(final String text, final float progressRatio)
     {
         super("progressbar", text);
         this.progressBarProgressProperty = new BaseProperty<>(0f, "progressProperty");
-        this.progressBarProgressDirection = new BaseProperty<>(EHAlignment.RIGHT, "progressDirectionProperty");
+        this.progressBarProgressDirection = new BaseProperty<>(RectSide.RIGHT, "progressDirectionProperty");
 
         this.progressBarProgressProperty.setChecker((old, set) ->
         {
@@ -30,7 +30,7 @@ public class GuiProgressBar extends GuiLabeled
         });
 
         this.progressBarProgressProperty.setValue(progressRatio);
-        this.getTextAlignmentProperty().setValue(EAlignment.MIDDLE_CENTER);
+        this.getTextAlignmentProperty().setValue(RectAlignment.MIDDLE_CENTER);
     }
 
     public GuiProgressBar(final String text)
@@ -59,7 +59,7 @@ public class GuiProgressBar extends GuiLabeled
         return this.progressBarProgressProperty;
     }
 
-    public BaseProperty<EHAlignment> getProgressDirectionProperty()
+    public BaseProperty<RectSide> getProgressDirectionProperty()
     {
         return this.progressBarProgressDirection;
     }
@@ -74,12 +74,12 @@ public class GuiProgressBar extends GuiLabeled
         this.getProgressProperty().setValue(progress);
     }
 
-    public EHAlignment getProgressDirection()
+    public RectSide getProgressDirection()
     {
         return this.getProgressDirectionProperty().getValue();
     }
 
-    public void setProgressDirection(EHAlignment direction)
+    public void setProgressDirection(RectSide direction)
     {
         this.getProgressDirectionProperty().setValue(direction);
     }

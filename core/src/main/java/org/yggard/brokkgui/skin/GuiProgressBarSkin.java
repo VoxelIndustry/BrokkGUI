@@ -2,6 +2,7 @@ package org.yggard.brokkgui.skin;
 
 import fr.ourten.teabeans.binding.BaseExpression;
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.element.GuiProgressBar;
 import org.yggard.brokkgui.shape.Rectangle;
 
@@ -16,15 +17,9 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         this.track = new Rectangle(model.getxPos(), model.getyPos(), model.getWidth(), model.getHeight());
         this.track.getxPosProperty().bind(new BaseExpression<>(() ->
         {
-            switch (model.getProgressDirection())
-            {
-                case CENTER:
-                    return model.getxPos() + (model.getWidth() - this.track.getWidth()) / 2;
-                case LEFT:
-                    return model.getxPos() + model.getWidth() - this.track.getWidth();
-                default:
-                    return model.getxPos();
-            }
+            if (model.getProgressDirection() == RectSide.LEFT)
+                return model.getxPos() + model.getWidth() - this.track.getWidth();
+            return model.getxPos();
         }, model.getxPosProperty(), model.getWidthProperty(), model.getProgressDirectionProperty()));
         this.track.getyPosProperty().bind(model.getyPosProperty());
         this.track.getWidthProperty().bind(new BaseExpression<>(() ->

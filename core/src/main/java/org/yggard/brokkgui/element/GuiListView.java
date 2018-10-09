@@ -6,7 +6,7 @@ import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiListViewBehavior;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiScrollableBase;
-import org.yggard.brokkgui.data.EOrientation;
+import org.yggard.brokkgui.data.RectAxis;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.skin.GuiListViewSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
@@ -19,9 +19,9 @@ public class GuiListView<T> extends GuiScrollableBase
 {
     private final BaseProperty<Boolean> editableProperty;
 
-    private final BaseListProperty<T>        elementsProperty;
-    private final BaseProperty<GuiNode>      placeholderProperty;
-    private final BaseProperty<EOrientation> orientationProperty;
+    private final BaseListProperty<T>    elementsProperty;
+    private final BaseProperty<GuiNode>  placeholderProperty;
+    private final BaseProperty<RectAxis> orientationProperty;
 
     private final BaseProperty<Function<T, ? extends GuiListCell<T>>> cellFactoryProperty;
 
@@ -38,7 +38,7 @@ public class GuiListView<T> extends GuiScrollableBase
 
         this.editableProperty = new BaseProperty<>(false, "editableProperty");
         this.placeholderProperty = new BaseProperty<>(null, "placeholderProperty");
-        this.orientationProperty = new BaseProperty<>(EOrientation.VERTICAL, "orientationProperty");
+        this.orientationProperty = new BaseProperty<>(RectAxis.VERTICAL, "orientationProperty");
 
         this.cellFactoryProperty = new BaseProperty<>(null, "cellFactoryProperty");
 
@@ -70,7 +70,7 @@ public class GuiListView<T> extends GuiScrollableBase
             @Override
             public Float computeValue()
             {
-                if (getOrientation().equals(EOrientation.HORIZONTAL))
+                if (getOrientation().equals(RectAxis.HORIZONTAL))
                     return getCellWidth() * getElements().size() + getCellXPadding() * (getElements().size() - 1);
                 return getCellWidth();
             }
@@ -85,7 +85,7 @@ public class GuiListView<T> extends GuiScrollableBase
             @Override
             public Float computeValue()
             {
-                if (getOrientation().equals(EOrientation.VERTICAL))
+                if (getOrientation().equals(RectAxis.VERTICAL))
                     return getCellHeight() * getElements().size() + getCellYPadding() * (getElements().size() - 1);
                 return getCellHeight();
             }
@@ -118,7 +118,7 @@ public class GuiListView<T> extends GuiScrollableBase
         return this.placeholderProperty;
     }
 
-    public BaseProperty<EOrientation> getOrientationProperty()
+    public BaseProperty<RectAxis> getOrientationProperty()
     {
         return this.orientationProperty;
     }
@@ -222,12 +222,12 @@ public class GuiListView<T> extends GuiScrollableBase
         }
     }
 
-    public EOrientation getOrientation()
+    public RectAxis getOrientation()
     {
         return this.getOrientationProperty().getValue();
     }
 
-    public void setOrientation(final EOrientation orientation)
+    public void setOrientation(final RectAxis orientation)
     {
         this.getOrientationProperty().setValue(orientation);
     }

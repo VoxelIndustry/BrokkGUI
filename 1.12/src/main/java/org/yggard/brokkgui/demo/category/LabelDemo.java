@@ -1,7 +1,7 @@
 package org.yggard.brokkgui.demo.category;
 
-import org.yggard.brokkgui.data.EAlignment;
-import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.RectAlignment;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.panel.GuiAbsolutePane;
@@ -34,7 +34,7 @@ public class LabelDemo extends GuiAbsolutePane
 
         GuiLabel label2 = new GuiLabel("I Left T Left", icon2);
         label2.setWidth(100);
-        label2.setTextAlignment(EAlignment.LEFT_CENTER);
+        label2.setTextAlignment(RectAlignment.LEFT_CENTER);
         label2.setTextPadding(new RectOffset(2, 5, 2, 0));
         label2.setStyle("border-color: gray; border-thin: 1;");
 
@@ -45,7 +45,7 @@ public class LabelDemo extends GuiAbsolutePane
 
         GuiLabel label3 = new GuiLabel("I Left T Right", icon3);
         label3.setWidth(100);
-        label3.setTextAlignment(EAlignment.RIGHT_CENTER);
+        label3.setTextAlignment(RectAlignment.RIGHT_CENTER);
         label3.setTextPadding(new RectOffset(2, 5, 2, 0));
         label3.setStyle("border-color: gray; border-thin: 1;");
 
@@ -58,7 +58,7 @@ public class LabelDemo extends GuiAbsolutePane
         icon.setStyle("color: red;");
 
         GuiLabel label = new GuiLabel("I Right T Middle", icon);
-        label.setIconSide(ESide.RIGHT);
+        label.setIconSide(RectSide.RIGHT);
         label.setWidth(100);
         label.setTextPadding(new RectOffset(2, 0, 2, 0));
         label.setStyle("border-color: gray; border-thin: 1;");
@@ -69,9 +69,9 @@ public class LabelDemo extends GuiAbsolutePane
         icon2.setStyle("color: red;");
 
         GuiLabel label2 = new GuiLabel("I Right T Left", icon2);
-        label2.setIconSide(ESide.RIGHT);
+        label2.setIconSide(RectSide.RIGHT);
         label2.setWidth(100);
-        label2.setTextAlignment(EAlignment.LEFT_CENTER);
+        label2.setTextAlignment(RectAlignment.LEFT_CENTER);
         label2.setTextPadding(new RectOffset(2, 5, 2, 0));
         label2.setStyle("border-color: gray; border-thin: 1;");
 
@@ -81,9 +81,9 @@ public class LabelDemo extends GuiAbsolutePane
         icon3.setStyle("color: red;");
 
         GuiLabel label3 = new GuiLabel("I Right T Right", icon3);
-        label3.setIconSide(ESide.RIGHT);
+        label3.setIconSide(RectSide.RIGHT);
         label3.setWidth(100);
-        label3.setTextAlignment(EAlignment.RIGHT_CENTER);
+        label3.setTextAlignment(RectAlignment.RIGHT_CENTER);
         label3.setTextPadding(new RectOffset(2, 0, 2, 5));
         label3.setStyle("border-color: gray; border-thin: 1;");
 
@@ -97,7 +97,7 @@ public class LabelDemo extends GuiAbsolutePane
 
         GuiLabel label = new GuiLabel("I Up T Middle", icon);
         label.setWidth(80);
-        label.setIconSide(ESide.UP);
+        label.setIconSide(RectSide.UP);
         label.setTextPadding(new RectOffset(2, 0, 2, 0));
         label.setStyle("border-color: gray; border-thin: 1;");
 
@@ -108,8 +108,8 @@ public class LabelDemo extends GuiAbsolutePane
 
         GuiLabel label2 = new GuiLabel("I Up T Left", icon2);
         label2.setWidth(80);
-        label2.setIconSide(ESide.UP);
-        label2.setTextAlignment(EAlignment.LEFT_CENTER);
+        label2.setIconSide(RectSide.UP);
+        label2.setTextAlignment(RectAlignment.LEFT_CENTER);
         label2.setTextPadding(new RectOffset(2, 5, 2, 0));
         label2.setStyle("border-color: gray; border-thin: 1;");
 
@@ -120,8 +120,8 @@ public class LabelDemo extends GuiAbsolutePane
 
         GuiLabel label3 = new GuiLabel("I Up T Right", icon3);
         label3.setWidth(80);
-        label3.setIconSide(ESide.UP);
-        label3.setTextAlignment(EAlignment.RIGHT_CENTER);
+        label3.setIconSide(RectSide.UP);
+        label3.setTextAlignment(RectAlignment.RIGHT_CENTER);
         label3.setTextPadding(new RectOffset(2, 5, 2, 0));
         label3.setStyle("border-color: gray; border-thin: 1;");
 
@@ -135,7 +135,7 @@ public class LabelDemo extends GuiAbsolutePane
 
         GuiLabel label = new GuiLabel("I Down T Middle", icon);
         label.setWidth(80);
-        label.setIconSide(ESide.DOWN);
+        label.setIconSide(RectSide.DOWN);
         label.setTextPadding(new RectOffset(2, 0, 2, 0));
         label.setStyle("border-color: gray; border-thin: 1;");
 
@@ -146,8 +146,8 @@ public class LabelDemo extends GuiAbsolutePane
 
         GuiLabel label2 = new GuiLabel("I Down T Left", icon2);
         label2.setWidth(80);
-        label2.setIconSide(ESide.DOWN);
-        label2.setTextAlignment(EAlignment.LEFT_CENTER);
+        label2.setIconSide(RectSide.DOWN);
+        label2.setTextAlignment(RectAlignment.LEFT_CENTER);
         label2.setTextPadding(new RectOffset(2, 5, 2, 0));
         label2.setStyle("border-color: gray; border-thin: 1;");
 
@@ -158,8 +158,8 @@ public class LabelDemo extends GuiAbsolutePane
 
         GuiLabel label3 = new GuiLabel("I Down T Right", icon3);
         label3.setWidth(80);
-        label3.setIconSide(ESide.DOWN);
-        label3.setTextAlignment(EAlignment.RIGHT_CENTER);
+        label3.setIconSide(RectSide.DOWN);
+        label3.setTextAlignment(RectAlignment.RIGHT_CENTER);
         label3.setTextPadding(new RectOffset(2, 5, 2, 0));
         label3.setStyle("border-color: gray; border-thin: 1;");
 

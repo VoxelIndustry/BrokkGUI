@@ -3,7 +3,7 @@ package org.yggard.brokkgui.policy;
 /**
  * @author Ourten 9 oct. 2016
  */
-public enum EScrollbarPolicy
+public enum GuiScrollbarPolicy
 {
-    ALWAYS, NEVER, NEEDED;
+    ALWAYS, NEVER, NEEDED
 }

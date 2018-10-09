@@ -4,7 +4,7 @@ import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiLabeled;
-import org.yggard.brokkgui.data.EOrientation;
+import org.yggard.brokkgui.data.RectAxis;
 import org.yggard.brokkgui.skin.GuiListCellSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
@@ -38,7 +38,7 @@ public class GuiListCell<T> extends GuiLabeled
             @Override
             public Float computeValue()
             {
-                if (listView.getOrientation() == EOrientation.HORIZONTAL)
+                if (listView.getOrientation() == RectAxis.HORIZONTAL)
                     return listView.getxPos() + listView.getScrollX()
                             + listView.getElements().indexOf(GuiListCell.this.getItem()) * GuiListCell.this.getWidth()
                             + GuiListCell.this.getWidth() / 2
@@ -59,7 +59,7 @@ public class GuiListCell<T> extends GuiLabeled
             @Override
             public Float computeValue()
             {
-                if (listView.getOrientation() == EOrientation.VERTICAL)
+                if (listView.getOrientation() == RectAxis.VERTICAL)
                     return listView.getyPos() + listView.getScrollY()
                             + listView.getElements().indexOf(GuiListCell.this.getItem()) * GuiListCell.this.getHeight()
                             + listView.getCellYPadding() * listView.getElements().indexOf(GuiListCell.this.getItem());

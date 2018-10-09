@@ -7,7 +7,7 @@ import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.behavior.GuiBehaviorBase;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiLabeled;
-import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.shape.Text;
 
 /**
@@ -74,17 +74,17 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
 
                 if (model.getTextAlignment().isLeft())
                     return model.getxPos() + model.getxTranslate() + model.getTextPadding().getLeft()
-                            + (model.getIconSide() == ESide.LEFT ? iconWidth : 0);
+                            + (model.getIconSide() == RectSide.LEFT ? iconWidth : 0);
                 else if (model.getTextAlignment().isRight())
                     return model.getxPos() + model.getxTranslate()
                             + model.getWidth()
                             - model.getTextPadding().getRight()
                             - BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getEllipsedText())
-                            - (model.getIconSide() == ESide.RIGHT ? iconWidth : 0);
+                            - (model.getIconSide() == RectSide.RIGHT ? iconWidth : 0);
                 else
                     return model.getxPos() + model.getxTranslate()
                             + model.getTextPadding().getLeft()
-                            + (model.getIconSide() == ESide.LEFT ? iconWidth : 0)
+                            + (model.getIconSide() == RectSide.LEFT ? iconWidth : 0)
                             + getAvailableTextWidth() / 2
                             - BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getEllipsedText()) / 2
                             - model.getTextPadding().getRight();
@@ -112,17 +112,17 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
 
                 if (model.getTextAlignment().isUp())
                     return model.getyPos() + model.getyTranslate() + model.getTextPadding().getTop()
-                            + (model.getIconSide() == ESide.UP ? iconHeight : 0);
+                            + (model.getIconSide() == RectSide.UP ? iconHeight : 0);
                 else if (model.getTextAlignment().isDown())
                     return model.getyPos() + model.getyTranslate()
                             + model.getHeight()
                             - model.getTextPadding().getBottom()
                             - BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight()
-                            - (model.getIconSide() == ESide.DOWN ? iconHeight : 0);
+                            - (model.getIconSide() == RectSide.DOWN ? iconHeight : 0);
                 else
                     return model.getyPos() + model.getyTranslate() + model.getHeight() / 2
-                            + (model.getIconSide() == ESide.UP ? iconHeight :
-                            (model.getIconSide() == ESide.DOWN ? -iconHeight : 0)) / 2
+                            + (model.getIconSide() == RectSide.UP ? iconHeight :
+                            (model.getIconSide() == RectSide.DOWN ? -iconHeight : 0)) / 2
                             - BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight() / 2
                             + model.getTextPadding().getTop()
                             - model.getTextPadding().getBottom();
@@ -234,10 +234,10 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
             @Override
             public Float computeValue()
             {
-                if (getModel().getIconSide() == ESide.LEFT)
+                if (getModel().getIconSide() == RectSide.LEFT)
                     return getModel().getxPos() + getModel().getxTranslate()
                             + getModel().getTextPadding().getLeft();
-                if (getModel().getIconSide() == ESide.RIGHT)
+                if (getModel().getIconSide() == RectSide.RIGHT)
                     return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth()
                             - getModel().getTextPadding().getRight()
                             - icon.getWidth();
@@ -262,10 +262,10 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
             @Override
             public Float computeValue()
             {
-                if (getModel().getIconSide() == ESide.UP)
+                if (getModel().getIconSide() == RectSide.UP)
                     return getModel().getyPos() + getModel().getyTranslate()
                             + getModel().getTextPadding().getTop();
-                if (getModel().getIconSide() == ESide.DOWN)
+                if (getModel().getIconSide() == RectSide.DOWN)
                     return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight()
                             - getModel().getTextPadding().getBottom()
                             - icon.getHeight();

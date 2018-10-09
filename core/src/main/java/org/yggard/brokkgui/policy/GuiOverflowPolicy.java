@@ -1,6 +1,6 @@
 package org.yggard.brokkgui.policy;
 
-public enum EOverflowPolicy
+public enum GuiOverflowPolicy
 {
     /**
      * NONE : Nothing is trimmed, inside elements can go everywhere they want.
@@ -10,5 +10,5 @@ public enum EOverflowPolicy
      *
      * TRIM_ALL : Absolutely everything is trimmed.
      */
-    NONE, TRIM, TRIM_ALL;
+    NONE, TRIM, TRIM_ALL
 }

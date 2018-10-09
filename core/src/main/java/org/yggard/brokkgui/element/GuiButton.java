@@ -3,7 +3,7 @@ package org.yggard.brokkgui.element;
 import org.yggard.brokkgui.behavior.GuiButtonBehavior;
 import org.yggard.brokkgui.component.GuiNode;
 import org.yggard.brokkgui.control.GuiButtonBase;
-import org.yggard.brokkgui.data.EAlignment;
+import org.yggard.brokkgui.data.RectAlignment;
 import org.yggard.brokkgui.skin.GuiButtonSkin;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 
@@ -13,7 +13,7 @@ public class GuiButton extends GuiButtonBase
     {
         super("button", text, icon);
 
-        this.getLabel().setTextAlignment(EAlignment.MIDDLE_CENTER);
+        this.getLabel().setTextAlignment(RectAlignment.MIDDLE_CENTER);
     }
 
     public GuiButton(String text)

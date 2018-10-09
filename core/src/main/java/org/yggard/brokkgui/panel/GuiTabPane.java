@@ -5,8 +5,8 @@ import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.behavior.GuiTabPaneBehavior;
 import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.control.GuiControl;
-import org.yggard.brokkgui.data.ESide;
-import org.yggard.brokkgui.policy.EOverflowPolicy;
+import org.yggard.brokkgui.data.RectSide;
+import org.yggard.brokkgui.policy.GuiOverflowPolicy;
 import org.yggard.brokkgui.skin.GuiSkinBase;
 import org.yggard.brokkgui.skin.GuiTabPaneSkin;
 import org.yggard.brokkgui.style.tree.StyleList;
@@ -21,7 +21,7 @@ public class GuiTabPane extends GuiControl
 {
     private final BaseListProperty<GuiTab> tabsProperty;
     private final BaseProperty<Integer>    selectedTabProperty, defaultTabProperty;
-    private final BaseProperty<ESide> sideProperty;
+    private final BaseProperty<RectSide> sideProperty;
 
     private final BaseProperty<Float> tabHeaderWidthProperty;
     private final BaseProperty<Float> tabHeaderHeightProperty;
@@ -36,12 +36,12 @@ public class GuiTabPane extends GuiControl
         this.tabsProperty = new BaseListProperty<>(null, "tabsProperty");
         this.selectedTabProperty = new BaseProperty<>(-1, "selectedTabProperty");
         this.defaultTabProperty = new BaseProperty<>(-1, "defaultTabProperty");
-        this.sideProperty = new BaseProperty<>(ESide.UP, "sideProperty");
+        this.sideProperty = new BaseProperty<>(RectSide.UP, "sideProperty");
 
         this.tabHeaderWidthProperty = new BaseProperty<>(-1f, "tabHeaderWidthProperty");
         this.tabHeaderHeightProperty = new BaseProperty<>(20f, "tabHeaderHeightProperty");
 
-        this.setOverflowPolicy(EOverflowPolicy.TRIM_ALL);
+        this.setGuiOverflowPolicy(GuiOverflowPolicy.TRIM_ALL);
 
         this.tabHeaderFactories = new HashMap<>();
     }
@@ -67,7 +67,7 @@ public class GuiTabPane extends GuiControl
         return this.defaultTabProperty;
     }
 
-    public BaseProperty<ESide> getSideProperty()
+    public BaseProperty<RectSide> getSideProperty()
     {
         return this.sideProperty;
     }
@@ -194,12 +194,12 @@ public class GuiTabPane extends GuiControl
         this.setDefaultTab(this.tabsProperty.indexOf(tab));
     }
 
-    public ESide getTabSide()
+    public RectSide getTabSide()
     {
         return this.getSideProperty().getValue();
     }
 
-    public void setTabSide(final ESide side)
+    public void setTabSide(final RectSide side)
     {
         this.getSideProperty().setValue(side);
     }

@@ -4,7 +4,7 @@ import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.binding.BaseExpression;
 import org.yggard.brokkgui.behavior.GuiButtonBehavior;
 import org.yggard.brokkgui.component.GuiNode;
-import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.element.GuiRadioButton;
 
 public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonBehavior<GuiRadioButton>>
@@ -46,9 +46,9 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             @Override
             public Float computeValue()
             {
-                if (getModel().getButtonSide() == ESide.LEFT)
+                if (getModel().getButtonSide() == RectSide.LEFT)
                     return getModel().getxPos() + getModel().getxTranslate();
-                if (getModel().getButtonSide() == ESide.RIGHT)
+                if (getModel().getButtonSide() == RectSide.RIGHT)
                     return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth()
                             - node.getWidth();
                 return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() / 2
@@ -70,9 +70,9 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             @Override
             public Float computeValue()
             {
-                if (getModel().getButtonSide() == ESide.UP)
+                if (getModel().getButtonSide() == RectSide.UP)
                     return getModel().getyPos() + getModel().getyTranslate();
-                if (getModel().getButtonSide() == ESide.DOWN)
+                if (getModel().getButtonSide() == RectSide.DOWN)
                     return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight()
                             - getModel().getLabel().getHeight();
                 return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() / 2
@@ -110,9 +110,9 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             @Override
             public Float computeValue()
             {
-                if (getModel().getButtonSide() == ESide.LEFT)
+                if (getModel().getButtonSide() == RectSide.LEFT)
                     return getModel().getxPos() + getModel().getxTranslate() + getModel().getButtonNode().getWidth();
-                if (getModel().getButtonSide() == ESide.RIGHT)
+                if (getModel().getButtonSide() == RectSide.RIGHT)
                     return getModel().getxPos() + getModel().getxTranslate();
                 return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() / 2
                         - getModel().getLabel().getWidth() / 2;
@@ -133,9 +133,9 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             @Override
             public Float computeValue()
             {
-                if (getModel().getButtonSide() == ESide.UP)
+                if (getModel().getButtonSide() == RectSide.UP)
                     return getModel().getyPos() + getModel().getyTranslate() + getModel().getButtonNode().getHeight();
-                if (getModel().getButtonSide() == ESide.DOWN)
+                if (getModel().getButtonSide() == RectSide.DOWN)
                     return getModel().getyPos() + getModel().getyTranslate();
                 return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() / 2
                         - getModel().getLabel().getHeight() / 2;

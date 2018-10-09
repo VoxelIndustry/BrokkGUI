@@ -3,7 +3,7 @@ package org.yggard.brokkgui.component;
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
-import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.data.RelativeBindingHelper;
 import org.yggard.brokkgui.internal.IGuiRenderer;
 import org.yggard.brokkgui.paint.RenderPass;
@@ -99,14 +99,14 @@ public class GuiTab
     {
         final BaseBinding<Float> xPadding = new BaseExpression<>(() ->
         {
-            if (pane.getTabSide() == ESide.LEFT)
+            if (pane.getTabSide() == RectSide.LEFT)
                 return pane.getWidth() / 10 + 1;
             return 0f;
         }, pane.getSideProperty(), pane.getWidthProperty());
 
         final BaseBinding<Float> yPadding = new BaseExpression<>(() ->
         {
-            if (pane.getTabSide() == ESide.UP)
+            if (pane.getTabSide() == RectSide.UP)
                 return pane.getHeight() / 10 + 1;
             return 0f;
         }, pane.getSideProperty(), pane.getHeightProperty());
@@ -123,7 +123,7 @@ public class GuiTab
             @Override
             public Float computeValue()
             {
-                if (pane.getTabSide().equals(ESide.LEFT) || pane.getTabSide().equals(ESide.RIGHT))
+                if (pane.getTabSide().equals(RectSide.LEFT) || pane.getTabSide().equals(RectSide.RIGHT))
                     return pane.getWidth() - pane.getTabHeaderWidth();
                 return pane.getWidth();
             }
@@ -137,7 +137,7 @@ public class GuiTab
             @Override
             public Float computeValue()
             {
-                if (pane.getTabSide().equals(ESide.UP) || pane.getTabSide().equals(ESide.DOWN))
+                if (pane.getTabSide().equals(RectSide.UP) || pane.getTabSide().equals(RectSide.DOWN))
                     return pane.getHeight() - pane.getTabHeaderHeight();
                 return pane.getHeight();
             }

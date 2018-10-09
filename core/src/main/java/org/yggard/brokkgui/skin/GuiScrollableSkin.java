@@ -3,7 +3,7 @@ package org.yggard.brokkgui.skin;
 import fr.ourten.teabeans.binding.BaseBinding;
 import org.yggard.brokkgui.behavior.GuiScrollableBehavior;
 import org.yggard.brokkgui.control.GuiScrollableBase;
-import org.yggard.brokkgui.policy.EScrollbarPolicy;
+import org.yggard.brokkgui.policy.GuiScrollbarPolicy;
 import org.yggard.brokkgui.shape.Rectangle;
 
 /**
@@ -164,11 +164,11 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
             @Override
             public Boolean computeValue()
             {
-                if (getModel().getScrollXPolicy() == EScrollbarPolicy.ALWAYS
-                        || getModel().getScrollXPolicy() == EScrollbarPolicy.NEEDED)
+                if (getModel().getScrollXPolicy() == GuiScrollbarPolicy.ALWAYS
+                        || getModel().getScrollXPolicy() == GuiScrollbarPolicy.NEEDED)
                 {
                     if (getModel().getWidth() >= getModel().getTrueWidth())
-                        return getModel().getScrollXPolicy() == EScrollbarPolicy.ALWAYS;
+                        return getModel().getScrollXPolicy() == GuiScrollbarPolicy.ALWAYS;
                     else
                         return true;
                 }
@@ -187,11 +187,11 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
             @Override
             public Boolean computeValue()
             {
-                if (getModel().getScrollYPolicy() == EScrollbarPolicy.ALWAYS
-                        || getModel().getScrollYPolicy() == EScrollbarPolicy.NEEDED)
+                if (getModel().getScrollYPolicy() == GuiScrollbarPolicy.ALWAYS
+                        || getModel().getScrollYPolicy() == GuiScrollbarPolicy.NEEDED)
                 {
                     if (getModel().getHeight() >= getModel().getTrueHeight())
-                        return getModel().getScrollYPolicy() == EScrollbarPolicy.ALWAYS;
+                        return getModel().getScrollYPolicy() == GuiScrollbarPolicy.ALWAYS;
                     else
                         return true;
                 }

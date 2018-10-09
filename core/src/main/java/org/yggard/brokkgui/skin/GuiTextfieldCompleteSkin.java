@@ -5,7 +5,7 @@ import fr.ourten.teabeans.listener.ListValueChangeListener;
 import org.apache.commons.lang3.StringUtils;
 import org.yggard.brokkgui.behavior.GuiTextfieldCompleteBehavior;
 import org.yggard.brokkgui.component.IGuiPopup;
-import org.yggard.brokkgui.data.EAlignment;
+import org.yggard.brokkgui.data.RectAlignment;
 import org.yggard.brokkgui.data.RectOffset;
 import org.yggard.brokkgui.element.GuiLabel;
 import org.yggard.brokkgui.element.GuiTextfieldComplete;
@@ -174,7 +174,7 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
             label.getWidthProperty().bind(this.getWidthProperty());
             label.getHeightProperty().bind(this.model.getCellHeightProperty());
             label.setTextPadding(LABEL_PADDING);
-            label.setTextAlignment(EAlignment.LEFT_CENTER);
+            label.setTextAlignment(RectAlignment.LEFT_CENTER);
             label.setOnClickEvent(e -> marked = text);
             return label;
         }

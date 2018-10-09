@@ -3,9 +3,8 @@ package org.yggard.brokkgui.demo;
 import fr.ourten.teabeans.binding.BaseBinding;
 import org.yggard.brokkgui.component.GuiTab;
 import org.yggard.brokkgui.control.GuiToggleGroup;
-import org.yggard.brokkgui.data.EAlignment;
-import org.yggard.brokkgui.data.EHAlignment;
-import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.RectAlignment;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.element.*;
 import org.yggard.brokkgui.gui.BrokkGuiScreen;
 import org.yggard.brokkgui.paint.Color;
@@ -46,7 +45,7 @@ public class GuiDemo extends BrokkGuiScreen
         listView.setPlaceholder(new GuiLabel("I'm a placeholder"));
 
         final GuiProgressBar progressBar = new GuiProgressBar(0.5f);
-        progressBar.setProgressDirection(EHAlignment.CENTER);
+        progressBar.setProgressDirection(RectSide.RIGHT);
         progressBar.setWidth(200);
         progressBar.getTextProperty().bind(new BaseBinding<String>()
         {
@@ -83,7 +82,7 @@ public class GuiDemo extends BrokkGuiScreen
         radioButton2.setStyle("text-color: green");
 
         checkbox.setHeightRatio(0.05f);
-        checkbox.setButtonSide(ESide.LEFT);
+        checkbox.setButtonSide(RectSide.LEFT);
 
         final GuiToggleGroup toggleGroup = new GuiToggleGroup();
         toggleGroup.setAllowNothing(true);
@@ -98,13 +97,13 @@ public class GuiDemo extends BrokkGuiScreen
         labelPane.setOpacity(0.5);
 
         final GuiLabel left = new GuiLabel("LEFT-CENTER");
-        left.setTextAlignment(EAlignment.LEFT_CENTER);
+        left.setTextAlignment(RectAlignment.LEFT_CENTER);
 
         final GuiLabel center = new GuiLabel("CENTER");
-        center.setTextAlignment(EAlignment.MIDDLE_CENTER);
+        center.setTextAlignment(RectAlignment.MIDDLE_CENTER);
 
         final GuiLabel right = new GuiLabel("RIGHT");
-        right.setTextAlignment(EAlignment.RIGHT_CENTER);
+        right.setTextAlignment(RectAlignment.RIGHT_CENTER);
 
         labelPane.addChild(left, 0, 95);
         labelPane.addChild(center, 100, 95);

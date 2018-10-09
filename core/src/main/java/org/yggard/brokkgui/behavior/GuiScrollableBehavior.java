@@ -5,7 +5,7 @@ import org.yggard.brokkgui.control.GuiScrollableBase;
 import org.yggard.brokkgui.event.ClickEvent;
 import org.yggard.brokkgui.event.GuiMouseEvent;
 import org.yggard.brokkgui.event.ScrollEvent;
-import org.yggard.brokkgui.policy.EScrollbarPolicy;
+import org.yggard.brokkgui.policy.GuiScrollbarPolicy;
 
 /**
  * @author Ourten 9 oct. 2016
@@ -27,7 +27,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         float gripYMinX =
                 getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - getModel().getGripYWidth();
 
-        if (getModel().getScrollYPolicy() != EScrollbarPolicy.NEVER &&
+        if (getModel().getScrollYPolicy() != GuiScrollbarPolicy.NEVER &&
                 getModel().getTrueHeight() > getModel().getHeight() && event.getMouseX() - event.getDragX() > gripYMinX)
         {
             float ratio =
@@ -47,7 +47,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         float gripXMinY =
                 getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() - getModel().getGripXHeight();
 
-        if (getModel().getScrollXPolicy() != EScrollbarPolicy.NEVER &&
+        if (getModel().getScrollXPolicy() != GuiScrollbarPolicy.NEVER &&
                 getModel().getTrueWidth() > getModel().getWidth() && event.getMouseY() - event.getDragY() > gripXMinY)
         {
             float ratio =
@@ -70,7 +70,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         float gripYMinX =
                 getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - getModel().getGripYWidth();
 
-        if (getModel().getScrollYPolicy() != EScrollbarPolicy.NEVER &&
+        if (getModel().getScrollYPolicy() != GuiScrollbarPolicy.NEVER &&
                 getModel().getTrueHeight() > getModel().getHeight() && event.getMouseX() > gripYMinX)
         {
             float ratio =
@@ -81,7 +81,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         // Min Y to select the horizontal grip
         float gripXMinY =
                 getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() - getModel().getGripXHeight();
-        if (getModel().getScrollXPolicy() != EScrollbarPolicy.NEVER &&
+        if (getModel().getScrollXPolicy() != GuiScrollbarPolicy.NEVER &&
                 getModel().getTrueWidth() > getModel().getWidth() && event.getMouseY() > gripXMinY)
         {
             float ratio =

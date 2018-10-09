@@ -4,37 +4,37 @@ import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
 import org.yggard.brokkgui.BrokkGuiPlatform;
 import org.yggard.brokkgui.component.GuiNode;
-import org.yggard.brokkgui.data.EAlignment;
-import org.yggard.brokkgui.data.ESide;
+import org.yggard.brokkgui.data.RectAlignment;
+import org.yggard.brokkgui.data.RectSide;
 import org.yggard.brokkgui.data.RectOffset;
 
 import javax.annotation.Nonnull;
 
 public abstract class GuiLabeled extends GuiControl
 {
-    private final BaseProperty<EAlignment> textAlignmentProperty;
-    private final BaseProperty<String>     textProperty;
+    private final BaseProperty<RectAlignment> textAlignmentProperty;
+    private final BaseProperty<String>        textProperty;
 
     private final BaseProperty<String>     ellipsisProperty;
     private final BaseProperty<Boolean>    expandToTextProperty;
     private final BaseProperty<RectOffset> textPaddingProperty;
 
-    private final BaseProperty<GuiNode> iconProperty;
-    private final BaseProperty<ESide>   iconSideProperty;
-    private final BaseProperty<Float>   iconPaddingProperty;
+    private final BaseProperty<GuiNode>  iconProperty;
+    private final BaseProperty<RectSide> iconSideProperty;
+    private final BaseProperty<Float>    iconPaddingProperty;
 
     public GuiLabeled(String type, String text, GuiNode icon)
     {
         super(type);
 
         this.textProperty = new BaseProperty<>(text, "textProperty");
-        this.textAlignmentProperty = new BaseProperty<>(EAlignment.MIDDLE_CENTER, "textAlignmentProperty");
+        this.textAlignmentProperty = new BaseProperty<>(RectAlignment.MIDDLE_CENTER, "textAlignmentProperty");
         this.ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
         this.expandToTextProperty = new BaseProperty<>(true, "expandToTextProperty");
         this.textPaddingProperty = new BaseProperty<>(RectOffset.EMPTY, "textPaddingProperty");
 
         this.iconProperty = new BaseProperty<>(icon, "iconProperty");
-        this.iconSideProperty = new BaseProperty<>(ESide.LEFT, "iconSideProperty");
+        this.iconSideProperty = new BaseProperty<>(RectSide.LEFT, "iconSideProperty");
         this.iconPaddingProperty = new BaseProperty<>(2f, "iconPaddingProperty");
 
         this.bindSizeToText();
@@ -66,7 +66,7 @@ public abstract class GuiLabeled extends GuiControl
         super.setHeight(height);
     }
 
-    public BaseProperty<EAlignment> getTextAlignmentProperty()
+    public BaseProperty<RectAlignment> getTextAlignmentProperty()
     {
         return this.textAlignmentProperty;
     }
@@ -96,7 +96,7 @@ public abstract class GuiLabeled extends GuiControl
         return iconProperty;
     }
 
-    public BaseProperty<ESide> getIconSideProperty()
+    public BaseProperty<RectSide> getIconSideProperty()
     {
         return iconSideProperty;
     }
@@ -106,12 +106,12 @@ public abstract class GuiLabeled extends GuiControl
         return iconPaddingProperty;
     }
 
-    public EAlignment getTextAlignment()
+    public RectAlignment getTextAlignment()
     {
         return this.getTextAlignmentProperty().getValue();
     }
 
-    public void setTextAlignment(final EAlignment alignment)
+    public void setTextAlignment(final RectAlignment alignment)
     {
         this.getTextAlignmentProperty().setValue(alignment);
     }
@@ -156,12 +156,12 @@ public abstract class GuiLabeled extends GuiControl
         this.iconProperty.setValue(icon);
     }
 
-    public ESide getIconSide()
+    public RectSide getIconSide()
     {
         return this.iconSideProperty.getValue();
     }
 
-    public void setIconSide(ESide iconSide)
+    public void setIconSide(RectSide iconSide)
     {
         this.iconSideProperty.setValue(iconSide);
     }
