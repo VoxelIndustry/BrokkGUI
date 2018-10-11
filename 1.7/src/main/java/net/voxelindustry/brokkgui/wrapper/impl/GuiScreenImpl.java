@@ -1,0 +1,161 @@
+package net.voxelindustry.brokkgui.wrapper.impl;
+
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.Tessellator;
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
+import net.voxelindustry.brokkgui.GuiFocusManager;
+import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
+import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
+import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.paint.RenderTarget;
+import net.voxelindustry.brokkgui.wrapper.GuiHelper;
+import net.voxelindustry.brokkgui.wrapper.GuiRenderer;
+import org.lwjgl.input.Keyboard;
+
+public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
+{
+    private final BrokkGuiScreen brokkgui;
+    private final String         modID;
+
+    private final GuiRenderer renderer;
+
+    public GuiScreenImpl(String modID, BrokkGuiScreen brokkgui)
+    {
+        this.brokkgui = brokkgui;
+        this.modID = modID;
+        this.renderer = new GuiRenderer(Tessellator.instance);
+        this.brokkgui.setWrapper(this);
+    }
+
+    @Override
+    public boolean doesGuiPauseGame()
+    {
+        return false;
+    }
+
+    @Override
+    public void initGui()
+    {
+        super.initGui();
+
+        this.brokkgui.getScreenWidthProperty().setValue(this.width);
+        this.brokkgui.getScreenHeightProperty().setValue(this.height);
+
+        Keyboard.enableRepeatEvents(true);
+        this.brokkgui.initGui();
+    }
+
+    @Override
+    public void onGuiClosed()
+    {
+        super.onGuiClosed();
+        Keyboard.enableRepeatEvents(false);
+
+        this.brokkgui.onClose();
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+    {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+
+        this.brokkgui.render(mouseX, mouseY, RenderTarget.MAIN,
+                RenderPass.BACKGROUND, RenderPass.MAIN, RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN,
+                GuiHelper.ITEM_HOVER);
+        this.brokkgui.render(mouseX, mouseY, RenderTarget.WINDOW,
+                RenderPass.BACKGROUND, RenderPass.MAIN, RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN,
+                GuiHelper.ITEM_HOVER);
+        this.brokkgui.render(mouseX, mouseY, RenderTarget.POPUP,
+                RenderPass.BACKGROUND, RenderPass.MAIN, RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN,
+                GuiHelper.ITEM_HOVER);
+
+        this.brokkgui.renderLast(mouseX, mouseY);
+    }
+
+    @Override
+    public void mouseClicked(final int mouseX, final int mouseY, final int key)
+    {
+        super.mouseClicked(mouseX, mouseY, key);
+
+        this.brokkgui.onClick(mouseX, mouseY, key);
+    }
+
+    @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick)
+    {
+        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+
+        this.brokkgui.onClickDrag(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+    }
+
+    @Override
+    protected void mouseMovedOrUp(int mouseX, int mouseY, int state)
+    {
+        super.mouseMovedOrUp(mouseX, mouseY, state);
+
+        this.brokkgui.onClickStop(mouseX, mouseY, state);
+    }
+
+    @Override
+    public void handleMouseInput()
+    {
+        super.handleMouseInput();
+        this.brokkgui.handleMouseInput();
+    }
+
+    @Override
+    public void keyTyped(final char c, final int key)
+    {
+        if (key == BrokkGuiPlatform.getInstance().getKeyboardUtil().getKeyCode("ESCAPE") ||
+                GuiFocusManager.getInstance().getFocusedNode() == null)
+            super.keyTyped(c, key);
+        this.brokkgui.onKeyTyped(c, key);
+    }
+
+    @Override
+    public void askClose()
+    {
+        this.mc.displayGuiScreen(null);
+        this.mc.setIngameFocus();
+
+        this.brokkgui.onClose();
+    }
+
+    @Override
+    public void askOpen()
+    {
+        this.mc.displayGuiScreen(this);
+
+        this.brokkgui.onOpen();
+    }
+
+    @Override
+    public int getScreenWidth()
+    {
+        return this.width;
+    }
+
+    @Override
+    public int getScreenHeight()
+    {
+        return this.height;
+    }
+
+    @Override
+    public IGuiRenderer getRenderer()
+    {
+        return this.renderer;
+    }
+
+    @Override
+    public String getThemeID()
+    {
+        return this.modID;
+    }
+
+    public BrokkGuiScreen getGui()
+    {
+        return brokkgui;
+    }
+}

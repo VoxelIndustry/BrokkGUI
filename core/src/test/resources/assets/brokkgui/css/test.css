@@ -1,18 +1,18 @@
 pane {
-    -background-color: red;
-    -border-color: blue;
-    -border-width: 1;
+    background-color: red;
+    border-color: blue;
+    border-width: 1;
 }
 
 pane > .snowflakes {
-    -border-color: khaki;
-    -border-width: 2;
+    border-color: khaki;
+    border-width: 2;
 }
 
 #cyan {
-    -background-color: cyan;
+    background-color: cyan;
 }
 
 #cyan:hover {
-    -background-color: lightblue;
+    background-color: lightblue;
 }

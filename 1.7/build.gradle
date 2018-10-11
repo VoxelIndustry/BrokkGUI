@@ -38,7 +38,7 @@ task devJar(type: Jar) {
     classifier = 'dev'
 
     duplicatesStrategy = 'exclude'
-    exclude('org/yggard/brokkgui/demo/**')
+    exclude('net/voxelindustry/brokkgui/demo/**')
     exclude('assets/brokkguidemo/**')
 }
 

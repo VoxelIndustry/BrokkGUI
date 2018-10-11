@@ -10,9 +10,10 @@ buildscript {
             }
         }
     }
-    dependencies {
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.6.1"
-    }
+}
+
+plugins {
+    id "com.jfrog.artifactory" version "4.7.5"
 }
 
 subprojects {
@@ -20,7 +21,7 @@ subprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
 
-    group = "org.yggard"
+    group = "net.voxelindustry"
     compileJava.options.encoding = 'UTF-8'
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -36,7 +37,7 @@ subprojects {
         contextUrl = "${artifactory_contextUrl}"
         publish {
             repository {
-                repoKey = 'yggard'
+                repoKey = 'voxelindustry'
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
                 maven = true
@@ -65,14 +66,13 @@ subprojects {
     }
 
     repositories {
-        maven { url "http://maven.ferenyr.info/artifactory/ourten"}
-        maven { url "http://maven.ferenyr.info/artifactory/yggard"}
+        maven { url 'http://maven.ferenyr.info/artifactory/libs-release'}
         mavenCentral()
     }
 
     jar {
         duplicatesStrategy = 'exclude'
-        exclude('org/yggard/brokkgui/demo/**')
+        exclude('net/voxelindustry/brokkgui/demo/**')
     }
 
     publishing {
@@ -104,7 +104,7 @@ project(":core") {
     version = "1.0.0-31-SNAPSHOT"
     dependencies {
         api "fr.ourten:teabeans:0.7.0"
-        api "org.yggard:hermod:0.1.2"
+        api "net.voxelindustry:hermod:1.0.0"
         implementation "org.apache.commons:commons-lang3:3.4"
         implementation "com.google.code.findbugs:jsr305:3.0.1"
         implementation "commons-io:commons-io:2.5"
