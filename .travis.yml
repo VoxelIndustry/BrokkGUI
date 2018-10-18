@@ -2,16 +2,16 @@ language: java
 sudo: false
 notifications:
   email: false
-install: true
-jdk: oraclejdk8
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
 before_install:
   - chmod +x gradlew
+install:
+  - ./gradlew setupCIWorkspace -S
 script:
   - ./gradlew build check
+os: linux
+jdk: oraclejdk8
+global_env: TERM=dumb
 cache:
   directories:
-    - ~/.gradle
+    - $HOME/.gradle/caches
+    - $HOME/.gradle/wrapper
