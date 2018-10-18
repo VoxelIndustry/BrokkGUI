@@ -1,4 +1,4 @@
-# BrokkGUI [![Build Status](https://img.shields.io/travis/VoxelIndustry/BrokkGUI.svg?style=flat-square)](https://travis-ci.org/VoxelIndustry/BrokkGUI) [![GitHub forks](https://img.shields.io/github/forks/voxelindustry/BrokkGUI.svg)](https://github.com/voxelindustry/BrokkGUI/network)[![GitHub issues](https://img.shields.io/github/issues/voxelindustry/BrokkGUI.svg)](https://github.com/voxelindustry/BrokkGUI/issues) [![GitHub license](https://img.shields.io/github/license/voxelindustry/BrokkGUI.svg)](https://github.com/voxelindustry/BrokkGUI/blob/master/LICENSE)
+# BrokkGUI [![Build Status](https://img.shields.io/travis/VoxelIndustry/BrokkGUI.svg?style=flat-square)](https://travis-ci.org/VoxelIndustry/BrokkGUI) [![GitHub forks](https://img.shields.io/github/forks/voxelindustry/BrokkGUI.svg)](https://github.com/voxelindustry/BrokkGUI/network) [![GitHub issues](https://img.shields.io/github/issues/voxelindustry/BrokkGUI.svg)](https://github.com/voxelindustry/BrokkGUI/issues) [![GitHub license](https://img.shields.io/github/license/voxelindustry/BrokkGUI.svg)](https://github.com/voxelindustry/BrokkGUI/blob/master/LICENSE)
 
 _A powerful generalist UI framework._
 
@@ -12,7 +12,7 @@ BrokkGUI depends on two additional libraries not present in Minecraft :
 * [Teabeans](https://github.com/Ourten/TeaBeans) used for the bindings and properties.
 * [Hermod](https://github.com/VoxelIndustry/Hermod) used for the event system.
 
-To depends on a binding add the following to your gradle build file :
+To depend on a binding add the following to your gradle build file :
 ```gradle
 repositories {
     maven {
@@ -66,6 +66,33 @@ The use of TeaBeans enable a clear separation of the UI skin and style from the 
 Multiple events have been added on the base components allowing you to react on hover, disable, click, text type, scroll and so on...
 
 # Components
+The framework contains the following base components:
+* **Buttons**
+  * GuiButton
+  * GuiToggleButton
+  * GuiCheckbox
+  * GuiRadioButton
+* **Labels**
+  * GuiLabel
+  * GuiLink
+* **Inputs**
+  * GuiTextfield
+  * GuiTextfieldComplete _(Auto completed textfield)_
+* **Panels and containers**  
+  * GuiListView
+  * ScrollPane
+  * GuiAbsolutePane
+  * GuiRelativePane
+  * GuiTabPane
+* **Windows**
+  * GuiToast
+  * GuiTooltip
+  * SubGuiScreen
+
+Components available only in Minecraft bindings:
+* FluidStackView
+* ItemStackView
+* MCTooltip
 
 # Examples
 Theses examples are GUIs made with the framework and showcase some features combination.
@@ -74,3 +101,13 @@ Theses examples are GUIs made with the framework and showcase some features comb
 
 ### GUI of a pressure regulator with complex shapes
 <img src="http://i.ferenyr.info/images/storage/steamvent.gif" alt="Pressure GUI" width="354.5" height="334.5">
+
+## Authors
+
+* **[Ourten](https://github.com/Ourten)** - *Initial work*
+
+See also the list of [contributors](https://github.com/voxelindustry/brokkgui/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details
