@@ -256,7 +256,7 @@ public class BrokkGuiScreen implements IGuiWindow
         this.lastClickY = -1;
     }
 
-    public void handleMouseInput()
+    public void handleMouseScroll(double scrolled)
     {
         int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
@@ -271,12 +271,12 @@ public class BrokkGuiScreen implements IGuiWindow
 
             if (match.isPresent())
             {
-                match.get().handleMouseInput(mouseX, mouseY);
+                match.get().handleMouseScroll(mouseX, mouseY, scrolled);
                 return;
             }
         }
         if (this.getMainPanel().isPointInside(mouseX, mouseY))
-            this.getMainPanel().handleMouseInput(mouseX, mouseY);
+            this.getMainPanel().handleMouseScroll(mouseX, mouseY, scrolled);
     }
 
     public void onKeyTyped(final char c, final int key)

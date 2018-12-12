@@ -1,13 +1,12 @@
 package net.voxelindustry.brokkgui.wrapper.impl;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.voxelindustry.brokkgui.BrokkGuiPlatform;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.class_308;
+import net.minecraft.client.gui.ContainerGui;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.container.ActionTypeSlot;
+import net.minecraft.container.Container;
+import net.minecraft.container.Slot;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
@@ -16,12 +15,9 @@ import net.voxelindustry.brokkgui.paint.RenderTarget;
 import net.voxelindustry.brokkgui.wrapper.GuiHelper;
 import net.voxelindustry.brokkgui.wrapper.GuiRenderer;
 import net.voxelindustry.brokkgui.wrapper.container.BrokkGuiContainer;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
+import org.lwjgl.glfw.GLFW;
 
-import java.io.IOException;
-
-public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
+public class GuiContainerImpl extends ContainerGui implements IBrokkGuiImpl
 {
     private final BrokkGuiContainer<? extends Container> brokkgui;
     private       String                                 modID;
@@ -48,99 +44,123 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     private void refreshContainerWidth(int newWidth)
     {
         this.width = newWidth;
-        this.xSize = width;
-        this.guiLeft = (this.width - this.xSize) / 2;
+        this.containerWidth = width;
+        this.left = (this.width - this.containerWidth) / 2;
     }
 
     private void refreshContainerHeight(int newHeight)
     {
         this.height = newHeight;
-        this.ySize = height;
-        this.guiTop = (this.height - this.ySize) / 2;
+        this.containerHeight = height;
+        this.top = (this.height - this.containerHeight) / 2;
     }
 
     @Override
-    public void initGui()
+    public void onInitialized()
     {
-        super.initGui();
+        super.onInitialized();
 
         this.brokkgui.getScreenWidthProperty().setValue(this.width);
         this.brokkgui.getScreenHeightProperty().setValue(this.height);
 
-        Keyboard.enableRepeatEvents(true);
+        this.client.keyboard.enableRepeatEvents(true);
         this.brokkgui.initGui();
     }
 
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
-        this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
     @Override
-    public void onGuiClosed()
+    public void onClosed()
     {
-        super.onGuiClosed();
-        Keyboard.enableRepeatEvents(false);
+        super.onClosed();
+        this.client.keyboard.enableRepeatEvents(false);
 
         this.brokkgui.onClose();
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY)
+    public void draw(int mouseX, int mouseY, float partialTicks)
+    {
+        this.drawBackground();
+        super.draw(mouseX, mouseY, partialTicks);
+
+        if (brokkgui.allowContainerHover(mouseX, mouseY))
+            this.drawMousoverTooltip(mouseX, mouseY);
+    }
+
+    @Override
+    protected void drawBackground(float partialTicks, int mouseX, int mouseY)
     {
         this.brokkgui.render(mouseX, mouseY, RenderTarget.MAIN,
                 RenderPass.BACKGROUND, RenderPass.MAIN, RenderPass.FOREGROUND, RenderPass.HOVER);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    protected void drawForeground(int mouseX, int mouseY)
     {
-        GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
+        GlStateManager.translatef(-this.left, -this.top, 0);
         this.brokkgui.render(mouseX, mouseY, RenderTarget.MAIN, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);
-        RenderHelper.disableStandardItemLighting();
+
+        // RenderHelper disableGUIStandardItemLighting
+        class_308.method_1450();
+
         this.brokkgui.render(mouseX, mouseY, RenderTarget.WINDOW, RenderPass.BACKGROUND, RenderPass.MAIN,
                 RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);
-        RenderHelper.disableStandardItemLighting();
+
+        // RenderHelper disableGUIStandardItemLighting
+        class_308.method_1450();
+
         this.brokkgui.render(mouseX, mouseY, RenderTarget.POPUP, RenderPass.BACKGROUND, RenderPass.MAIN,
                 RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);
 
         this.brokkgui.renderLast(mouseX, mouseY);
-        GlStateManager.translate(this.guiLeft, this.guiTop, 0);
+        GlStateManager.translatef(this.left, this.top, 0);
     }
 
     @Override
-    public void mouseClicked(final int mouseX, final int mouseY, final int key) throws IOException
+    public boolean mouseClicked(final double mouseX, final double mouseY, final int key)
     {
-        super.mouseClicked(mouseX, mouseY, key);
+        this.brokkgui.onClick((int) mouseX, (int) mouseY, key);
 
-        this.brokkgui.onClick(mouseX, mouseY, key);
+        return super.mouseClicked(mouseX, mouseY, key);
     }
 
     @Override
-    public void handleMouseInput() throws IOException
+    public boolean mouseDragged(double mouseX, double mouseY, int clickedMouseButton, double timeSinceLastClick,
+                                double unknown)
     {
-        super.handleMouseInput();
-        this.brokkgui.handleMouseScroll(Mouse.getEventDWheel());
+        this.brokkgui.onClickDrag((int) mouseX, (int) mouseY, clickedMouseButton, (long) timeSinceLastClick);
+
+        return super.mouseDragged(mouseX, mouseY, clickedMouseButton, timeSinceLastClick, unknown);
     }
 
     @Override
-    public void keyTyped(final char c, final int key) throws IOException
+    public boolean mouseReleased(double mouseX, double mouseY, int state)
     {
-        if (key == BrokkGuiPlatform.getInstance().getKeyboardUtil().getKeyCode("ESCAPE") ||
-                GuiFocusManager.getInstance().getFocusedNode() == null)
-            super.keyTyped(c, key);
-        this.brokkgui.onKeyTyped(c, key);
+        this.brokkgui.onClickStop((int) mouseX, (int) mouseY, state);
+
+        return super.mouseReleased(mouseX, mouseY, state);
+    }
+
+    @Override
+    public boolean mouseScrolled(double scrolled)
+    {
+        this.brokkgui.handleMouseScroll(scrolled);
+        return super.mouseScrolled(scrolled);
+    }
+
+    @Override
+    public boolean keyPressed(int c, int key, int var3)
+    {
+        if (key == GLFW.GLFW_KEY_ESCAPE || GuiFocusManager.getInstance().getFocusedNode() == null)
+            return super.keyPressed(c, key, var3);
+        this.brokkgui.onKeyTyped((char) c, key);
+        return true;
     }
 
     @Override
     public void askClose()
     {
-        if (this.mc.player != null)
-            this.inventorySlots.onContainerClosed(this.mc.player);
-        this.mc.displayGuiScreen(null);
-        this.mc.setIngameFocus();
-
+        if (this.client.player != null)
+            this.client.player.closeGui();
         this.brokkgui.onClose();
     }
 
@@ -177,9 +197,9 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     }
 
     @Override
-    protected void handleMouseClick(final Slot slot, final int slotID, final int button, final ClickType flag)
+    protected void onMouseClick(final Slot slot, final int slotID, final int button, final ActionTypeSlot flag)
     {
-        super.handleMouseClick(slot, slotID, button, flag);
+        super.onMouseClick(slot, slotID, button, flag);
 
         if (slot != null)
             this.brokkgui.slotClick(slot, button);

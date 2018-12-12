@@ -1,15 +1,11 @@
 buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven {
-            url 'http://maven.ferenyr.info/artifactory/plugins-release'
-            credentials {
-                username = "${artifactory_user}"
-                password = "${artifactory_password}"
-            }
-        }
-    }
+  repositories {
+    jcenter()
+    maven { url = 'http://maven.fabricmc.net' }
+  }
+  dependencies {
+    classpath 'net.fabricmc:fabric-loom:0.1.0-SNAPSHOT'
+  }
 }
 
 plugins {
@@ -116,6 +112,23 @@ project(":core") {
     }
 }
 
+project(":fabric-1.14") {
+    apply plugin: 'fabric-loom'
+
+    archivesBaseName = "brokkgui-binding-fabric1.14"
+
+    version = "1.0.0-32-SNAPSHOT"
+
+    dependencies {
+        api project(":core")
+
+        minecraft "com.mojang:minecraft:18w49a"
+        mappings "net.fabricmc:yarn:18w49a.1"
+        modCompile "net.fabricmc:fabric-loader:0.2.0.58"
+        modCompile "net.fabricmc:fabric:0.1.0.36"
+    }
+}
+
 project(":1.11") {
     archivesBaseName = "brokkgui-binding-mc1.11"
 
@@ -127,15 +140,6 @@ project(":1.11") {
 
 project(":1.12") {
     archivesBaseName = "brokkgui-binding-mc1.12"
-
-    version = "1.0.0-32-SNAPSHOT"
-    dependencies {
-        api project(":core")
-    }
-}
-
-project(":1.7") {
-    archivesBaseName = "brokkgui-binding-mc1.7"
 
     version = "1.0.0-32-SNAPSHOT"
     dependencies {

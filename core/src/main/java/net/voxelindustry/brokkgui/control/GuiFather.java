@@ -175,12 +175,12 @@ public class GuiFather extends GuiNode
     }
 
     @Override
-    public void handleMouseInput(int mouseX, int mouseY)
+    public void handleMouseScroll(int mouseX, int mouseY, double scrolled)
     {
-        super.handleMouseInput(mouseX, mouseY);
+        super.handleMouseScroll(mouseX, mouseY, scrolled);
 
         this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
-                .forEach(child -> child.handleMouseInput(mouseX, mouseY));
+                .forEach(child -> child.handleMouseScroll(mouseX, mouseY, scrolled));
     }
 
     /////////////////////

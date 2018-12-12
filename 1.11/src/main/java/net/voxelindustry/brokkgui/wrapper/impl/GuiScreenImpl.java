@@ -12,6 +12,7 @@ import net.voxelindustry.brokkgui.paint.RenderTarget;
 import net.voxelindustry.brokkgui.wrapper.GuiHelper;
 import net.voxelindustry.brokkgui.wrapper.GuiRenderer;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
@@ -103,7 +104,7 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     public void handleMouseInput() throws IOException
     {
         super.handleMouseInput();
-        this.brokkgui.handleMouseInput();
+        this.brokkgui.handleMouseScroll(Mouse.getEventDWheel());
     }
 
     @Override

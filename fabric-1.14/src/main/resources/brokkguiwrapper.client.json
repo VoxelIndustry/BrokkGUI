@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "net.voxelindustry.brokkgui.wrapper.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MinecraftClientMixin",
+    "MouseMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
