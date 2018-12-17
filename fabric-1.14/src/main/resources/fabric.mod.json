@@ -3,7 +3,10 @@
   "name": "BrokkGui Wrapper",
   "version": "0.1.0",
   "side": "universal",
-  "initializer": "net.voxelindustry.brokkgui.wrapper.BrokkGuiWrapperMod",
+  "initializers": [
+    "net.voxelindustry.brokkgui.wrapper.BrokkGuiWrapperMod",
+    "net.voxelindustry.brokkgui.demo.BrokkGuiDemo"
+  ],
   "mixins": {
     "client": "brokkguiwrapper.client.json",
     "common": "brokkguiwrapper.common.json"

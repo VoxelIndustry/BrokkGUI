@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.wrapper.impl;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.class_308;
 import net.minecraft.client.gui.ContainerGui;
+import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.container.ActionTypeSlot;
 import net.minecraft.container.Container;
@@ -99,14 +99,12 @@ public class GuiContainerImpl extends ContainerGui implements IBrokkGuiImpl
         GlStateManager.translatef(-this.left, -this.top, 0);
         this.brokkgui.render(mouseX, mouseY, RenderTarget.MAIN, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);
 
-        // RenderHelper disableGUIStandardItemLighting
-        class_308.method_1450();
+        GuiLighting.disable();
 
         this.brokkgui.render(mouseX, mouseY, RenderTarget.WINDOW, RenderPass.BACKGROUND, RenderPass.MAIN,
                 RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);
 
-        // RenderHelper disableGUIStandardItemLighting
-        class_308.method_1450();
+        GuiLighting.disable();
 
         this.brokkgui.render(mouseX, mouseY, RenderTarget.POPUP, RenderPass.BACKGROUND, RenderPass.MAIN,
                 RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN, GuiHelper.ITEM_HOVER);

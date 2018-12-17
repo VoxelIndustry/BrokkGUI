@@ -25,8 +25,7 @@ public class BrokkGuiDemo implements ModInitializer
     {
         BrokkGuiPlatform.getInstance().enableRenderDebug(true);
 
-
-        Registry.register(Registry.ITEMS, "brokkguidemo:itembrokkguitest",
+        Registry.register(Registry.ITEM, "brokkguidemo:itembrokkguitest",
                 new Item(new Item.Settings().stackSize(1).itemGroup(ItemGroup.MISC))
                 {
                     @Override
@@ -34,7 +33,7 @@ public class BrokkGuiDemo implements ModInitializer
                     {
                         player.setCurrentHand(hand);
 
-                        if (world.isRemote && !player.isSneaking())
+                        if (world.isClient() && !player.isSneaking())
                             MinecraftClient.getInstance().openGui(BrokkGuiManager.getBrokkGuiScreen(new GuiDemo()));
                         // TODO : Add container opening
 

@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.wrapper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Mouse;
 import net.voxelindustry.brokkgui.internal.IMouseUtil;
-import net.voxelindustry.brokkgui.wrapper.mixin.IAccessibleMouse;
 
 /**
  * @author Ourten 9 oct. 2016
@@ -14,38 +13,44 @@ public class MouseUtil implements IMouseUtil
 
     public MouseUtil()
     {
-        this.mouse = MinecraftClient.getInstance().mouse;
     }
 
     @Override
     public int getEventDWheel()
     {
-        return (int) ((IAccessibleMouse) mouse).getDWheel();
+        return (int) ((IAccessibleMouse) getMouse()).getDWheel();
     }
 
     @Override
     public int getEventButton()
     {
-        return ((IAccessibleMouse) mouse).getMouseButton();
+        return ((IAccessibleMouse) getMouse()).getMouseButton();
     }
 
     public int getMouseX()
     {
         if (MinecraftClient.getInstance().currentGui == null)
             // Mouse.getX
-            return (int) this.mouse.method_1603();
-        return (int) (mouse.method_1603() * MinecraftClient.getInstance().window.getScaledWidth() /
-                MinecraftClient.getInstance().window.getWindowWidth());
+            return (int) this.getMouse().getX();
+        return (int) (getMouse().getX() * MinecraftClient.getInstance().window.getScaledWidth() /
+                MinecraftClient.getInstance().window.method_4480());
     }
 
     public int getMouseY()
     {
         if (MinecraftClient.getInstance().currentGui == null)
             // Mouse.getY
-            return (int) this.mouse.method_1604();
+            return (int) this.getMouse().getY();
 
         // Mouse.getEventY
-        return (int) (MinecraftClient.getInstance().window.getScaledHeight() - mouse.method_1604() *
-                MinecraftClient.getInstance().window.getScaledHeight() / MinecraftClient.getInstance().window.getWindowHeight() - 1);
+        return (int) (getMouse().getY() * MinecraftClient.getInstance().window.getScaledHeight() /
+                MinecraftClient.getInstance().window.method_4507());
+    }
+
+    public Mouse getMouse()
+    {
+        if (this.mouse == null)
+            this.mouse = MinecraftClient.getInstance().mouse;
+        return this.mouse;
     }
 }

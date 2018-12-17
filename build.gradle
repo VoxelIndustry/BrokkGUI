@@ -122,10 +122,10 @@ project(":fabric-1.14") {
     dependencies {
         api project(":core")
 
-        minecraft "com.mojang:minecraft:18w49a"
-        mappings "net.fabricmc:yarn:18w49a.1"
-        modCompile "net.fabricmc:fabric-loader:0.2.0.58"
-        modCompile "net.fabricmc:fabric:0.1.0.36"
+        minecraft "com.mojang:minecraft:18w50a"
+        mappings "net.fabricmc:yarn:18w50a.+"
+        modCompile "net.fabricmc:fabric-loader:0.2.0.70"
+        modCompile "net.fabricmc:fabric:0.1.1.51"
     }
 }
 

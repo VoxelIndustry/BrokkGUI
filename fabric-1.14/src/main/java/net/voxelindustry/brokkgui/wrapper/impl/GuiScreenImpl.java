@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.wrapper.impl;
 
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.render.Tessellator;
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
@@ -99,17 +100,30 @@ public class GuiScreenImpl extends Gui implements IBrokkGuiImpl
     @Override
     public boolean mouseScrolled(double scrolled)
     {
-        this.brokkgui.handleMouseScroll(scrolled);
+        System.out.println(scrolled+"  "+ BrokkGuiPlatform.getInstance().getMouseUtil().getEventDWheel());
+        this.brokkgui.handleMouseScroll(scrolled*120);
         return super.mouseScrolled(scrolled);
     }
 
     @Override
-    public boolean keyPressed(int c, int key, int var3)
+    public boolean keyPressed(int keyCode, int scanCode, int modsField)
     {
-        if (key == GLFW.GLFW_KEY_ESCAPE || GuiFocusManager.getInstance().getFocusedNode() == null)
-            return super.keyPressed(c, key, var3);
-        this.brokkgui.onKeyTyped((char) c, key);
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE || GuiFocusManager.getInstance().getFocusedNode() == null)
+            return super.keyPressed(keyCode, scanCode, modsField);
+
+        this.brokkgui.onKeyTyped((char) 0, keyCode);
         return true;
+    }
+
+    @Override
+    public boolean charTyped(char typedChar, int modsField)
+    {
+        if (GuiFocusManager.getInstance().getFocusedNode() != null)
+        {
+            this.brokkgui.onKeyTyped(typedChar, -1);
+            return true;
+        }
+        return false;
     }
 
     @Override

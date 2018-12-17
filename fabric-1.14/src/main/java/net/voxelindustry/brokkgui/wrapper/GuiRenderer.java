@@ -26,9 +26,9 @@ public class GuiRenderer implements IGuiRenderer
     {
         final int op = this.getGLOpFromMode(mode);
         if (texture)
-            this.t.getVertexBuffer().begin(op, VertexFormats.POSITION_UV);
+            this.t.getBufferBuilder().begin(op, VertexFormats.POSITION_UV);
         else
-            this.t.getVertexBuffer().begin(op, VertexFormats.POSITION);
+            this.t.getBufferBuilder().begin(op, VertexFormats.POSITION);
     }
 
     @Override
@@ -40,13 +40,13 @@ public class GuiRenderer implements IGuiRenderer
     @Override
     public void addVertex(final double x, final double y, final double z)
     {
-        this.t.getVertexBuffer().vertex(x, y, z).end();
+        this.t.getBufferBuilder().vertex(x, y, z).next();
     }
 
     @Override
     public void addVertexWithUV(final double x, final double y, final double z, final double u, final double v)
     {
-        this.t.getVertexBuffer().vertex(x, y, z).texture(u, v).end();
+        this.t.getBufferBuilder().vertex(x, y, z).texture(u, v).next();
     }
 
     @Override

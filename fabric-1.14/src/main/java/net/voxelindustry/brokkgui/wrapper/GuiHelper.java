@@ -2,16 +2,15 @@ package net.voxelindustry.brokkgui.wrapper;
 
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.class_308;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.item.TooltipOptions;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexBuffer;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.fluid.BaseFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.TextComponent;
@@ -309,8 +308,7 @@ public class GuiHelper implements IGuiHelper
             short short1 = 240;
             short short2 = 240;
 
-            // RenderHelper enableGUIStandardItemLighting
-            class_308.method_1452();
+            GuiLighting.enableForItems();
 
             GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, short1 / 1.0F, short2 / 1.0F);
 
@@ -320,9 +318,7 @@ public class GuiHelper implements IGuiHelper
             GlStateManager.popMatrix();
             GlStateManager.disableRescaleNormal();
 
-            // RenderHelper enableGUIStandardItemLighting
-            class_308.method_1452();
-
+            GuiLighting.enableForItems();
             GlStateManager.popMatrix();
         }
     }
@@ -330,7 +326,7 @@ public class GuiHelper implements IGuiHelper
     public void drawItemStackTooltip(IGuiRenderer renderer, int mouseX, int mouseY,
                                      ItemStack stack)
     {
-        List<String> tooltipText = stack.getTooltipText(this.mc.player, this.mc.settings.advancedItemTooltips ?
+        List<String> tooltipText = stack.getTooltipText(this.mc.player, this.mc.options.advancedItemTooltips ?
                 TooltipOptions.Instance.ADVANCED : TooltipOptions.Instance.NORMAL).stream()
                 .map(TextComponent::getFormattedText).collect(Collectors.toList());
 
@@ -351,7 +347,7 @@ public class GuiHelper implements IGuiHelper
             return;
 
         GlStateManager.disableRescaleNormal();
-        class_308.method_1450();
+        GuiLighting.disable();
         GlStateManager.disableLighting();
         GlStateManager.disableDepthTest();
         int maxLineWidth = tooltipText.stream().mapToInt(mc.fontRenderer::getStringWidth).sum();
@@ -409,7 +405,7 @@ public class GuiHelper implements IGuiHelper
 
         GlStateManager.enableLighting();
         GlStateManager.enableDepthTest();
-        class_308.method_1452();
+        GuiLighting.enableForItems();
         GlStateManager.enableRescaleNormal();
     }
 
@@ -431,7 +427,7 @@ public class GuiHelper implements IGuiHelper
                 GlStateManager.DstBlendFactor.ZERO);
         GlStateManager.shadeModel(7425);
         Tessellator var15 = Tessellator.getInstance();
-        VertexBuffer var16 = var15.getVertexBuffer();
+        BufferBuilder var16 = var15.getBufferBuilder();
         var16.begin(7, VertexFormats.POSITION_COLOR);
         var16.vertex(xEnd, yStart, zLevel).color(var8, var9, var10, var7).next();
         var16.vertex(xStart, yStart, zLevel).color(var8, var9, var10, var7).next();
@@ -477,7 +473,7 @@ public class GuiHelper implements IGuiHelper
     @Override
     public float getStringHeight()
     {
-        return this.mc.fontRenderer.FONT_HEIGHT;
+        return this.mc.fontRenderer.fontHeight;
     }
 
     @Override

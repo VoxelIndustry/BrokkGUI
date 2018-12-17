@@ -2,8 +2,8 @@ package net.voxelindustry.brokkgui.wrapper;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexBuffer;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.item.ItemBuiltinRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -13,10 +13,9 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.SystemUtil;
-import net.minecraft.util.math.Facing;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.wrapper.mixin.IAccessibleItemColorMap;
 
 import java.util.List;
 import java.util.Random;
@@ -99,19 +98,19 @@ public class GuiRenderItemHelper
     private void renderModel(BakedModel model, int color, ItemStack stack)
     {
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer buffer = tessellator.getVertexBuffer();
+        BufferBuilder buffer = tessellator.getBufferBuilder();
 
         // VertexFormats.ITEM
         buffer.begin(7, VertexFormats.field_1590);
 
-        for (Facing facing : Facing.values())
+        for (Direction facing : Direction.values())
             this.renderQuads(buffer, model.getQuads(null, facing, rand), color, stack);
 
         this.renderQuads(buffer, model.getQuads(null, null, rand), color, stack);
         tessellator.draw();
     }
 
-    private void renderQuads(VertexBuffer renderer, List<BakedQuad> quads, int color, ItemStack stack)
+    private void renderQuads(BufferBuilder renderer, List<BakedQuad> quads, int color, ItemStack stack)
     {
         boolean flag = color == -1 && !stack.isEmpty();
         int i = 0;
@@ -123,7 +122,7 @@ public class GuiRenderItemHelper
 
             if (flag && bakedquad.hasColor())
             {
-                quadColor = ((IAccessibleItemColorMap) this.mc).getItemColorMap().method_1704(stack,
+                quadColor = ((IAccessibleItemColorMap) this.mc).getItemColorMap().getRenderColor(stack,
                         bakedquad.getColorIndex());
 
                 quadColor |= -16777216;

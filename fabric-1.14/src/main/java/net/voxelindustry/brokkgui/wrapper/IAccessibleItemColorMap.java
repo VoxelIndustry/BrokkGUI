@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.wrapper.mixin;
+package net.voxelindustry.brokkgui.wrapper;
 
 import net.minecraft.client.render.item.ItemColorMap;
 

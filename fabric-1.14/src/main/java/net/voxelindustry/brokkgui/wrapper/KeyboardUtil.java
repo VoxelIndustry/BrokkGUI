@@ -34,7 +34,9 @@ public class KeyboardUtil implements IKeyboardUtil
     @Override
     public boolean isKeyValidChar(int key)
     {
-        return SharedConstants.isValidChar((char) key);
+        // key is 0 when no char has been received to distinguish keyPressed and charTyped GLFW events since they
+        // are merged in the event bus
+        return key != 0 && SharedConstants.isValidChar((char) key);
     }
 
     @Override

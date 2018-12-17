@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.wrapper.mixin;
 
 import net.minecraft.client.util.Mouse;
+import net.voxelindustry.brokkgui.wrapper.IAccessibleMouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 

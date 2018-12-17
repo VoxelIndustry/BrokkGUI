@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.component;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.BaseSetProperty;
-import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
@@ -260,9 +259,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void handleMouseScroll(int mouseX, int mouseY, double scroll)
     {
-        if (BrokkGuiPlatform.getInstance().getMouseUtil().getEventDWheel() != 0)
-            this.getEventDispatcher().dispatchEvent(GuiMouseEvent.WHEEL,
-                    new GuiMouseEvent.Wheel(this, (int) scroll));
+        if (scroll != 0)
+            this.getEventDispatcher().dispatchEvent(GuiMouseEvent.WHEEL, new GuiMouseEvent.Wheel(this, (int) scroll));
     }
 
     public void handleClick(final int mouseX, final int mouseY, final int key)

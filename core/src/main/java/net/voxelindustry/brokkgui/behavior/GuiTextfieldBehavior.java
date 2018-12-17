@@ -68,7 +68,7 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
             }
         }
         else if (this.getModel().isEditable()
-                && BrokkGuiPlatform.getInstance().getKeyboardUtil().isKeyValidChar(event.getKey()))
+                && BrokkGuiPlatform.getInstance().getKeyboardUtil().isKeyValidChar(event.getCharacter()))
         {
             this.appendTextToCursor(String.valueOf(event.getCharacter()));
             contentChanged = true;
