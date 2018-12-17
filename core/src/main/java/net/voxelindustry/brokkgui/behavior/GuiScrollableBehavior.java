@@ -95,6 +95,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         float scrolled;
         boolean vertical = !BrokkGuiPlatform.getInstance().getKeyboardUtil().isShiftKeyDown();
 
+        System.out.println("Current scroll: " + this.getModel().getScrollY());
         if (vertical)
         {
             if (this.getModel().getHeight() >= this.getModel().getTrueHeight())
@@ -106,6 +107,8 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
                 scrolled = this.getModel().getHeight() - this.getModel().getTrueHeight() - this.getModel().getScrollY();
             if (this.getModel().getScrollY() + scrolled >= 0 && event.getDwheel() > 0)
                 scrolled = 0 - this.getModel().getScrollY();
+            System.out.println("Scrolled: " + event.getDwheel() / 10f * this.getModel().getScrollSpeed());
+
             this.getModel().setScrollY(this.getModel().getScrollY() + scrolled);
         }
         else
