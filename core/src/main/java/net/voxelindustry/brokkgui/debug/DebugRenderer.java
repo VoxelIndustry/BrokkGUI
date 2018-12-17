@@ -9,6 +9,7 @@ import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.ColorConstants;
 import net.voxelindustry.brokkgui.shape.GuiShape;
+import net.voxelindustry.brokkgui.util.MathUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.NumberFormat;
@@ -81,8 +82,13 @@ public class DebugRenderer
 
         if (hoveredNode != null)
         {
-            this.drawTextBox(renderer, getNodeText(hoveredNode), hoveredNode.getxPos() + hoveredNode.getxTranslate(),
+            float xStart = MathUtils.clamp(0,
+                    screen.getScreenWidth() - renderer.getHelper().getStringWidth(getNodeText(hoveredNode)),
+                    hoveredNode.getxPos() + hoveredNode.getxTranslate());
+            float yStart = MathUtils.clamp(0, screen.getScreenHeight() - renderer.getHelper().getStringHeight(),
                     hoveredNode.getyPos() + hoveredNode.getyTranslate() + hoveredNode.getHeight());
+
+            this.drawTextBox(renderer, getNodeText(hoveredNode), xStart, yStart);
             renderer.getHelper().drawColoredEmptyRect(renderer, hoveredNode.getxPos() + hoveredNode.getxTranslate(),
                     hoveredNode.getyPos() + hoveredNode.getyTranslate(), hoveredNode.getWidth(),
                     hoveredNode.getHeight(), 300, borderColor, 0.5f);
