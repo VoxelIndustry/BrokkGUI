@@ -75,3 +75,8 @@ scrollpane .grip-x {
 #horiscroll-rect {
     background-texture: url("brokkguidemo:textures/gui/horiz_scroll.png");
 }
+
+#pretty-label text {
+    shadow: false;
+    color: rgba(1, 1, 1, 0.78);
+}

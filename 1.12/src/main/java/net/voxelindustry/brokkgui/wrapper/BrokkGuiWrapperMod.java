@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.wrapper;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -23,6 +24,9 @@ public class BrokkGuiWrapperMod
         BrokkGuiPlatform.getInstance().setMouseUtil(new MouseUtil());
 
         if (event.getSide().isClient())
+        {
             BrokkGuiPlatform.getInstance().setGuiHelper(new GuiHelper());
+            MinecraftForge.EVENT_BUS.register(new WrapperEventHandler());
+        }
     }
 }

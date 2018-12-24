@@ -188,7 +188,7 @@ public class BrokkGuiScreen implements IGuiWindow
      */
     public void renderLast(int mouseX, int mouseY)
     {
-        if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && this.debugRenderer == null)
+        if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && this.debugRenderer == null && this.wrapper.allowDebug())
         {
             this.renderer.getHelper().drawColoredEmptyRect(this.renderer, 1, 1,
                     this.renderer.getHelper().getStringWidth("DEBUG") + 2,
@@ -197,7 +197,7 @@ public class BrokkGuiScreen implements IGuiWindow
             this.renderer.getHelper().drawString("DEBUG", 2, 2, 400, Color.WHITE, Color.ALPHA);
         }
 
-        if (this.debugRenderer != null)
+        if (this.debugRenderer != null && this.wrapper.allowDebug())
             this.debugRenderer.render(this.renderer, mouseX, mouseY);
     }
 
@@ -213,7 +213,7 @@ public class BrokkGuiScreen implements IGuiWindow
 
     public void onClick(final int mouseX, final int mouseY, final int key)
     {
-        if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && this.debugRenderer == null)
+        if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && this.debugRenderer == null && this.wrapper.allowDebug())
         {
             if (mouseX > 0 && mouseY > 0 && mouseX < this.renderer.getHelper().getStringWidth("DEBUG") && mouseY < this.renderer.getHelper().getStringHeight())
                 this.debugRenderer = new DebugRenderer(this);
@@ -261,7 +261,7 @@ public class BrokkGuiScreen implements IGuiWindow
         int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
 
-        if(this.debugRenderer != null)
+        if (this.debugRenderer != null)
             this.debugRenderer.onMouseInput();
 
         if (!this.windows.isEmpty())

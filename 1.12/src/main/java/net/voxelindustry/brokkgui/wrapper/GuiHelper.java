@@ -61,12 +61,8 @@ public class GuiHelper implements IGuiHelper
         int height = (int) (i - g);
         ScaledResolution sr = new ScaledResolution(this.mc);
         int factor = sr.getScaleFactor();
-        GuiScreen currentScreen = this.mc.currentScreen;
-        if (currentScreen != null)
-        {
-            int bottomY = (int) (currentScreen.height - i);
-            GL11.glScissor((int) (f * factor), bottomY * factor, width * factor, height * factor);
-        }
+        int bottomY = (int) (sr.getScaledHeight() - i);
+        GL11.glScissor((int) (f * factor), bottomY * factor, width * factor, height * factor);
     }
 
     @Override

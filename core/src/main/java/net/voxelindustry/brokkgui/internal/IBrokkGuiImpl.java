@@ -13,4 +13,9 @@ public interface IBrokkGuiImpl
     IGuiRenderer getRenderer();
 
     String getThemeID();
+
+    default boolean allowDebug()
+    {
+        return true;
+    }
 }
