@@ -103,8 +103,8 @@ public class GuiRenderer implements IGuiRenderer
         {
             case QUADS:
                 return GL11.GL_QUADS;
-            case LINE:
-                return GL11.GL_LINE;
+            case LINE_STRIP:
+                return GL11.GL_LINE_STRIP;
             case LINES:
                 return GL11.GL_LINES;
             case POINTS:

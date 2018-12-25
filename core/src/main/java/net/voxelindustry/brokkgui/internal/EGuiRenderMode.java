@@ -5,5 +5,5 @@ package net.voxelindustry.brokkgui.internal;
  */
 public enum EGuiRenderMode
 {
-    POINTS, LINE, LINES, QUADS, TRIANGLES, TRIANGLES_STRIP;
+    POINTS, LINE_STRIP, LINES, QUADS, TRIANGLES, TRIANGLES_STRIP;
 }

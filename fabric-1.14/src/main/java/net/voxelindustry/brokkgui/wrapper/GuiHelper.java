@@ -266,7 +266,7 @@ public class GuiHelper implements IGuiHelper
         this.enableAlpha();
         GlStateManager.color4f(c.getRed(), c.getGreen(), c.getBlue(), (float) (c.getAlpha() * alphaMask));
 
-        renderer.beginDrawing(EGuiRenderMode.LINE, false);
+        renderer.beginDrawing(EGuiRenderMode.LINES, false);
         GL11.glLineWidth(lineWeight);
 
         renderer.addVertex(startX, startY, zLevel);
