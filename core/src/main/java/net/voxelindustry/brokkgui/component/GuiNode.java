@@ -260,7 +260,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public void handleMouseScroll(int mouseX, int mouseY, double scroll)
     {
         if (scroll != 0)
-            this.getEventDispatcher().dispatchEvent(GuiMouseEvent.WHEEL, new GuiMouseEvent.Wheel(this, (int) scroll));
+            this.getEventDispatcher().dispatchEvent(GuiMouseEvent.WHEEL,
+                    new GuiMouseEvent.Wheel(this, mouseX, mouseY, (int) scroll));
     }
 
     public void handleClick(final int mouseX, final int mouseY, final int key)

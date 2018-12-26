@@ -18,7 +18,7 @@ public class GuiMouseEvent extends GuiInputEvent
 
     private final int mouseX, mouseY;
 
-    public GuiMouseEvent(final GuiNode source, final int mouseX, final int mouseY)
+    public GuiMouseEvent(GuiNode source, int mouseX, int mouseY)
     {
         super(source);
         this.mouseX = mouseX;
@@ -39,9 +39,9 @@ public class GuiMouseEvent extends GuiInputEvent
     {
         private final int dwheel;
 
-        public Wheel(final GuiNode source, final int dwheel)
+        public Wheel(GuiNode source, int mouseX, int mouseY, int dwheel)
         {
-            super(source, 0, 0);
+            super(source, mouseX, mouseY);
 
             this.dwheel = dwheel;
         }
