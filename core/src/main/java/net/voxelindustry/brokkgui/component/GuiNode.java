@@ -315,6 +315,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
         if (this.isDragged())
         {
+            this.getDraggedProperty().setValue(false);
             this.getEventDispatcher().dispatchEvent(GuiMouseEvent.DRAG_STOP,
                     new GuiMouseEvent.DragStop(this, mouseX, mouseY, key, draggedX, draggedY));
             this.draggedX = 0;
