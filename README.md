@@ -16,7 +16,7 @@ To depend on a binding add the following to your gradle build file :
 ```gradle
 repositories {
     maven {
-      url 'http://maven.ferenyr.info/artifactory/libs-release
+      url 'http://maven.ferenyr.info/artifactory/libs-release'
     }
 }
 
@@ -36,9 +36,9 @@ There are several officials bindings bundled in this repository but the creation
 
 | Platform      | Status    | Future    |
 | ------------- | --------- | --------- |
-| Minecraft 1.7.10 | No container support | :warning:**Slated for removal** |
 | Minecraft 1.11 | Full support | :warning:**Will be removed in 1.13** |
 | Minecraft 1.12 | Full support | :white_check_mark:**Latest** |
+| Minecraft 1.14 | No container support | :warning:**Experimental** |
 
 # Features
 #### CSS Engine
