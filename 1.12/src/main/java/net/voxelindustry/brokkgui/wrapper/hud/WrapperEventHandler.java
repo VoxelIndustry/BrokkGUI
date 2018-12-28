@@ -1,5 +1,9 @@
-package net.voxelindustry.brokkgui.wrapper;
+package net.voxelindustry.brokkgui.wrapper.hud;
 
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
+import com.google.common.collect.Multimaps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,6 +21,7 @@ import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.wrapper.impl.GlobalHudImpl;
 import net.voxelindustry.brokkgui.wrapper.impl.HudImpl;
 import net.voxelindustry.brokkgui.wrapper.impl.WorldScreenImpl;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -25,14 +30,15 @@ import java.util.function.Supplier;
 
 public class WrapperEventHandler
 {
-    private              GlobalHudImpl                          globalHud;
-    private static final Map<Supplier<BrokkGuiScreen>, Boolean> HUDs = new HashMap<>();
+    public WrapperEventHandler()
+    {
+    }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event)
     {
-       
+
     }
 
     @SubscribeEvent
@@ -91,26 +97,5 @@ public class WrapperEventHandler
         GlStateManager.disableBlend();
         GlStateManager.popAttrib();
         GlStateManager.popMatrix();
-    }
-
-    public static void addHUD(Supplier<BrokkGuiScreen> screenSupplier, boolean openByDefault)
-    {
-        HUDs.put(screenSupplier, openByDefault);
-    }
-
-    private GlobalHudImpl getGlobalHud()
-    {
-        if (this.globalHud == null)
-        {
-            this.globalHud = new GlobalHudImpl(Minecraft.getMinecraft());
-
-            HUDs.forEach((hudCreator, config) ->
-            {
-                HudImpl hud = new HudImpl(globalHud, hudCreator.get());
-                hud.setOpenByDefault(config);
-                globalHud.attach(hud);
-            });
-        }
-        return this.globalHud;
     }
 }

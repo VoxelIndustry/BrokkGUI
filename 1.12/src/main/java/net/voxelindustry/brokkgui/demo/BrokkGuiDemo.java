@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
-import net.voxelindustry.brokkgui.wrapper.WrapperEventHandler;
+import net.voxelindustry.brokkgui.wrapper.hud.WrapperEventHandler;
 import net.voxelindustry.brokkgui.wrapper.impl.BrokkGuiManager;
 
 @Mod(modid = BrokkGuiDemo.MODID, version = BrokkGuiDemo.VERSION, name = BrokkGuiDemo.MODNAME, dependencies = "required-after:brokkguiwrapper")
