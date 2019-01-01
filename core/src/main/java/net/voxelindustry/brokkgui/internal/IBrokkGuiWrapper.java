@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.internal;
 
-public interface IBrokkGuiImpl
+public interface IBrokkGuiWrapper
 {
     int getScreenWidth();
 

@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -18,10 +19,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
-import net.voxelindustry.brokkgui.wrapper.hud.WrapperEventHandler;
+import net.voxelindustry.brokkgui.wrapper.hud.HUDManager;
 import net.voxelindustry.brokkgui.wrapper.impl.BrokkGuiManager;
 
-@Mod(modid = BrokkGuiDemo.MODID, version = BrokkGuiDemo.VERSION, name = BrokkGuiDemo.MODNAME, dependencies = "required-after:brokkguiwrapper")
+@Mod(modid = BrokkGuiDemo.MODID, version = BrokkGuiDemo.VERSION, name = BrokkGuiDemo.MODNAME, dependencies =
+        "required-after:brokkguiwrapper")
 public class BrokkGuiDemo
 {
     public static final String MODID   = "brokkguidemo";
@@ -39,7 +41,7 @@ public class BrokkGuiDemo
         BrokkGuiPlatform.getInstance().enableRenderDebug(true);
 
         if (event.getSide().isClient())
-            WrapperEventHandler.addHUD(HUDDemo::new, true);
+            HUDManager.addHUD(new ResourceLocation(MODID, "huddemo"), HUDDemo::new, true);
     }
 
     @SubscribeEvent

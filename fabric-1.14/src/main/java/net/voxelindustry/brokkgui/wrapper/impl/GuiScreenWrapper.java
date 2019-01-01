@@ -5,7 +5,7 @@ import net.minecraft.client.render.Tessellator;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
-import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
+import net.voxelindustry.brokkgui.internal.IBrokkGuiWrapper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
@@ -13,14 +13,14 @@ import net.voxelindustry.brokkgui.wrapper.GuiHelper;
 import net.voxelindustry.brokkgui.wrapper.GuiRenderer;
 import org.lwjgl.glfw.GLFW;
 
-public class GuiScreenImpl extends Gui implements IBrokkGuiImpl
+public class GuiScreenWrapper extends Gui implements IBrokkGuiWrapper
 {
     private final BrokkGuiScreen brokkgui;
     private final String         modID;
 
     private final GuiRenderer renderer;
 
-    GuiScreenImpl(String modID, BrokkGuiScreen brokkgui)
+    GuiScreenWrapper(String modID, BrokkGuiScreen brokkgui)
     {
         this.brokkgui = brokkgui;
         this.modID = modID;

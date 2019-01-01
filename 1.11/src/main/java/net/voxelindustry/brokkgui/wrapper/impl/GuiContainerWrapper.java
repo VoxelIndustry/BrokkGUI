@@ -9,7 +9,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
-import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
+import net.voxelindustry.brokkgui.internal.IBrokkGuiWrapper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
@@ -21,14 +21,14 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
+public class GuiContainerWrapper extends GuiContainer implements IBrokkGuiWrapper
 {
     private final BrokkGuiContainer<? extends Container> brokkgui;
     private       String                                 modID;
 
     private final GuiRenderer renderer;
 
-    GuiContainerImpl(String modID, BrokkGuiContainer<? extends Container> brokkGui)
+    GuiContainerWrapper(String modID, BrokkGuiContainer<? extends Container> brokkGui)
     {
         super(brokkGui.getContainer());
         this.brokkgui = brokkGui;
@@ -75,9 +75,6 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
-
-        if (brokkgui.allowContainerHover(mouseX, mouseY))
-            this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
@@ -90,7 +87,7 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+    protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY)
     {
         this.brokkgui.render(mouseX, mouseY, RenderTarget.MAIN,
                 RenderPass.BACKGROUND, RenderPass.MAIN, RenderPass.FOREGROUND, RenderPass.HOVER);

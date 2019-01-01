@@ -20,7 +20,7 @@ public class BrokkGuiManager
 
     public static GuiScreen getBrokkGuiScreen(String modID, BrokkGuiScreen brokkGui)
     {
-        return new GuiScreenImpl(modID, brokkGui);
+        return new GuiScreenWrapper(modID, brokkGui);
     }
 
     public static GuiContainer getBrokkGuiContainer(BrokkGuiContainer<? extends Container> brokkGui)
@@ -30,7 +30,7 @@ public class BrokkGuiManager
 
     public static GuiContainer getBrokkGuiContainer(String modID, BrokkGuiContainer<? extends Container> brokkGui)
     {
-        return new GuiContainerImpl(modID, brokkGui);
+        return new GuiContainerWrapper(modID, brokkGui);
     }
 
     public static void openBrokkGuiScreen(BrokkGuiScreen brokkGui)

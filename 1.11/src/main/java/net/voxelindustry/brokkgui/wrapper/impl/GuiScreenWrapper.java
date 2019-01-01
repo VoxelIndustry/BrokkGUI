@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
-import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
+import net.voxelindustry.brokkgui.internal.IBrokkGuiWrapper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
@@ -16,14 +16,14 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
+public class GuiScreenWrapper extends GuiScreen implements IBrokkGuiWrapper
 {
     private final BrokkGuiScreen brokkgui;
     private final String         modID;
 
     private final GuiRenderer renderer;
 
-    GuiScreenImpl(String modID, BrokkGuiScreen brokkgui)
+    GuiScreenWrapper(String modID, BrokkGuiScreen brokkgui)
     {
         this.brokkgui = brokkgui;
         this.modID = modID;
@@ -72,6 +72,7 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
         this.brokkgui.render(mouseX, mouseY, RenderTarget.POPUP,
                 RenderPass.BACKGROUND, RenderPass.MAIN, RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN,
                 GuiHelper.ITEM_HOVER);
+
         this.brokkgui.renderLast(mouseX, mouseY);
     }
 

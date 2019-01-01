@@ -1,15 +1,13 @@
 package net.voxelindustry.brokkgui.wrapper.hud;
 
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
-import com.google.common.collect.Multimaps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,19 +15,13 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.voxelindustry.brokkgui.demo.WorldGuiDemo;
-import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
-import net.voxelindustry.brokkgui.wrapper.impl.GlobalHudImpl;
-import net.voxelindustry.brokkgui.wrapper.impl.HudImpl;
-import net.voxelindustry.brokkgui.wrapper.impl.WorldScreenImpl;
-import org.apache.commons.lang3.tuple.Pair;
+import net.voxelindustry.brokkgui.wrapper.impl.WorldScreenWrapper;
 import org.lwjgl.opengl.GL11;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
 
 public class WrapperEventHandler
 {
+    private ScaledResolution cachedResolution;
+
     public WrapperEventHandler()
     {
     }
@@ -42,12 +34,21 @@ public class WrapperEventHandler
     }
 
     @SubscribeEvent
-    public void onGameOverlay(RenderGameOverlayEvent e)
+    public void onGameOverlay(RenderGameOverlayEvent.Post e)
     {
-        if (e.getType() != RenderGameOverlayEvent.ElementType.EXPERIENCE)
-            return;
+        if (e.getResolution() != cachedResolution)
+        {
+            this.cachedResolution = e.getResolution();
+            HUDManager.getInstance().getGlobalHud().setResolution(cachedResolution);
+        }
 
-        getGlobalHud().render();
+        HUDManager.getInstance().getGlobalHud().render(e.getType());
+    }
+
+    @SubscribeEvent
+    public void onGuiOpen(GuiOpenEvent e)
+    {
+        HUDManager.getInstance().getGlobalHud().onGuiChange(e.getGui());
     }
 
     @SubscribeEvent
@@ -87,7 +88,7 @@ public class WrapperEventHandler
                     GlStateManager.rotate(-180, 0, 0, 1);
 
                     GlStateManager.scale(0.0625f / 16, 0.0625f / 16, 0.0625f / 16);
-                    WorldScreenImpl screen = new WorldScreenImpl(new WorldGuiDemo(), 256, 256);
+                    WorldScreenWrapper screen = new WorldScreenWrapper(new WorldGuiDemo(), 256, 256);
 
                     screen.render();
 

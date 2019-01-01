@@ -4,15 +4,16 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 public class HUDConfig
 {
-    private boolean openByDefault;
-    private boolean closeOnHide;
+    private boolean      openByDefault;
+    private HUDGuiPolicy hudGuiPolicy;
 
     private RenderGameOverlayEvent.ElementType type;
 
-    public HUDConfig(boolean openByDefault, boolean closeOnHide, RenderGameOverlayEvent.ElementType type)
+    public HUDConfig(boolean openByDefault, HUDGuiPolicy hudGuiPolicy,
+                     RenderGameOverlayEvent.ElementType type)
     {
         this.openByDefault = openByDefault;
-        this.closeOnHide = closeOnHide;
+        this.hudGuiPolicy = hudGuiPolicy;
         this.type = type;
     }
 
@@ -21,9 +22,9 @@ public class HUDConfig
         return openByDefault;
     }
 
-    public boolean isCloseOnHide()
+    public HUDGuiPolicy getHudGuiPolicy()
     {
-        return closeOnHide;
+        return hudGuiPolicy;
     }
 
     public RenderGameOverlayEvent.ElementType getType()
@@ -38,9 +39,8 @@ public class HUDConfig
 
     public static class Builder
     {
-        private boolean openByDefault;
-        private boolean closeOnHide;
-
+        private boolean                            openByDefault;
+        private HUDGuiPolicy                       hudGuiPolicy;
         private RenderGameOverlayEvent.ElementType type;
 
         public Builder setOpenByDefault(boolean openByDefault)
@@ -49,9 +49,9 @@ public class HUDConfig
             return this;
         }
 
-        public Builder setCloseOnHide(boolean closeOnHide)
+        public Builder setHudGuiPolicy(HUDGuiPolicy hudGuiPolicy)
         {
-            this.closeOnHide = closeOnHide;
+            this.hudGuiPolicy = hudGuiPolicy;
             return this;
         }
 
@@ -63,7 +63,7 @@ public class HUDConfig
 
         public HUDConfig create()
         {
-            return new HUDConfig(openByDefault, closeOnHide, type);
+            return new HUDConfig(openByDefault, hudGuiPolicy, type);
         }
     }
 }

@@ -8,7 +8,7 @@ import net.minecraft.container.ActionTypeSlot;
 import net.minecraft.container.Container;
 import net.minecraft.container.Slot;
 import net.voxelindustry.brokkgui.GuiFocusManager;
-import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
+import net.voxelindustry.brokkgui.internal.IBrokkGuiWrapper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
@@ -17,14 +17,14 @@ import net.voxelindustry.brokkgui.wrapper.GuiRenderer;
 import net.voxelindustry.brokkgui.wrapper.container.BrokkGuiContainer;
 import org.lwjgl.glfw.GLFW;
 
-public class GuiContainerImpl extends ContainerGui implements IBrokkGuiImpl
+public class GuiContainerWrapper extends ContainerGui implements IBrokkGuiWrapper
 {
     private final BrokkGuiContainer<? extends Container> brokkgui;
     private       String                                 modID;
 
     private final GuiRenderer renderer;
 
-    GuiContainerImpl(String modID, BrokkGuiContainer<? extends Container> brokkGui)
+    GuiContainerWrapper(String modID, BrokkGuiContainer<? extends Container> brokkGui)
     {
         super(brokkGui.getContainer());
         this.brokkgui = brokkGui;

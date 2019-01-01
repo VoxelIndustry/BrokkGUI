@@ -1,55 +1,78 @@
 package net.voxelindustry.brokkgui.wrapper.hud;
 
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.MultimapBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.wrapper.impl.GlobalHudImpl;
-import net.voxelindustry.brokkgui.wrapper.impl.HudImpl;
+import net.voxelindustry.brokkgui.wrapper.impl.HudWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class HUDManager
 {
-    private static final ListMultimap<RenderGameOverlayEvent.ElementType, Pair<Supplier<BrokkGuiScreen>, HUDConfig>> HUDs =
-            MultimapBuilder.hashKeys().arrayListValues().build();
+    private static final Map<ResourceLocation, Pair<Supplier<BrokkGuiScreen>, HUDConfig>> HUDs = new HashMap<>();
+
+    public static void addHUD(ResourceLocation rsl, Supplier<BrokkGuiScreen> screenSupplier)
+    {
+        addHUD(rsl, screenSupplier, true);
+    }
+
+    public static void addHUD(ResourceLocation rsl, Supplier<BrokkGuiScreen> screenSupplier, boolean openByDefault)
+    {
+        addHUD(rsl, screenSupplier, openByDefault, RenderGameOverlayEvent.ElementType.EXPERIENCE);
+    }
+
+    public static void addHUD(ResourceLocation rsl, Supplier<BrokkGuiScreen> screenSupplier, boolean openByDefault,
+                              RenderGameOverlayEvent.ElementType type)
+    {
+        addHUD(rsl, screenSupplier, HUDConfig.build().setOpenByDefault(openByDefault).setType(type).create());
+    }
+
+    public static void addHUD(ResourceLocation rsl, Supplier<BrokkGuiScreen> screenSupplier, HUDConfig config)
+    {
+        HUDs.put(rsl, Pair.of(screenSupplier, config));
+    }
+
+    public static void openHUD(ResourceLocation rsl)
+    {
+        getInstance().getGlobalHud().askOpen(getInstance().getGlobalHud().getHUD(rsl));
+    }
+
+    public static void closeHUD(ResourceLocation rsl)
+    {
+        getInstance().getGlobalHud().askClose(getInstance().getGlobalHud().getHUD(rsl));
+    }
+
+    private static HUDManager INSTANCE;
+
+    public static HUDManager getInstance()
+    {
+        if (INSTANCE == null)
+            INSTANCE = new HUDManager();
+        return INSTANCE;
+    }
 
     private GlobalHudImpl globalHud;
 
-    public static void addHUD(Supplier<BrokkGuiScreen> screenSupplier)
+    private HUDManager()
     {
-        addHUD(screenSupplier, true);
+
     }
 
-    public static void addHUD(Supplier<BrokkGuiScreen> screenSupplier, boolean openByDefault)
-    {
-        addHUD(screenSupplier, openByDefault, RenderGameOverlayEvent.ElementType.EXPERIENCE);
-    }
-
-    public static void addHUD(Supplier<BrokkGuiScreen> screenSupplier, boolean openByDefault,
-                              RenderGameOverlayEvent.ElementType type)
-    {
-        addHUD(screenSupplier, HUDConfig.build().setOpenByDefault(openByDefault).setType(type).create());
-    }
-
-    public static void addHUD(Supplier<BrokkGuiScreen> screenSupplier, HUDConfig config)
-    {
-        HUDs.put(config.getType(), Pair.of(screenSupplier, config));
-    }
-
-    private GlobalHudImpl getGlobalHud()
+    protected GlobalHudImpl getGlobalHud()
     {
         if (this.globalHud == null)
         {
             this.globalHud = new GlobalHudImpl(Minecraft.getMinecraft());
 
-            HUDs.forEach((hudCreator, config) ->
+            HUDs.forEach((rsl, hudCreator) ->
             {
-                HudImpl hud = new HudImpl(globalHud, hudCreator.get());
-                hud.setOpenByDefault(config);
-                globalHud.attach(hud);
+                HudWrapper hud = new HudWrapper(globalHud, hudCreator.getKey().get(), hudCreator.getValue());
+                globalHud.attach(rsl, hud);
             });
         }
         return this.globalHud;

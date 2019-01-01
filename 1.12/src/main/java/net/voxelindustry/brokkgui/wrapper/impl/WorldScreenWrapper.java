@@ -2,20 +2,20 @@ package net.voxelindustry.brokkgui.wrapper.impl;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
-import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
+import net.voxelindustry.brokkgui.internal.IBrokkGuiWrapper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
 import net.voxelindustry.brokkgui.wrapper.GuiHelper;
 import net.voxelindustry.brokkgui.wrapper.GuiRenderer;
 
-public class WorldScreenImpl implements IBrokkGuiImpl
+public class WorldScreenWrapper implements IBrokkGuiWrapper
 {
     private int windowWidth, windowHeight;
     private final BrokkGuiScreen screen;
     private final GuiRenderer    renderer;
 
-    public WorldScreenImpl(BrokkGuiScreen screen, int windowWidth, int windowHeight)
+    public WorldScreenWrapper(BrokkGuiScreen screen, int windowWidth, int windowHeight)
     {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;

@@ -8,7 +8,7 @@ import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.debug.DebugRenderer;
 import net.voxelindustry.brokkgui.event.WindowEvent;
-import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
+import net.voxelindustry.brokkgui.internal.IBrokkGuiWrapper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.paint.Color;
@@ -46,7 +46,7 @@ public class BrokkGuiScreen implements IGuiWindow
 
     private final ListenerPool listenerPool;
 
-    private IBrokkGuiImpl wrapper;
+    private IBrokkGuiWrapper wrapper;
 
     private int cachedMouseX, cachedMouseY;
     private int lastClickX, lastClickY;
@@ -93,7 +93,7 @@ public class BrokkGuiScreen implements IGuiWindow
         this(0, 0);
     }
 
-    public void setWrapper(final IBrokkGuiImpl wrapper)
+    public void setWrapper(final IBrokkGuiWrapper wrapper)
     {
         this.wrapper = wrapper;
 
