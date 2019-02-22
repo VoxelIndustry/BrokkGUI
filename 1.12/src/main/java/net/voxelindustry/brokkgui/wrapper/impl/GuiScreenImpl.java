@@ -133,18 +133,6 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     }
 
     @Override
-    public int getScreenWidth()
-    {
-        return this.width;
-    }
-
-    @Override
-    public int getScreenHeight()
-    {
-        return this.height;
-    }
-
-    @Override
     public IGuiRenderer getRenderer()
     {
         return this.renderer;
@@ -154,6 +142,18 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     public String getThemeID()
     {
         return this.modID;
+    }
+
+    @Override
+    public float getGuiRelativePosX()
+    {
+        return (int) (this.width / (1 / brokkgui.getxRelativePos()) - brokkgui.getWidth() / 2);
+    }
+
+    @Override
+    public float getGuiRelativePosY()
+    {
+        return (int) (this.height / (1 / brokkgui.getyRelativePos()) - brokkgui.getHeight() / 2);
     }
 
     public BrokkGuiScreen getGui()

@@ -99,15 +99,11 @@ public class BrokkGuiScreen implements IGuiWindow
 
         this.renderer = wrapper.getRenderer();
 
-        this.xPosProperty.bind(new BaseExpression<>(() ->
-                BrokkGuiScreen.this.getScreenWidth() / (1 / BrokkGuiScreen.this.getxRelativePos())
-                        - BrokkGuiScreen.this.getWidth() / 2, this.getScreenWidthProperty(), this
-                .getxRelativePosProperty(), this.getWidthProperty()));
+        this.xPosProperty.bind(new BaseExpression<>(wrapper::getGuiRelativePosX,
+                this.getScreenWidthProperty(), this.getxRelativePosProperty(), this.getWidthProperty()));
 
-        this.yPosProperty.bind(new BaseExpression<>(() ->
-                BrokkGuiScreen.this.getScreenHeight() / (1 / BrokkGuiScreen.this.getyRelativePos())
-                        - BrokkGuiScreen.this.getHeight() / 2, this.getyRelativePosProperty(), this
-                .getScreenHeightProperty(), this.getHeightProperty()));
+        this.yPosProperty.bind(new BaseExpression<>(wrapper::getGuiRelativePosY,
+                this.getyRelativePosProperty(), this.getScreenHeightProperty(), this.getHeightProperty()));
 
         this.stylesheetsProperty.addListener(obs ->
         {
@@ -261,7 +257,7 @@ public class BrokkGuiScreen implements IGuiWindow
         int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
 
-        if(this.debugRenderer != null)
+        if (this.debugRenderer != null)
             this.debugRenderer.onMouseInput();
 
         if (!this.windows.isEmpty())

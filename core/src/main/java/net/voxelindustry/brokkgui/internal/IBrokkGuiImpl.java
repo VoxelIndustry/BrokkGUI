@@ -2,10 +2,6 @@ package net.voxelindustry.brokkgui.internal;
 
 public interface IBrokkGuiImpl
 {
-    int getScreenWidth();
-
-    int getScreenHeight();
-
     void askOpen();
 
     void askClose();
@@ -13,4 +9,8 @@ public interface IBrokkGuiImpl
     IGuiRenderer getRenderer();
 
     String getThemeID();
+
+    float getGuiRelativePosX();
+
+    float getGuiRelativePosY();
 }
