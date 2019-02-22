@@ -34,7 +34,7 @@ public class BrokkGuiDemo implements ModInitializer
                         player.setCurrentHand(hand);
 
                         if (world.isClient() && !player.isSneaking())
-                            MinecraftClient.getInstance().openGui(BrokkGuiManager.getBrokkGuiScreen(new GuiDemo()));
+                            MinecraftClient.getInstance().openScreen(BrokkGuiManager.getBrokkGuiScreen(new GuiDemo()));
                         // TODO : Add container opening
 
                         return new TypedActionResult<>(ActionResult.PASS, player.getStackInHand(hand));

@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.wrapper;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Mouse;
+import net.minecraft.client.Mouse;
 import net.voxelindustry.brokkgui.internal.IMouseUtil;
 
 /**
@@ -29,22 +29,20 @@ public class MouseUtil implements IMouseUtil
 
     public int getMouseX()
     {
-        if (MinecraftClient.getInstance().currentGui == null)
-            // Mouse.getX
+        if (MinecraftClient.getInstance().currentScreen == null)
             return (int) this.getMouse().getX();
         return (int) (getMouse().getX() * MinecraftClient.getInstance().window.getScaledWidth() /
-                MinecraftClient.getInstance().window.method_4480());
+                MinecraftClient.getInstance().window.getWidth());
     }
 
     public int getMouseY()
     {
-        if (MinecraftClient.getInstance().currentGui == null)
-            // Mouse.getY
+        if (MinecraftClient.getInstance().currentScreen == null)
             return (int) this.getMouse().getY();
 
         // Mouse.getEventY
         return (int) (getMouse().getY() * MinecraftClient.getInstance().window.getScaledHeight() /
-                MinecraftClient.getInstance().window.method_4507());
+                MinecraftClient.getInstance().window.getHeight());
     }
 
     public Mouse getMouse()

@@ -3,8 +3,8 @@ package net.voxelindustry.brokkgui.wrapper;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.FontRenderer;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.item.TooltipOptions;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GuiLighting;
@@ -60,8 +60,8 @@ public class GuiHelper implements IGuiHelper
     {
         int width = (int) (h - f);
         int height = (int) (i - g);
-        double factor = this.mc.window.method_4495();
-        Gui currentScreen = this.mc.currentGui;
+        double factor = this.mc.window.getScaleFactor();
+        Screen currentScreen = this.mc.currentScreen;
         if (currentScreen != null)
         {
             int bottomY = (int) (currentScreen.height - i);
@@ -71,7 +71,7 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public void drawString(String string, int x, int y, float zLevel, Color textColor, Color shadowColor)
+    public void drawString(String string, float x, float y, float zLevel, Color textColor, Color shadowColor)
     {
         GlStateManager.enableBlend();
         GlStateManager.clearCurrentColor();
@@ -82,8 +82,8 @@ public class GuiHelper implements IGuiHelper
         }
 
         if (shadowColor.getAlpha() != 0)
-            this.mc.fontRenderer.draw(string, x + 1, y + 1, this.applyAlphaMask(shadowColor).toRGBAInt());
-        this.mc.fontRenderer.draw(string, x, y, this.applyAlphaMask(textColor).toRGBAInt());
+            this.mc.textRenderer.draw(string, x + 1, y + 1, this.applyAlphaMask(shadowColor).toRGBAInt());
+        this.mc.textRenderer.draw(string, x, y, this.applyAlphaMask(textColor).toRGBAInt());
         if (zLevel != 0)
             GL11.glPopMatrix();
         GlStateManager.clearCurrentColor();
@@ -91,15 +91,9 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public void drawString(String string, double x, double y, float zLevel, Color textColor, Color shadowColor)
+    public void drawString(String string, float x, float y, float zLevel, Color textColor)
     {
-        this.drawString(string, (int) x, (int) y, zLevel, textColor, shadowColor);
-    }
-
-    @Override
-    public void drawString(String string, double x, double y, float zLevel, Color textColor)
-    {
-        this.drawString(string, (int) x, (int) y, zLevel, textColor, Color.ALPHA);
+        this.drawString(string, x, y, zLevel, textColor, Color.ALPHA);
     }
 
     @Override
@@ -298,7 +292,7 @@ public class GuiHelper implements IGuiHelper
             GlStateManager.pushMatrix();
             GlStateManager.translatef(-(startX * (scaleX - 1)) - 8 * scaleX, -(startY * (scaleY - 1)) - 8 * scaleY, 0);
             GlStateManager.scalef(scaleX, scaleY, 1);
-            FontRenderer font = this.mc.fontRenderer;
+            TextRenderer font = this.mc.textRenderer;
 
             GlStateManager.pushMatrix();
             GlStateManager.translatef(0.0F, 0.0F, 32.0F);
@@ -313,7 +307,7 @@ public class GuiHelper implements IGuiHelper
             GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, short1 / 1.0F, short2 / 1.0F);
 
             this.itemHelper.renderItemStack(stack, (int) startX, (int) startY, zLevel, applyAlphaMask(color));
-            this.getRenderItem().renderItemOverlaysInGUIWithText(font, stack, (int) startX, (int) startY,
+            this.getRenderItem().renderGuiItemOverlay(font, stack, (int) startX, (int) startY,
                     displayString);
             GlStateManager.popMatrix();
             GlStateManager.disableRescaleNormal();
@@ -350,7 +344,7 @@ public class GuiHelper implements IGuiHelper
         GuiLighting.disable();
         GlStateManager.disableLighting();
         GlStateManager.disableDepthTest();
-        int maxLineWidth = tooltipText.stream().mapToInt(mc.fontRenderer::getStringWidth).sum();
+        int maxLineWidth = tooltipText.stream().mapToInt(mc.textRenderer::getStringWidth).sum();
 
         int xStart = x + 12;
         int yStart = y - 12;
@@ -360,14 +354,14 @@ public class GuiHelper implements IGuiHelper
             var8 += 2 + (tooltipText.size() - 1) * 10;
         }
 
-        if (xStart + maxLineWidth > this.mc.window.getWindowWidth())
+        if (xStart + maxLineWidth > this.mc.window.getWidth())
         {
             xStart -= 28 + maxLineWidth;
         }
 
-        if (yStart + var8 + 6 > this.mc.window.getWindowHeight())
+        if (yStart + var8 + 6 > this.mc.window.getHeight())
         {
-            yStart = this.mc.window.getWindowHeight() - var8 - 6;
+            yStart = this.mc.window.getHeight() - var8 - 6;
         }
 
         int var9 = -267386864;
@@ -397,7 +391,7 @@ public class GuiHelper implements IGuiHelper
         for (int index = 0; index < tooltipText.size(); ++index)
         {
             String line = tooltipText.get(index);
-            this.mc.fontRenderer.drawWithShadow(line, (float) xStart, (float) yStart, -1);
+            this.mc.textRenderer.drawWithShadow(line, (float) xStart, (float) yStart, -1);
             if (index == 0)
                 yStart += 2;
             yStart += 10;
@@ -422,9 +416,9 @@ public class GuiHelper implements IGuiHelper
         GlStateManager.disableTexture();
         GlStateManager.enableBlend();
         GlStateManager.disableAlphaTest();
-        GlStateManager.blendFuncSeparate(GlStateManager.SrcBlendFactor.SRC_ALPHA,
-                GlStateManager.DstBlendFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcBlendFactor.ONE,
-                GlStateManager.DstBlendFactor.ZERO);
+        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO);
         GlStateManager.shadeModel(7425);
         Tessellator var15 = Tessellator.getInstance();
         BufferBuilder var16 = var15.getBufferBuilder();
@@ -449,11 +443,11 @@ public class GuiHelper implements IGuiHelper
     @Override
     public void translateVecToScreenSpace(Vector2i vec)
     {
-        Gui currentScreen = this.mc.currentGui;
+        Screen currentScreen = this.mc.currentScreen;
         if (currentScreen != null)
         {
-            vec.setX((int) (vec.getX() / ((float) currentScreen.width / this.mc.window.getWindowWidth())));
-            vec.setY((int) ((currentScreen.height - vec.getY()) / ((float) currentScreen.height / this.mc.window.getWindowHeight())
+            vec.setX((int) (vec.getX() / ((float) currentScreen.width / this.mc.window.getWidth())));
+            vec.setY((int) ((currentScreen.height - vec.getY()) / ((float) currentScreen.height / this.mc.window.getHeight())
                     - 1));
         }
     }
@@ -461,19 +455,19 @@ public class GuiHelper implements IGuiHelper
     @Override
     public String trimStringToPixelWidth(String str, int pixelWidth)
     {
-        return this.mc.fontRenderer.wrapStringToWidth(str, pixelWidth);
+        return this.mc.textRenderer.wrapStringToWidth(str, pixelWidth);
     }
 
     @Override
     public float getStringWidth(String str)
     {
-        return this.mc.fontRenderer.getStringWidth(str);
+        return this.mc.textRenderer.getStringWidth(str);
     }
 
     @Override
     public float getStringHeight()
     {
-        return this.mc.fontRenderer.fontHeight;
+        return this.mc.textRenderer.fontHeight;
     }
 
     @Override
@@ -517,9 +511,9 @@ public class GuiHelper implements IGuiHelper
         GlStateManager.enableBlend();
         GlStateManager.enableAlphaTest();
         GlStateManager.enableDepthTest();
-        GlStateManager.blendFuncSeparate(GlStateManager.SrcBlendFactor.SRC_ALPHA,
-                GlStateManager.DstBlendFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcBlendFactor.ONE,
-                GlStateManager.DstBlendFactor.ZERO);
+        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO);
     }
 
     private void disableAlpha()

@@ -5,7 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.render.item.ItemBuiltinRenderer;
+import net.minecraft.client.render.item.ItemDynamicRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
@@ -38,8 +38,8 @@ public class GuiRenderItemHelper
     {
         GlStateManager.translatef(0.0F, 0.0F, 32.0F);
 
-        BakedModel model = this.getRenderItem().getModelMap().getModel(stack);
-        model = model.getItemPropertyOverrides().method_3495(model, stack, null, MinecraftClient.getInstance().player);
+        BakedModel model = this.getRenderItem().getModels().getModel(stack);
+        model = model.getItemPropertyOverrides().apply(model, stack, null, MinecraftClient.getInstance().player);
 
         GlStateManager.pushMatrix();
         this.mc.getTextureManager().bindTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
@@ -48,8 +48,8 @@ public class GuiRenderItemHelper
         GlStateManager.enableAlphaTest();
         GlStateManager.alphaFunc(516, 0.1F);
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SrcBlendFactor.SRC_ALPHA,
-                GlStateManager.DstBlendFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         this.setupGuiTransform(x, y, model.hasDepthInGui(), (int) zLevel + 50);
 
         if (!stack.isEmpty())
@@ -62,13 +62,13 @@ public class GuiRenderItemHelper
                 GlStateManager.color4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
                 GlStateManager.enableRescaleNormal();
 
-                ItemBuiltinRenderer.INSTANCE.method_3166(stack);
+                ItemDynamicRenderer.INSTANCE.render(stack);
             }
             else
             {
                 this.renderModel(model, color.toRGBAInt(), stack);
 
-                if (stack.hasEnchantmentGlow())
+                if (stack.hasEnchantmentGlint())
                     this.renderEffect(model);
             }
 
@@ -100,8 +100,7 @@ public class GuiRenderItemHelper
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBufferBuilder();
 
-        // VertexFormats.ITEM
-        buffer.begin(7, VertexFormats.field_1590);
+        buffer.begin(7, VertexFormats.POSITION_COLOR_UV_NORMAL);
 
         for (Direction facing : Direction.values())
             this.renderQuads(buffer, model.getQuads(null, facing, rand), color, stack);
@@ -141,26 +140,26 @@ public class GuiRenderItemHelper
         GlStateManager.depthMask(false);
         GlStateManager.depthFunc(514);
         GlStateManager.disableLighting();
-        GlStateManager.blendFunc(GlStateManager.SrcBlendFactor.SRC_COLOR, GlStateManager.DstBlendFactor.ONE);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
         this.mc.getTextureManager().bindTexture(RES_ITEM_GLINT);
         GlStateManager.matrixMode(5890);
         GlStateManager.pushMatrix();
         GlStateManager.scalef(8.0F, 8.0F, 8.0F);
-        float f = (float) (SystemUtil.getMeasuringTimeMili() % 3000L) / 3000.0F / 8.0F;
+        float f = (float) (SystemUtil.getMeasuringTimeMs() % 3000L) / 3000.0F / 8.0F;
         GlStateManager.translatef(f, 0.0F, 0.0F);
         GlStateManager.rotatef(-50.0F, 0.0F, 0.0F, 1.0F);
         this.renderModel(model, -8372020, ItemStack.EMPTY);
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
         GlStateManager.scalef(8.0F, 8.0F, 8.0F);
-        float f1 = (float) (SystemUtil.getMeasuringTimeMili() % 4873L) / 4873.0F / 8.0F;
+        float f1 = (float) (SystemUtil.getMeasuringTimeMs() % 4873L) / 4873.0F / 8.0F;
         GlStateManager.translatef(-f1, 0.0F, 0.0F);
         GlStateManager.rotatef(10.0F, 0.0F, 0.0F, 1.0F);
         this.renderModel(model, -8372020, ItemStack.EMPTY);
         GlStateManager.popMatrix();
         GlStateManager.matrixMode(5888);
-        GlStateManager.blendFunc(GlStateManager.SrcBlendFactor.SRC_ALPHA,
-                GlStateManager.DstBlendFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableLighting();
         GlStateManager.depthFunc(515);
         GlStateManager.depthMask(true);

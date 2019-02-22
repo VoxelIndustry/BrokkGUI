@@ -1,12 +1,14 @@
 package net.voxelindustry.brokkgui.wrapper.impl;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.gui.ContainerGui;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.container.ActionTypeSlot;
 import net.minecraft.container.Container;
 import net.minecraft.container.Slot;
+import net.minecraft.container.SlotActionType;
+import net.minecraft.text.StringTextComponent;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
@@ -17,7 +19,7 @@ import net.voxelindustry.brokkgui.wrapper.GuiRenderer;
 import net.voxelindustry.brokkgui.wrapper.container.BrokkGuiContainer;
 import org.lwjgl.glfw.GLFW;
 
-public class GuiContainerImpl extends ContainerGui implements IBrokkGuiImpl
+public class GuiContainerImpl extends ContainerScreen implements IBrokkGuiImpl
 {
     private final BrokkGuiContainer<? extends Container> brokkgui;
     private       String                                 modID;
@@ -26,7 +28,8 @@ public class GuiContainerImpl extends ContainerGui implements IBrokkGuiImpl
 
     GuiContainerImpl(String modID, BrokkGuiContainer<? extends Container> brokkGui)
     {
-        super(brokkGui.getContainer());
+        super(brokkGui.getContainer(), MinecraftClient.getInstance().player.inventory,
+                new StringTextComponent(modID + ":" + brokkGui.getClass().getSimpleName()));
         this.brokkgui = brokkGui;
         this.modID = modID;
         this.renderer = new GuiRenderer(Tessellator.getInstance());
@@ -83,7 +86,7 @@ public class GuiContainerImpl extends ContainerGui implements IBrokkGuiImpl
         super.draw(mouseX, mouseY, partialTicks);
 
         if (brokkgui.allowContainerHover(mouseX, mouseY))
-            this.drawMousoverTooltip(mouseX, mouseY);
+            this.drawMouseoverTooltip(mouseX, mouseY);
     }
 
     @Override
@@ -171,18 +174,6 @@ public class GuiContainerImpl extends ContainerGui implements IBrokkGuiImpl
     }
 
     @Override
-    public int getScreenWidth()
-    {
-        return this.width;
-    }
-
-    @Override
-    public int getScreenHeight()
-    {
-        return this.height;
-    }
-
-    @Override
     public IGuiRenderer getRenderer()
     {
         return this.renderer;
@@ -195,7 +186,19 @@ public class GuiContainerImpl extends ContainerGui implements IBrokkGuiImpl
     }
 
     @Override
-    protected void onMouseClick(final Slot slot, final int slotID, final int button, final ActionTypeSlot flag)
+    public float getGuiRelativePosX()
+    {
+        return (int) (this.width / (1 / brokkgui.getxRelativePos()) - brokkgui.getWidth() / 2);
+    }
+
+    @Override
+    public float getGuiRelativePosY()
+    {
+        return (int) (this.height / (1 / brokkgui.getyRelativePos()) - brokkgui.getHeight() / 2);
+    }
+
+    @Override
+    protected void onMouseClick(Slot slot, int slotID, int button, SlotActionType flag)
     {
         super.onMouseClick(slot, slotID, button, flag);
 

@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.wrapper;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Screen;
 import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 import org.lwjgl.glfw.GLFW;
 
@@ -42,13 +42,13 @@ public class KeyboardUtil implements IKeyboardUtil
     @Override
     public boolean isCtrlKeyDown()
     {
-        return Gui.isControlPressed();
+        return Screen.isControlPressed();
     }
 
     @Override
     public boolean isShiftKeyDown()
     {
-        return Gui.isShiftPressed();
+        return Screen.isShiftPressed();
     }
 
     @Override

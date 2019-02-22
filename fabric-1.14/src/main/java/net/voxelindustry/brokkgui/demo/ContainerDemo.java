@@ -10,8 +10,11 @@ import net.minecraft.entity.player.PlayerInventory;
  */
 public class ContainerDemo extends Container
 {
-    public ContainerDemo(final PlayerInventory player)
+    public ContainerDemo(PlayerInventory player)
     {
+        // TODO : Use ContainerType
+        super(null,0);
+
         int l;
         for (l = 0; l < 3; ++l)
             for (int i1 = 0; i1 < 9; ++i1)

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.wrapper.impl;
 
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Screen;
 import net.minecraft.client.render.Tessellator;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
@@ -13,7 +13,7 @@ import net.voxelindustry.brokkgui.wrapper.GuiHelper;
 import net.voxelindustry.brokkgui.wrapper.GuiRenderer;
 import org.lwjgl.glfw.GLFW;
 
-public class GuiScreenImpl extends Gui implements IBrokkGuiImpl
+public class GuiScreenImpl extends Screen implements IBrokkGuiImpl
 {
     private final BrokkGuiScreen brokkgui;
     private final String         modID;
@@ -100,8 +100,8 @@ public class GuiScreenImpl extends Gui implements IBrokkGuiImpl
     @Override
     public boolean mouseScrolled(double scrolled)
     {
-        System.out.println(scrolled+"  "+ BrokkGuiPlatform.getInstance().getMouseUtil().getEventDWheel());
-        this.brokkgui.handleMouseScroll(scrolled*120);
+        System.out.println(scrolled + "  " + BrokkGuiPlatform.getInstance().getMouseUtil().getEventDWheel());
+        this.brokkgui.handleMouseScroll(scrolled * 120);
         return super.mouseScrolled(scrolled);
     }
 
@@ -138,21 +138,9 @@ public class GuiScreenImpl extends Gui implements IBrokkGuiImpl
     @Override
     public void askOpen()
     {
-        this.client.openGui(this);
+        this.client.openScreen(this);
 
         this.brokkgui.onOpen();
-    }
-
-    @Override
-    public int getScreenWidth()
-    {
-        return this.width;
-    }
-
-    @Override
-    public int getScreenHeight()
-    {
-        return this.height;
     }
 
     @Override
@@ -165,6 +153,18 @@ public class GuiScreenImpl extends Gui implements IBrokkGuiImpl
     public String getThemeID()
     {
         return this.modID;
+    }
+
+    @Override
+    public float getGuiRelativePosX()
+    {
+        return (int) (this.width / (1 / brokkgui.getxRelativePos()) - brokkgui.getWidth() / 2);
+    }
+
+    @Override
+    public float getGuiRelativePosY()
+    {
+        return (int) (this.height / (1 / brokkgui.getyRelativePos()) - brokkgui.getHeight() / 2);
     }
 
     public BrokkGuiScreen getGui()
