@@ -17,11 +17,9 @@ public interface IGuiHelper
 
     void scissorBox(float f, float g, float h, float i);
 
-    void drawString(String string, int x, int y, float zLevel, Color textColor, Color shadowColor);
+    void drawString(String string, float x, float y, float zLevel, Color textColor, Color shadowColor);
 
-    void drawString(String string, double x, double y, float zLevel, Color textColor, Color shadowColor);
-
-    void drawString(String string, double x, double y, float zLevel, Color textColor);
+    void drawString(String string, float x, float y, float zLevel, Color textColor);
 
     void drawTexturedRect(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
                           float vMax, float width, float height, float zLevel);

@@ -70,7 +70,7 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public void drawString(String string, int x, int y, float zLevel, Color textColor, Color shadowColor)
+    public void drawString(String string, float x, float y, float zLevel, Color textColor, Color shadowColor)
     {
         GlStateManager.enableBlend();
         GlStateManager.resetColor();
@@ -90,15 +90,9 @@ public class GuiHelper implements IGuiHelper
     }
 
     @Override
-    public void drawString(String string, double x, double y, float zLevel, Color textColor, Color shadowColor)
+    public void drawString(String string, float x, float y, float zLevel, Color textColor)
     {
-        this.drawString(string, (int) x, (int) y, zLevel, textColor, shadowColor);
-    }
-
-    @Override
-    public void drawString(String string, double x, double y, float zLevel, Color textColor)
-    {
-        this.drawString(string, (int) x, (int) y, zLevel, textColor, Color.ALPHA);
+        this.drawString(string, x, y, zLevel, textColor, Color.ALPHA);
     }
 
     @Override
