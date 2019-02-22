@@ -1,4 +1,3 @@
 include 'core'
-include '1.11'
 include '1.12'
 include 'fabric-1.14'

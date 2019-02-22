@@ -122,19 +122,10 @@ project(":fabric-1.14") {
     dependencies {
         api project(":core")
 
-        minecraft "com.mojang:minecraft:18w50a"
-        mappings "net.fabricmc:yarn:18w50a.+"
-        modCompile "net.fabricmc:fabric-loader:0.2.0.70"
-        modCompile "net.fabricmc:fabric:0.1.1.51"
-    }
-}
-
-project(":1.11") {
-    archivesBaseName = "brokkgui-binding-mc1.11"
-
-    version = "1.0.0-32-SNAPSHOT"
-    dependencies {
-        api project(":core")
+        minecraft "com.mojang:minecraft:19w07a"
+        mappings "net.fabricmc:yarn:19w07a.+"
+        modCompile "net.fabricmc:fabric-loader:0.3.6.107"
+        modCompile "net.fabricmc:fabric:0.2.1.94"
     }
 }
 
