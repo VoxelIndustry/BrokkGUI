@@ -9,20 +9,20 @@ import org.spongepowered.asm.mixin.Shadow;
 public class MouseMixin implements IAccessibleMouse
 {
     @Shadow
-    private int field_1780;
+    private int activeButton;
 
     @Shadow
-    private double field_1786;
+    private double eventDeltaWheel;
 
     @Override
     public int getMouseButton()
     {
-        return this.field_1780;
+        return this.activeButton;
     }
 
     @Override
     public double getDWheel()
     {
-        return this.field_1786;
+        return this.eventDeltaWheel;
     }
 }

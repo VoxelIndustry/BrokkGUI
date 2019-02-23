@@ -29,7 +29,7 @@ public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extend
     }
 
     @Override
-    protected void onKeyTyped(KeyEvent event)
+    protected void onKeyTyped(KeyEvent.Input event)
     {
         super.onKeyTyped(event);
 
@@ -41,6 +41,14 @@ public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extend
         else if (this.getModel().getText().length() >= this.getModel().getCharBeforeCompletion() &&
                 !skin.isCompletePopupShown())
             skin.showCompletePopup();
+    }
+
+    @Override
+    protected void onKeyPressed(KeyEvent.Press event)
+    {
+        super.onKeyPressed(event);
+
+        GuiTextfieldCompleteSkin skin = (GuiTextfieldCompleteSkin) this.getModel().getSkin();
 
         if (!skin.isCompletePopupShown())
             return;

@@ -107,12 +107,24 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
     }
 
     @Override
+    public void handleKeyboardInput() throws IOException
+    {
+        super.handleKeyboardInput();
+
+        char c0 = Keyboard.getEventCharacter();
+
+        if (Keyboard.getEventKey() == 0 && c0 >= ' ' || !Keyboard.getEventKeyState())
+            this.brokkgui.onKeyReleased(Keyboard.getEventKey());
+    }
+
+    @Override
     public void keyTyped(final char c, final int key) throws IOException
     {
         if (key == BrokkGuiPlatform.getInstance().getKeyboardUtil().getKeyCode("ESCAPE") ||
                 GuiFocusManager.getInstance().getFocusedNode() == null)
             super.keyTyped(c, key);
         this.brokkgui.onKeyTyped(c, key);
+        this.brokkgui.onKeyPressed(key);
     }
 
     @Override

@@ -97,7 +97,7 @@ subprojects {
 project(":core") {
     archivesBaseName = "brokkgui-core"
 
-    version = "1.0.0-34-SNAPSHOT"
+    version = "1.0.0-35-SNAPSHOT"
     dependencies {
         api "fr.ourten:teabeans:0.7.0"
         api "net.voxelindustry:hermod:1.0.0"
@@ -117,7 +117,7 @@ project(":fabric-1.14") {
 
     archivesBaseName = "brokkgui-binding-fabric1.14"
 
-    version = "1.0.0-34-SNAPSHOT"
+    version = "1.0.0-35-SNAPSHOT"
 
     dependencies {
         api project(":core")
@@ -132,7 +132,7 @@ project(":fabric-1.14") {
 project(":1.12") {
     archivesBaseName = "brokkgui-binding-mc1.12"
 
-    version = "1.0.0-34-SNAPSHOT"
+    version = "1.0.0-35-SNAPSHOT"
     dependencies {
         api project(":core")
     }

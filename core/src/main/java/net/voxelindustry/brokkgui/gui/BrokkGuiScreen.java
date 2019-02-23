@@ -260,25 +260,35 @@ public class BrokkGuiScreen implements IGuiWindow
         if (this.debugRenderer != null)
             this.debugRenderer.onMouseInput();
 
-        if (!this.windows.isEmpty())
-        {
-            Optional<SubGuiScreen> match =
-                    this.windows.stream().filter(gui -> gui.isPointInside(mouseX, mouseY)).findFirst();
-
-            if (match.isPresent())
-            {
-                match.get().handleMouseScroll(mouseX, mouseY, scrolled);
-                return;
-            }
-        }
-        if (this.getMainPanel().isPointInside(mouseX, mouseY))
-            this.getMainPanel().handleMouseScroll(mouseX, mouseY, scrolled);
+        GuiFather hovered = this.getNodeUnderMouse(mouseX, mouseY);
+        if (hovered != null)
+            hovered.handleMouseScroll(mouseX, mouseY, scrolled);
     }
 
     public void onKeyTyped(final char c, final int key)
     {
         if (GuiFocusManager.getInstance().getFocusedNode() != null)
             GuiFocusManager.getInstance().getFocusedNode().handleKeyInput(c, key);
+    }
+
+    public void onKeyPressed(int key)
+    {
+        int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
+        int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+
+        GuiFather hovered = this.getNodeUnderMouse(mouseX, mouseY);
+        if (hovered != null)
+            hovered.handleKeyPress(mouseX, mouseY, key);
+    }
+
+    public void onKeyReleased(int key)
+    {
+        int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
+        int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+
+        GuiFather hovered = this.getNodeUnderMouse(mouseX, mouseY);
+        if (hovered != null)
+            hovered.handleKeyRelease(mouseX, mouseY, key);
     }
 
     public void addSubGui(final SubGuiScreen subGui)
@@ -346,6 +356,21 @@ public class BrokkGuiScreen implements IGuiWindow
         this.listenerPool.clear();
         PopupHandler.getInstance().clearPopups();
         this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
+    }
+
+    private GuiFather getNodeUnderMouse(int mouseX, int mouseY)
+    {
+        if (!this.windows.isEmpty())
+        {
+            Optional<SubGuiScreen> match =
+                    this.windows.stream().filter(gui -> gui.isPointInside(mouseX, mouseY)).findFirst();
+
+            if (match.isPresent())
+                return match.get();
+        }
+        if (this.getMainPanel().isPointInside(mouseX, mouseY))
+            return this.getMainPanel();
+        return null;
     }
 
     public GuiPane getMainPanel()

@@ -149,12 +149,32 @@ public class GuiContainerImpl extends ContainerScreen implements IBrokkGuiImpl
     }
 
     @Override
-    public boolean keyPressed(int c, int key, int var3)
+    public boolean keyReleased(int keyCode, int scanCode, int modsField)
     {
-        if (key == GLFW.GLFW_KEY_ESCAPE || GuiFocusManager.getInstance().getFocusedNode() == null)
-            return super.keyPressed(c, key, var3);
-        this.brokkgui.onKeyTyped((char) c, key);
+        this.brokkgui.onKeyReleased(keyCode);
+
+        return super.keyReleased(keyCode, scanCode, modsField);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modsField)
+    {
+        this.brokkgui.onKeyPressed(keyCode);
+
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE || GuiFocusManager.getInstance().getFocusedNode() == null)
+            return super.keyPressed(keyCode, scanCode, modsField);
         return true;
+    }
+
+    @Override
+    public boolean charTyped(char typedChar, int modsField)
+    {
+        if (GuiFocusManager.getInstance().getFocusedNode() != null)
+        {
+            this.brokkgui.onKeyTyped(typedChar, -1);
+            return true;
+        }
+        return super.charTyped(typedChar, modsField);
     }
 
     @Override

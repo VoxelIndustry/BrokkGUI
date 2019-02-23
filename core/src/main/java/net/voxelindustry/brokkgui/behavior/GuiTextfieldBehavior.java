@@ -21,13 +21,29 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
     {
         super(model);
 
-        this.getModel().getEventDispatcher().addHandler(KeyEvent.TYPE, this::onKeyTyped);
+        this.getModel().getEventDispatcher().addHandler(KeyEvent.INPUT, this::onKeyTyped);
+        this.getModel().getEventDispatcher().addHandler(KeyEvent.PRESS, this::onKeyPressed);
     }
 
-    protected void onKeyTyped(final KeyEvent event)
+    protected void onKeyTyped(KeyEvent.Input event)
     {
-        final String oldText = this.getModel().getText();
+        String oldText = this.getModel().getText();
+
+        if (this.getModel().isEditable()
+                && BrokkGuiPlatform.getInstance().getKeyboardUtil().isKeyValidChar(event.getCharacter()))
+        {
+            this.appendTextToCursor(String.valueOf(event.getCharacter()));
+
+            this.getModel().getEventDispatcher().dispatchEvent(TextTypedEvent.TYPE,
+                    new TextTypedEvent(this.getModel(), oldText, this.getModel().getText()));
+        }
+    }
+
+    protected void onKeyPressed(KeyEvent.Press event)
+    {
+        String oldText = this.getModel().getText();
         boolean contentChanged = false;
+
         if (event.getKey() == this.keyboard.getKeyCode("DELETE"))
         {
             if (this.getModel().isEditable())
@@ -67,12 +83,7 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
                 contentChanged = true;
             }
         }
-        else if (this.getModel().isEditable()
-                && BrokkGuiPlatform.getInstance().getKeyboardUtil().isKeyValidChar(event.getCharacter()))
-        {
-            this.appendTextToCursor(String.valueOf(event.getCharacter()));
-            contentChanged = true;
-        }
+
         if (contentChanged)
             this.getModel().getEventDispatcher().dispatchEvent(TextTypedEvent.TYPE,
                     new TextTypedEvent(this.getModel(), oldText, this.getModel().getText()));

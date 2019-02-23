@@ -323,9 +323,19 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         }
     }
 
-    public void handleKeyInput(final char c, final int key)
+    public void handleKeyInput(char c, int key)
     {
-        this.getEventDispatcher().dispatchEvent(KeyEvent.TYPE, new KeyEvent(this, c, key));
+        this.getEventDispatcher().dispatchEvent(KeyEvent.INPUT, new KeyEvent.Input(this, c, key));
+    }
+
+    public void handleKeyPress(int mouseX, int mouseY, int key)
+    {
+        this.getEventDispatcher().dispatchEvent(KeyEvent.PRESS, new KeyEvent.Press(this, key));
+    }
+
+    public void handleKeyRelease(int mouseX, int mouseY, int key)
+    {
+        this.getEventDispatcher().dispatchEvent(KeyEvent.RELEASE, new KeyEvent.Release(this, key));
     }
 
     public boolean isPointInside(final int pointX, final int pointY)

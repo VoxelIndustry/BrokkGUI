@@ -183,6 +183,24 @@ public class GuiFather extends GuiNode
                 .forEach(child -> child.handleMouseScroll(mouseX, mouseY, scrolled));
     }
 
+    @Override
+    public void handleKeyPress(int mouseX, int mouseY, int key)
+    {
+        super.handleKeyPress(mouseX, mouseY, key);
+
+        this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
+                .forEach(child -> child.handleKeyPress(mouseX, mouseY, key));
+    }
+
+    @Override
+    public void handleKeyRelease(int mouseX, int mouseY, int key)
+    {
+        super.handleKeyRelease(mouseX, mouseY, key);
+
+        this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
+                .forEach(child -> child.handleKeyRelease(mouseX, mouseY, key));
+    }
+
     /////////////////////
     //     STYLING     //
     /////////////////////

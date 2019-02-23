@@ -5,7 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Screen;
-import net.minecraft.client.item.TooltipOptions;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.Tessellator;
@@ -321,7 +321,7 @@ public class GuiHelper implements IGuiHelper
                                      ItemStack stack)
     {
         List<String> tooltipText = stack.getTooltipText(this.mc.player, this.mc.options.advancedItemTooltips ?
-                TooltipOptions.Instance.ADVANCED : TooltipOptions.Instance.NORMAL).stream()
+                TooltipContext.Default.ADVANCED : TooltipContext.Default.NORMAL).stream()
                 .map(TextComponent::getFormattedText).collect(Collectors.toList());
 
         for (int i = 0; i < tooltipText.size(); ++i)

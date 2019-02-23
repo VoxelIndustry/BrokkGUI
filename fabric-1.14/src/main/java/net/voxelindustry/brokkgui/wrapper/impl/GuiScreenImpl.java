@@ -106,12 +106,20 @@ public class GuiScreenImpl extends Screen implements IBrokkGuiImpl
     }
 
     @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modsField)
+    {
+        this.brokkgui.onKeyReleased(keyCode);
+
+        return super.keyReleased(keyCode, scanCode, modsField);
+    }
+
+    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modsField)
     {
+        this.brokkgui.onKeyPressed(keyCode);
+
         if (keyCode == GLFW.GLFW_KEY_ESCAPE || GuiFocusManager.getInstance().getFocusedNode() == null)
             return super.keyPressed(keyCode, scanCode, modsField);
-
-        this.brokkgui.onKeyTyped((char) 0, keyCode);
         return true;
     }
 
@@ -123,7 +131,7 @@ public class GuiScreenImpl extends Screen implements IBrokkGuiImpl
             this.brokkgui.onKeyTyped(typedChar, -1);
             return true;
         }
-        return false;
+        return super.charTyped(typedChar, modsField);
     }
 
     @Override
