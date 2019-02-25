@@ -73,6 +73,14 @@ public class GuiScreenImpl extends Screen implements IBrokkGuiImpl
     }
 
     @Override
+    public void update()
+    {
+        super.update();
+
+        this.brokkgui.tick();
+    }
+
+    @Override
     public boolean mouseClicked(final double mouseX, final double mouseY, final int key)
     {
         this.brokkgui.onClick((int) mouseX, (int) mouseY, key);

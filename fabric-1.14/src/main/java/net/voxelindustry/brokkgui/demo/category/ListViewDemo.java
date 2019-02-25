@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.demo.category;
 
 import net.minecraft.text.TextFormat;
-import net.voxelindustry.brokkgui.control.GuiTooltip;
+import net.voxelindustry.brokkgui.element.GuiTooltip;
 import net.voxelindustry.brokkgui.demo.GuiDemo;
-import net.voxelindustry.brokkgui.element.GuiButton;
+import net.voxelindustry.brokkgui.element.input.GuiButton;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.GuiListView;
 import net.voxelindustry.brokkgui.panel.GuiRelativePane;

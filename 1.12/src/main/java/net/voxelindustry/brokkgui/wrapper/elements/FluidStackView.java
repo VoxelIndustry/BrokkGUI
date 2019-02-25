@@ -2,10 +2,10 @@ package net.voxelindustry.brokkgui.wrapper.elements;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.minecraftforge.fluids.FluidStack;
-import net.voxelindustry.brokkgui.control.GuiControl;
+import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
-public class FluidStackView extends GuiControl
+public class FluidStackView extends GuiElement
 {
     private BaseProperty<FluidStack> fluidStackProperty;
 

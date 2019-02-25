@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.wrapper.elements;
 import com.mojang.blaze3d.platform.GlStateManager;
 import fr.ourten.teabeans.value.BaseListProperty;
 import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiTooltip;
+import net.voxelindustry.brokkgui.element.GuiTooltip;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.wrapper.GuiHelper;

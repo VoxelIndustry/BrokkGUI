@@ -1,19 +1,19 @@
 package net.voxelindustry.brokkgui.demo;
 
 import fr.ourten.teabeans.binding.BaseBinding;
-import net.voxelindustry.brokkgui.component.GuiTab;
-import net.voxelindustry.brokkgui.component.ToastManager;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectOffset;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.demo.category.*;
-import net.voxelindustry.brokkgui.element.GuiButton;
+import net.voxelindustry.brokkgui.element.input.GuiButton;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.GuiProgressBar;
+import net.voxelindustry.brokkgui.element.ToastManager;
+import net.voxelindustry.brokkgui.element.pane.GuiTab;
+import net.voxelindustry.brokkgui.element.pane.GuiTabPane;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.paint.Texture;
 import net.voxelindustry.brokkgui.panel.GuiRelativePane;
-import net.voxelindustry.brokkgui.panel.GuiTabPane;
 
 public class GuiDemo extends BrokkGuiScreen
 {

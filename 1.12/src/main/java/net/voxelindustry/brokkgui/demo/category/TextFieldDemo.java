@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.demo.category;
 
-import net.voxelindustry.brokkgui.element.GuiTextfield;
-import net.voxelindustry.brokkgui.element.GuiTextfieldComplete;
+import net.voxelindustry.brokkgui.element.input.GuiTextfield;
+import net.voxelindustry.brokkgui.element.input.GuiTextfieldComplete;
 import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
 
 import java.util.Arrays;

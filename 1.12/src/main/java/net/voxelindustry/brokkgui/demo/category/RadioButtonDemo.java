@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui.demo.category;
 
-import net.voxelindustry.brokkgui.control.GuiToggleGroup;
+import net.voxelindustry.brokkgui.element.input.GuiToggleGroup;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.Rotation;
-import net.voxelindustry.brokkgui.element.GuiCheckbox;
-import net.voxelindustry.brokkgui.element.GuiRadioButton;
+import net.voxelindustry.brokkgui.element.input.GuiCheckbox;
+import net.voxelindustry.brokkgui.element.input.GuiRadioButton;
 import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
 import net.voxelindustry.brokkgui.shape.Rectangle;
 

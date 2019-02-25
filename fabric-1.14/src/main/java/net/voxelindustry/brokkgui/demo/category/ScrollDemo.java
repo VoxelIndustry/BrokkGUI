@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.demo.category;
 
 import net.voxelindustry.brokkgui.panel.GuiRelativePane;
-import net.voxelindustry.brokkgui.panel.ScrollPane;
+import net.voxelindustry.brokkgui.element.pane.ScrollPane;
 import net.voxelindustry.brokkgui.shape.Rectangle;
 
 public class ScrollDemo extends GuiRelativePane

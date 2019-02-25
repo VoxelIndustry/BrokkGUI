@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiTooltip;
+import net.voxelindustry.brokkgui.element.GuiTooltip;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 

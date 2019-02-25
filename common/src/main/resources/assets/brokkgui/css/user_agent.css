@@ -1,0 +1,42 @@
+scrollpane > .grip-x, scrollpane > .grip-y {
+    color: lightgrey;
+}
+
+progressbar > .track {
+    color: red;
+}
+
+radio-button >> .box {
+    color: rgba(0, 0, 0, 0);
+    line-color: black;
+    line-weight: 1;
+}
+
+radio-button >> .mark {
+    color: black;
+}
+
+checkbox >> .box {
+    color: rgba(0, 0, 0, 0);
+    line-color: black;
+    line-weight: 1;
+}
+
+checkbox >> .mark {
+    color: gray;
+}
+
+textfield .text {
+    color: white;
+    shadow-color: #4c4c4c;
+}
+
+textfield .prompt {
+    color: #7f7f7f;
+    shadow: false;
+}
+
+label > text {
+    shadow: false;
+    color: #404040;
+}

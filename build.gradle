@@ -94,11 +94,13 @@ subprojects {
     artifactoryPublish.dependsOn build
 }
 
-project(":core") {
-    archivesBaseName = "brokkgui-core"
+project(":common") {
+    archivesBaseName = "brokkgui-common"
 
-    version = "1.0.0-35-SNAPSHOT"
+    version = project.brokkgui_version
     dependencies {
+        api project(":style")
+
         api "fr.ourten:teabeans:0.7.0"
         api "net.voxelindustry:hermod:1.0.0"
         implementation "org.apache.commons:commons-lang3:3.4"
@@ -112,15 +114,46 @@ project(":core") {
     }
 }
 
+project(":element") {
+    archivesBaseName = "brokkgui-elements"
+
+    version = project.brokkgui_version
+
+    dependencies {
+        api project(":common")
+
+        implementation "org.apache.commons:commons-lang3:3.4"
+        implementation "com.google.code.findbugs:jsr305:3.0.1"
+        implementation "commons-io:commons-io:2.5"
+        implementation "com.google.guava:guava:21.0"
+    }
+}
+
+project(":style") {
+    archivesBaseName = "brokkgui-style"
+
+    version = project.brokkgui_version
+
+    dependencies {
+        api "fr.ourten:teabeans:0.7.0"
+
+        implementation "org.apache.commons:commons-lang3:3.4"
+        implementation "com.google.code.findbugs:jsr305:3.0.1"
+        implementation "commons-io:commons-io:2.5"
+        implementation "com.google.guava:guava:21.0"
+    }
+}
+
 project(":fabric-1.14") {
     apply plugin: 'fabric-loom'
 
     archivesBaseName = "brokkgui-binding-fabric1.14"
 
-    version = "1.0.0-35-SNAPSHOT"
+    version = project.brokkgui_version
 
     dependencies {
-        api project(":core")
+        api project(":common")
+        api project(":element")
 
         minecraft "com.mojang:minecraft:19w07a"
         mappings "net.fabricmc:yarn:19w07a.+"
@@ -132,8 +165,9 @@ project(":fabric-1.14") {
 project(":1.12") {
     archivesBaseName = "brokkgui-binding-mc1.12"
 
-    version = "1.0.0-35-SNAPSHOT"
+    version = project.brokkgui_version
     dependencies {
-        api project(":core")
+        api project(":common")
+        api project(":element")
     }
 }

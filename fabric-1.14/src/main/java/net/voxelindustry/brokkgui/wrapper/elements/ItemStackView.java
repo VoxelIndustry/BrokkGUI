@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.wrapper.elements;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.minecraft.item.ItemStack;
-import net.voxelindustry.brokkgui.control.GuiControl;
+import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
@@ -12,7 +12,7 @@ import net.voxelindustry.brokkgui.skin.GuiSkinBase;
  *         A custom node used only for itemstack display. It cannot be used as a
  *         replacement of a slot.
  */
-public class ItemStackView extends GuiControl
+public class ItemStackView extends GuiElement
 {
     private final BaseProperty<String>    alternateStringProperty;
     private final BaseProperty<ItemStack> stackProperty;

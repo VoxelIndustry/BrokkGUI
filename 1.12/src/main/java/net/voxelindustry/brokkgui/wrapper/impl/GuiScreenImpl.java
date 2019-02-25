@@ -73,6 +73,8 @@ public class GuiScreenImpl extends GuiScreen implements IBrokkGuiImpl
                 RenderPass.BACKGROUND, RenderPass.MAIN, RenderPass.FOREGROUND, RenderPass.HOVER, GuiHelper.ITEM_MAIN,
                 GuiHelper.ITEM_HOVER);
         this.brokkgui.renderLast(mouseX, mouseY);
+
+        brokkgui.tick();
     }
 
     @Override

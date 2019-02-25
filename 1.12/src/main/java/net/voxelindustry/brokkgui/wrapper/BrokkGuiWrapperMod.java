@@ -18,7 +18,7 @@ public class BrokkGuiWrapperMod
     @EventHandler
     public void onPreInit(final FMLPreInitializationEvent event)
     {
-        BrokkGuiPlatform.getInstance().setPlatformName("MC1.12.1");
+        BrokkGuiPlatform.getInstance().setPlatformName("MC1.12.2");
         BrokkGuiPlatform.getInstance().setKeyboardUtil(new KeyboardUtil());
         BrokkGuiPlatform.getInstance().setMouseUtil(new MouseUtil());
 

@@ -110,6 +110,8 @@ public class GuiContainerImpl extends GuiContainer implements IBrokkGuiImpl
 
         this.brokkgui.renderLast(mouseX, mouseY);
         GlStateManager.translate(this.guiLeft, this.guiTop, 0);
+
+        brokkgui.tick();
     }
 
     @Override
