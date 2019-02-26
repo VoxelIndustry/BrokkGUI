@@ -1,14 +1,11 @@
 package net.voxelindustry.brokkgui.demo;
 
-import fr.ourten.teabeans.binding.BaseBinding;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectOffset;
-import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.demo.category.*;
-import net.voxelindustry.brokkgui.element.input.GuiButton;
 import net.voxelindustry.brokkgui.element.GuiLabel;
-import net.voxelindustry.brokkgui.element.GuiProgressBar;
 import net.voxelindustry.brokkgui.element.ToastManager;
+import net.voxelindustry.brokkgui.element.input.GuiButton;
 import net.voxelindustry.brokkgui.element.pane.GuiTab;
 import net.voxelindustry.brokkgui.element.pane.GuiTabPane;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
@@ -37,31 +34,12 @@ public class GuiDemo extends BrokkGuiScreen
 
         button.setOnClickEvent(e -> System.out.println("clicked"));
 
-        final GuiProgressBar progressBar = new GuiProgressBar(0.5f);
-        progressBar.setProgressDirection(RectSide.RIGHT);
-        progressBar.setWidth(200);
-        progressBar.getTextProperty().bind(new BaseBinding<String>()
-        {
-            {
-                super.bind(progressBar.getProgressProperty());
-            }
-
-            @Override
-            public String computeValue()
-            {
-                return progressBar.getProgress() + "";
-            }
-        });
-
-        progressBar.setHeight(20);
-        progressBar.setStyle("border-color: red; border-thin: 2;");
-
         final GuiTabPane tabPane = new GuiTabPane();
         tabPane.setWidth(200);
         tabPane.setHeight(200);
         tabPane.addTab(new GuiTab("Textfield", new TextFieldDemo()));
         tabPane.addTab(new GuiTab("ListView", new ListViewDemo(this)));
-        tabPane.addTab(new GuiTab("Progress", progressBar));
+        tabPane.addTab(new GuiTab("Animation", new AnimationDemo()));
         tabPane.addTab(new GuiTab("RadioButton", new RadioButtonDemo()));
         tabPane.addTab(new GuiTab("Labels", new LabelDemo()));
         tabPane.addTab(new GuiTab("Scroll", new ScrollDemo()));

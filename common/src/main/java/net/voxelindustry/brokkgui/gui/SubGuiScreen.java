@@ -98,6 +98,7 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
     @Override
     public void close()
     {
+        this.dispose();
         this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 

@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui;
 
+import net.voxelindustry.brokkgui.animation.ITickSender;
 import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 import net.voxelindustry.brokkgui.internal.IMouseUtil;
@@ -22,6 +23,7 @@ public class BrokkGuiPlatform
     private IGuiHelper    guiHelper;
     private IKeyboardUtil keyboardUtil;
     private IMouseUtil    mouseUtil;
+    private ITickSender   tickSender;
     private String        platformName;
 
     private boolean enableRenderDebug;
@@ -79,5 +81,15 @@ public class BrokkGuiPlatform
     public void enableRenderDebug(boolean enableRenderDebug)
     {
         this.enableRenderDebug = enableRenderDebug;
+    }
+
+    public ITickSender getTickSender()
+    {
+        return tickSender;
+    }
+
+    public void setTickSender(ITickSender sender)
+    {
+        this.tickSender = sender;
     }
 }

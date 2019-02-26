@@ -201,6 +201,14 @@ public class GuiFather extends GuiNode
                 .forEach(child -> child.handleKeyRelease(mouseX, mouseY, key));
     }
 
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+
+        this.getChildrens().forEach(GuiNode::dispose);
+    }
+
     /////////////////////
     //     STYLING     //
     /////////////////////

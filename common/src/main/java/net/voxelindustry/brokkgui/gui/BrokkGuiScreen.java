@@ -371,6 +371,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot
         GuiFocusManager.getInstance().requestFocus(null);
         this.listenerPool.clear();
         PopupHandler.getInstance().clearPopups();
+
+        if (this.mainPanel != null)
+            this.mainPanel.dispose();
+        this.getSubGuis().forEach(SubGuiScreen::close);
+
         this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 

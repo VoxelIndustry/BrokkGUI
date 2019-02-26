@@ -143,6 +143,16 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
     }
 
+    /**
+     * Clear all resources related to this component
+     * <p>
+     * Only called on UI closing.
+     */
+    public void dispose()
+    {
+        this.getEventDispatcher().dispatchEvent(DisposeEvent.TYPE, new DisposeEvent(this));
+    }
+
     public final void renderNode(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
         if (!this.isVisible())

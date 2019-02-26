@@ -39,8 +39,8 @@ public class Text extends GuiShape
                         this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
                         this.getLineColor(), this.getLineWeight());
 
-            renderer.getHelper().drawString(this.getText(), (int) (this.getxPos() + this.getxTranslate()),
-                    (int) (this.getyPos() + this.getyTranslate()), this.getzLevel(),
+            renderer.getHelper().drawString(this.getText(), this.getxPos() + this.getxTranslate(),
+                    this.getyPos() + this.getyTranslate(), this.getzLevel(),
                     this.getColor(), this.useShadow() ? this.getShadowColor() : Color.ALPHA);
         }
     }
