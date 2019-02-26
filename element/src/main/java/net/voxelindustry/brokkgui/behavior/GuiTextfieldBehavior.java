@@ -131,17 +131,18 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
         return true;
     }
 
-    protected void appendTextToCursor(final String toAppend)
+    protected void appendTextToCursor(String toAppend)
     {
         if (this.getModel().getMaxTextLength() >= 0
                 && this.getModel().getText().length() + toAppend.length() <= this.getModel().getMaxTextLength())
-            toAppend.substring(0, this.getModel().getText().length() - this.getModel().getMaxTextLength() < 0 ? 0
-                    : this.getModel().getText().length() - this.getModel().getMaxTextLength());
-        if (toAppend != "")
+            toAppend = toAppend.substring(0,
+                    this.getModel().getText().length() - this.getModel().getMaxTextLength() < 0 ? 0
+                            : this.getModel().getText().length() - this.getModel().getMaxTextLength());
+
+        if (!toAppend.equals(""))
         {
             String result = this.getModel().getText();
-            final String temp = this.getModel().getText().substring(this.getModel().getCursorPos(),
-                    this.getModel().getText().length());
+            String temp = this.getModel().getText().substring(this.getModel().getCursorPos());
 
             result = result.substring(0, this.getModel().getCursorPos());
             result += toAppend;
@@ -242,5 +243,4 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
         this.getModel().setText(currentText.substring(0, getModel().getCursorPos()) + currentText.substring(pos));
         return true;
     }
-
 }
