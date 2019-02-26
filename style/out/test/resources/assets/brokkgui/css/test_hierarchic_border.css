@@ -1,8 +1,0 @@
-.myPane {
-    border-thin: 2;
-    border-color: khaki;
-}
-
-.myPane > .myChildPane {
-    border-color: red;
-}
