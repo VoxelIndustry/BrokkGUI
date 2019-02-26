@@ -7,12 +7,12 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 
 public class Text extends GuiShape
 {
-    private final BaseProperty<String>     textProperty;
-    private final BaseProperty<Integer>    lineSpacingProperty;
+    private final BaseProperty<String>  textProperty;
+    private final BaseProperty<Integer> lineSpacingProperty;
 
-    public Text(final float posX, final float posY, final String text)
+    public Text(float posX, float posY, String text)
     {
-        super("text");
+        super("text", Rectangle.SHAPE);
 
         this.setxTranslate(posX);
         this.setyTranslate(posY);
@@ -22,6 +22,8 @@ public class Text extends GuiShape
 
         this.getStyle().registerProperty("shadow-color", Color.WHITE, Color.class);
         this.getStyle().registerProperty("shadow", true, Boolean.class);
+
+        this.getStyle().registerProperty("color", Color.BLACK, Color.class);
     }
 
     public Text(final String text)
@@ -30,15 +32,12 @@ public class Text extends GuiShape
     }
 
     @Override
-    public void renderContent(final IGuiRenderer renderer, final RenderPass pass, final int mouseX, final int mouseY)
+    public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
+        super.renderContent(renderer, pass, mouseX, mouseY);
+
         if (pass == RenderPass.MAIN)
         {
-            if (this.getLineWeight() > 0)
-                renderer.getHelper().drawColoredEmptyRect(renderer, this.getxPos() + this.getxTranslate(),
-                        this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
-                        this.getLineColor(), this.getLineWeight());
-
             renderer.getHelper().drawString(this.getText(), this.getxPos() + this.getxTranslate(),
                     this.getyPos() + this.getyTranslate(), this.getzLevel(),
                     this.getColor(), this.useShadow() ? this.getShadowColor() : Color.ALPHA);
@@ -83,5 +82,10 @@ public class Text extends GuiShape
     public boolean useShadow()
     {
         return this.getStyle().getStyleProperty("shadow", Boolean.class).getValue();
+    }
+
+    public Color getColor()
+    {
+        return this.getStyle().getStyleProperty("color", Color.class).getValue();
     }
 }

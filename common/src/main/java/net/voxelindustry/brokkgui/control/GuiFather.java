@@ -6,6 +6,8 @@ import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
+import net.voxelindustry.brokkgui.shape.GuiShape;
+import net.voxelindustry.brokkgui.shape.Rectangle;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
@@ -13,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class GuiFather extends GuiNode
+public class GuiFather extends GuiShape
 {
     private final BaseListProperty<GuiNode> childrensProperty;
     private final List<ICascadeStyleable>   styleChilds;
@@ -22,7 +24,7 @@ public class GuiFather extends GuiNode
 
     public GuiFather(String type)
     {
-        super(type);
+        super(type, Rectangle.SHAPE);
 
         this.childrensProperty = new BaseListProperty<>(null, "childrensProperty");
 
@@ -127,11 +129,17 @@ public class GuiFather extends GuiNode
             renderer.getHelper().scissorBox(this.getxPos() + this.getxTranslate(),
                     this.getyPos() + this.getyTranslate(), this.getxPos() + this.getxTranslate() + this.getWidth(),
                     this.getyPos() + this.getyTranslate() + this.getHeight());
+
+            super.renderContent(renderer, pass, mouseX, mouseY);
             this.getChildrens().forEach(child -> child.renderNode(renderer, pass, mouseX, mouseY));
+
             renderer.getHelper().endScissor();
         }
         else
+        {
+            super.renderContent(renderer, pass, mouseX, mouseY);
             this.getChildrens().forEach(child -> child.renderNode(renderer, pass, mouseX, mouseY));
+        }
     }
 
     @Override

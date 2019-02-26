@@ -24,7 +24,7 @@ public class RadioButtonDemo extends GuiAbsolutePane
         GuiRadioButton radioButton2 = new GuiRadioButton("Nothing to see here 2");
         radioButton2.setHeight(10);
         radioButton2.setButtonSide(RectSide.RIGHT);
-        radioButton2.setStyle("border-color: blue; border-thin: 1;");
+        radioButton2.setStyle("border-color: blue; border-width: 1;");
 
         GuiCheckbox checkbox = new GuiCheckbox("Left 3");
         checkbox.setHeight(10);

@@ -15,7 +15,7 @@ listcell > button:hover > > text {
 listcell > button {
     background-color: #E57373;
     border-color: #DCE775;
-    border-thin: 1;
+    border-width: 1;
 }
 
 listcell > button > > text {

@@ -25,7 +25,7 @@ public class LabelDemo extends GuiAbsolutePane
         GuiLabel label = new GuiLabel("I Left T Middle", icon);
         label.setWidth(100);
         label.setTextPadding(new RectOffset(2, 0, 2, 0));
-        label.setStyle("border-color: gray; border-thin: 1;");
+        label.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label, 5, 5);
 
@@ -36,7 +36,7 @@ public class LabelDemo extends GuiAbsolutePane
         label2.setWidth(100);
         label2.setTextAlignment(RectAlignment.LEFT_CENTER);
         label2.setTextPadding(new RectOffset(2, 5, 2, 0));
-        label2.setStyle("border-color: gray; border-thin: 1;");
+        label2.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label2, 5, 20);
 
@@ -47,7 +47,7 @@ public class LabelDemo extends GuiAbsolutePane
         label3.setWidth(100);
         label3.setTextAlignment(RectAlignment.RIGHT_CENTER);
         label3.setTextPadding(new RectOffset(2, 5, 2, 0));
-        label3.setStyle("border-color: gray; border-thin: 1;");
+        label3.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label3, 5, 35);
     }
@@ -61,7 +61,7 @@ public class LabelDemo extends GuiAbsolutePane
         label.setIconSide(RectSide.RIGHT);
         label.setWidth(100);
         label.setTextPadding(new RectOffset(2, 0, 2, 0));
-        label.setStyle("border-color: gray; border-thin: 1;");
+        label.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label, 5, 50);
 
@@ -73,7 +73,7 @@ public class LabelDemo extends GuiAbsolutePane
         label2.setWidth(100);
         label2.setTextAlignment(RectAlignment.LEFT_CENTER);
         label2.setTextPadding(new RectOffset(2, 5, 2, 0));
-        label2.setStyle("border-color: gray; border-thin: 1;");
+        label2.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label2, 5, 65);
 
@@ -85,7 +85,7 @@ public class LabelDemo extends GuiAbsolutePane
         label3.setWidth(100);
         label3.setTextAlignment(RectAlignment.RIGHT_CENTER);
         label3.setTextPadding(new RectOffset(2, 0, 2, 5));
-        label3.setStyle("border-color: gray; border-thin: 1;");
+        label3.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label3, 5, 80);
     }
@@ -99,7 +99,7 @@ public class LabelDemo extends GuiAbsolutePane
         label.setWidth(80);
         label.setIconSide(RectSide.UP);
         label.setTextPadding(new RectOffset(2, 0, 2, 0));
-        label.setStyle("border-color: gray; border-thin: 1;");
+        label.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label, 105, 5);
 
@@ -111,7 +111,7 @@ public class LabelDemo extends GuiAbsolutePane
         label2.setIconSide(RectSide.UP);
         label2.setTextAlignment(RectAlignment.LEFT_CENTER);
         label2.setTextPadding(new RectOffset(2, 5, 2, 0));
-        label2.setStyle("border-color: gray; border-thin: 1;");
+        label2.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label2, 105, 30);
 
@@ -123,7 +123,7 @@ public class LabelDemo extends GuiAbsolutePane
         label3.setIconSide(RectSide.UP);
         label3.setTextAlignment(RectAlignment.RIGHT_CENTER);
         label3.setTextPadding(new RectOffset(2, 5, 2, 0));
-        label3.setStyle("border-color: gray; border-thin: 1;");
+        label3.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label3, 105, 55);
     }
@@ -137,7 +137,7 @@ public class LabelDemo extends GuiAbsolutePane
         label.setWidth(80);
         label.setIconSide(RectSide.DOWN);
         label.setTextPadding(new RectOffset(2, 0, 2, 0));
-        label.setStyle("border-color: gray; border-thin: 1;");
+        label.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label, 105, 80);
 
@@ -149,7 +149,7 @@ public class LabelDemo extends GuiAbsolutePane
         label2.setIconSide(RectSide.DOWN);
         label2.setTextAlignment(RectAlignment.LEFT_CENTER);
         label2.setTextPadding(new RectOffset(2, 5, 2, 0));
-        label2.setStyle("border-color: gray; border-thin: 1;");
+        label2.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label2, 105, 105);
 
@@ -161,7 +161,7 @@ public class LabelDemo extends GuiAbsolutePane
         label3.setIconSide(RectSide.DOWN);
         label3.setTextAlignment(RectAlignment.RIGHT_CENTER);
         label3.setTextPadding(new RectOffset(2, 5, 2, 0));
-        label3.setStyle("border-color: gray; border-thin: 1;");
+        label3.setStyle("border-color: gray; border-width: 1;");
 
         this.addChild(label3, 105, 130);
     }

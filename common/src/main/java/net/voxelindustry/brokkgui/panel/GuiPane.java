@@ -5,7 +5,6 @@ import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
 import net.voxelindustry.brokkgui.style.StyleSource;
@@ -19,9 +18,6 @@ public class GuiPane extends GuiFather
         super("pane");
 
         this.guiOverflowPolicy = GuiOverflowPolicy.NONE;
-
-        this.getStyle().registerProperty("border-thin", 0, Integer.class);
-        this.getStyle().registerProperty("border-color", Color.BLACK, Color.class);
 
         this.getStyle().registerProperty("opacity", 1D, Double.class);
     }
@@ -62,24 +58,10 @@ public class GuiPane extends GuiFather
         if (this.getOpacity() != 1)
             renderer.getHelper().startAlphaMask(this.getOpacity());
 
-        if (pass == RenderPass.FOREGROUND && this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
-            renderer.getHelper().drawColoredEmptyRect(renderer, this.getxPos() + this.getxTranslate(),
-                    this.getyPos() + this.getyTranslate(), this.getWidth(), this.getHeight(), this.getzLevel(),
-                    this.getBorderColor(), this.getBorderThin());
         super.renderContent(renderer, pass, mouseX, mouseY);
 
         if (this.getOpacity() != 1)
             renderer.getHelper().closeAlphaMask();
-    }
-
-    public int getBorderThin()
-    {
-        return this.getStyle().getStyleProperty("border-thin", Integer.class).getValue();
-    }
-
-    public Color getBorderColor()
-    {
-        return this.getStyle().getStyleProperty("border-color", Color.class).getValue();
     }
 
     @Override

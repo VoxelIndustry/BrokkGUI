@@ -1,18 +1,20 @@
 package net.voxelindustry.brokkgui.shape;
 
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
-import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.style.StyleSource;
 
 public class Line extends GuiShape
 {
     public Line(float startX, float startY, float endX, float endY)
     {
-        super("line");
+        super("line", null);
+        this.setShape(new LineShape(this::getLineThin));
         this.setxTranslate(startX);
         this.setyTranslate(startY);
 
         this.setWidth(Math.abs(startX - endX));
         this.setHeight(Math.abs(startY - endY));
+
+        this.getStyle().registerProperty("line-thin", 1f, Float.class);
     }
 
     public Line(float endX, float endY)
@@ -25,12 +27,13 @@ public class Line extends GuiShape
         this(0, 0);
     }
 
-    @Override
-    public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
+    public float getLineThin()
     {
-        if (pass == RenderPass.MAIN)
-            renderer.getHelper().drawColoredLine(renderer, this.getxPos() + this.getxTranslate(),
-                    this.getyPos() + this.getyTranslate(), this.getxPos() + this.getWidth(),
-                    this.getyPos() + this.getHeight(), this.getLineWeight(), this.getzLevel(), this.getColor());
+        return this.getStyle().getStyleProperty("line-thin", Float.class).getValue();
+    }
+
+    public void setLineThin(float lineThin)
+    {
+        this.getStyle().getStyleProperty("line-thin", Float.class).setStyle(StyleSource.CODE, 10_000, lineThin);
     }
 }

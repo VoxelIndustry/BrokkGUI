@@ -9,12 +9,9 @@ import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.*;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.paint.Texture;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.StyleHolder;
-import net.voxelindustry.brokkgui.style.StyleSource;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
@@ -135,12 +132,6 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
             else
                 this.getActivePseudoClass().remove("focus");
         });
-
-        this.getStyle().registerProperty("background-color", Color.ALPHA, Color.class);
-        this.getStyle().registerProperty("foreground-color", Color.ALPHA, Color.class);
-
-        this.getStyle().registerProperty("background-texture", Texture.EMPTY, Texture.class);
-        this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
     }
 
     /**
@@ -157,55 +148,6 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     {
         if (!this.isVisible())
             return;
-
-        if (pass == RenderPass.BACKGROUND)
-        {
-            if (this.getBackgroundTexture() != Texture.EMPTY)
-            {
-                Texture background = this.getBackgroundTexture();
-
-                renderer.getHelper().bindTexture(background);
-                renderer.getHelper().drawTexturedRect(renderer,
-                        this.getxPos() + this.getxTranslate(),
-                        this.getyPos() + this.getyTranslate(),
-                        background.getUMin(), background.getVMin(), background.getUMax(), background.getVMax(),
-                        this.getWidth(), this.getHeight(), this.getzLevel());
-            }
-            if (this.getBackgroundColor().getAlpha() != 0)
-            {
-                Color background = this.getBackgroundColor();
-
-                renderer.getHelper().drawColoredRect(renderer,
-                        this.getxPos() + this.getxTranslate(),
-                        this.getyPos() + this.getyTranslate(),
-                        this.getWidth(), this.getHeight(), this.getzLevel(),
-                        background);
-            }
-        }
-        if (pass == RenderPass.FOREGROUND)
-        {
-            if (this.getForegroundTexture() != Texture.EMPTY)
-            {
-                Texture foreground = this.getForegroundTexture();
-
-                renderer.getHelper().bindTexture(foreground);
-                renderer.getHelper().drawTexturedRect(renderer,
-                        this.getxPos() + this.getxTranslate(),
-                        this.getyPos() + this.getyTranslate(),
-                        foreground.getUMin(), foreground.getVMin(), foreground.getUMax(), foreground.getVMax(),
-                        this.getWidth(), this.getHeight(), this.getzLevel());
-            }
-            if (this.getForegroundColor().getAlpha() != 0)
-            {
-                Color foreground = this.getForegroundColor();
-
-                renderer.getHelper().drawColoredRect(renderer,
-                        this.getxPos() + this.getxTranslate(),
-                        this.getyPos() + this.getyTranslate(),
-                        this.getWidth(), this.getHeight(), this.getzLevel(),
-                        foreground);
-            }
-        }
 
         boolean createdMatrix = false;
         if (this.getRotation() != Rotation.NONE && this.getRotation().getAngle() % 360 != 0)
@@ -665,50 +607,6 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         if (father != null)
             this.setStyleTree(father.getStyle().getStyleSupplier());
         this.refreshStyle();
-    }
-
-    public Texture getBackgroundTexture()
-    {
-        return this.getStyle().getStyleProperty("background-texture", Texture.class).getValue();
-    }
-
-    public void setBackgroundTexture(Texture texture)
-    {
-        this.getStyle().getStyleProperty("background-texture", Texture.class)
-                .setStyle(StyleSource.CODE, 10_000, texture);
-    }
-
-    public Color getBackgroundColor()
-    {
-        return this.getStyle().getStyleProperty("background-color", Color.class).getValue();
-    }
-
-    public void setBackgroundColor(Color color)
-    {
-        this.getStyle().getStyleProperty("background-color", Color.class)
-                .setStyle(StyleSource.CODE, 10_000, color);
-    }
-
-    public Texture getForegroundTexture()
-    {
-        return this.getStyle().getStyleProperty("foreground-texture", Texture.class).getValue();
-    }
-
-    public void setForegroundTexture(Texture texture)
-    {
-        this.getStyle().getStyleProperty("foreground-texture", Texture.class)
-                .setStyle(StyleSource.CODE, 10_000, texture);
-    }
-
-    public Color getForegroundColor()
-    {
-        return this.getStyle().getStyleProperty("foreground-color", Color.class).getValue();
-    }
-
-    public void setForegroundColor(Color color)
-    {
-        this.getStyle().getStyleProperty("foreground-color", Color.class)
-                .setStyle(StyleSource.CODE, 10_000, color);
     }
 
     public BaseProperty<Boolean> getFocusedProperty()

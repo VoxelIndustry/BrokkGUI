@@ -22,7 +22,7 @@ public class ListViewDemo extends GuiRelativePane
 
         labelList.setCellHeight(20);
         labelList.setCellWidth(75);
-        labelList.setStyle("border-color: gray; border-thin: 1;");
+        labelList.setStyle("border-color: gray; border-width: 1;");
 
         labelList.setPlaceholder(new GuiLabel("I'm a placeholder"));
 

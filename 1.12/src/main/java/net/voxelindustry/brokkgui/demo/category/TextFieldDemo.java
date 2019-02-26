@@ -14,7 +14,7 @@ public class TextFieldDemo extends GuiAbsolutePane
         field.setWidthRatio(1);
         field.setHeight(40);
 
-        field.setStyle("border-color: black; border-thin: 1;");
+        field.setStyle("border-color: black; border-width: 1;");
         this.addChild(field, 0, 0);
 
         GuiTextfieldComplete autocomplete = new GuiTextfieldComplete();
@@ -31,7 +31,7 @@ public class TextFieldDemo extends GuiAbsolutePane
         expandField.setHeight(20);
         expandField.setExpandToText(true);
 
-        expandField.setStyle("border-color: black; border-thin: 1;");
+        expandField.setStyle("border-color: black; border-width: 1;");
         this.addChild(expandField, 0, 120);
     }
 }

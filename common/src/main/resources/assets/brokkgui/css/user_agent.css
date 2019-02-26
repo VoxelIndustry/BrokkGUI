@@ -1,29 +1,29 @@
 scrollpane > .grip-x, scrollpane > .grip-y {
-    color: lightgrey;
+    background-color: lightgrey;
 }
 
 progressbar > .track {
-    color: red;
+    background-color: red;
 }
 
 radio-button >> .box {
-    color: rgba(0, 0, 0, 0);
-    line-color: black;
-    line-weight: 1;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: black;
+    border-width: 1;
 }
 
 radio-button >> .mark {
-    color: black;
+    background-color: black;
 }
 
 checkbox >> .box {
-    color: rgba(0, 0, 0, 0);
-    line-color: black;
-    line-weight: 1;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: black;
+    border-width: 1;
 }
 
 checkbox >> .mark {
-    color: gray;
+    background-color: gray;
 }
 
 textfield .text {

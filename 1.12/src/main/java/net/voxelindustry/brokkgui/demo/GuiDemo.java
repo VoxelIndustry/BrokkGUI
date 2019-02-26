@@ -30,7 +30,7 @@ public class GuiDemo extends BrokkGuiScreen
 
         button.setWidth(200);
         button.setHeight(30);
-        button.setStyle("border-color: green; border-thin: 2; text-color: khaki");
+        button.setStyle("border-color: green; border-width: 2; text-color: khaki");
 
         button.setOnClickEvent(e -> System.out.println("clicked"));
 

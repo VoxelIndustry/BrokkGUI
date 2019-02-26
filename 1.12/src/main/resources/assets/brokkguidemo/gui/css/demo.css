@@ -15,7 +15,7 @@ listcell > button:hover > > text {
 listcell > button {
     background-color: #E57373;
     border-color: #DCE775;
-    border-thin: 1;
+    border-width: 1;
 }
 
 listcell > button > > text {
@@ -59,13 +59,13 @@ checkbox {
 }
 
 scrollpane .grip-y {
-    texture: url("brokkguidemo:textures/gui/scrollbar_vert.png");
-    color: rgba(0, 0, 0, 0);
+    background-texture: url("brokkguidemo:textures/gui/scrollbar_vert.png");
+    background-color: rgba(0, 0, 0, 0);
 }
 
 scrollpane .grip-x {
-    texture: url("brokkguidemo:textures/gui/scrollbar_horiz.png");
-    color: rgba(0, 0, 0, 0);
+    background-texture: url("brokkguidemo:textures/gui/scrollbar_horiz.png");
+    background-color: rgba(0, 0, 0, 0);
 }
 
 #vertscroll-rect {
