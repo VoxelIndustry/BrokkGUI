@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.animation;
+package net.voxelindustry.brokkgui.animation.transition;
 
 import net.voxelindustry.brokkgui.component.GuiNode;
 
@@ -12,7 +12,6 @@ public class TranslateTransition extends Transition
     private float fromX, fromY;
     private float translateX, translateY;
 
-
     public TranslateTransition(GuiNode node, long millis)
     {
         this(node, millis, TimeUnit.MILLISECONDS);
@@ -21,7 +20,6 @@ public class TranslateTransition extends Transition
     public TranslateTransition(GuiNode node, long duration, TimeUnit unit)
     {
         super(node, duration, unit);
-
     }
 
     @Override

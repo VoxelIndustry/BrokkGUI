@@ -1,5 +1,8 @@
-package net.voxelindustry.brokkgui.animation;
+package net.voxelindustry.brokkgui.animation.transition;
 
+import net.voxelindustry.brokkgui.animation.Animation;
+import net.voxelindustry.brokkgui.animation.Interpolator;
+import net.voxelindustry.brokkgui.animation.Interpolators;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.event.DisposeEvent;
 
@@ -36,6 +39,8 @@ public abstract class Transition extends Animation
 
     public GuiNode getNode()
     {
+        if (node == null && getParent() instanceof Transition)
+            return ((Transition) getParent()).getNode();
         return node;
     }
 }

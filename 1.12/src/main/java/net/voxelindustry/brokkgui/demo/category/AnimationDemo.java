@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.demo.category;
 
-import net.voxelindustry.brokkgui.animation.TranslateTransition;
+import net.voxelindustry.brokkgui.animation.transition.TranslateTransition;
 import net.voxelindustry.brokkgui.control.GuiButtonBase;
 import net.voxelindustry.brokkgui.element.input.GuiRadioButton;
 import net.voxelindustry.brokkgui.panel.GuiRelativePane;

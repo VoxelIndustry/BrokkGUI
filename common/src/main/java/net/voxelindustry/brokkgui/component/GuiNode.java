@@ -12,6 +12,7 @@ import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.style.StyleSource;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
@@ -132,6 +133,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
             else
                 this.getActivePseudoClass().remove("focus");
         });
+
+        this.getStyle().registerProperty("opacity", 1D, Double.class);
     }
 
     /**
@@ -190,7 +193,13 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
                     -(this.getyPos() + this.getyTranslate() + this.getHeight() / 2), 0);
         }
 
+        if (this.getOpacity() != 1)
+            renderer.getHelper().startAlphaMask(this.getOpacity());
+
         this.renderContent(renderer, pass, mouseX, mouseY);
+
+        if (this.getOpacity() != 1)
+            renderer.getHelper().closeAlphaMask();
 
         if (createdMatrix)
             renderer.endMatrix();
@@ -577,6 +586,21 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.setScaleX(scale);
         this.setScaleY(scale);
         this.setScaleZ(scale);
+    }
+
+    public BaseProperty<Double> getOpacityProperty()
+    {
+        return this.getStyle().getStyleProperty("opacity", Double.class);
+    }
+
+    public double getOpacity()
+    {
+        return this.getOpacityProperty().getValue();
+    }
+
+    public void setOpacity(double opacity)
+    {
+        this.getStyle().getStyleProperty("opacity", Double.class).setStyle(StyleSource.CODE, 0, opacity);
     }
 
     public BaseProperty<GuiFather> getFatherProperty()

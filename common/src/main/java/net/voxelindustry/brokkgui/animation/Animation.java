@@ -21,7 +21,7 @@ public abstract class Animation implements ITicking
 
     private Animation parent;
 
-    Animation(long duration, TimeUnit unit)
+    public Animation(long duration, TimeUnit unit)
     {
         this.duration = unit.toMillis(duration);
         this.maxCycles = 1;
@@ -53,6 +53,14 @@ public abstract class Animation implements ITicking
                 ((float) elapsedTime / duration);
         this.getProgressProperty().setValue(currentProgress);
         this.getTotalProgressProperty().setValue((float) (this.getCurrentCycle() / this.getMaxCycles()) + (currentProgress / getMaxCycles()));
+    }
+
+    public void setCurrentProgress(float progress)
+    {
+        getCurrentCycleProperty().setValue((int) Math.floor(progress));
+
+        getProgressProperty().setValue(progress - getCurrentCycle());
+        getTotalProgressProperty().setValue(progress / getMaxCycles());
     }
 
     public void start()
@@ -95,7 +103,7 @@ public abstract class Animation implements ITicking
         this.getStatusProperty().setValue(AnimationStatus.RUNNING);
     }
 
-    void complete()
+    protected void complete()
     {
         this.getStatusProperty().setValue(AnimationStatus.COMPLETED);
         BrokkGuiPlatform.getInstance().getTickSender().removeTicking(this);
