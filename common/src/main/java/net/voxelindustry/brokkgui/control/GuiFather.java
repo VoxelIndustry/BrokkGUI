@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.control;
 
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.value.BaseListProperty;
+import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -20,7 +21,7 @@ public class GuiFather extends GuiShape
     private final BaseListProperty<GuiNode> childrensProperty;
     private final List<ICascadeStyleable>   styleChilds;
 
-    private GuiOverflowPolicy guiOverflowPolicy;
+    private BaseProperty<GuiOverflowPolicy> guiOverflowProperty;
 
     public GuiFather(String type)
     {
@@ -28,7 +29,19 @@ public class GuiFather extends GuiShape
 
         this.childrensProperty = new BaseListProperty<>(null, "childrensProperty");
 
-        this.guiOverflowPolicy = GuiOverflowPolicy.NONE;
+        this.guiOverflowProperty = new BaseProperty<>(GuiOverflowPolicy.NONE, "overflowProperty");
+        this.guiOverflowProperty.addListener(obs ->
+        {
+            if (getScissorBox() == null)
+                return;
+
+            if (guiOverflowProperty.getValue() == GuiOverflowPolicy.TRIM)
+                getScissorBox().setRenderPassPredicate(pass -> pass.getPriority() <= RenderPass.FOREGROUND.getPriority());
+            else if (guiOverflowProperty.getValue() == GuiOverflowPolicy.NONE)
+                getScissorBox().setRenderPassPredicate(pass -> false);
+            else
+                getScissorBox().setRenderPassPredicate(pass -> true);
+        });
 
         this.childrensProperty.addListener((ListValueChangeListener<GuiNode>) (obs, oldValue, newValue) ->
         {
@@ -108,38 +121,26 @@ public class GuiFather extends GuiShape
         return this.styleChilds.remove(styleable);
     }
 
-    public GuiOverflowPolicy getGuiOverflowPolicy()
+    public BaseProperty<GuiOverflowPolicy> getGuiOverflowProperty()
     {
-        return this.guiOverflowPolicy;
+        return this.guiOverflowProperty;
     }
 
-    public void setGuiOverflowPolicy(final GuiOverflowPolicy guiOverflowPolicy)
+    public void setGuiOverflow(GuiOverflowPolicy guiOverflow)
     {
-        this.guiOverflowPolicy = guiOverflowPolicy;
+        this.getGuiOverflowProperty().setValue(guiOverflow);
+    }
+
+    public GuiOverflowPolicy getGuiOverflow()
+    {
+        return this.getGuiOverflowProperty().getValue();
     }
 
     @Override
     public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
-        if ((this.getGuiOverflowPolicy().ordinal() >= GuiOverflowPolicy.TRIM.ordinal()
-                && pass.getPriority() <= RenderPass.FOREGROUND.getPriority())
-                || (this.getGuiOverflowPolicy().ordinal() >= GuiOverflowPolicy.TRIM_ALL.ordinal()))
-        {
-            renderer.getHelper().beginScissor();
-            renderer.getHelper().scissorBox(this.getxPos() + this.getxTranslate(),
-                    this.getyPos() + this.getyTranslate(), this.getxPos() + this.getxTranslate() + this.getWidth(),
-                    this.getyPos() + this.getyTranslate() + this.getHeight());
-
-            super.renderContent(renderer, pass, mouseX, mouseY);
-            this.getChildrens().forEach(child -> child.renderNode(renderer, pass, mouseX, mouseY));
-
-            renderer.getHelper().endScissor();
-        }
-        else
-        {
-            super.renderContent(renderer, pass, mouseX, mouseY);
-            this.getChildrens().forEach(child -> child.renderNode(renderer, pass, mouseX, mouseY));
-        }
+        super.renderContent(renderer, pass, mouseX, mouseY);
+        this.getChildrens().forEach(child -> child.renderNode(renderer, pass, mouseX, mouseY));
     }
 
     @Override

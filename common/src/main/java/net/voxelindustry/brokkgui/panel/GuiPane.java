@@ -3,17 +3,12 @@ package net.voxelindustry.brokkgui.panel;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
-import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
 
 public class GuiPane extends GuiFather
 {
-    private final GuiOverflowPolicy guiOverflowPolicy;
-
     public GuiPane()
     {
         super("pane");
-
-        this.guiOverflowPolicy = GuiOverflowPolicy.NONE;
     }
 
     @Override
@@ -43,11 +38,5 @@ public class GuiPane extends GuiFather
             node.getyPosProperty().unbind();
         });
         this.getChildrensProperty().clear();
-    }
-
-    @Override
-    public GuiOverflowPolicy getGuiOverflowPolicy()
-    {
-        return this.guiOverflowPolicy;
     }
 }

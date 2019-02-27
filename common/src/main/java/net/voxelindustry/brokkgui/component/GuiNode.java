@@ -10,6 +10,7 @@ import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.*;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.shape.ScissorBox;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.StyleSource;
@@ -39,6 +40,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     private final BaseProperty<Boolean> visibleProperty;
     private final BaseProperty<Boolean> draggedProperty;
     private       int                   draggedX, draggedY;
+
+    private ScissorBox scissorBox;
 
     private final BaseProperty<String>    styleID;
     private final BaseSetProperty<String> styleClass;
@@ -145,6 +148,9 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public void dispose()
     {
         this.getEventDispatcher().dispatchEvent(DisposeEvent.TYPE, new DisposeEvent(this));
+
+        if (this.getScissorBox() != null)
+            this.getScissorBox().dispose();
     }
 
     public final void renderNode(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
@@ -196,7 +202,12 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         if (this.getOpacity() != 1)
             renderer.getHelper().startAlphaMask(this.getOpacity());
 
+        boolean appliedScissor = this.getScissorBox() != null && this.getScissorBox().setupAndApply(renderer, pass);
+
         this.renderContent(renderer, pass, mouseX, mouseY);
+
+        if (appliedScissor)
+            this.getScissorBox().end(renderer);
 
         if (this.getOpacity() != 1)
             renderer.getHelper().closeAlphaMask();
@@ -737,6 +748,16 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public int getDraggedY()
     {
         return draggedY;
+    }
+
+    public ScissorBox getScissorBox()
+    {
+        return scissorBox;
+    }
+
+    public void setScissorBox(ScissorBox scissorBox)
+    {
+        this.scissorBox = scissorBox;
     }
 
     /////////////////////

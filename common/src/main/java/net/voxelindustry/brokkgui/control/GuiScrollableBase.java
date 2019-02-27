@@ -4,6 +4,7 @@ import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
 import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
+import net.voxelindustry.brokkgui.shape.ScissorBox;
 import net.voxelindustry.hermod.EventHandler;
 
 public abstract class GuiScrollableBase extends GuiElement
@@ -36,7 +37,8 @@ public abstract class GuiScrollableBase extends GuiElement
 
         this.scrollXPolicyProperty = new BaseProperty<>(GuiScrollbarPolicy.NEEDED, "scrollXPolicyProperty");
         this.scrollYPolicyProperty = new BaseProperty<>(GuiScrollbarPolicy.NEEDED, "scrollYPolicyProperty");
-        this.setGuiOverflowPolicy(GuiOverflowPolicy.TRIM_ALL);
+        this.setScissorBox(ScissorBox.fitNode(this));
+        this.setGuiOverflow(GuiOverflowPolicy.TRIM_ALL);
 
         this.setFocusable(true);
     }

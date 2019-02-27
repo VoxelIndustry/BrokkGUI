@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.element.TabHeaderFactory;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
+import net.voxelindustry.brokkgui.shape.ScissorBox;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 import net.voxelindustry.brokkgui.skin.GuiTabPaneSkin;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
@@ -41,7 +42,8 @@ public class GuiTabPane extends GuiElement
         this.tabHeaderWidthProperty = new BaseProperty<>(-1f, "tabHeaderWidthProperty");
         this.tabHeaderHeightProperty = new BaseProperty<>(20f, "tabHeaderHeightProperty");
 
-        this.setGuiOverflowPolicy(GuiOverflowPolicy.TRIM_ALL);
+        this.setScissorBox(ScissorBox.fitNode(this));
+        this.setGuiOverflow(GuiOverflowPolicy.TRIM_ALL);
 
         this.tabHeaderFactories = new HashMap<>();
     }
