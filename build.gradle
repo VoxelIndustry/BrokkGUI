@@ -10,6 +10,7 @@ buildscript {
 
 plugins {
     id "com.jfrog.artifactory" version "4.7.5"
+    id "org.sonarqube" version "2.7"
 }
 
 subprojects {
@@ -64,11 +65,6 @@ subprojects {
     repositories {
         maven { url 'http://maven.ferenyr.info/artifactory/libs-release'}
         mavenCentral()
-    }
-
-    jar {
-        duplicatesStrategy = 'exclude'
-        exclude('net/voxelindustry/brokkgui/demo/**')
     }
 
     publishing {
@@ -159,15 +155,5 @@ project(":fabric-1.14") {
         mappings "net.fabricmc:yarn:19w07a.+"
         modCompile "net.fabricmc:fabric-loader:0.3.6.107"
         modCompile "net.fabricmc:fabric:0.2.1.94"
-    }
-}
-
-project(":1.12") {
-    archivesBaseName = "brokkgui-binding-mc1.12"
-
-    version = project.brokkgui_version
-    dependencies {
-        api project(":common")
-        api project(":element")
     }
 }

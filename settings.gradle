@@ -1,6 +1,3 @@
 include 'common'
 include 'element'
 include 'style'
-
-include '1.12'
-include 'fabric-1.14'
