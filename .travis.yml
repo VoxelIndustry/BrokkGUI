@@ -2,15 +2,10 @@ language: java
 sudo: false
 before_install:
   - chmod +x gradlew
-install:
-  - ./gradlew setupCIWorkspace -S
 script:
-  - ./gradlew build check
+  - ./gradlew build check sonarqube
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -f $HOME/.gradle/caches/minecraft/ForgeVersion.json
-  - rm -f $HOME/.gradle/caches/minecraft/ForgeVersion.json.etag
-  - rm -rf $HOME/.gradle/caches/minecraft/deobfedDeps
 cache:
   - directories:
     - ./libs

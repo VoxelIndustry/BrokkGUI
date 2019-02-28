@@ -36,7 +36,6 @@ There are several officials bindings bundled in this repository but the creation
 
 | Platform      | Status    | Future    |
 | ------------- | --------- | --------- |
-| Minecraft 1.11 | Full support | :warning:**Will be removed in 1.13** |
 | Minecraft 1.12 | Full support | :white_check_mark:**Latest** |
 | Minecraft 1.14 | No container support | :warning:**Experimental** |
 
