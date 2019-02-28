@@ -134,8 +134,8 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
-        property "sonar.host.url", project.sonarqube_url
-        property "sonar.login", project.sonarqube_login
+        property "sonar.host.url", hasProperty('sonarqube_url') ? sonarqube_url : System.getenv('SONARQUBE_URL')
+        property "sonar.login", hasProperty('sonarqube_login') ? sonarqube_login : System.getenv('SONARQUBE_LOGIN')
         property "sonar.projectKey", "BrokkGUI"
     }
 }
