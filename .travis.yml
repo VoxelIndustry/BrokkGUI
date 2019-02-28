@@ -1,17 +1,22 @@
 language: java
 sudo: false
-notifications:
-  email: false
 before_install:
   - chmod +x gradlew
 install:
   - ./gradlew setupCIWorkspace -S
 script:
   - ./gradlew build check
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -f $HOME/.gradle/caches/minecraft/ForgeVersion.json
+  - rm -f $HOME/.gradle/caches/minecraft/ForgeVersion.json.etag
+  - rm -rf $HOME/.gradle/caches/minecraft/deobfedDeps
+cache:
+  - directories:
+    - ./libs
+    - $HOME/.gradle/caches
+    - $HOME/.gradle/wrapper
 os: linux
 jdk: oraclejdk8
 global_env: TERM=dumb
-cache:
-  directories:
-    - $HOME/.gradle/caches
-    - $HOME/.gradle/wrapper
+group: stable
