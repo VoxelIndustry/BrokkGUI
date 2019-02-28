@@ -1,13 +1,19 @@
 package net.voxelindustry.brokkgui.style;
 
-import net.voxelindustry.brokkgui.style.StyleSource;
-import net.voxelindustry.brokkgui.style.StyleableProperty;
+import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StylePropertyTest
 {
+    @Before
+    public void init()
+    {
+        StyleEngine.getInstance().start();
+    }
+
     @Test
     public void forcefullSet()
     {

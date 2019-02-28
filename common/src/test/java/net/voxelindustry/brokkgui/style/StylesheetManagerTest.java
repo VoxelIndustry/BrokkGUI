@@ -1,10 +1,11 @@
 package net.voxelindustry.brokkgui.style;
 
-import net.voxelindustry.brokkgui.style.StylesheetManager;
+import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.brokkgui.style.tree.StyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleSelectorHierarchic;
 import net.voxelindustry.brokkgui.style.tree.StyleSelectorType;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -16,6 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class StylesheetManagerTest
 {
+    @Before
+    public void init()
+    {
+        StyleEngine.getInstance().start();
+    }
+
     @Test
     public void parseSimpleCSS()
     {

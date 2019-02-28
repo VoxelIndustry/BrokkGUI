@@ -3,8 +3,9 @@ package net.voxelindustry.brokkgui.style;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.ColorConstants;
 import net.voxelindustry.brokkgui.panel.GuiPane;
-import net.voxelindustry.brokkgui.style.StylesheetManager;
+import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -16,6 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class StyleNodeTest
 {
+    @Before
+    public void init()
+    {
+        StyleEngine.getInstance().start();
+    }
+
     @Test
     public void testSimpleBorder()
     {
