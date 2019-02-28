@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.style.tree;
 
-import org.apache.commons.lang3.tuple.Pair;
 import net.voxelindustry.brokkgui.style.StyleHolder;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

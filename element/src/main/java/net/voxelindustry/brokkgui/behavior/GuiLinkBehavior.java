@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.behavior;
 
-import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.element.GuiLink;
 import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.internal.DesktopUtils;

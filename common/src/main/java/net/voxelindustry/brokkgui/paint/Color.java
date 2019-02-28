@@ -201,8 +201,6 @@ public class Color extends GuiPaint
             return false;
         if (Float.floatToIntBits(this.green) != Float.floatToIntBits(other.green))
             return false;
-        if (Float.floatToIntBits(this.red) != Float.floatToIntBits(other.red))
-            return false;
-        return true;
+        return Float.floatToIntBits(this.red) == Float.floatToIntBits(other.red);
     }
 }

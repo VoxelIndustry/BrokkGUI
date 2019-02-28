@@ -3,10 +3,10 @@ package net.voxelindustry.brokkgui.style.parser;
 import net.voxelindustry.brokkgui.style.StylesheetManager;
 import net.voxelindustry.brokkgui.style.tree.IStyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
+import net.voxelindustry.brokkgui.style.tree.StyleRule;
 import net.voxelindustry.brokkgui.util.NumberedLineIterator;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
-import net.voxelindustry.brokkgui.style.tree.StyleRule;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

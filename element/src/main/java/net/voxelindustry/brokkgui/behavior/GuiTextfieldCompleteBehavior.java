@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.behavior;
 
 import net.voxelindustry.brokkgui.element.input.GuiTextfieldComplete;
-import net.voxelindustry.brokkgui.skin.GuiTextfieldCompleteSkin;
 import net.voxelindustry.brokkgui.event.FocusEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent;
+import net.voxelindustry.brokkgui.skin.GuiTextfieldCompleteSkin;
 
 public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extends GuiTextfieldBehavior<T>
 {

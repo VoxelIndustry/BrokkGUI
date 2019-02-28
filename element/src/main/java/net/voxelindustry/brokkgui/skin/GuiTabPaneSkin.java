@@ -14,7 +14,6 @@ import net.voxelindustry.brokkgui.element.pane.GuiTabPane;
 import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.skin.GuiBehaviorSkinBase;
 
 import java.util.ArrayList;
 import java.util.List;

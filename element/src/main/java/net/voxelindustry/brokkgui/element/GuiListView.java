@@ -23,7 +23,7 @@ public class GuiListView<T> extends GuiScrollableBase
     private final BaseProperty<GuiNode>  placeholderProperty;
     private final BaseProperty<RectAxis> orientationProperty;
 
-    private final BaseProperty<Function<T, ? extends GuiListCell<T>>> cellFactoryProperty;
+    private final BaseProperty<Function<T, GuiListCell<T>>> cellFactoryProperty;
 
     private final BaseProperty<Float> cellWidthProperty, cellHeightProperty;
     private final BaseProperty<Float> cellXPaddingProperty, cellYPaddingProperty;
@@ -123,7 +123,7 @@ public class GuiListView<T> extends GuiScrollableBase
         return this.orientationProperty;
     }
 
-    public BaseProperty<Function<T, ? extends GuiListCell<T>>> getCellFactoryProperty()
+    public BaseProperty<Function<T, GuiListCell<T>>> getCellFactoryProperty()
     {
         return this.cellFactoryProperty;
     }
@@ -237,38 +237,38 @@ public class GuiListView<T> extends GuiScrollableBase
         return this.getElementsProperty().getValue().isEmpty();
     }
 
-    public void setCellFactory(final Function<T, ? extends GuiListCell<T>> cellFactory)
+    public void setCellFactory(final Function<T, GuiListCell<T>> cellFactory)
     {
         this.getCellFactoryProperty().setValue(cellFactory);
     }
 
-    public Function<T, ? extends GuiListCell<T>> getCellFactory()
+    public Function<T, GuiListCell<T>> getCellFactory()
     {
         if (!this.getCellFactoryProperty().isPresent())
             this.setCellFactory(this.getDefaultCellFactory());
         return this.getCellFactoryProperty().getValue();
     }
 
-    private Function<T, ? extends GuiListCell<T>> getDefaultCellFactory()
+    private Function<T, GuiListCell<T>> getDefaultCellFactory()
     {
-        return T ->
+        return content ->
         {
-            final GuiListCell<T> cell = new GuiListCell<>(this, T);
+            final GuiListCell<T> cell = new GuiListCell<>(this, content);
 
-            if (T == null)
+            if (content == null)
             {
                 cell.setGraphic(null);
                 cell.setText("");
             }
-            else if (T instanceof GuiNode)
+            else if (content instanceof GuiNode)
             {
-                cell.setGraphic((GuiNode) T);
+                cell.setGraphic((GuiNode) content);
                 cell.setText("");
             }
             else
             {
                 cell.setGraphic(null);
-                cell.setText(T.toString());
+                cell.setText(content.toString());
             }
             return cell;
         };

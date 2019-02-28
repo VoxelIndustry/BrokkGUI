@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.behavior;
 
-import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.element.pane.GuiTabPane;
 
 /**

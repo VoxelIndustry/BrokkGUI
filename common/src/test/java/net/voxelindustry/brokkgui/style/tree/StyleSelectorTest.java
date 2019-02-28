@@ -1,8 +1,6 @@
 package net.voxelindustry.brokkgui.style.tree;
 
 import net.voxelindustry.brokkgui.panel.GuiPane;
-import net.voxelindustry.brokkgui.style.tree.StyleSelector;
-import net.voxelindustry.brokkgui.style.tree.StyleSelectorType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;

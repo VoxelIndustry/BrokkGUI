@@ -9,7 +9,7 @@ public interface IGuiBehavable<B extends GuiBehaviorBase<?>>
         return this.getBehaviourProperty().getValue();
     }
 
-    public BaseProperty<B> getBehaviourProperty();
+    BaseProperty<B> getBehaviourProperty();
 
-    public void setBehaviour(B value);
+    void setBehaviour(B value);
 }

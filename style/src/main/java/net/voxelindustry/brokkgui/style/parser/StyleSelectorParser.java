@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui.style.parser;
 
-import org.apache.commons.lang3.StringUtils;
 import net.voxelindustry.brokkgui.style.tree.IStyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleSelectorHierarchic;
 import net.voxelindustry.brokkgui.style.tree.StyleSelectorType;
+import org.apache.commons.lang3.StringUtils;
 
 public class StyleSelectorParser
 {

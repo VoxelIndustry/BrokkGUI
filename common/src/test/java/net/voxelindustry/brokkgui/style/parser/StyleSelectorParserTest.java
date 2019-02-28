@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.style.parser;
 
-import net.voxelindustry.brokkgui.style.parser.StyleSelectorParser;
 import net.voxelindustry.brokkgui.style.tree.IStyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleSelectorHierarchic;

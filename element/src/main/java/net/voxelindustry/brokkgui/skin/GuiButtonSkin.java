@@ -5,7 +5,6 @@ import net.voxelindustry.brokkgui.control.GuiButtonBase;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.skin.GuiBehaviorSkinBase;
 
 public class GuiButtonSkin<C extends GuiButtonBase, B extends GuiButtonBehavior<C>> extends GuiBehaviorSkinBase<C, B>
 {

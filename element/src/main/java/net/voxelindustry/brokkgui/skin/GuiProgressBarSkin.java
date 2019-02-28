@@ -5,7 +5,6 @@ import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.element.GuiProgressBar;
 import net.voxelindustry.brokkgui.shape.Rectangle;
-import net.voxelindustry.brokkgui.skin.GuiLabeledSkinBase;
 
 public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorBase<C>> extends GuiLabeledSkinBase<C, B>
 {

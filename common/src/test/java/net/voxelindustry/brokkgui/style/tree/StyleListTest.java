@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.style.tree;
 
 import com.google.common.collect.Lists;
-import net.voxelindustry.brokkgui.style.tree.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;

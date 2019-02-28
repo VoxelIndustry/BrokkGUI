@@ -4,7 +4,6 @@ import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.element.GuiTooltip;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.skin.GuiBehaviorSkinBase;
 
 public class GuiTooltipSkin extends GuiBehaviorSkinBase<GuiTooltip, GuiBehaviorBase<GuiTooltip>>
 {

@@ -6,8 +6,8 @@ import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.component.IGuiTooltip;
 import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
-import net.voxelindustry.brokkgui.skin.GuiTooltipSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
+import net.voxelindustry.brokkgui.skin.GuiTooltipSkin;
 
 public class GuiTooltip extends GuiElement implements IGuiTooltip
 {

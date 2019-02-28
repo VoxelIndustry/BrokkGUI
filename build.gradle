@@ -78,6 +78,8 @@ subprojects {
 	tasks.eclipse.dependsOn(cleanEclipse)
 
     artifactoryPublish.dependsOn build
+
+    apply plugin: 'jacoco'
 }
 
 project(":common") {
@@ -134,8 +136,9 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
-        property "sonar.host.url", hasProperty('sonarqube_url') ? sonarqube_url : System.getenv('SONARQUBE_URL')
-        property "sonar.login", hasProperty('sonarqube_login') ? sonarqube_login : System.getenv('SONARQUBE_LOGIN')
+        property "sonar.host.url", project.hasProperty('sonarqube_url') ? project.sonarqube_url : System.getenv('SONARQUBE_URL')
+        property "sonar.login", project.hasProperty('sonarqube_login') ? project.sonarqube_login : System.getenv('SONARQUBE_LOGIN')
         property "sonar.projectKey", "BrokkGUI"
+        property "sonar.groovy.binaries", "${project.buildDir.name}${File.separator}classes"
     }
 }
