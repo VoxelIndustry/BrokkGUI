@@ -33,6 +33,7 @@ public class StylesheetParser
     public StyleList loadStylesheet(String styleSheet) throws IOException
     {
         StyleList list = new StyleList();
+        List<String> dependencies = new ArrayList<>();
 
         InputStream input = StylesheetManager.class.getResourceAsStream(styleSheet);
         if (input == null)
@@ -41,10 +42,23 @@ public class StylesheetParser
                 new InputStreamReader(input, Charsets.toCharset(StandardCharsets.UTF_8)));
         while (iterator.hasNext())
         {
-            String line = iterator.nextLine();
+            String line = iterator.nextLine().trim();
             if (StringUtils.isEmpty(line))
                 continue;
 
+            if (line.startsWith("@import"))
+            {
+                String url = line.substring(7).replace("url(", "").replace(")", "").replace(";", "").replace("\"",
+                        "").trim();
+                dependencies.add(url);
+                continue;
+            }
+
+            if (!dependencies.isEmpty())
+            {
+                list.merge(StylesheetManager.getInstance().loadDependencies(styleSheet, dependencies));
+                dependencies.clear();
+            }
             if (line.contains("{"))
             {
                 IStyleSelector[] selectors = selectorParser.readSelectors(line);
@@ -56,6 +70,14 @@ public class StylesheetParser
             else
                 logger.severe("Expected { at line " + iterator.getLineNumber());
         }
+
+        // Load dependencies even if the styleSheet is empty
+        if (!dependencies.isEmpty())
+        {
+            list.merge(StylesheetManager.getInstance().loadDependencies(styleSheet, dependencies));
+            dependencies.clear();
+        }
+
         input.close();
         return list;
     }

@@ -31,10 +31,10 @@ public class StylesheetManager
     private LoadingCache<String, StyleList> styleCache;
     private StylesheetParser                styleParser;
 
-    public final String        DEFAULT_THEME = "BROKKGUI";
-    private List<String>       themeIDs;
-    private List<List<String>> styleSheets;
-    private List<StyleList>    userAgents;
+    public final String             DEFAULT_THEME = "BROKKGUI";
+    private      List<String>       themeIDs;
+    private      List<List<String>> styleSheets;
+    private      List<StyleList>    userAgents;
 
     private StylesheetManager()
     {
@@ -85,6 +85,18 @@ public class StylesheetManager
     StyleList getStyleList(String styleSheet) throws ExecutionException
     {
         return this.styleCache.get(styleSheet);
+    }
+
+    public StyleList loadDependencies(String styleSheet, List<String> dependencies)
+    {
+        try
+        {
+            return loadStylesheets(dependencies.toArray(new String[0]));
+        } catch (ExecutionException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     ////////////////

@@ -35,6 +35,26 @@ public class StylesheetManagerTest
             e.printStackTrace();
         }
 
+        assertTestCSS(list);
+    }
+
+    @Test
+    public void parseCSSWithImport()
+    {
+        StyleList list = null;
+        try
+        {
+            list = StylesheetManager.getInstance().loadStylesheets("/assets/brokkgui/css/import.css");
+        } catch (ExecutionException e)
+        {
+            e.printStackTrace();
+        }
+
+        assertTestCSS(list);
+    }
+
+    private void assertTestCSS(StyleList list)
+    {
         assertThat(list).isNotNull();
         assertThat(list.getInternalStyleList()).hasSize(5);
         assertThat(list.getInternalStyleList().get(0).getSelector()).isInstanceOf(StyleSelector.class);
