@@ -12,6 +12,8 @@ public class SequentialTransition extends Transition
 {
     private List<Animation> animations;
 
+    private Animation current;
+
     public SequentialTransition(GuiNode node, Animation... animations)
     {
         super(node, 0, TimeUnit.MILLISECONDS);
@@ -44,6 +46,15 @@ public class SequentialTransition extends Transition
 
         if (animation == null)
             return;
+
+        if (current != animation)
+        {
+            if (current != null)
+                current.complete();
+
+            current = animation;
+            current.restart();
+        }
 
         animation.setCurrentProgress(interpolated - currentPart);
     }

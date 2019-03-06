@@ -2,10 +2,14 @@ package net.voxelindustry.brokkgui.animation;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
+import net.voxelindustry.brokkgui.event.AnimationFinishEvent;
+import net.voxelindustry.hermod.EventDispatcher;
+import net.voxelindustry.hermod.EventHandler;
+import net.voxelindustry.hermod.IEventEmitter;
 
 import java.util.concurrent.TimeUnit;
 
-public abstract class Animation implements ITicking
+public abstract class Animation implements ITicking, IEventEmitter
 {
     private long duration;
     private long startTime;
@@ -19,7 +23,9 @@ public abstract class Animation implements ITicking
     private BaseProperty<Float>           progressProperty;
     private BaseProperty<Float>           totalProgressProperty;
 
-    private Animation parent;
+    private Animation                          parent;
+    private EventDispatcher                    eventDispatcher;
+    private EventHandler<AnimationFinishEvent> onFinishEvent;
 
     public Animation(long duration, TimeUnit unit)
     {
@@ -103,12 +109,15 @@ public abstract class Animation implements ITicking
         this.getStatusProperty().setValue(AnimationStatus.RUNNING);
     }
 
-    protected void complete()
+    public void complete()
     {
         this.getStatusProperty().setValue(AnimationStatus.COMPLETED);
         BrokkGuiPlatform.getInstance().getTickSender().removeTicking(this);
 
         this.startTime = 0;
+
+        if (this.onFinishEvent != null)
+            this.onFinishEvent.handle(new AnimationFinishEvent(this));
     }
 
     public BaseProperty<AnimationStatus> getStatusProperty()
@@ -210,5 +219,18 @@ public abstract class Animation implements ITicking
     public void setParent(Animation parent)
     {
         this.parent = parent;
+    }
+
+    public void setOnFinishEvent(EventHandler<AnimationFinishEvent> onFinishEvent)
+    {
+        if (this.eventDispatcher == null)
+            this.eventDispatcher = new EventDispatcher();
+        this.onFinishEvent = onFinishEvent;
+    }
+
+    @Override
+    public EventDispatcher getEventDispatcher()
+    {
+        return eventDispatcher;
     }
 }
