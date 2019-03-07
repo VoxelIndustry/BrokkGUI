@@ -37,7 +37,7 @@ public class LineShape implements ShapeDefinition
     public void drawTextured(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Texture texture,
                              float zLevel)
     {
-
+        // TODO : Add helper for drawing textured lines
     }
 
     @Override
