@@ -8,9 +8,9 @@ import net.voxelindustry.brokkgui.gui.SubGuiScreen;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.ColorConstants;
-import net.voxelindustry.brokkgui.shape.GuiShape;
 import net.voxelindustry.brokkgui.util.MathUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.NumberFormat;
 import java.util.HashSet;
@@ -27,14 +27,16 @@ public class DebugRenderer
     }
 
     private final BrokkGuiScreen screen;
-    private final Color          borderColor = ColorConstants.getColor("steelblue");
-    private final Color          textColor   = ColorConstants.getColor("gold");
-    private final Color          boxColor    = Color.BLACK.addAlpha(-0.5f);
+    private final Color          borderColor      = ColorConstants.getColor("steelblue");
+    private final Color          textColor        = ColorConstants.getColor("gold");
+    private final Color          hoveredTextColor = ColorConstants.getColor("gold").shade(0.2f);
+    private final Color          boxColor         = Color.BLACK.addAlpha(-0.5f);
 
     private final Set<GuiFather> openedNodes;
 
     private GuiFather openedRoot;
     private GuiNode   hoveredNode;
+    private GuiNode   castHoveredNode;
     private int       mouseX, mouseY;
 
     private float accordionScrollX, accordionScrollY;
@@ -80,19 +82,52 @@ public class DebugRenderer
                 openedRoot.getyPos() + openedRoot.getyTranslate() + openedRoot.getHeight());
         this.drawAccordion(renderer, openedRoot, "Root", accordionScrollX, accordionScrollY);
 
-        if (hoveredNode != null)
+        this.drawSelectedNodeBoxes(renderer, hoveredNode);
+
+        if (!screen.getMainPanel().isPointInside(mouseX, mouseY))
+            return;
+
+        this.castHoveredNode = this.getDeepestHoveredNode(screen.getMainPanel(), mouseX, mouseY, 0).getKey();
+        this.drawSelectedNodeBoxes(renderer, castHoveredNode);
+    }
+
+    private void drawSelectedNodeBoxes(IGuiRenderer renderer, GuiNode node)
+    {
+        if (node != null)
         {
             float xStart = MathUtils.clamp(0,
-                    screen.getScreenWidth() - renderer.getHelper().getStringWidth(getNodeText(hoveredNode)),
-                    hoveredNode.getxPos() + hoveredNode.getxTranslate());
+                    screen.getScreenWidth() - renderer.getHelper().getStringWidth(getNodeText(node)),
+                    node.getxPos() + node.getxTranslate());
             float yStart = MathUtils.clamp(0, screen.getScreenHeight() - renderer.getHelper().getStringHeight(),
-                    hoveredNode.getyPos() + hoveredNode.getyTranslate() + hoveredNode.getHeight());
+                    node.getyPos() + node.getyTranslate() + node.getHeight());
 
-            this.drawTextBox(renderer, getNodeText(hoveredNode), xStart, yStart);
-            renderer.getHelper().drawColoredEmptyRect(renderer, hoveredNode.getxPos() + hoveredNode.getxTranslate(),
-                    hoveredNode.getyPos() + hoveredNode.getyTranslate(), hoveredNode.getWidth(),
-                    hoveredNode.getHeight(), 300, borderColor, 0.5f);
+            this.drawTextBox(renderer, getNodeText(node), xStart, yStart);
+            renderer.getHelper().drawColoredEmptyRect(renderer, node.getxPos() + node.getxTranslate(),
+                    node.getyPos() + node.getyTranslate(), node.getWidth(),
+                    node.getHeight(), 300, borderColor, 0.5f);
         }
+    }
+
+    private Pair<GuiNode, Integer> getDeepestHoveredNode(GuiNode current, int mouseX, int mouseY, int depth)
+    {
+        if (current instanceof GuiFather)
+        {
+            Pair<GuiNode, Integer> deepest = null;
+
+            for (GuiNode child : ((GuiFather) current).getChildrens())
+            {
+                if (!child.isPointInside(mouseX, mouseY))
+                    continue;
+
+                Pair<GuiNode, Integer> candidate = getDeepestHoveredNode(child, mouseX, mouseY, depth + 1);
+
+                if (deepest == null || candidate.getRight() > deepest.getRight())
+                    deepest = candidate;
+            }
+            if (deepest != null)
+                return deepest;
+        }
+        return Pair.of(current, depth);
     }
 
     public void onClick(int mouseX, int mouseY)
@@ -159,12 +194,14 @@ public class DebugRenderer
 
         for (GuiNode child : parent.getChildrens())
         {
-            if (mouseX > startX + 5 * depth && mouseX < startX + 5 * depth + renderer.getHelper().getStringWidth(child.getClass().getSimpleName()) &&
+            String childName = getNodeName(child);
+
+            if (mouseX > startX + 5 * depth && mouseX < startX + 5 * depth + renderer.getHelper().getStringWidth(childName) &&
                     mouseY > startY + height && mouseY < startY + height + renderer.getHelper().getStringHeight())
                 hoveredNode = child;
 
-            renderer.getHelper().drawString(child.getClass().getSimpleName(), startX + 5 * depth, startY + height,
-                    300, textColor, Color.ALPHA);
+            renderer.getHelper().drawString(childName, startX + 5 * depth, startY + height,
+                    300, hoveredNode == child || castHoveredNode == child ? hoveredTextColor : textColor, Color.ALPHA);
             height += renderer.getHelper().getStringHeight() + 1;
 
             if (child instanceof GuiFather)
@@ -179,18 +216,24 @@ public class DebugRenderer
                 " w:" + FORMAT.format(screen.getWidth()) + " h:" + FORMAT.format(screen.getHeight());
     }
 
+    private String getNodeName(GuiNode node)
+    {
+        StringBuilder builder = new StringBuilder();
+
+        if (!StringUtils.isEmpty(node.getID()))
+            builder.append("#").append(node.getID());
+        else
+            builder.append(node.getClass().getSimpleName());
+
+        return builder.toString();
+    }
+
     private String getNodeText(GuiNode node)
     {
         StringBuilder builder = new StringBuilder();
 
-        if (node instanceof GuiShape)
-        {
-            if (!StringUtils.isEmpty(node.getID()))
-                builder.append("#").append(node.getID());
-            node.getStyleClass().getValue().forEach(str -> builder.append(" .").append(str));
-        }
-        else
-            builder.append(node.getClass().getSimpleName());
+        builder.append(getNodeName(node));
+        node.getStyleClass().getValue().forEach(str -> builder.append(" .").append(str));
         builder.append(" x:").append(FORMAT.format(node.getxPos()));
         builder.append(" y:").append(FORMAT.format(node.getyPos()));
         builder.append(" w:").append(FORMAT.format(node.getWidth()));
