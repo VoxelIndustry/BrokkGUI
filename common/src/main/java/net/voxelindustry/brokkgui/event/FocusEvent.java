@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.event;
 
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.hermod.EventType;
+import net.voxelindustry.hermod.IEventEmitter;
 
 public class FocusEvent extends GuiStateEvent
 {
@@ -9,12 +10,12 @@ public class FocusEvent extends GuiStateEvent
 
     private final boolean focused;
 
-    public FocusEvent(final GuiNode source)
+    public FocusEvent(GuiNode source)
     {
         this(source, false);
     }
 
-    public FocusEvent(final GuiNode source, final boolean focused)
+    public FocusEvent(GuiNode source, boolean focused)
     {
         super(source);
 
@@ -24,5 +25,11 @@ public class FocusEvent extends GuiStateEvent
     public boolean isFocused()
     {
         return this.focused;
+    }
+
+    @Override
+    public FocusEvent copy(IEventEmitter source)
+    {
+        return new FocusEvent((GuiNode) source, isFocused());
     }
 }

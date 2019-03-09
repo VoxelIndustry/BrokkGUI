@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.event;
 
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.hermod.EventType;
+import net.voxelindustry.hermod.IEventEmitter;
 
 public class KeyEvent extends GuiInputEvent
 {
@@ -28,6 +29,12 @@ public class KeyEvent extends GuiInputEvent
         return this.key;
     }
 
+    @Override
+    public KeyEvent copy(IEventEmitter source)
+    {
+        return new KeyEvent((GuiNode) source, getKey());
+    }
+
     public static class Input extends KeyEvent
     {
         private final char character;
@@ -42,6 +49,12 @@ public class KeyEvent extends GuiInputEvent
         {
             return this.character;
         }
+
+        @Override
+        public KeyEvent.Input copy(IEventEmitter source)
+        {
+            return new KeyEvent.Input((GuiNode) source,getCharacter(), getKey());
+        }
     }
 
     public static class Press extends KeyEvent
@@ -50,6 +63,12 @@ public class KeyEvent extends GuiInputEvent
         {
             super(source, key);
         }
+
+        @Override
+        public KeyEvent.Press copy(IEventEmitter source)
+        {
+            return new KeyEvent.Press((GuiNode) source, getKey());
+        }
     }
 
     public static class Release extends KeyEvent
@@ -57,6 +76,12 @@ public class KeyEvent extends GuiInputEvent
         public Release(GuiNode source, int key)
         {
             super(source, key);
+        }
+
+        @Override
+        public KeyEvent.Release copy(IEventEmitter source)
+        {
+            return new KeyEvent.Release((GuiNode) source, getKey());
         }
     }
 }

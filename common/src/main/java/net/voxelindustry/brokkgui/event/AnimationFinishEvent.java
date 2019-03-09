@@ -9,4 +9,10 @@ public class AnimationFinishEvent extends HermodEvent
     {
         super(source);
     }
+
+    @Override
+    public AnimationFinishEvent copy(IEventEmitter source)
+    {
+        return new AnimationFinishEvent(source);
+    }
 }

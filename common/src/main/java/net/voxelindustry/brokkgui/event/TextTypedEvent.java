@@ -2,19 +2,20 @@ package net.voxelindustry.brokkgui.event;
 
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.hermod.EventType;
+import net.voxelindustry.hermod.IEventEmitter;
 
 public class TextTypedEvent extends GuiInputEvent
 {
     public static final EventType<TextTypedEvent> TYPE = new EventType<>(GuiInputEvent.ANY, "TEXT_INPUT_EVENT");
 
-    private final String                          oldText, newText;
+    private final String oldText, newText;
 
-    public TextTypedEvent(final GuiNode source)
+    public TextTypedEvent(GuiNode source)
     {
         this(source, "", "");
     }
 
-    public TextTypedEvent(final GuiNode source, final String oldText, final String newText)
+    public TextTypedEvent(GuiNode source, String oldText, String newText)
     {
         super(source);
         this.oldText = oldText;
@@ -29,5 +30,11 @@ public class TextTypedEvent extends GuiInputEvent
     public String getNewText()
     {
         return this.newText;
+    }
+
+    @Override
+    public TextTypedEvent copy(IEventEmitter source)
+    {
+        return new TextTypedEvent((GuiNode) source, getOldText(), getNewText());
     }
 }

@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.event;
 
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.hermod.EventType;
+import net.voxelindustry.hermod.IEventEmitter;
 
 public class GuiMouseEvent extends GuiInputEvent
 {
@@ -35,6 +36,12 @@ public class GuiMouseEvent extends GuiInputEvent
         return this.mouseY;
     }
 
+    @Override
+    public GuiMouseEvent copy(IEventEmitter source)
+    {
+        return new GuiMouseEvent((GuiNode) source, getMouseX(), getMouseY());
+    }
+
     public static final class Wheel extends GuiMouseEvent
     {
         private final int dwheel;
@@ -49,6 +56,12 @@ public class GuiMouseEvent extends GuiInputEvent
         public int getDwheel()
         {
             return this.dwheel;
+        }
+
+        @Override
+        public Wheel copy(IEventEmitter source)
+        {
+            return new Wheel((GuiNode) source, getMouseX(), getMouseY(), getDwheel());
         }
     }
 
@@ -66,6 +79,12 @@ public class GuiMouseEvent extends GuiInputEvent
         public int getKey()
         {
             return key;
+        }
+
+        @Override
+        public DragStart copy(IEventEmitter source)
+        {
+            return new DragStart((GuiNode) source, getMouseX(), getMouseY(), getKey());
         }
     }
 
@@ -90,6 +109,12 @@ public class GuiMouseEvent extends GuiInputEvent
         {
             return dragY;
         }
+
+        @Override
+        public Dragging copy(IEventEmitter source)
+        {
+            return new Dragging((GuiNode) source, getMouseX(), getMouseY(), getKey(), getDragX(), getDragY());
+        }
     }
 
     public static final class DragStop extends Dragging
@@ -97,6 +122,12 @@ public class GuiMouseEvent extends GuiInputEvent
         public DragStop(GuiNode source, int mouseX, int mouseY, int mouseKey, int dragX, int dragY)
         {
             super(source, mouseX, mouseY, mouseKey, dragX, dragY);
+        }
+
+        @Override
+        public DragStop copy(IEventEmitter source)
+        {
+            return new DragStop((GuiNode) source, getMouseX(), getMouseY(), getKey(), getDragX(), getDragY());
         }
     }
 }
