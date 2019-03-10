@@ -4,8 +4,10 @@ import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.hermod.EventHandler;
+import net.voxelindustry.hermod.EventType;
+import net.voxelindustry.hermod.HermodEvent;
 
-public class SubGuiScreen extends GuiFather implements IGuiWindow
+public class SubGuiScreen extends GuiFather implements IGuiSubWindow
 {
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
@@ -55,16 +57,19 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
         this.hasWarFog = warFog;
     }
 
+    @Override
     public BaseProperty<Float> getxRelativePosProperty()
     {
         return this.xRelativePosProperty;
     }
 
+    @Override
     public BaseProperty<Float> getyRelativePosProperty()
     {
         return this.yRelativePosProperty;
     }
 
+    @Override
     public float getxRelativePos()
     {
         return this.getxRelativePosProperty().getValue();
@@ -75,6 +80,7 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
         this.getxRelativePosProperty().setValue(xRelativePos);
     }
 
+    @Override
     public float getyRelativePos()
     {
         return this.getyRelativePosProperty().getValue();
@@ -88,6 +94,24 @@ public class SubGuiScreen extends GuiFather implements IGuiWindow
     /////////////////////
     // EVENTS HANDLING //
     /////////////////////
+
+    @Override
+    public <T extends HermodEvent> void addEventHandler(EventType<T> type, EventHandler<? super T> handler)
+    {
+        this.getEventDispatcher().addHandler(type, handler);
+    }
+
+    @Override
+    public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler)
+    {
+        this.getEventDispatcher().removeHandler(type, handler);
+    }
+
+    @Override
+    public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
+    {
+        this.getEventDispatcher().dispatchEvent(type, event.copy(this));
+    }
 
     @Override
     public void open()

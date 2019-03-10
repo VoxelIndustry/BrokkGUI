@@ -1,5 +1,7 @@
 package net.voxelindustry.brokkgui.internal;
 
+import net.voxelindustry.brokkgui.gui.IGuiWindow;
+
 public interface IBrokkGuiImpl
 {
     void askOpen();
@@ -10,7 +12,11 @@ public interface IBrokkGuiImpl
 
     String getThemeID();
 
-    float getGuiRelativePosX();
+    float getGuiRelativePosX(float guiXRelativePos, float guiWidth);
 
-    float getGuiRelativePosY();
+    float getGuiRelativePosY(float guiYRelativePos, float guiHeight);
+
+    IGuiWindow getGui();
+
+    void setGuiWindow(IGuiWindow window);
 }

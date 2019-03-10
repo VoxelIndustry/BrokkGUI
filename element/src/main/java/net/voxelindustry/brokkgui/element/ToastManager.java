@@ -5,7 +5,7 @@ import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.data.RectAlignment;
-import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
+import net.voxelindustry.brokkgui.gui.IGuiWindow;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -14,7 +14,7 @@ import java.util.Queue;
 
 public class ToastManager
 {
-    private final BrokkGuiScreen screen;
+    private final IGuiWindow screen;
 
     private final BaseProperty<Float>         xPosProperty;
     private final BaseProperty<Float>         yPosProperty;
@@ -29,7 +29,7 @@ public class ToastManager
     private GuiToast                   toastHolder;
     private Queue<Pair<GuiNode, Long>> toastQueue;
 
-    public ToastManager(BrokkGuiScreen screen)
+    public ToastManager(IGuiWindow screen)
     {
         this.screen = screen;
 
