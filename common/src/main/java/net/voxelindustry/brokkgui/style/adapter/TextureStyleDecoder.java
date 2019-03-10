@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.paint.Texture;
 
-public class TextureStyleAdapter implements IStyleAdapter<Texture>
+public class TextureStyleDecoder implements IStyleDecoder<Texture>
 {
     @Override
     public Texture decode(String style)

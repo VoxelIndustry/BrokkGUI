@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.style.adapter;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.ColorConstants;
 
-public class ColorStyleAdapter implements IStyleAdapter<Color>
+public class ColorStyleDecoder implements IStyleDecoder<Color>
 {
     @Override
     public Color decode(String style)

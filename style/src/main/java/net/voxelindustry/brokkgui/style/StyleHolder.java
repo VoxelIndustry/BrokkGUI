@@ -1,7 +1,8 @@
 package net.voxelindustry.brokkgui.style;
 
+import com.google.common.collect.ImmutableMap;
 import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.style.parser.StyleDecoder;
+import net.voxelindustry.brokkgui.style.parser.StyleTranslator;
 import net.voxelindustry.brokkgui.style.tree.StyleEntry;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
@@ -46,7 +47,7 @@ public class StyleHolder
         if (this.properties.containsKey(propertyName))
         {
             this.properties.get(propertyName).setStyle(source, specificity,
-                    StyleDecoder.getInstance().decode(value, this.properties.get(propertyName).getValueClass()));
+                    StyleTranslator.getInstance().decode(value, this.properties.get(propertyName).getValueClass()));
         }
     }
 
@@ -105,6 +106,14 @@ public class StyleHolder
     public ICascadeStyleable getOwner()
     {
         return owner;
+    }
+
+    /**
+     * @return the contained properties of this holder. Intended only for debug info.
+     */
+    public ImmutableMap<String, StyleableProperty<?>> getProperties()
+    {
+        return ImmutableMap.copyOf(properties);
     }
 
     void resetToDefault()

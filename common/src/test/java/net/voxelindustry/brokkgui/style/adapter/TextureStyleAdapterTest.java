@@ -11,12 +11,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class TextureStyleAdapterTest
 {
-    private TextureStyleAdapter adapter;
+    private TextureStyleDecoder adapter;
 
     @Before
     public void init()
     {
-        this.adapter = new TextureStyleAdapter();
+        this.adapter = new TextureStyleDecoder();
     }
 
     @Test

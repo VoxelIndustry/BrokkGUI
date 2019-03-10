@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.Texture;
-import net.voxelindustry.brokkgui.style.parser.StyleDecoder;
+import net.voxelindustry.brokkgui.style.parser.StyleTranslator;
 
 public class StyleEngine
 {
@@ -22,7 +22,10 @@ public class StyleEngine
 
     public void start()
     {
-        StyleDecoder.getInstance().registerStyleAdapter(Color.class, new ColorStyleAdapter());
-        StyleDecoder.getInstance().registerStyleAdapter(Texture.class, new TextureStyleAdapter());
+        StyleTranslator.getInstance().registerStyleDecoder(Color.class, new ColorStyleDecoder());
+        StyleTranslator.getInstance().registerStyleDecoder(Texture.class, new TextureStyleDecoder());
+
+        StyleTranslator.getInstance().registerStyleEncoder(Color.class, new ColorStyleEncoder());
+        StyleTranslator.getInstance().registerStyleEncoder(Texture.class, new TextureStyleEncoder());
     }
 }
