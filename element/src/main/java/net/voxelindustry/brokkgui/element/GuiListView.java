@@ -30,7 +30,7 @@ public class GuiListView<T> extends GuiScrollableBase
 
     private final BaseProperty<Integer> selectedCellIndexProperty;
 
-    public GuiListView(final List<T> elements)
+    public GuiListView(List<T> elements)
     {
         super("listview");
 
@@ -42,8 +42,8 @@ public class GuiListView<T> extends GuiScrollableBase
 
         this.cellFactoryProperty = new BaseProperty<>(null, "cellFactoryProperty");
 
-        this.cellWidthProperty = new BaseProperty<>(0f, "cellWidthProperty");
-        this.cellHeightProperty = new BaseProperty<>(0f, "cellHeightProperty");
+        this.cellWidthProperty = new BaseProperty<>(100f, "cellWidthProperty");
+        this.cellHeightProperty = new BaseProperty<>(20f, "cellHeightProperty");
 
         this.cellXPaddingProperty = new BaseProperty<>(0f, "cellXPaddingProperty");
         this.cellYPaddingProperty = new BaseProperty<>(0f, "cellYPaddingProperty");
@@ -163,8 +163,11 @@ public class GuiListView<T> extends GuiScrollableBase
 
     public void setElements(final List<T> elements)
     {
-        this.getElementsProperty().clear();
-        this.getElementsProperty().addAll(elements);
+        this.getElementsProperty().muteWhile(() ->
+        {
+            getElementsProperty().clear();
+            getElementsProperty().addAll(elements);
+        });
     }
 
     public void addElement(T element)
@@ -256,19 +259,14 @@ public class GuiListView<T> extends GuiScrollableBase
             final GuiListCell<T> cell = new GuiListCell<>(this, content);
 
             if (content == null)
-            {
                 cell.setGraphic(null);
-                cell.setText("");
-            }
             else if (content instanceof GuiNode)
-            {
                 cell.setGraphic((GuiNode) content);
-                cell.setText("");
-            }
             else
             {
-                cell.setGraphic(null);
-                cell.setText(content.toString());
+                GuiLabel label = new GuiLabel(content.toString());
+                label.setExpandToText(false);
+                cell.setGraphic(label);
             }
             return cell;
         };

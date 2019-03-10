@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.behavior;
 
-import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.value.BaseListProperty;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.element.GuiListCell;
@@ -23,7 +22,7 @@ public class GuiListViewBehavior<T> extends GuiScrollableBehavior<GuiListView<T>
 
         this.mapAllCells();
         this.getModel().getElementsProperty()
-                .addListener((ListValueChangeListener<T>) (observable, oldValue, newValue) -> this.mapAllCells());
+                .addListener(obs -> this.mapAllCells());
 
         this.getModel().getEventDispatcher().addHandler(ClickEvent.TYPE, this::onClick);
     }

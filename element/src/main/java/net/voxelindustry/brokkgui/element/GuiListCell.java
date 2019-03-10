@@ -3,12 +3,13 @@ package net.voxelindustry.brokkgui.element;
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiLabeled;
+import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAxis;
+import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.skin.GuiListCellSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
-public class GuiListCell<T> extends GuiLabeled
+public class GuiListCell<T> extends GuiElement
 {
     private final GuiListView<T> listView;
 
@@ -95,7 +96,7 @@ public class GuiListCell<T> extends GuiLabeled
         return this.getItemProperty().getValue();
     }
 
-    public void setItem(final T item)
+    public void setItem(T item)
     {
         this.getItemProperty().setValue(item);
     }
@@ -105,29 +106,22 @@ public class GuiListCell<T> extends GuiLabeled
         return this.getGraphicProperty().getValue();
     }
 
-    public void setGraphic(final GuiNode graphic)
+    public void setGraphic(GuiNode graphic)
     {
         if (this.getGraphic() != null)
         {
-            this.getGraphic().setFather(null);
-            this.getChildrensProperty().remove(this.getGraphic());
-        }
-        if (this.getGraphic() != null)
-        {
-            this.getGraphic().getxPosProperty().unbind();
-            this.getGraphic().getyPosProperty().unbind();
+            this.removeChild(this.getGraphic());
             this.getGraphic().getWidthProperty().unbind();
             this.getGraphic().getHeightProperty().unbind();
         }
         this.getGraphicProperty().setValue(graphic);
         if (this.getGraphic() != null)
         {
-            this.getGraphic().getxPosProperty().bind(this.getxPosProperty());
-            this.getGraphic().getyPosProperty().bind(this.getyPosProperty());
+            this.addChild(this.getGraphic());
+
+            RelativeBindingHelper.bindToPos(this.getGraphic(), this);
             this.getGraphic().getWidthProperty().bind(this.getWidthProperty());
             this.getGraphic().getHeightProperty().bind(this.getHeightProperty());
-            this.getChildrensProperty().add(graphic);
-            graphic.setFather(this);
         }
     }
 

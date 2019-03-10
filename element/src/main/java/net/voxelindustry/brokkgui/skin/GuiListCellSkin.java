@@ -5,15 +5,15 @@ import net.voxelindustry.brokkgui.element.GuiListCell;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
-public class GuiListCellSkin<T> extends GuiLabeledSkinBase<GuiListCell<T>, GuiBehaviorBase<GuiListCell<T>>>
+public class GuiListCellSkin<T> extends GuiBehaviorSkinBase<GuiListCell<T>, GuiBehaviorBase<GuiListCell<T>>>
 {
-    public GuiListCellSkin(final GuiListCell<T> model)
+    public GuiListCellSkin(GuiListCell<T> model)
     {
         super(model, new GuiBehaviorBase<>(model));
     }
 
     @Override
-    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
+    public void render(RenderPass pass, IGuiRenderer renderer, int mouseX, int mouseY)
     {
         super.render(pass, renderer, mouseX, mouseY);
 
