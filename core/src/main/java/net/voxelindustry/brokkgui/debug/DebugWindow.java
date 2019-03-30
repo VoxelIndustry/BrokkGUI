@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.debug;
 
 import fr.ourten.teabeans.binding.BaseExpression;
+import net.voxelindustry.brokkgui.event.LayoutEvent;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
 import net.voxelindustry.brokkgui.paint.Color;
@@ -8,7 +9,6 @@ import net.voxelindustry.brokkgui.paint.ColorConstants;
 import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
 
 import java.text.NumberFormat;
-import java.util.concurrent.TimeUnit;
 
 public class DebugWindow extends BrokkGuiScreen
 {
@@ -41,14 +41,13 @@ public class DebugWindow extends BrokkGuiScreen
         this.debugLayoutPanel = new DebugLayoutPanel();
         debugLayoutPanel.setHeightRatio(1);
         debugLayoutPanel.setWidth(200);
-        mainPanel.addChild(debugLayoutPanel,0,0);
+        mainPanel.addChild(debugLayoutPanel, 0, 0);
 
-        this.runLater(this::updateLayout, 500, TimeUnit.MILLISECONDS);
-    }
+        debugLayoutPanel.updateLayout(window);
+        window.addEventHandler(LayoutEvent.ANY, e -> debugLayoutPanel.updateLayout(window));
 
-    private void updateLayout()
-    {
-        this.debugLayoutPanel.updateLayout(window);
-        this.runLater(this::updateLayout, 500, TimeUnit.MILLISECONDS);
+        this.isDebugged = true;
+
+        this.addStylesheet("/assets/brokkgui/css/debug.css");
     }
 }

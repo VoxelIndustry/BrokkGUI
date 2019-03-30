@@ -9,6 +9,7 @@ import net.voxelindustry.brokkgui.element.GuiListCell;
 import net.voxelindustry.brokkgui.element.GuiListView;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
 import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
+import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -27,6 +28,7 @@ public class DebugLayoutPanel extends GuiAbsolutePane
         view.setCellWidth(125);
         view.setCellHeight(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
         view.setStyle("background-color: #000000 50%;");
+        view.setGuiOverflow(GuiOverflowPolicy.NONE);
         view.setCellFactory(content ->
         {
             GuiListCell<Pair<GuiNode, Integer>> cell = new GuiListCell<>(view, content);
@@ -34,13 +36,21 @@ public class DebugLayoutPanel extends GuiAbsolutePane
                     new GuiLabel(StringUtils.repeat(' ', content.getValue()) + DebugRenderer.getNodeName(content.getKey()));
             label.setExpandToText(false);
             label.setTextAlignment(RectAlignment.LEFT_CENTER);
-            label.setOnHoverEvent(e -> label.setExpandToText(e.isEntering()));
+            label.setOnHoverEvent(e ->
+            {
+                if(e.isEntering())
+                    label.setExpandToText(true);
+                else
+                {
+                    label.setExpandToText(false);
+                    label.setWidth(view.getWidth());
+                }
+            });
             cell.setGraphic(label);
             return cell;
         });
+
         this.addChild(view, 0, 0);
-
-
     }
 
     public void updateLayout(IGuiWindow window)

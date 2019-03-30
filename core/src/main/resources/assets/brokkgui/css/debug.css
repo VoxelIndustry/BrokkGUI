@@ -1,0 +1,7 @@
+listcell > label > text {
+    color: #FFD700;
+}
+
+listcell > label:hover > text {
+    color: rgb(204, 172, 0);
+}
