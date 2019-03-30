@@ -227,6 +227,13 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
+    public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
+    {
+        first.dispatchEventRedirect(type, event);
+        second.dispatchEventRedirect(type, event);
+    }
+
+    @Override
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
     {
         first.dispatchEvent(type, event);

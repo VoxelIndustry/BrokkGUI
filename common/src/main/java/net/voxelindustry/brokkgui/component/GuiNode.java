@@ -8,6 +8,7 @@ import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.*;
+import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.ScissorBox;
@@ -48,6 +49,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     private final BaseSetProperty<String> activePseudoClass;
     private       String                  type;
     private       StyleHolder             styleHolder;
+
+    private IGuiSubWindow window;
 
     public GuiNode(String type)
     {
@@ -630,8 +633,11 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
      *
      * @param father
      */
-    public void setFather(final GuiFather father)
+    public void setFather(GuiFather father)
     {
+        if (getFatherProperty().isPresent() && getFather().getWindow() != null)
+            getFather().getWindow().dispatchEvent(LayoutEvent.REMOVE, new LayoutEvent.Remove(this));
+
         this.getFatherProperty().setValue(father);
         if (father != null && this.getWidthRatio() != -1)
             RelativeBindingHelper.bindWidthRelative(this, father, this.getWidthRatioProperty());
@@ -640,7 +646,13 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
         this.getStyle().getParent().setValue(father);
         if (father != null)
+        {
             this.setStyleTree(father.getStyle().getStyleSupplier());
+            this.setWindow(father.getWindow());
+
+            if (this.getWindow() != null)
+                getWindow().dispatchEvent(LayoutEvent.ADD, new LayoutEvent.Add(this));
+        }
         this.refreshStyle();
     }
 
@@ -758,6 +770,16 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public void setScissorBox(ScissorBox scissorBox)
     {
         this.scissorBox = scissorBox;
+    }
+
+    public IGuiSubWindow getWindow()
+    {
+        return window;
+    }
+
+    public void setWindow(IGuiSubWindow window)
+    {
+        this.window = window;
     }
 
     /////////////////////

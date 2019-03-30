@@ -53,7 +53,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     private PriorityQueue<Pair<Runnable, Long>> tasksQueue;
 
-    private boolean isDebugged;
+    protected boolean isDebugged;
 
     public BrokkGuiScreen(final float xRelativePos, final float yRelativePos, final float width, final float height)
     {
@@ -417,6 +417,9 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             this.mainPanel.getHeightProperty().unbind();
             this.mainPanel.getxPosProperty().unbind();
             this.mainPanel.getyPosProperty().unbind();
+
+            if (this.mainPanel.getWindow() == this)
+                this.mainPanel.setWindow(null);
         }
 
         this.mainPanel = mainPanel;
@@ -430,6 +433,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         this.mainPanel.setStyleTree(this.getStyleTreeProperty()::getValue);
         if (this.wrapper != null)
             this.mainPanel.refreshStyle();
+        this.mainPanel.setWindow(this);
     }
 
     public void runLater(Runnable runnable, long time, TimeUnit unit)
@@ -616,19 +620,25 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public <T extends HermodEvent> void addEventHandler(EventType<T> type, EventHandler<? super T> handler)
     {
-        this.eventDispatcher.addHandler(type, handler);
+        this.getEventDispatcher().addHandler(type, handler);
     }
 
     @Override
     public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler)
     {
-        this.eventDispatcher.removeHandler(type, handler);
+        this.getEventDispatcher().removeHandler(type, handler);
+    }
+
+    @Override
+    public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
+    {
+        this.getEventDispatcher().dispatchEvent(type, event.copy(this));
     }
 
     @Override
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
     {
-        this.eventDispatcher.dispatchEvent(type, event.copy(this));
+        this.getEventDispatcher().dispatchEvent(type, event);
     }
 
     /////////////////////

@@ -4,6 +4,7 @@ import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
@@ -216,6 +217,14 @@ public class GuiFather extends GuiShape
         super.dispose();
 
         this.getChildrens().forEach(GuiNode::dispose);
+    }
+
+    @Override
+    public void setWindow(IGuiSubWindow window)
+    {
+        super.setWindow(window);
+
+        this.getChildrens().forEach(child -> child.setWindow(this.getWindow()));
     }
 
     /////////////////////

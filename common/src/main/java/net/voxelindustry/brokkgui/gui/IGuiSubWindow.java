@@ -30,6 +30,7 @@ public interface IGuiSubWindow
 
     <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler);
 
-    void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event);
+    void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event);
 
+    void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event);
 }

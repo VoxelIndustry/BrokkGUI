@@ -24,6 +24,8 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
 
         this.xRelativePosProperty = new BaseProperty<>(xRelativePos, "xRelativePosProperty");
         this.yRelativePosProperty = new BaseProperty<>(yRelativePos, "yRelativePosProperty");
+
+        this.setWindow(this);
     }
 
     public SubGuiScreen()
@@ -108,9 +110,15 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     }
 
     @Override
-    public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
+    public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
     {
         this.getEventDispatcher().dispatchEvent(type, event.copy(this));
+    }
+
+    @Override
+    public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
+    {
+        this.getEventDispatcher().dispatchEvent(type, event);
     }
 
     @Override
