@@ -60,6 +60,9 @@ public class ShorthandProperty<T> extends StyleProperty<T>
             for (int childIndex : argMapper.map(valueIndex, values.size()))
                 childProperties.get(childIndex).setStyle(source, specificity, values.get(valueIndex));
         }
+
+        if (!values.isEmpty())
+            this.internalSetStyle(source, specificity, values.get(0));
         return true;
     }
 }
