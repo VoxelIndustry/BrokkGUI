@@ -1,11 +1,23 @@
 package net.voxelindustry.brokkgui.data;
 
-/**
- * @author Ourten 15 oct. 2016
- */
 public enum RectSide
 {
-    UP, DOWN, LEFT, RIGHT;
+    UP("top"),
+    DOWN("bottom"),
+    LEFT("left"),
+    RIGHT("right");
+
+    private String cssString;
+
+    RectSide(String cssString)
+    {
+        this.cssString = cssString;
+    }
+
+    public String getCssString()
+    {
+        return cssString;
+    }
 
     public boolean isVertical()
     {

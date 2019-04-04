@@ -1,11 +1,16 @@
 package net.voxelindustry.brokkgui.shape;
 
 import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.data.RectCorner;
+import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.style.StyleProperty;
 import net.voxelindustry.brokkgui.style.StyleSource;
+import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMappers;
+import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
 
 public abstract class GuiShape extends GuiNode
 {
@@ -23,8 +28,20 @@ public abstract class GuiShape extends GuiNode
         this.getStyle().registerProperty("background-texture", Texture.EMPTY, Texture.class);
         this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
 
-        this.getStyle().registerProperty("border-width", 0f, Float.class);
-        this.getStyle().registerProperty("border-color", Color.BLACK, Color.class);
+        StyleProperty<Color> borderColorProperty = this.getStyle().registerProperty("border-color", Color.BLACK,
+                Color.class);
+
+        ShorthandProperty<Float> borderWidthProperty = this.getStyle().registerShorthand("border-width", 0f,
+                Float.class, ShorthandArgMappers.BOX_MAPPER,
+                "border-top-width", "border-right-width", "border-bottom-width", "border-left-width");
+
+
+        this.getStyle().registerShorthand("border-radius", 0,
+                Integer.class, ShorthandArgMappers.BOX_MAPPER,
+                "border-top-left-radius", "border-top-right-radius",
+                "border-bottom-right-radius", "border-bottom-left-radius");
+
+        this.getStyle().registerGenericShorthand("border", "", borderColorProperty, borderWidthProperty);
     }
 
     @Override
@@ -53,10 +70,8 @@ public abstract class GuiShape extends GuiNode
         if (pass == RenderPass.FOREGROUND)
         {
             // Draw border
-            if (this.getBorderThin() > 0 && this.getBorderColor() != Color.ALPHA)
-                this.shape.drawColoredEmpty(this, renderer,
-                        getxPos() + getxTranslate(), getyPos() + getyTranslate(),
-                        getBorderThin(), getBorderColor(), getzLevel());
+            if (this.getBorderColor() != Color.ALPHA)
+                this.shape.drawBorder(this, renderer);
 
             if (this.getForegroundTexture() != Texture.EMPTY)
             {
@@ -128,14 +143,48 @@ public abstract class GuiShape extends GuiNode
                 .setStyle(StyleSource.CODE, 10_000, color);
     }
 
-    public float getBorderThin()
+    public float getBorderWidth()
     {
         return this.getStyle().getStyleProperty("border-width", Float.class).getValue();
     }
 
-    public void setBorderThin(float borderThin)
+    public void setBorderWidth(float borderWidth)
     {
-        this.getStyle().getStyleProperty("border-width", Float.class).setStyle(StyleSource.CODE, 10_000, borderThin);
+        this.getStyle().getStyleProperty("border-width", Float.class)
+                .setStyle(StyleSource.CODE, 10_000, borderWidth);
+    }
+
+    public float getBorderWidth(RectSide side)
+    {
+        return this.getStyle().getStyleProperty("border-" + side.getCssString() + "-width", Float.class).getValue();
+    }
+
+    public void setBorderWidth(float borderWidth, RectSide side)
+    {
+        this.getStyle().getStyleProperty("border-" + side.getCssString() + "-width", Float.class)
+                .setStyle(StyleSource.CODE, 10_000, borderWidth);
+    }
+
+    public Integer getBorderRadius()
+    {
+        return this.getStyle().getStyleProperty("border-radius", Integer.class).getValue();
+    }
+
+    public void setBorderRadius(int radius)
+    {
+        this.getStyle().getStyleProperty("border-radius", Integer.class)
+                .setStyle(StyleSource.CODE, 10_000, radius);
+    }
+
+    public Integer getBorderRadius(RectCorner corner)
+    {
+        return this.getStyle().getStyleProperty("border-" + corner.getCssString() + "-radius", Integer.class).getValue();
+    }
+
+    public void setBorderRadius(int radius, RectCorner corner)
+    {
+        this.getStyle().getStyleProperty("border-" + corner.getCssString() + "-radius", Integer.class)
+                .setStyle(StyleSource.CODE, 10_000, radius);
     }
 
     public Color getBorderColor()
@@ -145,7 +194,8 @@ public abstract class GuiShape extends GuiNode
 
     public void setBorderColor(Color color)
     {
-        this.getStyle().getStyleProperty("border-color", Color.class).setStyle(StyleSource.CODE, 10_000, color);
+        this.getStyle().getStyleProperty("border-color", Color.class)
+                .setStyle(StyleSource.CODE, 10_000, color);
     }
 
     public void setShape(ShapeDefinition shape)

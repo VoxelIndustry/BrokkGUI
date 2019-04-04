@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.internal;
 
+import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.Vector2i;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.Texture;
@@ -46,6 +47,8 @@ public interface IGuiHelper
 
     void drawColoredLine(IGuiRenderer renderer, float startX, float startY, float endX, float endY, float lineWeight,
                          float zLevel, Color c);
+
+    void drawColoredArc(IGuiRenderer renderer, float centerX, float centerY, float radius, float zLevel, Color color, RectCorner corner);
 
     void translateVecToScreenSpace(Vector2i vec);
 

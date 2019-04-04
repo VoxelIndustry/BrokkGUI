@@ -22,6 +22,12 @@ public class CircleShape implements ShapeDefinition
     }
 
     @Override
+    public void drawBorder(GuiShape shape, IGuiRenderer renderer)
+    {
+
+    }
+
+    @Override
     public void drawTextured(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Texture texture,
                              float zLevel)
     {
