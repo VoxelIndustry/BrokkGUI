@@ -41,7 +41,7 @@ public class StyleNodeTest
         pane.refreshStyle();
 
         assertThat(pane.getBorderColor()).isEqualTo(ColorConstants.getColor("khaki"));
-        assertThat(pane.getBorderThin()).isEqualTo(2);
+        assertThat(pane.getBorderWidth()).isEqualTo(2);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class StyleNodeTest
         fakeChildPane.refreshStyle();
 
         assertThat(pane.getBorderColor()).isEqualTo(ColorConstants.getColor("khaki"));
-        assertThat(pane.getBorderThin()).isEqualTo(2);
+        assertThat(pane.getBorderWidth()).isEqualTo(2);
     }
 
     @Test

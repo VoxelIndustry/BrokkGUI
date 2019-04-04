@@ -1,15 +1,16 @@
 package net.voxelindustry.brokkgui.style;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 
-public class StyleableProperty<T> extends BaseProperty<T>
+public class StyleProperty<T> extends BaseProperty<T>
 {
     private final Class<T>    valueClass;
     private       int         specificitySet;
     private       StyleSource source;
     private       T           defaultValue;
 
-    public StyleableProperty(T defaultValue, String name, Class<T> valueClass)
+    public StyleProperty(T defaultValue, String name, Class<T> valueClass)
     {
         super(defaultValue, name);
 
@@ -17,6 +18,11 @@ public class StyleableProperty<T> extends BaseProperty<T>
         this.source = StyleSource.USER_AGENT;
         this.specificitySet = 0;
         this.defaultValue = defaultValue;
+    }
+
+    public boolean setStyleRaw(StyleSource source, int specificity, String rawValue)
+    {
+        return this.setStyle(source, specificity, StyleTranslator.getInstance().decode(rawValue, this.getValueClass()));
     }
 
     public boolean setStyle(StyleSource source, int specificity, T value)
@@ -30,7 +36,7 @@ public class StyleableProperty<T> extends BaseProperty<T>
         return false;
     }
 
-    private void internalSetStyle(StyleSource source, int specificity, T value)
+    protected void internalSetStyle(StyleSource source, int specificity, T value)
     {
         this.source = source;
         this.specificitySet = specificity;

@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.Texture;
-import net.voxelindustry.brokkgui.style.parser.StyleTranslator;
 
 public class StyleEngine
 {
@@ -22,10 +21,14 @@ public class StyleEngine
 
     public void start()
     {
-        StyleTranslator.getInstance().registerStyleDecoder(Color.class, new ColorStyleDecoder());
-        StyleTranslator.getInstance().registerStyleDecoder(Texture.class, new TextureStyleDecoder());
+        ColorStyleTranslator colorTranslator = new ColorStyleTranslator();
 
-        StyleTranslator.getInstance().registerStyleEncoder(Color.class, new ColorStyleEncoder());
-        StyleTranslator.getInstance().registerStyleEncoder(Texture.class, new TextureStyleEncoder());
+        StyleTranslator.getInstance().registerTranslator(Color.class, colorTranslator, colorTranslator,
+                colorTranslator);
+
+        TextureStyleTranslator textureTranslator = new TextureStyleTranslator();
+
+        StyleTranslator.getInstance().registerTranslator(Texture.class, textureTranslator, textureTranslator,
+                textureTranslator);
     }
 }

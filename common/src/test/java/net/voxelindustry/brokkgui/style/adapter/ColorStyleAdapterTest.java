@@ -11,12 +11,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class ColorStyleAdapterTest
 {
-    private ColorStyleDecoder adapter;
+    private ColorStyleTranslator adapter;
 
     @Before
     public void init()
     {
-        this.adapter = new ColorStyleDecoder();
+        this.adapter = new ColorStyleTranslator();
     }
 
     @Test

@@ -2,8 +2,8 @@ package net.voxelindustry.brokkgui.debug;
 
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
-import net.voxelindustry.brokkgui.style.StyleableProperty;
-import net.voxelindustry.brokkgui.style.parser.StyleTranslator;
+import net.voxelindustry.brokkgui.style.StyleProperty;
+import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class StyleDebugPanel
     {
         List<String> styleText = new ArrayList<>();
 
-        for (Map.Entry<String, StyleableProperty<?>> entry : node.getStyle().getProperties().entrySet())
+        for (Map.Entry<String, StyleProperty<?>> entry : node.getStyle().getProperties().entrySet())
         {
             styleText.add(entry.getKey() + ": " + (entry.getValue().getValue() != null ?
                     StyleTranslator.getInstance().encode(entry.getValue().getValue(),

@@ -21,7 +21,7 @@ public class StylePropertyTest
         String codeValue = "codeValue";
         String authorValue = "authorValue";
 
-        StyleableProperty<String> styleProperty = new StyleableProperty<>(defaultValue, "name", String.class);
+        StyleProperty<String> styleProperty = new StyleProperty<>(defaultValue, "name", String.class);
 
         assertThat(styleProperty.getValue()).isEqualTo(defaultValue);
 
