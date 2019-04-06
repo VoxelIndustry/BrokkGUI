@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.control;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.component.IGuiTooltip;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
-import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 import net.voxelindustry.brokkgui.skin.IGuiSkinnable;
@@ -23,15 +22,9 @@ public abstract class GuiElement extends GuiFather implements IGuiSkinnable
         this.tooltipProperty.addListener((obs, oldValue, newValue) ->
         {
             if (oldValue != null)
-            {
-                PopupHandler.getInstance().removePopup(oldValue);
                 oldValue.setOwner(null);
-            }
             if (newValue != null)
-            {
-                PopupHandler.getInstance().addPopup(newValue);
                 newValue.setOwner(this);
-            }
         });
     }
 

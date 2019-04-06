@@ -116,7 +116,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             StylesheetManager.getInstance().refreshStylesheets(this);
             if (this.getMainPanel() != null)
                 this.getMainPanel().refreshStyle();
-            PopupHandler.getInstance().refreshStyle();
+            PopupHandler.getInstance(this).refreshStyle();
 
             this.windows.forEach(GuiFather::refreshStyle);
         });
@@ -125,7 +125,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         if (this.getMainPanel() != null)
             this.getMainPanel().refreshStyle();
         this.windows.forEach(GuiFather::refreshStyle);
-        PopupHandler.getInstance().setStyleSupplier(this.getStyleTreeProperty()::getValue);
+        PopupHandler.getInstance(this).setStyleSupplier(this.getStyleTreeProperty()::getValue);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                         this.mainPanel.handleHover(mouseX, mouseY, this.mainPanel.isPointInside(mouseX, mouseY));
                     }
 
-                    PopupHandler.getInstance().handleHover(mouseX, mouseY);
+                    PopupHandler.getInstance(this).handleHover(mouseX, mouseY);
                     this.cachedMouseX = mouseX;
                     this.cachedMouseY = mouseY;
                 }
@@ -178,7 +178,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                 break;
             case POPUP:
                 for (RenderPass pass : passes)
-                    PopupHandler.getInstance().renderPopupInPass(renderer, pass, mouseX, mouseY);
+                    PopupHandler.getInstance(this).renderPopupInPass(renderer, pass, mouseX, mouseY);
                 break;
         }
     }
@@ -238,7 +238,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             }
         }
 
-        PopupHandler.getInstance().handleClick(mouseX, mouseY, key);
+        PopupHandler.getInstance(this).handleClick(mouseX, mouseY, key);
 
         if (!this.windows.isEmpty())
         {
@@ -380,7 +380,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         GuiFocusManager.getInstance().requestFocus(null);
         this.listenerPool.clear();
-        PopupHandler.getInstance().clearPopups();
+        PopupHandler.getInstance(this).delete(this);
 
         if (this.mainPanel != null)
             this.mainPanel.dispose();
@@ -404,6 +404,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         return null;
     }
 
+    @Override
     public GuiPane getMainPanel()
     {
         return this.mainPanel;
@@ -605,6 +606,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         this.getEventDispatcher().addHandler(WindowEvent.CLOSE, this.onCloseEvent);
     }
 
+    @Override
     public EventDispatcher getEventDispatcher()
     {
         if (this.eventDispatcher == null)

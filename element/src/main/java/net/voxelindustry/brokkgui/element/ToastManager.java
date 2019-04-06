@@ -51,7 +51,7 @@ public class ToastManager
             if (!(newValue > toastHolder.getLifeTime()))
                 return;
 
-            PopupHandler.getInstance().removePopup(toastHolder);
+            PopupHandler.getInstance(screen).removePopup(toastHolder);
             current.setValue(null);
             toastHolder.setContent(null);
 
@@ -62,7 +62,7 @@ public class ToastManager
                 toastHolder.setContent(current.getValue());
                 toastHolder.resetCurrentTime();
                 toastHolder.setLifeTime(next.getValue());
-                PopupHandler.getInstance().addPopup(toastHolder);
+                PopupHandler.getInstance(screen).addPopup(toastHolder);
             }
         });
 
@@ -76,7 +76,8 @@ public class ToastManager
             @Override
             public Float computeValue()
             {
-                float offset = (current.getValue() == toastHolder.getContent() ? 0 : getToastExitXProperty().getValue());
+                float offset = (current.getValue() == toastHolder.getContent() ? 0 :
+                        getToastExitXProperty().getValue());
 
                 if (getToastAlignmentProperty().getValue().isLeft())
                     return xPosProperty.getValue() - toastHolder.getWidth() + offset;
@@ -96,7 +97,8 @@ public class ToastManager
             @Override
             public Float computeValue()
             {
-                float offset = (current.getValue() == toastHolder.getContent()? 0 : getToastExitYProperty().getValue());
+                float offset = (current.getValue() == toastHolder.getContent() ? 0 :
+                        getToastExitYProperty().getValue());
 
                 if (getToastAlignmentProperty().getValue().isUp())
                     return yPosProperty.getValue() - toastHolder.getHeight() + offset;
@@ -118,7 +120,7 @@ public class ToastManager
             toastHolder.resetCurrentTime();
             toastHolder.setLifeTime(lifeTime);
             toastHolder.setContent(current.getValue());
-            PopupHandler.getInstance().addPopup(toastHolder);
+            PopupHandler.getInstance(screen).addPopup(toastHolder);
         }
     }
 

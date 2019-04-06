@@ -36,12 +36,12 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
 
         this.popup.mapSuggestions();
         this.isCompletePopupShown = true;
-        PopupHandler.getInstance().addPopup(popup);
+        PopupHandler.getInstance(getModel().getWindow()).addPopup(popup);
     }
 
     public void hideCompletePopup()
     {
-        PopupHandler.getInstance().removePopup(popup);
+        PopupHandler.getInstance(getModel().getWindow()).removePopup(popup);
         this.isCompletePopupShown = false;
     }
 

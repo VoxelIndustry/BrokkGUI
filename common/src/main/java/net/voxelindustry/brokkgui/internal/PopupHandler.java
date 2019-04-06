@@ -2,24 +2,27 @@ package net.voxelindustry.brokkgui.internal;
 
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
+import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
+import net.voxelindustry.brokkgui.gui.IGuiWindow;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.IStyleable;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class PopupHandler
 {
-    private static PopupHandler INSTANCE;
+    private static Map<IGuiSubWindow, PopupHandler> instances = new IdentityHashMap<>();
 
-    public static PopupHandler getInstance()
+    public static PopupHandler getInstance(IGuiSubWindow window)
     {
-        if (INSTANCE == null)
-            INSTANCE = new PopupHandler();
-        return INSTANCE;
+        Objects.requireNonNull(window);
+        
+        if (!instances.containsKey(window))
+            instances.put(window, new PopupHandler());
+        return instances.get(window);
     }
 
     private List<IGuiPopup> popups;
@@ -56,11 +59,13 @@ public class PopupHandler
         return this.popups.contains(popup);
     }
 
-    public void clearPopups()
+    public void delete(IGuiWindow window)
     {
         this.popups.clear();
         this.toAdd.clear();
         this.toRemove.clear();
+
+        instances.remove(window);
     }
 
     public void renderPopupInPass(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
