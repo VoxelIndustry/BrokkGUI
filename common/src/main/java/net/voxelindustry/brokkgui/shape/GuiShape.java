@@ -66,13 +66,13 @@ public abstract class GuiShape extends GuiNode
                         getxPos() + getxTranslate(), getyPos() + getyTranslate(),
                         background, getzLevel());
             }
-        }
-        if (pass == RenderPass.FOREGROUND)
-        {
+
             // Draw border
             if (this.getBorderColor() != Color.ALPHA)
                 this.shape.drawBorder(this, renderer);
-
+        }
+        if (pass == RenderPass.FOREGROUND)
+        {
             if (this.getForegroundTexture() != Texture.EMPTY)
             {
                 Texture foreground = this.getForegroundTexture();

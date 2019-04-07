@@ -89,9 +89,10 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
         else
         {
             getModel().getLabel().setExpandToText(true);
-            getModel().getWidthProperty().bind(BaseExpression.biCombine(getModel().getButtonNode().getWidthProperty(),
+            getModel().getWidthProperty().bind(BaseExpression.biCombine(
+                    getModel().getButtonNode().getWidthProperty(),
                     getModel().getLabel().getWidthProperty(),
-                    (buttonWidth, labelWidth) -> buttonWidth + labelWidth));
+                    Float::sum));
         }
 
         getModel().getLabel().getHeightProperty().bind(getModel().getHeightProperty());
@@ -146,9 +147,10 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
         {
             getModel().getLabel().getWidthProperty().unbind();
             getModel().getLabel().setExpandToText(true);
-            getModel().getWidthProperty().bind(BaseExpression.biCombine(getModel().getButtonNode().getWidthProperty(),
+            getModel().getWidthProperty().bind(BaseExpression.biCombine(
+                    getModel().getButtonNode().getWidthProperty(),
                     getModel().getLabel().getWidthProperty(),
-                    (buttonWidth, labelWidth) -> buttonWidth + labelWidth));
+                    Float::sum));
         });
     }
 }
