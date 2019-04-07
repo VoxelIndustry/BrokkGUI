@@ -38,6 +38,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     private final BaseProperty<Float> widthProperty, heightProperty, xPosProperty, yPosProperty;
 
     private final BaseProperty<Float> xRelativePosProperty, yRelativePosProperty;
+    private final BaseProperty<Float> xOffsetProperty, yOffsetProperty;
 
     private final BaseProperty<Integer> screenWidthProperty, screenHeightProperty;
 
@@ -66,6 +67,9 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         this.xPosProperty = new BaseProperty<>(0f, "xPosProperty");
         this.yPosProperty = new BaseProperty<>(0f, "yPosProperty");
 
+        this.xOffsetProperty = new BaseProperty<>(0f, "xOffsetProperty");
+        this.yOffsetProperty = new BaseProperty<>(0f, "yOffsetProperty");
+
         this.windows = new ArrayList<>();
 
         this.screenWidthProperty = new BaseProperty<>(0, "screenWidthProperty");
@@ -90,7 +94,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     public BrokkGuiScreen(final float width, final float height)
     {
-        this(0, 0, width, height);
+        this(0.5f, 0.5f, width, height);
     }
 
     public BrokkGuiScreen()
@@ -105,11 +109,13 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         this.renderer = wrapper.getRenderer();
 
-        this.xPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosX(getxRelativePos(), getWidth()),
-                this.getScreenWidthProperty(), this.getxRelativePosProperty(), this.getWidthProperty()));
+        this.xPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosX(getxRelativePos(), getWidth()) + getxOffset(),
+                this.getScreenWidthProperty(), this.getxRelativePosProperty(), this.getWidthProperty(),
+                this.getxOffsetProperty()));
 
-        this.yPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosY(getyRelativePos(), getHeight()),
-                this.getyRelativePosProperty(), this.getScreenHeightProperty(), this.getHeightProperty()));
+        this.yPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosY(getyRelativePos(), getHeight()) + getyOffset(),
+                this.getyRelativePosProperty(), this.getScreenHeightProperty(), this.getHeightProperty(),
+                this.getyOffsetProperty()));
 
         this.stylesheetsProperty.addListener(obs ->
         {
@@ -479,6 +485,16 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         return this.yRelativePosProperty;
     }
 
+    public BaseProperty<Float> getxOffsetProperty()
+    {
+        return xOffsetProperty;
+    }
+
+    public BaseProperty<Float> getyOffsetProperty()
+    {
+        return yOffsetProperty;
+    }
+
     @Override
     public float getWidth()
     {
@@ -499,6 +515,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     public void setHeight(final float height)
     {
         this.getHeightProperty().setValue(height);
+    }
+
+    public void setSize(float width, float height)
+    {
+        this.setWidth(width);
+        this.setHeight(height);
     }
 
     public float getxPos()
@@ -541,6 +563,38 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     public void setyRelativePos(final float yRelativePos)
     {
         this.getyRelativePosProperty().setValue(yRelativePos);
+    }
+
+    public void setRelativePos(float xRelativePos, float yRelativePos)
+    {
+        this.setxRelativePos(xRelativePos);
+        this.setyRelativePos(yRelativePos);
+    }
+
+    public float getxOffset()
+    {
+        return this.getxOffsetProperty().getValue();
+    }
+
+    public void setxOffset(float xOffset)
+    {
+        this.getxOffsetProperty().setValue(xOffset);
+    }
+
+    public float getyOffset()
+    {
+        return this.getyOffsetProperty().getValue();
+    }
+
+    public void setyOffset(float yOffset)
+    {
+        this.getyOffsetProperty().setValue(yOffset);
+    }
+
+    public void setOffset(float xOffset, float yOffset)
+    {
+        this.setxOffset(xOffset);
+        this.setyOffset(yOffset);
     }
 
     @Override
