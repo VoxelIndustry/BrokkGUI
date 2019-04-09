@@ -78,6 +78,6 @@ public class StyleTranslator
 
         this.registerTranslator(Boolean.class, Boolean::parseBoolean,
                 (cssString, pretty) -> String.valueOf(cssString),
-                StringCountUtils::boolArtStart);
+                StringCountUtils::boolAtStart);
     }
 }

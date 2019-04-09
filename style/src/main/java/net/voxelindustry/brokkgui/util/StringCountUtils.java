@@ -35,7 +35,7 @@ public class StringCountUtils
         return count;
     }
 
-    public static int boolArtStart(String str)
+    public static int boolAtStart(String str)
     {
         if (str.equalsIgnoreCase("true"))
             return 4;
