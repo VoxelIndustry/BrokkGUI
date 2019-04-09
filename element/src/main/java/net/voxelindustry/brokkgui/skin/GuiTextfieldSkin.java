@@ -57,7 +57,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             @Override
             public Float computeValue()
             {
-                return getModel().getxPos() + getModel().getxTranslate() + getModel().getTextPadding().getLeft();
+                return getModel().getLeftPos() + getModel().getTextPadding().getLeft();
             }
         });
         text.getyPosProperty().bind(new BaseBinding<Float>()
@@ -70,7 +70,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             @Override
             public Float computeValue()
             {
-                return getModel().getyPos() + getModel().getyTranslate() + getModel().getTextPadding().getTop();
+                return getModel().getTopPos() + getModel().getTextPadding().getTop();
             }
         });
         text.getWidthProperty().bind(BaseExpression.transform(this.displayedTextProperty,
@@ -92,7 +92,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             @Override
             public Float computeValue()
             {
-                return getModel().getxPos() + getModel().getxTranslate() + getModel().getTextPadding().getLeft();
+                return getModel().getLeftPos() + getModel().getTextPadding().getLeft();
             }
         });
         promptText.getyPosProperty().bind(new BaseBinding<Float>()
@@ -105,7 +105,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             @Override
             public Float computeValue()
             {
-                return getModel().getyPos() + getModel().getyTranslate() + getModel().getTextPadding().getTop();
+                return getModel().getTopPos() + getModel().getTextPadding().getTop();
             }
         });
         promptText.getWidthProperty().bind(BaseExpression.transform(this.ellipsedPromptProperty,
@@ -138,8 +138,8 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
 
         if (pass == RenderPass.FOREGROUND)
         {
-            float x = getModel().getxPos() + getModel().getxTranslate();
-            float y = getModel().getyPos() + getModel().getyTranslate();
+            float x = getModel().getLeftPos();
+            float y = getModel().getTopPos();
             float xPadding = getModel().getTextPadding().getLeft();
             float yPadding = getModel().getTextPadding().getTop();
 
@@ -161,8 +161,8 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                     if (validator.isErrored())
                     {
                         renderer.getHelper().drawString(validator.getMessage(),
-                                getModel().getxPos() + getModel().getxTranslate(),
-                                getModel().getyPos() + getModel().getyTranslate()
+                                getModel().getLeftPos(),
+                                getModel().getTopPos()
                                         + getModel().getHeight()
                                         + i * (renderer.getHelper().getStringHeight() + 1),
                                 getModel().getzLevel(), Color.RED);

@@ -24,15 +24,14 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
     private void onMouseDrag(GuiMouseEvent.Dragging event)
     {
         // Min X to select the vertical grip
-        float gripYMinX =
-                getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - getModel().getGripYWidth();
+        float gripYMinX = getModel().getRightPos() - getModel().getGripYWidth();
 
         if (getModel().getScrollYPolicy() != GuiScrollbarPolicy.NEVER &&
                 getModel().getTrueHeight() > getModel().getHeight() && event.getMouseX() - event.getDragX() > gripYMinX)
         {
             float ratio =
                     (event.getMouseY() - getModel().getyPos() - getModel().getyTranslate()) / getModel().getHeight();
-            float minY = getModel().getyPos() + getModel().getyTranslate();
+            float minY = getModel().getTopPos();
             float maxY = minY + getModel().getHeight();
 
             if (event.getMouseY() > minY && event.getMouseY() < maxY)
@@ -44,15 +43,14 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         }
 
         // Min Y to select the horizontal grip
-        float gripXMinY =
-                getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() - getModel().getGripXHeight();
+        float gripXMinY = getModel().getBottomPos() - getModel().getGripXHeight();
 
         if (getModel().getScrollXPolicy() != GuiScrollbarPolicy.NEVER &&
                 getModel().getTrueWidth() > getModel().getWidth() && event.getMouseY() - event.getDragY() > gripXMinY)
         {
             float ratio =
                     (event.getMouseX() - getModel().getxPos() - getModel().getxTranslate()) / getModel().getWidth();
-            float minX = getModel().getxPos() + getModel().getxTranslate();
+            float minX = getModel().getLeftPos();
             float maxX = minX + getModel().getWidth();
 
             if (event.getMouseX() > minX && event.getMouseX() < maxX)
@@ -67,8 +65,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
     private void onClick(ClickEvent event)
     {
         // Min X to select the vertical grip
-        float gripYMinX =
-                getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - getModel().getGripYWidth();
+        float gripYMinX = getModel().getRightPos() - getModel().getGripYWidth();
 
         if (getModel().getScrollYPolicy() != GuiScrollbarPolicy.NEVER &&
                 getModel().getTrueHeight() > getModel().getHeight() && event.getMouseX() > gripYMinX)
@@ -79,8 +76,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         }
 
         // Min Y to select the horizontal grip
-        float gripXMinY =
-                getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() - getModel().getGripXHeight();
+        float gripXMinY = getModel().getBottomPos() - getModel().getGripXHeight();
         if (getModel().getScrollXPolicy() != GuiScrollbarPolicy.NEVER &&
                 getModel().getTrueWidth() > getModel().getWidth() && event.getMouseY() > gripXMinY)
         {

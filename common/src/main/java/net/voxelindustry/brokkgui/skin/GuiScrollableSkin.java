@@ -34,14 +34,14 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
             public Float computeValue()
             {
                 if (getModel().getWidth() >= getModel().getTrueWidth())
-                    return getModel().getxPos() + getModel().getxTranslate();
+                    return getModel().getLeftPos();
                 else
                 {
                     float area = getModel().getTrueWidth() - getModel().getWidth();
                     float ratio = getModel().getScrollX() / area;
                     float size = getModel().getWidth() - gripX.getWidth();
 
-                    return getModel().getxPos() + getModel().getxTranslate() - size * ratio;
+                    return getModel().getLeftPos() - size * ratio;
                 }
             }
         });
@@ -57,7 +57,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
             @Override
             public Float computeValue()
             {
-                return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() - gripX.getHeight();
+                return getModel().getBottomPos() - gripX.getHeight();
             }
         });
         this.gripX.getHeightProperty().bind(this.getModel().getGripXHeightProperty());
@@ -95,7 +95,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
             @Override
             public Float computeValue()
             {
-                return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() - gripY.getWidth();
+                return getModel().getRightPos() - gripY.getWidth();
             }
         });
         this.gripY.getyPosProperty().bind(new BaseBinding<Float>()
@@ -121,7 +121,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                     float ratio = getModel().getScrollY() / area;
                     float size = getModel().getHeight() - gripY.getHeight();
 
-                    return getModel().getyPos() + getModel().getyTranslate() - size * ratio;
+                    return getModel().getTopPos() - size * ratio;
                 }
             }
         });

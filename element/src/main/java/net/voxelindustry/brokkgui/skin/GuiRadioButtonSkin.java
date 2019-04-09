@@ -47,11 +47,10 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             public Float computeValue()
             {
                 if (getModel().getButtonSide() == RectSide.LEFT)
-                    return getModel().getxPos() + getModel().getxTranslate();
+                    return getModel().getLeftPos();
                 if (getModel().getButtonSide() == RectSide.RIGHT)
-                    return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth()
-                            - node.getWidth();
-                return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() / 2
+                    return getModel().getRightPos() - node.getWidth();
+                return getModel().getLeftPos() + getModel().getWidth() / 2
                         - node.getWidth() / 2;
             }
         });
@@ -71,12 +70,10 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             public Float computeValue()
             {
                 if (getModel().getButtonSide() == RectSide.UP)
-                    return getModel().getyPos() + getModel().getyTranslate();
+                    return getModel().getTopPos();
                 if (getModel().getButtonSide() == RectSide.DOWN)
-                    return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight()
-                            - getModel().getLabel().getHeight();
-                return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() / 2
-                        - node.getHeight() / 2;
+                    return getModel().getBottomPos() - getModel().getLabel().getHeight();
+                return getModel().getTopPos() + getModel().getHeight() / 2 - node.getHeight() / 2;
             }
         });
     }
@@ -112,10 +109,10 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             public Float computeValue()
             {
                 if (getModel().getButtonSide() == RectSide.LEFT)
-                    return getModel().getxPos() + getModel().getxTranslate() + getModel().getButtonNode().getWidth();
+                    return getModel().getLeftPos() + getModel().getButtonNode().getWidth();
                 if (getModel().getButtonSide() == RectSide.RIGHT)
-                    return getModel().getxPos() + getModel().getxTranslate();
-                return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth() / 2
+                    return getModel().getLeftPos();
+                return getModel().getLeftPos() + getModel().getWidth() / 2
                         - getModel().getLabel().getWidth() / 2;
             }
         });
@@ -135,10 +132,10 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             public Float computeValue()
             {
                 if (getModel().getButtonSide() == RectSide.UP)
-                    return getModel().getyPos() + getModel().getyTranslate() + getModel().getButtonNode().getHeight();
+                    return getModel().getTopPos() + getModel().getButtonNode().getHeight();
                 if (getModel().getButtonSide() == RectSide.DOWN)
-                    return getModel().getyPos() + getModel().getyTranslate();
-                return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight() / 2
+                    return getModel().getTopPos();
+                return getModel().getTopPos() + getModel().getHeight() / 2
                         - getModel().getLabel().getHeight() / 2;
             }
         });

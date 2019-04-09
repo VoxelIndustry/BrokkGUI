@@ -52,7 +52,7 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
                     .mapToDouble(GuiNode::getWidth).sum();
 
             for (GuiNode header : tabHeaders.subList(index + 1, tabHeaders.size()))
-                header.getxPosProperty().setValue(getModel().getxPos() + getModel().getxTranslate() + lastSpacing);
+                header.getxPosProperty().setValue(getModel().getLeftPos() + lastSpacing);
         }
     }
 
@@ -105,7 +105,7 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
                 float lastSpacing = (float) tabHeaders.stream()
                         .filter(candidate -> tabHeaders.indexOf(candidate) < getModel().getTabIndex(guiTab))
                         .mapToDouble(GuiNode::getWidth).sum();
-                return getModel().getxPos() + getModel().getxTranslate() + lastSpacing;
+                return getModel().getLeftPos() + lastSpacing;
             }
         });
         header.getyPosProperty().bind(BaseExpression.biCombine(getModel().getyPosProperty(),

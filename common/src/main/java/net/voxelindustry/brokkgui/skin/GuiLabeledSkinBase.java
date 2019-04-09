@@ -235,13 +235,13 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
             public Float computeValue()
             {
                 if (getModel().getIconSide() == RectSide.LEFT)
-                    return getModel().getxPos() + getModel().getxTranslate()
+                    return getModel().getLeftPos()
                             + getModel().getTextPadding().getLeft();
                 if (getModel().getIconSide() == RectSide.RIGHT)
-                    return getModel().getxPos() + getModel().getxTranslate() + getModel().getWidth()
+                    return getModel().getRightPos()
                             - getModel().getTextPadding().getRight()
                             - icon.getWidth();
-                return getModel().getxPos() + getModel().getxTranslate()
+                return getModel().getLeftPos()
                         + getModel().getWidth() / 2 - icon.getWidth() / 2
                         + getModel().getTextPadding().getLeft()
                         - getModel().getTextPadding().getRight();
@@ -263,13 +263,13 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
             public Float computeValue()
             {
                 if (getModel().getIconSide() == RectSide.UP)
-                    return getModel().getyPos() + getModel().getyTranslate()
+                    return getModel().getTopPos()
                             + getModel().getTextPadding().getTop();
                 if (getModel().getIconSide() == RectSide.DOWN)
-                    return getModel().getyPos() + getModel().getyTranslate() + getModel().getHeight()
+                    return getModel().getBottomPos()
                             - getModel().getTextPadding().getBottom()
                             - icon.getHeight();
-                return getModel().getyPos() + getModel().getyTranslate()
+                return getModel().getTopPos()
                         + getModel().getHeight() / 2 - icon.getHeight() / 2
                         + getModel().getTextPadding().getTop()
                         - getModel().getTextPadding().getBottom();

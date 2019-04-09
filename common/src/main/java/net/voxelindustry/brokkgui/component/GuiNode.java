@@ -492,6 +492,46 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     /**
+     * Method computing the left-pos of this Node box (pos.x + translate.x)
+     *
+     * @return the computed non-cached value
+     */
+    public float getLeftPos()
+    {
+        return this.getxPos() + this.getxTranslate();
+    }
+
+    /**
+     * Method computing the top-pos of this Node box (pos.y + translate.y)
+     *
+     * @return the computed non-cached value
+     */
+    public float getTopPos()
+    {
+        return this.getyPos() + this.getyTranslate();
+    }
+
+    /**
+     * Method computing the right-pos of this Node box (pos.x + translate.x + width)
+     *
+     * @return the computed non-cached value
+     */
+    public float getRightPos()
+    {
+        return this.getxPos() + this.getxTranslate() + this.getWidth();
+    }
+
+    /**
+     * Method computing the bottom-pos of this Node box (pos.y + translate.y + height)
+     *
+     * @return the computed non-cached value
+     */
+    public float getBottomPos()
+    {
+        return this.getyPos() + this.getyTranslate() + this.getHeight();
+    }
+
+    /**
      * Helper method to set the width and height of the Node in one call.
      *
      * @param width
