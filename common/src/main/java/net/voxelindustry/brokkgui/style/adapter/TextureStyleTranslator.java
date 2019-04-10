@@ -6,20 +6,20 @@ import java.text.NumberFormat;
 
 public class TextureStyleTranslator implements IStyleDecoder<Texture>, IStyleEncoder<Texture>, IStyleValidator<Texture>
 {
-    private final NumberFormat colorFormat;
+    private final NumberFormat textureFormat;
 
     TextureStyleTranslator()
     {
-        colorFormat = NumberFormat.getInstance();
-        colorFormat.setMinimumFractionDigits(0);
-        colorFormat.setMaximumFractionDigits(1);
+        textureFormat = NumberFormat.getInstance();
+        textureFormat.setMinimumFractionDigits(0);
+        textureFormat.setMaximumFractionDigits(1);
     }
 
     @Override
     public String encode(Texture value, boolean prettyPrint)
     {
-        return value.getResource() + " " + colorFormat.format(value.getUMin()) + "," + colorFormat.format(value.getVMin())
-                + " -> " + colorFormat.format(value.getUMax()) + "," + colorFormat.format(value.getVMax());
+        return value.getResource() + " " + textureFormat.format(value.getUMin()) + "," + textureFormat.format(value.getVMin())
+                + " -> " + textureFormat.format(value.getUMax()) + "," + textureFormat.format(value.getVMax());
     }
 
     @Override

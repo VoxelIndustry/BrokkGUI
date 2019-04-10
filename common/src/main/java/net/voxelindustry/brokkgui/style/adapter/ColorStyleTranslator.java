@@ -4,10 +4,16 @@ import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.ColorConstants;
 
 import java.text.NumberFormat;
+import java.util.regex.Pattern;
 
 public class ColorStyleTranslator implements IStyleDecoder<Color>, IStyleEncoder<Color>, IStyleValidator<Color>
 {
     private final NumberFormat colorFormat;
+
+    private final Pattern hexColorPattern      = Pattern.compile("^#\\d{6}");
+    private final Pattern hexAlphaColorPattern = Pattern.compile("^#\\d{6}\\s+\\d{2}%");
+    private final Pattern rgbColorPattern      = Pattern.compile("^rgb\\((\\s?\\d+\\s?,\\s?){2}(\\s?\\d+\\s?)\\)");
+    private final Pattern rgbaColorPattern     = Pattern.compile("^rgba\\((\\s?\\d+\\s?,\\s?){3}(\\s?\\d+\\s?)\\)");
 
     ColorStyleTranslator()
     {
@@ -101,14 +107,13 @@ public class ColorStyleTranslator implements IStyleDecoder<Color>, IStyleEncoder
     @Override
     public int validate(String style)
     {
-        if (style.matches("^#\\d{6}"))
+        if (hexColorPattern.matcher(style).matches())
         {
-            if (style.matches("^#\\d{6}\\s+\\d{2}%"))
+            if (hexAlphaColorPattern.matcher(style).matches())
                 return style.substring(0, style.indexOf("%") + 1).length();
             return 7;
         }
-        if (!style.matches("^rgb\\((\\s?\\d+\\s?,\\s?){2}(\\s?\\d+\\s?)\\)") && !style.matches("^rgba\\((\\s?\\d+\\s" +
-                "?,\\s?){3}(\\s?\\d+\\s?)\\)"))
+        if (!rgbColorPattern.matcher(style).matches() && !rgbaColorPattern.matcher(style).matches())
             return 0;
         return style.substring(0, style.indexOf(")") + 1).length();
     }
