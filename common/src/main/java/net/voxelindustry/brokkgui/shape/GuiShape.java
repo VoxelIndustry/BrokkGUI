@@ -8,7 +8,7 @@ import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.Texture;
 import net.voxelindustry.brokkgui.style.StyleSource;
-import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMappers;
+import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
 
 public abstract class GuiShape extends GuiNode
@@ -28,7 +28,7 @@ public abstract class GuiShape extends GuiNode
         this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
 
         this.getStyle().registerConditionalProperties("border*", BorderProperties.getInstance());
-                Color.class);
+        this.getStyle().registerConditionalProperties("border-image*", BorderImageProperties.getInstance());
     }
 
     @Override
