@@ -7,10 +7,9 @@ import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.Texture;
-import net.voxelindustry.brokkgui.style.StyleProperty;
 import net.voxelindustry.brokkgui.style.StyleSource;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMappers;
-import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
+import net.voxelindustry.brokkgui.style.optional.BorderProperties;
 
 public abstract class GuiShape extends GuiNode
 {
@@ -28,20 +27,8 @@ public abstract class GuiShape extends GuiNode
         this.getStyle().registerProperty("background-texture", Texture.EMPTY, Texture.class);
         this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
 
-        StyleProperty<Color> borderColorProperty = this.getStyle().registerProperty("border-color", Color.BLACK,
+        this.getStyle().registerConditionalProperties("border*", BorderProperties.getInstance());
                 Color.class);
-
-        ShorthandProperty<Float> borderWidthProperty = this.getStyle().registerShorthand("border-width", 0f,
-                Float.class, ShorthandArgMappers.BOX_MAPPER,
-                "border-top-width", "border-right-width", "border-bottom-width", "border-left-width");
-
-
-        this.getStyle().registerShorthand("border-radius", 0,
-                Integer.class, ShorthandArgMappers.BOX_MAPPER,
-                "border-top-left-radius", "border-top-right-radius",
-                "border-bottom-right-radius", "border-bottom-left-radius");
-
-        this.getStyle().registerGenericShorthand("border", "", borderColorProperty, borderWidthProperty);
     }
 
     @Override

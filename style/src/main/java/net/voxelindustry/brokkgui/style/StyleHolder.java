@@ -7,16 +7,23 @@ import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMapper;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
 import net.voxelindustry.brokkgui.style.tree.StyleEntry;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 public class StyleHolder
 {
-    private HashMap<String, StyleProperty<?>> properties;
-    private BaseProperty<ICascadeStyleable>   parent;
-    private ICascadeStyleable                 owner;
+    private Map<String, StyleProperty<?>>   properties;
+    private BaseProperty<ICascadeStyleable> parent;
+    private ICascadeStyleable               owner;
+
+    private List<Pair<Pattern, Consumer<StyleHolder>>> conditionalProperties;
 
     private Supplier<StyleList> styleSupplier;
 
@@ -25,6 +32,8 @@ public class StyleHolder
         this.properties = new HashMap<>();
         this.owner = owner;
         this.parent = new BaseProperty<>(null, "parentProperty");
+
+        this.conditionalProperties = new ArrayList<>();
     }
 
     public void parseInlineCSS(String css)
@@ -41,7 +50,30 @@ public class StyleHolder
 
     private boolean hasProperty(String property)
     {
-        return this.properties.containsKey(property);
+        if (this.properties.containsKey(property))
+            return true;
+
+        if (this.conditionalProperties.stream().filter(entry -> entry.getKey().matcher(property).matches())
+                .peek(entry -> entry.getValue().accept(this)).count() > 0)
+            return true;
+        return false;
+    }
+
+    /**
+     * Return the held state of the specified property.
+     * It will query the currently registered properties and the conditional patterns as well.
+     *
+     * @param property key identifying the css-property
+     * @return the held state PRESENT if currently in properties map, CONDITIONAL if a pattern match but has not yet
+     * added its properties, ABSENT if no references can be found.
+     */
+    public HeldPropertyState doesHoldProperty(String property)
+    {
+        if (this.properties.containsKey(property))
+            return HeldPropertyState.PRESENT;
+        if (this.conditionalProperties.stream().anyMatch(entry -> entry.getKey().matcher(property).matches()))
+            return HeldPropertyState.CONDITIONAL;
+        return HeldPropertyState.ABSENT;
     }
 
     private void setProperty(String propertyName, String value, StyleSource source, int specificity)
@@ -51,12 +83,29 @@ public class StyleHolder
     }
 
     /**
+     * Register conditionally enabled properties. It allows to lazily add properties to a Styleable node, increasing
+     * the memory efficiency of simple nodes.
+     * <p>
+     * For example borders are conditionals, if any property matching "border*" is called all border related
+     * properties are added.
+     *
+     * @param matchKey          key to transform into a regular expression. See this example syntax "border*" and
+     *                          "*-image*"
+     * @param propertiesCreator Consumer parameterized with this StyleHolder. Add the properties or execute
+     *                          invalidating operations for conflicting properties.
+     */
+    public void registerConditionalProperties(String matchKey, Consumer<StyleHolder> propertiesCreator)
+    {
+        String regex = '^' + matchKey.replaceAll("\\*", "\\\\S*") + '$';
+
+        this.conditionalProperties.add(Pair.of(Pattern.compile(regex), propertiesCreator));
+    }
+
+    /**
      * Register a generic shorthand property.
      * For example border is a shorthand to border-width, border-style and border-color
-     * For example border-with is a shorthand for border-top-width, border-right-width, border-bottom-width,
-     * border-left-width
      * <p>
-     * This method will create and add the childs properties of the same type to the StyleHolder.
+     * This method will not create the child properties.
      *
      * @param name         of the property
      * @param defaultValue initial value (css string)
@@ -77,6 +126,22 @@ public class StyleHolder
         return shorthand;
     }
 
+    /**
+     * Register a non-generic shorthand property.
+     * For example border-width is a shorthand for border-top-width, border-right-width, border-bottom-width,
+     * border-left-width
+     * <p>
+     * This method will create and add the childs properties of the same type to the StyleHolder.
+     *
+     * @param name         of the property
+     * @param defaultValue initial value
+     * @param valueClass   Class representing the generic parameter of this method
+     * @param mapper       Interface for mapping css parts to children @see ShorthandArgMappers#BOX_MAPPER for an
+     *                     example
+     * @param children     array of children property keys
+     * @param <T>          type of the shorthand property and its children
+     * @return the created shorthand
+     */
     public <T> ShorthandProperty<T> registerShorthand(String name, T defaultValue, Class<T> valueClass,
                                                       ShorthandArgMapper mapper, String... children)
     {

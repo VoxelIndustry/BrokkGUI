@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.style;
 
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
+import net.voxelindustry.brokkgui.style.optional.BorderProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,5 +33,20 @@ public class StyleHolderTest
         assertThat(styleHolder.getStyleProperty("border-width", Integer.class).getValue()).isEqualTo(2);
         assertThat(styleHolder.getStyleProperty("border-color", Color.class).getValue()).isEqualTo(Color.RED);
         assertThat(styleHolder.getStyleProperty("color", Color.class).getValue()).isEqualTo(Color.AQUA);
+    }
+
+    @Test
+    public void parseConditionalProperties()
+    {
+        StyleHolder styleHolder = new StyleHolder(null);
+
+        assertThat(styleHolder.doesHoldProperty("border-color")).isEqualTo(HeldPropertyState.ABSENT);
+
+        styleHolder.registerConditionalProperties("border*", BorderProperties.getInstance());
+
+        assertThat(styleHolder.doesHoldProperty("border-color")).isEqualTo(HeldPropertyState.CONDITIONAL);
+        styleHolder.parseInlineCSS("border-color: red;");
+
+        assertThat(styleHolder.doesHoldProperty("border-color")).isEqualTo(HeldPropertyState.PRESENT);
     }
 }
