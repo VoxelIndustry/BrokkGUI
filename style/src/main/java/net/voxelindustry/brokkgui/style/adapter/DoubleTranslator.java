@@ -2,16 +2,8 @@ package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.util.StringCountUtils;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.regex.Pattern;
-
 public class DoubleTranslator implements IStyleDecoder<Double>, IStyleEncoder<Double>, IStyleValidator<Double>
 {
-    private final Pattern percentPattern = Pattern.compile("^\\d*\\.?\\d*%");
-
-    private final DecimalFormat format = new DecimalFormat("0.0");
-
     @Override
     public String encode(Double value, boolean prettyPrint)
     {
@@ -21,20 +13,9 @@ public class DoubleTranslator implements IStyleDecoder<Double>, IStyleEncoder<Do
     @Override
     public Double decode(String style)
     {
-        double value;
-
-        try
-        {
-            value = format.parse(style).doubleValue();
-        } catch (ParseException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-
-        if (percentPattern.matcher(style).matches())
-            return value / 100;
-        return value;
+        if (style.contains("%"))
+            return Double.valueOf(style.replace('%', '\0')) / 100;
+        return Double.valueOf(style);
     }
 
     @Override

@@ -86,7 +86,7 @@ public class StyleHolder
     {
         if (!this.hasProperty(propertyName))
             return;
-        
+
         StyleProperty<T> property = this.getStyleProperty(propertyName, valueClass);
 
         if (property != null)
