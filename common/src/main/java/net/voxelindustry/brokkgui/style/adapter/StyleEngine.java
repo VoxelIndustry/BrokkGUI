@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.Texture;
 
@@ -30,5 +31,10 @@ public class StyleEngine
 
         StyleTranslator.getInstance().registerTranslator(Texture.class, textureTranslator, textureTranslator,
                 textureTranslator);
+
+        RectBoxTranslator rectBoxTranslator = new RectBoxTranslator();
+
+        StyleTranslator.getInstance().registerTranslator(RectBox.class, rectBoxTranslator, rectBoxTranslator,
+                rectBoxTranslator);
     }
 }

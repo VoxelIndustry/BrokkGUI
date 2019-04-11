@@ -84,6 +84,9 @@ public class StyleHolder
 
     public <T> void setPropertyDirect(String propertyName, T value, Class<T> valueClass)
     {
+        if (!this.hasProperty(propertyName))
+            return;
+        
         StyleProperty<T> property = this.getStyleProperty(propertyName, valueClass);
 
         if (property != null)
