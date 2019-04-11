@@ -64,13 +64,11 @@ public class StyleTranslator
                 (cssString, pretty) -> String.valueOf(cssString),
                 StringCountUtils::integerAtStart);
 
-        this.registerTranslator(Float.class, Float::parseFloat,
-                (cssString, pretty) -> String.valueOf(cssString),
-                StringCountUtils::floatAtStart);
+        FloatTranslator floatTranslator = new FloatTranslator();
+        this.registerTranslator(Float.class, floatTranslator, floatTranslator, floatTranslator);
 
-        this.registerTranslator(Double.class, Double::parseDouble,
-                (cssString, pretty) -> String.valueOf(cssString),
-                StringCountUtils::floatAtStart);
+        DoubleTranslator doubleTranslator = new DoubleTranslator();
+        this.registerTranslator(Double.class, doubleTranslator, doubleTranslator, doubleTranslator);
 
         this.registerTranslator(String.class, String::valueOf,
                 (cssString, pretty) -> cssString,
