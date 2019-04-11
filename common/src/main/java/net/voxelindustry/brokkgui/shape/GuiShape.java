@@ -9,6 +9,7 @@ import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.style.HeldPropertyState;
 import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
 
@@ -37,14 +38,6 @@ public abstract class GuiShape extends GuiNode
     {
         if (pass == RenderPass.BACKGROUND)
         {
-            if (this.hasBorder())
-            {
-                if (this.hasBorderImage())
-                    ImageBorderDrawer.drawBorder(this, renderer);
-                else
-                    ColorBorderDrawer.drawBorder(this, renderer);
-            }
-
             if (this.getBackgroundTexture() != Texture.EMPTY)
             {
                 Texture background = this.getBackgroundTexture();
@@ -61,6 +54,14 @@ public abstract class GuiShape extends GuiNode
                 this.shape.drawColored(this, renderer,
                         getxPos() + getxTranslate(), getyPos() + getyTranslate(),
                         background, getzLevel());
+            }
+
+            if (this.hasBorder())
+            {
+                if (this.hasBorderImage())
+                    ImageBorderDrawer.drawBorder(this, renderer);
+                else
+                    ColorBorderDrawer.drawBorder(this, renderer);
             }
         }
         if (pass == RenderPass.FOREGROUND)
@@ -133,12 +134,12 @@ public abstract class GuiShape extends GuiNode
 
     public boolean hasBorder()
     {
-        return this.getStyle().doesHoldProperty("border-width").isHeld();
+        return this.getStyle().doesHoldProperty("border-width") == HeldPropertyState.PRESENT;
     }
 
     public boolean hasBorderImage()
     {
-        return this.getStyle().doesHoldProperty("border-image-source").isHeld();
+        return this.getStyle().doesHoldProperty("border-image-source") == HeldPropertyState.PRESENT;
     }
 
     public float getBorderWidth()
@@ -189,6 +190,16 @@ public abstract class GuiShape extends GuiNode
     public void setBorderColor(Color color)
     {
         this.getStyle().setPropertyDirect("border-color", color, Color.class);
+    }
+
+    public Texture getBorderImage()
+    {
+        return this.getStyle().getStyleValue("border-image-source", Texture.class, Texture.EMPTY);
+    }
+
+    public void setBorderImage(Texture texture)
+    {
+        this.getStyle().setPropertyDirect("border-image-source", texture, Texture.class);
     }
 
     public void setShape(ShapeDefinition shape)

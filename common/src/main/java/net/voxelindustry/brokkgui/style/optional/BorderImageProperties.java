@@ -1,10 +1,9 @@
 package net.voxelindustry.brokkgui.style.optional;
 
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.paint.Texture;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.StyleProperty;
-import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMappers;
-import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
 
 import java.util.function.Consumer;
 
@@ -30,20 +29,14 @@ public class BorderImageProperties implements Consumer<StyleHolder>
         StyleProperty<Texture> borderTextureProperty = holder.registerProperty("border-image-source", Texture.EMPTY,
                 Texture.class);
 
-        ShorthandProperty<Float> borderImageWidthProperty = holder.registerShorthand("border-image-width", 1f,
-                Float.class, ShorthandArgMappers.BOX_MAPPER,
-                "border-image-top-width", "border-image-right-width",
-                "border-image-bottom-width", "border-image-left-width");
+        StyleProperty<RectBox> borderImageWidthProperty = holder.registerProperty("border-image-width",
+                RectBox.build().all(1).create(), RectBox.class);
 
-        ShorthandProperty<Float> borderImageOutsetProperty = holder.registerShorthand("border-image-outset", 1f,
-                Float.class, ShorthandArgMappers.BOX_MAPPER,
-                "border-image-top-outset", "border-image-right-outset",
-                "border-image-bottom-outset", "border-image-left-outset");
+        StyleProperty<RectBox> borderImageOutsetProperty = holder.registerProperty("border-image-outset",
+                RectBox.build().all(0).create(), RectBox.class);
 
-        ShorthandProperty<Float> borderImageSliceProperty = holder.registerShorthand("border-image-slice", 1f,
-                Float.class, ShorthandArgMappers.BOX_MAPPER,
-                "border-image-top-slice", "border-image-right-slice",
-                "border-image-bottom-slice", "border-image-left-slice");
+        StyleProperty<RectBox> borderImageSliceProperty = holder.registerProperty("border-image-slice",
+                RectBox.build().all(1).create(), RectBox.class);
 
         StyleProperty<Boolean> borderImageFill = holder.registerProperty("border-image-fill", false, Boolean.class);
 
