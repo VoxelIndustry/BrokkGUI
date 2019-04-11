@@ -88,101 +88,102 @@ public abstract class GuiShape extends GuiNode
 
     public Texture getBackgroundTexture()
     {
-        return this.getStyle().getStyleProperty("background-texture", Texture.class).getValue();
+        return this.getStyle().getStyleValue("background-texture", Texture.class, Texture.EMPTY);
     }
 
     public void setBackgroundTexture(Texture texture)
     {
-        this.getStyle().getStyleProperty("background-texture", Texture.class)
-                .setStyle(StyleSource.CODE, 10_000, texture);
+        this.getStyle().setPropertyDirect("background-texture", texture, Texture.class);
     }
 
     public Color getBackgroundColor()
     {
-        return this.getStyle().getStyleProperty("background-color", Color.class).getValue();
+        return this.getStyle().getStyleValue("background-color", Color.class, Color.ALPHA);
     }
 
     public void setBackgroundColor(Color color)
     {
-        this.getStyle().getStyleProperty("background-color", Color.class)
-                .setStyle(StyleSource.CODE, 10_000, color);
+        this.getStyle().setPropertyDirect("background-color", color, Color.class);
     }
 
     public Texture getForegroundTexture()
     {
-        return this.getStyle().getStyleProperty("foreground-texture", Texture.class).getValue();
+        return this.getStyle().getStyleValue("foreground-texture", Texture.class, Texture.EMPTY);
     }
 
     public void setForegroundTexture(Texture texture)
     {
-        this.getStyle().getStyleProperty("foreground-texture", Texture.class)
-                .setStyle(StyleSource.CODE, 10_000, texture);
+        this.getStyle().setPropertyDirect("foreground-texture", texture, Texture.class);
     }
 
     public Color getForegroundColor()
     {
-        return this.getStyle().getStyleProperty("foreground-color", Color.class).getValue();
+        return this.getStyle().getStyleValue("foreground-color", Color.class, Color.ALPHA);
     }
 
     public void setForegroundColor(Color color)
     {
-        this.getStyle().getStyleProperty("foreground-color", Color.class)
-                .setStyle(StyleSource.CODE, 10_000, color);
+        this.getStyle().setPropertyDirect("foreground-color", color, Color.class);
+    }
+
+    public boolean hasBorder()
+    {
+        return this.getStyle().doesHoldProperty("border-width").isHeld();
+    }
+
+    public boolean hasBorderImage()
+    {
+        return this.getStyle().doesHoldProperty("border-image-source").isHeld();
     }
 
     public float getBorderWidth()
     {
-        return this.getStyle().getStyleProperty("border-width", Float.class).getValue();
+        return this.getStyle().getStyleValue("border-width", Float.class, 0f);
     }
 
     public void setBorderWidth(float borderWidth)
     {
-        this.getStyle().getStyleProperty("border-width", Float.class)
-                .setStyle(StyleSource.CODE, 10_000, borderWidth);
+        this.getStyle().setPropertyDirect("border-width", borderWidth, Float.class);
     }
 
     public float getBorderWidth(RectSide side)
     {
-        return this.getStyle().getStyleProperty("border-" + side.getCssString() + "-width", Float.class).getValue();
+        return this.getStyle().getStyleValue("border-" + side.getCssString() + "-width", Float.class, 0f);
     }
 
     public void setBorderWidth(float borderWidth, RectSide side)
     {
-        this.getStyle().getStyleProperty("border-" + side.getCssString() + "-width", Float.class)
-                .setStyle(StyleSource.CODE, 10_000, borderWidth);
+        this.getStyle().setPropertyDirect("border-" + side.getCssString() + "-width", borderWidth, Float.class);
     }
 
     public Integer getBorderRadius()
     {
-        return this.getStyle().getStyleProperty("border-radius", Integer.class).getValue();
+        return this.getStyle().getStyleValue("border-radius", Integer.class, 0);
     }
 
     public void setBorderRadius(int radius)
     {
-        this.getStyle().getStyleProperty("border-radius", Integer.class)
-                .setStyle(StyleSource.CODE, 10_000, radius);
+        this.getStyle().setPropertyDirect("border-radius", radius, Integer.class);
     }
 
     public Integer getBorderRadius(RectCorner corner)
     {
-        return this.getStyle().getStyleProperty("border-" + corner.getCssString() + "-radius", Integer.class).getValue();
+        return this.getStyle().getStyleValue("border-" + corner.getCssString() + "-radius", Integer.class, 0);
     }
 
     public void setBorderRadius(int radius, RectCorner corner)
     {
-        this.getStyle().getStyleProperty("border-" + corner.getCssString() + "-radius", Integer.class)
-                .setStyle(StyleSource.CODE, 10_000, radius);
+        this.getStyle().setPropertyDirect("border-" + corner.getCssString() + "-radius", radius, Integer.class);
     }
 
     public Color getBorderColor()
     {
-        return this.getStyle().getStyleProperty("border-color", Color.class).getValue();
+        return this.getStyle().getStyleValue("border-color", Color.class, Color.ALPHA);
     }
 
     public void setBorderColor(Color color)
     {
-        this.getStyle().getStyleProperty("border-color", Color.class)
-                .setStyle(StyleSource.CODE, 10_000, color);
+        this.getStyle().setPropertyDirect("border-color", color, Color.class);
     }
 
     public void setShape(ShapeDefinition shape)

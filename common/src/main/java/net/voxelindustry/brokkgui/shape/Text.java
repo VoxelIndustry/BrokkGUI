@@ -76,16 +76,16 @@ public class Text extends GuiShape
 
     public Color getShadowColor()
     {
-        return this.getStyle().getStyleProperty("shadow-color", Color.class).getValue();
+        return this.getStyle().getStyleValue("shadow-color", Color.class, Color.ALPHA);
     }
 
     public boolean useShadow()
     {
-        return this.getStyle().getStyleProperty("shadow", Boolean.class).getValue();
+        return this.getStyle().getStyleValue("shadow", Boolean.class, false);
     }
 
     public Color getColor()
     {
-        return this.getStyle().getStyleProperty("color", Color.class).getValue();
+        return this.getStyle().getStyleValue("color", Color.class, Color.BLACK);
     }
 }

@@ -14,7 +14,6 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.ScissorBox;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.StyleHolder;
-import net.voxelindustry.brokkgui.style.StyleSource;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
@@ -654,7 +653,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public void setOpacity(double opacity)
     {
-        this.getStyle().getStyleProperty("opacity", Double.class).setStyle(StyleSource.CODE, 0, opacity);
+        this.getStyle().setPropertyDirect("opacity", opacity, Double.class);
     }
 
     public BaseProperty<GuiFather> getFatherProperty()

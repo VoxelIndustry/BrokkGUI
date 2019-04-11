@@ -82,6 +82,14 @@ public class StyleHolder
             this.properties.get(propertyName).setStyleRaw(source, specificity, value);
     }
 
+    public <T> void setPropertyDirect(String propertyName, T value, Class<T> valueClass)
+    {
+        StyleProperty<T> property = this.getStyleProperty(propertyName, valueClass);
+
+        if (property != null)
+            property.setStyle(StyleSource.CODE, 10_000, value);
+    }
+
     /**
      * Register conditionally enabled properties. It allows to lazily add properties to a Styleable node, increasing
      * the memory efficiency of simple nodes.
@@ -171,9 +179,27 @@ public class StyleHolder
     }
 
     @SuppressWarnings("unchecked")
-    public <T> StyleProperty<T> getStyleProperty(String name, Class<T> clazz)
+    public <T> StyleProperty<T> getStyleProperty(String name, Class<T> valueClass)
     {
         return (StyleProperty<T>) this.properties.get(name);
+    }
+
+    public <T> T getStyleValue(String propertyName, Class<T> valueClass)
+    {
+        StyleProperty<T> property = this.getStyleProperty(propertyName, valueClass);
+
+        if (property == null)
+            return null;
+        return property.getValue();
+    }
+
+    public <T> T getStyleValue(String propertyName, Class<T> valueClass, T defaultValue)
+    {
+        StyleProperty<T> property = this.getStyleProperty(propertyName, valueClass);
+
+        if (property == null)
+            return defaultValue;
+        return property.getValue();
     }
 
     public Supplier<StyleList> getStyleSupplier()

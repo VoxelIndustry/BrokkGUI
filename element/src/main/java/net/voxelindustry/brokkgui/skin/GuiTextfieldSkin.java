@@ -250,7 +250,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
 
     public Color getCursorColor()
     {
-        return getModel().getStyle().getStyleProperty("cursor-color", Color.class).getValue();
+        return getModel().getStyle().getStyleValue("cursor-color", Color.class, Color.ALPHA);
     }
 
     public String trimTextToWidth(String textToTrim, String ellipsis, int width, IGuiHelper helper)
