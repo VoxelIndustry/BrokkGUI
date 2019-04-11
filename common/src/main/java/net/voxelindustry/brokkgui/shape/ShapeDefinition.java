@@ -11,8 +11,6 @@ public interface ShapeDefinition
     void drawColoredEmpty(GuiShape shape, IGuiRenderer renderer, float startX, float startY, float lineWidth,
                           Color color, float zLevel);
 
-    void drawBorder(GuiShape shape, IGuiRenderer renderer);
-
     void drawTextured(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Texture texture, float zLevel);
 
     boolean isMouseInside(GuiShape shape, int mouseX, int mouseY);

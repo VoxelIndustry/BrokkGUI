@@ -1,5 +1,7 @@
 package net.voxelindustry.brokkgui.shape;
 
+import net.voxelindustry.brokkgui.border.ColorBorderDrawer;
+import net.voxelindustry.brokkgui.border.ImageBorderDrawer;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
@@ -7,7 +9,6 @@ import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.Texture;
-import net.voxelindustry.brokkgui.style.StyleSource;
 import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
 
@@ -36,6 +37,14 @@ public abstract class GuiShape extends GuiNode
     {
         if (pass == RenderPass.BACKGROUND)
         {
+            if (this.hasBorder())
+            {
+                if (this.hasBorderImage())
+                    ImageBorderDrawer.drawBorder(this, renderer);
+                else
+                    ColorBorderDrawer.drawBorder(this, renderer);
+            }
+
             if (this.getBackgroundTexture() != Texture.EMPTY)
             {
                 Texture background = this.getBackgroundTexture();
@@ -53,10 +62,6 @@ public abstract class GuiShape extends GuiNode
                         getxPos() + getxTranslate(), getyPos() + getyTranslate(),
                         background, getzLevel());
             }
-
-            // Draw border
-            if (this.getBorderColor() != Color.ALPHA)
-                this.shape.drawBorder(this, renderer);
         }
         if (pass == RenderPass.FOREGROUND)
         {

@@ -1,7 +1,5 @@
 package net.voxelindustry.brokkgui.shape;
 
-import net.voxelindustry.brokkgui.style.StyleSource;
-
 public class Line extends GuiShape
 {
     public Line(float startX, float startY, float endX, float endY)
@@ -29,11 +27,11 @@ public class Line extends GuiShape
 
     public float getLineThin()
     {
-        return this.getStyle().getStyleProperty("line-thin", Float.class).getValue();
+        return this.getStyle().getStyleValue("line-thin", Float.class, 1f);
     }
 
     public void setLineThin(float lineThin)
     {
-        this.getStyle().getStyleProperty("line-thin", Float.class).setStyle(StyleSource.CODE, 10_000, lineThin);
+        this.getStyle().setPropertyDirect("line-thin", lineThin, Float.class);
     }
 }
