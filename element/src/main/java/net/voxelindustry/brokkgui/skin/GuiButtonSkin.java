@@ -18,24 +18,34 @@ public class GuiButtonSkin<C extends GuiButtonBase, B extends GuiButtonBehavior<
 
     protected void bindLabel()
     {
-        if (!getModel().expandToLabel())
-            getModel().getLabel().getWidthProperty().bind(getModel().getWidthProperty());
-        else
-        {
-            getModel().getLabel().setExpandToText(true);
-            getModel().getWidthProperty().bind(getModel().getLabel().getWidthProperty());
-        }
-
-        getModel().getLabel().getHeightProperty().bind(getModel().getHeightProperty());
-
         RelativeBindingHelper.bindToPos(getModel().getLabel(), getModel());
 
-        getModel().getExpandToLabelProperty().addListener(obs ->
+        getModel().getExpandToLabelProperty().addListener(obs -> this.refreshLabelBinding());
+        this.refreshLabelBinding();
+    }
+
+    private void refreshLabelBinding()
+    {
+        if (getModel().expandToLabel())
         {
             getModel().getLabel().getWidthProperty().unbind();
+            getModel().getLabel().getHeightProperty().unbind();
+
             getModel().getLabel().setExpandToText(true);
+
             getModel().getWidthProperty().bind(getModel().getLabel().getWidthProperty());
-        });
+            getModel().getHeightProperty().bind(getModel().getLabel().getHeightProperty());
+        }
+        else
+        {
+            getModel().getLabel().setExpandToText(false);
+
+            getModel().getWidthProperty().unbind();
+            getModel().getHeightProperty().unbind();
+
+            getModel().getLabel().getWidthProperty().bind(getModel().getWidthProperty());
+            getModel().getLabel().getHeightProperty().bind(getModel().getHeightProperty());
+        }
     }
 
     @Override

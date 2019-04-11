@@ -37,6 +37,22 @@ public abstract class GuiButtonBase extends GuiElement
 
     protected abstract GuiLabeled createGuiLabel(String text, GuiNode icon);
 
+    @Override
+    public void setWidth(final float width)
+    {
+        if (this.getWidthProperty().isBound() && this.expandToLabel())
+            this.getWidthProperty().unbind();
+        super.setWidth(width);
+    }
+
+    @Override
+    public void setHeight(final float height)
+    {
+        if (this.getHeightProperty().isBound() && this.expandToLabel())
+            this.getHeightProperty().unbind();
+        super.setHeight(height);
+    }
+
     public void activate()
     {
         this.getEventDispatcher().dispatchEvent(ActionEvent.TYPE, new ActionEvent(this));
