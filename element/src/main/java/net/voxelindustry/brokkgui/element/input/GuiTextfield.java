@@ -7,7 +7,7 @@ import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldBehavior;
 import net.voxelindustry.brokkgui.component.ITextInput;
 import net.voxelindustry.brokkgui.control.GuiElement;
-import net.voxelindustry.brokkgui.data.RectOffset;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.event.CursorMoveEvent;
 import net.voxelindustry.brokkgui.event.TextTypedEvent;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
@@ -28,9 +28,9 @@ public class GuiTextfield extends GuiElement implements ITextInput
             validatedProperty;
     private final BaseProperty<Boolean> expandToTextProperty;
 
-    private final BaseProperty<Integer>    maxTextLengthProperty;
-    private final BaseProperty<Integer>    cursorPosProperty;
-    private final BaseProperty<RectOffset> textPaddingProperty;
+    private final BaseProperty<Integer> maxTextLengthProperty;
+    private final BaseProperty<Integer> cursorPosProperty;
+    private final BaseProperty<RectBox> textPaddingProperty;
 
     private final BaseListProperty<BaseTextValidator> validatorsProperty;
 
@@ -47,7 +47,7 @@ public class GuiTextfield extends GuiElement implements ITextInput
 
         this.maxTextLengthProperty = new BaseProperty<>(-1, "maxTextLength");
         this.cursorPosProperty = new BaseProperty<>(0, "cursorPosProperty");
-        this.textPaddingProperty = new BaseProperty<>(new RectOffset(2), "textPaddingProperty");
+        this.textPaddingProperty = new BaseProperty<>(new RectBox(2), "textPaddingProperty");
 
         this.promptTextAlwaysDisplayedProperty = new BaseProperty<>(false, "promptTextAlwaysDisplayedProperty");
         this.editableProperty = new BaseProperty<>(true, "editableProperty");
@@ -111,7 +111,7 @@ public class GuiTextfield extends GuiElement implements ITextInput
         return this.cursorPosProperty;
     }
 
-    public BaseProperty<RectOffset> getTextPaddingProperty()
+    public BaseProperty<RectBox> getTextPaddingProperty()
     {
         return this.textPaddingProperty;
     }
@@ -254,12 +254,12 @@ public class GuiTextfield extends GuiElement implements ITextInput
         return this.getPromptEllipsisProperty().getValue();
     }
 
-    public void setTextPadding(RectOffset padding)
+    public void setTextPadding(RectBox padding)
     {
         this.getTextPaddingProperty().setValue(padding);
     }
 
-    public RectOffset getTextPadding()
+    public RectBox getTextPadding()
     {
         return this.getTextPaddingProperty().getValue();
     }

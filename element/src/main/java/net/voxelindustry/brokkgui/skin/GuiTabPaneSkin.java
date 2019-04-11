@@ -7,7 +7,7 @@ import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.behavior.GuiTabPaneBehavior;
 import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.data.RectOffset;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.pane.GuiTab;
 import net.voxelindustry.brokkgui.element.pane.GuiTabPane;
@@ -123,7 +123,7 @@ public class GuiTabPaneSkin<T extends GuiTabPane> extends GuiBehaviorSkinBase<T,
     {
         GuiLabel label = new GuiLabel(guiTab.getText());
         label.getTextProperty().bind(guiTab.getTextProperty());
-        label.setTextPadding(new RectOffset(0, 2, 0, 2));
+        label.setTextPadding(new RectBox(0, 2, 0, 2));
         if (maxWidth != -1)
             label.setWidth(maxWidth);
         else

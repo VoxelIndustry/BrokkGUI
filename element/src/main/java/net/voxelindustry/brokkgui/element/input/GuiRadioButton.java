@@ -5,7 +5,7 @@ import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiTogglableButtonBehavior;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.control.GuiFather;
-import net.voxelindustry.brokkgui.data.RectOffset;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.shape.Rectangle;
@@ -25,7 +25,7 @@ public class GuiRadioButton extends GuiToggleButton
         this.buttonNodeProperty = new BaseProperty<>(new RadioButtonContent(this), "buttonNodeProperty");
 
         this.setExpandToLabel(true);
-        this.getLabel().setTextPadding(new RectOffset(0, 2, 0, 0));
+        this.getLabel().setTextPadding(new RectBox(0, 2, 0, 0));
     }
 
     public GuiRadioButton()

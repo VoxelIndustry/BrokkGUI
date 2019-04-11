@@ -5,7 +5,7 @@ import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.data.RectAlignment;
-import net.voxelindustry.brokkgui.data.RectOffset;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
 
 import javax.annotation.Nonnull;
@@ -15,9 +15,9 @@ public abstract class GuiLabeled extends GuiElement
     private final BaseProperty<RectAlignment> textAlignmentProperty;
     private final BaseProperty<String>        textProperty;
 
-    private final BaseProperty<String>     ellipsisProperty;
-    private final BaseProperty<Boolean>    expandToTextProperty;
-    private final BaseProperty<RectOffset> textPaddingProperty;
+    private final BaseProperty<String>  ellipsisProperty;
+    private final BaseProperty<Boolean> expandToTextProperty;
+    private final BaseProperty<RectBox> textPaddingProperty;
 
     private final BaseProperty<GuiNode>  iconProperty;
     private final BaseProperty<RectSide> iconSideProperty;
@@ -31,7 +31,7 @@ public abstract class GuiLabeled extends GuiElement
         this.textAlignmentProperty = new BaseProperty<>(RectAlignment.MIDDLE_CENTER, "textAlignmentProperty");
         this.ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
         this.expandToTextProperty = new BaseProperty<>(true, "expandToTextProperty");
-        this.textPaddingProperty = new BaseProperty<>(RectOffset.EMPTY, "textPaddingProperty");
+        this.textPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "textPaddingProperty");
 
         this.iconProperty = new BaseProperty<>(icon, "iconProperty");
         this.iconSideProperty = new BaseProperty<>(RectSide.LEFT, "iconSideProperty");
@@ -86,7 +86,7 @@ public abstract class GuiLabeled extends GuiElement
         return this.expandToTextProperty;
     }
 
-    public BaseProperty<RectOffset> getTextPaddingProperty()
+    public BaseProperty<RectBox> getTextPaddingProperty()
     {
         return textPaddingProperty;
     }
@@ -136,12 +136,12 @@ public abstract class GuiLabeled extends GuiElement
         this.ellipsisProperty.setValue(ellipsis);
     }
 
-    public RectOffset getTextPadding()
+    public RectBox getTextPadding()
     {
         return this.textPaddingProperty.getValue();
     }
 
-    public void setTextPadding(RectOffset textPadding)
+    public void setTextPadding(RectBox textPadding)
     {
         this.textPaddingProperty.setValue(textPadding);
     }

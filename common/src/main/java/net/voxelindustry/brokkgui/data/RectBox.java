@@ -2,16 +2,16 @@ package net.voxelindustry.brokkgui.data;
 
 import java.util.Objects;
 
-public class RectOffset
+public class RectBox
 {
-    public static RectOffset EMPTY = new RectOffset(0);
+    public static RectBox EMPTY = new RectBox(0);
 
     private final float top;
     private final float left;
     private final float bottom;
     private final float right;
 
-    public RectOffset(float top, float left, float bottom, float right)
+    public RectBox(float top, float left, float bottom, float right)
     {
         this.top = top;
         this.left = left;
@@ -19,7 +19,7 @@ public class RectOffset
         this.right = right;
     }
 
-    public RectOffset(float all)
+    public RectBox(float all)
     {
         this(all, all, all, all);
     }
@@ -49,7 +49,7 @@ public class RectOffset
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RectOffset that = (RectOffset) o;
+        RectBox that = (RectBox) o;
         return Float.compare(that.top, top) == 0 &&
                 Float.compare(that.left, left) == 0 &&
                 Float.compare(that.bottom, bottom) == 0 &&
@@ -65,7 +65,7 @@ public class RectOffset
     @Override
     public String toString()
     {
-        return "RectOffset{" +
+        return "RectBox{" +
                 "top=" + top +
                 ", left=" + left +
                 ", bottom=" + bottom +
@@ -122,9 +122,9 @@ public class RectOffset
             return this;
         }
 
-        public RectOffset create()
+        public RectBox create()
         {
-            return new RectOffset(top == -1 ? 0 : top,
+            return new RectBox(top == -1 ? 0 : top,
                     left == -1 ? 0 : left,
                     bottom == -1 ? 0 : bottom,
                     right == -1 ? 0 : right);

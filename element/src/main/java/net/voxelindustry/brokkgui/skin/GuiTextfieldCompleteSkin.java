@@ -5,7 +5,7 @@ import fr.ourten.teabeans.listener.ListValueChangeListener;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldCompleteBehavior;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.data.RectAlignment;
-import net.voxelindustry.brokkgui.data.RectOffset;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.input.GuiTextfieldComplete;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
@@ -82,7 +82,7 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
 
     private static class CompletePopup extends GuiAbsolutePane implements IGuiPopup
     {
-        private static RectOffset LABEL_PADDING = new RectOffset(1, 2, 1, 2);
+        private static RectBox LABEL_PADDING = new RectBox(1, 2, 1, 2);
 
         private GuiTextfieldComplete     model;
         private GuiTextfieldCompleteSkin skin;
