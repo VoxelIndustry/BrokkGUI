@@ -22,7 +22,7 @@ public abstract class GuiButtonBase extends GuiElement
         this.label = this.createGuiLabel(text, icon);
         this.addChild(this.label);
 
-        this.expandToLabel = new BaseProperty<>(false, "expandToLabelProperty");
+        this.expandToLabel = new BaseProperty<>(true, "expandToLabelProperty");
     }
 
     public GuiButtonBase(String type, String text)
