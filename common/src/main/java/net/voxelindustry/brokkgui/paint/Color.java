@@ -13,12 +13,12 @@ public class Color extends GuiPaint
     public static final Color GREEN      = ColorConstants.getColor("green");
     public static final Color YELLOW     = ColorConstants.getColor("yellow");
 
-    public static Color fromHex(final String hex)
+    public static Color fromHex(String hex)
     {
         return Color.fromHex(hex, 1);
     }
 
-    public static Color fromHex(final String hex, final float alpha)
+    public static Color fromHex(String hex, final float alpha)
     {
         final Color rtn = new Color(0, 0, 0);
 
@@ -37,12 +37,12 @@ public class Color extends GuiPaint
                 String.format("%02X", (int) (this.blue * 255));
     }
 
-    public static Color fromRGBInt(final int rgb)
+    public static Color fromRGBInt(int rgb)
     {
         return new Color((rgb >> 16 & 0xFF) / 255f, (rgb >> 8 & 0xFF) / 255f, (rgb & 0xFF) / 255f);
     }
 
-    public static Color fromRGBAInt(final int rgba)
+    public static Color fromRGBAInt(int rgba)
     {
         return new Color((rgba >> 24 & 0xFF) / 255f, (rgba >> 16 & 0xFF) / 255f, (rgba >> 8 & 0xFF) / 255f, (rgba &
                 0xFF) / 255f);
@@ -76,7 +76,7 @@ public class Color extends GuiPaint
 
     private float red, blue, green, alpha;
 
-    public Color(final float red, final float green, final float blue, final float alpha)
+    public Color(float red, float green, float blue, float alpha)
     {
         this.red = red;
         this.green = green;
@@ -84,46 +84,59 @@ public class Color extends GuiPaint
         this.alpha = alpha;
     }
 
-    public Color(final float red, final float green, final float blue)
+    public Color(float red, float green, float blue)
     {
         this(red, green, blue, 1);
     }
 
-    public Color addAlpha(final float alpha)
+    public Color addAlpha(float alpha)
     {
         final Color rtn = Color.from(this);
         rtn.setAlpha(alpha + rtn.getAlpha());
         return rtn;
     }
 
-    public Color addGreen(final float green)
+    public Color addGreen(float green)
     {
         final Color rtn = Color.from(this);
         rtn.setGreen(green + rtn.getGreen());
         return rtn;
     }
 
-    public Color addBlue(final float blue)
+    public Color addBlue(float blue)
     {
         final Color rtn = Color.from(this);
         rtn.setBlue(blue + rtn.getBlue());
         return rtn;
     }
 
-    public Color addRed(final float red)
+    public Color addRed(float red)
     {
         final Color rtn = Color.from(this);
         rtn.setRed(red + rtn.getRed());
         return rtn;
     }
 
-    public Color shade(final float shading)
+    public Color shade(float shading)
     {
         final Color rtn = Color.from(this);
         rtn.setRed(rtn.getRed() - shading);
         rtn.setGreen(rtn.getGreen() - shading);
         rtn.setBlue(rtn.getBlue() - shading);
         return rtn;
+    }
+
+    public Color interpolate(Color other, float delta)
+    {
+        if (delta >= 1)
+            return other;
+        if (delta <= 0)
+            return this;
+
+        return new Color(red + (other.red - red) * delta,
+                green + (other.green - green) * delta,
+                blue + (other.blue - blue) * delta,
+                alpha + (other.alpha - alpha) * delta);
     }
 
     public float getRed()
