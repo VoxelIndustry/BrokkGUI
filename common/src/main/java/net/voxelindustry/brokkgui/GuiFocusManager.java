@@ -1,48 +1,41 @@
 package net.voxelindustry.brokkgui;
 
-import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
 
-/**
- * @author Ourten 8 oct. 2016
- */
 public class GuiFocusManager
 {
-    private static volatile GuiFocusManager INSTANCE;
+    private static GuiFocusManager INSTANCE;
 
     public static GuiFocusManager getInstance()
     {
         if (GuiFocusManager.INSTANCE == null)
-            synchronized (GuiFocusManager.class)
-            {
-                if (GuiFocusManager.INSTANCE == null)
-                    GuiFocusManager.INSTANCE = new GuiFocusManager();
-            }
+            GuiFocusManager.INSTANCE = new GuiFocusManager();
         return GuiFocusManager.INSTANCE;
     }
 
-    private final BaseProperty<GuiNode> focusedNodeProperty;
+    private GuiElement focusedNode;
 
     private GuiFocusManager()
     {
-        this.focusedNodeProperty = new BaseProperty<>(null, "focusedNodeProperty");
     }
 
-    public GuiNode getFocusedNode()
+    public GuiElement getFocusedNode()
     {
-        return this.focusedNodeProperty.getValue();
+        return this.focusedNode;
     }
 
-    private void setFocusedNode(final GuiNode node)
+    private void setFocusedNode(GuiElement element)
     {
-        this.focusedNodeProperty.setValue(node);
+        this.focusedNode = element;
     }
 
-    public void requestFocus(final GuiNode guiNode)
+    public void requestFocus(GuiElement element)
     {
         if (this.getFocusedNode() != null)
             this.getFocusedNode().internalSetFocused(false);
-        this.setFocusedNode(guiNode);
+
+        this.setFocusedNode(element);
+
         if (this.getFocusedNode() != null)
             this.getFocusedNode().internalSetFocused(true);
     }
