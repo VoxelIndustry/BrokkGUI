@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.event;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.IEventEmitter;
 
@@ -13,12 +13,12 @@ public class KeyEvent extends GuiInputEvent
 
     private final int key;
 
-    public KeyEvent(GuiNode source)
+    public KeyEvent(GuiElement source)
     {
         this(source, 0);
     }
 
-    public KeyEvent(GuiNode source, int key)
+    public KeyEvent(GuiElement source, int key)
     {
         super(source);
         this.key = key;
@@ -32,14 +32,14 @@ public class KeyEvent extends GuiInputEvent
     @Override
     public KeyEvent copy(IEventEmitter source)
     {
-        return new KeyEvent((GuiNode) source, getKey());
+        return new KeyEvent((GuiElement) source, getKey());
     }
 
     public static class Input extends KeyEvent
     {
         private final char character;
 
-        public Input(GuiNode source, char character, int key)
+        public Input(GuiElement source, char character, int key)
         {
             super(source, key);
             this.character = character;
@@ -53,13 +53,13 @@ public class KeyEvent extends GuiInputEvent
         @Override
         public KeyEvent.Input copy(IEventEmitter source)
         {
-            return new KeyEvent.Input((GuiNode) source,getCharacter(), getKey());
+            return new KeyEvent.Input((GuiElement) source, getCharacter(), getKey());
         }
     }
 
     public static class Press extends KeyEvent
     {
-        public Press(GuiNode source, int key)
+        public Press(GuiElement source, int key)
         {
             super(source, key);
         }
@@ -67,13 +67,13 @@ public class KeyEvent extends GuiInputEvent
         @Override
         public KeyEvent.Press copy(IEventEmitter source)
         {
-            return new KeyEvent.Press((GuiNode) source, getKey());
+            return new KeyEvent.Press((GuiElement) source, getKey());
         }
     }
 
     public static class Release extends KeyEvent
     {
-        public Release(GuiNode source, int key)
+        public Release(GuiElement source, int key)
         {
             super(source, key);
         }
@@ -81,7 +81,7 @@ public class KeyEvent extends GuiInputEvent
         @Override
         public KeyEvent.Release copy(IEventEmitter source)
         {
-            return new KeyEvent.Release((GuiNode) source, getKey());
+            return new KeyEvent.Release((GuiElement) source, getKey());
         }
     }
 }

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.event;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.IEventEmitter;
 
@@ -10,12 +10,12 @@ public class ClickEvent extends GuiMouseEvent
 
     private final int key;
 
-    public ClickEvent(GuiNode source)
+    public ClickEvent(GuiElement source)
     {
         this(source, 0, 0, 0);
     }
 
-    public ClickEvent(GuiNode source, int mouseX, int mouseY, int key)
+    public ClickEvent(GuiElement source, int mouseX, int mouseY, int key)
     {
         super(source, mouseX, mouseY);
 
@@ -30,7 +30,7 @@ public class ClickEvent extends GuiMouseEvent
     @Override
     public ClickEvent copy(IEventEmitter source)
     {
-        return new ClickEvent((GuiNode) source, getMouseX(), getMouseY(), getKey());
+        return new ClickEvent((GuiElement) source, getMouseX(), getMouseY(), getKey());
     }
 
     public static class Left extends ClickEvent
@@ -38,7 +38,7 @@ public class ClickEvent extends GuiMouseEvent
         public static EventType<ClickEvent.Left> TYPE = new EventType<>(ClickEvent.TYPE,
                 "MOUSE_LEFT_CLICK_EVENT");
 
-        public Left(GuiNode source, int mouseX, int mouseY)
+        public Left(GuiElement source, int mouseX, int mouseY)
         {
             super(source, mouseX, mouseY, 0);
         }
@@ -46,7 +46,7 @@ public class ClickEvent extends GuiMouseEvent
         @Override
         public Left copy(IEventEmitter source)
         {
-            return new Left((GuiNode) source, getMouseX(), getMouseY());
+            return new Left((GuiElement) source, getMouseX(), getMouseY());
         }
     }
 
@@ -55,7 +55,7 @@ public class ClickEvent extends GuiMouseEvent
         public static EventType<ClickEvent.Right> TYPE = new EventType<>(ClickEvent.TYPE,
                 "MOUSE_RIGHT_CLICK_EVENT");
 
-        public Right(GuiNode source, int mouseX, int mouseY)
+        public Right(GuiElement source, int mouseX, int mouseY)
         {
             super(source, mouseX, mouseY, 1);
         }
@@ -63,7 +63,7 @@ public class ClickEvent extends GuiMouseEvent
         @Override
         public Right copy(IEventEmitter source)
         {
-            return new Right((GuiNode) source, getMouseX(), getMouseY());
+            return new Right((GuiElement) source, getMouseX(), getMouseY());
         }
     }
 
@@ -72,7 +72,7 @@ public class ClickEvent extends GuiMouseEvent
         public static EventType<ClickEvent.Middle> TYPE = new EventType<>(ClickEvent.TYPE,
                 "MOUSE_MIDDLE_CLICK_EVENT");
 
-        public Middle(GuiNode source, int mouseX, int mouseY)
+        public Middle(GuiElement source, int mouseX, int mouseY)
         {
             super(source, mouseX, mouseY, 2);
         }
@@ -80,7 +80,7 @@ public class ClickEvent extends GuiMouseEvent
         @Override
         public Middle copy(IEventEmitter source)
         {
-            return new Middle((GuiNode) source, getMouseX(), getMouseY());
+            return new Middle((GuiElement) source, getMouseX(), getMouseY());
         }
     }
 }

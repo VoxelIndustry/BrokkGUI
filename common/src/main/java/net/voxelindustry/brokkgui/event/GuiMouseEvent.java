@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.event;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.IEventEmitter;
 
@@ -19,7 +19,7 @@ public class GuiMouseEvent extends GuiInputEvent
 
     private final int mouseX, mouseY;
 
-    public GuiMouseEvent(GuiNode source, int mouseX, int mouseY)
+    public GuiMouseEvent(GuiElement source, int mouseX, int mouseY)
     {
         super(source);
         this.mouseX = mouseX;
@@ -39,14 +39,14 @@ public class GuiMouseEvent extends GuiInputEvent
     @Override
     public GuiMouseEvent copy(IEventEmitter source)
     {
-        return new GuiMouseEvent((GuiNode) source, getMouseX(), getMouseY());
+        return new GuiMouseEvent((GuiElement) source, getMouseX(), getMouseY());
     }
 
     public static final class Wheel extends GuiMouseEvent
     {
         private final int dwheel;
 
-        public Wheel(GuiNode source, int mouseX, int mouseY, int dwheel)
+        public Wheel(GuiElement source, int mouseX, int mouseY, int dwheel)
         {
             super(source, mouseX, mouseY);
 
@@ -61,7 +61,7 @@ public class GuiMouseEvent extends GuiInputEvent
         @Override
         public Wheel copy(IEventEmitter source)
         {
-            return new Wheel((GuiNode) source, getMouseX(), getMouseY(), getDwheel());
+            return new Wheel((GuiElement) source, getMouseX(), getMouseY(), getDwheel());
         }
     }
 
@@ -69,7 +69,7 @@ public class GuiMouseEvent extends GuiInputEvent
     {
         private final int key;
 
-        public DragStart(GuiNode source, int mouseX, int mouseY, int mouseKey)
+        public DragStart(GuiElement source, int mouseX, int mouseY, int mouseKey)
         {
             super(source, mouseX, mouseY);
 
@@ -84,7 +84,7 @@ public class GuiMouseEvent extends GuiInputEvent
         @Override
         public DragStart copy(IEventEmitter source)
         {
-            return new DragStart((GuiNode) source, getMouseX(), getMouseY(), getKey());
+            return new DragStart((GuiElement) source, getMouseX(), getMouseY(), getKey());
         }
     }
 
@@ -92,7 +92,7 @@ public class GuiMouseEvent extends GuiInputEvent
     {
         private final int dragX, dragY;
 
-        public Dragging(GuiNode source, int mouseX, int mouseY, int mouseKey, int dragX, int dragY)
+        public Dragging(GuiElement source, int mouseX, int mouseY, int mouseKey, int dragX, int dragY)
         {
             super(source, mouseX, mouseY, mouseKey);
 
@@ -113,13 +113,13 @@ public class GuiMouseEvent extends GuiInputEvent
         @Override
         public Dragging copy(IEventEmitter source)
         {
-            return new Dragging((GuiNode) source, getMouseX(), getMouseY(), getKey(), getDragX(), getDragY());
+            return new Dragging((GuiElement) source, getMouseX(), getMouseY(), getKey(), getDragX(), getDragY());
         }
     }
 
     public static final class DragStop extends Dragging
     {
-        public DragStop(GuiNode source, int mouseX, int mouseY, int mouseKey, int dragX, int dragY)
+        public DragStop(GuiElement source, int mouseX, int mouseY, int mouseKey, int dragX, int dragY)
         {
             super(source, mouseX, mouseY, mouseKey, dragX, dragY);
         }
@@ -127,7 +127,7 @@ public class GuiMouseEvent extends GuiInputEvent
         @Override
         public DragStop copy(IEventEmitter source)
         {
-            return new DragStop((GuiNode) source, getMouseX(), getMouseY(), getKey(), getDragX(), getDragY());
+            return new DragStop((GuiElement) source, getMouseX(), getMouseY(), getKey(), getDragX(), getDragY());
         }
     }
 }

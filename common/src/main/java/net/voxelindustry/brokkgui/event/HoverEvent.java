@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.event;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.IEventEmitter;
 
@@ -10,12 +10,12 @@ public class HoverEvent extends GuiStateEvent
 
     private final boolean entering;
 
-    public HoverEvent(GuiNode source)
+    public HoverEvent(GuiElement source)
     {
         this(source, false);
     }
 
-    public HoverEvent(GuiNode source, boolean entering)
+    public HoverEvent(GuiElement source, boolean entering)
     {
         super(source);
 
@@ -30,6 +30,6 @@ public class HoverEvent extends GuiStateEvent
     @Override
     public HoverEvent copy(IEventEmitter source)
     {
-        return new HoverEvent((GuiNode) source, isEntering());
+        return new HoverEvent((GuiElement) source, isEntering());
     }
 }
