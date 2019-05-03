@@ -9,7 +9,6 @@ import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 

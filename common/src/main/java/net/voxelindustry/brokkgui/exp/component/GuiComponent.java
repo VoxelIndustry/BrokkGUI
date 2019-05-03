@@ -11,7 +11,7 @@ public abstract class GuiComponent
 
     }
 
-    void attach(GuiElement element)
+    protected void attach(GuiElement element)
     {
         this.elementProperty.setValue(element);
     }

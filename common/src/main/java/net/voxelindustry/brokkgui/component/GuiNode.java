@@ -12,7 +12,6 @@ import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.ScissorBox;
-import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.hermod.EventDispatcher;
@@ -22,7 +21,7 @@ import net.voxelindustry.hermod.IEventEmitter;
 import java.util.Collections;
 import java.util.function.Supplier;
 
-public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
+public abstract class GuiNode implements IEventEmitter
 {
     private final BaseProperty<GuiFather> fatherProperty;
     private final BaseProperty<Float>     xPosProperty, yPosProperty, xTranslateProperty, yTranslateProperty,

@@ -5,11 +5,13 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class StyleSelector implements IStyleSelector
 {
     private final List<Pair<StyleSelectorType, String>> selectors;
-    protected     int                                   computedSpecificity;
+
+    private int computedSpecificity;
 
     public StyleSelector()
     {
@@ -62,7 +64,7 @@ public class StyleSelector implements IStyleSelector
     @Override
     public boolean match(IStyleSelector selector)
     {
-        if(selector == this)
+        if (selector == this)
             return true;
         if (!(selector instanceof StyleSelector))
             return false;
@@ -77,19 +79,19 @@ public class StyleSelector implements IStyleSelector
             case WILDCARD:
                 return true;
             case TYPE:
-                if (!selector.getValue().equals(styleHolder.getOwner().getType()))
+                if (!selector.getValue().equals(styleHolder.getType()))
                     return false;
                 break;
             case CLASS:
-                if (!styleHolder.getOwner().getStyleClass().getValue().contains(selector.getValue()))
+                if (!styleHolder.getStyleClass().getValue().contains(selector.getValue()))
                     return false;
                 break;
             case ID:
-                if (!selector.getValue().equals(styleHolder.getOwner().getID()))
+                if (!selector.getValue().equals(styleHolder.getElement().getId()))
                     return false;
                 break;
             case PSEUDOCLASS:
-                if (!styleHolder.getOwner().getActivePseudoClass().getValue().contains(selector.getValue()))
+                if (!styleHolder.getActivePseudoClass().getValue().contains(selector.getValue()))
                     return false;
                 break;
         }
@@ -100,5 +102,21 @@ public class StyleSelector implements IStyleSelector
     public String toString()
     {
         return "{" + selectors.toString() + ", specificity=" + this.getSpecificity() + '}';
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StyleSelector that = (StyleSelector) o;
+        return computedSpecificity == that.computedSpecificity &&
+                Objects.equals(getSelectors(), that.getSelectors());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(getSelectors(), computedSpecificity);
     }
 }

@@ -20,7 +20,7 @@ public abstract class GuiElement implements IEventEmitter
 {
     private Map<Class<? extends GuiComponent>, GuiComponent> componentMap;
 
-    private String id;
+    private BaseProperty<String> idProperty;
 
     private final Transform transform;
 
@@ -37,7 +37,7 @@ public abstract class GuiElement implements IEventEmitter
     private final BaseProperty<Boolean> visibleProperty;
     private final BaseProperty<Boolean> draggedProperty;
 
-    private final BaseProperty<Double> opacityProperty;
+    private BaseProperty<Double> opacityProperty;
 
     private int draggedX;
     private int draggedY;
@@ -49,6 +49,8 @@ public abstract class GuiElement implements IEventEmitter
         this.componentMap = new IdentityHashMap<>();
 
         this.transform = this.add(new Transform());
+
+        this.idProperty = new BaseProperty<>(null, "idProperty");
 
         this.focusedProperty = new BaseProperty<>(false, "focusedProperty");
         this.disabledProperty = new BaseProperty<>(false, "disabledProperty");
@@ -367,6 +369,11 @@ public abstract class GuiElement implements IEventEmitter
         return this.opacityProperty;
     }
 
+    public void replaceOpacityProperty(BaseProperty<Double> opacityProperty)
+    {
+        this.opacityProperty = opacityProperty;
+    }
+
     public double getOpacity()
     {
         return this.getOpacityProperty().getValue();
@@ -416,6 +423,7 @@ public abstract class GuiElement implements IEventEmitter
     public <T extends GuiComponent> T add(T component)
     {
         this.componentMap.put(component.getClass(), component);
+        component.attach(this);
         return component;
     }
 
@@ -431,6 +439,7 @@ public abstract class GuiElement implements IEventEmitter
         }
 
         this.componentMap.put(componentClass, instance);
+        instance.attach(this);
         return instance;
     }
 
@@ -459,14 +468,19 @@ public abstract class GuiElement implements IEventEmitter
 
     protected abstract String getType();
 
+    public BaseProperty<String> getIdProperty()
+    {
+        return this.idProperty;
+    }
+
     public String getId()
     {
-        return id;
+        return this.getIdProperty().getValue();
     }
 
     public void setId(String id)
     {
-        this.id = id;
+        this.getIdProperty().setValue(id);
     }
 
     /////////////////////

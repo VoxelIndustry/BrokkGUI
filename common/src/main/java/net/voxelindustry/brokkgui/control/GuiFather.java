@@ -10,7 +10,6 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
 import net.voxelindustry.brokkgui.shape.GuiShape;
 import net.voxelindustry.brokkgui.shape.Rectangle;
-import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
 import java.util.ArrayList;

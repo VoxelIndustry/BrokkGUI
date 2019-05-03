@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.style.tree;
 
-import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.style.ICascadeStyleable;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 
 public class StyleSelectorHierarchic implements IStyleSelector
@@ -42,27 +41,27 @@ public class StyleSelectorHierarchic implements IStyleSelector
 
     public boolean match(StyleHolder styleHolder)
     {
-        if (!styleHolder.getParent().isPresent())
+        if (styleHolder.getParent() == null)
             return false;
 
         if (this.isDirectChild())
         {
-            if (!this.parentSelector.match(styleHolder.getParent().getValue().getStyle()))
+            if (!styleHolder.getParent().has(StyleHolder.class) || !this.parentSelector.match(styleHolder.getParent().get(StyleHolder.class)))
                 return false;
         }
         else
         {
-            BaseProperty<ICascadeStyleable> current = styleHolder.getParent();
+            GuiElement current = styleHolder.getParent();
 
             boolean matched = false;
-            while (current.isPresent())
+            while (current != null)
             {
-                if (this.parentSelector.match(current.getValue().getStyle()))
+                if (styleHolder.getParent().has(StyleHolder.class) && this.parentSelector.match(current.get(StyleHolder.class)))
                 {
                     matched = true;
                     break;
                 }
-                current = current.getValue().getStyle().getParent();
+                current = current.transform().getParent() != null ? current.transform().getParent().getElement() : null;
             }
             if (!matched)
                 return false;

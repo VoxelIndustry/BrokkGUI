@@ -1,7 +1,13 @@
 package net.voxelindustry.brokkgui.style;
 
 import com.google.common.collect.ImmutableMap;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.listener.ListValueChangeListener;
+import fr.ourten.teabeans.listener.ValueChangeListener;
+import fr.ourten.teabeans.value.BaseSetProperty;
+import fr.ourten.teabeans.value.ObservableValue;
+import net.voxelindustry.brokkgui.exp.component.GuiComponent;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
+import net.voxelindustry.brokkgui.exp.component.Transform;
 import net.voxelindustry.brokkgui.style.shorthand.GenericShorthandProperty;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMapper;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
@@ -9,32 +15,100 @@ import net.voxelindustry.brokkgui.style.tree.StyleEntry;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
-public class StyleHolder
+public class StyleHolder extends GuiComponent
 {
-    private Map<String, StyleProperty<?>>   properties;
-    private BaseProperty<ICascadeStyleable> parent;
-    private ICascadeStyleable               owner;
+    private Map<String, StyleProperty<?>> properties;
 
     private List<Pair<Pattern, Consumer<StyleHolder>>> conditionalProperties;
 
-    private Supplier<StyleList> styleSupplier;
+    private       Supplier<StyleList>     styleSupplier;
+    private final BaseSetProperty<String> styleClass;
+    private final BaseSetProperty<String> activePseudoClass;
+    private       String                  type;
 
-    public StyleHolder(ICascadeStyleable owner)
+    private ValueChangeListener<String> styleRefreshListener = this::valueChanged;
+
+    public StyleHolder()
     {
         this.properties = new HashMap<>();
-        this.owner = owner;
-        this.parent = new BaseProperty<>(null, "parentProperty");
-
         this.conditionalProperties = new ArrayList<>();
+
+        this.styleClass = new BaseSetProperty<>(Collections.emptySet(), "styleClassListProperty");
+        this.activePseudoClass = new BaseSetProperty<>(Collections.emptySet(), "activePseudoClassListProperty");
+
+        ListValueChangeListener<String> styleListRefreshListener = this::valueListChanged;
+        this.styleClass.addListener(styleListRefreshListener);
+        this.activePseudoClass.addListener(styleListRefreshListener);
+
     }
+
+    @Override
+    protected void attach(GuiElement element)
+    {
+        if (this.getElement() != null)
+            this.getElement().getIdProperty().removeListener(styleRefreshListener);
+
+        super.attach(element);
+
+        element.getIdProperty().addListener(styleRefreshListener);
+
+        // Properties override
+        this.getElement().replaceOpacityProperty(this.registerProperty("opacity", 1D, Double.class));
+    }
+
+    private void valueListChanged(ObservableValue obs, String oldValue, String newValue)
+    {
+        this.refresh();
+    }
+
+    private void valueChanged(ObservableValue obs, String oldValue, String newValue)
+    {
+        this.refresh();
+    }
+
+    ////////////////
+    // PROPERTIES //
+    ////////////////
+
+    public BaseSetProperty<String> getStyleClass()
+    {
+        return this.styleClass;
+    }
+
+    public void setStyleTree(Supplier<StyleList> treeSupplier)
+    {
+        this.setStyleSupplier(treeSupplier);
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public BaseSetProperty<String> getActivePseudoClass()
+    {
+        return activePseudoClass;
+    }
+
+    public GuiElement getParent()
+    {
+        Transform parentTransform = this.getElement().transform().getParent();
+        return parentTransform != null ? parentTransform.getElement() : null;
+    }
+
+    /////////////
+    // STYLING //
+    /////////////
 
     public void parseInlineCSS(String css)
     {
@@ -232,19 +306,6 @@ public class StyleHolder
                 this.setProperty(rule.getRuleIdentifier(), rule.getRuleValue(), StyleSource.AUTHOR,
                         entry.getSelector().getSpecificity());
         }));
-    }
-
-    /**
-     * @return the parent
-     */
-    public BaseProperty<ICascadeStyleable> getParent()
-    {
-        return parent;
-    }
-
-    public ICascadeStyleable getOwner()
-    {
-        return owner;
     }
 
     /**

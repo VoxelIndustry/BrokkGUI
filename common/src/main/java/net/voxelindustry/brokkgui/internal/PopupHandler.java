@@ -5,8 +5,6 @@ import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.style.ICascadeStyleable;
-import net.voxelindustry.brokkgui.style.IStyleable;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
 import java.util.*;
