@@ -79,56 +79,56 @@ public abstract class GuiElement implements IEventEmitter
             return;
 
         boolean createdMatrix = false;
-        if (this.transform.getRotation() != Rotation.NONE && this.transform.getRotation().getAngle() % 360 != 0)
+        if (this.transform.rotation() != Rotation.NONE && this.transform.rotation().getAngle() % 360 != 0)
         {
             createdMatrix = true;
             renderer.beginMatrix();
 
             float translateX, translateY;
 
-            if (this.transform.getRotation().getOrigin().isRelativePos())
+            if (this.transform.rotation().getOrigin().isRelativePos())
             {
-                translateX = this.transform.getRotation().getOrigin().getOriginX() * this.transform.getWidth();
-                translateY = this.transform.getRotation().getOrigin().getOriginY() * this.transform.getHeight();
+                translateX = this.transform.rotation().getOrigin().getOriginX() * this.transform.width();
+                translateY = this.transform.rotation().getOrigin().getOriginY() * this.transform.height();
             }
             else
             {
-                translateX = this.transform.getRotation().getOrigin().getOriginX();
-                translateY = this.transform.getRotation().getOrigin().getOriginY();
+                translateX = this.transform.rotation().getOrigin().getOriginX();
+                translateY = this.transform.rotation().getOrigin().getOriginY();
             }
 
-            translateX += this.transform.getxPos() + this.transform.getxTranslate();
-            translateY += this.transform.getyPos() + this.transform.getyTranslate();
+            translateX += this.transform.xPos() + this.transform.xTranslate();
+            translateY += this.transform.getyPos() + this.transform.yTranslate();
 
             renderer.translateMatrix(translateX, translateY, 0);
-            renderer.rotateMatrix(this.transform.getRotation().getAngle(), 0, 0, 1);
+            renderer.rotateMatrix(this.transform.rotation().getAngle(), 0, 0, 1);
             renderer.translateMatrix(-translateX, -translateY, 0);
         }
 
-        if (this.transform.getScaleX() != 1 || this.transform.getScaleY() != 1 || this.transform.getScaleZ() != 1)
+        if (this.transform.scaleX() != 1 || this.transform.scaleY() != 1 || this.transform.scaleZ() != 1)
         {
             if (!createdMatrix)
             {
                 createdMatrix = true;
                 renderer.beginMatrix();
             }
-            renderer.translateMatrix(this.transform.getxPos() + this.transform.getxTranslate() + this.transform.getWidth() / 2,
-                    this.transform.getyPos() + this.transform.getyTranslate() + this.transform.getHeight() / 2, 0);
-            renderer.scaleMatrix(this.transform.getScaleX(), this.transform.getScaleY(), this.transform.getScaleZ());
-            renderer.translateMatrix(-(this.transform.getxPos() + this.transform.getxTranslate() + this.transform.getWidth() / 2),
-                    -(this.transform.getyPos() + this.transform.getyTranslate() + this.transform.getHeight() / 2), 0);
+            renderer.translateMatrix(this.transform.xPos() + this.transform.xTranslate() + this.transform.width() / 2,
+                    this.transform.getyPos() + this.transform.yTranslate() + this.transform.height() / 2, 0);
+            renderer.scaleMatrix(this.transform.scaleX(), this.transform.scaleY(), this.transform.scaleZ());
+            renderer.translateMatrix(-(this.transform.xPos() + this.transform.xTranslate() + this.transform.width() / 2),
+                    -(this.transform.getyPos() + this.transform.yTranslate() + this.transform.height() / 2), 0);
         }
 
         if (this.getOpacity() != 1)
             renderer.getHelper().startAlphaMask(this.getOpacity());
 
         boolean appliedScissor =
-                this.transform.getScissorBox() != null && this.transform.getScissorBox().setupAndApply(renderer, pass);
+                this.transform.scissorBox() != null && this.transform.scissorBox().setupAndApply(renderer, pass);
 
         this.renderContent(renderer, pass, mouseX, mouseY);
 
         if (appliedScissor)
-            this.transform.getScissorBox().end(renderer);
+            this.transform.scissorBox().end(renderer);
 
         if (this.getOpacity() != 1)
             renderer.getHelper().closeAlphaMask();
@@ -422,8 +422,8 @@ public abstract class GuiElement implements IEventEmitter
     {
         this.getEventDispatcher().dispatchEvent(DisposeEvent.TYPE, new DisposeEvent(this));
 
-        if (this.transform.getScissorBox() != null)
-            this.transform.getScissorBox().dispose();
+        if (this.transform.scissorBox() != null)
+            this.transform.scissorBox().dispose();
     }
 
     public IGuiSubWindow getWindow()

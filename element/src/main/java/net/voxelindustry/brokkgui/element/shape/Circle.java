@@ -18,10 +18,10 @@ public class Circle extends GuiElement
     {
         this.refreshStyle(StyleEngine.getInstance().getElementStyleStatus().enabled());
 
-        transform().setxTranslate(xPosition);
-        transform().setyTranslate(yPosition);
+        transform().xTranslate(xPosition);
+        transform().yTranslate(yPosition);
 
-        transform().setSize(radius, radius);
+        transform().size(radius, radius);
     }
 
     public Circle(float radius)

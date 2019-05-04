@@ -69,8 +69,8 @@ public class Paint extends GuiComponent implements RenderComponent
     @Override
     public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
-        float x = getElement().transform().getLeftPos();
-        float y = getElement().transform().getTopPos();
+        float x = getElement().transform().leftPos();
+        float y = getElement().transform().topPos();
         float z = getElement().transform().getzLevel();
 
         if (pass == RenderPass.BACKGROUND)

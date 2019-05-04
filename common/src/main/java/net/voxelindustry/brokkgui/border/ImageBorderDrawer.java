@@ -22,13 +22,13 @@ public class ImageBorderDrawer
         RectBox outsetBox = paint.borderImageOutset();
 
         Transform transform = paint.getElement().transform();
-        float leftPos = transform.getLeftPos() - outsetBox.getLeft();
-        float topPos = transform.getTopPos() - outsetBox.getTop();
-        float rightPos = transform.getRightPos() + outsetBox.getRight();
-        float bottomPos = transform.getBottomPos() + outsetBox.getBottom();
+        float leftPos = transform.leftPos() - outsetBox.getLeft();
+        float topPos = transform.topPos() - outsetBox.getTop();
+        float rightPos = transform.rightPos() + outsetBox.getRight();
+        float bottomPos = transform.bottomPos() + outsetBox.getBottom();
 
-        float width = transform.getWidth() + outsetBox.getLeft() + outsetBox.getRight();
-        float height = transform.getHeight() + outsetBox.getTop() + outsetBox.getBottom();
+        float width = transform.width() + outsetBox.getLeft() + outsetBox.getRight();
+        float height = transform.height() + outsetBox.getTop() + outsetBox.getBottom();
 
         boolean doFill = paint.borderImageFill();
 

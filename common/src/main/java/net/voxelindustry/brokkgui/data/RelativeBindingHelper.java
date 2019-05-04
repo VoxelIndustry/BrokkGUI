@@ -52,18 +52,18 @@ public class RelativeBindingHelper
         if (addX != null)
             toBind.xPosProperty()
                     .bind(BaseExpression.getExpression(
-                            () -> parent.getxPos() + parent.getxTranslate() + addX.getValue(), parent.xPosProperty(),
+                            () -> parent.xPos() + parent.xTranslate() + addX.getValue(), parent.xPosProperty(),
                             parent.xTranslateProperty(), addX));
         else
-            toBind.xPosProperty().bind(BaseExpression.getExpression(() -> parent.getxPos() + parent.getxTranslate(),
+            toBind.xPosProperty().bind(BaseExpression.getExpression(() -> parent.xPos() + parent.xTranslate(),
                     parent.xPosProperty(), parent.xTranslateProperty()));
         if (addY != null)
             toBind.yPosProperty()
                     .bind(BaseExpression.getExpression(
-                            () -> parent.getyPos() + parent.getyTranslate() + addY.getValue(), parent.yPosProperty(),
+                            () -> parent.getyPos() + parent.yTranslate() + addY.getValue(), parent.yPosProperty(),
                             parent.yTranslateProperty(), addY));
         else
-            toBind.yPosProperty().bind(BaseExpression.getExpression(() -> parent.getyPos() + parent.getyTranslate(),
+            toBind.yPosProperty().bind(BaseExpression.getExpression(() -> parent.getyPos() + parent.yTranslate(),
                     parent.yPosProperty(), parent.yTranslateProperty()));
     }
 

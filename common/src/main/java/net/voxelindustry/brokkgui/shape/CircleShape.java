@@ -13,7 +13,7 @@ public class CircleShape implements ShapeDefinition
     public void drawColored(Transform transform, IGuiRenderer renderer, float startX, float startY, Color color,
                             float zLevel)
     {
-        renderer.getHelper().drawColoredCircle(renderer, startX, startY, transform.getWidth(), zLevel, color);
+        renderer.getHelper().drawColoredCircle(renderer, startX, startY, transform.width(), zLevel, color);
     }
 
     @Override
@@ -21,7 +21,7 @@ public class CircleShape implements ShapeDefinition
                                  float lineWidth,
                                  Color color, float zLevel)
     {
-        renderer.getHelper().drawColoredEmptyCircle(renderer, startX, startY, transform.getWidth(), zLevel, color,
+        renderer.getHelper().drawColoredEmptyCircle(renderer, startX, startY, transform.width(), zLevel, color,
                 lineWidth);
     }
 
@@ -30,7 +30,7 @@ public class CircleShape implements ShapeDefinition
                              float zLevel)
     {
         renderer.getHelper().drawTexturedCircle(renderer, startX, startY, texture.getUMin(), texture.getVMin(),
-                texture.getUMax(), texture.getVMax(), transform.getWidth(), zLevel);
+                texture.getUMax(), texture.getVMax(), transform.width(), zLevel);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class CircleShape implements ShapeDefinition
             return false;
 
         Transform transform = element.transform();
-        float pointX = (mouseX - transform.getxPos() - transform.getxTranslate());
-        float pointY = (mouseY - transform.getyPos() - transform.getyTranslate());
-        return (pointX * pointX) + (pointY * pointY) < transform.getWidth() * transform.getWidth();
+        float pointX = (mouseX - transform.xPos() - transform.xTranslate());
+        float pointY = (mouseY - transform.getyPos() - transform.yTranslate());
+        return (pointX * pointX) + (pointY * pointY) < transform.width() * transform.width();
     }
 }

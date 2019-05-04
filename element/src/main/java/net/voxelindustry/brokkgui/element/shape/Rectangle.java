@@ -18,11 +18,11 @@ public class Rectangle extends GuiElement
     {
         this.refreshStyle(StyleEngine.getInstance().getElementStyleStatus().enabled());
 
-        transform().setxTranslate(xLeft);
-        transform().setyTranslate(yLeft);
+        transform().xTranslate(xLeft);
+        transform().yTranslate(yLeft);
 
-        transform().setWidth(width);
-        transform().setHeight(height);
+        transform().width(width);
+        transform().height(height);
     }
 
     public Rectangle(float width, float height)

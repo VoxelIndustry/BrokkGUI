@@ -96,9 +96,9 @@ public class Transform extends GuiComponent
 
         if (parent != null)
         {
-            if (this.getWidthRatio() != -1)
+            if (this.widthRatio() != -1)
                 RelativeBindingHelper.bindWidthRelative(this, parent, this.widthRatioProperty());
-            if (this.getHeightRatio() != -1)
+            if (this.heightRatio() != -1)
                 RelativeBindingHelper.bindHeightRelative(this, parent, this.heightRatioProperty());
 
             this.getElement().setWindow(parent.getElement().getWindow());
@@ -160,10 +160,10 @@ public class Transform extends GuiComponent
 
     public boolean isPointInside(int pointX, int pointY)
     {
-        return this.getxPos() + this.getxTranslate() < pointX
-                && pointX < this.getxPos() + this.getxTranslate() + this.getWidth()
-                && this.getyPos() + this.getyTranslate() < pointY
-                && pointY < this.getyPos() + this.getyTranslate() + this.getHeight();
+        return this.xPos() + this.xTranslate() < pointX
+                && pointX < this.xPos() + this.xTranslate() + this.width()
+                && this.getyPos() + this.yTranslate() < pointY
+                && pointY < this.getyPos() + this.yTranslate() + this.height();
     }
 
     public BaseProperty<Float> zLevelProperty()
@@ -243,16 +243,16 @@ public class Transform extends GuiComponent
 
     /**
      * @return xPos, used for layout management, do not attempt to change the
-     * property outside the layouting scope.
+     * property outside the layout scope.
      */
-    public float getxPos()
+    public float xPos()
     {
         return this.xPosProperty().getValue();
     }
 
     /**
      * @return yPos, used for layout management, do not attempt to change the
-     * property outside the layouting scope.
+     * property outside the layout scope.
      */
     public float getyPos()
     {
@@ -262,18 +262,18 @@ public class Transform extends GuiComponent
     /**
      * @return xTranslate, used for component positionning.
      */
-    public float getxTranslate()
+    public float xTranslate()
     {
         return this.xTranslateProperty().getValue();
     }
 
     /**
      * Set the translation of this component to this specified value, usable outside
-     * layouting scope.
+     * layout scope.
      *
      * @param xTranslate
      */
-    public void setxTranslate(float xTranslate)
+    public void xTranslate(float xTranslate)
     {
         this.xTranslateProperty().setValue(xTranslate);
     }
@@ -281,18 +281,18 @@ public class Transform extends GuiComponent
     /**
      * @return yTranslate, used for component positionning.
      */
-    public float getyTranslate()
+    public float yTranslate()
     {
         return this.yTranslateProperty().getValue();
     }
 
     /**
      * Set the translation of this component to this specified value, usable outside
-     * layouting scope.
+     * layout scope.
      *
      * @param yTranslate
      */
-    public void setyTranslate(float yTranslate)
+    public void yTranslate(float yTranslate)
     {
         this.yTranslateProperty().setValue(yTranslate);
     }
@@ -306,30 +306,30 @@ public class Transform extends GuiComponent
      * @param xTranslate
      * @param yTranslate
      */
-    public void setTranslate(float xTranslate, float yTranslate)
+    public void translate(float xTranslate, float yTranslate)
     {
-        this.setxTranslate(xTranslate);
-        this.setyTranslate(yTranslate);
+        this.xTranslate(xTranslate);
+        this.yTranslate(yTranslate);
     }
 
-    public float getWidth()
+    public float width()
     {
         return this.widthProperty().getValue();
     }
 
-    public void setWidth(float width)
+    public void width(float width)
     {
         if (this.widthProperty().isBound())
             this.widthProperty().unbind();
         this.widthProperty().setValue(width);
     }
 
-    public float getHeight()
+    public float height()
     {
         return this.heightProperty().getValue();
     }
 
-    public void setHeight(float height)
+    public void height(float height)
     {
         if (this.heightProperty().isBound())
             this.heightProperty().unbind();
@@ -341,9 +341,9 @@ public class Transform extends GuiComponent
      *
      * @return the computed non-cached value
      */
-    public float getLeftPos()
+    public float leftPos()
     {
-        return this.getxPos() + this.getxTranslate();
+        return this.xPos() + this.xTranslate();
     }
 
     /**
@@ -351,9 +351,9 @@ public class Transform extends GuiComponent
      *
      * @return the computed non-cached value
      */
-    public float getTopPos()
+    public float topPos()
     {
-        return this.getyPos() + this.getyTranslate();
+        return this.getyPos() + this.yTranslate();
     }
 
     /**
@@ -361,9 +361,9 @@ public class Transform extends GuiComponent
      *
      * @return the computed non-cached value
      */
-    public float getRightPos()
+    public float rightPos()
     {
-        return this.getxPos() + this.getxTranslate() + this.getWidth();
+        return this.xPos() + this.xTranslate() + this.width();
     }
 
     /**
@@ -371,9 +371,9 @@ public class Transform extends GuiComponent
      *
      * @return the computed non-cached value
      */
-    public float getBottomPos()
+    public float bottomPos()
     {
-        return this.getyPos() + this.getyTranslate() + this.getHeight();
+        return this.getyPos() + this.yTranslate() + this.height();
     }
 
     /**
@@ -382,13 +382,13 @@ public class Transform extends GuiComponent
      * @param width
      * @param height
      */
-    public void setSize(float width, float height)
+    public void size(float width, float height)
     {
-        this.setWidth(width);
-        this.setHeight(height);
+        this.width(width);
+        this.height(height);
     }
 
-    public float getWidthRatio()
+    public float widthRatio()
     {
         return this.widthRatioProperty().getValue();
     }
@@ -399,7 +399,7 @@ public class Transform extends GuiComponent
      *
      * @param ratio
      */
-    public void setWidthRatio(float ratio)
+    public void widthRatio(float ratio)
     {
         if (ratio == -1)
             this.widthProperty().unbind();
@@ -408,7 +408,7 @@ public class Transform extends GuiComponent
         this.widthRatioProperty().setValue(ratio);
     }
 
-    public float getHeightRatio()
+    public float heightRatio()
     {
         return this.heightRatioProperty().getValue();
     }
@@ -419,7 +419,7 @@ public class Transform extends GuiComponent
      *
      * @param ratio
      */
-    public void setHeightRatio(float ratio)
+    public void heightRatio(float ratio)
     {
         if (ratio == -1)
             this.heightProperty().unbind();
@@ -434,65 +434,65 @@ public class Transform extends GuiComponent
      * @param widthRatio
      * @param heightRatio
      */
-    public void setSizeRatio(float widthRatio, float heightRatio)
+    public void sizeRatio(float widthRatio, float heightRatio)
     {
-        this.setWidthRatio(widthRatio);
-        this.setHeightRatio(heightRatio);
+        this.widthRatio(widthRatio);
+        this.heightRatio(heightRatio);
     }
 
-    public Rotation getRotation()
+    public Rotation rotation()
     {
         return this.rotationProperty().getValue();
     }
 
-    public void setRotation(Rotation rotation)
+    public void rotate(Rotation rotation)
     {
         this.rotationProperty().setValue(rotation);
     }
 
-    public float getScaleX()
+    public float scaleX()
     {
         return this.scaleXProperty().getValue();
     }
 
-    public void setScaleX(float scaleX)
+    public void scaleX(float scaleX)
     {
         this.scaleXProperty().setValue(scaleX);
     }
 
-    public float getScaleY()
+    public float scaleY()
     {
         return this.scaleYProperty().getValue();
     }
 
-    public void setScaleY(float scaleY)
+    public void scaleY(float scaleY)
     {
         this.scaleYProperty().setValue(scaleY);
     }
 
-    public float getScaleZ()
+    public float scaleZ()
     {
         return this.scaleZProperty().getValue();
     }
 
-    public void setScaleZ(float scaleZ)
+    public void scaleZ(float scaleZ)
     {
         this.scaleZProperty().setValue(scaleZ);
     }
 
-    public void setScale(float scale)
+    public void scale(float scale)
     {
-        this.setScaleX(scale);
-        this.setScaleY(scale);
-        this.setScaleZ(scale);
+        this.scaleX(scale);
+        this.scaleY(scale);
+        this.scaleZ(scale);
     }
 
-    public ScissorBox getScissorBox()
+    public ScissorBox scissorBox()
     {
         return scissorBox;
     }
 
-    public void setScissorBox(ScissorBox scissorBox)
+    public void scissorBox(ScissorBox scissorBox)
     {
         this.scissorBox = scissorBox;
     }

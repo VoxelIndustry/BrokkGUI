@@ -18,11 +18,11 @@ public class Line extends GuiElement
     {
         this.refreshStyle(StyleEngine.getInstance().getElementStyleStatus().enabled());
 
-        transform().setxTranslate(startX);
-        transform().setyTranslate(startY);
+        transform().xTranslate(startX);
+        transform().yTranslate(startY);
 
-        transform().setWidth(Math.abs(startX - endX));
-        transform().setHeight(Math.abs(startY - endY));
+        transform().width(Math.abs(startX - endX));
+        transform().height(Math.abs(startY - endY));
     }
 
     public Line(float endX, float endY)

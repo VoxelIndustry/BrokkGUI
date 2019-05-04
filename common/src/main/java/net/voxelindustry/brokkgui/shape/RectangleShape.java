@@ -12,7 +12,7 @@ public class RectangleShape implements ShapeDefinition
     public void drawColored(Transform transform, IGuiRenderer renderer, float startX, float startY, Color color,
                             float zLevel)
     {
-        renderer.getHelper().drawColoredRect(renderer, startX, startY, transform.getWidth(), transform.getHeight(),
+        renderer.getHelper().drawColoredRect(renderer, startX, startY, transform.width(), transform.height(),
                 zLevel, color);
     }
 
@@ -21,7 +21,7 @@ public class RectangleShape implements ShapeDefinition
                                  float lineWidth,
                                  Color color, float zLevel)
     {
-        renderer.getHelper().drawColoredEmptyRect(renderer, startX, startY, transform.getWidth(), transform.getHeight(),
+        renderer.getHelper().drawColoredEmptyRect(renderer, startX, startY, transform.width(), transform.height(),
                 zLevel, color, lineWidth);
     }
 
@@ -30,7 +30,7 @@ public class RectangleShape implements ShapeDefinition
                              float zLevel)
     {
         renderer.getHelper().drawTexturedRect(renderer, startX, startY, texture.getUMin(), texture.getVMin(),
-                texture.getUMax(), texture.getVMax(), transform.getWidth(), transform.getHeight(), zLevel);
+                texture.getUMax(), texture.getVMax(), transform.width(), transform.height(), zLevel);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class RectangleShape implements ShapeDefinition
     {
         Transform transform = element.transform();
 
-        return mouseX > transform.getLeftPos() && mouseX < transform.getRightPos() &&
-                mouseY > transform.getTopPos() && mouseY < transform.getBottomPos();
+        return mouseX > transform.leftPos() && mouseX < transform.rightPos() &&
+                mouseY > transform.topPos() && mouseY < transform.bottomPos();
     }
 }

@@ -23,7 +23,7 @@ public class LineShape implements ShapeDefinition
                             float zLevel)
     {
         renderer.getHelper().drawColoredLine(renderer, startX, startY,
-                startX + transform.getWidth(), startY + transform.getHeight(),
+                startX + transform.width(), startY + transform.height(),
                 lineWidthSupplier.get(), zLevel, color);
     }
 
@@ -33,7 +33,7 @@ public class LineShape implements ShapeDefinition
                                  Color color, float zLevel)
     {
         renderer.getHelper().drawColoredLine(renderer, startX, startY,
-                startX + transform.getWidth(), startY + transform.getHeight(),
+                startX + transform.width(), startY + transform.height(),
                 lineWidthSupplier.get(), zLevel, color);
     }
 
@@ -60,11 +60,11 @@ public class LineShape implements ShapeDefinition
         Transform transform = element.transform();
 
         // Vector from segment beginning to mouse position
-        float AMx = mouseX - (transform.getxPos() + transform.getxTranslate());
-        float AMy = mouseY - (transform.getyPos() + transform.getyTranslate());
+        float AMx = mouseX - (transform.xPos() + transform.xTranslate());
+        float AMy = mouseY - (transform.getyPos() + transform.yTranslate());
 
-        float ABx = transform.getWidth();
-        float ABy = transform.getHeight();
+        float ABx = transform.width();
+        float ABy = transform.height();
 
         // Remember : det(A,B) = Ax * By - Ay * Bx
 
