@@ -7,7 +7,6 @@ import net.voxelindustry.brokkgui.event.*;
 import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.util.MouseInBoundsChecker;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.IEventEmitter;
@@ -40,8 +39,6 @@ public abstract class GuiElement implements IEventEmitter
 
     private BaseProperty<Double> opacityProperty;
 
-    private MouseInBoundsChecker mouseInBoundsChecker;
-
     private int draggedX;
     private int draggedY;
 
@@ -65,8 +62,6 @@ public abstract class GuiElement implements IEventEmitter
         this.draggedProperty = new BaseProperty<>(false, "draggedProperty");
 
         this.opacityProperty = new BaseProperty<>(1D, "opacityProperty");
-
-        this.mouseInBoundsChecker = MouseInBoundsChecker.DEFAULT;
     }
 
     ////////////
@@ -155,10 +150,10 @@ public abstract class GuiElement implements IEventEmitter
 
         if (hovered)
             this.transform.childrenProperty().getValue().forEach(child ->
-                    child.getElement().handleHover(mouseX, mouseY, child.isPointInside(mouseX, mouseY)));
+                    child.element().handleHover(mouseX, mouseY, child.isPointInside(mouseX, mouseY)));
         else
             this.transform.childrenProperty().getValue().forEach(child ->
-                    child.getElement().handleHover(mouseX, mouseY, false));
+                    child.element().handleHover(mouseX, mouseY, false));
     }
 
     public void handleMouseScroll(int mouseX, int mouseY, double scroll)
@@ -168,7 +163,7 @@ public abstract class GuiElement implements IEventEmitter
                     new GuiMouseEvent.Wheel(this, mouseX, mouseY, (int) scroll));
 
         this.transform.childrenProperty().getValue().stream().filter(child -> child.isPointInside(mouseX, mouseY))
-                .forEach(child -> child.getElement().handleMouseScroll(mouseX, mouseY, scroll));
+                .forEach(child -> child.element().handleMouseScroll(mouseX, mouseY, scroll));
     }
 
     public void handleClick(int mouseX, int mouseY, int key)
@@ -196,7 +191,7 @@ public abstract class GuiElement implements IEventEmitter
         this.setFocused();
 
         this.transform.childrenProperty().getValue().stream().filter(child -> child.isPointInside(mouseX, mouseY))
-                .forEach(child -> child.getElement().handleClick(mouseX, mouseY, key));
+                .forEach(child -> child.element().handleClick(mouseX, mouseY, key));
     }
 
     public void handleClickDrag(int mouseX, int mouseY, int key, int originalMouseX, int originalMouseY)
@@ -219,7 +214,7 @@ public abstract class GuiElement implements IEventEmitter
 
         this.transform.childrenProperty().getValue().stream()
                 .filter(child -> child.isPointInside(originalMouseX, originalMouseY))
-                .forEach(child -> child.getElement().handleClickDrag(mouseX, mouseY, key, originalMouseX,
+                .forEach(child -> child.element().handleClickDrag(mouseX, mouseY, key, originalMouseX,
                         originalMouseY));
     }
 
@@ -239,7 +234,7 @@ public abstract class GuiElement implements IEventEmitter
 
         this.transform.childrenProperty().getValue().stream()
                 .filter(child -> child.isPointInside(originalMouseX, originalMouseY))
-                .forEach(child -> child.getElement().handleClickStop(mouseX, mouseY, key, originalMouseX,
+                .forEach(child -> child.element().handleClickStop(mouseX, mouseY, key, originalMouseX,
                         originalMouseY));
     }
 
@@ -253,7 +248,7 @@ public abstract class GuiElement implements IEventEmitter
         this.getEventDispatcher().dispatchEvent(KeyEvent.PRESS, new KeyEvent.Press(this, key));
 
         this.transform.childrenProperty().getValue().stream().filter(child -> child.isPointInside(mouseX, mouseY))
-                .forEach(child -> child.getElement().handleKeyPress(mouseX, mouseY, key));
+                .forEach(child -> child.element().handleKeyPress(mouseX, mouseY, key));
     }
 
     public void handleKeyRelease(int mouseX, int mouseY, int key)
@@ -261,7 +256,7 @@ public abstract class GuiElement implements IEventEmitter
         this.getEventDispatcher().dispatchEvent(KeyEvent.RELEASE, new KeyEvent.Release(this, key));
 
         this.transform.childrenProperty().getValue().stream().filter(child -> child.isPointInside(mouseX, mouseY))
-                .forEach(child -> child.getElement().handleKeyRelease(mouseX, mouseY, key));
+                .forEach(child -> child.element().handleKeyRelease(mouseX, mouseY, key));
     }
 
     public BaseProperty<Boolean> getFocusedProperty()
@@ -392,21 +387,6 @@ public abstract class GuiElement implements IEventEmitter
     public void setOpacity(double opacity)
     {
         this.getOpacityProperty().setValue(opacity);
-    }
-
-    public MouseInBoundsChecker mouseInBoundsChecker()
-    {
-        return this.mouseInBoundsChecker;
-    }
-
-    public void mouseInBoundsChecker(MouseInBoundsChecker checker)
-    {
-        this.mouseInBoundsChecker = checker;
-    }
-
-    public boolean isPointInside(int pointX, int pointY)
-    {
-        return this.mouseInBoundsChecker().test(this, pointX, pointY);
     }
 
     /////////////

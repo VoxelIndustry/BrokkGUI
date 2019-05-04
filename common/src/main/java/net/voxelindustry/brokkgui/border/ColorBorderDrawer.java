@@ -22,7 +22,7 @@ public class ColorBorderDrawer
         float bottomLeftRadius = paint.borderRadius(RectCorner.BOTTOM_LEFT);
         float bottomRightRadius = paint.borderRadius(RectCorner.BOTTOM_RIGHT);
 
-        Transform transform = paint.getElement().transform();
+        Transform transform = paint.element().transform();
 
         if (bottomRightRadius > 0)
             renderer.getHelper().drawColoredArc(renderer,

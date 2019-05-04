@@ -61,7 +61,7 @@ public class StyleSelectorHierarchic implements IStyleSelector
                     matched = true;
                     break;
                 }
-                current = current.transform().getParent() != null ? current.transform().getParent().getElement() : null;
+                current = current.transform().getParent() != null ? current.transform().getParent().element() : null;
             }
             if (!matched)
                 return false;

@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.LayoutEvent;
 import net.voxelindustry.brokkgui.shape.ScissorBox;
+import net.voxelindustry.brokkgui.util.MouseInBoundsChecker;
 
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class Transform extends GuiComponent
 
     private final BaseProperty<Transform>     parentProperty;
     private final BaseListProperty<Transform> childrenListProperty;
+
+    private MouseInBoundsChecker mouseInBoundsChecker;
 
     private ScissorBox scissorBox;
 
@@ -64,6 +67,8 @@ public class Transform extends GuiComponent
             if (oldValue != null)
                 oldValue.setParent(null);
         });
+
+        this.mouseInBoundsChecker = MouseInBoundsChecker.DEFAULT;
     }
 
     ///////////////
@@ -88,9 +93,9 @@ public class Transform extends GuiComponent
      */
     public void setParent(Transform parent)
     {
-        if (parentProperty().isPresent() && getParent().getElement().getWindow() != null)
-            getParent().getElement().getWindow().dispatchEvent(LayoutEvent.REMOVE,
-                    new LayoutEvent.Remove(this.getElement()));
+        if (parentProperty().isPresent() && getParent().element().getWindow() != null)
+            getParent().element().getWindow().dispatchEvent(LayoutEvent.REMOVE,
+                    new LayoutEvent.Remove(this.element()));
 
         this.parentProperty().setValue(parent);
 
@@ -101,10 +106,10 @@ public class Transform extends GuiComponent
             if (this.heightRatio() != -1)
                 RelativeBindingHelper.bindHeightRelative(this, parent, this.heightRatioProperty());
 
-            this.getElement().setWindow(parent.getElement().getWindow());
+            this.element().setWindow(parent.element().getWindow());
 
-            if (this.getElement().getWindow() != null)
-                getElement().getWindow().dispatchEvent(LayoutEvent.ADD, new LayoutEvent.Add(this.getElement()));
+            if (this.element().getWindow() != null)
+                element().getWindow().dispatchEvent(LayoutEvent.ADD, new LayoutEvent.Add(this.element()));
         }
     }
 
@@ -160,10 +165,17 @@ public class Transform extends GuiComponent
 
     public boolean isPointInside(int pointX, int pointY)
     {
-        return this.xPos() + this.xTranslate() < pointX
-                && pointX < this.xPos() + this.xTranslate() + this.width()
-                && this.getyPos() + this.yTranslate() < pointY
-                && pointY < this.getyPos() + this.yTranslate() + this.height();
+        return this.mouseInBoundsChecker().test(this.element(), pointX, pointY);
+    }
+
+    public MouseInBoundsChecker mouseInBoundsChecker()
+    {
+        return this.mouseInBoundsChecker;
+    }
+
+    public void mouseInBoundsChecker(MouseInBoundsChecker checker)
+    {
+        this.mouseInBoundsChecker = checker;
     }
 
     public BaseProperty<Float> zLevelProperty()

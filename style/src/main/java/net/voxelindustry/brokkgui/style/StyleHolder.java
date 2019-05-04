@@ -51,10 +51,10 @@ public class StyleHolder extends GuiComponent
     @Override
     protected void attach(GuiElement element)
     {
-        if (this.getElement() != null)
+        if (this.element() != null)
         {
-            this.getElement().getIdProperty().removeListener(styleRefreshListener);
-            this.getElement().transform().parentProperty().removeListener(styleParentListener);
+            this.element().getIdProperty().removeListener(styleRefreshListener);
+            this.element().transform().parentProperty().removeListener(styleParentListener);
         }
 
         super.attach(element);
@@ -63,7 +63,7 @@ public class StyleHolder extends GuiComponent
         element.transform().parentProperty().addListener(styleParentListener);
 
         // Properties override
-        this.getElement().replaceOpacityProperty(this.registerProperty("opacity", 1D, Double.class));
+        this.element().replaceOpacityProperty(this.registerProperty("opacity", 1D, Double.class));
     }
 
     private void valueListChanged(ObservableValue obs, String oldValue, String newValue)
@@ -78,10 +78,10 @@ public class StyleHolder extends GuiComponent
 
     private void parentChanged(ObservableValue obs, Transform oldValue, Transform newValue)
     {
-        if (newValue == null || !newValue.getElement().has(StyleHolder.class))
+        if (newValue == null || !newValue.element().has(StyleHolder.class))
             return;
 
-        this.setStyleSupplier(newValue.getElement().get(StyleHolder.class).getStyleSupplier());
+        this.setStyleSupplier(newValue.element().get(StyleHolder.class).getStyleSupplier());
         this.refresh();
     }
 
@@ -111,8 +111,8 @@ public class StyleHolder extends GuiComponent
 
     public GuiElement getParent()
     {
-        Transform parentTransform = this.getElement().transform().getParent();
-        return parentTransform != null ? parentTransform.getElement() : null;
+        Transform parentTransform = this.element().transform().getParent();
+        return parentTransform != null ? parentTransform.element() : null;
     }
 
     /////////////

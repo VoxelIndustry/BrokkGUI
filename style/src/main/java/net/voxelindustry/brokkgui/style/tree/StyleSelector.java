@@ -87,7 +87,7 @@ public class StyleSelector implements IStyleSelector
                     return false;
                 break;
             case ID:
-                if (!selector.getValue().equals(styleHolder.getElement().getId()))
+                if (!selector.getValue().equals(styleHolder.element().getId()))
                     return false;
                 break;
             case PSEUDOCLASS:

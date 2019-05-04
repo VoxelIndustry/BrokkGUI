@@ -16,7 +16,7 @@ public abstract class GuiComponent
         this.elementProperty.setValue(element);
     }
 
-    public GuiElement getElement()
+    public GuiElement element()
     {
         return this.elementProperty.getValue();
     }

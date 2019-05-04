@@ -21,7 +21,7 @@ public class ImageBorderDrawer
         RectBox widthBox = paint.borderImageWidth();
         RectBox outsetBox = paint.borderImageOutset();
 
-        Transform transform = paint.getElement().transform();
+        Transform transform = paint.element().transform();
         float leftPos = transform.leftPos() - outsetBox.getLeft();
         float topPos = transform.topPos() - outsetBox.getTop();
         float rightPos = transform.rightPos() + outsetBox.getRight();

@@ -55,23 +55,23 @@ public class Paint extends GuiComponent implements RenderComponent
         this.shape = shape;
 
         if (this.hasElement())
-            this.getElement().mouseInBoundsChecker(shape::isMouseInside);
+            this.element().transform().mouseInBoundsChecker(shape::isMouseInside);
     }
 
     @Override
     protected void attach(GuiElement element)
     {
-        super.getElement();
+        super.element();
 
-        element.mouseInBoundsChecker(shape::isMouseInside);
+        element.transform().mouseInBoundsChecker(shape::isMouseInside);
     }
 
     @Override
     public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
-        float x = getElement().transform().leftPos();
-        float y = getElement().transform().topPos();
-        float z = getElement().transform().getzLevel();
+        float x = element().transform().leftPos();
+        float y = element().transform().topPos();
+        float z = element().transform().getzLevel();
 
         if (pass == RenderPass.BACKGROUND)
         {
@@ -80,13 +80,13 @@ public class Paint extends GuiComponent implements RenderComponent
                 Texture background = this.backgroundTexture();
 
                 renderer.getHelper().bindTexture(background);
-                this.shape.drawTextured(this.getElement().transform(), renderer, x, y, background, z);
+                this.shape.drawTextured(this.element().transform(), renderer, x, y, background, z);
             }
             if (this.hasColorBackground() && this.backgroundColor().getAlpha() != 0)
             {
                 Color background = this.backgroundColor();
 
-                this.shape.drawColored(this.getElement().transform(), renderer, x, y, background, z);
+                this.shape.drawColored(this.element().transform(), renderer, x, y, background, z);
             }
 
             if (this.hasBorder())
@@ -104,13 +104,13 @@ public class Paint extends GuiComponent implements RenderComponent
                 Texture foreground = this.foregroundTexture();
 
                 renderer.getHelper().bindTexture(foreground);
-                this.shape.drawTextured(this.getElement().transform(), renderer, x, y, foreground, z);
+                this.shape.drawTextured(this.element().transform(), renderer, x, y, foreground, z);
             }
             if (this.hasColorForeground() && this.foregroundColor().getAlpha() != 0)
             {
                 Color foreground = this.foregroundColor();
 
-                this.shape.drawColored(this.getElement().transform(), renderer, x, y, foreground, z);
+                this.shape.drawColored(this.element().transform(), renderer, x, y, foreground, z);
             }
         }
     }
