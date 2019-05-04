@@ -60,10 +60,10 @@ public class RelativeBindingHelper
         if (addY != null)
             toBind.yPosProperty()
                     .bind(BaseExpression.getExpression(
-                            () -> parent.getyPos() + parent.yTranslate() + addY.getValue(), parent.yPosProperty(),
+                            () -> parent.yPos() + parent.yTranslate() + addY.getValue(), parent.yPosProperty(),
                             parent.yTranslateProperty(), addY));
         else
-            toBind.yPosProperty().bind(BaseExpression.getExpression(() -> parent.getyPos() + parent.yTranslate(),
+            toBind.yPosProperty().bind(BaseExpression.getExpression(() -> parent.yPos() + parent.yTranslate(),
                     parent.yPosProperty(), parent.yTranslateProperty()));
     }
 

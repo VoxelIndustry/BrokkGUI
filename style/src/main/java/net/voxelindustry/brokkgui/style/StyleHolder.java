@@ -111,7 +111,7 @@ public class StyleHolder extends GuiComponent
 
     public GuiElement getParent()
     {
-        Transform parentTransform = this.element().transform().getParent();
+        Transform parentTransform = this.element().transform().parent();
         return parentTransform != null ? parentTransform.element() : null;
     }
 

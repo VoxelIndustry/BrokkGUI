@@ -93,7 +93,7 @@ public abstract class GuiElement implements IEventEmitter
             }
 
             translateX += this.transform.xPos() + this.transform.xTranslate();
-            translateY += this.transform.getyPos() + this.transform.yTranslate();
+            translateY += this.transform.yPos() + this.transform.yTranslate();
 
             renderer.translateMatrix(translateX, translateY, 0);
             renderer.rotateMatrix(this.transform.rotation().getAngle(), 0, 0, 1);
@@ -108,10 +108,10 @@ public abstract class GuiElement implements IEventEmitter
                 renderer.beginMatrix();
             }
             renderer.translateMatrix(this.transform.xPos() + this.transform.xTranslate() + this.transform.width() / 2,
-                    this.transform.getyPos() + this.transform.yTranslate() + this.transform.height() / 2, 0);
+                    this.transform.yPos() + this.transform.yTranslate() + this.transform.height() / 2, 0);
             renderer.scaleMatrix(this.transform.scaleX(), this.transform.scaleY(), this.transform.scaleZ());
             renderer.translateMatrix(-(this.transform.xPos() + this.transform.xTranslate() + this.transform.width() / 2),
-                    -(this.transform.getyPos() + this.transform.yTranslate() + this.transform.height() / 2), 0);
+                    -(this.transform.yPos() + this.transform.yTranslate() + this.transform.height() / 2), 0);
         }
 
         if (this.getOpacity() != 1)

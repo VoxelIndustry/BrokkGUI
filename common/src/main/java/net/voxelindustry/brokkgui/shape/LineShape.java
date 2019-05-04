@@ -61,7 +61,7 @@ public class LineShape implements ShapeDefinition
 
         // Vector from segment beginning to mouse position
         float AMx = mouseX - (transform.xPos() + transform.xTranslate());
-        float AMy = mouseY - (transform.getyPos() + transform.yTranslate());
+        float AMy = mouseY - (transform.yPos() + transform.yTranslate());
 
         float ABx = transform.width();
         float ABy = transform.height();

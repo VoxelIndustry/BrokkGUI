@@ -80,7 +80,7 @@ public class Transform extends GuiComponent
         return this.parentProperty;
     }
 
-    public Transform getParent()
+    public Transform parent()
     {
         return this.parentProperty().getValue();
     }
@@ -93,8 +93,8 @@ public class Transform extends GuiComponent
      */
     public void setParent(Transform parent)
     {
-        if (parentProperty().isPresent() && getParent().element().getWindow() != null)
-            getParent().element().getWindow().dispatchEvent(LayoutEvent.REMOVE,
+        if (parentProperty().isPresent() && parent().element().getWindow() != null)
+            parent().element().getWindow().dispatchEvent(LayoutEvent.REMOVE,
                     new LayoutEvent.Remove(this.element()));
 
         this.parentProperty().setValue(parent);
@@ -116,7 +116,7 @@ public class Transform extends GuiComponent
     /**
      * @return an immutable list
      */
-    public List<Transform> getChildren()
+    public List<Transform> children()
     {
         return this.childrenProperty().getValue();
     }
@@ -183,12 +183,12 @@ public class Transform extends GuiComponent
         return this.zLevelProperty;
     }
 
-    public float getzLevel()
+    public float zLevel()
     {
         return this.zLevelProperty().getValue();
     }
 
-    public void setzLevel(float zLevel)
+    public void zLevel(float zLevel)
     {
         this.zLevelProperty().setValue(zLevel);
     }
@@ -266,7 +266,7 @@ public class Transform extends GuiComponent
      * @return yPos, used for layout management, do not attempt to change the
      * property outside the layout scope.
      */
-    public float getyPos()
+    public float yPos()
     {
         return this.yPosProperty().getValue();
     }
@@ -365,7 +365,7 @@ public class Transform extends GuiComponent
      */
     public float topPos()
     {
-        return this.getyPos() + this.yTranslate();
+        return this.yPos() + this.yTranslate();
     }
 
     /**
@@ -385,7 +385,7 @@ public class Transform extends GuiComponent
      */
     public float bottomPos()
     {
-        return this.getyPos() + this.yTranslate() + this.height();
+        return this.yPos() + this.yTranslate() + this.height();
     }
 
     /**
@@ -415,8 +415,8 @@ public class Transform extends GuiComponent
     {
         if (ratio == -1)
             this.widthProperty().unbind();
-        else if (!this.widthProperty().isBound() && this.getParent() != null)
-            RelativeBindingHelper.bindWidthRelative(this, this.getParent(), this.widthRatioProperty());
+        else if (!this.widthProperty().isBound() && this.parent() != null)
+            RelativeBindingHelper.bindWidthRelative(this, this.parent(), this.widthRatioProperty());
         this.widthRatioProperty().setValue(ratio);
     }
 
@@ -435,8 +435,8 @@ public class Transform extends GuiComponent
     {
         if (ratio == -1)
             this.heightProperty().unbind();
-        else if (!this.heightProperty().isBound() && this.getParent() != null)
-            RelativeBindingHelper.bindHeightRelative(this, this.getParent(), this.heightRatioProperty());
+        else if (!this.heightProperty().isBound() && this.parent() != null)
+            RelativeBindingHelper.bindHeightRelative(this, this.parent(), this.heightRatioProperty());
         this.heightRatioProperty().setValue(ratio);
     }
 

@@ -28,29 +28,29 @@ public class ColorBorderDrawer
             renderer.getHelper().drawColoredArc(renderer,
                     transform.rightPos() - bottomRightRadius + borderRight - 1,
                     transform.bottomPos() - bottomRightRadius + borderBottom - 1,
-                    bottomRightRadius, transform.getzLevel(), color, RectCorner.BOTTOM_RIGHT);
+                    bottomRightRadius, transform.zLevel(), color, RectCorner.BOTTOM_RIGHT);
         if (bottomLeftRadius > 0)
             renderer.getHelper().drawColoredArc(renderer,
                     transform.leftPos() - borderLeft + bottomLeftRadius,
                     transform.bottomPos() - bottomLeftRadius + borderBottom - 1,
-                    bottomRightRadius, transform.getzLevel(), color, RectCorner.BOTTOM_LEFT);
+                    bottomRightRadius, transform.zLevel(), color, RectCorner.BOTTOM_LEFT);
         if (topLeftRadius > 0)
             renderer.getHelper().drawColoredArc(renderer,
                     transform.leftPos() - borderLeft + topLeftRadius,
                     transform.topPos() - borderTop + topLeftRadius,
-                    topLeftRadius, transform.getzLevel(), color, RectCorner.TOP_LEFT);
+                    topLeftRadius, transform.zLevel(), color, RectCorner.TOP_LEFT);
         if (topRightRadius > 0)
             renderer.getHelper().drawColoredArc(renderer,
                     transform.rightPos() - topRightRadius + borderRight - 1,
                     transform.topPos() - borderTop + topLeftRadius,
-                    topLeftRadius, transform.getzLevel(), color, RectCorner.TOP_RIGHT);
+                    topLeftRadius, transform.zLevel(), color, RectCorner.TOP_RIGHT);
 
         float bottomLeftRadiusOffset = bottomLeftRadius > 0 ? bottomLeftRadius - borderBottom : 0;
         if (borderLeft > 0)
             renderer.getHelper().drawColoredRect(renderer, transform.leftPos() - borderLeft,
                     transform.topPos() - borderTop + topLeftRadius, borderLeft,
                     transform.height() + borderTop - bottomLeftRadiusOffset - topLeftRadius,
-                    transform.getzLevel(), color);
+                    transform.zLevel(), color);
 
         float topLeftRadiusOffset = topLeftRadius > 0 && topLeftRadius <= borderLeft ? topLeftRadius - borderLeft : 0;
         if (borderTop > 0)
@@ -58,14 +58,14 @@ public class ColorBorderDrawer
                     transform.leftPos() + topLeftRadiusOffset,
                     transform.topPos() - borderTop,
                     transform.width() + borderRight - topLeftRadiusOffset - topRightRadius, borderTop,
-                    transform.getzLevel(), color);
+                    transform.zLevel(), color);
 
         float topRightRadiusOffset = topRightRadius > 0 ? topRightRadius - borderTop : 0;
         if (borderRight > 0)
             renderer.getHelper().drawColoredRect(renderer, transform.rightPos(),
                     transform.topPos() + topRightRadiusOffset, borderRight,
                     transform.height() + borderBottom - bottomRightRadius - topRightRadiusOffset,
-                    transform.getzLevel(), color);
+                    transform.zLevel(), color);
 
         float bottomRightRadiusOffset = bottomRightRadius > 0 && bottomRightRadius <= borderRight ?
                 bottomRightRadius - borderRight : 0;
@@ -74,6 +74,6 @@ public class ColorBorderDrawer
                     transform.leftPos() - borderLeft + bottomLeftRadius,
                     transform.bottomPos(),
                     transform.width() + borderLeft - bottomRightRadiusOffset - bottomLeftRadius,
-                    borderBottom, transform.getzLevel(), color);
+                    borderBottom, transform.zLevel(), color);
     }
 }

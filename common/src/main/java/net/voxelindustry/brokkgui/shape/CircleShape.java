@@ -41,7 +41,7 @@ public class CircleShape implements ShapeDefinition
 
         Transform transform = element.transform();
         float pointX = (mouseX - transform.xPos() - transform.xTranslate());
-        float pointY = (mouseY - transform.getyPos() - transform.yTranslate());
+        float pointY = (mouseY - transform.yPos() - transform.yTranslate());
         return (pointX * pointX) + (pointY * pointY) < transform.width() * transform.width();
     }
 }

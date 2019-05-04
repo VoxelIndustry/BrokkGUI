@@ -71,7 +71,7 @@ public class Paint extends GuiComponent implements RenderComponent
     {
         float x = element().transform().leftPos();
         float y = element().transform().topPos();
-        float z = element().transform().getzLevel();
+        float z = element().transform().zLevel();
 
         if (pass == RenderPass.BACKGROUND)
         {

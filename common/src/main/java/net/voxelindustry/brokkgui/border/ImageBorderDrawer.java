@@ -42,7 +42,7 @@ public class ImageBorderDrawer
                     leftPos, topPos - borderTop,
                     sliceBox.getLeft(), 0,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
-                    width, borderTop * widthBox.getTop(), transform.getzLevel());
+                    width, borderTop * widthBox.getTop(), transform.zLevel());
         }
 
         if (borderBottom > 0)
@@ -51,7 +51,7 @@ public class ImageBorderDrawer
                     leftPos, bottomPos - (widthBox.getBottom() - 1) * borderBottom,
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
                     1 - sliceBox.getRight(), 1,
-                    width, borderBottom * widthBox.getBottom(), transform.getzLevel());
+                    width, borderBottom * widthBox.getBottom(), transform.zLevel());
         }
 
         if (borderLeft > 0)
@@ -60,7 +60,7 @@ public class ImageBorderDrawer
                     leftPos - borderLeft, topPos,
                     0, sliceBox.getTop(),
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
-                    borderLeft * widthBox.getLeft(), height, transform.getzLevel());
+                    borderLeft * widthBox.getLeft(), height, transform.zLevel());
         }
 
         if (borderRight > 0)
@@ -69,7 +69,7 @@ public class ImageBorderDrawer
                     rightPos - (widthBox.getRight() - 1) * borderRight, topPos,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
                     1, 1 - sliceBox.getBottom(),
-                    borderRight * widthBox.getRight(), height, transform.getzLevel());
+                    borderRight * widthBox.getRight(), height, transform.zLevel());
         }
 
         // Corners
@@ -81,7 +81,7 @@ public class ImageBorderDrawer
                     0, 0,
                     sliceBox.getLeft(), sliceBox.getTop(),
                     borderLeft, borderTop,
-                    transform.getzLevel());
+                    transform.zLevel());
         }
 
         if (borderTop > 0 && borderRight > 0)
@@ -91,7 +91,7 @@ public class ImageBorderDrawer
                     1 - sliceBox.getRight(), 0,
                     1, sliceBox.getTop(),
                     borderRight, borderTop,
-                    transform.getzLevel());
+                    transform.zLevel());
         }
 
         if (borderBottom > 0 && borderRight > 0)
@@ -101,7 +101,7 @@ public class ImageBorderDrawer
                     1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     1, 1,
                     borderRight, borderBottom,
-                    transform.getzLevel());
+                    transform.zLevel());
         }
 
         if (borderBottom > 0 && borderLeft > 0)
@@ -111,7 +111,7 @@ public class ImageBorderDrawer
                     0, 1 - sliceBox.getBottom(),
                     sliceBox.getLeft(), 1,
                     borderLeft, borderBottom,
-                    transform.getzLevel());
+                    transform.zLevel());
         }
 
         if (doFill)
@@ -121,7 +121,7 @@ public class ImageBorderDrawer
                     sliceBox.getLeft(), sliceBox.getTop(), 1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     width - widthBox.getLeft() * borderLeft - widthBox.getRight() * borderRight,
                     height - widthBox.getTop() * borderTop - widthBox.getBottom() * borderBottom,
-                    transform.getzLevel());
+                    transform.zLevel());
         }
     }
 }
