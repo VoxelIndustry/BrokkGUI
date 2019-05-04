@@ -8,7 +8,6 @@ import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
-import net.voxelindustry.brokkgui.shape.Rectangle;
 import net.voxelindustry.brokkgui.skin.GuiRadioButtonSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 

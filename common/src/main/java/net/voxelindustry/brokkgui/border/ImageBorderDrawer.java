@@ -2,33 +2,35 @@ package net.voxelindustry.brokkgui.border;
 
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
+import net.voxelindustry.brokkgui.exp.component.Paint;
+import net.voxelindustry.brokkgui.exp.component.Transform;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Texture;
-import net.voxelindustry.brokkgui.shape.GuiShape;
 
 public class ImageBorderDrawer
 {
-    public static void drawBorder(GuiShape shape, IGuiRenderer renderer)
+    public static void drawBorder(Paint paint, IGuiRenderer renderer)
     {
-        Texture texture = shape.getBorderImage();
-        float borderLeft = shape.getBorderWidth(RectSide.LEFT);
-        float borderRight = shape.getBorderWidth(RectSide.RIGHT);
-        float borderTop = shape.getBorderWidth(RectSide.UP);
-        float borderBottom = shape.getBorderWidth(RectSide.DOWN);
+        Texture texture = paint.borderImage();
+        float borderLeft = paint.borderWidth(RectSide.LEFT);
+        float borderRight = paint.borderWidth(RectSide.RIGHT);
+        float borderTop = paint.borderWidth(RectSide.UP);
+        float borderBottom = paint.borderWidth(RectSide.DOWN);
 
-        RectBox sliceBox = shape.getStyle().getStyleValue("border-image-slice", RectBox.class, RectBox.EMPTY);
-        RectBox widthBox = shape.getStyle().getStyleValue("border-image-width", RectBox.class, RectBox.EMPTY);
-        RectBox outsetBox = shape.getStyle().getStyleValue("border-image-outset", RectBox.class, RectBox.EMPTY);
+        RectBox sliceBox = paint.borderImageSlice();
+        RectBox widthBox = paint.borderImageWidth();
+        RectBox outsetBox = paint.borderImageOutset();
 
-        float leftPos = shape.getLeftPos() - outsetBox.getLeft();
-        float topPos = shape.getTopPos() - outsetBox.getTop();
-        float rightPos = shape.getRightPos() + outsetBox.getRight();
-        float bottomPos = shape.getBottomPos() + outsetBox.getBottom();
+        Transform transform = paint.getElement().transform();
+        float leftPos = transform.getLeftPos() - outsetBox.getLeft();
+        float topPos = transform.getTopPos() - outsetBox.getTop();
+        float rightPos = transform.getRightPos() + outsetBox.getRight();
+        float bottomPos = transform.getBottomPos() + outsetBox.getBottom();
 
-        float width = shape.getWidth() + outsetBox.getLeft() + outsetBox.getRight();
-        float height = shape.getHeight() + outsetBox.getTop() + outsetBox.getBottom();
+        float width = transform.getWidth() + outsetBox.getLeft() + outsetBox.getRight();
+        float height = transform.getHeight() + outsetBox.getTop() + outsetBox.getBottom();
 
-        boolean doFill = shape.getStyle().getStyleValue("border-image-fill", Boolean.class, false);
+        boolean doFill = paint.borderImageFill();
 
         renderer.getHelper().bindTexture(texture);
 
@@ -40,7 +42,7 @@ public class ImageBorderDrawer
                     leftPos, topPos - borderTop,
                     sliceBox.getLeft(), 0,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
-                    width, borderTop * widthBox.getTop(), shape.getzLevel());
+                    width, borderTop * widthBox.getTop(), transform.getzLevel());
         }
 
         if (borderBottom > 0)
@@ -49,7 +51,7 @@ public class ImageBorderDrawer
                     leftPos, bottomPos - (widthBox.getBottom() - 1) * borderBottom,
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
                     1 - sliceBox.getRight(), 1,
-                    width, borderBottom * widthBox.getBottom(), shape.getzLevel());
+                    width, borderBottom * widthBox.getBottom(), transform.getzLevel());
         }
 
         if (borderLeft > 0)
@@ -58,7 +60,7 @@ public class ImageBorderDrawer
                     leftPos - borderLeft, topPos,
                     0, sliceBox.getTop(),
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
-                    borderLeft * widthBox.getLeft(), height, shape.getzLevel());
+                    borderLeft * widthBox.getLeft(), height, transform.getzLevel());
         }
 
         if (borderRight > 0)
@@ -67,7 +69,7 @@ public class ImageBorderDrawer
                     rightPos - (widthBox.getRight() - 1) * borderRight, topPos,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
                     1, 1 - sliceBox.getBottom(),
-                    borderRight * widthBox.getRight(), height, shape.getzLevel());
+                    borderRight * widthBox.getRight(), height, transform.getzLevel());
         }
 
         // Corners
@@ -79,7 +81,7 @@ public class ImageBorderDrawer
                     0, 0,
                     sliceBox.getLeft(), sliceBox.getTop(),
                     borderLeft, borderTop,
-                    shape.getzLevel());
+                    transform.getzLevel());
         }
 
         if (borderTop > 0 && borderRight > 0)
@@ -89,7 +91,7 @@ public class ImageBorderDrawer
                     1 - sliceBox.getRight(), 0,
                     1, sliceBox.getTop(),
                     borderRight, borderTop,
-                    shape.getzLevel());
+                    transform.getzLevel());
         }
 
         if (borderBottom > 0 && borderRight > 0)
@@ -99,7 +101,7 @@ public class ImageBorderDrawer
                     1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     1, 1,
                     borderRight, borderBottom,
-                    shape.getzLevel());
+                    transform.getzLevel());
         }
 
         if (borderBottom > 0 && borderLeft > 0)
@@ -109,7 +111,7 @@ public class ImageBorderDrawer
                     0, 1 - sliceBox.getBottom(),
                     sliceBox.getLeft(), 1,
                     borderLeft, borderBottom,
-                    shape.getzLevel());
+                    transform.getzLevel());
         }
 
         if (doFill)
@@ -119,7 +121,7 @@ public class ImageBorderDrawer
                     sliceBox.getLeft(), sliceBox.getTop(), 1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     width - widthBox.getLeft() * borderLeft - widthBox.getRight() * borderRight,
                     height - widthBox.getTop() * borderTop - widthBox.getBottom() * borderBottom,
-                    shape.getzLevel());
+                    transform.getzLevel());
         }
     }
 }

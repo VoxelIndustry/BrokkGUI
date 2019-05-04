@@ -4,7 +4,6 @@ import fr.ourten.teabeans.binding.BaseExpression;
 import net.voxelindustry.brokkgui.behavior.GuiTogglableButtonBehavior;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
-import net.voxelindustry.brokkgui.shape.Rectangle;
 import net.voxelindustry.brokkgui.shape.Text;
 import net.voxelindustry.brokkgui.skin.GuiCheckboxSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;

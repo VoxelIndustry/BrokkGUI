@@ -161,7 +161,7 @@ public class StyleHolder extends GuiComponent
         if (!this.hasProperty(propertyName))
             return;
 
-        StyleProperty<T> property = this.getStyleProperty(propertyName, valueClass);
+        StyleProperty<T> property = this.getProperty(propertyName, valueClass);
 
         if (property != null)
             property.setStyle(StyleSource.CODE, 10_000, value);
@@ -256,14 +256,21 @@ public class StyleHolder extends GuiComponent
     }
 
     @SuppressWarnings("unchecked")
-    public <T> StyleProperty<T> getStyleProperty(String name, Class<T> valueClass)
+    public <T> StyleProperty<T> getProperty(String name, Class<T> valueClass)
     {
         return (StyleProperty<T>) this.properties.get(name);
     }
 
+    public <T> StyleProperty<T> getOrCreateProperty(String name, Class<T> valueClass)
+    {
+        if (!this.hasProperty("name"))
+            return null;
+        return getProperty(name, valueClass);
+    }
+
     public <T> T getStyleValue(String propertyName, Class<T> valueClass)
     {
-        StyleProperty<T> property = this.getStyleProperty(propertyName, valueClass);
+        StyleProperty<T> property = this.getProperty(propertyName, valueClass);
 
         if (property == null)
             return null;
@@ -272,7 +279,7 @@ public class StyleHolder extends GuiComponent
 
     public <T> T getStyleValue(String propertyName, Class<T> valueClass, T defaultValue)
     {
-        StyleProperty<T> property = this.getStyleProperty(propertyName, valueClass);
+        StyleProperty<T> property = this.getProperty(propertyName, valueClass);
 
         if (property == null)
             return defaultValue;

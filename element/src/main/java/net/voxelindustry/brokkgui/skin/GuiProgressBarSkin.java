@@ -4,7 +4,6 @@ import fr.ourten.teabeans.binding.BaseExpression;
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.element.GuiProgressBar;
-import net.voxelindustry.brokkgui.shape.Rectangle;
 
 public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorBase<C>> extends GuiLabeledSkinBase<C, B>
 {

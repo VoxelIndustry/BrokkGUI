@@ -21,6 +21,11 @@ public abstract class GuiComponent
         return this.elementProperty.getValue();
     }
 
+    public boolean hasElement()
+    {
+        return this.elementProperty.isPresent();
+    }
+
     public BaseProperty<GuiElement> getElementProperty()
     {
         return this.elementProperty;

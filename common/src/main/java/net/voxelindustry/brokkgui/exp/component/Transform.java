@@ -88,17 +88,19 @@ public class Transform extends GuiComponent
      */
     public void setParent(Transform parent)
     {
-        if (parentProperty().isPresent() && getParent().getWindow() != null)
-            getParent().getWindow().dispatchEvent(LayoutEvent.REMOVE, new LayoutEvent.Remove(this.getElement()));
+        if (parentProperty().isPresent() && getParent().getElement().getWindow() != null)
+            getParent().getElement().getWindow().dispatchEvent(LayoutEvent.REMOVE,
+                    new LayoutEvent.Remove(this.getElement()));
 
         this.parentProperty().setValue(parent);
-        if (parent != null && this.getWidthRatio() != -1)
-            RelativeBindingHelper.bindWidthRelative(this, parent, this.widthRatioProperty());
-        if (parent != null && this.getHeightRatio() != -1)
-            RelativeBindingHelper.bindHeightRelative(this, parent, this.heightRatioProperty());
 
         if (parent != null)
         {
+            if (this.getWidthRatio() != -1)
+                RelativeBindingHelper.bindWidthRelative(this, parent, this.widthRatioProperty());
+            if (this.getHeightRatio() != -1)
+                RelativeBindingHelper.bindHeightRelative(this, parent, this.heightRatioProperty());
+
             this.setStyleTree(parent.getStyle().getStyleSupplier());
             this.setWindow(parent.getWindow());
 

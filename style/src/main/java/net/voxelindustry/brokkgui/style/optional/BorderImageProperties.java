@@ -30,13 +30,13 @@ public class BorderImageProperties implements Consumer<StyleHolder>
                 Texture.class);
 
         StyleProperty<RectBox> borderImageWidthProperty = holder.registerProperty("border-image-width",
-                RectBox.build().all(1).create(), RectBox.class);
+                RectBox.ONE, RectBox.class);
 
         StyleProperty<RectBox> borderImageOutsetProperty = holder.registerProperty("border-image-outset",
-                RectBox.build().all(0).create(), RectBox.class);
+                RectBox.EMPTY, RectBox.class);
 
         StyleProperty<RectBox> borderImageSliceProperty = holder.registerProperty("border-image-slice",
-                RectBox.build().all(1).create(), RectBox.class);
+                RectBox.ONE, RectBox.class);
 
         StyleProperty<Boolean> borderImageFill = holder.registerProperty("border-image-fill", false, Boolean.class);
 

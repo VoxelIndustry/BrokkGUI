@@ -15,6 +15,8 @@ public class StyleEngine
         return instance;
     }
 
+    private ElementStyleStatus status;
+
     private StyleEngine()
     {
 
@@ -36,5 +38,31 @@ public class StyleEngine
 
         StyleTranslator.getInstance().registerTranslator(RectBox.class, rectBoxTranslator, rectBoxTranslator,
                 rectBoxTranslator);
+    }
+
+    public void setElementsStyleStatus(ElementStyleStatus status)
+    {
+        this.status = status;
+    }
+
+    public ElementStyleStatus getElementStyleStatus()
+    {
+        return this.status;
+    }
+
+    public enum ElementStyleStatus
+    {
+        DEFAULT_ENABLED,
+        DEFAULT_DISABLED;
+
+        public boolean enabled()
+        {
+            return this == DEFAULT_ENABLED;
+        }
+
+        public boolean disabled()
+        {
+            return !this.enabled();
+        }
     }
 }

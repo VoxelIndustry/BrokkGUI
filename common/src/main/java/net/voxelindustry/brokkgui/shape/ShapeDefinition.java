@@ -1,17 +1,19 @@
 package net.voxelindustry.brokkgui.shape;
 
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
+import net.voxelindustry.brokkgui.exp.component.Transform;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.Texture;
 
 public interface ShapeDefinition
 {
-    void drawColored(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Color color, float zLevel);
+    void drawColored(Transform transform, IGuiRenderer renderer, float startX, float startY, Color color, float zLevel);
 
-    void drawColoredEmpty(GuiShape shape, IGuiRenderer renderer, float startX, float startY, float lineWidth,
+    void drawColoredEmpty(Transform transform, IGuiRenderer renderer, float startX, float startY, float lineWidth,
                           Color color, float zLevel);
 
-    void drawTextured(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Texture texture, float zLevel);
+    void drawTextured(Transform transform, IGuiRenderer renderer, float startX, float startY, Texture texture, float zLevel);
 
-    boolean isMouseInside(GuiShape shape, int mouseX, int mouseY);
+    boolean isMouseInside(GuiElement element, int mouseX, int mouseY);
 }

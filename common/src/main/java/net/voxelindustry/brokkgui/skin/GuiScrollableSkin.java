@@ -4,7 +4,6 @@ import fr.ourten.teabeans.binding.BaseBinding;
 import net.voxelindustry.brokkgui.behavior.GuiScrollableBehavior;
 import net.voxelindustry.brokkgui.control.GuiScrollableBase;
 import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
-import net.voxelindustry.brokkgui.shape.Rectangle;
 
 /**
  * @author Ourten 9 oct. 2016

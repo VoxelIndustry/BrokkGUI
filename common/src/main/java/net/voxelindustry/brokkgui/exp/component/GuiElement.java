@@ -7,18 +7,19 @@ import net.voxelindustry.brokkgui.event.*;
 import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.util.MouseInBoundsChecker;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.IEventEmitter;
 
-import java.util.Collection;
-import java.util.IdentityHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class GuiElement implements IEventEmitter
 {
     private Map<Class<? extends GuiComponent>, GuiComponent> componentMap;
+
+    private List<RenderComponent> renderComponents;
 
     private BaseProperty<String> idProperty;
 
@@ -39,6 +40,8 @@ public abstract class GuiElement implements IEventEmitter
 
     private BaseProperty<Double> opacityProperty;
 
+    private MouseInBoundsChecker mouseInBoundsChecker;
+
     private int draggedX;
     private int draggedY;
 
@@ -47,6 +50,7 @@ public abstract class GuiElement implements IEventEmitter
     public GuiElement()
     {
         this.componentMap = new IdentityHashMap<>();
+        this.renderComponents = new ArrayList<>(1);
 
         this.transform = this.add(new Transform());
 
@@ -61,6 +65,8 @@ public abstract class GuiElement implements IEventEmitter
         this.draggedProperty = new BaseProperty<>(false, "draggedProperty");
 
         this.opacityProperty = new BaseProperty<>(1D, "opacityProperty");
+
+        this.mouseInBoundsChecker = MouseInBoundsChecker.DEFAULT;
     }
 
     ////////////
@@ -131,7 +137,11 @@ public abstract class GuiElement implements IEventEmitter
             renderer.endMatrix();
     }
 
-    protected abstract void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY);
+    protected void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
+    {
+        for (RenderComponent component : this.renderComponents)
+            component.renderContent(renderer, pass, mouseX, mouseY);
+    }
 
     public void handleHover(int mouseX, int mouseY, boolean hovered)
     {
@@ -384,6 +394,21 @@ public abstract class GuiElement implements IEventEmitter
         this.getOpacityProperty().setValue(opacity);
     }
 
+    public MouseInBoundsChecker mouseInBoundsChecker()
+    {
+        return this.mouseInBoundsChecker;
+    }
+
+    public void mouseInBoundsChecker(MouseInBoundsChecker checker)
+    {
+        this.mouseInBoundsChecker = checker;
+    }
+
+    public boolean isPointInside(int pointX, int pointY)
+    {
+        return this.mouseInBoundsChecker().test(this, pointX, pointY);
+    }
+
     /////////////
     // WINDOWS //
     /////////////
@@ -424,6 +449,9 @@ public abstract class GuiElement implements IEventEmitter
     {
         this.componentMap.put(component.getClass(), component);
         component.attach(this);
+
+        if (component instanceof RenderComponent)
+            this.renderComponents.add((RenderComponent) component);
         return component;
     }
 
@@ -440,7 +468,20 @@ public abstract class GuiElement implements IEventEmitter
 
         this.componentMap.put(componentClass, instance);
         instance.attach(this);
+
+        if (instance instanceof RenderComponent)
+            this.renderComponents.add((RenderComponent) instance);
         return instance;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends GuiComponent> T remove(Class<T> componentClass)
+    {
+        GuiComponent component = this.componentMap.remove(componentClass);
+
+        if (component instanceof RenderComponent)
+            this.renderComponents.remove(component);
+        return (T) component;
     }
 
     @SuppressWarnings("unchecked")
