@@ -31,7 +31,8 @@ public class StyleHolder extends GuiComponent
     private final BaseSetProperty<String> activePseudoClass;
     private       String                  type;
 
-    private ValueChangeListener<String> styleRefreshListener = this::valueChanged;
+    private ValueChangeListener<String>    styleRefreshListener = this::valueChanged;
+    private ValueChangeListener<Transform> styleParentListener  = this::parentChanged;
 
     public StyleHolder()
     {
@@ -51,11 +52,15 @@ public class StyleHolder extends GuiComponent
     protected void attach(GuiElement element)
     {
         if (this.getElement() != null)
+        {
             this.getElement().getIdProperty().removeListener(styleRefreshListener);
+            this.getElement().transform().parentProperty().removeListener(styleParentListener);
+        }
 
         super.attach(element);
 
         element.getIdProperty().addListener(styleRefreshListener);
+        element.transform().parentProperty().addListener(styleParentListener);
 
         // Properties override
         this.getElement().replaceOpacityProperty(this.registerProperty("opacity", 1D, Double.class));
@@ -71,6 +76,15 @@ public class StyleHolder extends GuiComponent
         this.refresh();
     }
 
+    private void parentChanged(ObservableValue obs, Transform oldValue, Transform newValue)
+    {
+        if (newValue == null || !newValue.getElement().has(StyleHolder.class))
+            return;
+
+        this.setStyleSupplier(newValue.getElement().get(StyleHolder.class).getStyleSupplier());
+        this.refresh();
+    }
+
     ////////////////
     // PROPERTIES //
     ////////////////
@@ -78,11 +92,6 @@ public class StyleHolder extends GuiComponent
     public BaseSetProperty<String> getStyleClass()
     {
         return this.styleClass;
-    }
-
-    public void setStyleTree(Supplier<StyleList> treeSupplier)
-    {
-        this.setStyleSupplier(treeSupplier);
     }
 
     public String getType()

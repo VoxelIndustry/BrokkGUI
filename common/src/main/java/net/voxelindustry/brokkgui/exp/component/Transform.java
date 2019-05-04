@@ -101,13 +101,11 @@ public class Transform extends GuiComponent
             if (this.getHeightRatio() != -1)
                 RelativeBindingHelper.bindHeightRelative(this, parent, this.heightRatioProperty());
 
-            this.setStyleTree(parent.getStyle().getStyleSupplier());
-            this.setWindow(parent.getWindow());
+            this.getElement().setWindow(parent.getElement().getWindow());
 
-            if (this.getWindow() != null)
-                getWindow().dispatchEvent(LayoutEvent.ADD, new LayoutEvent.Add(this));
+            if (this.getElement().getWindow() != null)
+                getElement().getWindow().dispatchEvent(LayoutEvent.ADD, new LayoutEvent.Add(this.getElement()));
         }
-        this.refreshStyle();
     }
 
     /**
