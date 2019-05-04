@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.animation.transition;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,18 +12,18 @@ public class FadeTransition extends Transition
     private double fromOpacity;
     private double opacity;
 
-    public FadeTransition(GuiNode node, long duration, TimeUnit unit)
+    public FadeTransition(GuiElement element, long duration, TimeUnit unit)
     {
-        super(node, duration, unit);
+        super(element, duration, unit);
     }
 
     @Override
     protected void apply(float interpolated)
     {
-        if (getNode() == null)
+        if (element() == null)
             return;
 
-        getNode().setOpacity(fromOpacity + (endOpacity - fromOpacity) * interpolated);
+        element().setOpacity(fromOpacity + (endOpacity - fromOpacity) * interpolated);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class FadeTransition extends Transition
         super.restart();
 
         if (startOpacity == null)
-            fromOpacity = getNode().getOpacity();
+            fromOpacity = element().getOpacity();
         else
             fromOpacity = startOpacity;
 
@@ -40,32 +40,32 @@ public class FadeTransition extends Transition
             endOpacity = fromOpacity + opacity;
     }
 
-    public double getStartOpacity()
+    public double startOpacity()
     {
         return startOpacity;
     }
 
-    public void setStartOpacity(double startOpacity)
+    public void startOpacity(double startOpacity)
     {
         this.startOpacity = startOpacity;
     }
 
-    public double getEndOpacity()
+    public double endOpacity()
     {
         return endOpacity;
     }
 
-    public void setEndOpacity(double endOpacity)
+    public void endOpacity(double endOpacity)
     {
         this.endOpacity = endOpacity;
     }
 
-    public double getOpacity()
+    public double opacity()
     {
         return opacity;
     }
 
-    public void setOpacity(double opacity)
+    public void opacity(double opacity)
     {
         this.opacity = opacity;
     }

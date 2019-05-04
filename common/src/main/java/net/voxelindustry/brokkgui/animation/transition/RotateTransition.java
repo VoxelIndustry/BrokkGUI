@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.animation.transition;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,18 +12,18 @@ public class RotateTransition extends Transition
     private float fromAngle;
     private float rotateAngle;
 
-    public RotateTransition(GuiNode node, long duration, TimeUnit unit)
+    public RotateTransition(GuiElement element, long duration, TimeUnit unit)
     {
-        super(node, duration, unit);
+        super(element, duration, unit);
     }
 
     @Override
     protected void apply(float interpolated)
     {
-        if (getNode() == null)
+        if (element() == null)
             return;
 
-        getNode().getRotation().setAngle(fromAngle + (endAngle - fromAngle) * interpolated);
+        element().transform().rotation().setAngle(fromAngle + (endAngle - fromAngle) * interpolated);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class RotateTransition extends Transition
         super.restart();
 
         if (startAngle == null)
-            fromAngle = getNode().getRotation().getAngle();
+            fromAngle = element().transform().rotation().getAngle();
         else
             fromAngle = startAngle;
 
@@ -40,32 +40,32 @@ public class RotateTransition extends Transition
             endAngle = fromAngle + rotateAngle;
     }
 
-    public Float getStartAngle()
+    public Float startAngle()
     {
         return startAngle;
     }
 
-    public void setStartAngle(Float startAngle)
+    public void startAngle(Float startAngle)
     {
         this.startAngle = startAngle;
     }
 
-    public Float getEndAngle()
+    public Float endAngle()
     {
         return endAngle;
     }
 
-    public void setEndAngle(Float endAngle)
+    public void endAngle(Float endAngle)
     {
         this.endAngle = endAngle;
     }
 
-    public float getRotateAngle()
+    public float rotateAngle()
     {
         return rotateAngle;
     }
 
-    public void setRotateAngle(float rotateAngle)
+    public void rotateAngle(float rotateAngle)
     {
         this.rotateAngle = rotateAngle;
     }

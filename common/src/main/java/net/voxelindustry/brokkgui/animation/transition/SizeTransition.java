@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.animation.transition;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.exp.component.GuiElement;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,18 +12,18 @@ public class SizeTransition extends Transition
     private float fromX, fromY;
     private float translateX, translateY;
 
-    public SizeTransition(GuiNode node, long duration, TimeUnit unit)
+    public SizeTransition(GuiElement element, long duration, TimeUnit unit)
     {
-        super(node, duration, unit);
+        super(element, duration, unit);
     }
 
     @Override
     protected void apply(float interpolated)
     {
-        if (getNode() == null)
+        if (element() == null)
             return;
 
-        getNode().setSize(fromX + (endX - fromX) * interpolated, fromY + (endY - fromY) * interpolated);
+        element().transform().size(fromX + (endX - fromX) * interpolated, fromY + (endY - fromY) * interpolated);
     }
 
     @Override
@@ -32,12 +32,12 @@ public class SizeTransition extends Transition
         super.restart();
 
         if (startX == null)
-            fromX = getNode().getScaleX();
+            fromX = element().transform().scaleX();
         else
             fromX = startX;
 
         if (startY == null)
-            fromY = getNode().getScaleY();
+            fromY = element().transform().scaleY();
         else
             fromY = startY;
 
@@ -47,62 +47,62 @@ public class SizeTransition extends Transition
             endY = fromY + translateY;
     }
 
-    public Float getStartX()
+    public Float startX()
     {
         return startX;
     }
 
-    public void setStartX(Float startX)
+    public void startX(Float startX)
     {
         this.startX = startX;
     }
 
-    public Float getStartY()
+    public Float startY()
     {
         return startY;
     }
 
-    public void setStartY(Float startY)
+    public void startY(Float startY)
     {
         this.startY = startY;
     }
 
-    public Float getEndX()
+    public Float endX()
     {
         return endX;
     }
 
-    public void setEndX(Float endX)
+    public void endX(Float endX)
     {
         this.endX = endX;
     }
 
-    public Float getEndY()
+    public Float endY()
     {
         return endY;
     }
 
-    public void setEndY(Float endY)
+    public void endY(Float endY)
     {
         this.endY = endY;
     }
 
-    public float getTranslateX()
+    public float translateX()
     {
         return translateX;
     }
 
-    public void setTranslateX(float translateX)
+    public void translateX(float translateX)
     {
         this.translateX = translateX;
     }
 
-    public float getTranslateY()
+    public float translateY()
     {
         return translateY;
     }
 
-    public void setTranslateY(float translateY)
+    public void translateY(float translateY)
     {
         this.translateY = translateY;
     }
