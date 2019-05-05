@@ -3,17 +3,14 @@ package net.voxelindustry.brokkgui.style;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class StyleHolderTest
 {
-    @Before
+    @BeforeAll
     public void before()
     {
         StyleEngine.getInstance().start();
@@ -22,7 +19,7 @@ public class StyleHolderTest
     @Test
     public void parseSimpleCSS()
     {
-        StyleHolder styleHolder = new StyleHolder(null);
+        StyleHolder styleHolder = new StyleHolder();
 
         styleHolder.registerProperty("border-width", 0, Integer.class);
         styleHolder.registerProperty("border-color", Color.BLACK, Color.class);
@@ -30,15 +27,15 @@ public class StyleHolderTest
 
         styleHolder.parseInlineCSS("color: aqua; border-color: red; border-width: 2;");
 
-        assertThat(styleHolder.getStyleProperty("border-width", Integer.class).getValue()).isEqualTo(2);
-        assertThat(styleHolder.getStyleProperty("border-color", Color.class).getValue()).isEqualTo(Color.RED);
-        assertThat(styleHolder.getStyleProperty("color", Color.class).getValue()).isEqualTo(Color.AQUA);
+        assertThat(styleHolder.getProperty("border-width", Integer.class).getValue()).isEqualTo(2);
+        assertThat(styleHolder.getProperty("border-color", Color.class).getValue()).isEqualTo(Color.RED);
+        assertThat(styleHolder.getProperty("color", Color.class).getValue()).isEqualTo(Color.AQUA);
     }
 
     @Test
     public void parseConditionalProperties()
     {
-        StyleHolder styleHolder = new StyleHolder(null);
+        StyleHolder styleHolder = new StyleHolder();
 
         assertThat(styleHolder.doesHoldProperty("border-color")).isEqualTo(HeldPropertyState.ABSENT);
 

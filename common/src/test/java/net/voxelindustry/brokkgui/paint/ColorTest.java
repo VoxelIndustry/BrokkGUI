@@ -1,36 +1,33 @@
 package net.voxelindustry.brokkgui.paint;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ColorTest
+class ColorTest
 {
     @Test
-    public void rgbTranslation()
+    void rgbTranslation()
     {
         assertThat(Color.fromRGBInt(16711680)).isEqualTo(Color.RED);
         assertThat(Color.RED.toRGBInt()).isEqualTo(16711680);
     }
 
     @Test
-    public void hexTranslation()
+    void hexTranslation()
     {
         assertThat(Color.fromHex("#00FFFF")).isEqualTo(Color.AQUA);
         assertThat(Color.AQUA.toHex()).isEqualToIgnoringCase("#00FFFF");
     }
 
     @Test
-    public void copy()
+    void copy()
     {
         assertThat(Color.from(Color.RED)).isEqualTo(Color.RED);
     }
 
     @Test
-    public void modifiers()
+    void modifiers()
     {
         assertThat(Color.RED.addGreen(0.1f).getGreen()).isEqualTo(0.1f);
         assertThat(Color.BLUE.addRed(0.1f).getRed()).isEqualTo(0.1f);

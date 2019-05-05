@@ -5,19 +5,16 @@ import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.brokkgui.style.tree.StyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleSelectorHierarchic;
 import net.voxelindustry.brokkgui.style.tree.StyleSelectorType;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class StylesheetManagerTest
 {
-    @Before
+    @BeforeAll
     public void init()
     {
         StyleEngine.getInstance().start();

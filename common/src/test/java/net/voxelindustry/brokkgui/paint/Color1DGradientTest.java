@@ -1,13 +1,13 @@
 package net.voxelindustry.brokkgui.paint;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Color1DGradientTest
+class Color1DGradientTest
 {
     @Test
-    public void twoValuesGradient()
+    void twoValuesGradient()
     {
         Color1DGradient gradient = Color1DGradient.build().color(Color.RED, 0).color(Color.YELLOW, 1).create();
 
@@ -16,7 +16,7 @@ public class Color1DGradientTest
     }
 
     @Test
-    public void twoValuesCachedGradient()
+     void twoValuesCachedGradient()
     {
         Color1DGradient gradient = Color1DGradient.build().color(Color.RED, 0).color(Color.YELLOW, 1).precompute(0.5f).create();
 
@@ -25,7 +25,7 @@ public class Color1DGradientTest
     }
 
     @Test
-    public void threeValuesWrappingGradient()
+     void threeValuesWrappingGradient()
     {
         Color1DGradient gradient = Color1DGradient.build().color(Color.RED, 0).color(Color.YELLOW, 0.5f).color(Color.RED, 1).create();
 
@@ -38,7 +38,7 @@ public class Color1DGradientTest
     }
 
     @Test
-    public void threeValuesWrappingCachedGradient()
+     void threeValuesWrappingCachedGradient()
     {
         Color1DGradient gradient = Color1DGradient.build().color(Color.RED, 0).color(Color.YELLOW, 0.5f).color(Color.RED, 1).precompute(0.05f).create();
 

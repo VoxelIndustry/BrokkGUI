@@ -1,19 +1,16 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.paint.Color;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ColorStyleAdapterTest
 {
     private ColorStyleTranslator adapter;
 
-    @Before
+    @BeforeAll
     public void init()
     {
         this.adapter = new ColorStyleTranslator();

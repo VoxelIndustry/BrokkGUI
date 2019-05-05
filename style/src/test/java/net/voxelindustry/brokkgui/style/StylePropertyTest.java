@@ -1,14 +1,14 @@
 package net.voxelindustry.brokkgui.style;
 
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StylePropertyTest
 {
-    @Before
+    @BeforeAll
     public void init()
     {
         StyleEngine.getInstance().start();

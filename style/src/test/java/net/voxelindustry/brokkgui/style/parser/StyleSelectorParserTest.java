@@ -4,8 +4,8 @@ import net.voxelindustry.brokkgui.style.tree.IStyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleSelectorHierarchic;
 import net.voxelindustry.brokkgui.style.tree.StyleSelectorType;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +13,7 @@ public class StyleSelectorParserTest
 {
     private StyleSelectorParser parser;
 
-    @Before
+    @BeforeAll
     public void setup()
     {
         this.parser = new StyleSelectorParser();

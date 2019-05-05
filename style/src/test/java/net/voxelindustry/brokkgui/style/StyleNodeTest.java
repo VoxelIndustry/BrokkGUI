@@ -5,19 +5,14 @@ import net.voxelindustry.brokkgui.paint.ColorConstants;
 import net.voxelindustry.brokkgui.panel.GuiPane;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutionException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@RunWith(MockitoJUnitRunner.class)
 public class StyleNodeTest
 {
-    @Before
+    @BeforeAll
     public void init()
     {
         StyleEngine.getInstance().start();
