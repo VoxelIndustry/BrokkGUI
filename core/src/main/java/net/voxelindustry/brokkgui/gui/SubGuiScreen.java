@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.gui;
 
 import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;

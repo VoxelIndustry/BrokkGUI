@@ -6,12 +6,11 @@ import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.IProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.debug.DebugRenderer;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
-import net.voxelindustry.brokkgui.internal.PopupHandler;
+import net.voxelindustry.brokkgui.element.popup.PopupHandler;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
@@ -198,7 +197,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void renderLast(int mouseX, int mouseY)
     {
-        if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !this.isDebugged)
+        if (BrokkGuiPlatform.instance().isRenderDebugEnabled() && !this.isDebugged)
         {
             this.renderer.getHelper().drawColoredEmptyRect(this.renderer, 1, 1,
                     this.renderer.getHelper().getStringWidth("DEBUG") + 2,
@@ -235,7 +234,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onClick(final int mouseX, final int mouseY, final int key)
     {
-        if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !this.isDebugged)
+        if (BrokkGuiPlatform.instance().isRenderDebugEnabled() && !this.isDebugged)
         {
             if (mouseX > 0 && mouseY > 0 && mouseX < this.renderer.getHelper().getStringWidth("DEBUG") && mouseY < this.renderer.getHelper().getStringHeight())
             {
@@ -258,7 +257,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             if (this.mainPanel.isPointInside(mouseX, mouseY))
                 this.mainPanel.handleClick(mouseX, mouseY, key);
             else
-                GuiFocusManager.getInstance().requestFocus(null);
+                GuiFocusManager.instance().requestFocus(null);
         }
 
         this.lastClickX = mouseX;
@@ -284,8 +283,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void handleMouseScroll(double scrolled)
     {
-        int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
-        int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+        int mouseX = BrokkGuiPlatform.instance().mouseUtil().getMouseX();
+        int mouseY = BrokkGuiPlatform.instance().mouseUtil().getMouseY();
 
         GuiFather hovered = this.getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
@@ -295,15 +294,15 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onKeyTyped(final char c, final int key)
     {
-        if (GuiFocusManager.getInstance().getFocusedNode() != null)
-            GuiFocusManager.getInstance().getFocusedNode().handleKeyInput(c, key);
+        if (GuiFocusManager.instance().focusedNode() != null)
+            GuiFocusManager.instance().focusedNode().handleKeyInput(c, key);
     }
 
     @Override
     public void onKeyPressed(int key)
     {
-        int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
-        int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+        int mouseX = BrokkGuiPlatform.instance().mouseUtil().getMouseX();
+        int mouseY = BrokkGuiPlatform.instance().mouseUtil().getMouseY();
 
         GuiFather hovered = this.getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
@@ -313,8 +312,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onKeyReleased(int key)
     {
-        int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
-        int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+        int mouseX = BrokkGuiPlatform.instance().mouseUtil().getMouseX();
+        int mouseY = BrokkGuiPlatform.instance().mouseUtil().getMouseY();
 
         GuiFather hovered = this.getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
@@ -384,7 +383,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onClose()
     {
-        GuiFocusManager.getInstance().requestFocus(null);
+        GuiFocusManager.instance().requestFocus(null);
         this.listenerPool.clear();
         PopupHandler.getInstance(this).delete(this);
 
