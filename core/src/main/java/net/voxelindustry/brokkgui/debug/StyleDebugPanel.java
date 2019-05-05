@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.debug;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.style.StyleProperty;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;

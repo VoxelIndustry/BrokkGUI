@@ -4,7 +4,6 @@ import net.voxelindustry.brokkgui.animation.ITickSender;
 import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 import net.voxelindustry.brokkgui.internal.IMouseUtil;
-import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
 /**
  * @author Ourten 5 oct. 2016
@@ -13,7 +12,7 @@ public class BrokkGuiPlatform
 {
     private static volatile BrokkGuiPlatform INSTANCE;
 
-    public static BrokkGuiPlatform getInstance()
+    public static BrokkGuiPlatform instance()
     {
         if (BrokkGuiPlatform.INSTANCE == null)
             BrokkGuiPlatform.INSTANCE = new BrokkGuiPlatform();
@@ -30,45 +29,44 @@ public class BrokkGuiPlatform
 
     private BrokkGuiPlatform()
     {
-        StyleEngine.getInstance().start();
     }
 
-    public IKeyboardUtil getKeyboardUtil()
+    public IKeyboardUtil keyboardUtil()
     {
         return this.keyboardUtil;
     }
 
-    public void setKeyboardUtil(final IKeyboardUtil util)
+    public void keyboardUtil(IKeyboardUtil util)
     {
         this.keyboardUtil = util;
     }
 
-    public IMouseUtil getMouseUtil()
+    public IMouseUtil mouseUtil()
     {
         return this.mouseUtil;
     }
 
-    public void setMouseUtil(final IMouseUtil mouseUtil)
+    public void mouseUtil(IMouseUtil mouseUtil)
     {
         this.mouseUtil = mouseUtil;
     }
 
-    public String getPlatformName()
+    public String platformName()
     {
         return this.platformName;
     }
 
-    public void setPlatformName(final String platformName)
+    public void platformName(String platformName)
     {
         this.platformName = platformName;
     }
 
-    public IGuiHelper getGuiHelper()
+    public IGuiHelper guiHelper()
     {
         return this.guiHelper;
     }
 
-    public void setGuiHelper(final IGuiHelper guiHelper)
+    public void guiHelper(IGuiHelper guiHelper)
     {
         this.guiHelper = guiHelper;
     }
@@ -83,12 +81,12 @@ public class BrokkGuiPlatform
         this.enableRenderDebug = enableRenderDebug;
     }
 
-    public ITickSender getTickSender()
+    public ITickSender tickSender()
     {
         return tickSender;
     }
 
-    public void setTickSender(ITickSender sender)
+    public void tickSender(ITickSender sender)
     {
         this.tickSender = sender;
     }

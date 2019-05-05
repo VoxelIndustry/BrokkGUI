@@ -1,9 +1,6 @@
 package net.voxelindustry.brokkgui.element;
 
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
-import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiLabeled;
-import net.voxelindustry.brokkgui.skin.GuiLabeledSkinBase;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
 public class GuiLabel extends GuiLabeled

@@ -1,9 +1,5 @@
 package net.voxelindustry.brokkgui.element.input;
 
-import net.voxelindustry.brokkgui.behavior.GuiButtonBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiButtonBase;
-import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.skin.GuiButtonSkin;

@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.behavior;
 
-import net.voxelindustry.brokkgui.control.GuiButtonBase;
 import net.voxelindustry.brokkgui.element.IGuiTogglable;
 import net.voxelindustry.brokkgui.event.ClickEvent;
 

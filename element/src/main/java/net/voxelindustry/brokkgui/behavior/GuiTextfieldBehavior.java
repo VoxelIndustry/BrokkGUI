@@ -15,7 +15,7 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
 {
     static final Pattern ALPHA_NUM_REGEX = Pattern.compile("[a-zA-Z0-9]");
 
-    protected final IKeyboardUtil keyboard = BrokkGuiPlatform.getInstance().getKeyboardUtil();
+    protected final IKeyboardUtil keyboard = BrokkGuiPlatform.instance().keyboardUtil();
 
     public GuiTextfieldBehavior(final T model)
     {
@@ -30,7 +30,7 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
         String oldText = this.getModel().getText();
 
         if (this.getModel().isEditable()
-                && BrokkGuiPlatform.getInstance().getKeyboardUtil().isKeyValidChar(event.getCharacter()))
+                && BrokkGuiPlatform.instance().keyboardUtil().isKeyValidChar(event.getCharacter()))
         {
             this.appendTextToCursor(String.valueOf(event.getCharacter()));
 
@@ -75,11 +75,11 @@ public class GuiTextfieldBehavior<T extends GuiTextfield> extends GuiBehaviorBas
             else
                 this.getModel().setCursorPos(this.getModel().getCursorPos() + 1);
         else if (event.getKey() == this.keyboard.getKeyCode("V")
-                && BrokkGuiPlatform.getInstance().getKeyboardUtil().isCtrlKeyDown())
+                && BrokkGuiPlatform.instance().keyboardUtil().isCtrlKeyDown())
         {
             if (this.getModel().isEditable())
             {
-                this.appendTextToCursor(BrokkGuiPlatform.getInstance().getKeyboardUtil().getClipboardString());
+                this.appendTextToCursor(BrokkGuiPlatform.instance().keyboardUtil().getClipboardString());
                 contentChanged = true;
             }
         }

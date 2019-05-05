@@ -10,7 +10,6 @@ import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.shape.Text;
 import net.voxelindustry.brokkgui.validation.BaseTextValidator;
 import org.apache.commons.lang3.StringUtils;
 
@@ -74,8 +73,8 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             }
         });
         text.getWidthProperty().bind(BaseExpression.transform(this.displayedTextProperty,
-                BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
-        text.setHeight(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
+                BrokkGuiPlatform.instance().guiHelper()::getStringWidth));
+        text.setHeight(BrokkGuiPlatform.instance().guiHelper().getStringHeight());
 
         getModel().addChild(text);
 
@@ -109,8 +108,8 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             }
         });
         promptText.getWidthProperty().bind(BaseExpression.transform(this.ellipsedPromptProperty,
-                BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
-        promptText.setHeight(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
+                BrokkGuiPlatform.instance().guiHelper()::getStringWidth));
+        promptText.setHeight(BrokkGuiPlatform.instance().guiHelper().getStringHeight());
 
         promptText.getVisibleProperty().bind(new BaseBinding<Boolean>()
         {
@@ -185,7 +184,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             {
                 return trimTextToWidth(getModel().getPromptText(), getModel().getPromptEllipsis(),
                         (int) (getModel().getWidth() - getModel().getTextPadding().getLeft() - getModel().getTextPadding().getRight()),
-                        BrokkGuiPlatform.getInstance().getGuiHelper());
+                        BrokkGuiPlatform.instance().guiHelper());
             }
 
         });
@@ -208,7 +207,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                     displayOffset = getModel().getCursorPos();
                     return displayOffset;
                 }
-                IGuiHelper helper = BrokkGuiPlatform.getInstance().getGuiHelper();
+                IGuiHelper helper = BrokkGuiPlatform.instance().guiHelper();
                 while (helper.getStringWidth(getModel().getText().substring(displayOffset, getModel().getCursorPos()))
                         > getModel().getWidth() - getModel().getTextPadding().getLeft() - getModel().getTextPadding().getRight())
                 {
@@ -237,7 +236,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 if (StringUtils.isEmpty(rightPart))
                     return rightPart;
 
-                IGuiHelper helper = BrokkGuiPlatform.getInstance().getGuiHelper();
+                IGuiHelper helper = BrokkGuiPlatform.instance().guiHelper();
                 while (helper.getStringWidth(rightPart) > getModel().getWidth()
                         - getModel().getTextPadding().getLeft() - getModel().getTextPadding().getRight())
                 {

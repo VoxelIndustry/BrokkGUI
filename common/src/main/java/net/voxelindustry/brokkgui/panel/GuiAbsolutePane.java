@@ -1,35 +1,35 @@
 package net.voxelindustry.brokkgui.panel;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.Transform;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 
 public class GuiAbsolutePane extends GuiPane
 {
     @Override
-    public void addChild(final GuiNode node)
+    public void addChild(Transform transform)
     {
-        this.addChild(node, this.getWidth() / 2 - node.getWidth() / 2, this.getHeight() / 2 - node.getHeight() / 2);
+        this.addChild(transform, this.transform().width() / 2 - transform.width() / 2,
+                this.transform().height() / 2 - transform.height() / 2);
     }
 
-    public void addChild(final GuiNode node, final float posX, final float posY)
+    public void addChild(Transform transform, float posX, float posY)
     {
-        this.getChildrensProperty().add(node);
-        node.setFather(this);
+        super.addChild(transform);
 
-        node.getxPosProperty().unbind();
-        node.getyPosProperty().unbind();
+        transform.xPosProperty().unbind();
+        transform.yPosProperty().unbind();
 
-        RelativeBindingHelper.bindToPos(node, this, posX, posY);
+        RelativeBindingHelper.bindToPos(transform, this.transform(), posX, posY);
     }
 
-    public void setChildPos(final GuiNode node, final float posX, final float posY)
+    public void setChildPos(Transform transform, float posX, float posY)
     {
-        if (this.getChildrensProperty().contains(node))
+        if (transform().hasChild(transform))
         {
-            node.getxPosProperty().unbind();
-            node.getyPosProperty().unbind();
+            transform.xPosProperty().unbind();
+            transform.yPosProperty().unbind();
 
-            RelativeBindingHelper.bindToPos(node, this, posX, posY);
+            RelativeBindingHelper.bindToPos(transform, this.transform(), posX, posY);
         }
     }
 }

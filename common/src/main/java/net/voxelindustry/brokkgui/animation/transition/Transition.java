@@ -4,7 +4,7 @@ import net.voxelindustry.brokkgui.animation.Animation;
 import net.voxelindustry.brokkgui.animation.Interpolator;
 import net.voxelindustry.brokkgui.animation.Interpolators;
 import net.voxelindustry.brokkgui.event.DisposeEvent;
-import net.voxelindustry.brokkgui.exp.component.GuiElement;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 import java.util.concurrent.TimeUnit;
 

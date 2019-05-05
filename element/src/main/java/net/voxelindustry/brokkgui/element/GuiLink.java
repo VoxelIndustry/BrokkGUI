@@ -2,9 +2,6 @@ package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiLinkBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiLabeled;
-import net.voxelindustry.brokkgui.skin.GuiLabeledSkinBase;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
 /**

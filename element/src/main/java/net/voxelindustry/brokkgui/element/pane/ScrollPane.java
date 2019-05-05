@@ -1,10 +1,6 @@
 package net.voxelindustry.brokkgui.element.pane;
 
-import net.voxelindustry.brokkgui.behavior.GuiScrollableBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiScrollableBase;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
-import net.voxelindustry.brokkgui.skin.GuiScrollableSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
 /**

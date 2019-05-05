@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.exp.component;
+package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.GuiFocusManager;
@@ -297,7 +297,7 @@ public abstract class GuiElement implements IEventEmitter
     public void setFocused()
     {
         if (!this.isDisabled() && this.isFocusable())
-            GuiFocusManager.getInstance().requestFocus(this);
+            GuiFocusManager.instance().requestFocus(this);
     }
 
     public void internalSetFocused(boolean focused)

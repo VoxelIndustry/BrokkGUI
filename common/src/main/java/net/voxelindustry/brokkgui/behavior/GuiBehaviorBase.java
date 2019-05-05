@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.behavior;
 
-import net.voxelindustry.brokkgui.control.GuiElement;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 public class GuiBehaviorBase<C extends GuiElement>
 {

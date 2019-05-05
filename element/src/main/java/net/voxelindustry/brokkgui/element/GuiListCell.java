@@ -2,8 +2,6 @@ package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAxis;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.skin.GuiListCellSkin;

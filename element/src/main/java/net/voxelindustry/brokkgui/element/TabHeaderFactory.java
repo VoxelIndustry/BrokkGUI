@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.element;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.element.pane.GuiTab;
 
 @FunctionalInterface

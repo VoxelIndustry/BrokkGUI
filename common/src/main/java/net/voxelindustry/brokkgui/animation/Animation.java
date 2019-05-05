@@ -73,7 +73,7 @@ public abstract class Animation implements ITicking, IEventEmitter
     {
         if (this.isRunning())
             return;
-        BrokkGuiPlatform.getInstance().getTickSender().addTicking(this);
+        BrokkGuiPlatform.instance().tickSender().addTicking(this);
         this.restart();
     }
 
@@ -85,7 +85,7 @@ public abstract class Animation implements ITicking, IEventEmitter
     public void restart()
     {
         if (!this.isRunning())
-            BrokkGuiPlatform.getInstance().getTickSender().addTicking(this);
+            BrokkGuiPlatform.instance().tickSender().addTicking(this);
 
         this.getStatusProperty().setValue(AnimationStatus.RUNNING);
         this.getCurrentCycleProperty().setValue(0);
@@ -96,7 +96,7 @@ public abstract class Animation implements ITicking, IEventEmitter
     public void pause()
     {
         this.getStatusProperty().setValue(AnimationStatus.PAUSED);
-        BrokkGuiPlatform.getInstance().getTickSender().removeTicking(this);
+        BrokkGuiPlatform.instance().tickSender().removeTicking(this);
     }
 
     public void resume()
@@ -104,7 +104,7 @@ public abstract class Animation implements ITicking, IEventEmitter
         if (this.getStatus() != AnimationStatus.PAUSED)
             return;
 
-        BrokkGuiPlatform.getInstance().getTickSender().addTicking(this);
+        BrokkGuiPlatform.instance().tickSender().addTicking(this);
         this.startTime = System.currentTimeMillis() - this.elapsedTime;
         this.getStatusProperty().setValue(AnimationStatus.RUNNING);
     }
@@ -112,7 +112,7 @@ public abstract class Animation implements ITicking, IEventEmitter
     public void complete()
     {
         this.getStatusProperty().setValue(AnimationStatus.COMPLETED);
-        BrokkGuiPlatform.getInstance().getTickSender().removeTicking(this);
+        BrokkGuiPlatform.instance().tickSender().removeTicking(this);
 
         this.startTime = 0;
 

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.control;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectArea;
 import net.voxelindustry.brokkgui.event.GuiMouseEvent;
 
@@ -9,12 +9,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DragHelper
 {
-    public static void setDraggable(GuiNode node)
+    public static void setDraggable(GuiElement node)
     {
         setDraggable(node, null, null);
     }
 
-    public static void setDraggable(GuiNode node, @Nullable RectArea nodeDragStart, @Nullable RectArea dragArea)
+    public static void setDraggable(GuiElement node, @Nullable RectArea nodeDragStart, @Nullable RectArea dragArea)
     {
         AtomicBoolean isDragged = new AtomicBoolean(false);
 
@@ -27,8 +27,8 @@ public class DragHelper
         {
             if (isDragged.get() && (dragArea == null || dragArea.isPointInside(e.getMouseX(), e.getMouseY())))
             {
-                node.setxTranslate(e.getMouseX());
-                node.setyTranslate(e.getMouseY());
+                node.transform().xTranslate(e.getMouseX());
+                node.transform().yTranslate(e.getMouseY());
             }
         });
         node.getEventDispatcher().addHandler(GuiMouseEvent.DRAG_STOP, e -> isDragged.set(false));

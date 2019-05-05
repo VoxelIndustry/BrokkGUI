@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.debug;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.gui.GuiCompositeWindow;
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.exp.component;
+package net.voxelindustry.brokkgui.component;
 
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;

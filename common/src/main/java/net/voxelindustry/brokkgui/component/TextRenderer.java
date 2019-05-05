@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.exp.component;
+package net.voxelindustry.brokkgui.component;
 
 public class TextRenderer extends GuiComponent
 {
@@ -8,7 +8,7 @@ public class TextRenderer extends GuiComponent
     }
 
     @Override
-    void attach(GuiElement element)
+    protected void attach(GuiElement element)
     {
         super.attach(element);
 

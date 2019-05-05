@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.exp.component;
+package net.voxelindustry.brokkgui.component;
 
 public class GuiLabel extends GuiElement
 {

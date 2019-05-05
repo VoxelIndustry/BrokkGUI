@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
-import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.skin.GuiProgressBarSkin;

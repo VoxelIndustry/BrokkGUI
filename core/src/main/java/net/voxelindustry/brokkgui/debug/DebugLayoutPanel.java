@@ -1,8 +1,6 @@
 package net.voxelindustry.brokkgui.debug;
 
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
-import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.GuiListCell;
@@ -26,7 +24,7 @@ public class DebugLayoutPanel extends GuiAbsolutePane
         view.setWidth(125);
         view.setHeightRatio(1);
         view.setCellWidth(125);
-        view.setCellHeight(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
+        view.setCellHeight(BrokkGuiPlatform.instance().guiHelper().getStringHeight());
         view.setStyle("background-color: #000000 50%;");
         view.setGuiOverflow(GuiOverflowPolicy.NONE);
         view.setCellFactory(content ->

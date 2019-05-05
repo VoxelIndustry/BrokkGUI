@@ -8,7 +8,7 @@ import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.input.GuiTextfieldComplete;
-import net.voxelindustry.brokkgui.internal.PopupHandler;
+import net.voxelindustry.brokkgui.element.popup.PopupHandler;
 import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
 import org.apache.commons.lang3.StringUtils;
 
@@ -184,7 +184,7 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
             if (StringUtils.isEmpty(text) && model.getCharBeforeCompletion() != 0)
                 return;
 
-            this.clearChilds();
+            this.clearChildren();
 
             if (StringUtils.isEmpty(text))
             {

@@ -1,7 +1,5 @@
 package net.voxelindustry.brokkgui.skin;
 
-import net.voxelindustry.brokkgui.behavior.GuiButtonBehavior;
-import net.voxelindustry.brokkgui.control.GuiButtonBase;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;

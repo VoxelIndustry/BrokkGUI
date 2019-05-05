@@ -1,12 +1,12 @@
 package net.voxelindustry.brokkgui;
 
-import net.voxelindustry.brokkgui.exp.component.GuiElement;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 public class GuiFocusManager
 {
     private static GuiFocusManager INSTANCE;
 
-    public static GuiFocusManager getInstance()
+    public static GuiFocusManager instance()
     {
         if (GuiFocusManager.INSTANCE == null)
             GuiFocusManager.INSTANCE = new GuiFocusManager();
@@ -19,24 +19,24 @@ public class GuiFocusManager
     {
     }
 
-    public GuiElement getFocusedNode()
+    public GuiElement focusedNode()
     {
         return this.focusedNode;
     }
 
-    private void setFocusedNode(GuiElement element)
+    private void focusedNode(GuiElement element)
     {
         this.focusedNode = element;
     }
 
     public void requestFocus(GuiElement element)
     {
-        if (this.getFocusedNode() != null)
-            this.getFocusedNode().internalSetFocused(false);
+        if (this.focusedNode() != null)
+            this.focusedNode().internalSetFocused(false);
 
-        this.setFocusedNode(element);
+        this.focusedNode(element);
 
-        if (this.getFocusedNode() != null)
-            this.getFocusedNode().internalSetFocused(true);
+        if (this.focusedNode() != null)
+            this.focusedNode().internalSetFocused(true);
     }
 }

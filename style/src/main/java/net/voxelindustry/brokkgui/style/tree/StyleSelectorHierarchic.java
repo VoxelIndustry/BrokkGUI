@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.tree;
 
-import net.voxelindustry.brokkgui.exp.component.GuiElement;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 
 public class StyleSelectorHierarchic implements IStyleSelector

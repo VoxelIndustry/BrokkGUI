@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.element.pane;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiTabPaneBehavior;
-import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.element.TabHeaderFactory;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;

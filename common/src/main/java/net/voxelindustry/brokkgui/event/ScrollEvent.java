@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.event;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.IEventEmitter;
 
@@ -13,7 +13,7 @@ public class ScrollEvent extends GuiInputEvent
 
     private final float scrollX, scrollY;
 
-    public ScrollEvent(GuiNode source, float scrollX, float scrollY)
+    public ScrollEvent(GuiElement source, float scrollX, float scrollY)
     {
         super(source);
 
@@ -34,6 +34,6 @@ public class ScrollEvent extends GuiInputEvent
     @Override
     public ScrollEvent copy(IEventEmitter source)
     {
-        return new ScrollEvent((GuiNode) source, getScrollX(), getScrollY());
+        return new ScrollEvent((GuiElement) source, getScrollX(), getScrollY());
     }
 }

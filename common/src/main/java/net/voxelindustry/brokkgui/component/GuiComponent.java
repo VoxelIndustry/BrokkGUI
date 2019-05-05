@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.exp.component;
+package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.value.BaseProperty;
 
@@ -8,7 +8,7 @@ public abstract class GuiComponent
 
     public GuiComponent()
     {
-
+        this.elementProperty = new BaseProperty<>(null, "elementProperty");
     }
 
     protected void attach(GuiElement element)

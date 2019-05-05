@@ -3,10 +3,9 @@ package net.voxelindustry.brokkgui.element;
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
-import net.voxelindustry.brokkgui.internal.PopupHandler;
+import net.voxelindustry.brokkgui.element.popup.PopupHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayDeque;

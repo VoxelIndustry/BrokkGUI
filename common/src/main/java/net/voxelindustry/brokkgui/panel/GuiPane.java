@@ -1,42 +1,49 @@
 package net.voxelindustry.brokkgui.panel;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiFather;
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.Transform;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 
-public class GuiPane extends GuiFather
+public class GuiPane extends GuiElement
 {
     public GuiPane()
     {
-        super("pane");
+
     }
 
     @Override
-    public void addChild(final GuiNode node)
+    protected String getType()
     {
-        super.addChild(node);
-
-        RelativeBindingHelper.bindToCenter(node, this);
+        return "pane";
     }
 
-    @Override
-    public void removeChild(final GuiNode node)
+    public void addChild(GuiElement element)
     {
-        super.removeChild(node);
-
-        node.getxPosProperty().unbind();
-        node.getyPosProperty().unbind();
+        this.addChild(element.transform());
     }
 
-    @Override
-    public void clearChilds()
+    public void addChild(Transform transform)
     {
-        this.getChildrensProperty().getValue().forEach(node ->
-        {
-            node.setFather(null);
-            node.getxPosProperty().unbind();
-            node.getyPosProperty().unbind();
-        });
-        this.getChildrensProperty().clear();
+        transform().addChild(transform);
+
+        RelativeBindingHelper.bindToCenter(transform, this.transform());
+    }
+
+    public void removeChild(Transform transform)
+    {
+        transform().removeChild(transform);
+
+        transform.xPosProperty().unbind();
+        transform.yPosProperty().unbind();
+    }
+
+    public void removeChild(GuiElement element)
+    {
+        this.removeChild(element.transform());
+    }
+
+    public void clearChildren()
+    {
+        this.transform().clearChildren();
     }
 }

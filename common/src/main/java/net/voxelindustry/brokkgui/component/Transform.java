@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.exp.component;
+package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.value.BaseListProperty;
@@ -129,6 +129,8 @@ public class Transform extends GuiComponent
     public void addChild(Transform element)
     {
         this.childrenProperty().add(element);
+
+        RelativeBindingHelper.bindToPos(element, this);
     }
 
     public void addChildren(Transform... elements)

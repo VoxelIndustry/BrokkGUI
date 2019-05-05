@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.shape;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.ObservableValue;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.Transform;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import org.apache.commons.lang3.ArrayUtils;
@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 
 public class ScissorBox
 {
-    private GuiNode                node;
+    private Transform              transform;
     private ObservableValue<Float> startX, startY, endX, endY;
     private Predicate<RenderPass> renderPassPredicate;
 
@@ -21,16 +21,16 @@ public class ScissorBox
         this.renderPassPredicate = renderPass -> true;
     }
 
-    public static ScissorBox fitNode(GuiNode node)
+    public static ScissorBox fitNode(Transform transform)
     {
         ScissorBox box = new ScissorBox();
-        box.node = node;
+        box.transform = transform;
 
-        box.startX = BaseExpression.biCombine(node.getxPosProperty(), node.getxTranslateProperty(), Float::sum);
-        box.startY = BaseExpression.biCombine(node.getyPosProperty(), node.getyTranslateProperty(), Float::sum);
+        box.startX = BaseExpression.biCombine(transform.xPosProperty(), transform.xTranslateProperty(), Float::sum);
+        box.startY = BaseExpression.biCombine(transform.yPosProperty(), transform.yTranslateProperty(), Float::sum);
 
-        box.endX = BaseExpression.biCombine(box.startX, node.getWidthProperty(), Float::sum);
-        box.endY = BaseExpression.biCombine(box.startY, node.getHeightProperty(), Float::sum);
+        box.endX = BaseExpression.biCombine(box.startX, transform.widthProperty(), Float::sum);
+        box.endY = BaseExpression.biCombine(box.startY, transform.heightProperty(), Float::sum);
 
         return box;
     }
@@ -49,14 +49,14 @@ public class ScissorBox
 
     public void dispose()
     {
-        if (node == null)
+        if (transform == null)
             return;
 
-        ((BaseExpression<Float>) this.startX).unbind(node.getxPosProperty(), node.getxTranslateProperty());
-        ((BaseExpression<Float>) this.startY).unbind(node.getyPosProperty(), node.getyTranslateProperty());
+        ((BaseExpression<Float>) this.startX).unbind(transform.xPosProperty(), transform.xTranslateProperty());
+        ((BaseExpression<Float>) this.startY).unbind(transform.yPosProperty(), transform.yTranslateProperty());
 
-        ((BaseExpression<Float>) this.endX).unbind(this.startX, node.getWidthProperty());
-        ((BaseExpression<Float>) this.endY).unbind(this.startY, node.getHeightProperty());
+        ((BaseExpression<Float>) this.endX).unbind(this.startX, transform.widthProperty());
+        ((BaseExpression<Float>) this.endY).unbind(this.startY, transform.heightProperty());
     }
 
     public void setValidPass(RenderPass... passArray)

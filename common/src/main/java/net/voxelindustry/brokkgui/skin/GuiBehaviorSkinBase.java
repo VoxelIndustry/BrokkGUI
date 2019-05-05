@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.skin;
 
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
-import net.voxelindustry.brokkgui.control.GuiElement;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 public class GuiBehaviorSkinBase<C extends GuiElement, B extends GuiBehaviorBase<C>> extends GuiSkinBase<C>
 {

@@ -1,16 +1,15 @@
-package net.voxelindustry.brokkgui.control;
+package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
-import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
 
 import javax.annotation.Nonnull;
 
-public abstract class GuiLabeled extends GuiElement
+public class Text extends GuiComponent
 {
     private final BaseProperty<RectAlignment> textAlignmentProperty;
     private final BaseProperty<String>        textProperty;
@@ -19,51 +18,23 @@ public abstract class GuiLabeled extends GuiElement
     private final BaseProperty<Boolean> expandToTextProperty;
     private final BaseProperty<RectBox> textPaddingProperty;
 
-    private final BaseProperty<GuiNode>  iconProperty;
-    private final BaseProperty<RectSide> iconSideProperty;
-    private final BaseProperty<Float>    iconPaddingProperty;
+    private final BaseProperty<GuiElement> iconProperty;
+    private final BaseProperty<RectSide>   iconSideProperty;
+    private final BaseProperty<Float>      iconPaddingProperty;
 
-    public GuiLabeled(String type, String text, GuiNode icon)
+    public Text()
     {
-        super(type);
-
-        this.textProperty = new BaseProperty<>(text, "textProperty");
+        this.textProperty = new BaseProperty<>("", "textProperty");
         this.textAlignmentProperty = new BaseProperty<>(RectAlignment.MIDDLE_CENTER, "textAlignmentProperty");
         this.ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
         this.expandToTextProperty = new BaseProperty<>(true, "expandToTextProperty");
         this.textPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "textPaddingProperty");
 
-        this.iconProperty = new BaseProperty<>(icon, "iconProperty");
+        this.iconProperty = new BaseProperty<>(null, "iconProperty");
         this.iconSideProperty = new BaseProperty<>(RectSide.LEFT, "iconSideProperty");
         this.iconPaddingProperty = new BaseProperty<>(2f, "iconPaddingProperty");
 
         this.bindSizeToText();
-    }
-
-    public GuiLabeled(String type, String text)
-    {
-        this(type, text, null);
-    }
-
-    public GuiLabeled(String type)
-    {
-        this(type, "", null);
-    }
-
-    @Override
-    public void setWidth(final float width)
-    {
-        if (this.getWidthProperty().isBound() && this.expandToText())
-            this.getWidthProperty().unbind();
-        super.setWidth(width);
-    }
-
-    @Override
-    public void setHeight(final float height)
-    {
-        if (this.getHeightProperty().isBound() && this.expandToText())
-            this.getHeightProperty().unbind();
-        super.setHeight(height);
     }
 
     public BaseProperty<RectAlignment> getTextAlignmentProperty()
@@ -91,7 +62,7 @@ public abstract class GuiLabeled extends GuiElement
         return textPaddingProperty;
     }
 
-    public BaseProperty<GuiNode> getIconProperty()
+    public BaseProperty<GuiElement> getIconProperty()
     {
         return iconProperty;
     }
@@ -146,12 +117,12 @@ public abstract class GuiLabeled extends GuiElement
         this.textPaddingProperty.setValue(textPadding);
     }
 
-    public GuiNode getIcon()
+    public GuiElement getIcon()
     {
         return this.iconProperty.getValue();
     }
 
-    public void setIcon(GuiNode icon)
+    public void setIcon(GuiElement icon)
     {
         this.iconProperty.setValue(icon);
     }
@@ -187,15 +158,15 @@ public abstract class GuiLabeled extends GuiElement
             this.bindSizeToText();
         else if (!expandToText && this.expandToText())
         {
-            this.getWidthProperty().unbind();
-            this.getHeightProperty().unbind();
+            this.element().transform().widthProperty().unbind();
+            this.element().transform().heightProperty().unbind();
         }
         this.expandToTextProperty.setValue(expandToText);
     }
 
     private void bindSizeToText()
     {
-        this.getWidthProperty().bind(new BaseBinding<Float>()
+        this.element().transform().widthProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(getTextProperty(),
@@ -211,20 +182,20 @@ public abstract class GuiLabeled extends GuiElement
                 if (getIconProperty().isPresent())
                 {
                     if (getIconSide().isHorizontal())
-                        return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())
+                        return BrokkGuiPlatform.instance().guiHelper().getStringWidth(getText())
                                 + getTextPadding().getLeft() + getTextPadding().getRight()
-                                + getIcon().getWidth() + getIconPadding();
+                                + getIcon().transform().width() + getIconPadding();
                     else
-                        return Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText()),
-                                getIcon().getWidth())
+                        return Math.max(BrokkGuiPlatform.instance().guiHelper().getStringWidth(getText()),
+                                getIcon().transform().width())
                                 + getTextPadding().getLeft() + getTextPadding().getRight();
                 }
-                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())
+                return BrokkGuiPlatform.instance().guiHelper().getStringWidth(getText())
                         + getTextPadding().getLeft() + getTextPadding().getRight();
             }
         });
 
-        this.getHeightProperty().bind(new BaseBinding<Float>()
+        this.element().transform().heightProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(getTextProperty(),
@@ -240,15 +211,15 @@ public abstract class GuiLabeled extends GuiElement
                 if (getIconProperty().isPresent())
                 {
                     if (getIconSide().isVertical())
-                        return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight()
+                        return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
                                 + getTextPadding().getTop() + getTextPadding().getBottom()
-                                + getIcon().getHeight() + getIconPadding();
+                                + getIcon().transform().height() + getIconPadding();
                     else
-                        return Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight(),
-                                getIcon().getHeight())
+                        return Math.max(BrokkGuiPlatform.instance().guiHelper().getStringHeight(),
+                                getIcon().transform().height())
                                 + getTextPadding().getTop() + getTextPadding().getBottom();
                 }
-                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight()
+                return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
                         + getTextPadding().getTop() + getTextPadding().getBottom();
             }
         });

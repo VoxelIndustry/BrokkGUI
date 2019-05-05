@@ -6,7 +6,6 @@ import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldBehavior;
 import net.voxelindustry.brokkgui.component.ITextInput;
-import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.event.CursorMoveEvent;
 import net.voxelindustry.brokkgui.event.TextTypedEvent;
@@ -291,8 +290,8 @@ public class GuiTextfield extends GuiElement implements ITextInput
             public Float computeValue()
             {
                 return Math.max(getHeight(),
-                        Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getPromptText()),
-                                BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())) +
+                        Math.max(BrokkGuiPlatform.instance().guiHelper().getStringWidth(getPromptText()),
+                                BrokkGuiPlatform.instance().guiHelper().getStringWidth(getText())) +
                                 getTextPadding().getLeft() + getTextPadding().getRight());
             }
         });

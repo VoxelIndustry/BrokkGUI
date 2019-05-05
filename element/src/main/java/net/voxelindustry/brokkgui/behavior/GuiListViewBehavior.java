@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.behavior;
 
 import fr.ourten.teabeans.value.BaseListProperty;
-import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.element.GuiListCell;
 import net.voxelindustry.brokkgui.element.GuiListView;
 import net.voxelindustry.brokkgui.event.ClickEvent;

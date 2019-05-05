@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.skin;
 
-import net.voxelindustry.brokkgui.behavior.GuiButtonBehavior;
 import net.voxelindustry.brokkgui.element.input.GuiCheckbox;
 import net.voxelindustry.brokkgui.element.input.GuiRadioButton;
 

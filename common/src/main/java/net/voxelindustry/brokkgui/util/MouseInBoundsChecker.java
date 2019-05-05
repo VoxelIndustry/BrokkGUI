@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.util;
 
-import net.voxelindustry.brokkgui.exp.component.GuiElement;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 @FunctionalInterface
 public interface MouseInBoundsChecker

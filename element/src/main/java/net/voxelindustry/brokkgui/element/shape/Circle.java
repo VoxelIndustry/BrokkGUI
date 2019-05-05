@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.element.shape;
 
 import net.voxelindustry.brokkgui.component.PaintStyle;
-import net.voxelindustry.brokkgui.exp.component.GuiElement;
-import net.voxelindustry.brokkgui.exp.component.Paint;
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.Paint;
 import net.voxelindustry.brokkgui.shape.CircleShape;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;

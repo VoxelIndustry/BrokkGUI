@@ -1,10 +1,12 @@
-package net.voxelindustry.brokkgui.internal;
+package net.voxelindustry.brokkgui.element.popup;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
+import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
 import java.util.*;
@@ -17,7 +19,7 @@ public class PopupHandler
     public static PopupHandler getInstance(IGuiSubWindow window)
     {
         Objects.requireNonNull(window);
-        
+
         if (!instances.containsKey(window))
             instances.put(window, new PopupHandler());
         return instances.get(window);
@@ -40,10 +42,11 @@ public class PopupHandler
     {
         this.toAdd.add(popup);
 
-        if (popup instanceof ICascadeStyleable)
+        if (popup instanceof GuiElement && ((GuiElement) popup).has(StyleHolder.class))
         {
-            ((ICascadeStyleable) popup).setStyleTree(this.styleSupplier);
-            ((ICascadeStyleable) popup).refreshStyle();
+            StyleHolder style = ((GuiElement) popup).get(StyleHolder.class);
+            style.setStyleSupplier(styleSupplier);
+            style.refresh();
         }
     }
 
@@ -83,18 +86,20 @@ public class PopupHandler
 
         this.popups.forEach(popup ->
         {
-            if (popup instanceof ICascadeStyleable)
+            if (popup instanceof GuiElement && ((GuiElement) popup).has(StyleHolder.class))
             {
-                ((ICascadeStyleable) popup).setStyleTree(styleSupplier);
-                ((ICascadeStyleable) popup).refreshStyle();
+                StyleHolder style = ((GuiElement) popup).get(StyleHolder.class);
+                style.setStyleSupplier(styleSupplier);
+                style.refresh();
             }
         });
         this.toAdd.forEach(popup ->
         {
-            if (popup instanceof ICascadeStyleable)
+            if (popup instanceof GuiElement && ((GuiElement) popup).has(StyleHolder.class))
             {
-                ((ICascadeStyleable) popup).setStyleTree(styleSupplier);
-                ((ICascadeStyleable) popup).refreshStyle();
+                StyleHolder style = ((GuiElement) popup).get(StyleHolder.class);
+                style.setStyleSupplier(styleSupplier);
+                style.refresh();
             }
         });
     }
@@ -103,15 +108,19 @@ public class PopupHandler
     {
         this.popups.forEach(popup ->
         {
-            if (popup instanceof IStyleable)
-                ((IStyleable) popup).refreshStyle();
+            if (popup instanceof GuiElement && ((GuiElement) popup).has(StyleHolder.class))
+            {
+                StyleHolder style = ((GuiElement) popup).get(StyleHolder.class);
+                style.refresh();
+            }
         });
         this.toAdd.forEach(popup ->
         {
-            if (popup instanceof ICascadeStyleable)
+            if (popup instanceof GuiElement && ((GuiElement) popup).has(StyleHolder.class))
             {
-                ((ICascadeStyleable) popup).setStyleTree(styleSupplier);
-                ((ICascadeStyleable) popup).refreshStyle();
+                StyleHolder style = ((GuiElement) popup).get(StyleHolder.class);
+                style.setStyleSupplier(styleSupplier);
+                style.refresh();
             }
         });
     }
@@ -120,8 +129,9 @@ public class PopupHandler
     {
         popups.forEach(popup ->
         {
-            if (popup instanceof GuiNode)
-                ((GuiNode) popup).handleHover(mouseX, mouseY, ((GuiNode) popup).isPointInside(mouseX, mouseY));
+            if (popup instanceof GuiElement)
+                ((GuiElement) popup).handleHover(mouseX, mouseY,
+                        ((GuiElement) popup).transform().isPointInside(mouseX, mouseY));
         });
     }
 
@@ -129,8 +139,8 @@ public class PopupHandler
     {
         popups.forEach(popup ->
         {
-            if (popup instanceof GuiNode)
-                ((GuiNode) popup).handleClick(mouseX, mouseY, key);
+            if (popup instanceof GuiElement)
+                ((GuiElement) popup).handleClick(mouseX, mouseY, key);
         });
     }
 }

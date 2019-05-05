@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.animation.transition;
 
 import net.voxelindustry.brokkgui.animation.Animation;
 import net.voxelindustry.brokkgui.animation.Interpolators;
-import net.voxelindustry.brokkgui.exp.component.GuiElement;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 import java.util.Arrays;
 import java.util.List;
