@@ -16,20 +16,12 @@ public class GuiAbsolutePane extends GuiPane
     {
         super.addChild(transform);
 
-        transform.xPosProperty().unbind();
-        transform.yPosProperty().unbind();
-
         RelativeBindingHelper.bindToPos(transform, this.transform(), posX, posY);
     }
 
     public void setChildPos(Transform transform, float posX, float posY)
     {
         if (transform().hasChild(transform))
-        {
-            transform.xPosProperty().unbind();
-            transform.yPosProperty().unbind();
-
             RelativeBindingHelper.bindToPos(transform, this.transform(), posX, posY);
-        }
     }
 }

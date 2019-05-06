@@ -21,11 +21,6 @@ public class GuiRelativePane extends GuiPane
     public void setChildPos(Transform transform, float ratioX, float ratioY)
     {
         if (transform().hasChild(transform))
-        {
-            transform.xPosProperty().unbind();
-            transform.yPosProperty().unbind();
-
             RelativeBindingHelper.bindToRelative(transform, this.transform(), ratioX, ratioY);
-        }
     }
 }

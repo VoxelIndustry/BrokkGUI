@@ -8,7 +8,7 @@ public class GuiPane extends GuiElement
 {
     public GuiPane()
     {
-
+        transform().bindChild(false);
     }
 
     @Override
@@ -20,21 +20,18 @@ public class GuiPane extends GuiElement
     public void addChild(GuiElement element)
     {
         this.addChild(element.transform());
+
+        RelativeBindingHelper.bindToCenter(element.transform(), this.transform());
     }
 
     public void addChild(Transform transform)
     {
         transform().addChild(transform);
-
-        RelativeBindingHelper.bindToCenter(transform, this.transform());
     }
 
     public void removeChild(Transform transform)
     {
         transform().removeChild(transform);
-
-        transform.xPosProperty().unbind();
-        transform.yPosProperty().unbind();
     }
 
     public void removeChild(GuiElement element)

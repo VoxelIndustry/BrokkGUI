@@ -34,6 +34,8 @@ public class Transform extends GuiComponent
 
     private MouseInBoundsChecker mouseInBoundsChecker;
 
+    private boolean bindChild = true;
+
     private ScissorBox scissorBox;
 
     public Transform()
@@ -130,7 +132,8 @@ public class Transform extends GuiComponent
     {
         this.childrenProperty().add(element);
 
-        RelativeBindingHelper.bindToPos(element, this);
+        if (this.bindChild())
+            RelativeBindingHelper.bindToPos(element, this);
     }
 
     public void addChildren(Transform... elements)
@@ -142,16 +145,17 @@ public class Transform extends GuiComponent
     public void removeChild(Transform element)
     {
         this.childrenProperty().remove(element);
+
         element.xPosProperty().unbind();
         element.yPosProperty().unbind();
     }
 
     public void clearChildren()
     {
-        this.childrenProperty().getValue().forEach(node ->
+        this.childrenProperty().getValue().forEach(element ->
         {
-            node.xPosProperty().unbind();
-            node.yPosProperty().unbind();
+            element.xPosProperty().unbind();
+            element.yPosProperty().unbind();
         });
         this.childrenProperty().clear();
     }
@@ -159,6 +163,16 @@ public class Transform extends GuiComponent
     public boolean hasChild(Transform element)
     {
         return this.childrenProperty().contains(element);
+    }
+
+    public boolean bindChild()
+    {
+        return this.bindChild;
+    }
+
+    public void bindChild(boolean bindChild)
+    {
+        this.bindChild = bindChild;
     }
 
     ////////////////
