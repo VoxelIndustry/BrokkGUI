@@ -416,6 +416,75 @@ public abstract class GuiElement implements IEventEmitter
         this.window = window;
     }
 
+    //////////////
+    //  LAYOUT  //
+    //////////////
+
+    public GuiElement parent()
+    {
+        return this.transform().parent().element();
+    }
+
+    public float xPos()
+    {
+        return transform.xPos();
+    }
+
+    public float yPos()
+    {
+        return transform.yPos();
+    }
+
+    public float xTranslate()
+    {
+        return transform.xTranslate();
+    }
+
+    public void xTranslate(float xTranslate)
+    {
+        transform.xTranslate(xTranslate);
+    }
+
+    public float yTranslate()
+    {
+        return transform.yTranslate();
+    }
+
+    public void yTranslate(float yTranslate)
+    {
+        transform.yTranslate(yTranslate);
+    }
+
+    public void translate(float xTranslate, float yTranslate)
+    {
+        transform.translate(xTranslate, yTranslate);
+    }
+
+    public float width()
+    {
+        return transform.width();
+    }
+
+    public void width(float width)
+    {
+        transform.width(width);
+    }
+
+    public float height()
+    {
+        return transform.height();
+    }
+
+    public void height(float height)
+    {
+        transform.height(height);
+    }
+
+    public void size(float width, float height)
+    {
+        transform.size(width, height);
+    }
+
     ////////////////
     // COMPONENTS //
     ////////////////
@@ -441,13 +510,12 @@ public abstract class GuiElement implements IEventEmitter
         try
         {
             instance = componentClass.newInstance();
+            this.componentMap.put(componentClass, instance);
+            instance.attach(this);
         } catch (InstantiationException | IllegalAccessException e)
         {
             e.printStackTrace();
         }
-
-        this.componentMap.put(componentClass, instance);
-        instance.attach(this);
 
         if (instance instanceof RenderComponent)
             this.renderComponents.add((RenderComponent) instance);
