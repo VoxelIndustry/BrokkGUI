@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.style.tree;
 
-import net.voxelindustry.brokkgui.panel.GuiPane;
+import net.voxelindustry.brokkgui.style.DummyGuiElement;
+import net.voxelindustry.brokkgui.style.StyleHolder;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,18 +15,18 @@ public class StyleSelectorHierarchicTest
         selector.add(StyleSelectorType.ID, "myID");
         selector.addParent(StyleSelectorType.CLASS, "test");
 
-        GuiPane parent = new GuiPane();
-        parent.getStyleClass().add("test");
+        DummyGuiElement parent = new DummyGuiElement("dummy");
+        parent.get(StyleHolder.class).styleClass().add("test");
 
-        GuiPane child = new GuiPane();
-        child.setID("myID");
+        DummyGuiElement child = new DummyGuiElement("dummy");
+        child.setId("myID");
 
-        parent.addChild(child);
+        parent.transform().addChild(child.transform());
 
-        assertThat(child.getStyle().getParent().isPresent()).isTrue();
-        assertThat(child.getStyle().getParent().getValue()).isEqualTo(parent);
-        assertThat(selector.match(child.getStyle())).isTrue();
-        assertThat(selector.match(parent.getStyle())).isFalse();
+        assertThat(child.get(StyleHolder.class).parent()).isNotNull();
+        assertThat(child.get(StyleHolder.class).parent()).isEqualTo(parent);
+        assertThat(selector.match(child.get(StyleHolder.class))).isTrue();
+        assertThat(selector.match(parent.get(StyleHolder.class))).isFalse();
     }
 
     @Test
@@ -35,21 +36,21 @@ public class StyleSelectorHierarchicTest
         selector.add(StyleSelectorType.ID, "myID");
         selector.addParent(StyleSelectorType.CLASS, "test");
 
-        GuiPane parent = new GuiPane();
-        parent.getStyleClass().add("test");
+        DummyGuiElement parent = new DummyGuiElement("dummy");
+        parent.get(StyleHolder.class).styleClass().add("test");
 
-        GuiPane child = new GuiPane();
-        child.setID("myID");
+        DummyGuiElement child = new DummyGuiElement("dummy");
+        child.setId("myID");
 
-        GuiPane subChild = new GuiPane();
-        subChild.setID("myID");
+        DummyGuiElement grandChild = new DummyGuiElement("dummy");
+        grandChild.setId("myID");
 
-        parent.addChild(child);
-        child.addChild(subChild);
+        parent.transform().addChild(child.transform());
+        child.transform().addChild(grandChild.transform());
 
-        assertThat(selector.match(subChild.getStyle())).isTrue();
-        assertThat(selector.match(child.getStyle())).isTrue();
-        assertThat(selector.match(parent.getStyle())).isFalse();
+        assertThat(selector.match(grandChild.get(StyleHolder.class))).isTrue();
+        assertThat(selector.match(child.get(StyleHolder.class))).isTrue();
+        assertThat(selector.match(parent.get(StyleHolder.class))).isFalse();
     }
 
     @Test
@@ -96,24 +97,24 @@ public class StyleSelectorHierarchicTest
         direct.addParent(StyleSelectorType.WILDCARD, "");
         direct.add(StyleSelectorType.ID, "someID");
 
-        GuiPane pane = new GuiPane();
+        DummyGuiElement parent = new DummyGuiElement("dummy");
 
-        GuiPane child = new GuiPane();
-        child.setID("someID");
-        pane.addChild(child);
+        DummyGuiElement child = new DummyGuiElement("dummy");
+        child.setId("someID");
+        parent.transform().addChild(child.transform());
 
-        assertThat(direct.match(child.getStyle())).isTrue();
+        assertThat(direct.match(child.get(StyleHolder.class))).isTrue();
 
         StyleSelectorHierarchic indirect = new StyleSelectorHierarchic(new StyleSelector(), new StyleSelector(), false);
         indirect.addParent(StyleSelectorType.WILDCARD, "");
         indirect.add(StyleSelectorType.ID, "someID");
 
-        GuiPane subChild = new GuiPane();
-        subChild.setID("someID");
-        child.addChild(subChild);
+        DummyGuiElement subChild = new DummyGuiElement("dummy");
+        subChild.setId("someID");
+        child.transform().addChild(subChild.transform());
 
-        assertThat(indirect.match(subChild.getStyle())).isTrue();
-        assertThat(indirect.match(child.getStyle())).isTrue();
-        assertThat(indirect.match(pane.getStyle())).isFalse();
+        assertThat(indirect.match(subChild.get(StyleHolder.class))).isTrue();
+        assertThat(indirect.match(child.get(StyleHolder.class))).isTrue();
+        assertThat(indirect.match(parent.get(StyleHolder.class))).isFalse();
     }
 }

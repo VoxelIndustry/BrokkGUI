@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.tree;
 
-import net.voxelindustry.brokkgui.panel.GuiPane;
+import net.voxelindustry.brokkgui.style.DummyStyleHolder;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,17 +16,15 @@ public class StyleSelectorTest
         selector.add(StyleSelectorType.PSEUDOCLASS, "hovered");
         selector.add(StyleSelectorType.TYPE, "pane");
 
-        GuiPane pane = new GuiPane();
-        pane.getStyleClass().add("someClass");
-        pane.setID("someID");
-        pane.getActivePseudoClass().add("hovered");
+        DummyStyleHolder paneStyle = new DummyStyleHolder("someID", "pane");
+        paneStyle.styleClass().add("someClass");
+        paneStyle.activePseudoClass().add("hovered");
 
-        GuiPane notmatching = new GuiPane();
-        notmatching.getStyleClass().add("someClass");
-        notmatching.setID("someID");
+        DummyStyleHolder notmatchingStyle = new DummyStyleHolder("someID");
+        notmatchingStyle.styleClass().add("someClass");
 
-        assertThat(selector.match(pane.getStyle())).isTrue();
-        assertThat(selector.match(notmatching.getStyle())).isFalse();
+        assertThat(selector.match(paneStyle)).isTrue();
+        assertThat(selector.match(notmatchingStyle)).isFalse();
     }
 
     @Test

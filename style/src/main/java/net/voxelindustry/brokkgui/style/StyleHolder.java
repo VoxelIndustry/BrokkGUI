@@ -29,7 +29,6 @@ public class StyleHolder extends GuiComponent
     private       Supplier<StyleList>     styleSupplier;
     private final BaseSetProperty<String> styleClass;
     private final BaseSetProperty<String> activePseudoClass;
-    private       String                  type;
 
     private ValueChangeListener<String>    styleRefreshListener = this::valueChanged;
     private ValueChangeListener<Transform> styleParentListener  = this::parentChanged;
@@ -89,27 +88,32 @@ public class StyleHolder extends GuiComponent
     // PROPERTIES //
     ////////////////
 
-    public BaseSetProperty<String> getStyleClass()
+    public BaseSetProperty<String> styleClass()
     {
         return this.styleClass;
     }
 
-    public String getType()
+    public String type()
     {
-        return type;
+        return this.element().getType();
     }
 
-    public void setType(String type)
-    {
-        this.type = type;
-    }
-
-    public BaseSetProperty<String> getActivePseudoClass()
+    public BaseSetProperty<String> activePseudoClass()
     {
         return activePseudoClass;
     }
 
-    public GuiElement getParent()
+    public String id()
+    {
+        return this.element().getId();
+    }
+
+    public void id(String id)
+    {
+        this.element().setId(id);
+    }
+
+    public GuiElement parent()
     {
         Transform parentTransform = this.element().transform().parent();
         return parentTransform != null ? parentTransform.element() : null;

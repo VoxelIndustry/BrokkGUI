@@ -41,22 +41,22 @@ public class StyleSelectorHierarchic implements IStyleSelector
 
     public boolean match(StyleHolder styleHolder)
     {
-        if (styleHolder.getParent() == null)
+        if (styleHolder.parent() == null)
             return false;
 
         if (this.isDirectChild())
         {
-            if (!styleHolder.getParent().has(StyleHolder.class) || !this.parentSelector.match(styleHolder.getParent().get(StyleHolder.class)))
+            if (!styleHolder.parent().has(StyleHolder.class) || !this.parentSelector.match(styleHolder.parent().get(StyleHolder.class)))
                 return false;
         }
         else
         {
-            GuiElement current = styleHolder.getParent();
+            GuiElement current = styleHolder.parent();
 
             boolean matched = false;
             while (current != null)
             {
-                if (styleHolder.getParent().has(StyleHolder.class) && this.parentSelector.match(current.get(StyleHolder.class)))
+                if (styleHolder.parent().has(StyleHolder.class) && this.parentSelector.match(current.get(StyleHolder.class)))
                 {
                     matched = true;
                     break;

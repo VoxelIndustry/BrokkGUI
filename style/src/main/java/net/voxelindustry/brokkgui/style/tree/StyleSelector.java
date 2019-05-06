@@ -79,19 +79,19 @@ public class StyleSelector implements IStyleSelector
             case WILDCARD:
                 return true;
             case TYPE:
-                if (!selector.getValue().equals(styleHolder.getType()))
+                if (!selector.getValue().equals(styleHolder.type()))
                     return false;
                 break;
             case CLASS:
-                if (!styleHolder.getStyleClass().getValue().contains(selector.getValue()))
+                if (!styleHolder.styleClass().getValue().contains(selector.getValue()))
                     return false;
                 break;
             case ID:
-                if (!selector.getValue().equals(styleHolder.element().getId()))
+                if (!selector.getValue().equals(styleHolder.id()))
                     return false;
                 break;
             case PSEUDOCLASS:
-                if (!styleHolder.getActivePseudoClass().getValue().contains(selector.getValue()))
+                if (!styleHolder.activePseudoClass().getValue().contains(selector.getValue()))
                     return false;
                 break;
         }

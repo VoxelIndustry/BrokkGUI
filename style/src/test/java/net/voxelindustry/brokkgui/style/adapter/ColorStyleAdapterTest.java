@@ -3,9 +3,11 @@ package net.voxelindustry.brokkgui.style.adapter;
 import net.voxelindustry.brokkgui.paint.Color;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ColorStyleAdapterTest
 {
     private ColorStyleTranslator adapter;
