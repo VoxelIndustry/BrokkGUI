@@ -4,7 +4,7 @@ import fr.ourten.teabeans.value.IProperty;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
-import net.voxelindustry.brokkgui.panel.GuiPane;
+import net.voxelindustry.brokkgui.panel.PaneBase;
 
 /**
  * @author Ourten 31 oct. 2016
@@ -35,7 +35,7 @@ public interface IGuiWindow extends IGuiSubWindow
 
     IBrokkGuiImpl getWrapper();
 
-    GuiPane getMainPanel();
+    PaneBase getMainPanel();
 
     boolean doesOccludePoint(int mouseX, int mouseY);
 

@@ -9,7 +9,7 @@ import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.input.GuiTextfieldComplete;
 import net.voxelindustry.brokkgui.element.popup.PopupHandler;
-import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
+import net.voxelindustry.brokkgui.panel.AbsolutePaneBase;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
         return popup.selected != null;
     }
 
-    private static class CompletePopup extends GuiAbsolutePane implements IGuiPopup
+    private static class CompletePopup extends AbsolutePaneBase implements IGuiPopup
     {
         private static RectBox LABEL_PADDING = new RectBox(1, 2, 1, 2);
 

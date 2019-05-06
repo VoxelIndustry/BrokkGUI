@@ -5,7 +5,7 @@ import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
+import net.voxelindustry.brokkgui.panel.AbsolutePaneBase;
 
 public class GuiToast extends GuiFather implements IGuiPopup
 {
@@ -49,7 +49,7 @@ public class GuiToast extends GuiFather implements IGuiPopup
 
     public GuiToast(long lifeTime)
     {
-        this(new GuiAbsolutePane(), lifeTime);
+        this(new AbsolutePaneBase(), lifeTime);
     }
 
     @Override

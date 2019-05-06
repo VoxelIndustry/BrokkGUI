@@ -4,15 +4,15 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.Transform;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 
-public class GuiPane extends GuiElement
+public class PaneBase extends GuiElement
 {
-    public GuiPane()
+    public PaneBase()
     {
         transform().bindChild(false);
     }
 
     @Override
-    protected String getType()
+    public String getType()
     {
         return "pane";
     }

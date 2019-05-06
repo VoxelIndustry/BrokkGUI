@@ -9,7 +9,7 @@ public class GuiLabel extends GuiElement
     }
 
     @Override
-    protected String getType()
+    public String getType()
     {
         return "label";
     }

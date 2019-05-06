@@ -6,7 +6,7 @@ import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.ColorConstants;
-import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
+import net.voxelindustry.brokkgui.panel.AbsolutePaneBase;
 
 import java.text.NumberFormat;
 
@@ -35,7 +35,7 @@ public class DebugWindow extends BrokkGuiScreen
         this.getHeightProperty().bind(BaseExpression.transform(this.getScreenHeightProperty(), Integer::floatValue));
         this.window = window;
 
-        GuiAbsolutePane mainPanel = new GuiAbsolutePane();
+        AbsolutePaneBase mainPanel = new AbsolutePaneBase();
         this.setMainPanel(mainPanel);
 
         this.debugLayoutPanel = new DebugLayoutPanel();

@@ -555,7 +555,7 @@ public abstract class GuiElement implements IEventEmitter
         return this.componentMap.containsValue(component);
     }
 
-    protected abstract String getType();
+    public abstract String getType();
 
     public BaseProperty<String> getIdProperty()
     {

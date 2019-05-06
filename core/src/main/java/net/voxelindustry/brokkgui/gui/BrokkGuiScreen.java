@@ -14,7 +14,7 @@ import net.voxelindustry.brokkgui.element.popup.PopupHandler;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
-import net.voxelindustry.brokkgui.panel.GuiPane;
+import net.voxelindustry.brokkgui.panel.PaneBase;
 import net.voxelindustry.brokkgui.style.IStyleRoot;
 import net.voxelindustry.brokkgui.style.StylesheetManager;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
@@ -30,7 +30,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
 
-    private       GuiPane                 mainPanel;
+    private       PaneBase                mainPanel;
     private final ArrayList<SubGuiScreen> windows;
     private       IGuiRenderer            renderer;
 
@@ -88,7 +88,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         Comparator<Pair<Runnable, Long>> comparator = Comparator.comparingLong(Pair::getValue);
         this.tasksQueue = new PriorityQueue<>(comparator.reversed());
 
-        this.setMainPanel(new GuiPane());
+        this.setMainPanel(new PaneBase());
     }
 
     public BrokkGuiScreen(final float width, final float height)
@@ -410,12 +410,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public GuiPane getMainPanel()
+    public PaneBase getMainPanel()
     {
         return this.mainPanel;
     }
 
-    public void setMainPanel(final GuiPane mainPanel)
+    public void setMainPanel(final PaneBase mainPanel)
     {
         if (this.mainPanel != null)
         {

@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.panel;
 import net.voxelindustry.brokkgui.component.Transform;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 
-public class GuiAbsolutePane extends GuiPane
+public class AbsolutePaneBase extends PaneBase
 {
     @Override
     public void addChild(Transform transform)

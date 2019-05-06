@@ -6,7 +6,7 @@ import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.GuiListCell;
 import net.voxelindustry.brokkgui.element.GuiListView;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
-import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
+import net.voxelindustry.brokkgui.panel.AbsolutePaneBase;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -14,7 +14,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DebugLayoutPanel extends GuiAbsolutePane
+public class DebugLayoutPanel extends AbsolutePaneBase
 {
     private final GuiListView<Pair<GuiNode, Integer>> view;
 
