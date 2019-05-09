@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.element.input;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiTogglableButtonBehavior;
-import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.IGuiTogglable;
 import net.voxelindustry.brokkgui.skin.GuiButtonSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;

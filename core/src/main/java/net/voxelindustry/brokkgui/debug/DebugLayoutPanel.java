@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.debug;
 
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.data.RectAlignment;
-import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.GuiListCell;
 import net.voxelindustry.brokkgui.element.GuiListView;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;

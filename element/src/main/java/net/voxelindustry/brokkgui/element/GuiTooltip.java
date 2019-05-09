@@ -45,7 +45,7 @@ public class GuiTooltip implements IGuiTooltip, ICascadeStyleable
 
     public GuiTooltip(String text, GuiNode icon)
     {
-        this(new GuiLabel(text, icon), 5, 5);
+        this(new Label(text, icon), 5, 5);
     }
 
     public GuiTooltip(String text)

@@ -6,7 +6,6 @@ import net.voxelindustry.brokkgui.behavior.GuiTextfieldCompleteBehavior;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.input.GuiTextfieldComplete;
 import net.voxelindustry.brokkgui.element.popup.PopupHandler;
 import net.voxelindustry.brokkgui.panel.AbsolutePaneBase;

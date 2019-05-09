@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.element.input;
 
 import net.voxelindustry.brokkgui.data.RectAlignment;
-import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.skin.GuiButtonSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 

@@ -7,7 +7,6 @@ import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.behavior.GuiTabPaneBehavior;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.pane.GuiTab;
 import net.voxelindustry.brokkgui.element.pane.GuiTabPane;
 import net.voxelindustry.brokkgui.event.ClickEvent;
