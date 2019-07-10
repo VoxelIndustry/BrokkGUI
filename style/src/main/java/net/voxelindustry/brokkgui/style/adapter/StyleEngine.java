@@ -19,7 +19,7 @@ public class StyleEngine
 
     private StyleEngine()
     {
-
+        this.elementsStyleStatus(ElementStyleStatus.DEFAULT_ENABLED);
     }
 
     public void start()
@@ -40,12 +40,12 @@ public class StyleEngine
                 rectBoxTranslator);
     }
 
-    public void setElementsStyleStatus(ElementStyleStatus status)
+    public void elementsStyleStatus(ElementStyleStatus status)
     {
         this.status = status;
     }
 
-    public ElementStyleStatus getElementStyleStatus()
+    public ElementStyleStatus elementStyleStatus()
     {
         return this.status;
     }

@@ -115,27 +115,13 @@ public class Text extends GuiComponent
         this.element().transform().widthProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(textProperty(),
-                        textPaddingProperty(),
-                        getIconProperty(),
-                        getIconPaddingProperty(),
-                        getIconSideProperty());
+                super.bind(textProperty(), textPaddingProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                if (getIconProperty().isPresent())
-                {
-                    if (getIconSide().isHorizontal())
-                        return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text())
-                                + textPadding().getLeft() + textPadding().getRight()
-                                + getIcon().transform().width() + getIconPadding();
-                    else
-                        return Math.max(BrokkGuiPlatform.instance().guiHelper().getStringWidth(text()),
-                                getIcon().transform().width())
-                                + textPadding().getLeft() + textPadding().getRight();
-                }
+
                 return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text())
                         + textPadding().getLeft() + textPadding().getRight();
             }
@@ -145,26 +131,12 @@ public class Text extends GuiComponent
         {
             {
                 super.bind(textProperty(),
-                        textPaddingProperty(),
-                        getIconProperty(),
-                        getIconPaddingProperty(),
-                        getIconSideProperty());
+                        textPaddingProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                if (getIconProperty().isPresent())
-                {
-                    if (getIconSide().isVertical())
-                        return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
-                                + textPadding().getTop() + textPadding().getBottom()
-                                + getIcon().transform().height() + getIconPadding();
-                    else
-                        return Math.max(BrokkGuiPlatform.instance().guiHelper().getStringHeight(),
-                                getIcon().transform().height())
-                                + textPadding().getTop() + textPadding().getBottom();
-                }
                 return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
                         + textPadding().getTop() + textPadding().getBottom();
             }

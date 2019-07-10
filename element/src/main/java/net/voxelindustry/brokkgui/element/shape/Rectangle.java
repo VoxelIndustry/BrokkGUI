@@ -16,7 +16,7 @@ public class Rectangle extends GuiElement
 
     public Rectangle(float xLeft, float yLeft, float width, float height)
     {
-        this.refreshStyle(StyleEngine.getInstance().getElementStyleStatus().enabled());
+        this.refreshStyle(StyleEngine.getInstance().elementStyleStatus().enabled());
 
         transform().xTranslate(xLeft);
         transform().yTranslate(yLeft);
@@ -36,7 +36,7 @@ public class Rectangle extends GuiElement
     }
 
     @Override
-    protected String getType()
+    public String getType()
     {
         return "rectangle";
     }
@@ -64,6 +64,7 @@ public class Rectangle extends GuiElement
         Paint paint;
         if (useStyle)
         {
+            add(new StyleHolder());
             paint = new PaintStyle();
             remove(Paint.class);
         }
@@ -71,8 +72,9 @@ public class Rectangle extends GuiElement
         {
             paint = new Paint();
             remove(PaintStyle.class);
+            remove(StyleHolder.class);
         }
-        paint.setShape(SHAPE);
+        paint.shape(SHAPE);
         add(paint);
     }
 }

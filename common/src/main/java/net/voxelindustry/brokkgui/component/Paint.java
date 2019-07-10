@@ -45,12 +45,12 @@ public class Paint extends GuiComponent implements RenderComponent
     {
     }
 
-    public ShapeDefinition getShape()
+    public ShapeDefinition shape()
     {
         return shape;
     }
 
-    public void setShape(ShapeDefinition shape)
+    public void shape(ShapeDefinition shape)
     {
         this.shape = shape;
 

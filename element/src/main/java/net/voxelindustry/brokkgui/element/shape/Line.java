@@ -16,7 +16,7 @@ public class Line extends GuiElement
 
     public Line(float startX, float startY, float endX, float endY)
     {
-        this.refreshStyle(StyleEngine.getInstance().getElementStyleStatus().enabled());
+        this.refreshStyle(StyleEngine.getInstance().elementStyleStatus().enabled());
 
         transform().xTranslate(startX);
         transform().yTranslate(startY);
@@ -36,7 +36,7 @@ public class Line extends GuiElement
     }
 
     @Override
-    protected String getType()
+    public String getType()
     {
         return "line";
     }
@@ -74,7 +74,7 @@ public class Line extends GuiElement
             paint = new Paint();
             remove(PaintStyle.class);
         }
-        paint.setShape(new LineShape(this::getLineWidth));
+        paint.shape(new LineShape(this::getLineWidth));
         add(paint);
     }
 

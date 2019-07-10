@@ -326,6 +326,8 @@ public class StyleHolder extends GuiComponent
                 this.setProperty(rule.getRuleIdentifier(), rule.getRuleValue(), StyleSource.AUTHOR,
                         entry.getSelector().getSpecificity());
         }));
+
+        //this.element().transform().children().forEach(child -> child.element().);
     }
 
     /**

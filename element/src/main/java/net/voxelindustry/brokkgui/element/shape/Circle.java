@@ -16,7 +16,7 @@ public class Circle extends GuiElement
 
     public Circle(float xPosition, float yPosition, float radius)
     {
-        this.refreshStyle(StyleEngine.getInstance().getElementStyleStatus().enabled());
+        this.refreshStyle(StyleEngine.getInstance().elementStyleStatus().enabled());
 
         transform().xTranslate(xPosition);
         transform().yTranslate(yPosition);
@@ -35,7 +35,7 @@ public class Circle extends GuiElement
     }
 
     @Override
-    protected String getType()
+    public String getType()
     {
         return "circle";
     }
@@ -71,7 +71,7 @@ public class Circle extends GuiElement
             paint = new Paint();
             remove(PaintStyle.class);
         }
-        paint.setShape(SHAPE);
+        paint.shape(SHAPE);
         add(paint);
     }
 }
