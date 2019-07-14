@@ -6,16 +6,17 @@ import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.IProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
-import net.voxelindustry.brokkgui.debug.DebugRenderer;
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.element.popup.PopupHandler;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
-import net.voxelindustry.brokkgui.element.popup.PopupHandler;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
 import net.voxelindustry.brokkgui.panel.PaneBase;
 import net.voxelindustry.brokkgui.style.IStyleRoot;
+import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.StylesheetManager;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.hermod.*;
@@ -108,28 +109,28 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         this.renderer = wrapper.getRenderer();
 
-        this.xPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosX(getxRelativePos(), getWidth()) + getxOffset(),
-                this.getScreenWidthProperty(), this.getxRelativePosProperty(), this.getWidthProperty(),
-                this.getxOffsetProperty()));
+        this.xPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosX(xRelativePos(), width()) + xOffset(),
+                this.screenWidthProperty(), this.xRelativePosProperty(), this.widthProperty(),
+                this.xOffsetProperty()));
 
-        this.yPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosY(getyRelativePos(), getHeight()) + getyOffset(),
-                this.getyRelativePosProperty(), this.getScreenHeightProperty(), this.getHeightProperty(),
-                this.getyOffsetProperty()));
+        this.yPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosY(yRelativePos(), height()) + yOffset(),
+                this.yRelativePosProperty(), this.screenHeightProperty(), this.heightProperty(),
+                this.yOffsetProperty()));
 
         this.stylesheetsProperty.addListener(obs ->
         {
             StylesheetManager.getInstance().refreshStylesheets(this);
-            if (this.getMainPanel() != null)
-                this.getMainPanel().refreshStyle();
+            if (doesMainPanelUseStyle())
+                this.getMainPanel().get(StyleHolder.class).refresh();
             PopupHandler.getInstance(this).refreshStyle();
 
-            this.windows.forEach(GuiFather::refreshStyle);
+            this.windows.forEach(SubGuiScreen::refreshStyle);
         });
 
         StylesheetManager.getInstance().refreshStylesheets(this);
-        if (this.getMainPanel() != null)
-            this.getMainPanel().refreshStyle();
-        this.windows.forEach(GuiFather::refreshStyle);
+        if (doesMainPanelUseStyle())
+            this.getMainPanel().get(StyleHolder.class).refresh();
+        this.windows.forEach(SubGuiScreen::refreshStyle);
         PopupHandler.getInstance(this).setStyleSupplier(this.getStyleTreeProperty()::getValue);
     }
 
@@ -142,15 +143,15 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                 if (this.cachedMouseX != mouseX || this.cachedMouseY != mouseY)
                 {
                     if (!this.windows.isEmpty() && this.windows.stream().anyMatch(gui ->
-                            gui.isPointInside(mouseX, mouseY)))
+                            gui.transform().isPointInside(mouseX, mouseY)))
                     {
-                        this.windows.forEach(gui -> gui.handleHover(mouseX, mouseY, gui.isPointInside(mouseX, mouseY)));
+                        this.windows.forEach(gui -> gui.handleHover(mouseX, mouseY, gui.transform().isPointInside(mouseX, mouseY)));
                         this.mainPanel.handleHover(mouseX, mouseY, false);
                     }
                     else
                     {
                         this.windows.forEach(gui -> gui.handleHover(mouseX, mouseY, false));
-                        this.mainPanel.handleHover(mouseX, mouseY, this.mainPanel.isPointInside(mouseX, mouseY));
+                        this.mainPanel.handleHover(mouseX, mouseY, this.mainPanel.transform().isPointInside(mouseX, mouseY));
                     }
 
                     PopupHandler.getInstance(this).handleHover(mouseX, mouseY);
@@ -170,8 +171,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                     for (int i = this.windows.size() - 1; i >= 0; i--)
                     {
                         if (this.windows.get(i).hasWarFog())
-                            this.renderer.getHelper().drawColoredRect(this.renderer, 0, 0, this.getWidth(),
-                                    this.getHeight(), 5 + i, Color.BLACK.addAlpha(-0.5f));
+                            this.renderer.getHelper().drawColoredRect(this.renderer, 0, 0, this.width(),
+                                    this.height(), 5 + i, Color.BLACK.addAlpha(-0.5f));
 
                         for (RenderPass pass : passes)
                         {
@@ -210,7 +211,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public boolean doesOccludePoint(int mouseX, int mouseY)
     {
-        return !this.windows.isEmpty() && this.windows.stream().anyMatch(gui -> gui.isPointInside(mouseX, mouseY));
+        return !this.windows.isEmpty() && this.windows.stream().anyMatch(gui -> gui.transform().isPointInside(mouseX, mouseY));
     }
 
     @Override
@@ -247,14 +248,14 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         if (!this.windows.isEmpty())
         {
-            if (this.windows.get(0).isPointInside(mouseX, mouseY))
+            if (this.windows.get(0).transform().isPointInside(mouseX, mouseY))
                 this.windows.get(0).handleClick(mouseX, mouseY, key);
             else if (this.windows.get(0).closeOnClick())
                 this.removeSubGui(this.windows.get(0));
         }
         else
         {
-            if (this.mainPanel.isPointInside(mouseX, mouseY))
+            if (this.mainPanel.transform().isPointInside(mouseX, mouseY))
                 this.mainPanel.handleClick(mouseX, mouseY, key);
             else
                 GuiFocusManager.instance().requestFocus(null);
@@ -267,14 +268,14 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onClickDrag(int mouseX, int mouseY, int key, long timeSinceDrag)
     {
-        if (this.mainPanel.isPointInside(lastClickX, lastClickY))
+        if (this.mainPanel.transform().isPointInside(lastClickX, lastClickY))
             this.mainPanel.handleClickDrag(mouseX, mouseY, key, lastClickX, lastClickY);
     }
 
     @Override
     public void onClickStop(int mouseX, int mouseY, int key)
     {
-        if (this.mainPanel.isPointInside(lastClickX, lastClickY))
+        if (this.mainPanel.transform().isPointInside(lastClickX, lastClickY))
             this.mainPanel.handleClickStop(mouseX, mouseY, key, lastClickX, lastClickY);
         this.lastClickX = -1;
         this.lastClickY = -1;
@@ -286,7 +287,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         int mouseX = BrokkGuiPlatform.instance().mouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.instance().mouseUtil().getMouseY();
 
-        GuiFather hovered = this.getNodeUnderMouse(mouseX, mouseY);
+        GuiElement hovered = this.getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
             hovered.handleMouseScroll(mouseX, mouseY, scrolled);
     }
@@ -304,7 +305,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         int mouseX = BrokkGuiPlatform.instance().mouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.instance().mouseUtil().getMouseY();
 
-        GuiFather hovered = this.getNodeUnderMouse(mouseX, mouseY);
+        GuiElement hovered = this.getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
             hovered.handleKeyPress(mouseX, mouseY, key);
     }
@@ -315,7 +316,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         int mouseX = BrokkGuiPlatform.instance().mouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.instance().mouseUtil().getMouseY();
 
-        GuiFather hovered = this.getNodeUnderMouse(mouseX, mouseY);
+        GuiElement hovered = this.getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
             hovered.handleKeyRelease(mouseX, mouseY, key);
     }
@@ -324,13 +325,13 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         this.windows.add(0, subGui);
 
-        subGui.getxPosProperty().bind(new BaseExpression<>(() -> getScreenWidth() / (1 / subGui.getxRelativePos())
-                - subGui.getWidth() / 2, subGui.getxRelativePosProperty(), this.getScreenWidthProperty(),
-                subGui.getWidthProperty()));
+        subGui.transform().xPosProperty().bind(new BaseExpression<>(() -> screenWidth() / (1 / subGui.xRelativePos())
+                - subGui.width() / 2, subGui.xRelativePosProperty(), this.screenWidthProperty(),
+                subGui.transform().widthProperty()));
 
-        subGui.getyPosProperty().bind(new BaseExpression<>(() -> getScreenHeight() / (1 / subGui.getyRelativePos())
-                - subGui.getHeight() / 2, subGui.getyRelativePosProperty(), this.getScreenHeightProperty(),
-                subGui.getHeightProperty()));
+        subGui.transform().yPosProperty().bind(new BaseExpression<>(() -> screenHeight() / (1 / subGui.yRelativePos())
+                - subGui.height() / 2, subGui.yRelativePosProperty(), this.screenHeightProperty(),
+                subGui.transform().heightProperty()));
 
         subGui.open();
 
@@ -343,8 +344,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         subGui.close();
 
-        subGui.getxPosProperty().unbind();
-        subGui.getyPosProperty().unbind();
+        subGui.transform().xPosProperty().unbind();
+        subGui.transform().yPosProperty().unbind();
         this.windows.remove(subGui);
 
         subGui.setStyleTree(null);
@@ -394,17 +395,17 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
-    private GuiFather getNodeUnderMouse(int mouseX, int mouseY)
+    private GuiElement getNodeUnderMouse(int mouseX, int mouseY)
     {
         if (!this.windows.isEmpty())
         {
             Optional<SubGuiScreen> match =
-                    this.windows.stream().filter(gui -> gui.isPointInside(mouseX, mouseY)).findFirst();
+                    this.windows.stream().filter(gui -> gui.transform().isPointInside(mouseX, mouseY)).findFirst();
 
             if (match.isPresent())
                 return match.get();
         }
-        if (this.getMainPanel().isPointInside(mouseX, mouseY))
+        if (this.getMainPanel().transform().isPointInside(mouseX, mouseY))
             return this.getMainPanel();
         return null;
     }
@@ -419,10 +420,10 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         if (this.mainPanel != null)
         {
-            this.mainPanel.getWidthProperty().unbind();
-            this.mainPanel.getHeightProperty().unbind();
-            this.mainPanel.getxPosProperty().unbind();
-            this.mainPanel.getyPosProperty().unbind();
+            this.mainPanel.transform().widthProperty().unbind();
+            this.mainPanel.transform().heightProperty().unbind();
+            this.mainPanel.transform().xPosProperty().unbind();
+            this.mainPanel.transform().yPosProperty().unbind();
 
             if (this.mainPanel.getWindow() == this)
                 this.mainPanel.setWindow(null);
@@ -430,16 +431,24 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         this.mainPanel = mainPanel;
 
-        this.mainPanel.getWidthProperty().bind(this.widthProperty);
-        this.mainPanel.getHeightProperty().bind(this.heightProperty);
+        this.mainPanel.transform().widthProperty().bind(this.widthProperty);
+        this.mainPanel.transform().heightProperty().bind(this.heightProperty);
 
-        this.mainPanel.getxPosProperty().bind(this.xPosProperty);
-        this.mainPanel.getyPosProperty().bind(this.yPosProperty);
+        this.mainPanel.transform().xPosProperty().bind(this.xPosProperty);
+        this.mainPanel.transform().yPosProperty().bind(this.yPosProperty);
 
-        this.mainPanel.setStyleTree(this.getStyleTreeProperty()::getValue);
-        if (this.wrapper != null)
-            this.mainPanel.refreshStyle();
+        if (doesMainPanelUseStyle())
+        {
+            this.mainPanel.get(StyleHolder.class).setStyleSupplier(this.getStyleTreeProperty()::getValue);
+            if (this.wrapper != null)
+                this.mainPanel.get(StyleHolder.class).refresh();
+        }
         this.mainPanel.setWindow(this);
+    }
+
+    private boolean doesMainPanelUseStyle()
+    {
+        return this.mainPanel != null && this.mainPanel.has(StyleHolder.class);
     }
 
     public void runLater(Runnable runnable, long time, TimeUnit unit)
@@ -452,191 +461,191 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         this.runLater(runnable, ticks * 50, TimeUnit.MILLISECONDS);
     }
 
-    public BaseProperty<Float> getWidthProperty()
+    public BaseProperty<Float> widthProperty()
     {
         return this.widthProperty;
     }
 
-    public BaseProperty<Float> getHeightProperty()
+    public BaseProperty<Float> heightProperty()
     {
         return this.heightProperty;
     }
 
-    public BaseProperty<Float> getxPosProperty()
+    public BaseProperty<Float> xPosProperty()
     {
         return this.xPosProperty;
     }
 
-    public BaseProperty<Float> getyPosProperty()
+    public BaseProperty<Float> yPosProperty()
     {
         return this.yPosProperty;
     }
 
     @Override
-    public BaseProperty<Float> getxRelativePosProperty()
+    public BaseProperty<Float> xRelativePosProperty()
     {
         return this.xRelativePosProperty;
     }
 
     @Override
-    public BaseProperty<Float> getyRelativePosProperty()
+    public BaseProperty<Float> yRelativePosProperty()
     {
         return this.yRelativePosProperty;
     }
 
-    public BaseProperty<Float> getxOffsetProperty()
+    public BaseProperty<Float> xOffsetProperty()
     {
         return xOffsetProperty;
     }
 
-    public BaseProperty<Float> getyOffsetProperty()
+    public BaseProperty<Float> yOffsetProperty()
     {
         return yOffsetProperty;
     }
 
     @Override
-    public float getWidth()
+    public float width()
     {
-        return this.getWidthProperty().getValue();
+        return this.widthProperty().getValue();
     }
 
     @Override
-    public float getHeight()
+    public float height()
     {
-        return this.getHeightProperty().getValue();
+        return this.heightProperty().getValue();
     }
 
-    public void setWidth(final float width)
+    public void width(final float width)
     {
-        this.getWidthProperty().setValue(width);
+        this.widthProperty().setValue(width);
     }
 
-    public void setHeight(final float height)
+    public void height(final float height)
     {
-        this.getHeightProperty().setValue(height);
+        this.heightProperty().setValue(height);
     }
 
-    public void setSize(float width, float height)
+    public void size(float width, float height)
     {
-        this.setWidth(width);
-        this.setHeight(height);
+        this.width(width);
+        this.height(height);
     }
 
-    public float getxPos()
+    public float xPos()
     {
-        return this.getxPosProperty().getValue();
+        return this.xPosProperty().getValue();
     }
 
-    public void setxPos(final float xPos)
+    public void xPos(final float xPos)
     {
-        this.getxPosProperty().setValue(xPos);
+        this.xPosProperty().setValue(xPos);
     }
 
-    public float getyPos()
+    public float yPos()
     {
-        return this.getyPosProperty().getValue();
+        return this.yPosProperty().getValue();
     }
 
-    public void setyPos(final float yPos)
+    public void yPos(final float yPos)
     {
-        this.getyPosProperty().setValue(yPos);
-    }
-
-    @Override
-    public float getxRelativePos()
-    {
-        return this.getxRelativePosProperty().getValue();
-    }
-
-    public void setxRelativePos(final float xRelativePos)
-    {
-        this.getxRelativePosProperty().setValue(xRelativePos);
+        this.yPosProperty().setValue(yPos);
     }
 
     @Override
-    public float getyRelativePos()
+    public float xRelativePos()
     {
-        return this.getyRelativePosProperty().getValue();
+        return this.xRelativePosProperty().getValue();
     }
 
-    public void setyRelativePos(final float yRelativePos)
+    public void xRelativePos(final float xRelativePos)
     {
-        this.getyRelativePosProperty().setValue(yRelativePos);
+        this.xRelativePosProperty().setValue(xRelativePos);
+    }
+
+    @Override
+    public float yRelativePos()
+    {
+        return this.yRelativePosProperty().getValue();
+    }
+
+    public void yRelativePos(final float yRelativePos)
+    {
+        this.yRelativePosProperty().setValue(yRelativePos);
     }
 
     public void setRelativePos(float xRelativePos, float yRelativePos)
     {
-        this.setxRelativePos(xRelativePos);
-        this.setyRelativePos(yRelativePos);
+        this.xRelativePos(xRelativePos);
+        this.yRelativePos(yRelativePos);
     }
 
-    public float getxOffset()
+    public float xOffset()
     {
-        return this.getxOffsetProperty().getValue();
+        return this.xOffsetProperty().getValue();
     }
 
-    public void setxOffset(float xOffset)
+    public void xOffset(float xOffset)
     {
-        this.getxOffsetProperty().setValue(xOffset);
+        this.xOffsetProperty().setValue(xOffset);
     }
 
-    public float getyOffset()
+    public float yOffset()
     {
-        return this.getyOffsetProperty().getValue();
+        return this.yOffsetProperty().getValue();
     }
 
-    public void setyOffset(float yOffset)
+    public void yOffset(float yOffset)
     {
-        this.getyOffsetProperty().setValue(yOffset);
+        this.yOffsetProperty().setValue(yOffset);
     }
 
-    public void setOffset(float xOffset, float yOffset)
+    public void offset(float xOffset, float yOffset)
     {
-        this.setxOffset(xOffset);
-        this.setyOffset(yOffset);
+        this.xOffset(xOffset);
+        this.yOffset(yOffset);
     }
 
     @Override
-    public IProperty<Integer> getScreenWidthProperty()
+    public IProperty<Integer> screenWidthProperty()
     {
         return this.screenWidthProperty;
     }
 
     @Override
-    public IProperty<Integer> getScreenHeightProperty()
+    public IProperty<Integer> screenHeightProperty()
     {
         return this.screenHeightProperty;
     }
 
-    public int getScreenWidth()
+    public int screenWidth()
     {
-        return this.getScreenWidthProperty().getValue();
+        return this.screenWidthProperty().getValue();
     }
 
-    public int getScreenHeight()
+    public int screenHeight()
     {
-        return this.getScreenHeightProperty().getValue();
-    }
-
-    @Override
-    public void setScreenWidth(int width)
-    {
-        this.getScreenWidthProperty().setValue(width);
+        return this.screenHeightProperty().getValue();
     }
 
     @Override
-    public void setScreenHeight(int height)
+    public void screenWidth(int width)
     {
-        this.getScreenHeightProperty().setValue(height);
+        this.screenWidthProperty().setValue(width);
     }
 
-    public ListenerPool getListeners()
+    @Override
+    public void screenHeight(int height)
+    {
+        this.screenHeightProperty().setValue(height);
+    }
+
+    public ListenerPool listeners()
     {
         return this.listenerPool;
     }
 
     @Override
-    public IBrokkGuiImpl getWrapper()
+    public IBrokkGuiImpl wrapper()
     {
         return this.wrapper;
     }

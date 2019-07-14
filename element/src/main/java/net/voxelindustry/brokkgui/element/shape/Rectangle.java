@@ -1,18 +1,12 @@
 package net.voxelindustry.brokkgui.element.shape;
 
-import net.voxelindustry.brokkgui.component.PaintStyle;
-import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.component.Paint;
 import net.voxelindustry.brokkgui.shape.RectangleShape;
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
-public class Rectangle extends GuiElement
+public class Rectangle extends ShapeBase
 {
     public static final RectangleShape SHAPE = new RectangleShape();
-
-    private boolean             useStyle;
-    private StyleHolder         style;
 
     public Rectangle(float xLeft, float yLeft, float width, float height)
     {
@@ -41,40 +35,9 @@ public class Rectangle extends GuiElement
         return "rectangle";
     }
 
-    public StyleHolder getStyle()
+    @Override
+    public ShapeDefinition getShape()
     {
-        if (style == null)
-            style = get(StyleHolder.class);
-        return style;
-    }
-
-    public boolean useStyle()
-    {
-        return useStyle;
-    }
-
-    public void useStyle(boolean useStyle)
-    {
-        this.useStyle = useStyle;
-        this.refreshStyle(useStyle);
-    }
-
-    private void refreshStyle(boolean useStyle)
-    {
-        Paint paint;
-        if (useStyle)
-        {
-            add(new StyleHolder());
-            paint = new PaintStyle();
-            remove(Paint.class);
-        }
-        else
-        {
-            paint = new Paint();
-            remove(PaintStyle.class);
-            remove(StyleHolder.class);
-        }
-        paint.shape(SHAPE);
-        add(paint);
+        return SHAPE;
     }
 }

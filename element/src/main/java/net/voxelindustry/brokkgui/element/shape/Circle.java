@@ -1,18 +1,12 @@
 package net.voxelindustry.brokkgui.element.shape;
 
-import net.voxelindustry.brokkgui.component.PaintStyle;
-import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.component.Paint;
 import net.voxelindustry.brokkgui.shape.CircleShape;
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
-public class Circle extends GuiElement
+public class Circle extends ShapeBase
 {
     public static final CircleShape SHAPE = new CircleShape();
-
-    private boolean     useStyle;
-    private StyleHolder style;
 
     public Circle(float xPosition, float yPosition, float radius)
     {
@@ -40,38 +34,9 @@ public class Circle extends GuiElement
         return "circle";
     }
 
-    public StyleHolder getStyle()
+    @Override
+    public ShapeDefinition getShape()
     {
-        if (style == null)
-            style = get(StyleHolder.class);
-        return style;
-    }
-
-    public boolean useStyle()
-    {
-        return useStyle;
-    }
-
-    public void useStyle(boolean useStyle)
-    {
-        this.useStyle = useStyle;
-        this.refreshStyle(useStyle);
-    }
-
-    private void refreshStyle(boolean useStyle)
-    {
-        Paint paint;
-        if (useStyle)
-        {
-            paint = new PaintStyle();
-            remove(Paint.class);
-        }
-        else
-        {
-            paint = new Paint();
-            remove(PaintStyle.class);
-        }
-        paint.shape(SHAPE);
-        add(paint);
+        return SHAPE;
     }
 }

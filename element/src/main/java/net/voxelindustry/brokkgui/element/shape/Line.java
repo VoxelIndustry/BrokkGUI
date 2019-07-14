@@ -1,17 +1,12 @@
 package net.voxelindustry.brokkgui.element.shape;
 
 import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.component.PaintStyle;
-import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.component.Paint;
 import net.voxelindustry.brokkgui.shape.LineShape;
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
-public class Line extends GuiElement
+public class Line extends ShapeBase
 {
-    private boolean             useStyle;
-    private StyleHolder         style;
     private BaseProperty<Float> lineWidthProperty;
 
     public Line(float startX, float startY, float endX, float endY)
@@ -41,41 +36,10 @@ public class Line extends GuiElement
         return "line";
     }
 
-    public StyleHolder getStyle()
+    @Override
+    public ShapeDefinition getShape()
     {
-        if (style == null)
-            style = get(StyleHolder.class);
-        return style;
-    }
-
-    public boolean useStyle()
-    {
-        return useStyle;
-    }
-
-    public void useStyle(boolean useStyle)
-    {
-        this.useStyle = useStyle;
-        this.refreshStyle(useStyle);
-    }
-
-    private void refreshStyle(boolean useStyle)
-    {
-        Paint paint;
-        if (useStyle)
-        {
-            paint = new PaintStyle();
-            remove(Paint.class);
-
-            getStyle().registerProperty("line-width", 1f, Float.class);
-        }
-        else
-        {
-            paint = new Paint();
-            remove(PaintStyle.class);
-        }
-        paint.shape(new LineShape(this::getLineWidth));
-        add(paint);
+        return new LineShape(this::getLineWidth);
     }
 
     ////////////////
@@ -84,7 +48,7 @@ public class Line extends GuiElement
 
     public BaseProperty<Float> lineWidthProperty()
     {
-        if (useStyle)
+        if (this.useStyle())
             return this.getStyle().getProperty("line-width", Float.class);
 
         if (this.lineWidthProperty == null)
@@ -94,7 +58,7 @@ public class Line extends GuiElement
 
     public float getLineWidth()
     {
-        if (useStyle)
+        if (this.useStyle())
             return this.getStyle().getStyleValue("line-width", Float.class, 1f);
 
         return this.lineWidthProperty().getValue();
@@ -102,7 +66,7 @@ public class Line extends GuiElement
 
     public void setLineWidth(float lineWidth)
     {
-        if (useStyle)
+        if (this.useStyle())
             this.getStyle().setPropertyDirect("line-width", lineWidth, Float.class);
         else
             this.lineWidthProperty().setValue(lineWidth);

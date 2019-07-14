@@ -17,13 +17,13 @@ public interface IGuiWindow extends IGuiSubWindow
 
     void setWrapper(IBrokkGuiImpl wrapper);
 
-    void setScreenWidth(int width);
+    void screenWidth(int width);
 
-    void setScreenHeight(int height);
+    void screenHeight(int height);
 
-    IProperty<Integer> getScreenWidthProperty();
+    IProperty<Integer> screenWidthProperty();
 
-    IProperty<Integer> getScreenHeightProperty();
+    IProperty<Integer> screenHeightProperty();
 
     void render(int mouseX, int mouseY, RenderTarget target, RenderPass... pass);
 
@@ -33,7 +33,7 @@ public interface IGuiWindow extends IGuiSubWindow
 
     void initGui();
 
-    IBrokkGuiImpl getWrapper();
+    IBrokkGuiImpl wrapper();
 
     PaneBase getMainPanel();
 

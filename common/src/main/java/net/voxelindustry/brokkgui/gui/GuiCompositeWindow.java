@@ -42,29 +42,29 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void setScreenWidth(int width)
+    public void screenWidth(int width)
     {
-        first.setScreenWidth(width);
-        second.setScreenWidth(width);
+        first.screenWidth(width);
+        second.screenWidth(width);
     }
 
     @Override
-    public void setScreenHeight(int height)
+    public void screenHeight(int height)
     {
-        first.setScreenHeight(height);
-        second.setScreenHeight(height);
+        first.screenHeight(height);
+        second.screenHeight(height);
     }
 
     @Override
-    public IProperty<Integer> getScreenWidthProperty()
+    public IProperty<Integer> screenWidthProperty()
     {
-        return first.getScreenWidthProperty();
+        return first.screenWidthProperty();
     }
 
     @Override
-    public IProperty<Integer> getScreenHeightProperty()
+    public IProperty<Integer> screenHeightProperty()
     {
-        return first.getScreenHeightProperty();
+        return first.screenHeightProperty();
     }
 
     @Override
@@ -96,9 +96,9 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public IBrokkGuiImpl getWrapper()
+    public IBrokkGuiImpl wrapper()
     {
-        return first.getWrapper();
+        return first.wrapper();
     }
 
     @Override
@@ -177,39 +177,39 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public float getxRelativePos()
+    public float xRelativePos()
     {
-        return first.getxRelativePos();
+        return first.xRelativePos();
     }
 
     @Override
-    public float getyRelativePos()
+    public float yRelativePos()
     {
-        return first.getyRelativePos();
+        return first.yRelativePos();
     }
 
     @Override
-    public BaseProperty<Float> getxRelativePosProperty()
+    public BaseProperty<Float> xRelativePosProperty()
     {
-        return first.getxRelativePosProperty();
+        return first.xRelativePosProperty();
     }
 
     @Override
-    public BaseProperty<Float> getyRelativePosProperty()
+    public BaseProperty<Float> yRelativePosProperty()
     {
-        return first.getyRelativePosProperty();
+        return first.yRelativePosProperty();
     }
 
     @Override
-    public float getWidth()
+    public float width()
     {
-        return first.getWidth();
+        return first.width();
     }
 
     @Override
-    public float getHeight()
+    public float height()
     {
-        return first.getHeight();
+        return first.height();
     }
 
     @Override

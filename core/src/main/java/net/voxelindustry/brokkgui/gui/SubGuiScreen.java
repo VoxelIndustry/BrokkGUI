@@ -1,12 +1,13 @@
 package net.voxelindustry.brokkgui.gui;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
 
-public class SubGuiScreen extends GuiFather implements IGuiSubWindow
+public class SubGuiScreen extends GuiElement implements IGuiSubWindow
 {
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
@@ -18,8 +19,7 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
 
     public SubGuiScreen(float xRelativePos, float yRelativePos)
     {
-        super("subscreen");
-        this.setzLevel(300);
+        this.transform().zLevel(300);
 
         this.xRelativePosProperty = new BaseProperty<>(xRelativePos, "xRelativePosProperty");
         this.yRelativePosProperty = new BaseProperty<>(yRelativePos, "yRelativePosProperty");
@@ -30,6 +30,12 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     public SubGuiScreen()
     {
         this(0, 0);
+    }
+
+    @Override
+    public String getType()
+    {
+        return "subscreen";
     }
 
     /**
@@ -59,37 +65,37 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     }
 
     @Override
-    public BaseProperty<Float> getxRelativePosProperty()
+    public BaseProperty<Float> xRelativePosProperty()
     {
         return this.xRelativePosProperty;
     }
 
     @Override
-    public BaseProperty<Float> getyRelativePosProperty()
+    public BaseProperty<Float> yRelativePosProperty()
     {
         return this.yRelativePosProperty;
     }
 
     @Override
-    public float getxRelativePos()
+    public float xRelativePos()
     {
-        return this.getxRelativePosProperty().getValue();
+        return this.xRelativePosProperty().getValue();
     }
 
     public void setxRelativePos(final float xRelativePos)
     {
-        this.getxRelativePosProperty().setValue(xRelativePos);
+        this.xRelativePosProperty().setValue(xRelativePos);
     }
 
     @Override
-    public float getyRelativePos()
+    public float yRelativePos()
     {
-        return this.getyRelativePosProperty().getValue();
+        return this.yRelativePosProperty().getValue();
     }
 
     public void setyRelativePos(final float yRelativePos)
     {
-        this.getyRelativePosProperty().setValue(yRelativePos);
+        this.yRelativePosProperty().setValue(yRelativePos);
     }
 
     /////////////////////

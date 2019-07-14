@@ -14,17 +14,17 @@ public interface IGuiSubWindow
 
     void close();
 
-    float getxRelativePos();
+    float xRelativePos();
 
-    float getyRelativePos();
+    float yRelativePos();
 
-    BaseProperty<Float> getxRelativePosProperty();
+    BaseProperty<Float> xRelativePosProperty();
 
-    BaseProperty<Float> getyRelativePosProperty();
+    BaseProperty<Float> yRelativePosProperty();
 
-    float getWidth();
+    float width();
 
-    float getHeight();
+    float height();
 
     <T extends HermodEvent> void addEventHandler(EventType<T> type, EventHandler<? super T> handler);
 

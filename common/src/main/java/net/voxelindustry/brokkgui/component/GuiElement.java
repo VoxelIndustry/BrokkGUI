@@ -12,6 +12,7 @@ import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.IEventEmitter;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public abstract class GuiElement implements IEventEmitter
@@ -545,7 +546,7 @@ public abstract class GuiElement implements IEventEmitter
                 .map(key -> (T) componentMap.get(key)).collect(Collectors.toSet());
     }
 
-    public boolean has(Class<? extends GuiComponent> componentClass)
+    public <T extends GuiComponent> boolean has(Class<T> componentClass)
     {
         return this.componentMap.containsKey(componentClass);
     }
@@ -553,6 +554,14 @@ public abstract class GuiElement implements IEventEmitter
     public boolean has(GuiComponent component)
     {
         return this.componentMap.containsValue(component);
+    }
+
+    public <T extends GuiComponent> boolean ifHas(Class<T> componentClass, Consumer<T> action)
+    {
+        if (!this.has(componentClass))
+            return false;
+        action.accept(this.get(componentClass));
+        return true;
     }
 
     public abstract String getType();

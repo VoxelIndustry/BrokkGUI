@@ -307,6 +307,12 @@ public class StyleHolder extends GuiComponent
     public void setStyleSupplier(Supplier<StyleList> styleSupplier)
     {
         this.styleSupplier = styleSupplier;
+
+        if (this.element() != null)
+        {
+            this.element().transform().children().forEach(child ->
+                    child.element().ifHas(StyleHolder.class, style -> style.setStyleSupplier(styleSupplier)));
+        }
     }
 
     public void refresh()
@@ -327,7 +333,11 @@ public class StyleHolder extends GuiComponent
                         entry.getSelector().getSpecificity());
         }));
 
-        //this.element().transform().children().forEach(child -> child.element().);
+        if (this.element() != null)
+        {
+            this.element().transform().children().forEach(child ->
+                    child.element().ifHas(StyleHolder.class, StyleHolder::refresh));
+        }
     }
 
     /**
