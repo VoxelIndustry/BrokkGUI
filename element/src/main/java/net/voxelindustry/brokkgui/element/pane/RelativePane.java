@@ -9,4 +9,9 @@ public class RelativePane extends RelativePaneBase
     {
         this.add(StyleHolder.class);
     }
+
+    public StyleHolder style()
+    {
+        return this.get(StyleHolder.class);
+    }
 }

@@ -9,4 +9,9 @@ public class AbsolutePane extends AbsolutePaneBase
     {
         this.add(StyleHolder.class);
     }
+
+    public StyleHolder style()
+    {
+        return this.get(StyleHolder.class);
+    }
 }

@@ -24,6 +24,12 @@ public class Text extends GuiComponent
         this.ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
         this.expandToTextProperty = new BaseProperty<>(true, "expandToTextProperty");
         this.textPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "textPaddingProperty");
+    }
+
+    @Override
+    protected void attach(GuiElement element)
+    {
+        super.attach(element);
 
         this.bindSizeToText();
     }

@@ -9,4 +9,9 @@ public class Pane extends PaneBase
     {
         this.add(StyleHolder.class);
     }
+
+    public StyleHolder style()
+    {
+        return this.get(StyleHolder.class);
+    }
 }

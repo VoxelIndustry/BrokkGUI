@@ -137,6 +137,8 @@ public abstract class GuiElement implements IEventEmitter
     {
         for (RenderComponent component : this.renderComponents)
             component.renderContent(renderer, pass, mouseX, mouseY);
+
+        transform().children().forEach(child -> child.element().renderNode(renderer, pass, mouseX, mouseY));
     }
 
     public void handleHover(int mouseX, int mouseY, boolean hovered)
