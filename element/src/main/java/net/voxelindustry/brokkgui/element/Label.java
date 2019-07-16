@@ -15,7 +15,7 @@ public class Label extends GuiElement
     }
 
     @Override
-    public String getType()
+    public String type()
     {
         return "label";
     }

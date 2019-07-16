@@ -564,7 +564,7 @@ public abstract class GuiElement implements IEventEmitter
         return true;
     }
 
-    public abstract String getType();
+    public abstract String type();
 
     public BaseProperty<String> getIdProperty()
     {

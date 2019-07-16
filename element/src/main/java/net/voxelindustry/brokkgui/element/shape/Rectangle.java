@@ -30,7 +30,7 @@ public class Rectangle extends ShapeBase
     }
 
     @Override
-    public String getType()
+    public String type()
     {
         return "rectangle";
     }

@@ -31,7 +31,7 @@ public class Line extends ShapeBase
     }
 
     @Override
-    public String getType()
+    public String type()
     {
         return "line";
     }

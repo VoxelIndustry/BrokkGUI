@@ -13,7 +13,7 @@ public class DummyGuiElement extends GuiElement
     }
 
     @Override
-    public String getType()
+    public String type()
     {
         return this.type;
     }

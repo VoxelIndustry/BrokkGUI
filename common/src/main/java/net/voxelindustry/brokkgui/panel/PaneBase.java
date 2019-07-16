@@ -12,7 +12,7 @@ public class PaneBase extends GuiElement
     }
 
     @Override
-    public String getType()
+    public String type()
     {
         return "pane";
     }

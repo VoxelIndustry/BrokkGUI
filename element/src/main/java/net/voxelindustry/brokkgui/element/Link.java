@@ -38,7 +38,7 @@ public class Link extends GuiElement
     }
 
     @Override
-    public String getType()
+    public String type()
     {
         return "link";
     }

@@ -124,13 +124,13 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                 this.getMainPanel().get(StyleHolder.class).refresh();
             PopupHandler.getInstance(this).refreshStyle();
 
-            this.windows.forEach(SubGuiScreen::refreshStyle);
+            this.windows.forEach(screen -> screen.get(StyleHolder.class).refresh());
         });
 
         StylesheetManager.getInstance().refreshStylesheets(this);
         if (doesMainPanelUseStyle())
             this.getMainPanel().get(StyleHolder.class).refresh();
-        this.windows.forEach(SubGuiScreen::refreshStyle);
+        this.windows.forEach(screen -> screen.get(StyleHolder.class).refresh());
         PopupHandler.getInstance(this).setStyleSupplier(this.getStyleTreeProperty()::getValue);
     }
 
@@ -170,7 +170,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                 if (!this.windows.isEmpty())
                     for (int i = this.windows.size() - 1; i >= 0; i--)
                     {
-                        if (this.windows.get(i).hasWarFog())
+                        if (this.windows.get(i).warFog())
                             this.renderer.getHelper().drawColoredRect(this.renderer, 0, 0, this.width(),
                                     this.height(), 5 + i, Color.BLACK.addAlpha(-0.5f));
 
@@ -239,7 +239,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         {
             if (mouseX > 0 && mouseY > 0 && mouseX < this.renderer.getHelper().getStringWidth("DEBUG") && mouseY < this.renderer.getHelper().getStringHeight())
             {
-                DebugRenderer.wrap(this);
+                // TODO : Rework debug
+                // DebugRenderer.wrap(this);
                 this.isDebugged = true;
             }
         }
@@ -335,9 +336,9 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         subGui.open();
 
-        subGui.setStyleTree(this.getStyleTreeProperty()::getValue);
+        subGui.get(StyleHolder.class).setStyleSupplier(this.getStyleTreeProperty()::getValue);
         if (this.wrapper != null)
-            subGui.refreshStyle();
+            subGui.get(StyleHolder.class).refresh();
     }
 
     public void removeSubGui(final SubGuiScreen subGui)
@@ -348,7 +349,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         subGui.transform().yPosProperty().unbind();
         this.windows.remove(subGui);
 
-        subGui.setStyleTree(null);
+        subGui.get(StyleHolder.class).setStyleSupplier(null);
     }
 
     public boolean hasSubGui(final SubGuiScreen subGui)

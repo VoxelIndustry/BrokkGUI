@@ -33,7 +33,7 @@ public class SubGuiScreen extends GuiElement implements IGuiSubWindow
     }
 
     @Override
-    public String getType()
+    public String type()
     {
         return "subscreen";
     }
@@ -46,7 +46,7 @@ public class SubGuiScreen extends GuiElement implements IGuiSubWindow
         return this.closeOnClick;
     }
 
-    public void setCloseOnClick(final boolean closeOnClick)
+    public void closeOnClick(final boolean closeOnClick)
     {
         this.closeOnClick = closeOnClick;
     }
@@ -54,12 +54,12 @@ public class SubGuiScreen extends GuiElement implements IGuiSubWindow
     /**
      * @return if the subgui shadow everything outside his area.
      */
-    public boolean hasWarFog()
+    public boolean warFog()
     {
         return this.hasWarFog;
     }
 
-    public void setWarFog(final boolean warFog)
+    public void warFog(final boolean warFog)
     {
         this.hasWarFog = warFog;
     }
@@ -82,7 +82,7 @@ public class SubGuiScreen extends GuiElement implements IGuiSubWindow
         return this.xRelativePosProperty().getValue();
     }
 
-    public void setxRelativePos(final float xRelativePos)
+    public void xRelativePos(final float xRelativePos)
     {
         this.xRelativePosProperty().setValue(xRelativePos);
     }
@@ -93,7 +93,7 @@ public class SubGuiScreen extends GuiElement implements IGuiSubWindow
         return this.yRelativePosProperty().getValue();
     }
 
-    public void setyRelativePos(final float yRelativePos)
+    public void yRelativePos(final float yRelativePos)
     {
         this.yRelativePosProperty().setValue(yRelativePos);
     }

@@ -95,7 +95,7 @@ public class StyleHolder extends GuiComponent
 
     public String type()
     {
-        return this.element().getType();
+        return this.element().type();
     }
 
     public BaseSetProperty<String> activePseudoClass()
