@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.element.shape;
 
 import net.voxelindustry.brokkgui.shape.CircleShape;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
-import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
 public class Circle extends GuiNode
 {
@@ -10,8 +9,6 @@ public class Circle extends GuiNode
 
     public Circle(float xPosition, float yPosition, float radius)
     {
-        this.refreshStyle(StyleEngine.getInstance().elementStyleStatus().enabled());
-
         transform().xTranslate(xPosition);
         transform().yTranslate(yPosition);
 

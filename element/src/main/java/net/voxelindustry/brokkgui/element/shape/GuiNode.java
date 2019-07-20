@@ -5,12 +5,18 @@ import net.voxelindustry.brokkgui.component.Paint;
 import net.voxelindustry.brokkgui.component.PaintStyle;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
 public abstract class GuiNode extends GuiElement
 {
     private   boolean     useStyle;
     private   StyleHolder style;
     protected Paint       paint;
+
+    public GuiNode()
+    {
+        this.refreshStyle(StyleEngine.getInstance().elementStyleStatus().enabled());
+    }
 
     public abstract ShapeDefinition shape();
 

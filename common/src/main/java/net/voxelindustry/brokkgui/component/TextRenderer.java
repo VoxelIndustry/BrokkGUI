@@ -10,16 +10,12 @@ public class TextRenderer extends GuiComponent implements RenderComponent
     private Text      text;
     private Transform transform;
 
-    private final BaseProperty<Color>   colorProperty;
-    private final BaseProperty<Color>   shadowColorProperty;
-    private final BaseProperty<Boolean> shadowProperty;
+    protected BaseProperty<Color>   colorProperty;
+    protected BaseProperty<Color>   shadowColorProperty;
+    protected BaseProperty<Boolean> shadowProperty;
 
     public TextRenderer()
     {
-        colorProperty = new BaseProperty<>(Color.BLACK, "colorProperty");
-        shadowColorProperty = new BaseProperty<>(Color.WHITE, "shadowColorProperty");
-
-        shadowProperty = new BaseProperty<>(true, "shadowProperty");
     }
 
     @Override
@@ -46,20 +42,34 @@ public class TextRenderer extends GuiComponent implements RenderComponent
         }
     }
 
+    ////////////////
+    // PROPERTIES //
+    ////////////////
+
     public BaseProperty<Color> colorProperty()
     {
+        if (colorProperty == null)
+            colorProperty = new BaseProperty<>(Color.WHITE, "colorProperty");
         return colorProperty;
     }
 
     public BaseProperty<Color> shadowColorProperty()
     {
+        if (shadowColorProperty == null)
+            shadowColorProperty = new BaseProperty<>(Color.BLACK, "shadowColorProperty");
         return shadowColorProperty;
     }
 
     public BaseProperty<Boolean> shadowProperty()
     {
+        if (shadowProperty == null)
+            shadowProperty = new BaseProperty<>(false, "shadowProperty");
         return shadowProperty;
     }
+
+    ////////////
+    // VALUES //
+    ////////////
 
     public Color color()
     {

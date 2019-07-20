@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.element.shape;
 
 import net.voxelindustry.brokkgui.shape.RectangleShape;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
-import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
 public class Rectangle extends GuiNode
 {
@@ -10,8 +9,6 @@ public class Rectangle extends GuiNode
 
     public Rectangle(float xLeft, float yLeft, float width, float height)
     {
-        this.refreshStyle(StyleEngine.getInstance().elementStyleStatus().enabled());
-
         transform().xTranslate(xLeft);
         transform().yTranslate(yLeft);
 

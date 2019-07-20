@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.element.shape;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.shape.LineShape;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
-import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
 public class Line extends GuiNode
 {
@@ -11,8 +10,6 @@ public class Line extends GuiNode
 
     public Line(float startX, float startY, float endX, float endY)
     {
-        this.refreshStyle(StyleEngine.getInstance().elementStyleStatus().enabled());
-
         transform().xTranslate(startX);
         transform().yTranslate(startY);
 
