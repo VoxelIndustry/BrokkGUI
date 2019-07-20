@@ -7,11 +7,13 @@ import net.voxelindustry.brokkgui.component.TextRenderer;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.element.shape.GuiNode;
+import net.voxelindustry.brokkgui.element.shape.Rectangle;
+import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 
 import javax.annotation.Nonnull;
 
-public class Label extends GuiElement
+public class Label extends GuiNode
 {
     private final Text         text;
     private final TextRenderer textRenderer;
@@ -37,9 +39,10 @@ public class Label extends GuiElement
         return "label";
     }
 
-    public StyleHolder style()
+    @Override
+    public ShapeDefinition shape()
     {
-        return this.get(StyleHolder.class);
+        return Rectangle.SHAPE;
     }
 
     //////////

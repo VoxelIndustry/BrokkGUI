@@ -6,14 +6,15 @@ import net.voxelindustry.brokkgui.component.PaintStyle;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 
-public abstract class ShapeBase extends GuiElement
+public abstract class GuiNode extends GuiElement
 {
-    private boolean     useStyle;
-    private StyleHolder style;
+    private   boolean     useStyle;
+    private   StyleHolder style;
+    protected Paint       paint;
 
-    public abstract ShapeDefinition getShape();
+    public abstract ShapeDefinition shape();
 
-    public StyleHolder getStyle()
+    public StyleHolder style()
     {
         if (style == null)
             style = get(StyleHolder.class);
@@ -46,7 +47,12 @@ public abstract class ShapeBase extends GuiElement
             remove(PaintStyle.class);
             remove(StyleHolder.class);
         }
-        paint.shape(getShape());
-        add(paint);
+        paint.shape(shape());
+        this.paint = add(paint);
+    }
+
+    public Paint paint()
+    {
+        return paint;
     }
 }

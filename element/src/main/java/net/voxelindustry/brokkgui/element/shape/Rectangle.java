@@ -4,7 +4,7 @@ import net.voxelindustry.brokkgui.shape.RectangleShape;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
-public class Rectangle extends ShapeBase
+public class Rectangle extends GuiNode
 {
     public static final RectangleShape SHAPE = new RectangleShape();
 
@@ -36,7 +36,7 @@ public class Rectangle extends ShapeBase
     }
 
     @Override
-    public ShapeDefinition getShape()
+    public ShapeDefinition shape()
     {
         return SHAPE;
     }

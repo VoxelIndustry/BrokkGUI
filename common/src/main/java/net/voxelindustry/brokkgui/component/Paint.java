@@ -16,30 +16,30 @@ public class Paint extends GuiComponent implements RenderComponent
 {
     private ShapeDefinition shape;
 
-    private BaseProperty<Texture> backgroundTextureProperty;
-    private BaseProperty<Color>   backgroundColorProperty;
+    protected BaseProperty<Texture> backgroundTextureProperty;
+    protected BaseProperty<Color>   backgroundColorProperty;
 
-    private BaseProperty<Texture> foregroundTextureProperty;
-    private BaseProperty<Color>   foregroundColorProperty;
+    protected BaseProperty<Texture> foregroundTextureProperty;
+    protected BaseProperty<Color>   foregroundColorProperty;
 
-    private BaseProperty<Color> borderColorProperty;
+    protected BaseProperty<Color> borderColorProperty;
 
-    private BaseProperty<Float> borderWidthLeftProperty;
-    private BaseProperty<Float> borderWidthRightProperty;
-    private BaseProperty<Float> borderWidthTopProperty;
-    private BaseProperty<Float> borderWidthBottomProperty;
+    protected BaseProperty<Float> borderWidthLeftProperty;
+    protected BaseProperty<Float> borderWidthRightProperty;
+    protected BaseProperty<Float> borderWidthTopProperty;
+    protected BaseProperty<Float> borderWidthBottomProperty;
 
-    private BaseProperty<Integer> borderRadiusTopLeftProperty;
-    private BaseProperty<Integer> borderRadiusTopRightProperty;
-    private BaseProperty<Integer> borderRadiusBottomLeftProperty;
-    private BaseProperty<Integer> borderRadiusBottomRightProperty;
+    protected BaseProperty<Integer> borderRadiusTopLeftProperty;
+    protected BaseProperty<Integer> borderRadiusTopRightProperty;
+    protected BaseProperty<Integer> borderRadiusBottomLeftProperty;
+    protected BaseProperty<Integer> borderRadiusBottomRightProperty;
 
-    private BaseProperty<Texture> borderImageProperty;
-    private BaseProperty<RectBox> borderImageSliceProperty;
-    private BaseProperty<RectBox> borderImageWidthProperty;
-    private BaseProperty<RectBox> borderImageOutsetProperty;
+    protected BaseProperty<Texture> borderImageProperty;
+    protected BaseProperty<RectBox> borderImageSliceProperty;
+    protected BaseProperty<RectBox> borderImageWidthProperty;
+    protected BaseProperty<RectBox> borderImageOutsetProperty;
 
-    private BaseProperty<Boolean> borderImageFillProperty;
+    protected BaseProperty<Boolean> borderImageFillProperty;
 
     public Paint()
     {

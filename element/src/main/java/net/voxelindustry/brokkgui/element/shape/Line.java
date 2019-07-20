@@ -5,7 +5,7 @@ import net.voxelindustry.brokkgui.shape.LineShape;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
-public class Line extends ShapeBase
+public class Line extends GuiNode
 {
     private BaseProperty<Float> lineWidthProperty;
 
@@ -37,7 +37,7 @@ public class Line extends ShapeBase
     }
 
     @Override
-    public ShapeDefinition getShape()
+    public ShapeDefinition shape()
     {
         return new LineShape(this::getLineWidth);
     }
@@ -49,7 +49,7 @@ public class Line extends ShapeBase
     public BaseProperty<Float> lineWidthProperty()
     {
         if (this.useStyle())
-            return this.getStyle().getProperty("line-width", Float.class);
+            return this.style().getProperty("line-width", Float.class);
 
         if (this.lineWidthProperty == null)
             this.lineWidthProperty = new BaseProperty<>(1f, "line-width");
@@ -59,7 +59,7 @@ public class Line extends ShapeBase
     public float getLineWidth()
     {
         if (this.useStyle())
-            return this.getStyle().getStyleValue("line-width", Float.class, 1f);
+            return this.style().getStyleValue("line-width", Float.class, 1f);
 
         return this.lineWidthProperty().getValue();
     }
@@ -67,7 +67,7 @@ public class Line extends ShapeBase
     public void setLineWidth(float lineWidth)
     {
         if (this.useStyle())
-            this.getStyle().setPropertyDirect("line-width", lineWidth, Float.class);
+            this.style().setPropertyDirect("line-width", lineWidth, Float.class);
         else
             this.lineWidthProperty().setValue(lineWidth);
     }

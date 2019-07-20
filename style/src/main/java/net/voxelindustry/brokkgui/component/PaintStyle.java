@@ -76,109 +76,145 @@ public class PaintStyle extends Paint
     @Override
     public BaseProperty<Texture> backgroundTextureProperty()
     {
-        return getStyle().getOrCreateProperty("background-texture", Texture.class);
+        if (this.backgroundTextureProperty == null)
+            this.backgroundTextureProperty = getStyle().getOrCreateProperty("background-texture", Texture.class);
+        return backgroundTextureProperty;
     }
 
     @Override
     public BaseProperty<Color> backgroundColorProperty()
     {
-        return getStyle().getOrCreateProperty("background-color", Color.class);
+        if (this.backgroundColorProperty == null)
+            this.backgroundColorProperty = getStyle().getOrCreateProperty("background-color", Color.class);
+        return backgroundColorProperty;
     }
 
     @Override
     public BaseProperty<Texture> foregroundTextureProperty()
     {
-        return getStyle().getOrCreateProperty("foreground-texture", Texture.class);
+        if (this.foregroundTextureProperty == null)
+            this.foregroundTextureProperty = getStyle().getOrCreateProperty("foreground-texture", Texture.class);
+        return foregroundTextureProperty;
     }
 
     @Override
     public BaseProperty<Color> foregroundColorProperty()
     {
-        return getStyle().getOrCreateProperty("foreground-color", Color.class);
+        if (this.foregroundColorProperty == null)
+            this.foregroundColorProperty = getStyle().getOrCreateProperty("foreground-color", Color.class);
+        return foregroundColorProperty;
     }
 
     @Override
     public BaseProperty<Color> borderColorProperty()
     {
-        return getStyle().getOrCreateProperty("border-color", Color.class);
+        if (this.borderColorProperty == null)
+            this.borderColorProperty = getStyle().getOrCreateProperty("border-color", Color.class);
+        return this.borderColorProperty;
     }
 
     @Override
     public BaseProperty<Float> borderWidthLeftProperty()
     {
-        return getStyle().getOrCreateProperty("border-left-width", Float.class);
+        if (this.borderWidthLeftProperty == null)
+            this.borderWidthLeftProperty = getStyle().getOrCreateProperty("border-left-width", Float.class);
+        return this.borderWidthLeftProperty;
     }
 
     @Override
     public BaseProperty<Float> borderWidthRightProperty()
     {
-        return getStyle().getOrCreateProperty("border-right-width", Float.class);
+        if (this.borderWidthRightProperty == null)
+            this.borderWidthRightProperty = getStyle().getOrCreateProperty("border-right-width", Float.class);
+        return this.borderWidthRightProperty;
     }
 
     @Override
     public BaseProperty<Float> borderWidthTopProperty()
     {
-        return getStyle().getOrCreateProperty("border-top-width", Float.class);
+        if (this.borderWidthTopProperty == null)
+            this.borderWidthTopProperty = getStyle().getOrCreateProperty("border-top-width", Float.class);
+        return this.borderWidthTopProperty;
     }
 
     @Override
     public BaseProperty<Float> borderWidthBottomProperty()
     {
-        return getStyle().getOrCreateProperty("border-bottom-width", Float.class);
+        if (this.borderWidthBottomProperty == null)
+            this.borderWidthBottomProperty = getStyle().getOrCreateProperty("border-bottom-width", Float.class);
+        return this.borderWidthBottomProperty;
     }
 
     @Override
     public BaseProperty<Integer> borderRadiusTopLeftProperty()
     {
-        return getStyle().getOrCreateProperty("border-top-left-radius", Integer.class);
+        if (this.borderRadiusTopLeftProperty == null)
+            this.borderRadiusTopLeftProperty = getStyle().getOrCreateProperty("border-top-left-radius", Integer.class);
+        return this.borderRadiusTopLeftProperty;
     }
 
     @Override
     public BaseProperty<Integer> borderRadiusTopRightProperty()
     {
-        return getStyle().getOrCreateProperty("border-top-right-radius", Integer.class);
+        if (this.borderRadiusTopRightProperty == null)
+            this.borderRadiusTopRightProperty = getStyle().getOrCreateProperty("border-top-right-radius", Integer.class);
+        return this.borderRadiusTopRightProperty;
     }
 
     @Override
     public BaseProperty<Integer> borderRadiusBottomLeftProperty()
     {
-        return getStyle().getOrCreateProperty("border-bottom-left-radius", Integer.class);
+        if (this.borderRadiusBottomLeftProperty == null)
+            this.borderRadiusBottomLeftProperty = getStyle().getOrCreateProperty("border-bottom-left-radius", Integer.class);
+        return this.borderRadiusBottomLeftProperty;
     }
 
     @Override
     public BaseProperty<Integer> borderRadiusBottomRightProperty()
     {
-        return getStyle().getOrCreateProperty("border-bottom-right-radius", Integer.class);
+        if (this.borderRadiusBottomRightProperty == null)
+            this.borderRadiusBottomRightProperty = getStyle().getOrCreateProperty("border-bottom-right-radius", Integer.class);
+        return this.borderRadiusBottomRightProperty;
     }
 
     @Override
     public BaseProperty<Texture> borderImageProperty()
     {
-        return getStyle().getOrCreateProperty("border-image-source", Texture.class);
+        if (this.borderImageProperty == null)
+            this.borderImageProperty = getStyle().getOrCreateProperty("border-image-source", Texture.class);
+        return this.borderImageProperty;
     }
 
     @Override
     public BaseProperty<RectBox> borderImageSliceProperty()
     {
-        return getStyle().getOrCreateProperty("border-image-slice", RectBox.class);
+        if (this.borderImageSliceProperty == null)
+            this.borderImageSliceProperty = getStyle().getOrCreateProperty("border-image-slice", RectBox.class);
+        return this.borderImageSliceProperty;
     }
 
     @Override
     public BaseProperty<RectBox> borderImageWidthProperty()
     {
-        return getStyle().getOrCreateProperty("border-image-width", RectBox.class);
+        if (this.borderImageWidthProperty == null)
+            this.borderImageWidthProperty = getStyle().getOrCreateProperty("border-image-width", RectBox.class);
+        return this.borderImageWidthProperty;
     }
 
     @Override
     public BaseProperty<RectBox> borderImageOutsetProperty()
     {
-        return getStyle().getOrCreateProperty("border-image-outset", RectBox.class);
+        if (this.borderImageOutsetProperty == null)
+            this.borderImageOutsetProperty = getStyle().getOrCreateProperty("border-image-outset", RectBox.class);
+        return this.borderImageOutsetProperty;
     }
 
     @Override
     public BaseProperty<Boolean> borderImageFillProperty()
     {
-        return getStyle().getOrCreateProperty("border-image-fill", Boolean.class);
+        if (this.borderImageFillProperty == null)
+            this.borderImageFillProperty = getStyle().getOrCreateProperty("border-image-fill", Boolean.class);
+        return this.borderImageFillProperty;
     }
 
     ////////////

@@ -4,7 +4,7 @@ import net.voxelindustry.brokkgui.shape.CircleShape;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
-public class Circle extends ShapeBase
+public class Circle extends GuiNode
 {
     public static final CircleShape SHAPE = new CircleShape();
 
@@ -35,7 +35,7 @@ public class Circle extends ShapeBase
     }
 
     @Override
-    public ShapeDefinition getShape()
+    public ShapeDefinition shape()
     {
         return SHAPE;
     }
