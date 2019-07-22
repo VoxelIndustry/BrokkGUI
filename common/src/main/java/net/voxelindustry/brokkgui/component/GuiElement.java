@@ -63,6 +63,8 @@ public abstract class GuiElement implements IEventEmitter
         this.draggedProperty = new BaseProperty<>(false, "draggedProperty");
 
         this.opacityProperty = new BaseProperty<>(1D, "opacityProperty");
+
+        this.postConstruct();
     }
 
     ////////////
@@ -491,6 +493,14 @@ public abstract class GuiElement implements IEventEmitter
     ////////////////
     // COMPONENTS //
     ////////////////
+
+    /**
+     * Called right after the GuiElement has reached the end of its constructor
+     */
+    public void postConstruct()
+    {
+
+    }
 
     public Transform transform()
     {

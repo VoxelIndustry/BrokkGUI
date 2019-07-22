@@ -61,7 +61,7 @@ public class Paint extends GuiComponent implements RenderComponent
     @Override
     protected void attach(GuiElement element)
     {
-        super.element();
+        super.attach(element);
 
         element.transform().mouseInBoundsChecker(shape::isMouseInside);
     }

@@ -12,22 +12,26 @@ import javax.annotation.Nonnull;
 
 public class Label extends GuiNode
 {
-    private final Text text;
-    private final Icon icon;
+    private Text text;
+    private Icon icon;
 
     private TextRenderer textRenderer;
 
     public Label(String value)
     {
-        text = add(Text.class);
-        icon = add(Icon.class);
-
         text(value);
     }
 
     public Label()
     {
         this("");
+    }
+
+    @Override
+    public void postConstruct()
+    {
+        text = add(Text.class);
+        icon = add(Icon.class);
     }
 
     @Override
