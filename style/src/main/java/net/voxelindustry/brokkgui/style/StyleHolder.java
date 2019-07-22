@@ -13,7 +13,6 @@ import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMapper;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
 import net.voxelindustry.brokkgui.style.tree.StyleEntry;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -24,7 +23,7 @@ public class StyleHolder extends GuiComponent
 {
     private Map<String, StyleProperty<?>> properties;
 
-    private List<Pair<Pattern, Consumer<StyleHolder>>> conditionalProperties;
+    private List<ConditionalProperty> conditionalProperties;
 
     private       Supplier<StyleList>     styleSupplier;
     private final BaseSetProperty<String> styleClass;
@@ -140,8 +139,12 @@ public class StyleHolder extends GuiComponent
         if (this.properties.containsKey(property))
             return true;
 
-        if (this.conditionalProperties.stream().filter(entry -> entry.getKey().matcher(property).matches())
-                .peek(entry -> entry.getValue().accept(this)).count() > 0)
+        if (this.conditionalProperties.stream().filter(conditional -> !conditional.active() && conditional.pattern().matcher(property).matches())
+                .peek(entry ->
+                {
+                    entry.propertyCreator().accept(this);
+                    entry.active(true);
+                }).count() > 0)
             return true;
         return false;
     }
@@ -158,7 +161,7 @@ public class StyleHolder extends GuiComponent
     {
         if (this.properties.containsKey(property))
             return HeldPropertyState.PRESENT;
-        if (this.conditionalProperties.stream().anyMatch(entry -> entry.getKey().matcher(property).matches()))
+        if (this.conditionalProperties.stream().anyMatch(entry -> entry.pattern().matcher(property).matches()))
             return HeldPropertyState.CONDITIONAL;
         return HeldPropertyState.ABSENT;
     }
@@ -195,7 +198,7 @@ public class StyleHolder extends GuiComponent
     {
         String regex = '^' + matchKey.replaceAll("\\*", "\\\\S*") + '$';
 
-        this.conditionalProperties.add(Pair.of(Pattern.compile(regex), propertiesCreator));
+        this.conditionalProperties.add(new ConditionalProperty(Pattern.compile(regex), propertiesCreator));
     }
 
     /**

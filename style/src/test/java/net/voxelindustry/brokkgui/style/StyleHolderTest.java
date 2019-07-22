@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StyleHolderTest
@@ -47,5 +48,19 @@ public class StyleHolderTest
         styleHolder.parseInlineCSS("border-color: red;");
 
         assertThat(styleHolder.doesHoldProperty("border-color")).isEqualTo(HeldPropertyState.PRESENT);
+    }
+
+    @Test
+    public void refresh_givenIdChangeOnElement_thenShouldCallRefresh()
+    {
+        DummyGuiElement element = new DummyGuiElement("dummytype");
+        StyleHolder styleHolder = element.add(spy(StyleHolder.class));
+
+        reset(styleHolder);
+
+        element.setId("id");
+
+        verify(styleHolder).refresh();
+        verifyNoMoreInteractions(styleHolder);
     }
 }
