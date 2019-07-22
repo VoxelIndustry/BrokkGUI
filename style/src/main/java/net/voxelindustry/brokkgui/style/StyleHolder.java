@@ -165,8 +165,7 @@ public class StyleHolder extends GuiComponent
 
     private void setProperty(String propertyName, String value, StyleSource source, int specificity)
     {
-        if (this.properties.containsKey(propertyName))
-            this.properties.get(propertyName).setStyleRaw(source, specificity, value);
+        this.properties.get(propertyName).setStyleRaw(source, specificity, value);
     }
 
     public <T> void setPropertyDirect(String propertyName, T value, Class<T> valueClass)
