@@ -1,5 +1,7 @@
 package net.voxelindustry.brokkgui.paint;
 
+import java.util.Objects;
+
 public class RenderPass
 {
     public static final RenderPass BACKGROUND = new RenderPass("background", 0);
@@ -37,5 +39,30 @@ public class RenderPass
     public int getPriority()
     {
         return priority;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "RenderPass{" +
+                "name='" + name + '\'' +
+                ", priority=" + priority +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RenderPass that = (RenderPass) o;
+        return priority == that.priority &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(name, priority);
     }
 }
