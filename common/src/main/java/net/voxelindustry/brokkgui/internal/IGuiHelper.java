@@ -50,6 +50,8 @@ public interface IGuiHelper
 
     void drawColoredArc(IGuiRenderer renderer, float centerX, float centerY, float radius, float zLevel, Color color, RectCorner corner);
 
+    void drawColoredCross(IGuiRenderer renderer, float centerX, float centerY, float radius, float width, float zLevel, Color color);
+
     void translateVecToScreenSpace(Vector2i vec);
 
     String trimStringToPixelWidth(String str, int pixelWidth);
