@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 
 public abstract class GuiElement implements IEventEmitter
 {
-    private Map<Class<? extends GuiComponent>, GuiComponent> componentMap;
+    private final Map<Class<? extends GuiComponent>, GuiComponent> componentMap;
 
-    private List<RenderComponent> renderComponents;
+    private final List<RenderComponent> renderComponents;
 
-    private BaseProperty<String> idProperty;
+    private final BaseProperty<String> idProperty;
 
     private final Transform transform;
 
