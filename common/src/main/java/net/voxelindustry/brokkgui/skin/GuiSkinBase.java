@@ -4,12 +4,9 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GuiSkinBase<T extends GuiElement> implements IGuiSkin
 {
-    private final T             model;
+    private final T model;
 
     public GuiSkinBase(final T model)
     {

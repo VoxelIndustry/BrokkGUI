@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.component.impl.TextRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 
@@ -14,7 +15,7 @@ public class TextRendererStyle extends TextRenderer
     }
 
     @Override
-    protected void attach(GuiElement element)
+    public void attach(GuiElement element)
     {
         super.attach(element);
 

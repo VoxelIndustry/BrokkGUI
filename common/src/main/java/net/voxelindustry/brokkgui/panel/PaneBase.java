@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.panel;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.component.Transform;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 
 public class PaneBase extends GuiElement

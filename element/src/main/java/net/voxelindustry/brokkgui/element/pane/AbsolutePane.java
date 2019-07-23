@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.element.pane;
 
-import net.voxelindustry.brokkgui.component.Paint;
 import net.voxelindustry.brokkgui.component.PaintStyle;
+import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.element.shape.Rectangle;
 import net.voxelindustry.brokkgui.panel.AbsolutePaneBase;
 import net.voxelindustry.brokkgui.style.StyleHolder;

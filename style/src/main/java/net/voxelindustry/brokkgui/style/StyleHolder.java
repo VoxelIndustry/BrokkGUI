@@ -7,7 +7,7 @@ import fr.ourten.teabeans.value.BaseSetProperty;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.component.Transform;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.style.shorthand.GenericShorthandProperty;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMapper;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
@@ -47,7 +47,7 @@ public class StyleHolder extends GuiComponent
     }
 
     @Override
-    protected void attach(GuiElement element)
+    public void attach(GuiElement element)
     {
         if (this.element() != null)
         {

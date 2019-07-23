@@ -2,9 +2,9 @@ package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.component.Icon;
-import net.voxelindustry.brokkgui.component.Text;
-import net.voxelindustry.brokkgui.component.TextRenderer;
+import net.voxelindustry.brokkgui.component.impl.Icon;
+import net.voxelindustry.brokkgui.component.impl.Text;
+import net.voxelindustry.brokkgui.component.impl.TextRenderer;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 
 public class Link extends GuiElement

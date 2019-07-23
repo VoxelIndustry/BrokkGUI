@@ -1,6 +1,8 @@
-package net.voxelindustry.brokkgui.component;
+package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.component.GuiComponent;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectSide;
 
 public class Icon extends GuiComponent

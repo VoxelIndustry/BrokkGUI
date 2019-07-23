@@ -16,6 +16,7 @@ public class StyleSelectorHierarchic implements IStyleSelector
         this.directChild = directChild;
     }
 
+    @Override
     public int getSpecificity()
     {
         return childSelector.getSpecificity() + parentSelector.getSpecificity();
@@ -39,6 +40,7 @@ public class StyleSelectorHierarchic implements IStyleSelector
         return this;
     }
 
+    @Override
     public boolean match(StyleHolder styleHolder)
     {
         if (styleHolder.parent() == null)

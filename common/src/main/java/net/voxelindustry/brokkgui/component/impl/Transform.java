@@ -1,8 +1,9 @@
-package net.voxelindustry.brokkgui.component;
+package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.LayoutEvent;
@@ -123,7 +124,7 @@ public class Transform extends GuiComponent
         return this.childrenProperty().getValue();
     }
 
-    protected BaseListProperty<Transform> childrenProperty()
+    public BaseListProperty<Transform> childrenProperty()
     {
         return this.childrenListProperty;
     }

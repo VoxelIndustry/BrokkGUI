@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.GuiFocusManager;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.*;
 import net.voxelindustry.brokkgui.gui.IGuiSubWindow;

@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.border;
 
+import net.voxelindustry.brokkgui.component.impl.Paint;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
-import net.voxelindustry.brokkgui.component.Paint;
-import net.voxelindustry.brokkgui.component.Transform;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 

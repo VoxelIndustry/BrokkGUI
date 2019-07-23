@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.element.shape;
 
-import net.voxelindustry.brokkgui.component.Paint;
 import net.voxelindustry.brokkgui.component.PaintStyle;
+import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

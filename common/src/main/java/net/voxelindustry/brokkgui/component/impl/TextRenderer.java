@@ -1,6 +1,10 @@
-package net.voxelindustry.brokkgui.component;
+package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.component.GuiComponent;
+import net.voxelindustry.brokkgui.component.GuiComponentException;
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -19,7 +23,7 @@ public class TextRenderer extends GuiComponent implements RenderComponent
     }
 
     @Override
-    protected void attach(GuiElement element)
+    public void attach(GuiElement element)
     {
         super.attach(element);
 

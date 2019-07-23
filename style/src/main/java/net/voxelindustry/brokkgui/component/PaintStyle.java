@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
@@ -21,7 +22,7 @@ public class PaintStyle extends Paint
     }
 
     @Override
-    protected void attach(GuiElement element)
+    public void attach(GuiElement element)
     {
         super.attach(element);
 

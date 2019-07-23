@@ -1,8 +1,11 @@
-package net.voxelindustry.brokkgui.component;
+package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.border.ColorBorderDrawer;
 import net.voxelindustry.brokkgui.border.ImageBorderDrawer;
+import net.voxelindustry.brokkgui.component.GuiComponent;
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
@@ -59,7 +62,7 @@ public class Paint extends GuiComponent implements RenderComponent
     }
 
     @Override
-    protected void attach(GuiElement element)
+    public void attach(GuiElement element)
     {
         super.attach(element);
 

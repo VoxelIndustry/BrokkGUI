@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.shape;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.component.Transform;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.Texture;

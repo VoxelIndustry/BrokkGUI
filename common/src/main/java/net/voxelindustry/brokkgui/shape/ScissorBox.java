@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.shape;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.ObservableValue;
-import net.voxelindustry.brokkgui.component.Transform;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import org.apache.commons.lang3.ArrayUtils;

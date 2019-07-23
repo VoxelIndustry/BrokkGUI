@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.element.popup;
 
-import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;

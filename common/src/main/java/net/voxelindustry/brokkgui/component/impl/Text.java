@@ -1,8 +1,10 @@
-package net.voxelindustry.brokkgui.component;
+package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
+import net.voxelindustry.brokkgui.component.GuiComponent;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 
@@ -27,7 +29,7 @@ public class Text extends GuiComponent
     }
 
     @Override
-    protected void attach(GuiElement element)
+    public void attach(GuiElement element)
     {
         super.attach(element);
 
