@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class StylesheetManager
 {
+    private static final Logger LOGGER = Logger.getLogger("StylesheetManager");
     private static StylesheetManager INSTANCE;
 
     public static StylesheetManager getInstance()
@@ -68,7 +70,7 @@ public class StylesheetManager
                     new String[screen.getStylesheetsProperty().size()])));
         } catch (ExecutionException e)
         {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "can't refresh Sstylesheets", e);
         }
         screen.setStyleTree(list);
     }
@@ -94,7 +96,7 @@ public class StylesheetManager
             return loadStylesheets(dependencies.toArray(new String[0]));
         } catch (ExecutionException e)
         {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "can't load dependencies", e);
         }
         return null;
     }
@@ -122,7 +124,7 @@ public class StylesheetManager
 
         } catch (ExecutionException e)
         {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "can't add user agent", e);
         }
     }
 
@@ -145,7 +147,7 @@ public class StylesheetManager
                     new String[this.styleSheets.get(index).size()])));
         } catch (ExecutionException e)
         {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "can't remove user agent", e);
         }
     }
 
@@ -170,7 +172,7 @@ public class StylesheetManager
                     this.getStyleList("/assets/brokkgui/css/user_agent.css"));
         } catch (ExecutionException e)
         {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "can't create user agent", e);
         }
     }
 }

@@ -194,8 +194,7 @@ public class Color extends GuiPaint
         result = prime * result + Float.floatToIntBits(this.alpha);
         result = prime * result + Float.floatToIntBits(this.blue);
         result = prime * result + Float.floatToIntBits(this.green);
-        result = prime * result + Float.floatToIntBits(this.red);
-        return result;
+        return prime * result + Float.floatToIntBits(this.red);
     }
 
     @Override

@@ -87,8 +87,8 @@ public class StylesheetParser
         if (!content.hasNext())
             return Collections.emptyList();
         String currentLine = content.nextLine();
-        List<StyleRule> elements = new ArrayList<>();
-        while (!StringUtils.contains(currentLine, "}"))
+        List<StyleRule> elements = new ArrayList<>(StringUtils.countMatches(currentLine, '}'));
+        while (!StringUtils.contains(currentLine, '}'))
         {
             if (StringUtils.contains(currentLine, "{"))
             {

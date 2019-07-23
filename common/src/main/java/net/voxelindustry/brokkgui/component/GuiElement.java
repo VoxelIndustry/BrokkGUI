@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 
 public abstract class GuiElement implements IEventEmitter
 {
+    private static final boolean FALSE = false;
+    private static final boolean TRUE = true;
+
     private final Map<Class<? extends GuiComponent>, GuiComponent> componentMap;
 
     private final List<RenderComponent> renderComponents;
@@ -55,13 +58,13 @@ public abstract class GuiElement implements IEventEmitter
 
         this.idProperty = new BaseProperty<>(null, "idProperty");
 
-        this.focusedProperty = new BaseProperty<>(false, "focusedProperty");
-        this.disabledProperty = new BaseProperty<>(false, "disabledProperty");
-        this.hoveredProperty = new BaseProperty<>(false, "hoveredProperty");
+        this.focusedProperty = new BaseProperty<>(FALSE, "focusedProperty");
+        this.disabledProperty = new BaseProperty<>(FALSE, "disabledProperty");
+        this.hoveredProperty = new BaseProperty<>(FALSE, "hoveredProperty");
 
-        this.focusableProperty = new BaseProperty<>(false, "focusableProperty");
-        this.visibleProperty = new BaseProperty<>(true, "visibleProperty");
-        this.draggedProperty = new BaseProperty<>(false, "draggedProperty");
+        this.focusableProperty = new BaseProperty<>(FALSE, "focusableProperty");
+        this.visibleProperty = new BaseProperty<>(TRUE, "visibleProperty");
+        this.draggedProperty = new BaseProperty<>(FALSE, "draggedProperty");
 
         this.opacityProperty = new BaseProperty<>(1D, "opacityProperty");
 
@@ -500,7 +503,7 @@ public abstract class GuiElement implements IEventEmitter
      */
     public void postConstruct()
     {
-
+        // do nothing
     }
 
     public Transform transform()
@@ -508,7 +511,7 @@ public abstract class GuiElement implements IEventEmitter
         return this.transform;
     }
 
-    public <T extends GuiComponent> T add(T component)
+    public final <T extends GuiComponent> T add(T component)
     {
         this.componentMap.put(component.getClass(), component);
         component.attach(this);

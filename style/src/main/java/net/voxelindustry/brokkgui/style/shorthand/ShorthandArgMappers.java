@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.style.shorthand;
 
 public class ShorthandArgMappers
 {
-    public static ShorthandArgMapper BOX_MAPPER = (index, count) ->
+    public static final ShorthandArgMapper BOX_MAPPER = (index, count) ->
     {
         switch (count)
         {

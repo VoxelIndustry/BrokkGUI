@@ -35,7 +35,7 @@ public class ClickEvent extends GuiMouseEvent
 
     public static class Left extends ClickEvent
     {
-        public static EventType<ClickEvent.Left> TYPE = new EventType<>(ClickEvent.TYPE,
+        public static final EventType<ClickEvent.Left> TYPE = new EventType<>(ClickEvent.TYPE,
                 "MOUSE_LEFT_CLICK_EVENT");
 
         public Left(GuiElement source, int mouseX, int mouseY)
@@ -52,7 +52,7 @@ public class ClickEvent extends GuiMouseEvent
 
     public static class Right extends ClickEvent
     {
-        public static EventType<ClickEvent.Right> TYPE = new EventType<>(ClickEvent.TYPE,
+        public static final EventType<ClickEvent.Right> TYPE = new EventType<>(ClickEvent.TYPE,
                 "MOUSE_RIGHT_CLICK_EVENT");
 
         public Right(GuiElement source, int mouseX, int mouseY)
@@ -69,7 +69,7 @@ public class ClickEvent extends GuiMouseEvent
 
     public static class Middle extends ClickEvent
     {
-        public static EventType<ClickEvent.Middle> TYPE = new EventType<>(ClickEvent.TYPE,
+        public static final EventType<ClickEvent.Middle> TYPE = new EventType<>(ClickEvent.TYPE,
                 "MOUSE_MIDDLE_CLICK_EVENT");
 
         public Middle(GuiElement source, int mouseX, int mouseY)

@@ -45,7 +45,6 @@ public class StyleRule
     public int hashCode()
     {
         int result = getRuleIdentifier().hashCode();
-        result = 31 * result + getRuleValue().hashCode();
-        return result;
+        return 31 * result + getRuleValue().hashCode();
     }
 }

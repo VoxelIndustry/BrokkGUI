@@ -82,8 +82,7 @@ public class Texture extends GuiPaint
         result = 31 * result + (uMin != +0.0f ? Float.floatToIntBits(uMin) : 0);
         result = 31 * result + (vMin != +0.0f ? Float.floatToIntBits(vMin) : 0);
         result = 31 * result + (uMax != +0.0f ? Float.floatToIntBits(uMax) : 0);
-        result = 31 * result + (vMax != +0.0f ? Float.floatToIntBits(vMax) : 0);
-        return result;
+        return 31 * result + (vMax != +0.0f ? Float.floatToIntBits(vMax) : 0);
     }
 
     @Override

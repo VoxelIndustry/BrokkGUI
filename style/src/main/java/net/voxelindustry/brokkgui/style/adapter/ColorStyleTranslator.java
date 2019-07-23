@@ -32,20 +32,20 @@ public class ColorStyleTranslator implements IStyleDecoder<Color>, IStyleEncoder
             builder.append(value.toHex())
                     .append(" (")
                     .append(colorFormat.format(value.getRed() * 255))
-                    .append(",")
+                    .append(',')
                     .append(colorFormat.format(value.getGreen() * 255))
-                    .append(",")
+                    .append(',')
                     .append(colorFormat.format(value.getBlue() * 255))
-                    .append(",")
+                    .append(',')
                     .append(colorFormat.format(value.getAlpha() * 255))
-                    .append(")");
+                    .append(')');
         }
         else
         {
             builder.append(value.toHex())
-                    .append(" ")
+                    .append(' ')
                     .append(value.getAlpha() * 100)
-                    .append("%");
+                    .append('%');
         }
         return builder.toString();
     }
@@ -110,11 +110,11 @@ public class ColorStyleTranslator implements IStyleDecoder<Color>, IStyleEncoder
         if (hexColorPattern.matcher(style).matches())
         {
             if (hexAlphaColorPattern.matcher(style).matches())
-                return style.substring(0, style.indexOf("%") + 1).length();
+                return style.substring(0, style.indexOf('%') + 1).length();
             return 7;
         }
         if (!rgbColorPattern.matcher(style).matches() && !rgbaColorPattern.matcher(style).matches())
             return 0;
-        return style.substring(0, style.indexOf(")") + 1).length();
+        return style.substring(0, style.indexOf(')') + 1).length();
     }
 }
