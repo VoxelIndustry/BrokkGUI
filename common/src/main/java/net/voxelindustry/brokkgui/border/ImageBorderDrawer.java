@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.border;
 
-import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.component.Paint;
 import net.voxelindustry.brokkgui.component.Transform;
+import net.voxelindustry.brokkgui.data.RectBox;
+import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Texture;
 
@@ -33,47 +33,25 @@ public class ImageBorderDrawer
         boolean doFill = paint.borderImageFill();
 
         renderer.getHelper().bindTexture(texture);
+        drawWalls(renderer, borderLeft, borderRight, borderTop, borderBottom, sliceBox, widthBox, transform, leftPos, topPos, rightPos, bottomPos, width, height);
+        drawCorners(renderer, borderLeft, borderRight, borderTop, borderBottom, sliceBox, transform, leftPos, topPos, rightPos, bottomPos);
+        drawFill(renderer, borderLeft, borderRight, borderTop, borderBottom, sliceBox, widthBox, transform, leftPos, topPos, width, height, doFill);
+    }
 
-        // Walls
-
-        if (borderTop > 0)
+    private static void drawFill(IGuiRenderer renderer, float borderLeft, float borderRight, float borderTop, float borderBottom, RectBox sliceBox, RectBox widthBox, Transform transform, float leftPos, float topPos, float width, float height, boolean doFill)
+    {
+        if (doFill)
         {
             renderer.getHelper().drawTexturedRect(renderer,
-                    leftPos, topPos - borderTop,
-                    sliceBox.getLeft(), 0,
-                    1 - sliceBox.getRight(), sliceBox.getTop(),
-                    width, borderTop * widthBox.getTop(), transform.zLevel());
+                    leftPos, topPos,
+                    sliceBox.getLeft(), sliceBox.getTop(), 1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
+                    width, height,
+                    transform.zLevel());
         }
+    }
 
-        if (borderBottom > 0)
-        {
-            renderer.getHelper().drawTexturedRect(renderer,
-                    leftPos, bottomPos - (widthBox.getBottom() - 1) * borderBottom,
-                    sliceBox.getLeft(), 1 - sliceBox.getBottom(),
-                    1 - sliceBox.getRight(), 1,
-                    width, borderBottom * widthBox.getBottom(), transform.zLevel());
-        }
-
-        if (borderLeft > 0)
-        {
-            renderer.getHelper().drawTexturedRect(renderer,
-                    leftPos - borderLeft, topPos,
-                    0, sliceBox.getTop(),
-                    sliceBox.getLeft(), 1 - sliceBox.getBottom(),
-                    borderLeft * widthBox.getLeft(), height, transform.zLevel());
-        }
-
-        if (borderRight > 0)
-        {
-            renderer.getHelper().drawTexturedRect(renderer,
-                    rightPos - (widthBox.getRight() - 1) * borderRight, topPos,
-                    1 - sliceBox.getRight(), sliceBox.getTop(),
-                    1, 1 - sliceBox.getBottom(),
-                    borderRight * widthBox.getRight(), height, transform.zLevel());
-        }
-
-        // Corners
-
+    private static void drawCorners(IGuiRenderer renderer, float borderLeft, float borderRight, float borderTop, float borderBottom, RectBox sliceBox, Transform transform, float leftPos, float topPos, float rightPos, float bottomPos)
+    {
         if (borderTop > 0 && borderLeft > 0)
         {
             renderer.getHelper().drawTexturedRect(renderer,
@@ -113,15 +91,44 @@ public class ImageBorderDrawer
                     borderLeft, borderBottom,
                     transform.zLevel());
         }
+    }
 
-        if (doFill)
+    private static void drawWalls(IGuiRenderer renderer, float borderLeft, float borderRight, float borderTop, float borderBottom, RectBox sliceBox, RectBox widthBox, Transform transform, float leftPos, float topPos, float rightPos, float bottomPos, float width, float height)
+    {
+        if (borderTop > 0)
         {
             renderer.getHelper().drawTexturedRect(renderer,
-                    leftPos + widthBox.getLeft() * borderLeft, topPos + widthBox.getTop() * borderTop,
-                    sliceBox.getLeft(), sliceBox.getTop(), 1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
-                    width - widthBox.getLeft() * borderLeft - widthBox.getRight() * borderRight,
-                    height - widthBox.getTop() * borderTop - widthBox.getBottom() * borderBottom,
-                    transform.zLevel());
+                    leftPos, topPos - borderTop,
+                    sliceBox.getLeft(), 0,
+                    1 - sliceBox.getRight(), sliceBox.getTop(),
+                    width, borderTop * widthBox.getTop(), transform.zLevel());
+        }
+
+        if (borderBottom > 0)
+        {
+            renderer.getHelper().drawTexturedRect(renderer,
+                    leftPos, bottomPos - (widthBox.getBottom() - 1) * borderBottom,
+                    sliceBox.getLeft(), 1 - sliceBox.getBottom(),
+                    1 - sliceBox.getRight(), 1,
+                    width, borderBottom * widthBox.getBottom(), transform.zLevel());
+        }
+
+        if (borderLeft > 0)
+        {
+            renderer.getHelper().drawTexturedRect(renderer,
+                    leftPos - borderLeft, topPos,
+                    0, sliceBox.getTop(),
+                    sliceBox.getLeft(), 1 - sliceBox.getBottom(),
+                    borderLeft * widthBox.getLeft(), height, transform.zLevel());
+        }
+
+        if (borderRight > 0)
+        {
+            renderer.getHelper().drawTexturedRect(renderer,
+                    rightPos - (widthBox.getRight() - 1) * borderRight, topPos,
+                    1 - sliceBox.getRight(), sliceBox.getTop(),
+                    1, 1 - sliceBox.getBottom(),
+                    borderRight * widthBox.getRight(), height, transform.zLevel());
         }
     }
 }
