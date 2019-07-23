@@ -1,10 +1,18 @@
 package net.voxelindustry.brokkgui.component;
 
+import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.Rotation;
-import net.voxelindustry.brokkgui.event.*;
+import net.voxelindustry.brokkgui.event.ClickEvent;
+import net.voxelindustry.brokkgui.event.DisableEvent;
+import net.voxelindustry.brokkgui.event.DisposeEvent;
+import net.voxelindustry.brokkgui.event.FocusEvent;
+import net.voxelindustry.brokkgui.event.GuiMouseEvent;
+import net.voxelindustry.brokkgui.event.HoverEvent;
+import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -12,7 +20,11 @@ import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.IEventEmitter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -35,6 +47,8 @@ public abstract class GuiElement implements IEventEmitter
     private EventHandler<HoverEvent>   onHoverEvent;
     private EventHandler<ClickEvent>   onClickEvent;
 
+    private final ValueInvalidationListener disableListener = this::disableListener;
+
     private final BaseProperty<Boolean> focusedProperty;
     private final BaseProperty<Boolean> disabledProperty;
     private final BaseProperty<Boolean> hoveredProperty;
@@ -48,6 +62,7 @@ public abstract class GuiElement implements IEventEmitter
     private int draggedY;
 
     private IGuiSubWindow window;
+
 
     public GuiElement()
     {
@@ -69,6 +84,8 @@ public abstract class GuiElement implements IEventEmitter
         this.opacityProperty = new BaseProperty<>(1D, "opacityProperty");
 
         this.postConstruct();
+
+        this.disabledProperty.addListener(this.disableListener);
     }
 
     ////////////
@@ -660,5 +677,13 @@ public abstract class GuiElement implements IEventEmitter
     private void initEventDispatcher()
     {
         this.eventDispatcher = new EventDispatcher();
+    }
+
+    private void disableListener(Observable obs)
+    {
+        if (this.isHovered())
+            this.setHovered(false);
+        if (this.isFocused())
+            GuiFocusManager.instance().requestFocus(null);
     }
 }

@@ -3,7 +3,9 @@ package net.voxelindustry.brokkgui.style;
 import com.google.common.collect.ImmutableMap;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.listener.ValueChangeListener;
+import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.value.BaseSetProperty;
+import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
@@ -14,10 +16,16 @@ import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
 import net.voxelindustry.brokkgui.style.tree.StyleEntry;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+
+import static net.voxelindustry.brokkgui.style.PseudoClassConstants.*;
 
 public class StyleHolder extends GuiComponent
 {
@@ -31,6 +39,10 @@ public class StyleHolder extends GuiComponent
 
     private ValueChangeListener<String>    styleRefreshListener = this::valueChanged;
     private ValueChangeListener<Transform> styleParentListener  = this::parentChanged;
+
+    private ValueInvalidationListener focusListener   = this::focusListener;
+    private ValueInvalidationListener disableListener = this::disableListener;
+    private ValueInvalidationListener hoverListener   = this::hoverListener;
 
     public StyleHolder()
     {
@@ -53,6 +65,10 @@ public class StyleHolder extends GuiComponent
         {
             this.element().getIdProperty().removeListener(styleRefreshListener);
             this.element().transform().parentProperty().removeListener(styleParentListener);
+
+            this.element().getHoveredProperty().removeListener(hoverListener);
+            this.element().getDisabledProperty().removeListener(disableListener);
+            this.element().getFocusedProperty().removeListener(focusListener);
         }
 
         super.attach(element);
@@ -62,6 +78,44 @@ public class StyleHolder extends GuiComponent
 
         // Properties override
         this.element().replaceOpacityProperty(this.registerProperty("opacity", 1D, Double.class));
+
+        element.getHoveredProperty().addListener(hoverListener);
+        element.getDisabledProperty().addListener(disableListener);
+        element.getFocusedProperty().addListener(focusListener);
+    }
+
+    private void hoverListener(Observable obs)
+    {
+        if (this.element().isHovered())
+            this.activePseudoClass().add(HOVER);
+        else
+            this.activePseudoClass().remove(HOVER);
+    }
+
+    private void disableListener(Observable obs)
+    {
+        if (element().isDisabled())
+        {
+            if (!this.activePseudoClass().contains(DISABLED) && this.activePseudoClass().contains(ENABLED))
+                this.activePseudoClass().replace(ENABLED, DISABLED);
+            else if (!this.activePseudoClass().contains(ENABLED) && !this.activePseudoClass().contains(DISABLED))
+                this.activePseudoClass().add(DISABLED);
+        }
+        else
+        {
+            if (!this.activePseudoClass().contains(ENABLED) && this.activePseudoClass().contains(DISABLED))
+                this.activePseudoClass().replace(DISABLED, ENABLED);
+            else if (!this.activePseudoClass().contains(DISABLED) && !this.activePseudoClass().contains(ENABLED))
+                this.activePseudoClass().add(ENABLED);
+        }
+    }
+
+    private void focusListener(Observable obs)
+    {
+        if (element().isFocused())
+            this.activePseudoClass().add(FOCUS);
+        else
+            this.activePseudoClass().remove(FOCUS);
     }
 
     private void valueListChanged(ObservableValue obs, String oldValue, String newValue)
