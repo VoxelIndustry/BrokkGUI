@@ -26,7 +26,7 @@ public class TextRendererStyle extends TextRenderer
 
         style.registerProperty("color", Color.WHITE, Color.class);
         style.registerProperty("shadow-color", Color.BLACK, Color.class);
-        style.registerProperty("shadow", false, Boolean.class);
+        style.registerProperty("shadow", Boolean.FALSE, Boolean.class);
     }
 
     private StyleHolder style()
@@ -93,7 +93,7 @@ public class TextRendererStyle extends TextRenderer
     @Override
     public boolean shadow()
     {
-        return style().getStyleValue("shadow", Boolean.class, false);
+        return style().getStyleValue("shadow", Boolean.class, Boolean.FALSE);
     }
 
     @Override

@@ -369,7 +369,7 @@ public class PaintStyle extends Paint
     @Override
     public boolean borderImageFill()
     {
-        return this.style().getStyleValue("border-image-fill", Boolean.class, false);
+        return this.style().getStyleValue("border-image-fill", Boolean.class, Boolean.FALSE);
     }
 
     @Override

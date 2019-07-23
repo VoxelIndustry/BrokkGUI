@@ -24,7 +24,7 @@ public class Text extends GuiComponent
         this.textProperty = new BaseProperty<>("", "textProperty");
         this.textAlignmentProperty = new BaseProperty<>(RectAlignment.MIDDLE_CENTER, "textAlignmentProperty");
         this.ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
-        this.expandToTextProperty = new BaseProperty<>(true, "expandToTextProperty");
+        this.expandToTextProperty = new BaseProperty<>(Boolean.TRUE, "expandToTextProperty");
         this.textPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "textPaddingProperty");
     }
 

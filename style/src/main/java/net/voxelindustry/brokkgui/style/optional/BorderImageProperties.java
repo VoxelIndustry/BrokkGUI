@@ -38,7 +38,7 @@ public class BorderImageProperties implements Consumer<StyleHolder>
         StyleProperty<RectBox> borderImageSliceProperty = holder.registerProperty("border-image-slice",
                 RectBox.ONE, RectBox.class);
 
-        StyleProperty<Boolean> borderImageFill = holder.registerProperty("border-image-fill", false, Boolean.class);
+        StyleProperty<Boolean> borderImageFill = holder.registerProperty("border-image-fill", Boolean.FALSE, Boolean.class);
 
         holder.registerGenericShorthand("border-image", "", borderTextureProperty,
                 borderImageSliceProperty, borderImageWidthProperty, borderImageOutsetProperty, borderImageFill);

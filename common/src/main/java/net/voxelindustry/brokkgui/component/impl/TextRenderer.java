@@ -67,7 +67,7 @@ public class TextRenderer extends GuiComponent implements RenderComponent
     public BaseProperty<Boolean> shadowProperty()
     {
         if (shadowProperty == null)
-            shadowProperty = new BaseProperty<>(false, "shadowProperty");
+            shadowProperty = new BaseProperty<>(Boolean.FALSE, "shadowProperty");
         return shadowProperty;
     }
 

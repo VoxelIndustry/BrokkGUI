@@ -277,7 +277,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public BaseProperty<Boolean> borderImageFillProperty()
     {
         if (this.borderImageFillProperty == null)
-            this.borderImageFillProperty = new BaseProperty<>(false, "borderImageFillProperty");
+            this.borderImageFillProperty = new BaseProperty<>(Boolean.FALSE, "borderImageFillProperty");
         return this.borderImageFillProperty;
     }
 

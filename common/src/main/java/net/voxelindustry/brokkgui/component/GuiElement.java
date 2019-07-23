@@ -30,8 +30,6 @@ import java.util.stream.Collectors;
 
 public abstract class GuiElement implements IEventEmitter
 {
-    private static final boolean FALSE = false;
-    private static final boolean TRUE = true;
 
     private final Map<Class<? extends GuiComponent>, GuiComponent> componentMap;
 
@@ -73,13 +71,13 @@ public abstract class GuiElement implements IEventEmitter
 
         this.idProperty = new BaseProperty<>(null, "idProperty");
 
-        this.focusedProperty = new BaseProperty<>(FALSE, "focusedProperty");
-        this.disabledProperty = new BaseProperty<>(FALSE, "disabledProperty");
-        this.hoveredProperty = new BaseProperty<>(FALSE, "hoveredProperty");
+        this.focusedProperty = new BaseProperty<>(Boolean.FALSE, "focusedProperty");
+        this.disabledProperty = new BaseProperty<>(Boolean.FALSE, "disabledProperty");
+        this.hoveredProperty = new BaseProperty<>(Boolean.FALSE, "hoveredProperty");
 
-        this.focusableProperty = new BaseProperty<>(FALSE, "focusableProperty");
-        this.visibleProperty = new BaseProperty<>(TRUE, "visibleProperty");
-        this.draggedProperty = new BaseProperty<>(FALSE, "draggedProperty");
+        this.focusableProperty = new BaseProperty<>(Boolean.FALSE, "focusableProperty");
+        this.visibleProperty = new BaseProperty<>(Boolean.TRUE, "visibleProperty");
+        this.draggedProperty = new BaseProperty<>(Boolean.FALSE, "draggedProperty");
 
         this.opacityProperty = new BaseProperty<>(1D, "opacityProperty");
 
