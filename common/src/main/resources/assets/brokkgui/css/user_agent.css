@@ -6,23 +6,23 @@ progressbar > .track {
     background-color: red;
 }
 
-radio-button >> .box {
+radio-button > > .box {
     background-color: rgba(0, 0, 0, 0);
     border-color: black;
     border-width: 1;
 }
 
-radio-button >> .mark {
+radio-button > > .mark {
     background-color: black;
 }
 
-checkbox >> .box {
+checkbox > > .box {
     background-color: rgba(0, 0, 0, 0);
     border-color: black;
     border-width: 1;
 }
 
-checkbox >> .mark {
+checkbox > > .mark {
     background-color: gray;
 }
 
@@ -39,4 +39,12 @@ textfield .prompt {
 label > text {
     shadow: false;
     color: #404040;
+}
+
+link {
+    color: #0077CC;
+}
+
+link:hover {
+    color: #33AAFF;
 }

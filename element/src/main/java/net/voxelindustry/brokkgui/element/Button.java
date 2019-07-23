@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.element;
 
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.TextRendererStyle;
 import net.voxelindustry.brokkgui.component.delegate.IconDelegate;
 import net.voxelindustry.brokkgui.component.delegate.TextDelegate;
@@ -22,11 +23,20 @@ public class Button extends GuiNode implements TextDelegate, IconDelegate
 
     private EventHandler<ActionEvent> onActionEvent;
 
-    public Button(String value)
+    public Button(String value, GuiElement icon)
     {
         text(value);
 
+        // Setting the property will trigger invalidated listeners even with null
+        if (icon != null)
+            icon(icon);
+
         getEventDispatcher().addHandler(ClickEvent.Left.TYPE, this::onClick);
+    }
+
+    public Button(String value)
+    {
+        this(value, null);
     }
 
     public Button()
