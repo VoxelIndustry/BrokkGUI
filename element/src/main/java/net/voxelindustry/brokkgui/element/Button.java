@@ -8,23 +8,48 @@ import net.voxelindustry.brokkgui.component.impl.Text;
 import net.voxelindustry.brokkgui.component.impl.TextRenderer;
 import net.voxelindustry.brokkgui.element.shape.GuiNode;
 import net.voxelindustry.brokkgui.element.shape.Rectangle;
+import net.voxelindustry.brokkgui.event.ActionEvent;
+import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
+import net.voxelindustry.hermod.EventHandler;
 
-public class Label extends GuiNode implements TextDelegate, IconDelegate
+public class Button extends GuiNode implements TextDelegate, IconDelegate
 {
     private Text text;
     private Icon icon;
 
     private TextRenderer textRenderer;
 
-    public Label(String value)
+    private EventHandler<ActionEvent> onActionEvent;
+
+    public Button(String value)
     {
         text(value);
+
+        getEventDispatcher().addHandler(ClickEvent.Left.TYPE, this::onClick);
     }
 
-    public Label()
+    public Button()
     {
         this("");
+    }
+
+    private void onClick(final ClickEvent.Left event)
+    {
+        if (!isDisabled())
+            activate();
+    }
+
+    public void activate()
+    {
+        getEventDispatcher().dispatchEvent(ActionEvent.TYPE, new ActionEvent(this));
+    }
+
+    public void setOnActionEvent(final EventHandler<ActionEvent> onActionEvent)
+    {
+        getEventDispatcher().removeHandler(ActionEvent.TYPE, this.onActionEvent);
+        this.onActionEvent = onActionEvent;
+        getEventDispatcher().addHandler(ActionEvent.TYPE, this.onActionEvent);
     }
 
     @Override
@@ -37,7 +62,7 @@ public class Label extends GuiNode implements TextDelegate, IconDelegate
     @Override
     public String type()
     {
-        return "label";
+        return "button";
     }
 
     @Override
