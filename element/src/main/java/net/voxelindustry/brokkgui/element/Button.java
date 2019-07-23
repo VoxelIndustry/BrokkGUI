@@ -45,7 +45,7 @@ public class Button extends GuiNode implements TextDelegate, IconDelegate
         getEventDispatcher().dispatchEvent(ActionEvent.TYPE, new ActionEvent(this));
     }
 
-    public void setOnActionEvent(final EventHandler<ActionEvent> onActionEvent)
+    public void onActionEvent(EventHandler<ActionEvent> onActionEvent)
     {
         getEventDispatcher().removeHandler(ActionEvent.TYPE, this.onActionEvent);
         this.onActionEvent = onActionEvent;

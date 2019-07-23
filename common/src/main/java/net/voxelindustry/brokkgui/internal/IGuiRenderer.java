@@ -11,11 +11,11 @@ public interface IGuiRenderer
 
     void endPass(RenderPass pass);
 
-    void beginDrawing(EGuiRenderMode mode, boolean texture);
+    void beginDrawing(GuiRenderMode mode, boolean texture);
 
     default void beginDrawingQuads(final boolean texture)
     {
-        this.beginDrawing(EGuiRenderMode.QUADS, texture);
+        this.beginDrawing(GuiRenderMode.QUADS, texture);
     }
 
     void endDrawing();
