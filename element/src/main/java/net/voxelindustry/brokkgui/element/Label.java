@@ -51,6 +51,7 @@ public class Label extends GuiNode implements TextDelegate, IconDelegate
     {
         super.refreshStyle(useStyle);
 
+        TextRenderer textRenderer;
         if (useStyle)
         {
             textRenderer = new TextRendererStyle();

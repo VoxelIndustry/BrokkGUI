@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.element;
+package net.voxelindustry.brokkgui.element.input;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.TextRendererStyle;
@@ -7,6 +7,8 @@ import net.voxelindustry.brokkgui.component.delegate.TextDelegate;
 import net.voxelindustry.brokkgui.component.impl.Icon;
 import net.voxelindustry.brokkgui.component.impl.Text;
 import net.voxelindustry.brokkgui.component.impl.TextRenderer;
+import net.voxelindustry.brokkgui.component.impl.Toggleable;
+import net.voxelindustry.brokkgui.component.impl.ToggleableDelegate;
 import net.voxelindustry.brokkgui.element.shape.GuiNode;
 import net.voxelindustry.brokkgui.element.shape.Rectangle;
 import net.voxelindustry.brokkgui.event.ActionEvent;
@@ -14,16 +16,17 @@ import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.hermod.EventHandler;
 
-public class Button extends GuiNode implements TextDelegate, IconDelegate
+public class ToggleButton extends GuiNode implements TextDelegate, IconDelegate, ToggleableDelegate
 {
-    private Text text;
-    private Icon icon;
+    private Text       text;
+    private Icon       icon;
+    private Toggleable toggleable;
 
     private TextRenderer textRenderer;
 
     private EventHandler<ActionEvent> onActionEvent;
 
-    public Button(String value, GuiElement icon)
+    public ToggleButton(String value, GuiElement icon)
     {
         text(value);
 
@@ -34,12 +37,12 @@ public class Button extends GuiNode implements TextDelegate, IconDelegate
         getEventDispatcher().addHandler(ClickEvent.Left.TYPE, this::onClick);
     }
 
-    public Button(String value)
+    public ToggleButton(String value)
     {
         this(value, null);
     }
 
-    public Button()
+    public ToggleButton()
     {
         this("");
     }
@@ -47,7 +50,10 @@ public class Button extends GuiNode implements TextDelegate, IconDelegate
     private void onClick(final ClickEvent.Left event)
     {
         if (!isDisabled())
+        {
             activate();
+            select(!selected());
+        }
     }
 
     public void activate()
@@ -67,6 +73,7 @@ public class Button extends GuiNode implements TextDelegate, IconDelegate
     {
         text = add(Text.class);
         icon = add(Icon.class);
+        toggleable = add(Toggleable.class);
     }
 
     @Override
@@ -86,6 +93,7 @@ public class Button extends GuiNode implements TextDelegate, IconDelegate
     {
         super.refreshStyle(useStyle);
 
+        TextRenderer textRenderer;
         if (useStyle)
         {
             textRenderer = new TextRendererStyle();
@@ -100,10 +108,6 @@ public class Button extends GuiNode implements TextDelegate, IconDelegate
         this.textRenderer = add(textRenderer);
     }
 
-    //////////
-    // TEXT //
-    //////////
-
     @Override
     public Text textComponent()
     {
@@ -116,13 +120,15 @@ public class Button extends GuiNode implements TextDelegate, IconDelegate
         return textRenderer;
     }
 
-    //////////
-    // ICON //
-    //////////
-
     @Override
     public Icon iconComponent()
     {
         return icon;
+    }
+
+    @Override
+    public Toggleable toggleableComponent()
+    {
+        return toggleable;
     }
 }

@@ -1,6 +1,5 @@
-package net.voxelindustry.brokkgui.element;
+package net.voxelindustry.brokkgui.element.input;
 
-import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.TextRendererStyle;
 import net.voxelindustry.brokkgui.component.delegate.IconDelegate;
@@ -10,65 +9,57 @@ import net.voxelindustry.brokkgui.component.impl.Text;
 import net.voxelindustry.brokkgui.component.impl.TextRenderer;
 import net.voxelindustry.brokkgui.element.shape.GuiNode;
 import net.voxelindustry.brokkgui.element.shape.Rectangle;
+import net.voxelindustry.brokkgui.event.ActionEvent;
 import net.voxelindustry.brokkgui.event.ClickEvent;
-import net.voxelindustry.brokkgui.internal.DesktopUtils;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
+import net.voxelindustry.hermod.EventHandler;
 
-public class Link extends GuiNode implements TextDelegate, IconDelegate
+public class Button extends GuiNode implements TextDelegate, IconDelegate
 {
     private Text text;
     private Icon icon;
 
     private TextRenderer textRenderer;
 
-    private final BaseProperty<String> urlProperty;
+    private EventHandler<ActionEvent> onActionEvent;
 
-    public Link(String url, String text, GuiElement icon)
+    public Button(String value, GuiElement icon)
     {
-        text(text);
+        text(value);
 
         // Setting the property will trigger invalidated listeners even with null
         if (icon != null)
             icon(icon);
 
-        this.urlProperty = new BaseProperty<>(url, "urlProperty");
-
-        getEventDispatcher().addHandler(ClickEvent.Left.TYPE, this::internalClick);
+        getEventDispatcher().addHandler(ClickEvent.Left.TYPE, this::onClick);
     }
 
-    public Link(String url, String text)
+    public Button(String value)
     {
-        this(url, text, null);
+        this(value, null);
     }
 
-    public Link(String url)
-    {
-        this(url, url);
-    }
-
-    public Link()
+    public Button()
     {
         this("");
     }
 
-    public BaseProperty<String> urlProperty()
+    private void onClick(final ClickEvent.Left event)
     {
-        return this.urlProperty;
+        if (!isDisabled())
+            activate();
     }
 
-    public String url()
+    public void activate()
     {
-        return this.urlProperty().getValue();
+        getEventDispatcher().dispatchEvent(ActionEvent.TYPE, new ActionEvent(this));
     }
 
-    public void url(final String URL)
+    public void onActionEvent(EventHandler<ActionEvent> onActionEvent)
     {
-        this.urlProperty().setValue(URL);
-    }
-
-    private void internalClick(ClickEvent.Left event)
-    {
-        DesktopUtils.openURL(url());
+        getEventDispatcher().removeHandler(ActionEvent.TYPE, this.onActionEvent);
+        this.onActionEvent = onActionEvent;
+        getEventDispatcher().addHandler(ActionEvent.TYPE, this.onActionEvent);
     }
 
     @Override
@@ -81,7 +72,7 @@ public class Link extends GuiNode implements TextDelegate, IconDelegate
     @Override
     public String type()
     {
-        return "link";
+        return "button";
     }
 
     @Override
