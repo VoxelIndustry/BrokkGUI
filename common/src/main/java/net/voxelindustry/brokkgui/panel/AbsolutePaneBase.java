@@ -25,4 +25,14 @@ public abstract class AbsolutePaneBase extends PaneBase
         if (transform().hasChild(transform))
             RelativeBindingHelper.bindToPos(transform, this.transform(), posX, posY);
     }
+
+    public void addChild(GuiElement element, float posX, float posY)
+    {
+        this.addChild(element.transform(), posX, posY);
+    }
+
+    public void setChildPos(GuiElement element, float posX, float posY)
+    {
+        this.setChildPos(element.transform(), posX, posY);
+    }
 }

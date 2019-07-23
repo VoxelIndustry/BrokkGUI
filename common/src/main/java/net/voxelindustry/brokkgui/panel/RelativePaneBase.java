@@ -24,4 +24,14 @@ public abstract class RelativePaneBase extends PaneBase
         if (transform().hasChild(transform))
             RelativeBindingHelper.bindToRelative(transform, this.transform(), ratioX, ratioY);
     }
+
+    public void addChild(GuiElement element, float ratioX, float ratioY)
+    {
+        this.addChild(element.transform(), ratioX, ratioY);
+    }
+
+    public void setChildPos(GuiElement element, float ratioX, float ratioY)
+    {
+        this.setChildPos(element.transform(), ratioX, ratioY);
+    }
 }
