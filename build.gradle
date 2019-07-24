@@ -1,6 +1,7 @@
 plugins {
     id "com.jfrog.artifactory" version "4.7.5"
     id "org.sonarqube" version "2.7"
+    id "jacoco"
 }
 
 subprojects {
@@ -16,9 +17,9 @@ subprojects {
     apply plugin: "maven-publish"
     apply plugin: "com.jfrog.artifactory"
 
-	if (project != rootProject) {
-  		eclipse.project.name = (rootProject.name + project.path).replaceAll(':', '-')
-	}
+    if (project != rootProject) {
+        eclipse.project.name = (rootProject.name + project.path).replaceAll(':', '-')
+    }
 
     artifactory {
         contextUrl = "${artifactory_contextUrl}"
@@ -30,18 +31,18 @@ subprojects {
                 maven = true
             }
             defaults {
-                publications ('mavenJava')
+                publications('mavenJava')
             }
         }
     }
 
-	// Fix JDK version use in eclipse
-	eclipse {
-		jdt {
-			sourceCompatibility = 1.8
-			targetCompatibility = 1.8
-		}
-	}
+    // Fix JDK version use in eclipse
+    eclipse {
+        jdt {
+            sourceCompatibility = 1.8
+            targetCompatibility = 1.8
+        }
+    }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'
@@ -53,7 +54,7 @@ subprojects {
     }
 
     repositories {
-        maven { url 'http://maven.ferenyr.info/artifactory/libs-release'}
+        maven { url 'http://maven.ferenyr.info/artifactory/libs-release' }
         mavenCentral()
     }
 
@@ -68,18 +69,26 @@ subprojects {
         }
     }
 
-	// Add references to core project
-	tasks.cleanEclipse.doLast {
-		project.configurations.stream()
-		.flatMap({config -> config.dependencies.stream()})                  // get all deps
-		.filter({dep -> dep instanceof ProjectDependency})                  // that are Projects
-		.forEach({dep -> eclipse.project.referencedProjects.add(dep.name)}) // and add to referencedProjects
-	}
-	tasks.eclipse.dependsOn(cleanEclipse)
+    // Add references to core project
+    tasks.cleanEclipse.doLast {
+        project.configurations.stream()
+                .flatMap({ config -> config.dependencies.stream() })                  // get all deps
+                .filter({ dep -> dep instanceof ProjectDependency })                  // that are Projects
+                .forEach({ dep -> eclipse.project.referencedProjects.add(dep.name) }) // and add to referencedProjects
+    }
+    tasks.eclipse.dependsOn(cleanEclipse)
 
     artifactoryPublish.dependsOn build
 
     apply plugin: 'jacoco'
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
+    }
+
+    test.finalizedBy jacocoTestReport
 }
 
 project(":common") {
@@ -87,7 +96,7 @@ project(":common") {
 
     version = project.brokkgui_version
     dependencies {
-        api "fr.ourten:teabeans:1.0.0"
+        api "fr.ourten:teabeans:1.1.0"
         api "net.voxelindustry:hermod:2.0.0"
         implementation "org.apache.commons:commons-lang3:3.4"
         implementation "com.google.code.findbugs:jsr305:3.0.1"
@@ -173,7 +182,19 @@ sonarqube {
         property "sonar.host.url", project.hasProperty('sonarqube_url') ? project.sonarqube_url : System.getenv('SONARQUBE_URL')
         property "sonar.login", project.hasProperty('sonarqube_login') ? project.sonarqube_login : System.getenv('SONARQUBE_LOGIN')
         property "sonar.projectKey", "net.voxelindustry:BrokkGUI"
-		property "sonar.projectName", "BrokkGUI"
+        property "sonar.projectName", "BrokkGUI"
         property "sonar.groovy.binaries", "${project.buildDir.name}${File.separator}classes"
     }
 }
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+test.finalizedBy jacocoTestReport
+project.tasks["sonarqube"].dependsOn jacocoTestReport
