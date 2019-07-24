@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.ClickEvent;
+import net.voxelindustry.brokkgui.event.ComponentEvent;
 import net.voxelindustry.brokkgui.event.DisableEvent;
 import net.voxelindustry.brokkgui.event.DisposeEvent;
 import net.voxelindustry.brokkgui.event.FocusEvent;
@@ -25,6 +26,7 @@ import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -544,11 +546,15 @@ public abstract class GuiElement implements IEventEmitter
 
     public final <T extends GuiComponent> T add(T component)
     {
+        Objects.requireNonNull(component);
+
         this.componentMap.put(component.getClass(), component);
         component.attach(this);
 
         if (component instanceof RenderComponent)
             this.renderComponents.add((RenderComponent) component);
+
+        this.getEventDispatcher().dispatchEvent(ComponentEvent.ADDED, new ComponentEvent.Added(this, component));
         return component;
     }
 
@@ -567,6 +573,8 @@ public abstract class GuiElement implements IEventEmitter
 
         if (instance instanceof RenderComponent)
             this.renderComponents.add((RenderComponent) instance);
+
+        this.getEventDispatcher().dispatchEvent(ComponentEvent.ADDED, new ComponentEvent.Added(this, instance));
         return instance;
     }
 
@@ -577,6 +585,8 @@ public abstract class GuiElement implements IEventEmitter
 
         if (component instanceof RenderComponent)
             this.renderComponents.remove(component);
+
+        this.getEventDispatcher().dispatchEvent(ComponentEvent.REMOVED, new ComponentEvent.Removed(this, component));
         return (T) component;
     }
 
