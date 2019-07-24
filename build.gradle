@@ -4,6 +4,18 @@ plugins {
     id "jacoco"
 }
 
+project.ext {
+    commonsLangVersion = "3.4"
+    commonsIoVersion = "2.5"
+    guavaVersion = "21.0"
+    findbugsJsr305Version = "3.0.1"
+    teabeansVersion = "1.1.0"
+    hermodVersion = "2.0.0"
+    junitVersion = "5.3.2"
+    assertjVersion = "3.10.0"
+    mockitoVersion ="2.24.0"
+}
+
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'eclipse'
@@ -96,19 +108,19 @@ project(":common") {
 
     version = project.brokkgui_version
     dependencies {
-        api "fr.ourten:teabeans:1.1.0"
-        api "net.voxelindustry:hermod:2.0.0"
-        implementation "org.apache.commons:commons-lang3:3.4"
-        implementation "com.google.code.findbugs:jsr305:3.0.1"
-        implementation "commons-io:commons-io:2.5"
-        implementation "com.google.guava:guava:21.0"
+        api "fr.ourten:teabeans:${teabeansVersion}"
+        api "net.voxelindustry:hermod:${hermodVersion}"
+        implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
+        implementation "com.google.code.findbugs:jsr305:${findbugsJsr305Version}"
+        implementation "commons-io:commons-io:${commonsIoVersion}"
+        implementation "com.google.guava:guava:${guavaVersion}"
 
-        testCompile('org.junit.jupiter:junit-jupiter-api:5.3.2')
-        testCompile('org.mockito:mockito-core:2.24.0')
-        testCompile('org.mockito:mockito-junit-jupiter:2.24.0')
-        testCompile('org.assertj:assertj-core:3.10.0')
+        testCompile "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+        testCompile "org.mockito:mockito-core:${mockitoVersion}" 
+        testCompile "org.mockito:mockito-junit-jupiter:${mockitoVersion}" 
+        testCompile "org.assertj:assertj-core:${assertjVersion}" 
 
-        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.3.2')
+        testRuntime "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     }
 }
 
@@ -120,17 +132,17 @@ project(":style") {
     dependencies {
         api project(":common")
 
-        implementation "org.apache.commons:commons-lang3:3.4"
-        implementation "com.google.code.findbugs:jsr305:3.0.1"
-        implementation "commons-io:commons-io:2.5"
-        implementation "com.google.guava:guava:21.0"
+        implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
+        implementation "com.google.code.findbugs:jsr305:${findbugsJsr305Version}"
+        implementation "commons-io:commons-io:${commonsIoVersion}"
+        implementation "com.google.guava:guava:${guavaVersion}"
 
-        testCompile('org.junit.jupiter:junit-jupiter-api:5.3.2')
-        testCompile('org.mockito:mockito-core:2.24.0')
-        testCompile('org.mockito:mockito-junit-jupiter:2.24.0')
-        testCompile('org.assertj:assertj-core:3.10.0')
+        testCompile "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+        testCompile "org.mockito:mockito-core:${mockitoVersion}" 
+        testCompile "org.mockito:mockito-junit-jupiter:${mockitoVersion}" 
+        testCompile "org.assertj:assertj-core:${assertjVersion}" 
 
-        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.3.2')
+        testRuntime "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     }
 }
 
@@ -143,17 +155,17 @@ project(":element") {
         api project(":common")
         api project(":style")
 
-        implementation "org.apache.commons:commons-lang3:3.4"
-        implementation "com.google.code.findbugs:jsr305:3.0.1"
-        implementation "commons-io:commons-io:2.5"
-        implementation "com.google.guava:guava:21.0"
+        implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
+        implementation "com.google.code.findbugs:jsr305:${findbugsJsr305Version}"
+        implementation "commons-io:commons-io:${commonsIoVersion}"
+        implementation "com.google.guava:guava:${guavaVersion}"
 
-        testCompile('org.junit.jupiter:junit-jupiter-api:5.3.2')
-        testCompile('org.mockito:mockito-core:2.24.0')
-        testCompile('org.mockito:mockito-junit-jupiter:2.24.0')
-        testCompile('org.assertj:assertj-core:3.10.0')
+        testCompile "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+        testCompile "org.mockito:mockito-core:${mockitoVersion}" 
+        testCompile "org.mockito:mockito-junit-jupiter:${mockitoVersion}" 
+        testCompile "org.assertj:assertj-core:${assertjVersion}" 
 
-        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.3.2')
+        testRuntime "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     }
 }
 
@@ -166,12 +178,12 @@ project(":core") {
         api project(":common")
         api project(":element")
 
-        api "fr.ourten:teabeans:1.0.0"
+        api "fr.ourten:teabeans:${teabeansVersion}"
 
-        implementation "org.apache.commons:commons-lang3:3.4"
-        implementation "com.google.code.findbugs:jsr305:3.0.1"
-        implementation "commons-io:commons-io:2.5"
-        implementation "com.google.guava:guava:21.0"
+        implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
+        implementation "com.google.code.findbugs:jsr305:${findbugsJsr305Version}"
+        implementation "commons-io:commons-io:${commonsIoVersion}"
+        implementation "com.google.guava:guava:${guavaVersion}"
     }
 }
 
