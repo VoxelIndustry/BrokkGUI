@@ -1,6 +1,7 @@
-package net.voxelindustry.brokkgui.component.impl;
+package net.voxelindustry.brokkgui.component.delegate;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.component.impl.Toggleable;
 import net.voxelindustry.brokkgui.element.input.ToggleGroup;
 
 public interface ToggleableDelegate

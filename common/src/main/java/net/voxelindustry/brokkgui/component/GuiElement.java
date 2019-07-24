@@ -186,7 +186,11 @@ public abstract class GuiElement implements IEventEmitter
             this.getEventDispatcher().dispatchEvent(GuiMouseEvent.WHEEL,
                     new GuiMouseEvent.Wheel(this, mouseX, mouseY, (int) scroll));
 
-        this.transform.childrenProperty().getValue().stream().filter(child -> child.isPointInside(mouseX, mouseY))
+        this.transform.childrenProperty().getValue().stream().peek(child ->
+        {
+            if (child == null)
+                ExceptionTranslator.createNullChildInElement(this);
+        }).filter(child -> child.isPointInside(mouseX, mouseY))
                 .forEach(child -> child.element().handleMouseScroll(mouseX, mouseY, scroll));
     }
 
@@ -214,7 +218,11 @@ public abstract class GuiElement implements IEventEmitter
         }
         this.setFocused();
 
-        this.transform.childrenProperty().getValue().stream().filter(child -> child.isPointInside(mouseX, mouseY))
+        this.transform.childrenProperty().getValue().stream().peek(child ->
+        {
+            if (child == null)
+                ExceptionTranslator.createNullChildInElement(this);
+        }).filter(child -> child.isPointInside(mouseX, mouseY))
                 .forEach(child -> child.element().handleClick(mouseX, mouseY, key));
     }
 
@@ -271,7 +279,11 @@ public abstract class GuiElement implements IEventEmitter
     {
         this.getEventDispatcher().dispatchEvent(KeyEvent.PRESS, new KeyEvent.Press(this, key));
 
-        this.transform.childrenProperty().getValue().stream().filter(child -> child.isPointInside(mouseX, mouseY))
+        this.transform.childrenProperty().getValue().stream().peek(child ->
+        {
+            if (child == null)
+                ExceptionTranslator.createNullChildInElement(this);
+        }).filter(child -> child.isPointInside(mouseX, mouseY))
                 .forEach(child -> child.element().handleKeyPress(mouseX, mouseY, key));
     }
 
@@ -279,7 +291,11 @@ public abstract class GuiElement implements IEventEmitter
     {
         this.getEventDispatcher().dispatchEvent(KeyEvent.RELEASE, new KeyEvent.Release(this, key));
 
-        this.transform.childrenProperty().getValue().stream().filter(child -> child.isPointInside(mouseX, mouseY))
+        this.transform.childrenProperty().getValue().stream().peek(child ->
+        {
+            if (child == null)
+                ExceptionTranslator.createNullChildInElement(this);
+        }).filter(child -> child.isPointInside(mouseX, mouseY))
                 .forEach(child -> child.element().handleKeyRelease(mouseX, mouseY, key));
     }
 

@@ -6,4 +6,8 @@ public class GuiComponentException extends RuntimeException
     {
         super(message);
     }
+
+    public GuiComponentException()
+    {
+    }
 }
