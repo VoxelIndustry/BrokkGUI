@@ -1,10 +1,14 @@
 package net.voxelindustry.brokkgui.component.impl;
 
+import fr.ourten.teabeans.binding.BaseExpression;
+import fr.ourten.teabeans.binding.Binding;
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.RenderComponent;
+import net.voxelindustry.brokkgui.data.TextLayoutHelper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -18,6 +22,14 @@ public class TextRenderer extends GuiComponent implements RenderComponent
     protected BaseProperty<Color>   shadowColorProperty;
     protected BaseProperty<Boolean> shadowProperty;
 
+    private Binding<Float> xPosBinding;
+    private Binding<Float> yPosBinding;
+
+    private Binding<Float> widthBinding;
+    private float          height;
+
+    private Binding<String> ellipsedTextBinding;
+
     public TextRenderer()
     {
     }
@@ -25,6 +37,14 @@ public class TextRenderer extends GuiComponent implements RenderComponent
     @Override
     public void attach(GuiElement element)
     {
+        if (this.element() != null)
+        {
+            this.ellipsedTextBinding.unbindAll();
+            this.xPosBinding.unbindAll();
+            this.yPosBinding.unbindAll();
+            this.widthBinding.unbindAll();
+        }
+
         super.attach(element);
 
         if (!element.has(Text.class))
@@ -33,15 +53,35 @@ public class TextRenderer extends GuiComponent implements RenderComponent
 
         this.text = element.get(Text.class);
         this.transform = element.transform();
+
+        Icon icon = element.get(Icon.class);
+
+        if (icon != null)
+        {
+            this.ellipsedTextBinding = TextLayoutHelper.createEllipsedTextBinding(element, text, icon);
+            this.xPosBinding = TextLayoutHelper.createXPosBinding(element, text, icon, ellipsedTextBinding);
+            this.yPosBinding = TextLayoutHelper.createYPosBinding(element, text, icon);
+        }
+        else
+        {
+            this.ellipsedTextBinding = TextLayoutHelper.createEllipsedTextBinding(element, text);
+            this.xPosBinding = TextLayoutHelper.createXPosBinding(element, text, ellipsedTextBinding);
+            this.yPosBinding = TextLayoutHelper.createYPosBinding(element, text);
+        }
+
+        widthBinding = BaseExpression.transform(ellipsedTextBinding,
+                BrokkGuiPlatform.instance().guiHelper()::getStringWidth);
+        height = BrokkGuiPlatform.instance().guiHelper().getStringHeight();
     }
+
 
     @Override
     public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
         if (pass == RenderPass.MAIN)
         {
-            renderer.getHelper().drawString(text.text(), transform.leftPos(),
-                    transform.topPos(), transform.zLevel(),
+            renderer.getHelper().drawString(ellipsedTextBinding.getValue(), transform.leftPos() + xPosBinding.getValue(),
+                    transform.topPos() + yPosBinding.getValue(), transform.zLevel(),
                     color(), this.shadow() ? this.shadowColor() : Color.ALPHA);
         }
     }
