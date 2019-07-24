@@ -16,6 +16,14 @@ public class Icon extends GuiComponent
         this.iconProperty = new BaseProperty<>(null, "iconProperty");
         this.iconSideProperty = new BaseProperty<>(RectSide.LEFT, "iconSideProperty");
         this.iconPaddingProperty = new BaseProperty<>(2f, "iconPaddingProperty");
+
+        this.iconProperty.addListener((observable, oldValue, newValue) ->
+        {
+            if (oldValue != null)
+                element().transform().removeChild(oldValue.transform());
+            if (newValue != null)
+                element().transform().addChild(newValue.transform());
+        });
     }
 
     public BaseProperty<GuiElement> iconProperty()

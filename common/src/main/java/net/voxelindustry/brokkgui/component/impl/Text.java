@@ -1,12 +1,12 @@
 package net.voxelindustry.brokkgui.component.impl;
 
-import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
+import net.voxelindustry.brokkgui.data.TextLayoutHelper;
+import net.voxelindustry.brokkgui.event.ComponentEvent;
 
 import javax.annotation.Nonnull;
 
@@ -33,7 +33,19 @@ public class Text extends GuiComponent
     {
         super.attach(element);
 
-        this.bindSizeToText();
+        if (this.expandToText())
+            this.bindSizeToText();
+
+        element().getEventDispatcher().addHandler(ComponentEvent.ANY, this::onComponentChange);
+    }
+
+    private void onComponentChange(ComponentEvent event)
+    {
+        if (event.getComponent() != null && event.getComponent().getClass() != Icon.class)
+            return;
+
+        if (this.expandToText())
+            this.bindSizeToText();
     }
 
     public BaseProperty<RectAlignment> textAlignmentProperty()
@@ -120,34 +132,16 @@ public class Text extends GuiComponent
 
     private void bindSizeToText()
     {
-        this.element().transform().widthProperty().bind(new BaseBinding<Float>()
+        Icon icon = this.element().get(Icon.class);
+        if (icon != null)
         {
-            {
-                super.bind(textProperty(), textPaddingProperty());
-            }
-
-            @Override
-            public Float computeValue()
-            {
-
-                return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text())
-                        + textPadding().getLeft() + textPadding().getRight();
-            }
-        });
-
-        this.element().transform().heightProperty().bind(new BaseBinding<Float>()
+            this.element().transform().widthProperty().bind(TextLayoutHelper.createMinimalWidthBinding(this, icon));
+            this.element().transform().heightProperty().bind(TextLayoutHelper.createMinimalHeightBinding(this, icon));
+        }
+        else
         {
-            {
-                super.bind(textProperty(),
-                        textPaddingProperty());
-            }
-
-            @Override
-            public Float computeValue()
-            {
-                return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
-                        + textPadding().getTop() + textPadding().getBottom();
-            }
-        });
+            this.element().transform().widthProperty().bind(TextLayoutHelper.createMinimalWidthBinding(this));
+            this.element().transform().heightProperty().bind(TextLayoutHelper.createMinimalHeightBinding(this));
+        }
     }
 }

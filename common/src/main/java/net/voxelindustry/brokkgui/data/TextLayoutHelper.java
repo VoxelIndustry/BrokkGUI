@@ -120,6 +120,70 @@ public class TextLayoutHelper
         };
     }
 
+    public static Binding<Float> createMinimalWidthBinding(Text text, Icon icon)
+    {
+        return new BaseBinding<Float>()
+        {
+            {
+                super.bind(text.textProperty(),
+                        text.textPaddingProperty(),
+                        icon.iconProperty(),
+                        icon.iconPaddingProperty(),
+                        icon.iconSideProperty());
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                if (icon.iconProperty().isPresent())
+                {
+                    if (icon.iconSide().isHorizontal())
+                        return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text.text())
+                                + text.textPadding().getLeft() + text.textPadding().getRight()
+                                + icon.icon().width() + icon.iconPadding();
+                    else
+                        return Math.max(BrokkGuiPlatform.instance().guiHelper().getStringWidth(text.text()),
+                                icon.icon().width())
+                                + text.textPadding().getLeft() + text.textPadding().getRight();
+                }
+                return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text.text())
+                        + text.textPadding().getLeft() + text.textPadding().getRight();
+            }
+        };
+    }
+
+    public static Binding<Float> createMinimalHeightBinding(Text text, Icon icon)
+    {
+        return new BaseBinding<Float>()
+        {
+            {
+                super.bind(text.textProperty(),
+                        text.textPaddingProperty(),
+                        icon.iconProperty(),
+                        icon.iconPaddingProperty(),
+                        icon.iconSideProperty());
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                if (icon.iconProperty().isPresent())
+                {
+                    if (icon.iconSide().isVertical())
+                        return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
+                                + text.textPadding().getTop() + text.textPadding().getBottom()
+                                + icon.icon().height() + icon.iconPadding();
+                    else
+                        return Math.max(BrokkGuiPlatform.instance().guiHelper().getStringHeight(),
+                                icon.icon().height())
+                                + text.textPadding().getTop() + text.textPadding().getBottom();
+                }
+                return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
+                        + text.textPadding().getTop() + text.textPadding().getBottom();
+            }
+        };
+    }
+
     public static Binding<Float> createXPosBinding(GuiElement element, Text text, Binding<String> ellipsedTextProperty)
     {
         return new BaseBinding<Float>()
@@ -201,6 +265,42 @@ public class TextLayoutHelper
                     return trimmed + text.ellipsis();
                 }
                 return text.text();
+            }
+        };
+    }
+
+    public static Binding<Float> createMinimalWidthBinding(Text text)
+    {
+        return new BaseBinding<Float>()
+        {
+            {
+                super.bind(text.textProperty(), text.textPaddingProperty());
+            }
+
+            @Override
+            public Float computeValue()
+            {
+
+                return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text.text())
+                        + text.textPadding().getLeft() + text.textPadding().getRight();
+            }
+        };
+    }
+
+    public static Binding<Float> createMinimalHeightBinding(Text text)
+    {
+        return new BaseBinding<Float>()
+        {
+            {
+                super.bind(text.textProperty(),
+                        text.textPaddingProperty());
+            }
+
+            @Override
+            public Float computeValue()
+            {
+                return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
+                        + text.textPadding().getTop() + text.textPadding().getBottom();
             }
         };
     }
