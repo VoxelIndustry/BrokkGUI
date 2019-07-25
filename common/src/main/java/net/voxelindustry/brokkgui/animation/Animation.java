@@ -38,6 +38,7 @@ public abstract class Animation implements ITicking, IEventEmitter
         this.totalProgressProperty = new BaseProperty<>(0f, "totalProgressProperty");
     }
 
+    @Override
     public void tick(long currentMillis)
     {
         this.elapsedTime = currentMillis - this.startTime;
@@ -58,7 +59,7 @@ public abstract class Animation implements ITicking, IEventEmitter
         float currentProgress = reverse && getCurrentCycle() % 2 != 0 ? 1 - ((float) elapsedTime / duration) :
                 ((float) elapsedTime / duration);
         this.getProgressProperty().setValue(currentProgress);
-        this.getTotalProgressProperty().setValue((float) (this.getCurrentCycle() / this.getMaxCycles()) + (currentProgress / getMaxCycles()));
+        this.getTotalProgressProperty().setValue((float) (this.getCurrentCycle() / this.getMaxCycles()) + (currentProgress / (float) getMaxCycles()));
     }
 
     public void setCurrentProgress(float progress)

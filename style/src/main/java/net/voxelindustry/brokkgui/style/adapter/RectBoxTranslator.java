@@ -43,6 +43,8 @@ public class RectBoxTranslator implements IStyleDecoder<RectBox>, IStyleEncoder<
                 bottom = StyleTranslator.getInstance().decode(parts[2], Float.class);
                 left = StyleTranslator.getInstance().decode(parts[3], Float.class);
                 break;
+            default:
+                throw new RuntimeException("Cannot parse a RectBox from more than 4 values! style=" + style);
         }
         return RectBox.build().top(top).right(right).bottom(bottom).left(left).create();
     }

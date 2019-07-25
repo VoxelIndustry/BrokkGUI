@@ -324,7 +324,7 @@ public class TextLayoutHelper
 
     private static float getAvailableTextWidth(GuiElement element, Text text, @Nullable Icon icon)
     {
-        if (icon.iconProperty().isPresent() && icon.iconSide().isHorizontal())
+        if (icon != null && icon.iconProperty().isPresent() && icon.iconSide().isHorizontal())
         {
             return element.width()
                     - text.textPadding().getLeft() - text.textPadding().getRight()
