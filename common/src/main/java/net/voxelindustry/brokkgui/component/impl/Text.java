@@ -41,9 +41,10 @@ public class Text extends GuiComponent
 
     private void onComponentChange(ComponentEvent event)
     {
-        if (event.getComponent() != null && event.getComponent().getClass() != Icon.class)
+        if (event.getComponent() == null || event.getComponent().getClass() != Icon.class)
             return;
 
+        ((Icon) event.getComponent()).contentPaddingProperty(textPaddingProperty);
         if (this.expandToText())
             this.bindSizeToText();
     }
