@@ -32,6 +32,8 @@ public class Label extends GuiNode implements TextDelegate, IconDelegate
     {
         text = add(Text.class);
         icon = add(Icon.class);
+
+        icon.elementContentPaddingProperty(text.textPaddingProperty());
     }
 
     @Override

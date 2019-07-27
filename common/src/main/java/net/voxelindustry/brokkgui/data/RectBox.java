@@ -5,7 +5,7 @@ import java.util.Objects;
 public class RectBox
 {
     public static final RectBox EMPTY = new RectBox(0);
-    public static final RectBox ONE = new RectBox(1);
+    public static final RectBox ONE   = new RectBox(1);
 
     private final float top;
     private final float left;
@@ -43,6 +43,71 @@ public class RectBox
     public float getRight()
     {
         return right;
+    }
+
+    public RectBox setTop(float top)
+    {
+        return new RectBox(top, this.left, this.bottom, this.right);
+    }
+
+    public RectBox setBottom(float bottom)
+    {
+        return new RectBox(this.top, this.left, bottom, this.right);
+    }
+
+    public RectBox setLeft(float left)
+    {
+        return new RectBox(this.top, left, this.bottom, this.right);
+    }
+
+    public RectBox setRight(float right)
+    {
+        return new RectBox(this.top, this.left, this.bottom, right);
+    }
+
+    public RectBox addTop(float top)
+    {
+        return setTop(this.top + top);
+    }
+
+    public RectBox addBottom(float bottom)
+    {
+        return setBottom(this.bottom + bottom);
+    }
+
+    public RectBox addLeft(float left)
+    {
+        return setLeft(this.left + left);
+    }
+
+    public RectBox addRight(float right)
+    {
+        return setRight(this.right + right);
+    }
+
+    public RectBox minusTop(float top)
+    {
+        return setTop(this.top - top);
+    }
+
+    public RectBox minusBottom(float bottom)
+    {
+        return setBottom(this.bottom - bottom);
+    }
+
+    public RectBox minusLeft(float left)
+    {
+        return setLeft(this.left - left);
+    }
+
+    public RectBox minusRight(float right)
+    {
+        return setRight(this.right - right);
+    }
+
+    public RectBox sum(RectBox other)
+    {
+        return new RectBox(this.top + other.top, this.left + other.left, this.bottom + other.bottom, this.right + other.right);
     }
 
     @Override

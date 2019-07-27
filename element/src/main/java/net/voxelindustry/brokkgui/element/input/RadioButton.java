@@ -1,14 +1,18 @@
 package net.voxelindustry.brokkgui.element.input;
 
+import fr.ourten.teabeans.binding.BaseExpression;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.TextRendererStyle;
+import net.voxelindustry.brokkgui.component.delegate.CheckMarkDelegate;
 import net.voxelindustry.brokkgui.component.delegate.IconDelegate;
 import net.voxelindustry.brokkgui.component.delegate.TextDelegate;
 import net.voxelindustry.brokkgui.component.delegate.ToggleableDelegate;
+import net.voxelindustry.brokkgui.component.impl.CheckMark;
 import net.voxelindustry.brokkgui.component.impl.Icon;
 import net.voxelindustry.brokkgui.component.impl.Text;
 import net.voxelindustry.brokkgui.component.impl.TextRenderer;
 import net.voxelindustry.brokkgui.component.impl.Toggleable;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.element.shape.GuiNode;
 import net.voxelindustry.brokkgui.element.shape.Rectangle;
 import net.voxelindustry.brokkgui.event.ActionEvent;
@@ -16,17 +20,21 @@ import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.hermod.EventHandler;
 
-public class ToggleButton extends GuiNode implements TextDelegate, IconDelegate, ToggleableDelegate
+import static fr.ourten.teabeans.binding.BaseExpression.biCombine;
+import static fr.ourten.teabeans.binding.BaseExpression.triCombine;
+
+public class RadioButton extends GuiNode implements TextDelegate, IconDelegate, ToggleableDelegate, CheckMarkDelegate
 {
     private Text       text;
     private Icon       icon;
     private Toggleable toggleable;
+    private CheckMark  checkMark;
 
     private TextRenderer textRenderer;
 
     private EventHandler<ActionEvent> onActionEvent;
 
-    public ToggleButton(String value, GuiElement icon)
+    public RadioButton(String value, GuiElement icon)
     {
         text(value);
 
@@ -37,12 +45,12 @@ public class ToggleButton extends GuiNode implements TextDelegate, IconDelegate,
         getEventDispatcher().addHandler(ClickEvent.Left.TYPE, this::onClick);
     }
 
-    public ToggleButton(String value)
+    public RadioButton(String value)
     {
         this(value, null);
     }
 
-    public ToggleButton()
+    public RadioButton()
     {
         this("");
     }
@@ -74,14 +82,33 @@ public class ToggleButton extends GuiNode implements TextDelegate, IconDelegate,
         text = add(Text.class);
         icon = add(Icon.class);
         toggleable = add(Toggleable.class);
+        checkMark = add(CheckMark.class);
 
-        icon.elementContentPaddingProperty(text.textPaddingProperty());
+        BaseExpression<RectBox> elementContentPadding = triCombine(checkMark.box().transform().widthProperty(), checkMark.boxPaddingProperty(), checkMark.boxSideProperty(), (width, padding, side) ->
+        {
+            switch (side)
+            {
+                case UP:
+                    return padding.addTop(width);
+                case DOWN:
+                    return padding.addBottom(width);
+                case LEFT:
+                    return padding.addLeft(width);
+                case RIGHT:
+                    return padding.addRight(width);
+                default:
+                    return padding;
+            }
+        });
+
+        icon.elementContentPaddingProperty(biCombine(text.textPaddingProperty(), elementContentPadding, RectBox::sum));
+        text.elementContentPaddingProperty(elementContentPadding);
     }
 
     @Override
     public String type()
     {
-        return "button";
+        return "radio-button";
     }
 
     @Override
@@ -132,5 +159,11 @@ public class ToggleButton extends GuiNode implements TextDelegate, IconDelegate,
     public Toggleable toggleableComponent()
     {
         return toggleable;
+    }
+
+    @Override
+    public CheckMark checkMarkComponent()
+    {
+        return checkMark;
     }
 }

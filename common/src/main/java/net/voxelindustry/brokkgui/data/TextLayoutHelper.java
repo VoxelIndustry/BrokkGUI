@@ -22,6 +22,7 @@ public class TextLayoutHelper
                         icon.iconSideProperty(),
                         icon.iconPaddingProperty(),
                         text.textPaddingProperty(),
+                        text.elementContentPaddingProperty(),
                         ellipsedTextProperty);
             }
 
@@ -33,15 +34,15 @@ public class TextLayoutHelper
                     iconWidth = icon.icon().width() + icon.iconPadding();
 
                 if (text.textAlignment().isLeft())
-                    return text.textPadding().getLeft()
+                    return text.textPadding().getLeft() + text.elementContentPadding().getLeft()
                             + (icon.iconSide() == RectSide.LEFT ? iconWidth : 0);
                 else if (text.textAlignment().isRight())
                     return element.width()
-                            - text.textPadding().getRight()
+                            - text.textPadding().getRight() - text.elementContentPadding().getRight()
                             - BrokkGuiPlatform.instance().guiHelper().getStringWidth(ellipsedTextProperty.getValue())
                             - (icon.iconSide() == RectSide.RIGHT ? iconWidth : 0);
                 else
-                    return text.textPadding().getLeft()
+                    return text.textPadding().getLeft() + text.elementContentPadding().getLeft()
                             + (icon.iconSide() == RectSide.LEFT ? iconWidth : 0)
                             + getAvailableTextWidth(element, text, icon) / 2
                             - BrokkGuiPlatform.instance().guiHelper().getStringWidth(ellipsedTextProperty.getValue()) / 2;
@@ -59,7 +60,8 @@ public class TextLayoutHelper
                         icon.iconProperty(),
                         icon.iconSideProperty(),
                         icon.iconPaddingProperty(),
-                        text.textPaddingProperty());
+                        text.textPaddingProperty(),
+                        text.elementContentPaddingProperty());
             }
 
             @Override
@@ -70,11 +72,11 @@ public class TextLayoutHelper
                     iconHeight = icon.icon().height() + icon.iconPadding();
 
                 if (text.textAlignment().isUp())
-                    return text.textPadding().getTop()
+                    return text.textPadding().getTop() + text.elementContentPadding().getTop()
                             + (icon.iconSide() == RectSide.UP ? iconHeight : 0);
                 else if (text.textAlignment().isDown())
                     return element.height()
-                            - text.textPadding().getBottom()
+                            - text.textPadding().getBottom() - text.elementContentPadding().getBottom()
                             - BrokkGuiPlatform.instance().guiHelper().getStringHeight()
                             - (icon.iconSide() == RectSide.DOWN ? iconHeight : 0);
                 else
@@ -82,7 +84,7 @@ public class TextLayoutHelper
                             + (icon.iconSide() == RectSide.UP ? iconHeight :
                             (icon.iconSide() == RectSide.DOWN ? -iconHeight : 0)) / 2
                             - BrokkGuiPlatform.instance().guiHelper().getStringHeight() / 2
-                            + text.textPadding().getTop();
+                            + text.textPadding().getTop() + text.elementContentPadding().getTop();
             }
         };
     }
@@ -97,6 +99,7 @@ public class TextLayoutHelper
                         element.transform().widthProperty(),
                         text.ellipsisProperty(),
                         text.textPaddingProperty(),
+                        text.elementContentPaddingProperty(),
                         icon.iconPaddingProperty(),
                         icon.iconSideProperty(),
                         icon.iconProperty());
@@ -127,6 +130,7 @@ public class TextLayoutHelper
             {
                 super.bind(text.textProperty(),
                         text.textPaddingProperty(),
+                        text.elementContentPaddingProperty(),
                         icon.iconProperty(),
                         icon.iconPaddingProperty(),
                         icon.iconSideProperty());
@@ -140,14 +144,17 @@ public class TextLayoutHelper
                     if (icon.iconSide().isHorizontal())
                         return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text.text())
                                 + text.textPadding().getLeft() + text.textPadding().getRight()
+                                + text.elementContentPadding().getLeft() + text.elementContentPadding().getRight()
                                 + icon.icon().width() + icon.iconPadding();
                     else
                         return Math.max(BrokkGuiPlatform.instance().guiHelper().getStringWidth(text.text()),
                                 icon.icon().width())
-                                + text.textPadding().getLeft() + text.textPadding().getRight();
+                                + text.textPadding().getLeft() + text.textPadding().getRight()
+                                + text.elementContentPadding().getLeft() + text.elementContentPadding().getRight();
                 }
                 return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text.text())
-                        + text.textPadding().getLeft() + text.textPadding().getRight();
+                        + text.textPadding().getLeft() + text.textPadding().getRight()
+                        + text.elementContentPadding().getLeft() + text.elementContentPadding().getRight();
             }
         };
     }
@@ -159,6 +166,7 @@ public class TextLayoutHelper
             {
                 super.bind(text.textProperty(),
                         text.textPaddingProperty(),
+                        text.elementContentPaddingProperty(),
                         icon.iconProperty(),
                         icon.iconPaddingProperty(),
                         icon.iconSideProperty());
@@ -172,14 +180,17 @@ public class TextLayoutHelper
                     if (icon.iconSide().isVertical())
                         return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
                                 + text.textPadding().getTop() + text.textPadding().getBottom()
+                                + text.elementContentPadding().getTop() + text.elementContentPadding().getBottom()
                                 + icon.icon().height() + icon.iconPadding();
                     else
                         return Math.max(BrokkGuiPlatform.instance().guiHelper().getStringHeight(),
                                 icon.icon().height())
-                                + text.textPadding().getTop() + text.textPadding().getBottom();
+                                + text.textPadding().getTop() + text.textPadding().getBottom()
+                                + text.elementContentPadding().getTop() + text.elementContentPadding().getBottom();
                 }
                 return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
-                        + text.textPadding().getTop() + text.textPadding().getBottom();
+                        + text.textPadding().getTop() + text.textPadding().getBottom()
+                        + text.elementContentPadding().getTop() + text.elementContentPadding().getBottom();
             }
         };
     }
@@ -192,6 +203,7 @@ public class TextLayoutHelper
                 super.bind(text.textAlignmentProperty(),
                         element.transform().widthProperty(),
                         text.textPaddingProperty(),
+                        text.elementContentPaddingProperty(),
                         ellipsedTextProperty);
             }
 
@@ -199,13 +211,13 @@ public class TextLayoutHelper
             public Float computeValue()
             {
                 if (text.textAlignment().isLeft())
-                    return text.textPadding().getLeft();
+                    return text.textPadding().getLeft() + text.elementContentPadding().getLeft();
                 else if (text.textAlignment().isRight())
                     return element.width()
-                            - text.textPadding().getRight()
+                            - text.textPadding().getRight() - text.elementContentPadding().getRight()
                             - BrokkGuiPlatform.instance().guiHelper().getStringWidth(ellipsedTextProperty.getValue());
                 else
-                    return text.textPadding().getLeft()
+                    return text.textPadding().getLeft() + text.elementContentPadding().getLeft()
                             + getAvailableTextWidth(element, text, null) / 2
                             - BrokkGuiPlatform.instance().guiHelper().getStringWidth(ellipsedTextProperty.getValue()) / 2;
             }
@@ -219,22 +231,23 @@ public class TextLayoutHelper
             {
                 super.bind(text.textAlignmentProperty(),
                         element.transform().heightProperty(),
-                        text.textPaddingProperty());
+                        text.textPaddingProperty(),
+                        text.elementContentPaddingProperty());
             }
 
             @Override
             public Float computeValue()
             {
                 if (text.textAlignment().isUp())
-                    return text.textPadding().getTop();
+                    return text.textPadding().getTop() + text.elementContentPadding().getTop();
                 else if (text.textAlignment().isDown())
                     return element.height()
-                            - text.textPadding().getBottom()
+                            - text.textPadding().getBottom() - text.elementContentPadding().getBottom()
                             - BrokkGuiPlatform.instance().guiHelper().getStringHeight();
                 else
                     return element.height() / 2
                             - BrokkGuiPlatform.instance().guiHelper().getStringHeight() / 2
-                            + text.textPadding().getTop();
+                            + text.textPadding().getTop() + text.elementContentPadding().getTop();
             }
         };
     }
@@ -248,7 +261,8 @@ public class TextLayoutHelper
                         text.expandToTextProperty(),
                         element.transform().widthProperty(),
                         text.ellipsisProperty(),
-                        text.textPaddingProperty());
+                        text.textPaddingProperty(),
+                        text.elementContentPaddingProperty());
             }
 
             @Override
@@ -274,7 +288,9 @@ public class TextLayoutHelper
         return new BaseBinding<Float>()
         {
             {
-                super.bind(text.textProperty(), text.textPaddingProperty());
+                super.bind(text.textProperty(),
+                        text.textPaddingProperty(),
+                        text.elementContentPaddingProperty());
             }
 
             @Override
@@ -282,7 +298,8 @@ public class TextLayoutHelper
             {
 
                 return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text.text())
-                        + text.textPadding().getLeft() + text.textPadding().getRight();
+                        + text.textPadding().getLeft() + text.textPadding().getRight()
+                        + text.elementContentPadding().getLeft() + text.elementContentPadding().getRight();
             }
         };
     }
@@ -293,14 +310,16 @@ public class TextLayoutHelper
         {
             {
                 super.bind(text.textProperty(),
-                        text.textPaddingProperty());
+                        text.textPaddingProperty(),
+                        text.elementContentPaddingProperty());
             }
 
             @Override
             public Float computeValue()
             {
                 return BrokkGuiPlatform.instance().guiHelper().getStringHeight()
-                        + text.textPadding().getTop() + text.textPadding().getBottom();
+                        + text.textPadding().getTop() + text.textPadding().getBottom()
+                        + text.elementContentPadding().getTop() + text.elementContentPadding().getBottom();
             }
         };
     }
@@ -328,6 +347,7 @@ public class TextLayoutHelper
         {
             return element.width()
                     - text.textPadding().getLeft() - text.textPadding().getRight()
+                    - text.elementContentPadding().getLeft() - text.elementContentPadding().getRight()
                     - icon.icon().width() - icon.iconPadding();
         }
         return element.width() - text.textPadding().getLeft() - text.textPadding().getRight();

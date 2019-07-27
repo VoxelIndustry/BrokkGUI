@@ -1,11 +1,11 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.data.TextLayoutHelper;
 import net.voxelindustry.brokkgui.event.ComponentEvent;
 
 import javax.annotation.Nonnull;
@@ -19,6 +19,8 @@ public class Text extends GuiComponent
     private final BaseProperty<Boolean> expandToTextProperty;
     private final BaseProperty<RectBox> textPaddingProperty;
 
+    private final BaseProperty<RectBox> elementContentPaddingProperty;
+
     public Text()
     {
         this.textProperty = new BaseProperty<>("", "textProperty");
@@ -26,6 +28,8 @@ public class Text extends GuiComponent
         this.ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
         this.expandToTextProperty = new BaseProperty<>(Boolean.TRUE, "expandToTextProperty");
         this.textPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "textPaddingProperty");
+
+        this.elementContentPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "elementContentPaddingProperty");
     }
 
     @Override
@@ -44,7 +48,6 @@ public class Text extends GuiComponent
         if (event.getComponent() == null || event.getComponent().getClass() != Icon.class)
             return;
 
-        ((Icon) event.getComponent()).contentPaddingProperty(textPaddingProperty);
         if (this.expandToText())
             this.bindSizeToText();
     }
@@ -72,6 +75,16 @@ public class Text extends GuiComponent
     public BaseProperty<RectBox> textPaddingProperty()
     {
         return textPaddingProperty;
+    }
+
+    public BaseProperty<RectBox> elementContentPaddingProperty()
+    {
+        return this.elementContentPaddingProperty;
+    }
+
+    public void elementContentPaddingProperty(ObservableValue<RectBox> elementContentPaddingProperty)
+    {
+        this.elementContentPaddingProperty.bind(elementContentPaddingProperty);
     }
 
     public RectAlignment textAlignment()
@@ -114,6 +127,16 @@ public class Text extends GuiComponent
         this.textPaddingProperty.setValue(textPadding);
     }
 
+    public RectBox elementContentPadding()
+    {
+        return this.elementContentPaddingProperty().getValue();
+    }
+
+    public void elementContentPadding(RectBox elementContentPadding)
+    {
+        this.elementContentPaddingProperty().setValue(elementContentPadding);
+    }
+
     public boolean expandToText()
     {
         return this.expandToTextProperty.getValue();
@@ -134,7 +157,7 @@ public class Text extends GuiComponent
     private void bindSizeToText()
     {
         Icon icon = this.element().get(Icon.class);
-        if (icon != null)
+       /*x if (icon != null)
         {
             this.element().transform().widthProperty().bind(TextLayoutHelper.createMinimalWidthBinding(this, icon));
             this.element().transform().heightProperty().bind(TextLayoutHelper.createMinimalHeightBinding(this, icon));
@@ -143,6 +166,6 @@ public class Text extends GuiComponent
         {
             this.element().transform().widthProperty().bind(TextLayoutHelper.createMinimalWidthBinding(this));
             this.element().transform().heightProperty().bind(TextLayoutHelper.createMinimalHeightBinding(this));
-        }
+        }*/
     }
 }

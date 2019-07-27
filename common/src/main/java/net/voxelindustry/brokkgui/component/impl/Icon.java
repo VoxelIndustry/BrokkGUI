@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectBox;
@@ -13,7 +14,7 @@ public class Icon extends GuiComponent
     private final BaseProperty<RectSide>   iconSideProperty;
     private final BaseProperty<Float>      iconPaddingProperty;
 
-    private final BaseProperty<RectBox> contentPaddingProperty;
+    private final BaseProperty<RectBox> elementContentPaddingProperty;
 
     public Icon()
     {
@@ -21,7 +22,7 @@ public class Icon extends GuiComponent
         this.iconSideProperty = new BaseProperty<>(RectSide.LEFT, "iconSideProperty");
         this.iconPaddingProperty = new BaseProperty<>(2f, "iconPaddingProperty");
 
-        this.contentPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "contentPaddingProperty");
+        this.elementContentPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "elementContentPaddingProperty");
 
         this.iconProperty.addListener((observable, oldValue, newValue) ->
         {
@@ -50,14 +51,14 @@ public class Icon extends GuiComponent
         return iconPaddingProperty;
     }
 
-    public BaseProperty<RectBox> contentPaddingProperty()
+    public BaseProperty<RectBox> elementContentPaddingProperty()
     {
-        return contentPaddingProperty;
+        return elementContentPaddingProperty;
     }
 
-    public void contentPaddingProperty(BaseProperty<RectBox> contentPaddingProperty)
+    public void elementContentPaddingProperty(ObservableValue<RectBox> elementContentPaddingProperty)
     {
-        this.contentPaddingProperty.bind(contentPaddingProperty);
+        this.elementContentPaddingProperty.bind(elementContentPaddingProperty);
     }
 
     public GuiElement icon()
@@ -90,9 +91,14 @@ public class Icon extends GuiComponent
         this.iconPaddingProperty.setValue(iconPadding);
     }
 
-    public RectBox contentPadding()
+    public RectBox elementContentPadding()
     {
-        return this.contentPaddingProperty.getValue();
+        return this.elementContentPaddingProperty.getValue();
+    }
+
+    public void elementContentPadding(RectBox elementContentPadding)
+    {
+        this.elementContentPaddingProperty().setValue(elementContentPadding);
     }
 
     private void bindIcon(GuiElement icon)
@@ -103,7 +109,7 @@ public class Icon extends GuiComponent
                 super.bind(iconSideProperty(),
                         element().transform().xPosProperty(),
                         element().transform().xTranslateProperty(),
-                        contentPaddingProperty,
+                        elementContentPaddingProperty,
                         element().transform().widthProperty(),
                         icon.transform().widthProperty());
             }
@@ -113,14 +119,14 @@ public class Icon extends GuiComponent
             {
                 if (iconSide() == RectSide.LEFT)
                     return element().transform().leftPos()
-                            + contentPadding().getLeft();
+                            + elementContentPadding().getLeft();
                 if (iconSide() == RectSide.RIGHT)
                     return element().transform().rightPos()
-                            - contentPadding().getRight()
+                            - elementContentPadding().getRight()
                             - icon.width();
                 return element().transform().leftPos()
                         + element().width() / 2 - icon.width() / 2
-                        + contentPadding().getLeft();
+                        + elementContentPadding().getLeft();
             }
         });
 
@@ -130,7 +136,7 @@ public class Icon extends GuiComponent
                 super.bind(iconSideProperty(),
                         element().transform().yPosProperty(),
                         element().transform().yTranslateProperty(),
-                        contentPaddingProperty,
+                        elementContentPaddingProperty,
                         element().transform().heightProperty(),
                         icon.transform().heightProperty());
             }
@@ -140,14 +146,14 @@ public class Icon extends GuiComponent
             {
                 if (iconSide() == RectSide.UP)
                     return element().transform().topPos()
-                            + contentPadding().getTop();
+                            + elementContentPadding().getTop();
                 if (iconSide() == RectSide.DOWN)
                     return element().transform().bottomPos()
-                            - contentPadding().getBottom()
+                            - elementContentPadding().getBottom()
                             - icon.height();
                 return element().transform().topPos()
                         + element().height() / 2 - icon.height() / 2
-                        + contentPadding().getTop();
+                        + elementContentPadding().getTop();
             }
         });
     }

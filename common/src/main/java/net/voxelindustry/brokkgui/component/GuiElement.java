@@ -36,6 +36,7 @@ public abstract class GuiElement implements IEventEmitter
     private final Map<Class<? extends GuiComponent>, GuiComponent> componentMap;
 
     private final List<RenderComponent> renderComponents;
+    private final List<UpdateComponent> updateComponents;
 
     private final BaseProperty<String> idProperty;
 
@@ -68,6 +69,7 @@ public abstract class GuiElement implements IEventEmitter
     {
         this.componentMap = new IdentityHashMap<>();
         this.renderComponents = new ArrayList<>(1);
+        this.updateComponents = new ArrayList<>(1);
 
         this.transform = this.add(new Transform());
 
@@ -96,6 +98,9 @@ public abstract class GuiElement implements IEventEmitter
     {
         if (!this.isVisible())
             return;
+
+        if (pass == RenderPass.BACKGROUND)
+            this.updateComponents.forEach(UpdateComponent::update);
 
         boolean createdMatrix = false;
         if (this.transform.rotation() != Rotation.NONE && this.transform.rotation().getAngle() % 360 != 0)
@@ -553,6 +558,8 @@ public abstract class GuiElement implements IEventEmitter
 
         if (component instanceof RenderComponent)
             this.renderComponents.add((RenderComponent) component);
+        if (component instanceof UpdateComponent)
+            this.updateComponents.add((UpdateComponent) component);
 
         this.getEventDispatcher().dispatchEvent(ComponentEvent.ADDED, new ComponentEvent.Added(this, component));
         return component;
@@ -573,6 +580,8 @@ public abstract class GuiElement implements IEventEmitter
 
         if (instance instanceof RenderComponent)
             this.renderComponents.add((RenderComponent) instance);
+        if (instance instanceof UpdateComponent)
+            this.updateComponents.add((UpdateComponent) instance);
 
         this.getEventDispatcher().dispatchEvent(ComponentEvent.ADDED, new ComponentEvent.Added(this, instance));
         return instance;
@@ -585,6 +594,8 @@ public abstract class GuiElement implements IEventEmitter
 
         if (component instanceof RenderComponent)
             this.renderComponents.remove(component);
+        if (component instanceof UpdateComponent)
+            this.updateComponents.remove(component);
 
         this.getEventDispatcher().dispatchEvent(ComponentEvent.REMOVED, new ComponentEvent.Removed(this, component));
         return (T) component;
