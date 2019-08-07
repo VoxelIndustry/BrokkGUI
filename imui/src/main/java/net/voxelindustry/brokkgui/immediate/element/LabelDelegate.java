@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.immediate.element;
 
 import net.voxelindustry.brokkgui.paint.Color;
 
-public interface LabelDelegate extends CommonLib{
+public interface LabelDelegate extends CommonLib {
 
     default void label(int x, int y, String text) {
         label(x, y, text, 1);
