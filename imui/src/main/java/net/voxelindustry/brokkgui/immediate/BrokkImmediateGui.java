@@ -1,7 +1,10 @@
 package net.voxelindustry.brokkgui.immediate;
 
+import com.sun.webkit.dom.KeyboardEventImpl;
 import net.voxelindustry.brokkgui.immediate.element.ElementsDelegate;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
+import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
 
@@ -19,6 +22,11 @@ public abstract class BrokkImmediateGui extends GuiWindowAdapter implements Elem
     @Override
     public IBrokkGuiImpl wrapper() {
         return this.wrapper;
+    }
+
+    @Override
+    public IGuiRenderer guiRenderer() {
+        return wrapper().getRenderer();
     }
 
     @Override

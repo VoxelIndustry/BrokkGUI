@@ -2,11 +2,14 @@ package net.voxelindustry.brokkgui.immediate.element;
 
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.internal.IGuiHelper;
+import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.internal.IMouseUtil;
 
 public interface CommonLib {
 
     boolean isMouseClick(int key);
+
+    IGuiRenderer guiRenderer();
 
     default IGuiHelper guiHelper() {
         return BrokkGuiPlatform.instance().guiHelper();

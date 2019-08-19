@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.immediate;
+/*package net.voxelindustry.brokkgui.immediate;
 
 public class TestGui extends BrokkImmediateGui {
 
@@ -6,4 +6,4 @@ public class TestGui extends BrokkImmediateGui {
     public void render() {
         label(1,1,"test");
     }
-}
+}*/
