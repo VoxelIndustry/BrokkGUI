@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.immediate.element;
 
-import com.sun.webkit.dom.KeyboardEventImpl;
 import net.voxelindustry.brokkgui.paint.Color;
 
 public interface ButtonDelegate extends LabelDelegate, CommonLib {
