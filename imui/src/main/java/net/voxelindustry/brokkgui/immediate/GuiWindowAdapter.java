@@ -9,23 +9,24 @@ import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
+
 
 public class GuiWindowAdapter implements IGuiWindow {
 
     @Override
     public void onOpen() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public void onClose() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public void setWrapper(IBrokkGuiImpl wrapper) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
@@ -38,12 +39,12 @@ public class GuiWindowAdapter implements IGuiWindow {
 
     @Override
     public fr.ourten.teabeans.value.IProperty<Integer> screenWidthProperty() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public fr.ourten.teabeans.value.IProperty<Integer> screenHeightProperty() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
@@ -64,12 +65,12 @@ public class GuiWindowAdapter implements IGuiWindow {
 
     @Override
     public IBrokkGuiImpl wrapper() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public PaneBase getMainPanel() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
@@ -113,27 +114,27 @@ public class GuiWindowAdapter implements IGuiWindow {
 
     @Override
     public void close() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public float xRelativePos() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public float yRelativePos() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public fr.ourten.teabeans.value.BaseProperty<Float> xRelativePosProperty() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public fr.ourten.teabeans.value.BaseProperty<Float> yRelativePosProperty() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
@@ -143,26 +144,26 @@ public class GuiWindowAdapter implements IGuiWindow {
 
     @Override
     public float height() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public <T extends HermodEvent> void addEventHandler(EventType<T> type, EventHandler<? super T> handler) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 
     @Override
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("not implemented");
     }
 }

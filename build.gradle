@@ -199,6 +199,7 @@ project(":core") {
     dependencies {
         api project(":common")
         api project(":element")
+        api project(":imui")
 
         api "fr.ourten:teabeans:${teabeansVersion}"
 
