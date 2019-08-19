@@ -169,6 +169,28 @@ project(":element") {
     }
 }
 
+project(":imui") {
+    archivesBaseName = "brokkgui-imui"
+
+    version = project.brokkgui_version
+
+    dependencies {
+        api project(":common")
+
+        implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
+        implementation "com.google.code.findbugs:jsr305:${findbugsJsr305Version}"
+        implementation "commons-io:commons-io:${commonsIoVersion}"
+        implementation "com.google.guava:guava:${guavaVersion}"
+
+        testCompile "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+        testCompile "org.mockito:mockito-core:${mockitoVersion}" 
+        testCompile "org.mockito:mockito-junit-jupiter:${mockitoVersion}" 
+        testCompile "org.assertj:assertj-core:${assertjVersion}" 
+
+        testRuntime "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    }
+}
+
 project(":core") {
     archivesBaseName = "brokkgui-core"
 
