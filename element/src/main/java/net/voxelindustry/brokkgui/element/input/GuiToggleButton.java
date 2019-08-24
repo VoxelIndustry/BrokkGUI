@@ -7,13 +7,17 @@ import net.voxelindustry.brokkgui.control.GuiButtonBase;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.IGuiTogglable;
+import net.voxelindustry.brokkgui.event.SelectEvent;
 import net.voxelindustry.brokkgui.skin.GuiButtonSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
+import net.voxelindustry.hermod.EventHandler;
 
 public class GuiToggleButton extends GuiButtonBase implements IGuiTogglable
 {
     private final BaseProperty<Boolean>        selectedProperty;
     private final BaseProperty<GuiToggleGroup> toggleGroupProperty;
+
+    private EventHandler<SelectEvent> onSelectEvent;
 
     public GuiToggleButton(String type, String text, GuiNode icon)
     {
@@ -28,6 +32,7 @@ public class GuiToggleButton extends GuiButtonBase implements IGuiTogglable
                 this.getActivePseudoClass().add("active");
             else
                 this.getActivePseudoClass().remove("active");
+            this.getEventDispatcher().dispatchEvent(SelectEvent.TYPE, new SelectEvent(this, isSelected()));
         });
     }
 
@@ -112,5 +117,16 @@ public class GuiToggleButton extends GuiButtonBase implements IGuiTogglable
             }
         }
         return this.isSelected();
+    }
+
+    /////////////////////
+    // EVENTS HANDLING //
+    /////////////////////
+
+    public void setOnSelectEvent(final EventHandler<SelectEvent> onSelectEvent)
+    {
+        this.getEventDispatcher().removeHandler(SelectEvent.TYPE, this.onSelectEvent);
+        this.onSelectEvent = onSelectEvent;
+        this.getEventDispatcher().addHandler(SelectEvent.TYPE, this.onSelectEvent);
     }
 }
