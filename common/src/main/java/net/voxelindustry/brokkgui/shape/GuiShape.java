@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.shape;
 import net.voxelindustry.brokkgui.border.ColorBorderDrawer;
 import net.voxelindustry.brokkgui.border.ImageBorderDrawer;
 import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
@@ -22,12 +23,14 @@ public abstract class GuiShape extends GuiNode
         super(type);
 
         this.shape = shape;
-
+        
         this.getStyle().registerProperty("background-color", Color.ALPHA, Color.class);
         this.getStyle().registerProperty("foreground-color", Color.ALPHA, Color.class);
 
         this.getStyle().registerProperty("background-texture", Texture.EMPTY, Texture.class);
         this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
+
+        this.getStyle().registerProperty("background-position", RectBox.EMPTY, RectBox.class);
 
         this.getStyle().registerConditionalProperties("border*", BorderProperties.getInstance());
         this.getStyle().registerConditionalProperties("border-image*", BorderImageProperties.getInstance());

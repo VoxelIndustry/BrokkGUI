@@ -44,6 +44,16 @@ public class RectBox
         return right;
     }
 
+    public float getHorizontal()
+    {
+        return left + right;
+    }
+
+    public float getVertical()
+    {
+        return top + bottom;
+    }
+
     @Override
     public boolean equals(Object o)
     {
