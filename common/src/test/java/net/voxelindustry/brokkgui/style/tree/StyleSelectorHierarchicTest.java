@@ -1,6 +1,9 @@
 package net.voxelindustry.brokkgui.style.tree;
 
 import net.voxelindustry.brokkgui.panel.GuiPane;
+import net.voxelindustry.brokkgui.style.selector.StyleSelector;
+import net.voxelindustry.brokkgui.style.selector.StyleSelectorHierarchic;
+import net.voxelindustry.brokkgui.style.selector.StyleSelectorType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -85,11 +88,11 @@ public class StyleSelectorHierarchicTest
         selector.add(StyleSelectorType.ID, "someID");
         selector.addParent(StyleSelectorType.PSEUDOCLASS, "hovered");
 
-        assertThat(selector.getSpecificity()).isEqualTo(120);
+        assertThat(selector.getSpecificity()).isEqualTo(1_002_000);
 
         selector.addParent(StyleSelectorType.CLASS, "anotherClass");
 
-        assertThat(selector.getSpecificity()).isEqualTo(130);
+        assertThat(selector.getSpecificity()).isEqualTo(1_003_000);
     }
 
     @Test

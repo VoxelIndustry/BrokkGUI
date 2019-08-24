@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.style.tree;
+package net.voxelindustry.brokkgui.style.selector;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
@@ -17,6 +17,7 @@ public class StyleSelectorHierarchic implements IStyleSelector
         this.directChild = directChild;
     }
 
+    @Override
     public int getSpecificity()
     {
         return childSelector.getSpecificity() + parentSelector.getSpecificity();
@@ -40,6 +41,7 @@ public class StyleSelectorHierarchic implements IStyleSelector
         return this;
     }
 
+    @Override
     public boolean match(StyleHolder styleHolder)
     {
         if (!styleHolder.getParent().isPresent())

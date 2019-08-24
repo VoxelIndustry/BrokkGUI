@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.style.parser;
 
-import net.voxelindustry.brokkgui.style.tree.IStyleSelector;
-import net.voxelindustry.brokkgui.style.tree.StyleSelector;
-import net.voxelindustry.brokkgui.style.tree.StyleSelectorHierarchic;
-import net.voxelindustry.brokkgui.style.tree.StyleSelectorType;
+import net.voxelindustry.brokkgui.style.selector.IStyleSelector;
+import net.voxelindustry.brokkgui.style.selector.StyleSelector;
+import net.voxelindustry.brokkgui.style.selector.StyleSelectorHierarchic;
+import net.voxelindustry.brokkgui.style.selector.StyleSelectorType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,6 +46,18 @@ public class StyleSelectorParserTest
 
         assertThat(selectors[0].match(new StyleSelector().add(StyleSelectorType.TYPE, "button"))).isTrue();
         assertThat(selectors[1].match(new StyleSelector().add(StyleSelectorType.TYPE, "text"))).isTrue();
+    }
+
+    @Test
+    public void testStructurals()
+    {
+        String firstChild = "button:first-child";
+
+        IStyleSelector[] selectors = parser.readSelectors(firstChild);
+
+        assertThat(selectors.length).isEqualTo(1);
+
+        assertThat(selectors[0].match(new StyleSelector().add(StyleSelectorType.TYPE, "button").add(StyleSelectorType.STRUCTURAL_PSEUDOCLASS, "first-child"))).isTrue();
     }
 
     @Test

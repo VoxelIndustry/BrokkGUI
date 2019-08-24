@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.style.parser;
 
 import net.voxelindustry.brokkgui.style.StylesheetManager;
-import net.voxelindustry.brokkgui.style.tree.IStyleSelector;
+import net.voxelindustry.brokkgui.style.selector.IStyleSelector;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.brokkgui.style.tree.StyleRule;
 import net.voxelindustry.brokkgui.util.NumberedLineIterator;

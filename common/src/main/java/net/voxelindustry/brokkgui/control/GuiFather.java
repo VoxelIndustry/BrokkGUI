@@ -11,13 +11,18 @@ import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
 import net.voxelindustry.brokkgui.shape.GuiShape;
 import net.voxelindustry.brokkgui.shape.Rectangle;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
+import net.voxelindustry.brokkgui.style.IStyleParent;
+import net.voxelindustry.brokkgui.style.IStyleable;
+import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class GuiFather extends GuiShape
+import static java.util.stream.Collectors.toList;
+
+public class GuiFather extends GuiShape implements IStyleParent
 {
     private final BaseListProperty<GuiNode> childrensProperty;
     private final List<ICascadeStyleable>   styleChilds;
@@ -114,7 +119,8 @@ public class GuiFather extends GuiShape
         this.styleChilds.add(styleable);
         styleable.setStyleTree(this.getStyle().getStyleSupplier());
         styleable.setParent(this);
-        styleable.refreshStyle();
+
+        styleChilds.forEach(IStyleable::refreshStyle);
     }
 
     public boolean removeStyleChild(ICascadeStyleable styleable)
@@ -244,5 +250,17 @@ public class GuiFather extends GuiShape
     {
         this.styleChilds.forEach(ICascadeStyleable::refreshStyle);
         super.refreshStyle();
+    }
+
+    @Override
+    public List<StyleHolder> getChildStyles()
+    {
+        return childrensProperty.getModifiableValue().stream().map(GuiNode::getStyle).collect(toList());
+    }
+
+    @Override
+    public int getChildCount()
+    {
+        return childrensProperty.size();
     }
 }

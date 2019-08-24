@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.style.tree;
+package net.voxelindustry.brokkgui.style.selector;
 
 import net.voxelindustry.brokkgui.style.StyleHolder;
 

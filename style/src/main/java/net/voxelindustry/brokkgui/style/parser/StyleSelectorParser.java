@@ -1,9 +1,10 @@
 package net.voxelindustry.brokkgui.style.parser;
 
-import net.voxelindustry.brokkgui.style.tree.IStyleSelector;
-import net.voxelindustry.brokkgui.style.tree.StyleSelector;
-import net.voxelindustry.brokkgui.style.tree.StyleSelectorHierarchic;
-import net.voxelindustry.brokkgui.style.tree.StyleSelectorType;
+import net.voxelindustry.brokkgui.style.selector.IStyleSelector;
+import net.voxelindustry.brokkgui.style.selector.StyleSelector;
+import net.voxelindustry.brokkgui.style.selector.StyleSelectorHierarchic;
+import net.voxelindustry.brokkgui.style.selector.StyleSelectorType;
+import net.voxelindustry.brokkgui.style.selector.structural.StructuralSelectors;
 import org.apache.commons.lang3.StringUtils;
 
 public class StyleSelectorParser
@@ -92,7 +93,12 @@ public class StyleSelectorParser
             else if (pseudoClass == null)
                 rtn.add(StyleSelectorType.TYPE, part);
             if (pseudoClass != null)
-                rtn.add(StyleSelectorType.PSEUDOCLASS, pseudoClass);
+            {
+                if (StructuralSelectors.isStructural(pseudoClass))
+                    rtn.add(StyleSelectorType.STRUCTURAL_PSEUDOCLASS, pseudoClass);
+                else
+                    rtn.add(StyleSelectorType.PSEUDOCLASS, pseudoClass);
+            }
         }
         return rtn;
     }

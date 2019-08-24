@@ -1,19 +1,25 @@
-package net.voxelindustry.brokkgui.style.tree;
+package net.voxelindustry.brokkgui.style.selector;
 
 import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.style.selector.structural.StructuralSelector;
+import net.voxelindustry.brokkgui.style.selector.structural.StructuralSelectors;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.voxelindustry.brokkgui.style.selector.StyleSelectorType.STRUCTURAL_PSEUDOCLASS;
+
 public class StyleSelector implements IStyleSelector
 {
     private final List<Pair<StyleSelectorType, String>> selectors;
+    private final List<StructuralSelector>              structuralSelectors;
     protected     int                                   computedSpecificity;
 
     public StyleSelector()
     {
         this.selectors = new ArrayList<>();
+        this.structuralSelectors = new ArrayList<>(1);
         this.computedSpecificity = -1;
     }
 
@@ -24,13 +30,19 @@ public class StyleSelector implements IStyleSelector
         return this;
     }
 
+    @Override
     public StyleSelector add(StyleSelectorType type, String selector)
     {
-        this.selectors.add(Pair.of(type, selector));
+        if (type == STRUCTURAL_PSEUDOCLASS)
+            structuralSelectors.add(StructuralSelectors.fromString(selector));
+        else
+            this.selectors.add(Pair.of(type, selector));
+
         this.computedSpecificity = -1;
         return this;
     }
 
+    @Override
     public int getSpecificity()
     {
         if (this.computedSpecificity == -1)
@@ -38,6 +50,8 @@ public class StyleSelector implements IStyleSelector
             this.computedSpecificity = 0;
             for (Pair<StyleSelectorType, String> selector : this.selectors)
                 this.computedSpecificity += selector.getKey().getSpecificity();
+
+            this.computedSpecificity += structuralSelectors.size() * STRUCTURAL_PSEUDOCLASS.getSpecificity();
         }
         return this.computedSpecificity;
     }
@@ -47,6 +61,7 @@ public class StyleSelector implements IStyleSelector
         return selectors;
     }
 
+    @Override
     public boolean match(StyleHolder styleHolder)
     {
         for (Pair<StyleSelectorType, String> selector : this.selectors)
@@ -56,18 +71,26 @@ public class StyleSelector implements IStyleSelector
             if (!this.checkSelector(selector, styleHolder))
                 return false;
         }
+        for (StructuralSelector structuralSelector : structuralSelectors)
+        {
+            if (!structuralSelector.test(styleHolder))
+                return false;
+        }
         return true;
     }
 
     @Override
     public boolean match(IStyleSelector selector)
     {
-        if(selector == this)
+        if (selector == this)
             return true;
         if (!(selector instanceof StyleSelector))
             return false;
         StyleSelector other = (StyleSelector) selector;
-        return this.selectors.size() == other.selectors.size() && this.selectors.containsAll(other.selectors);
+        return this.selectors.size() == other.selectors.size()
+                && this.selectors.containsAll(other.selectors)
+                && this.structuralSelectors.size() == other.structuralSelectors.size()
+                && this.structuralSelectors.containsAll(other.structuralSelectors);
     }
 
     protected boolean checkSelector(Pair<StyleSelectorType, String> selector, StyleHolder styleHolder)
@@ -99,6 +122,10 @@ public class StyleSelector implements IStyleSelector
     @Override
     public String toString()
     {
-        return "{" + selectors.toString() + ", specificity=" + this.getSpecificity() + '}';
+        return "StyleSelector{" +
+                "selectors=" + selectors +
+                ", structuralSelectors=" + structuralSelectors +
+                ", computedSpecificity=" + computedSpecificity +
+                '}';
     }
 }

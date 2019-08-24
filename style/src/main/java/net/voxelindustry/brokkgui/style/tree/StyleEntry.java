@@ -1,5 +1,7 @@
 package net.voxelindustry.brokkgui.style.tree;
 
+import net.voxelindustry.brokkgui.style.selector.IStyleSelector;
+
 import java.util.ArrayList;
 import java.util.List;
 
