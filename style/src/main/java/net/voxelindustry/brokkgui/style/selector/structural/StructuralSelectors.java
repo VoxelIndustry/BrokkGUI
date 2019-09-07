@@ -9,8 +9,8 @@ public class StructuralSelectors
 {
     private static StructuralSelector FIRST_CHILD = style -> style.getParent().isPresent()
             && style.getParent().getValue() instanceof IStyleParent
-            && ((IStyleParent) style.getParent().getValue()).getChildCount() == 1
-            || ((IStyleParent) style.getParent().getValue()).getChildStyles().get(0) == style;
+            && (((IStyleParent) style.getParent().getValue()).getChildCount() == 1
+            || ((IStyleParent) style.getParent().getValue()).getChildStyles().get(0) == style);
 
     private static StructuralSelector LAST_CHILD = style ->
     {
