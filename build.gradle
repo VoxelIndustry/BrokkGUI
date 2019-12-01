@@ -162,6 +162,28 @@ project(":element") {
     }
 }
 
+project(":layout") {
+    archivesBaseName = "brokkgui-layout"
+
+    version = project.brokkgui_version
+
+    dependencies {
+        api project(":common")
+
+        implementation "org.apache.commons:commons-lang3:3.4"
+        implementation "com.google.code.findbugs:jsr305:3.0.1"
+        implementation "commons-io:commons-io:2.5"
+        implementation "com.google.guava:guava:21.0"
+
+        testCompile('org.junit.jupiter:junit-jupiter-api:5.3.2')
+        testCompile('org.mockito:mockito-core:2.24.0')
+        testCompile('org.mockito:mockito-junit-jupiter:2.24.0')
+        testCompile('org.assertj:assertj-core:3.10.0')
+
+        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.3.2')
+    }
+}
+
 project(":core") {
     archivesBaseName = "brokkgui-core"
 
