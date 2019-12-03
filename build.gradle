@@ -101,6 +101,8 @@ project(":common") {
 
     version = project.brokkgui_version
     dependencies {
+        api project(":layout")
+
         api "fr.ourten:teabeans:1.1.0"
         api "net.voxelindustry:hermod:2.0.0"
         implementation "org.apache.commons:commons-lang3:3.4"
@@ -168,8 +170,7 @@ project(":layout") {
     version = project.brokkgui_version
 
     dependencies {
-        api project(":common")
-
+        implementation "fr.ourten:teabeans:1.1.0"
         implementation "org.apache.commons:commons-lang3:3.4"
         implementation "com.google.code.findbugs:jsr305:3.0.1"
         implementation "commons-io:commons-io:2.5"

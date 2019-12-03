@@ -1,16 +1,20 @@
 package net.voxelindustry.brokkgui.component.impl;
 
+import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.event.ComponentEvent;
+import net.voxelindustry.brokkgui.layout.ILayoutBox;
 
 import javax.annotation.Nonnull;
 
-public class Text extends GuiComponent
+public class Text extends GuiComponent implements ILayoutBox
 {
     private final BaseProperty<RectAlignment> textAlignmentProperty;
     private final BaseProperty<String>        textProperty;
@@ -21,6 +25,8 @@ public class Text extends GuiComponent
 
     private final BaseProperty<RectBox> elementContentPaddingProperty;
 
+    private boolean isLayoutDirty = false;
+
     public Text()
     {
         this.textProperty = new BaseProperty<>("", "textProperty");
@@ -30,6 +36,18 @@ public class Text extends GuiComponent
         this.textPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "textPaddingProperty");
 
         this.elementContentPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "elementContentPaddingProperty");
+
+        ValueInvalidationListener dirtyLayoutListener = this::dirtyOnChange;
+        this.textProperty.addListener(dirtyLayoutListener);
+        this.textAlignmentProperty.addListener(dirtyLayoutListener);
+        this.ellipsisProperty.addListener(dirtyLayoutListener);
+        this.expandToTextProperty.addListener(dirtyLayoutListener);
+        this.textPaddingProperty.addListener(dirtyLayoutListener);
+    }
+
+    private void dirtyOnChange(Observable obs)
+    {
+        this.isLayoutDirty = true;
     }
 
     @Override
@@ -167,5 +185,51 @@ public class Text extends GuiComponent
             this.element().transform().widthProperty().bind(TextLayoutHelper.createMinimalWidthBinding(this));
             this.element().transform().heightProperty().bind(TextLayoutHelper.createMinimalHeightBinding(this));
         }*/
+    }
+
+    ////////////
+    // LAYOUT //
+    ////////////
+
+    @Override
+    public float minWidth()
+    {
+        return BrokkGuiPlatform.instance().guiHelper().getStringWidth(ellipsis()) + textPadding().getHorizontal();
+    }
+
+    @Override
+    public float minHeight()
+    {
+        return BrokkGuiPlatform.instance().guiHelper().getStringHeight() + textPadding().getVertical();
+    }
+
+    @Override
+    public float prefWidth()
+    {
+        return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text()) + textPadding().getHorizontal();
+    }
+
+    @Override
+    public float prefHeight()
+    {
+        return BrokkGuiPlatform.instance().guiHelper().getStringHeight() + textPadding().getVertical();
+    }
+
+    @Override
+    public float maxWidth()
+    {
+        return BrokkGuiPlatform.instance().guiHelper().getStringWidth(text()) + textPadding().getHorizontal();
+    }
+
+    @Override
+    public float maxHeight()
+    {
+        return BrokkGuiPlatform.instance().guiHelper().getStringHeight() + textPadding().getVertical();
+    }
+
+    @Override
+    public boolean isLayoutDirty()
+    {
+        return isLayoutDirty;
     }
 }

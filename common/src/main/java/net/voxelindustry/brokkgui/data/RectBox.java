@@ -45,6 +45,16 @@ public class RectBox
         return right;
     }
 
+    public float getHorizontal()
+    {
+        return this.left + this.right;
+    }
+
+    public float getVertical()
+    {
+        return this.top + this.bottom;
+    }
+
     public RectBox setTop(float top)
     {
         return new RectBox(top, this.left, this.bottom, this.right);

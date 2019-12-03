@@ -1,20 +1,27 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
+import net.voxelindustry.brokkgui.layout.ILayoutBox;
 
-public class Icon extends GuiComponent
+public class Icon extends GuiComponent implements ILayoutBox
 {
     private final BaseProperty<GuiElement> iconProperty;
     private final BaseProperty<RectSide>   iconSideProperty;
-    private final BaseProperty<Float>      iconPaddingProperty;
+
+    // FIXME: Change to a RectBox padding to remove special casing with iconSide
+    private final BaseProperty<Float> iconPaddingProperty;
 
     private final BaseProperty<RectBox> elementContentPaddingProperty;
+
+    private boolean isLayoutDirty = false;
 
     public Icon()
     {
@@ -34,6 +41,15 @@ public class Icon extends GuiComponent
                 this.bindIcon(newValue);
             }
         });
+
+        ValueInvalidationListener dirtyLayoutListener = this::dirtyOnChange;
+        iconProperty.addListener(dirtyLayoutListener);
+        iconSideProperty.addListener(dirtyLayoutListener);
+    }
+
+    private void dirtyOnChange(Observable obs)
+    {
+        this.isLayoutDirty = true;
     }
 
     public BaseProperty<GuiElement> iconProperty()
@@ -156,5 +172,51 @@ public class Icon extends GuiComponent
                         + elementContentPadding().getTop();
             }
         });
+    }
+
+    ////////////
+    // LAYOUT //
+    ////////////
+
+    @Override
+    public float minWidth()
+    {
+        return this.icon().width();
+    }
+
+    @Override
+    public float minHeight()
+    {
+        return this.icon().height();
+    }
+
+    @Override
+    public float prefWidth()
+    {
+        return this.icon().width();
+    }
+
+    @Override
+    public float prefHeight()
+    {
+        return this.icon().height();
+    }
+
+    @Override
+    public float maxWidth()
+    {
+        return this.icon().width();
+    }
+
+    @Override
+    public float maxHeight()
+    {
+        return this.icon().height();
+    }
+
+    @Override
+    public boolean isLayoutDirty()
+    {
+        return isLayoutDirty;
     }
 }

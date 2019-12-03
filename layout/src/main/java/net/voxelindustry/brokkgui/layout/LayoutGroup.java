@@ -220,31 +220,26 @@ public class LayoutGroup implements ILayoutBox
         return maxHeight;
     }
 
-    @Override
     public void layoutWidth(final float width)
     {
         layoutWidth = width;
     }
 
-    @Override
     public void layoutHeight(final float height)
     {
         layoutHeight = height;
     }
 
-    @Override
     public float layoutWidth()
     {
         return layoutWidth;
     }
 
-    @Override
     public float layoutHeight()
     {
         return layoutHeight;
     }
 
-    @Override
     public float effectiveWidth()
     {
         if (isDirty())
@@ -252,7 +247,6 @@ public class LayoutGroup implements ILayoutBox
         return effectiveWidth;
     }
 
-    @Override
     public float effectiveHeight()
     {
         if (isDirty())

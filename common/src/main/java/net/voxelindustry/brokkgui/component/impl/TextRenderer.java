@@ -10,6 +10,7 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.data.TextLayoutHelper;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.layout.LayoutGroup;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
@@ -55,6 +56,11 @@ public class TextRenderer extends GuiComponent implements RenderComponent
         this.transform = element.transform();
 
         Icon icon = element.get(Icon.class);
+
+        LayoutGroup layout = new LayoutGroup(text, icon, icon.iconSide().opposite().toLayout());
+
+        // Bind alignment
+        icon.iconSideProperty().addListener(obs -> layout.firstAlignment(icon.iconSide().opposite().toLayout()));
 
         if (icon != null)
         {

@@ -13,15 +13,5 @@ public interface ILayoutBox {
 
     float maxHeight();
 
-    void layoutWidth(float width);
-
-    void layoutHeight(float height);
-
-    float layoutWidth();
-
-    float layoutHeight();
-
-    float effectiveWidth();
-
-    float effectiveHeight();
+    boolean isLayoutDirty();
 }
