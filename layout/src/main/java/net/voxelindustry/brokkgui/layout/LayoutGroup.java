@@ -1,5 +1,7 @@
 package net.voxelindustry.brokkgui.layout;
 
+import java.util.Objects;
+
 import static java.lang.Float.max;
 import static java.lang.Float.min;
 
@@ -22,6 +24,9 @@ public class LayoutGroup implements ILayoutBox
     private float layoutWidth;
     private float layoutHeight;
 
+    private float layoutPosX;
+    private float layoutPosY;
+
     // Computed actual dimension
     private float effectiveWidth;
     private float effectiveHeight;
@@ -38,20 +43,19 @@ public class LayoutGroup implements ILayoutBox
     private float secondWidth;
     private float secondHeight;
 
-    private boolean isDirty = true;
+    private boolean isLayoutDirty = true;
 
     public LayoutGroup(final ILayoutBox first, final ILayoutBox second, final LayoutAlignment firstAlignment)
     {
+        Objects.requireNonNull(first);
+        Objects.requireNonNull(second);
+
         this.first = first;
         this.second = second;
         this.firstAlignment = firstAlignment;
     }
 
-    public LayoutGroup()
-    {
-    }
-
-    private void refreshLayout()
+    public void refreshLayout()
     {
         minWidth = computeWidth(first.minWidth(), second.minWidth());
         minHeight = computeHeight(first.minHeight(), second.minHeight());
@@ -175,48 +179,36 @@ public class LayoutGroup implements ILayoutBox
     @Override
     public float minWidth()
     {
-        if (isDirty())
-            refreshLayout();
         return minWidth;
     }
 
     @Override
     public float minHeight()
     {
-        if (isDirty())
-            refreshLayout();
         return minHeight;
     }
 
     @Override
     public float prefWidth()
     {
-        if (isDirty())
-            refreshLayout();
         return prefWidth;
     }
 
     @Override
     public float prefHeight()
     {
-        if (isDirty())
-            refreshLayout();
         return prefHeight;
     }
 
     @Override
     public float maxWidth()
     {
-        if (isDirty())
-            refreshLayout();
         return maxWidth;
     }
 
     @Override
     public float maxHeight()
     {
-        if (isDirty())
-            refreshLayout();
         return maxHeight;
     }
 
@@ -228,6 +220,18 @@ public class LayoutGroup implements ILayoutBox
     public void layoutHeight(final float height)
     {
         layoutHeight = height;
+    }
+
+    @Override
+    public void layoutPosX(float layoutPosX)
+    {
+        this.layoutPosX = layoutPosX;
+    }
+
+    @Override
+    public void layoutPosY(float layoutPosY)
+    {
+        this.layoutPosY = layoutPosY;
     }
 
     public float layoutWidth()
@@ -242,26 +246,23 @@ public class LayoutGroup implements ILayoutBox
 
     public float effectiveWidth()
     {
-        if (isDirty())
-            refreshLayout();
         return effectiveWidth;
     }
 
     public float effectiveHeight()
     {
-        if (isDirty())
-            refreshLayout();
         return effectiveHeight;
     }
 
     public void markDirty()
     {
-        isDirty = true;
+        isLayoutDirty = true;
     }
 
-    public boolean isDirty()
+    @Override
+    public boolean isLayoutDirty()
     {
-        return isDirty;
+        return isLayoutDirty || this.first.isLayoutDirty() || this.second.isLayoutDirty();
     }
 
     public ILayoutBox first()
@@ -299,57 +300,41 @@ public class LayoutGroup implements ILayoutBox
 
     public float firstPosX()
     {
-        if (isDirty())
-            refreshLayout();
         return firstPosX;
     }
 
     public float firstPosY()
     {
-        if (isDirty())
-            refreshLayout();
         return firstPosY;
     }
 
     public float secondPosX()
     {
-        if (isDirty())
-            refreshLayout();
         return secondPosX;
     }
 
     public float secondPosY()
     {
-        if (isDirty())
-            refreshLayout();
         return secondPosY;
     }
 
     public float firstWidth()
     {
-        if (isDirty())
-            refreshLayout();
         return firstWidth;
     }
 
     public float firstHeight()
     {
-        if (isDirty())
-            refreshLayout();
         return firstHeight;
     }
 
     public float secondWidth()
     {
-        if (isDirty())
-            refreshLayout();
         return secondWidth;
     }
 
     public float secondHeight()
     {
-        if (isDirty())
-            refreshLayout();
         return secondHeight;
     }
 }

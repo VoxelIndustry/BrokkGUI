@@ -1,4 +1,6 @@
-package net.voxelindustry.brokkgui.layout;
+package net.voxelindustry.brokkgui;
+
+import net.voxelindustry.brokkgui.layout.ILayoutBox;
 
 import java.util.Objects;
 
@@ -85,6 +87,37 @@ public class LayoutBox implements ILayoutBox
     public void maxY(final float maxY)
     {
         maxHeight = maxY;
+    }
+
+
+    @Override
+    public boolean isLayoutDirty()
+    {
+        return false;
+    }
+
+    @Override
+    public void layoutWidth(float layoutWidth)
+    {
+
+    }
+
+    @Override
+    public void layoutHeight(float layoutHeight)
+    {
+
+    }
+
+    @Override
+    public void layoutPosX(float layoutPosX)
+    {
+
+    }
+
+    @Override
+    public void layoutPosY(float layoutPosY)
+    {
+
     }
 
     @Override

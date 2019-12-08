@@ -31,6 +31,8 @@ public class TextRenderer extends GuiComponent implements RenderComponent
 
     private Binding<String> ellipsedTextBinding;
 
+    private LayoutGroup layoutGroup;
+
     public TextRenderer()
     {
     }
@@ -57,10 +59,10 @@ public class TextRenderer extends GuiComponent implements RenderComponent
 
         Icon icon = element.get(Icon.class);
 
-        LayoutGroup layout = new LayoutGroup(text, icon, icon.iconSide().opposite().toLayout());
+        layoutGroup = new LayoutGroup(text, icon, icon.iconSide().opposite().toLayout());
 
         // Bind alignment
-        icon.iconSideProperty().addListener(obs -> layout.firstAlignment(icon.iconSide().opposite().toLayout()));
+        icon.iconSideProperty().addListener(obs -> layoutGroup.firstAlignment(icon.iconSide().opposite().toLayout()));
 
         if (icon != null)
         {
@@ -80,14 +82,26 @@ public class TextRenderer extends GuiComponent implements RenderComponent
         height = BrokkGuiPlatform.instance().guiHelper().getStringHeight();
     }
 
+    private void refreshLayout()
+    {
+        if (layoutGroup.isLayoutDirty())
+        {
+            layoutGroup.refreshLayout();
+        }
+    }
 
     @Override
     public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
+        if (pass == RenderPass.BACKGROUND)
+        {
+            refreshLayout();
+        }
+
         if (pass == RenderPass.MAIN)
         {
-            renderer.getHelper().drawString(ellipsedTextBinding.getValue(), transform.leftPos() + xPosBinding.getValue(),
-                    transform.topPos() + yPosBinding.getValue(), transform.zLevel(),
+            renderer.getHelper().drawString(text.textTrimmedForRender(), transform.leftPos() + layoutGroup.firstPosX(),
+                    transform.topPos() + layoutGroup.firstPosY(), transform.zLevel(),
                     color(), this.shadow() ? this.shadowColor() : Color.ALPHA);
         }
     }

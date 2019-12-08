@@ -11,8 +11,11 @@ import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.event.ComponentEvent;
 import net.voxelindustry.brokkgui.layout.ILayoutBox;
+import net.voxelindustry.brokkgui.platform.TextPlatform;
 
 import javax.annotation.Nonnull;
+
+import static net.voxelindustry.brokkgui.platform.TextPlatform.trimTextToWidth;
 
 public class Text extends GuiComponent implements ILayoutBox
 {
@@ -26,6 +29,13 @@ public class Text extends GuiComponent implements ILayoutBox
     private final BaseProperty<RectBox> elementContentPaddingProperty;
 
     private boolean isLayoutDirty = false;
+
+    private float layoutWidth;
+    private float layoutHeight;
+    private float layoutPosX;
+    private float layoutPosY;
+
+    private String textTrimmedForRender;
 
     public Text()
     {
@@ -187,6 +197,11 @@ public class Text extends GuiComponent implements ILayoutBox
         }*/
     }
 
+    public String textTrimmedForRender()
+    {
+        return this.textTrimmedForRender;
+    }
+
     ////////////
     // LAYOUT //
     ////////////
@@ -231,5 +246,58 @@ public class Text extends GuiComponent implements ILayoutBox
     public boolean isLayoutDirty()
     {
         return isLayoutDirty;
+    }
+
+    @Override
+    public void layoutWidth(float layoutWidth)
+    {
+        this.layoutWidth = layoutWidth;
+
+        float widthForText = layoutWidth - textPadding().getHorizontal();
+
+        if (widthForText < TextPlatform.stringWidth(text()))
+            this.textTrimmedForRender = trimTextToWidth(text(),
+                    layoutWidth - textPadding().getHorizontal() - TextPlatform.stringWidth(ellipsis()))
+                    + ellipsis();
+        else
+            this.textTrimmedForRender = text();
+    }
+
+    @Override
+    public void layoutHeight(float layoutHeight)
+    {
+        this.layoutHeight = layoutHeight;
+    }
+
+    @Override
+    public void layoutPosX(float layoutPosX)
+    {
+        this.layoutPosX = layoutPosX;
+    }
+
+    @Override
+    public void layoutPosY(float layoutPosY)
+    {
+        this.layoutPosY = layoutPosY;
+    }
+
+    public float layoutWidth()
+    {
+        return this.layoutWidth;
+    }
+
+    public float layoutHeight()
+    {
+        return this.layoutHeight;
+    }
+
+    public float layoutPosX()
+    {
+        return this.layoutPosX;
+    }
+
+    public float layoutPosY()
+    {
+        return this.layoutPosY;
     }
 }

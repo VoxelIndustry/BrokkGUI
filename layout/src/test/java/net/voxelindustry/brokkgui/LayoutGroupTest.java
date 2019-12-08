@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui;
 
 import net.voxelindustry.brokkgui.layout.LayoutAlignment;
-import net.voxelindustry.brokkgui.layout.LayoutBox;
 import net.voxelindustry.brokkgui.layout.LayoutGroup;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +16,7 @@ public class LayoutGroupTest
 
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.LEFT_CENTER);
 
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.minWidth()).isEqualTo(25);
         assertThat(group.minHeight()).isEqualTo(15);
@@ -31,7 +30,7 @@ public class LayoutGroupTest
 
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.CENTER_TOP);
 
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.minWidth()).isEqualTo(10);
         assertThat(group.minHeight()).isEqualTo(30);
@@ -45,7 +44,7 @@ public class LayoutGroupTest
 
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.LEFT_TOP);
 
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.minWidth()).isEqualTo(25);
         assertThat(group.minHeight()).isEqualTo(35);
@@ -60,7 +59,7 @@ public class LayoutGroupTest
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.LEFT_TOP);
         group.layoutWidth(40);
         group.layoutHeight(40);
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.effectiveWidth()).isEqualTo(left.maxWidth() + right.maxWidth());
         assertThat(group.effectiveHeight()).isEqualTo(left.maxHeight() + right.maxHeight());
@@ -75,7 +74,7 @@ public class LayoutGroupTest
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.LEFT_TOP);
         group.layoutWidth(30);
         group.layoutHeight(30);
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.effectiveWidth()).isEqualTo(group.layoutWidth()).isEqualTo(30);
         assertThat(group.effectiveHeight()).isEqualTo(group.layoutHeight()).isEqualTo(30);
@@ -90,7 +89,7 @@ public class LayoutGroupTest
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.LEFT_TOP);
         group.layoutWidth(15);
         group.layoutHeight(15);
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.firstWidth()).isEqualTo(10);
         assertThat(group.secondWidth()).isEqualTo(5);
@@ -108,7 +107,7 @@ public class LayoutGroupTest
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.LEFT_TOP);
         group.layoutWidth(30);
         group.layoutHeight(30);
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.firstWidth()).isEqualTo(20);
         assertThat(group.secondWidth()).isEqualTo(10);
@@ -127,7 +126,7 @@ public class LayoutGroupTest
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.LEFT_TOP);
         group.layoutWidth(40);
         group.layoutHeight(40);
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.firstWidth()).isEqualTo(20);
         assertThat(group.secondWidth()).isEqualTo(20);
@@ -145,7 +144,7 @@ public class LayoutGroupTest
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.LEFT_TOP);
         group.layoutWidth(10);
         group.layoutHeight(10);
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.firstWidth()).isEqualTo(5);
         assertThat(group.secondWidth()).isEqualTo(5);
@@ -163,7 +162,7 @@ public class LayoutGroupTest
         final LayoutGroup group = new LayoutGroup(left, right, LayoutAlignment.LEFT_TOP);
         group.layoutWidth(10);
         group.layoutHeight(10);
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.firstPosX()).isEqualTo(0);
         assertThat(group.firstPosY()).isEqualTo(0);
@@ -181,7 +180,7 @@ public class LayoutGroupTest
         final LayoutGroup group = new LayoutGroup(first, second, LayoutAlignment.CENTER_TOP);
         group.layoutWidth(10);
         group.layoutHeight(15);
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.firstPosX()).isEqualTo(2.5F);
         assertThat(group.firstPosY()).isEqualTo(0);
@@ -199,7 +198,7 @@ public class LayoutGroupTest
         final LayoutGroup group = new LayoutGroup(first, second, LayoutAlignment.LEFT_CENTER);
         group.layoutWidth(15);
         group.layoutHeight(10);
-        group.markDirty();
+        group.refreshLayout();
 
         assertThat(group.firstPosX()).isEqualTo(0);
         assertThat(group.firstPosY()).isEqualTo(2.5F);

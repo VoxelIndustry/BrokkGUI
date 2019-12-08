@@ -23,6 +23,11 @@ public class Icon extends GuiComponent implements ILayoutBox
 
     private boolean isLayoutDirty = false;
 
+    private float layoutWidth;
+    private float layoutHeight;
+    private float layoutPosX;
+    private float layoutPosY;
+
     public Icon()
     {
         this.iconProperty = new BaseProperty<>(null, "iconProperty");
@@ -218,5 +223,49 @@ public class Icon extends GuiComponent implements ILayoutBox
     public boolean isLayoutDirty()
     {
         return isLayoutDirty;
+    }
+
+    @Override
+    public void layoutWidth(float layoutWidth)
+    {
+        this.layoutWidth = layoutWidth;
+    }
+
+    @Override
+    public void layoutHeight(float layoutHeight)
+    {
+        this.layoutHeight = layoutHeight;
+    }
+
+    @Override
+    public void layoutPosX(float layoutPosX)
+    {
+        this.layoutPosX = layoutPosX;
+    }
+
+    @Override
+    public void layoutPosY(float layoutPosY)
+    {
+        this.layoutPosY = layoutPosY;
+    }
+
+    public float layoutWidth()
+    {
+        return this.layoutWidth;
+    }
+
+    public float layoutHeight()
+    {
+        return this.layoutHeight;
+    }
+
+    public float layoutPosX()
+    {
+        return this.layoutPosX;
+    }
+
+    public float layoutPosY()
+    {
+        return this.layoutPosY;
     }
 }
