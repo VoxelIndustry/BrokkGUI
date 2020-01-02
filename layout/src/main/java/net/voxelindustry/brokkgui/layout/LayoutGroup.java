@@ -300,22 +300,22 @@ public class LayoutGroup implements ILayoutBox
 
     public float firstPosX()
     {
-        return firstPosX;
+        return firstPosX + layoutPosX;
     }
 
     public float firstPosY()
     {
-        return firstPosY;
+        return firstPosY + layoutPosY;
     }
 
     public float secondPosX()
     {
-        return secondPosX;
+        return secondPosX + layoutPosX;
     }
 
     public float secondPosY()
     {
-        return secondPosY;
+        return secondPosY + layoutPosY;
     }
 
     public float firstWidth()

@@ -50,6 +50,8 @@ public class Icon extends GuiComponent implements ILayoutBox
         ValueInvalidationListener dirtyLayoutListener = this::dirtyOnChange;
         iconProperty.addListener(dirtyLayoutListener);
         iconSideProperty.addListener(dirtyLayoutListener);
+        iconPaddingProperty.addListener(dirtyLayoutListener);
+        elementContentPaddingProperty.addListener(dirtyLayoutListener);
     }
 
     private void dirtyOnChange(Observable obs)
