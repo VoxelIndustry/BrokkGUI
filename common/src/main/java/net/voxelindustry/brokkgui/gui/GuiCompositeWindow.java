@@ -142,10 +142,10 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void onClickDrag(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick)
+    public void onClickDrag(int mouseX, int mouseY, int key, double dragX, double dragY)
     {
-        first.onClickDrag(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
-        second.onClickDrag(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+        first.onClickDrag(mouseX, mouseY, key, dragX, dragY);
+        second.onClickDrag(mouseX, mouseY, key, dragX, dragY);
     }
 
     @Override

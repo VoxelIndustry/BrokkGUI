@@ -266,7 +266,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void onClickDrag(int mouseX, int mouseY, int key, long timeSinceDrag)
+    public void onClickDrag(int mouseX, int mouseY, int key, double dragX, double dragY)
     {
         if (this.mainPanel.isPointInside(lastClickX, lastClickY))
             this.mainPanel.handleClickDrag(mouseX, mouseY, key, lastClickX, lastClickY);

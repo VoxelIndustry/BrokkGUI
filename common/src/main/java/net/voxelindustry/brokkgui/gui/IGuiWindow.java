@@ -51,7 +51,7 @@ public interface IGuiWindow extends IGuiSubWindow
 
     void onClick(int mouseX, int mouseY, int key);
 
-    void onClickDrag(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick);
+    void onClickDrag(int mouseX, int mouseY, int clickedMouseButton, double dragX, double dragY);
 
     void onClickStop(int mouseX, int mouseY, int state);
 

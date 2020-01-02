@@ -5,10 +5,6 @@ package net.voxelindustry.brokkgui.internal;
  */
 public interface IMouseUtil
 {
-    int getEventButton();
-
-    int getEventDWheel();
-
     int getMouseX();
 
     int getMouseY();
