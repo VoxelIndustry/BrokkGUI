@@ -107,6 +107,17 @@ public class GuiFather extends GuiShape implements IStyleParent
         this.getChildrensProperty().clear();
     }
 
+    public void removeChildrenOfType(Class typeClass)
+    {
+        this.getChildrensProperty().getValue().stream().filter(typeClass::isInstance).collect(toList()).forEach(node ->
+        {
+            node.getxPosProperty().unbind();
+            node.getyPosProperty().unbind();
+
+            getChildrensProperty().remove(node);
+        });
+    }
+
     public boolean hasChild(final GuiNode node)
     {
         return this.getChildrensProperty().contains(node);
