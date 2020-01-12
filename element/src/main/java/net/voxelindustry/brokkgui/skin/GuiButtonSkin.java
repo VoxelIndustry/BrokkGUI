@@ -18,7 +18,7 @@ public class GuiButtonSkin<C extends GuiButtonBase, B extends GuiButtonBehavior<
 
     protected void bindLabel()
     {
-        RelativeBindingHelper.bindToPos(getModel().getLabel(), getModel());
+        RelativeBindingHelper.bindToCenter(getModel().getLabel(), getModel());
 
         getModel().getExpandToLabelProperty().addListener(obs -> this.refreshLabelBinding());
         this.refreshLabelBinding();
