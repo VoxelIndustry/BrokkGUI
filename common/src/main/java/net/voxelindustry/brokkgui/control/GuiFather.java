@@ -164,6 +164,9 @@ public class GuiFather extends GuiShape implements IStyleParent
     @Override
     public void handleClick(final int mouseX, final int mouseY, final int key)
     {
+        if (this.isDisabled() || !this.isVisible())
+            return;
+
         super.handleClick(mouseX, mouseY, key);
 
         this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
@@ -173,6 +176,9 @@ public class GuiFather extends GuiShape implements IStyleParent
     @Override
     public void handleClickDrag(int mouseX, int mouseY, int key, int originalMouseX, int originalMouseY)
     {
+        if (this.isDisabled() || !this.isVisible())
+            return;
+
         super.handleClickDrag(mouseX, mouseY, key, originalMouseX, originalMouseY);
 
         this.getChildrens().stream().filter(child -> child.isPointInside(originalMouseX, originalMouseY))
@@ -182,6 +188,9 @@ public class GuiFather extends GuiShape implements IStyleParent
     @Override
     public void handleClickStop(int mouseX, int mouseY, int key, int originalMouseX, int originalMouseY)
     {
+        if (this.isDisabled() || !this.isVisible())
+            return;
+
         super.handleClickStop(mouseX, mouseY, key, originalMouseX, originalMouseY);
 
         this.getChildrens().stream().filter(child -> child.isPointInside(originalMouseX, originalMouseY))
@@ -191,6 +200,9 @@ public class GuiFather extends GuiShape implements IStyleParent
     @Override
     public void handleHover(int mouseX, int mouseY, boolean hovered)
     {
+        if (this.isDisabled() || !this.isVisible())
+            return;
+
         super.handleHover(mouseX, mouseY, hovered);
 
         if (hovered)
@@ -204,6 +216,9 @@ public class GuiFather extends GuiShape implements IStyleParent
     @Override
     public void handleMouseScroll(int mouseX, int mouseY, double scrolled)
     {
+        if (this.isDisabled() || !this.isVisible())
+            return;
+
         super.handleMouseScroll(mouseX, mouseY, scrolled);
 
         this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
@@ -213,6 +228,9 @@ public class GuiFather extends GuiShape implements IStyleParent
     @Override
     public void handleKeyPress(int mouseX, int mouseY, int key)
     {
+        if (this.isDisabled() || !this.isVisible())
+            return;
+
         super.handleKeyPress(mouseX, mouseY, key);
 
         this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
@@ -222,6 +240,9 @@ public class GuiFather extends GuiShape implements IStyleParent
     @Override
     public void handleKeyRelease(int mouseX, int mouseY, int key)
     {
+        if (this.isDisabled() || !this.isVisible())
+            return;
+
         super.handleKeyRelease(mouseX, mouseY, key);
 
         this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
