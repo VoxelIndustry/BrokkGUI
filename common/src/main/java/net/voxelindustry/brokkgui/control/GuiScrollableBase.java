@@ -16,6 +16,8 @@ public abstract class GuiScrollableBase extends GuiElement
 
     private final BaseProperty<GuiScrollbarPolicy> scrollXPolicyProperty, scrollYPolicyProperty;
 
+    private boolean isPannable;
+
     private EventHandler<ScrollEvent> onScrollEvent;
 
     public GuiScrollableBase(String type)
@@ -210,6 +212,16 @@ public abstract class GuiScrollableBase extends GuiElement
     public void setGripYHeight(float gripYHeight)
     {
         this.gripYHeightProperty.setValue(gripYHeight);
+    }
+
+    public boolean isPannable()
+    {
+        return this.isPannable;
+    }
+
+    public void setPannable(boolean pannable)
+    {
+        this.isPannable = pannable;
     }
 
     ////////////

@@ -6,23 +6,49 @@ import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.event.GuiMouseEvent;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
+import net.voxelindustry.brokkgui.util.MathUtils;
 
 /**
  * @author Ourten 9 oct. 2016
  */
 public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehaviorBase<C>
 {
+    private float dragStartX;
+    private float dragStartY;
+
     public GuiScrollableBehavior(C model)
     {
         super(model);
 
         this.getModel().getEventDispatcher().addHandler(GuiMouseEvent.WHEEL, this::onMouseWheel);
         this.getModel().getEventDispatcher().addHandler(ClickEvent.TYPE, this::onClick);
+
+        this.getModel().getEventDispatcher().addHandler(GuiMouseEvent.DRAG_START, this::onMouseDragStart);
         this.getModel().getEventDispatcher().addHandler(GuiMouseEvent.DRAGGING, this::onMouseDrag);
+    }
+
+    private void onMouseDragStart(GuiMouseEvent.DragStart event)
+    {
+        if (!getModel().isPannable())
+            return;
+
+        dragStartX = getModel().getScrollX();
+        dragStartY = getModel().getScrollY();
+    }
+
+    private void handlePanning(GuiMouseEvent.Dragging event)
+    {
+        if (getModel().getTrueWidth() > getModel().getWidth())
+            getModel().setScrollX(MathUtils.clamp(getModel().getWidth() - getModel().getTrueWidth(), 0, dragStartX + event.getDragX()));
+        if (getModel().getTrueHeight() > getModel().getHeight())
+            getModel().setScrollY(MathUtils.clamp(getModel().getHeight() - getModel().getTrueHeight(), 0, dragStartY + event.getDragY()));
     }
 
     private void onMouseDrag(GuiMouseEvent.Dragging event)
     {
+        if (getModel().isPannable())
+            handlePanning(event);
+
         // Min X to select the vertical grip
         float gripYMinX = getModel().getRightPos() - getModel().getGripYWidth();
 
@@ -121,5 +147,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
 
         this.getModel().getEventDispatcher().dispatchEvent(ScrollEvent.TYPE,
                 new ScrollEvent(this.getModel(), vertical ? 0 : scrolled, vertical ? scrolled : 0));
+
+        System.out.println(getModel().getScrollX() + " <=> " + getModel().getScrollY());
     }
 }
