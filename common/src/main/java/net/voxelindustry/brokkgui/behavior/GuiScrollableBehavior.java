@@ -2,11 +2,14 @@ package net.voxelindustry.brokkgui.behavior;
 
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.control.GuiScrollableBase;
+import net.voxelindustry.brokkgui.data.Position;
 import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.event.GuiMouseEvent;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
 import net.voxelindustry.brokkgui.util.MathUtils;
+
+import static java.lang.Integer.signum;
 
 /**
  * @author Ourten 9 oct. 2016
@@ -39,9 +42,18 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
     private void handlePanning(GuiMouseEvent.Dragging event)
     {
         if (getModel().getTrueWidth() > getModel().getWidth())
-            getModel().setScrollX(MathUtils.clamp(getModel().getWidth() - getModel().getTrueWidth(), 0, dragStartX + event.getDragX()));
+        {
+            getModel().setScrollX(MathUtils.clamp(
+                    getModel().getWidth() - getModel().getTrueWidth(),
+                    0,
+                    dragStartX + event.getDragX() * getModel().getPanSpeed()));
+        }
         if (getModel().getTrueHeight() > getModel().getHeight())
-            getModel().setScrollY(MathUtils.clamp(getModel().getHeight() - getModel().getTrueHeight(), 0, dragStartY + event.getDragY()));
+        {
+            getModel().setScrollY(MathUtils.clamp(getModel().getHeight() - getModel().getTrueHeight(),
+                    0,
+                    dragStartY + event.getDragY() * getModel().getPanSpeed()));
+        }
     }
 
     private void onMouseDrag(GuiMouseEvent.Dragging event)
@@ -112,7 +124,18 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         }
     }
 
-    private void onMouseWheel(GuiMouseEvent.Wheel event)
+    private void handleScale(GuiMouseEvent.Wheel event)
+    {
+        getModel().getChildrens().forEach(child ->
+        {
+            float zoomValue = 0.05F * signum(event.getDwheel());
+
+            child.setScalePivot(Position.absolute(event.getMouseX() - child.getLeftPos(), event.getMouseY() - child.getTopPos()));
+            child.setScale(child.getScaleX() + zoomValue);
+        });
+    }
+
+    private void handleScroll(GuiMouseEvent.Wheel event)
     {
         float scrolled;
         boolean vertical = !BrokkGuiPlatform.getInstance().getKeyboardUtil().isShiftKeyDown();
@@ -142,12 +165,27 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
                 scrolled = this.getModel().getWidth() - this.getModel().getTrueWidth() - this.getModel().getScrollX();
             if (this.getModel().getScrollX() + scrolled >= 0 && event.getDwheel() > 0)
                 scrolled = 0 - this.getModel().getScrollX();
+
             this.getModel().setScrollX(this.getModel().getScrollX() + scrolled);
         }
 
-        this.getModel().getEventDispatcher().dispatchEvent(ScrollEvent.TYPE,
-                new ScrollEvent(this.getModel(), vertical ? 0 : scrolled, vertical ? scrolled : 0));
+        if (vertical)
+            this.getModel().getEventDispatcher().dispatchEvent(ScrollEvent.TYPE,
+                    new ScrollEvent(this.getModel(), 0, scrolled));
+        else
+            this.getModel().getEventDispatcher().dispatchEvent(ScrollEvent.TYPE,
+                    new ScrollEvent(this.getModel(), scrolled, 0));
+    }
 
-        System.out.println(getModel().getScrollX() + " <=> " + getModel().getScrollY());
+    private void onMouseWheel(GuiMouseEvent.Wheel event)
+    {
+        if (getModel().isScalable())
+        {
+            this.handleScale(event);
+        }
+        else if (getModel().isScrollable())
+        {
+            this.handleScroll(event);
+        }
     }
 }

@@ -16,13 +16,19 @@ public abstract class GuiScrollableBase extends GuiElement
 
     private final BaseProperty<GuiScrollbarPolicy> scrollXPolicyProperty, scrollYPolicyProperty;
 
+    private final BaseProperty<Float> panSpeedProperty;
+
     private boolean isPannable;
+    private boolean isScalable;
+    private boolean isScrollable;
 
     private EventHandler<ScrollEvent> onScrollEvent;
 
     public GuiScrollableBase(String type)
     {
         super(type);
+
+        this.isScrollable = true;
 
         this.scrollXProperty = new BaseProperty<>(0f, "scrollXProperty");
         this.scrollYProperty = new BaseProperty<>(0f, "scrollYProperty");
@@ -39,6 +45,9 @@ public abstract class GuiScrollableBase extends GuiElement
 
         this.scrollXPolicyProperty = new BaseProperty<>(GuiScrollbarPolicy.NEEDED, "scrollXPolicyProperty");
         this.scrollYPolicyProperty = new BaseProperty<>(GuiScrollbarPolicy.NEEDED, "scrollYPolicyProperty");
+
+        this.panSpeedProperty = new BaseProperty<>(1F, "panSpeedProperty");
+
         this.setScissorBox(ScissorBox.fitNode(this));
         this.setGuiOverflow(GuiOverflowPolicy.TRIM_ALL);
 
@@ -88,6 +97,11 @@ public abstract class GuiScrollableBase extends GuiElement
     public BaseProperty<Float> getGripYHeightProperty()
     {
         return gripYHeightProperty;
+    }
+
+    public BaseProperty<Float> getPanSpeedProperty()
+    {
+        return panSpeedProperty;
     }
 
     public float getScrollX()
@@ -214,6 +228,16 @@ public abstract class GuiScrollableBase extends GuiElement
         this.gripYHeightProperty.setValue(gripYHeight);
     }
 
+    public float getPanSpeed()
+    {
+        return getPanSpeedProperty().getValue();
+    }
+
+    public void setPanSpeed(float panSpeed)
+    {
+        getPanSpeedProperty().setValue(panSpeed);
+    }
+
     public boolean isPannable()
     {
         return this.isPannable;
@@ -222,6 +246,42 @@ public abstract class GuiScrollableBase extends GuiElement
     public void setPannable(boolean pannable)
     {
         this.isPannable = pannable;
+    }
+
+    /**
+     * Allow scroll controls to alter this element scale.
+     * This allow a zooming behavior on mousewheel.
+     * <p>
+     * When a Scrollable element is Scalable it will no longer be possible to scroll with the mousewheel.
+     * If translating the Scrollable is still desired it is recommended to set the element as pannable @see #setPannable(boolean)
+     */
+    public boolean isScalable()
+    {
+        return this.isScalable;
+    }
+
+    /**
+     * Allow scroll controls to alter this element scale.
+     * This allow a zooming behavior on mousewheel.
+     * <p>
+     * When a Scrollable element is Scalable it will no longer be possible to scroll with the mousewheel.
+     * If translating the Scrollable is still desired it is recommended to set the element as pannable @see #setPannable(boolean)
+     *
+     * @param scalable
+     */
+    public void setScalable(boolean scalable)
+    {
+        this.isScalable = scalable;
+    }
+
+    public boolean isScrollable()
+    {
+        return this.isScrollable;
+    }
+
+    public void setScrollable(boolean scrollable)
+    {
+        this.isScrollable = scrollable;
     }
 
     ////////////
