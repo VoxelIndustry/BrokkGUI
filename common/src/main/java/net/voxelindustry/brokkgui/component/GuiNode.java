@@ -5,9 +5,18 @@ import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.BaseSetProperty;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.control.GuiFather;
+import net.voxelindustry.brokkgui.data.Position;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.data.Rotation;
-import net.voxelindustry.brokkgui.event.*;
+import net.voxelindustry.brokkgui.data.Scale;
+import net.voxelindustry.brokkgui.event.ClickEvent;
+import net.voxelindustry.brokkgui.event.DisableEvent;
+import net.voxelindustry.brokkgui.event.DisposeEvent;
+import net.voxelindustry.brokkgui.event.FocusEvent;
+import net.voxelindustry.brokkgui.event.GuiMouseEvent;
+import net.voxelindustry.brokkgui.event.HoverEvent;
+import net.voxelindustry.brokkgui.event.KeyEvent;
+import net.voxelindustry.brokkgui.event.LayoutEvent;
 import net.voxelindustry.brokkgui.gui.IGuiSubWindow;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -29,7 +38,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
             widthProperty, heightProperty, widthRatioProperty, heightRatioProperty, zLevelProperty;
 
     private final BaseProperty<Rotation> rotationProperty;
-    private final BaseProperty<Float>    scaleXProperty, scaleYProperty, scaleZProperty;
+    private final BaseProperty<Scale>    scaleProperty;
 
     private       EventDispatcher            eventDispatcher;
     private       EventHandler<FocusEvent>   onFocusEvent;
@@ -70,9 +79,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.zLevelProperty = new BaseProperty<>(0f, "zLevelProperty");
 
         this.rotationProperty = new BaseProperty<>(Rotation.NONE, "rotationProperty");
-        this.scaleXProperty = new BaseProperty<>(1f, "scaleXProperty");
-        this.scaleYProperty = new BaseProperty<>(1f, "scaleYProperty");
-        this.scaleZProperty = new BaseProperty<>(1f, "scaleZProperty");
+        this.scaleProperty = new BaseProperty<>(null, "scaleProperty");
 
         this.fatherProperty = new BaseProperty<>(null, "fatherProperty");
 
@@ -187,18 +194,9 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
             renderer.translateMatrix(-translateX, -translateY, 0);
         }
 
-        if (this.getScaleX() != 1 || this.getScaleY() != 1 || this.getScaleZ() != 1)
+        if (getScaleProperty().isPresent())
         {
-            if (!createdMatrix)
-            {
-                createdMatrix = true;
-                renderer.beginMatrix();
-            }
-            renderer.translateMatrix(this.getxPos() + this.getxTranslate() + this.getWidth() / 2,
-                    this.getyPos() + this.getyTranslate() + this.getHeight() / 2, 0);
-            renderer.scaleMatrix(this.getScaleX(), this.getScaleY(), this.getScaleZ());
-            renderer.translateMatrix(-(this.getxPos() + this.getxTranslate() + this.getWidth() / 2),
-                    -(this.getyPos() + this.getyTranslate() + this.getHeight() / 2), 0);
+            createdMatrix = getScale().apply(renderer, this, createdMatrix);
         }
 
         if (this.getOpacity() != 1)
@@ -314,10 +312,30 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
     public boolean isPointInside(final int pointX, final int pointY)
     {
-        return this.getxPos() + this.getxTranslate() < pointX
-                && pointX < this.getxPos() + this.getxTranslate() + this.getWidth()
-                && this.getyPos() + this.getyTranslate() < pointY
-                && pointY < this.getyPos() + this.getyTranslate() + this.getHeight();
+        return this.getLeftPos() < pointX
+                && pointX < this.getRightPos()
+                && this.getTopPos() < pointY
+                && pointY < this.getBottomPos();
+    }
+
+    public float screenXToNodeX(float screenX)
+    {
+        return screenX / getScaleX() - getLeftPos();
+    }
+
+    public float screenYToNodeY(float screenY)
+    {
+        return screenY / getScaleY() - getTopPos();
+    }
+
+    public float nodeXToScreenX(float nodeX)
+    {
+        return (getLeftPos() + nodeX) * getScaleX();
+    }
+
+    public float nodeYToScreenY(float nodeY)
+    {
+        return (getTopPos() + nodeY) * getScaleY();
     }
 
     public BaseProperty<Float> getzLevelProperty()
@@ -380,19 +398,9 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         return rotationProperty;
     }
 
-    public BaseProperty<Float> getScaleXProperty()
+    public BaseProperty<Scale> getScaleProperty()
     {
-        return scaleXProperty;
-    }
-
-    public BaseProperty<Float> getScaleYProperty()
-    {
-        return scaleYProperty;
-    }
-
-    public BaseProperty<Float> getScaleZProperty()
-    {
-        return scaleZProperty;
+        return scaleProperty;
     }
 
     /**
@@ -604,41 +612,83 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.getRotationProperty().setValue(rotation);
     }
 
+    public Scale getScale()
+    {
+        return this.getScaleProperty().getValue();
+    }
+
+    public void setScale(Scale scale)
+    {
+        this.getScaleProperty().setValue(scale);
+    }
+
     public float getScaleX()
     {
-        return this.getScaleXProperty().getValue();
+        if (this.getScaleProperty().isPresent())
+            return this.getScaleProperty().getValue().getX();
+        return 1;
     }
 
     public void setScaleX(float scaleX)
     {
-        this.getScaleXProperty().setValue(scaleX);
+        if (getScaleProperty().isPresent())
+            this.setScale(new Scale(scaleX, getScaleY(), getScaleZ(), getScalePivot()));
+        else
+            this.setScale(new Scale(scaleX, 0, 0, null));
     }
 
     public float getScaleY()
     {
-        return this.getScaleYProperty().getValue();
+        if (this.getScaleProperty().isPresent())
+
+            return this.getScaleProperty().getValue().getY();
+        return 1;
     }
 
     public void setScaleY(float scaleY)
     {
-        this.getScaleYProperty().setValue(scaleY);
+        if (getScaleProperty().isPresent())
+            this.setScale(new Scale(getScaleX(), scaleY, getScaleZ(), getScalePivot()));
+        else
+            this.setScale(new Scale(0, scaleY, 0, null));
     }
 
     public float getScaleZ()
     {
-        return this.getScaleZProperty().getValue();
+        if (this.getScaleProperty().isPresent())
+            return this.getScaleProperty().getValue().getY();
+        return 1;
     }
 
     public void setScaleZ(float scaleZ)
     {
-        this.getScaleZProperty().setValue(scaleZ);
+        if (getScaleProperty().isPresent())
+            this.setScale(new Scale(getScaleX(), getScaleY(), 0, getScalePivot()));
+        else
+            this.setScale(new Scale(0, 0, scaleZ, null));
     }
 
     public void setScale(float scale)
     {
-        this.setScaleX(scale);
-        this.setScaleY(scale);
-        this.setScaleZ(scale);
+        if (this.getScaleProperty().isPresent())
+            this.setScale(new Scale(scale, scale, scale, getScalePivot()));
+        else
+            this.setScale(new Scale(scale, scale, scale, null));
+    }
+
+    public Position getScalePivot()
+    {
+        if (this.getScaleProperty().isPresent())
+            return getScale().getPivot().orElse(null);
+        return null;
+    }
+
+    public void setScalePivot(Position scalePivot)
+    {
+        if (this.getScaleProperty().isPresent())
+            setScale(new Scale(getScaleX(), getScaleY(), getScaleZ(), scalePivot));
+        else
+            setScale(new Scale(1, 1, 1, scalePivot));
     }
 
     public BaseProperty<Double> getOpacityProperty()
