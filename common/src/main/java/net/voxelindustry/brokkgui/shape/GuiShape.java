@@ -7,8 +7,10 @@ import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.paint.BackgroundRepeat;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.paint.SpriteAnimation;
 import net.voxelindustry.brokkgui.paint.Texture;
 import net.voxelindustry.brokkgui.style.HeldPropertyState;
 import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
@@ -28,7 +30,12 @@ public abstract class GuiShape extends GuiNode
         this.getStyle().registerProperty("foreground-color", Color.ALPHA, Color.class);
 
         this.getStyle().registerProperty("background-texture", Texture.EMPTY, Texture.class);
+        this.getStyle().registerProperty("background-repeat", BackgroundRepeat.NONE, BackgroundRepeat.class);
+        this.getStyle().registerProperty("background-animation", SpriteAnimation.EMPTY, SpriteAnimation.class);
+
         this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
+        this.getStyle().registerProperty("foreground-repeat", BackgroundRepeat.NONE, BackgroundRepeat.class);
+        this.getStyle().registerProperty("foreground-animation", SpriteAnimation.EMPTY, SpriteAnimation.class);
 
         this.getStyle().registerProperty("background-position", RectBox.EMPTY, RectBox.class);
 
