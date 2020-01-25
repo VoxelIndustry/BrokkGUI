@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
-import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.sprite.Texture;
 
 import java.text.NumberFormat;
 
@@ -18,7 +18,9 @@ public class TextureStyleTranslator implements IStyleDecoder<Texture>, IStyleEnc
     @Override
     public String encode(Texture value, boolean prettyPrint)
     {
-        return value.getResource() + " " + textureFormat.format(value.getUMin()) + "," + textureFormat.format(value.getVMin())
+        return value.getResource()
+                + " (" + value.getPixelWidth() + "px, " + value.getPixelHeight() + "px) "
+                + textureFormat.format(value.getUMin()) + "," + textureFormat.format(value.getVMin())
                 + " -> " + textureFormat.format(value.getUMax()) + "," + textureFormat.format(value.getVMax());
     }
 
@@ -30,20 +32,48 @@ public class TextureStyleTranslator implements IStyleDecoder<Texture>, IStyleEnc
 
         String[] split = style.replace("url(", "").replace(")", "").split(",");
 
-        switch (split.length)
+        String resource = "";
+        float uMin = 0;
+        float vMin = 0;
+        float uMax = 1;
+        float vMax = 1;
+
+        int pixelWidth = 0;
+        int pixelHeight = 0;
+
+        for (int index = 0; index < split.length; index++)
         {
-            case 1:
-                return new Texture(split[0].replace("\"", "").trim());
-            case 3:
-                return new Texture(split[0].replace("\"", "").trim(), Float.parseFloat(split[1].trim()),
-                        Float.parseFloat(split[2].trim()));
-            case 5:
-                return new Texture(split[0].replace("\"", "").trim(), Float.parseFloat(split[1].trim()),
-                        Float.parseFloat(split[2].trim()), Float.parseFloat(split[3].trim()),
-                        Float.parseFloat(split[4].trim()));
-            default:
-                return null;
+            if (index == 0)
+            {
+                resource = split[0].replace("\"", "").trim();
+                continue;
+            }
+
+            if (split[index].contains("px"))
+            {
+                if (index % 2 == 1)
+                {
+                    pixelWidth = Integer.parseInt(split[index].replace("px", "").trim());
+                }
+                else
+                {
+                    pixelHeight = Integer.parseInt(split[index].replace("px", "").trim());
+                }
+            }
+            else
+            {
+                if (index == 1)
+                    uMin = Float.parseFloat(split[index].trim());
+                else if (index == 2)
+                    vMin = Float.parseFloat(split[index].trim());
+                else if (index == 3)
+                    uMax = Float.parseFloat(split[index].trim());
+                else if (index == 4)
+                    vMax = Float.parseFloat(split[index].trim());
+            }
         }
+
+        return new Texture(resource, uMin, vMin, uMax, vMax, pixelWidth, pixelHeight);
     }
 
     @Override

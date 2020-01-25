@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.style.optional;
 
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.StyleProperty;
 

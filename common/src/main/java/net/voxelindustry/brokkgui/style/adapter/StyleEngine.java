@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.paint.BackgroundRepeat;
+import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.paint.SpriteAnimation;
-import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.sprite.SpriteAnimation;
+import net.voxelindustry.brokkgui.sprite.Texture;
 
 public class StyleEngine
 {
@@ -47,7 +47,7 @@ public class StyleEngine
 
         BackgroundRepeatStyleTranslator backgroundRepeatTranslator = new BackgroundRepeatStyleTranslator();
 
-        StyleTranslator.getInstance().registerTranslator(BackgroundRepeat.class,
+        StyleTranslator.getInstance().registerTranslator(SpriteRepeat.class,
                 backgroundRepeatTranslator,
                 backgroundRepeatTranslator,
                 backgroundRepeatTranslator);

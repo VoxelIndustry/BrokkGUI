@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.paint;
+package net.voxelindustry.brokkgui.sprite;
 
 import java.util.Map;
 
@@ -33,7 +33,19 @@ public class SpriteAnimation
 
     public void parse()
     {
+        if (this.isParsed)
+            return;
         // TODO: Sprite animation parser
+    }
+
+    public String getResourcePath()
+    {
+        return resourcePath;
+    }
+
+    public boolean isParsed()
+    {
+        return isParsed;
     }
 
     public boolean isVertical()

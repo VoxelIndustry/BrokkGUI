@@ -1,4 +1,8 @@
-package net.voxelindustry.brokkgui.paint;
+package net.voxelindustry.brokkgui.sprite;
+
+import net.voxelindustry.brokkgui.paint.GuiPaint;
+
+import java.util.Objects;
 
 public class Texture extends GuiPaint
 {
@@ -7,22 +11,31 @@ public class Texture extends GuiPaint
     private final String resource;
     private final float  uMin, vMin, uMax, vMax;
 
-    public Texture(final String resource, final float uMin, final float vMin, final float uMax, final float vMax)
+    private final int pixelWidth, pixelHeight;
+
+    public Texture(String resource, float uMin, float vMin, float uMax, float vMax, int pixelWidth, int pixelHeight)
     {
-        super();
         this.resource = resource;
         this.uMin = uMin;
         this.vMin = vMin;
         this.uMax = uMax;
         this.vMax = vMax;
+        this.pixelWidth = pixelWidth;
+        this.pixelHeight = pixelHeight;
     }
 
-    public Texture(final String resource, final float u, final float v)
+    public Texture(String resource, float uMin, float vMin, float uMax, float vMax)
+    {
+        this(resource, uMin, vMin, uMax, vMax, 0, 0);
+    }
+
+
+    public Texture(String resource, float u, float v)
     {
         this(resource, u, v, 1, 1);
     }
 
-    public Texture(final String resource)
+    public Texture(String resource)
     {
         this(resource, 0, 0);
     }
@@ -62,28 +75,35 @@ public class Texture extends GuiPaint
         return this.vMax;
     }
 
+    public int getPixelWidth()
+    {
+        return pixelWidth;
+    }
+
+    public int getPixelHeight()
+    {
+        return pixelHeight;
+    }
+
     @Override
     public boolean equals(Object o)
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Texture texture = (Texture) o;
-
-        return Float.compare(texture.uMin, uMin) == 0 && Float.compare(texture.vMin, vMin) == 0 && Float.compare
-                (texture.uMax, uMax) == 0 && Float.compare(texture.vMax, vMax) == 0 && (getResource() != null ?
-                getResource().equals(texture.getResource()) : texture.getResource() == null);
+        return Float.compare(texture.uMin, uMin) == 0 &&
+                Float.compare(texture.vMin, vMin) == 0 &&
+                Float.compare(texture.uMax, uMax) == 0 &&
+                Float.compare(texture.vMax, vMax) == 0 &&
+                pixelWidth == texture.pixelWidth &&
+                pixelHeight == texture.pixelHeight &&
+                Objects.equals(resource, texture.resource);
     }
 
     @Override
     public int hashCode()
     {
-        int result = getResource() != null ? getResource().hashCode() : 0;
-        result = 31 * result + (uMin != +0.0f ? Float.floatToIntBits(uMin) : 0);
-        result = 31 * result + (vMin != +0.0f ? Float.floatToIntBits(vMin) : 0);
-        result = 31 * result + (uMax != +0.0f ? Float.floatToIntBits(uMax) : 0);
-        result = 31 * result + (vMax != +0.0f ? Float.floatToIntBits(vMax) : 0);
-        return result;
+        return Objects.hash(resource, uMin, vMin, uMax, vMax, pixelWidth, pixelHeight);
     }
 
     @Override
@@ -95,6 +115,8 @@ public class Texture extends GuiPaint
                 ", vMin=" + vMin +
                 ", uMax=" + uMax +
                 ", vMax=" + vMax +
-                "} " + super.toString();
+                ", pixelWidth=" + pixelWidth +
+                ", pixelHeight=" + pixelHeight +
+                '}';
     }
 }

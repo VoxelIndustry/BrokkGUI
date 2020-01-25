@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.internal;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.Vector2i;
 import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.sprite.Texture;
 
 /**
  * @author Ourten 5 oct. 2016

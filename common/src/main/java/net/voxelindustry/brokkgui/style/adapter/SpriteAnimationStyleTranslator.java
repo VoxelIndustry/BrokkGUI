@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
-import net.voxelindustry.brokkgui.paint.SpriteAnimation;
+import net.voxelindustry.brokkgui.sprite.SpriteAnimation;
 
 public class SpriteAnimationStyleTranslator implements IStyleDecoder<SpriteAnimation>, IStyleEncoder<SpriteAnimation>, IStyleValidator<SpriteAnimation>
 {

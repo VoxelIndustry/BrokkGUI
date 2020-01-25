@@ -1,28 +1,28 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
-import net.voxelindustry.brokkgui.paint.BackgroundRepeat;
+import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 
-public class BackgroundRepeatStyleTranslator implements IStyleDecoder<BackgroundRepeat>, IStyleEncoder<BackgroundRepeat>, IStyleValidator<BackgroundRepeat>
+public class BackgroundRepeatStyleTranslator implements IStyleDecoder<SpriteRepeat>, IStyleEncoder<SpriteRepeat>, IStyleValidator<SpriteRepeat>
 {
     @Override
-    public BackgroundRepeat decode(String style)
+    public SpriteRepeat decode(String style)
     {
         switch (style)
         {
             case "none":
-                return BackgroundRepeat.NONE;
+                return SpriteRepeat.NONE;
             case "repeat-x":
-                return BackgroundRepeat.REPEAT_X;
+                return SpriteRepeat.REPEAT_X;
             case "repeat-y":
-                return BackgroundRepeat.REPEAT_Y;
+                return SpriteRepeat.REPEAT_Y;
             case "repeat":
-                return BackgroundRepeat.REPEAT_BOTH;
+                return SpriteRepeat.REPEAT_BOTH;
         }
         throw new IllegalArgumentException("Cannot decode BackgroundRepeat value of [" + style + "]");
     }
 
     @Override
-    public String encode(BackgroundRepeat value, boolean prettyPrint)
+    public String encode(SpriteRepeat value, boolean prettyPrint)
     {
         switch (value)
         {

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
-import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.sprite.Texture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
