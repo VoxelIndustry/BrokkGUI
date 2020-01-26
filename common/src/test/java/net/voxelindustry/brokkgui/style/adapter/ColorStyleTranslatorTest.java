@@ -9,7 +9,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ColorStyleAdapterTest
+public class ColorStyleTranslatorTest
 {
     private ColorStyleTranslator adapter;
 
