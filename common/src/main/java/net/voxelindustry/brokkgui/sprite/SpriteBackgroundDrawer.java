@@ -18,6 +18,8 @@ public class SpriteBackgroundDrawer
 
     private static void draw(GuiShape shape, IGuiRenderer renderer, Texture texture, SpriteRepeat repeat, SpriteAnimation animation, RectBox position)
     {
+        renderer.getHelper().bindTexture(texture);
+
         if (repeat == SpriteRepeat.NONE)
         {
             drawSimple(shape, renderer, texture, position);
@@ -58,8 +60,8 @@ public class SpriteBackgroundDrawer
 
     private static void drawRepeatX(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position)
     {
-        int repeatCount = (int) (shape.getWidth() - position.getHorizontal() / texture.getPixelWidth());
-        float leftOver = shape.getWidth() - position.getHorizontal() % texture.getPixelWidth();
+        int repeatCount = (int) ((shape.getWidth() - position.getHorizontal()) / texture.getPixelWidth());
+        float leftOver = (shape.getWidth() - position.getHorizontal()) % texture.getPixelWidth();
 
         for (int index = 0; index < repeatCount; index++)
         {
@@ -88,8 +90,8 @@ public class SpriteBackgroundDrawer
 
     private static void drawRepeatY(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position)
     {
-        int repeatCount = (int) (shape.getHeight() - position.getVertical() / texture.getPixelHeight());
-        float leftOver = shape.getHeight() - position.getVertical() % texture.getPixelHeight();
+        int repeatCount = (int) ((shape.getHeight() - position.getVertical()) / texture.getPixelHeight());
+        float leftOver = (shape.getHeight() - position.getVertical()) % texture.getPixelHeight();
 
         for (int index = 0; index < repeatCount; index++)
         {
@@ -118,10 +120,10 @@ public class SpriteBackgroundDrawer
 
     private static void drawRepeatBoth(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position)
     {
-        int repeatCountX = (int) (shape.getWidth() - position.getHorizontal() / texture.getPixelWidth());
-        float leftOverX = shape.getWidth() - position.getHorizontal() % texture.getPixelWidth();
-        int repeatCountY = (int) (shape.getHeight() - position.getVertical() / texture.getPixelHeight());
-        float leftOverY = shape.getHeight() - position.getVertical() % texture.getPixelHeight();
+        int repeatCountX = (int) ((shape.getWidth() - position.getHorizontal()) / texture.getPixelWidth());
+        float leftOverX = (shape.getWidth() - position.getHorizontal()) % texture.getPixelWidth();
+        int repeatCountY = (int) ((shape.getHeight() - position.getVertical()) / texture.getPixelHeight());
+        float leftOverY = (shape.getHeight() - position.getVertical()) % texture.getPixelHeight();
 
         for (int xIndex = 0; xIndex < repeatCountX; xIndex++)
         {
