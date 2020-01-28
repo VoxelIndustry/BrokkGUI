@@ -8,8 +8,7 @@ public class SpriteAnimation
 
     private boolean vertical;
 
-    private int  frameCount;
-    private long defaultFrameTimeMillis;
+    private int frameCount;
 
     private Map<Integer, Long> frameTimeMillisByFrameIndex;
 
@@ -21,11 +20,10 @@ public class SpriteAnimation
         this.resourcePath = resourcePath;
     }
 
-    public SpriteAnimation(boolean vertical, int frameCount, long defaultFrameTimeMillis, Map<Integer, Long> frameTimeMillisByFrameIndex)
+    public SpriteAnimation(boolean vertical, int frameCount, Map<Integer, Long> frameTimeMillisByFrameIndex)
     {
         this.vertical = vertical;
         this.frameCount = frameCount;
-        this.defaultFrameTimeMillis = defaultFrameTimeMillis;
         this.frameTimeMillisByFrameIndex = frameTimeMillisByFrameIndex;
 
         this.isParsed = true;
@@ -56,11 +54,6 @@ public class SpriteAnimation
     public int getFrameCount()
     {
         return frameCount;
-    }
-
-    public long getDefaultFrameTimeMillis()
-    {
-        return defaultFrameTimeMillis;
     }
 
     public Map<Integer, Long> getFrameTimeMillisByFrameIndex()
