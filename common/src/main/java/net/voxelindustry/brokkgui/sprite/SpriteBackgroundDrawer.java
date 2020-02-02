@@ -8,12 +8,20 @@ public class SpriteBackgroundDrawer
 {
     public static void drawBackground(GuiShape shape, IGuiRenderer renderer)
     {
-        draw(shape, renderer, shape.getBackgroundTexture(), shape.getBackgroundRepeat(), shape.getBackgroundAnimation(), shape.getBackgroundPosition());
+        Texture texture = shape.getBackgroundTexture();
+        if (shape.getBackgroundAnimation() != null)
+            texture = shape.getBackgroundAnimation().getCurrentFrame(System.currentTimeMillis());
+
+        draw(shape, renderer, texture, shape.getBackgroundRepeat(), shape.getBackgroundAnimation(), shape.getBackgroundPosition());
     }
 
     public static void drawForeground(GuiShape shape, IGuiRenderer renderer)
     {
-        draw(shape, renderer, shape.getForegroundTexture(), shape.getForegroundRepeat(), shape.getForegroundAnimation(), shape.getForegroundPosition());
+        Texture texture = shape.getForegroundTexture();
+        if (shape.getForegroundAnimation() != null)
+            texture = shape.getForegroundAnimation().getCurrentFrame(System.currentTimeMillis());
+
+        draw(shape, renderer, texture, shape.getForegroundRepeat(), shape.getForegroundAnimation(), shape.getForegroundPosition());
     }
 
     private static void draw(GuiShape shape, IGuiRenderer renderer, Texture texture, SpriteRepeat repeat, SpriteAnimation animation, RectBox position)

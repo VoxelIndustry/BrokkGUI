@@ -1,5 +1,8 @@
 package net.voxelindustry.brokkgui.sprite;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
@@ -8,10 +11,15 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import net.voxelindustry.brokkgui.animation.Interpolator;
 import net.voxelindustry.brokkgui.animation.Interpolators;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -21,7 +29,39 @@ public class SpriteAnimationParser extends TypeAdapter<SpriteAnimation>
 {
     private static final Gson GSON = new GsonBuilder().registerTypeAdapter(SpriteAnimation.class, new SpriteAnimationParser()).create();
 
-    public static SpriteAnimation parse(String json)
+    private static final LoadingCache<String, SpriteAnimation> ANIMATION_CACHE = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .expireAfterAccess(10, TimeUnit.MINUTES)
+            .build(new CacheLoader<String, SpriteAnimation>()
+            {
+                @Override
+                public SpriteAnimation load(@Nonnull String resource) throws IOException
+                {
+                    return readAnimation(resource);
+                }
+            });
+
+    private static SpriteAnimation readAnimation(String resource) throws IOException
+    {
+        String json = IOUtils.toString(SpriteAnimationParser.class.getResourceAsStream(resource), StandardCharsets.UTF_8);
+        return parse(json);
+    }
+
+    public static SpriteAnimation getAnimation(String resource)
+    {
+        try
+        {
+            return ANIMATION_CACHE.get(resource);
+        } catch (Exception e)
+        {
+            System.err.println("Unable to load SpriteAnimation. resource=" + resource);
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    static SpriteAnimation parse(String json)
     {
         return GSON.fromJson(json, SpriteAnimation.class);
     }
@@ -114,9 +154,13 @@ public class SpriteAnimationParser extends TypeAdapter<SpriteAnimation>
                             return parsedFrameTimes.getOrDefault(index, nextValue - previousValue);
                         }));
 
+        Map<Integer, Long> summedFramesTimeByIndex = framesTimeByIndex.keySet().stream()
+                .map(index -> Pair.of(index, IntStream.rangeClosed(0, index).mapToLong(framesTimeByIndex::get).sum()))
+                .collect(toMap(Pair::getKey, Pair::getValue));
+
         return new SpriteAnimation(
                 isVertical,
                 frameCount,
-                framesTimeByIndex);
+                summedFramesTimeByIndex);
     }
 }

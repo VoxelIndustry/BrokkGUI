@@ -4,21 +4,12 @@ import java.util.Map;
 
 public class SpriteAnimation
 {
-    public static SpriteAnimation EMPTY = new SpriteAnimation(null);
-
     private boolean vertical;
 
-    private int frameCount;
+    private int  frameCount;
+    private long durationMillis;
 
     private Map<Integer, Long> frameTimeMillisByFrameIndex;
-
-    private String  resourcePath;
-    private boolean isParsed = false;
-
-    public SpriteAnimation(String resourcePath)
-    {
-        this.resourcePath = resourcePath;
-    }
 
     public SpriteAnimation(boolean vertical, int frameCount, Map<Integer, Long> frameTimeMillisByFrameIndex)
     {
@@ -26,24 +17,12 @@ public class SpriteAnimation
         this.frameCount = frameCount;
         this.frameTimeMillisByFrameIndex = frameTimeMillisByFrameIndex;
 
-        this.isParsed = true;
+        this.durationMillis = frameTimeMillisByFrameIndex.get(frameTimeMillisByFrameIndex.size() - 1);
     }
 
-    public void parse()
+    public SpriteAnimationInstance instantiate()
     {
-        if (this.isParsed)
-            return;
-        // TODO: Sprite animation parser
-    }
-
-    public String getResourcePath()
-    {
-        return resourcePath;
-    }
-
-    public boolean isParsed()
-    {
-        return isParsed;
+        return new SpriteAnimationInstance(vertical, frameCount, frameTimeMillisByFrameIndex);
     }
 
     public boolean isVertical()
@@ -54,6 +33,11 @@ public class SpriteAnimation
     public int getFrameCount()
     {
         return frameCount;
+    }
+
+    public long getDurationMillis()
+    {
+        return durationMillis;
     }
 
     public Map<Integer, Long> getFrameTimeMillisByFrameIndex()

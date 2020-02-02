@@ -9,11 +9,12 @@ import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.sprite.SpriteAnimation;
+import net.voxelindustry.brokkgui.sprite.SpriteAnimationInstance;
 import net.voxelindustry.brokkgui.sprite.SpriteBackgroundDrawer;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.HeldPropertyState;
+import net.voxelindustry.brokkgui.style.optional.BackgroundProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
 
@@ -21,24 +22,17 @@ public abstract class GuiShape extends GuiNode
 {
     private ShapeDefinition shape;
 
+    private SpriteAnimationInstance backgroundAnimation;
+    private SpriteAnimationInstance         foregroundAnimation;
+
     public GuiShape(String type, ShapeDefinition shape)
     {
         super(type);
 
         this.shape = shape;
 
-        this.getStyle().registerProperty("background-color", Color.ALPHA, Color.class);
-        this.getStyle().registerProperty("foreground-color", Color.ALPHA, Color.class);
-
-        this.getStyle().registerProperty("background-texture", Texture.EMPTY, Texture.class);
-        this.getStyle().registerProperty("background-repeat", SpriteRepeat.NONE, SpriteRepeat.class);
-        this.getStyle().registerProperty("background-animation", SpriteAnimation.EMPTY, SpriteAnimation.class);
-        this.getStyle().registerProperty("background-position", RectBox.EMPTY, RectBox.class);
-
-        this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
-        this.getStyle().registerProperty("foreground-repeat", SpriteRepeat.NONE, SpriteRepeat.class);
-        this.getStyle().registerProperty("foreground-animation", SpriteAnimation.EMPTY, SpriteAnimation.class);
-        this.getStyle().registerProperty("foreground-position", RectBox.EMPTY, RectBox.class);
+        this.getStyle().registerConditionalProperties("background*", BackgroundProperties.getBackgroundInstance());
+        this.getStyle().registerConditionalProperties("foreground*", BackgroundProperties.getForegroundInstance());
 
         this.getStyle().registerConditionalProperties("border*", BorderProperties.getInstance());
         this.getStyle().registerConditionalProperties("border-image*", BorderImageProperties.getInstance());
@@ -123,14 +117,14 @@ public abstract class GuiShape extends GuiNode
         this.getStyle().setPropertyDirect("background-repeat", spriteRepeat, SpriteRepeat.class);
     }
 
-    public SpriteAnimation getBackgroundAnimation()
+    public String getBackgroundAnimationResource()
     {
-        return this.getStyle().getStyleValue("background-animation", SpriteAnimation.class, SpriteAnimation.EMPTY);
+        return this.getStyle().getStyleValue("background-animation", String.class, "");
     }
 
-    public void setBackgroundAnimation(SpriteAnimation spriteAnimation)
+    public void setBackgroundAnimationResource(String spriteAnimationResource)
     {
-        this.getStyle().setPropertyDirect("background-animation", spriteAnimation, SpriteAnimation.class);
+        this.getStyle().setPropertyDirect("background-animation", spriteAnimationResource, String.class);
     }
 
     public RectBox getBackgroundPosition()
@@ -141,6 +135,16 @@ public abstract class GuiShape extends GuiNode
     public void setBackgroundPosition(RectBox position)
     {
         this.getStyle().setPropertyDirect("background-position", position, RectBox.class);
+    }
+
+    public SpriteAnimationInstance getBackgroundAnimation()
+    {
+        return backgroundAnimation;
+    }
+
+    public void setBackgroundAnimation(SpriteAnimationInstance backgroundAnimation)
+    {
+        this.backgroundAnimation = backgroundAnimation;
     }
 
     public Texture getForegroundTexture()
@@ -173,14 +177,14 @@ public abstract class GuiShape extends GuiNode
         this.getStyle().setPropertyDirect("foreground-repeat", spriteRepeat, SpriteRepeat.class);
     }
 
-    public SpriteAnimation getForegroundAnimation()
+    public String getForegroundAnimationResource()
     {
-        return this.getStyle().getStyleValue("foreground-animation", SpriteAnimation.class, SpriteAnimation.EMPTY);
+        return this.getStyle().getStyleValue("foreground-animation", String.class, "");
     }
 
-    public void setForegroundAnimation(SpriteAnimation spriteAnimation)
+    public void setForegroundAnimationResource(String spriteAnimationResource)
     {
-        this.getStyle().setPropertyDirect("foreground-animation", spriteAnimation, SpriteAnimation.class);
+        this.getStyle().setPropertyDirect("foreground-animation", spriteAnimationResource, String.class);
     }
 
     public RectBox getForegroundPosition()
@@ -191,6 +195,16 @@ public abstract class GuiShape extends GuiNode
     public void setForegroundPosition(RectBox position)
     {
         this.getStyle().setPropertyDirect("foreground-position", position, RectBox.class);
+    }
+
+    public SpriteAnimationInstance getForegroundAnimation()
+    {
+        return foregroundAnimation;
+    }
+
+    public void setForegroundAnimation(SpriteAnimationInstance foregroundAnimation)
+    {
+        this.foregroundAnimation = foregroundAnimation;
     }
 
     public boolean hasBorder()

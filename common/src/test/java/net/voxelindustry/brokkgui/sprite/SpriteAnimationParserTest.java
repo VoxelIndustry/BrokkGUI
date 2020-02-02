@@ -29,6 +29,6 @@ public class SpriteAnimationParserTest
 
         assertThat(spriteAnimation.getFrameTimeMillisByFrameIndex()).hasSize(9);
         assertThat(spriteAnimation.getFrameTimeMillisByFrameIndex()).containsEntry(0, 111L);
-        assertThat(spriteAnimation.getFrameTimeMillisByFrameIndex()).containsEntry(8, 1000L);
+        assertThat(spriteAnimation.getFrameTimeMillisByFrameIndex()).containsEntry(8, 1888L);
     }
 }
