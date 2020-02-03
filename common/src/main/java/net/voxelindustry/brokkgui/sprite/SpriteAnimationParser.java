@@ -9,14 +9,14 @@ import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.animation.Interpolator;
 import net.voxelindustry.brokkgui.animation.Interpolators;
-import org.apache.commons.io.IOUtils;
+import net.voxelindustry.brokkgui.data.Resource;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -29,32 +29,32 @@ public class SpriteAnimationParser extends TypeAdapter<SpriteAnimation>
 {
     private static final Gson GSON = new GsonBuilder().registerTypeAdapter(SpriteAnimation.class, new SpriteAnimationParser()).create();
 
-    private static final LoadingCache<String, SpriteAnimation> ANIMATION_CACHE = CacheBuilder.newBuilder()
+    private static final LoadingCache<Resource, SpriteAnimation> ANIMATION_CACHE = CacheBuilder.newBuilder()
             .maximumSize(100)
             .expireAfterAccess(10, TimeUnit.MINUTES)
-            .build(new CacheLoader<String, SpriteAnimation>()
+            .build(new CacheLoader<Resource, SpriteAnimation>()
             {
                 @Override
-                public SpriteAnimation load(@Nonnull String resource) throws IOException
+                public SpriteAnimation load(@Nonnull Resource resource) throws IOException
                 {
                     return readAnimation(resource);
                 }
             });
 
-    private static SpriteAnimation readAnimation(String resource) throws IOException
+    private static SpriteAnimation readAnimation(Resource resource) throws IOException
     {
-        String json = IOUtils.toString(SpriteAnimationParser.class.getResourceAsStream(resource), StandardCharsets.UTF_8);
+        String json = BrokkGuiPlatform.getInstance().getResourceHandler().readToString(resource);
         return parse(json);
     }
 
-    public static SpriteAnimation getAnimation(String resource)
+    public static SpriteAnimation getAnimation(Resource resource)
     {
         try
         {
             return ANIMATION_CACHE.get(resource);
         } catch (Exception e)
         {
-            System.err.println("Unable to load SpriteAnimation. resource=" + resource);
+            BrokkGuiPlatform.getInstance().getLogger().severe("Unable to load SpriteAnimation. resource=" + resource);
             e.printStackTrace();
         }
 

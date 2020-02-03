@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
 import java.text.NumberFormat;
@@ -27,10 +28,13 @@ public class TextureStyleTranslator implements IStyleDecoder<Texture>, IStyleEnc
     @Override
     public Texture decode(String style)
     {
-        if (!style.startsWith("url("))
-            return null;
+        if (!style.startsWith("url(") && !style.startsWith("assets("))
+            return Texture.EMPTY;
 
-        String[] split = style.replace("url(", "").replace(")", "").split(",");
+        if (style.startsWith("url("))
+            BrokkGuiPlatform.getInstance().getLogger().warning("Deprecated texture specification used. url(...) will be removed from BrokkGUI in version 1.0.0.");
+
+        String[] split = style.replace("url(", "").replace("assets(", "").replace(")", "").split(",");
 
         String resource = "";
         float uMin = 0;
@@ -79,7 +83,7 @@ public class TextureStyleTranslator implements IStyleDecoder<Texture>, IStyleEnc
     @Override
     public int validate(String style)
     {
-        if (!style.startsWith("url("))
+        if (!style.startsWith("url(") || !style.startsWith("assets("))
             return 0;
 
         return style.substring(0, style.indexOf(')') + 1).length();

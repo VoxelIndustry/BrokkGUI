@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
+import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.sprite.SpriteAnimation;
+import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
 public class StyleEngine
@@ -52,11 +52,11 @@ public class StyleEngine
                 backgroundRepeatTranslator,
                 backgroundRepeatTranslator);
 
-        SpriteAnimationStyleTranslator spriteAnimationTranslator = new SpriteAnimationStyleTranslator();
+        ResourceStyleTranslator resourceTranslator = new ResourceStyleTranslator();
 
-        StyleTranslator.getInstance().registerTranslator(SpriteAnimation.class,
-                spriteAnimationTranslator,
-                spriteAnimationTranslator,
-                spriteAnimationTranslator);
+        StyleTranslator.getInstance().registerTranslator(Resource.class,
+                resourceTranslator,
+                resourceTranslator,
+                resourceTranslator);
     }
 }

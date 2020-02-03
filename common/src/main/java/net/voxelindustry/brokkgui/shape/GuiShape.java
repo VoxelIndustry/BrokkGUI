@@ -23,7 +23,7 @@ public abstract class GuiShape extends GuiNode
     private ShapeDefinition shape;
 
     private SpriteAnimationInstance backgroundAnimation;
-    private SpriteAnimationInstance         foregroundAnimation;
+    private SpriteAnimationInstance foregroundAnimation;
 
     public GuiShape(String type, ShapeDefinition shape)
     {

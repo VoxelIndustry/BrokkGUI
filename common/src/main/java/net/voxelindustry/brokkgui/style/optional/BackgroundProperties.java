@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.style.optional;
 
 import net.voxelindustry.brokkgui.data.RectBox;
+import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.shape.GuiShape;
 import net.voxelindustry.brokkgui.sprite.SpriteAnimationInstance;
@@ -8,7 +9,6 @@ import net.voxelindustry.brokkgui.sprite.SpriteAnimationParser;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.StyleHolder;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Consumer;
 
@@ -48,14 +48,14 @@ public class BackgroundProperties implements Consumer<StyleHolder>
 
         holder.registerProperty(key + "-texture", Texture.EMPTY, Texture.class);
         holder.registerProperty(key + "-repeat", SpriteRepeat.NONE, SpriteRepeat.class);
-        holder.registerProperty(key + "-animation", "", String.class);
+        holder.registerProperty(key + "-animation", null, Resource.class);
         holder.registerProperty(key + "-position", RectBox.EMPTY, RectBox.class);
 
         if (isBackground)
         {
-            holder.getStyleProperty("background-animation", String.class).addListener((obs, oldValue, newValue) ->
+            holder.getStyleProperty("background-animation", Resource.class).addListener((obs, oldValue, newValue) ->
             {
-                if (!StringUtils.isBlank(newValue))
+                if (newValue != null)
                 {
                     SpriteAnimationInstance spriteAnimationInstance = SpriteAnimationParser.getAnimation(newValue).instantiate();
                     spriteAnimationInstance.computeTextures(((GuiShape) holder.getOwner()).getBackgroundTexture());
@@ -70,9 +70,9 @@ public class BackgroundProperties implements Consumer<StyleHolder>
         }
         else
         {
-            holder.getStyleProperty("foreground-animation", String.class).addListener((obs, oldValue, newValue) ->
+            holder.getStyleProperty("foreground-animation", Resource.class).addListener((obs, oldValue, newValue) ->
             {
-                if (!StringUtils.isBlank(newValue))
+                if (newValue != null)
                 {
                     SpriteAnimationInstance spriteAnimationInstance = SpriteAnimationParser.getAnimation(newValue).instantiate();
                     spriteAnimationInstance.computeTextures(((GuiShape) holder.getOwner()).getForegroundTexture());
