@@ -4,48 +4,40 @@ import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.IProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
-import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.data.Resource;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.shape.GuiShape;
 import net.voxelindustry.brokkgui.shape.ShapeSpriteRotationCache;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
-import net.voxelindustry.brokkgui.sprite.SpriteAnimationInstance;
-import net.voxelindustry.brokkgui.sprite.SpriteAnimationParser;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.SpriteRotation;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.StyleHolder;
-import net.voxelindustry.brokkgui.style.StyleProperty;
 import net.voxelindustry.brokkgui.style.event.StyleRefreshEvent;
 
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static java.util.Optional.ofNullable;
-
-public class BackgroundProperties implements Consumer<StyleHolder>
+public class SpriteRandomRotationProperties implements Consumer<StyleHolder>
 {
-    private static BackgroundProperties backgroundInstance;
-    private static BackgroundProperties foregroundInstance;
+    private static SpriteRandomRotationProperties backgroundInstance;
+    private static SpriteRandomRotationProperties foregroundInstance;
 
-    public static BackgroundProperties getBackgroundInstance()
+    public static SpriteRandomRotationProperties getBackgroundInstance()
     {
         if (backgroundInstance == null)
-            backgroundInstance = new BackgroundProperties(true);
+            backgroundInstance = new SpriteRandomRotationProperties(true);
         return backgroundInstance;
     }
 
-    public static BackgroundProperties getForegroundInstance()
+    public static SpriteRandomRotationProperties getForegroundInstance()
     {
         if (foregroundInstance == null)
-            foregroundInstance = new BackgroundProperties(false);
+            foregroundInstance = new SpriteRandomRotationProperties(false);
         return foregroundInstance;
     }
 
     private boolean isBackground;
 
-    private BackgroundProperties(boolean isBackground)
+    private SpriteRandomRotationProperties(boolean isBackground)
     {
         this.isBackground = isBackground;
     }
@@ -54,69 +46,13 @@ public class BackgroundProperties implements Consumer<StyleHolder>
     public void accept(StyleHolder holder)
     {
         String key = isBackground ? "background" : "foreground";
-        holder.registerProperty(key + "-color", Color.ALPHA, Color.class);
 
-        holder.registerProperty(key + "-texture", Texture.EMPTY, Texture.class);
-        holder.registerProperty(key + "-repeat", SpriteRepeat.NONE, SpriteRepeat.class);
-        holder.registerProperty(key + "-animation", null, Resource.class);
-        holder.registerProperty(key + "-position", RectBox.EMPTY, RectBox.class);
+        GuiShape shape = (GuiShape) holder.getOwner();
 
-        StyleProperty<RandomSpriteRotation> randomSpriteRotationProperty = holder.registerProperty(key + "-rotation", null, RandomSpriteRotation.class);
+        IProperty<RandomSpriteRotation> randomRotationProperty = holder.registerProperty(key + "-rotation", null, RandomSpriteRotation.class);
+        IProperty<Texture> textureProperty = holder.getStyleProperty(key + "-texture", Texture.class);
+        IProperty<SpriteRepeat> repeatProperty = holder.getStyleProperty(key + "-repeat", SpriteRepeat.class);
 
-        if (isBackground)
-        {
-            StyleProperty<Resource> animationProperty = holder.getStyleProperty("background-animation", Resource.class);
-
-            animationProperty.addListener((obs, oldValue, newValue) ->
-            {
-                if (newValue != null)
-                {
-                    SpriteAnimationInstance spriteAnimationInstance = SpriteAnimationParser.getAnimation(newValue).instantiate();
-                    spriteAnimationInstance.computeTextures(((GuiShape) holder.getOwner()).getBackgroundTexture());
-                    ((GuiShape) holder.getOwner()).setBackgroundAnimation(spriteAnimationInstance);
-                }
-            });
-
-            StyleProperty<Texture> textureProperty = holder.getStyleProperty("background-texture", Texture.class);
-
-            textureProperty.addListener((obs, oldValue, newValue) ->
-            {
-                ofNullable(((GuiShape) holder.getOwner()).getBackgroundAnimation()).ifPresent(sai -> sai.computeTextures(newValue));
-            });
-
-            StyleProperty<SpriteRepeat> spriteRepeatProperty = holder.getStyleProperty("background-repeat", SpriteRepeat.class);
-
-            setupRotationBinding((GuiShape) holder.getOwner(),
-                    holder,
-                    randomSpriteRotationProperty,
-                    textureProperty,
-                    spriteRepeatProperty);
-        }
-        else
-        {
-            holder.getStyleProperty("foreground-animation", Resource.class).addListener((obs, oldValue, newValue) ->
-            {
-                if (newValue != null)
-                {
-                    SpriteAnimationInstance spriteAnimationInstance = SpriteAnimationParser.getAnimation(newValue).instantiate();
-                    spriteAnimationInstance.computeTextures(((GuiShape) holder.getOwner()).getForegroundTexture());
-                    ((GuiShape) holder.getOwner()).setForegroundAnimation(spriteAnimationInstance);
-                }
-            });
-
-            holder.getStyleProperty("foreground-texture", Texture.class).addListener((obs, oldValue, newValue) ->
-            {
-                ofNullable(((GuiShape) holder.getOwner()).getForegroundAnimation()).ifPresent(sai -> sai.computeTextures(newValue));
-            });
-        }
-    }
-
-    private void setupRotationBinding(GuiShape shape,
-                                      StyleHolder holder,
-                                      IProperty<RandomSpriteRotation> randomRotationProperty,
-                                      IProperty<Texture> textureProperty,
-                                      IProperty<SpriteRepeat> repeatProperty)
-    {
         ShapeSpriteRotationCache cache = new ShapeSpriteRotationCache();
         BaseProperty<Boolean> styleRefreshProperty = new BaseProperty<>(Boolean.FALSE, "styleRefreshProperty");
 
@@ -189,6 +125,9 @@ public class BackgroundProperties implements Consumer<StyleHolder>
             rotations[index] = selected;
         }
 
-        shape.setBackgroundRotationArray(anythingSelected ? rotations : null);
+        if (this.isBackground)
+            shape.setBackgroundRotationArray(anythingSelected ? rotations : null);
+        else
+            shape.setForegroundRotationArray(anythingSelected ? rotations : null);
     }
 }

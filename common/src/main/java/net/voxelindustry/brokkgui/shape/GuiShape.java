@@ -15,9 +15,10 @@ import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.SpriteRotation;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.HeldPropertyState;
-import net.voxelindustry.brokkgui.style.optional.BackgroundProperties;
+import net.voxelindustry.brokkgui.style.optional.SpriteProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
+import net.voxelindustry.brokkgui.style.optional.SpriteRandomRotationProperties;
 
 public abstract class GuiShape extends GuiNode
 {
@@ -35,11 +36,15 @@ public abstract class GuiShape extends GuiNode
 
         this.shape = shape;
 
-        this.getStyle().registerConditionalProperties("background*", BackgroundProperties.getBackgroundInstance());
-        this.getStyle().registerConditionalProperties("foreground*", BackgroundProperties.getForegroundInstance());
+        this.getStyle().registerConditionalProperties("background*", SpriteProperties.getBackgroundInstance());
+        this.getStyle().registerConditionalProperties("foreground*", SpriteProperties.getForegroundInstance());
+
+        this.getStyle().registerConditionalProperties("background-rotation", SpriteRandomRotationProperties.getBackgroundInstance());
+        this.getStyle().registerConditionalProperties("foreground-rotation", SpriteRandomRotationProperties.getForegroundInstance());
 
         this.getStyle().registerConditionalProperties("border*", BorderProperties.getInstance());
         this.getStyle().registerConditionalProperties("border-image*", BorderImageProperties.getInstance());
+
     }
 
     @Override
