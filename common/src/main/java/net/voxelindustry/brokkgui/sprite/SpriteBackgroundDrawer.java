@@ -12,7 +12,7 @@ public class SpriteBackgroundDrawer
         if (shape.getBackgroundAnimation() != null)
             texture = shape.getBackgroundAnimation().getCurrentFrame(System.currentTimeMillis());
 
-        draw(shape, renderer, texture, shape.getBackgroundRepeat(), shape.getBackgroundAnimation(), shape.getBackgroundPosition());
+        draw(shape, renderer, texture, shape.getBackgroundRepeat(), shape.getBackgroundPosition(), shape.getBackgroundRotationArray());
     }
 
     public static void drawForeground(GuiShape shape, IGuiRenderer renderer)
@@ -21,52 +21,67 @@ public class SpriteBackgroundDrawer
         if (shape.getForegroundAnimation() != null)
             texture = shape.getForegroundAnimation().getCurrentFrame(System.currentTimeMillis());
 
-        draw(shape, renderer, texture, shape.getForegroundRepeat(), shape.getForegroundAnimation(), shape.getForegroundPosition());
+        draw(shape, renderer, texture, shape.getForegroundRepeat(), shape.getForegroundPosition(), shape.getForegroundRotationArray());
     }
 
-    private static void draw(GuiShape shape, IGuiRenderer renderer, Texture texture, SpriteRepeat repeat, SpriteAnimation animation, RectBox position)
+    private static void draw(GuiShape shape, IGuiRenderer renderer, Texture texture, SpriteRepeat repeat, RectBox position, SpriteRotation... rotations)
     {
         renderer.getHelper().bindTexture(texture);
 
         if (repeat == SpriteRepeat.NONE)
         {
-            drawSimple(shape, renderer, texture, position);
+            drawSimple(shape, renderer, texture, position, rotations == null ? SpriteRotation.NONE : rotations[0]);
         }
         else if (repeat == SpriteRepeat.REPEAT_X)
         {
-            drawRepeatX(shape, renderer, texture, position);
+            drawRepeatX(shape, renderer, texture, position, rotations);
         }
         else if (repeat == SpriteRepeat.REPEAT_Y)
         {
-            drawRepeatY(shape, renderer, texture, position);
+            drawRepeatY(shape, renderer, texture, position, rotations);
         }
         else
         {
-            drawRepeatBoth(shape, renderer, texture, position);
+            drawRepeatBoth(shape, renderer, texture, position, rotations);
         }
     }
 
-    private static void drawSimple(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position)
+    private static void drawSimple(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation rotation)
     {
         if (position == RectBox.EMPTY)
         {
-            renderer.getHelper().drawTexturedRect(renderer, shape.getLeftPos(), shape.getTopPos(), texture.getUMin(), texture.getVMin(),
-                    texture.getUMax(), texture.getVMax(), shape.getWidth(), shape.getHeight(), shape.getzLevel());
+            if (rotation != SpriteRotation.NONE)
+                renderer.getHelper().drawTexturedRect(renderer, shape.getLeftPos(), shape.getTopPos(), texture.getUMin(), texture.getVMin(),
+                        texture.getUMax(), texture.getVMax(), shape.getWidth(), shape.getHeight(), shape.getzLevel(), rotation);
+            else
+                renderer.getHelper().drawTexturedRect(renderer, shape.getLeftPos(), shape.getTopPos(), texture.getUMin(), texture.getVMin(),
+                        texture.getUMax(), texture.getVMax(), shape.getWidth(), shape.getHeight(), shape.getzLevel());
         }
         else
         {
-            renderer.getHelper().drawTexturedRect(renderer,
-                    shape.getLeftPos() + position.getLeft(),
-                    shape.getTopPos() + position.getTop(),
-                    texture.getUMin(), texture.getVMin(),
-                    texture.getUMax(), texture.getVMax(),
-                    shape.getWidth() - position.getHorizontal(),
-                    shape.getHeight() - position.getVertical(),
-                    shape.getzLevel());
+            if (rotation != SpriteRotation.NONE)
+                renderer.getHelper().drawTexturedRect(renderer,
+                        shape.getLeftPos() + position.getLeft(),
+                        shape.getTopPos() + position.getTop(),
+                        texture.getUMin(), texture.getVMin(),
+                        texture.getUMax(), texture.getVMax(),
+                        shape.getWidth() - position.getHorizontal(),
+                        shape.getHeight() - position.getVertical(),
+                        shape.getzLevel(),
+                        rotation);
+            else
+                renderer.getHelper().drawTexturedRect(renderer,
+                        shape.getLeftPos() + position.getLeft(),
+                        shape.getTopPos() + position.getTop(),
+                        texture.getUMin(), texture.getVMin(),
+                        texture.getUMax(), texture.getVMax(),
+                        shape.getWidth() - position.getHorizontal(),
+                        shape.getHeight() - position.getVertical(),
+                        shape.getzLevel());
         }
     }
 
-    private static void drawRepeatX(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position)
+    private static void drawRepeatX(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation... rotations)
     {
         int repeatCount = (int) ((shape.getWidth() - position.getHorizontal()) / texture.getPixelWidth());
         float leftOver = (shape.getWidth() - position.getHorizontal()) % texture.getPixelWidth();
@@ -80,7 +95,8 @@ public class SpriteBackgroundDrawer
                     texture.getUMax(), texture.getVMax(),
                     texture.getPixelWidth(),
                     shape.getHeight() - position.getVertical(),
-                    shape.getzLevel());
+                    shape.getzLevel(),
+                    rotations == null ? SpriteRotation.NONE : rotations[index]);
         }
 
         if (leftOver != 0)
@@ -92,11 +108,12 @@ public class SpriteBackgroundDrawer
                     texture.getUMax(), texture.getVMax(),
                     leftOver,
                     shape.getHeight() - position.getVertical(),
-                    shape.getzLevel());
+                    shape.getzLevel(),
+                    rotations == null ? SpriteRotation.NONE : rotations[repeatCount]);
         }
     }
 
-    private static void drawRepeatY(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position)
+    private static void drawRepeatY(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation... rotations)
     {
         int repeatCount = (int) ((shape.getHeight() - position.getVertical()) / texture.getPixelHeight());
         float leftOver = (shape.getHeight() - position.getVertical()) % texture.getPixelHeight();
@@ -110,7 +127,8 @@ public class SpriteBackgroundDrawer
                     texture.getUMax(), texture.getVMax(),
                     shape.getWidth() - position.getHorizontal(),
                     texture.getPixelHeight(),
-                    shape.getzLevel());
+                    shape.getzLevel(),
+                    rotations == null ? SpriteRotation.NONE : rotations[index]);
         }
 
         if (leftOver != 0)
@@ -122,11 +140,12 @@ public class SpriteBackgroundDrawer
                     texture.getUMax(), texture.getVMax(),
                     shape.getWidth() - position.getHorizontal(),
                     leftOver,
-                    shape.getzLevel());
+                    shape.getzLevel(),
+                    rotations == null ? SpriteRotation.NONE : rotations[repeatCount]);
         }
     }
 
-    private static void drawRepeatBoth(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position)
+    private static void drawRepeatBoth(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation... rotations)
     {
         int repeatCountX = (int) ((shape.getWidth() - position.getHorizontal()) / texture.getPixelWidth());
         float leftOverX = (shape.getWidth() - position.getHorizontal()) % texture.getPixelWidth();
@@ -144,7 +163,8 @@ public class SpriteBackgroundDrawer
                         texture.getUMax(), texture.getVMax(),
                         texture.getPixelWidth(),
                         texture.getPixelHeight(),
-                        shape.getzLevel());
+                        shape.getzLevel(),
+                        rotations == null ? SpriteRotation.NONE : rotations[yIndex * repeatCountX + xIndex]);
             }
         }
 
@@ -159,7 +179,8 @@ public class SpriteBackgroundDrawer
                         texture.getUMax(), texture.getVMax(),
                         leftOverX,
                         texture.getPixelHeight(),
-                        shape.getzLevel());
+                        shape.getzLevel(),
+                        rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + yIndex]);
             }
         }
         if (leftOverY != 0)
@@ -173,7 +194,8 @@ public class SpriteBackgroundDrawer
                         texture.getUMax(), texture.getVMax(),
                         texture.getPixelWidth(),
                         leftOverY,
-                        shape.getzLevel());
+                        shape.getzLevel(),
+                        rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + repeatCountY + xIndex]);
             }
         }
         if (leftOverX != 0 && leftOverY != 0)
@@ -185,7 +207,8 @@ public class SpriteBackgroundDrawer
                     texture.getUMax(), texture.getVMax(),
                     leftOverX,
                     leftOverY,
-                    shape.getzLevel());
+                    shape.getzLevel(),
+                    rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + repeatCountX + repeatCountY]);
         }
     }
 }

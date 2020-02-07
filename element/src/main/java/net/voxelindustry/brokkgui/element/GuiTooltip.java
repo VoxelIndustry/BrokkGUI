@@ -12,11 +12,14 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.StyleHolder;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
+import net.voxelindustry.hermod.EventDispatcher;
 
 import java.util.function.Supplier;
 
 public class GuiTooltip implements IGuiTooltip, ICascadeStyleable
 {
+    private EventDispatcher eventDispatcher;
+
     private BaseProperty<GuiNode>        contentProperty;
     private GuiElement                   owner;
     private ValueChangeListener<Boolean> ownerHoverListener;
@@ -177,5 +180,18 @@ public class GuiTooltip implements IGuiTooltip, ICascadeStyleable
     public void refreshStyle()
     {
         this.getContent().refreshStyle();
+    }
+
+    @Override
+    public EventDispatcher getEventDispatcher()
+    {
+        if (this.eventDispatcher == null)
+            this.initEventDispatcher();
+        return this.eventDispatcher;
+    }
+
+    private void initEventDispatcher()
+    {
+        this.eventDispatcher = new EventDispatcher();
     }
 }

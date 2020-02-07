@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.internal.IMouseUtil;
 import net.voxelindustry.brokkgui.internal.IResourceHandler;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -35,9 +36,13 @@ public class BrokkGuiPlatform
 
     private boolean enableRenderDebug;
 
+    private final Random random;
+
     private BrokkGuiPlatform()
     {
         StyleEngine.getInstance().start();
+
+        this.random = new Random();
     }
 
     public Logger getLogger()
@@ -118,5 +123,10 @@ public class BrokkGuiPlatform
     public void setTickSender(ITickSender sender)
     {
         this.tickSender = sender;
+    }
+
+    public Random getRandom()
+    {
+        return this.random;
     }
 }

@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.internal;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.Vector2i;
 import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.sprite.SpriteRotation;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
 /**
@@ -21,6 +22,9 @@ public interface IGuiHelper
     void drawString(String string, float x, float y, float zLevel, Color textColor, Color shadowColor);
 
     void drawString(String string, float x, float y, float zLevel, Color textColor);
+
+    void drawTexturedRect(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
+                          float vMax, float width, float height, float zLevel, SpriteRotation rotation);
 
     void drawTexturedRect(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
                           float vMax, float width, float height, float zLevel);

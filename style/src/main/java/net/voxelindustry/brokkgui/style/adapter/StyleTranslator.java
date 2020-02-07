@@ -37,6 +37,11 @@ public class StyleTranslator
         this.styleValidators.put(valueClass, validator);
     }
 
+    public <T, V extends IStyleDecoder<T> & IStyleEncoder<T> & IStyleValidator<T>> void registerTranslator(Class<T> valueClass, V translator)
+    {
+        this.registerTranslator(valueClass, translator, translator, translator);
+    }
+
     @SuppressWarnings("unchecked")
     public <T> T decode(String cssString, Class<?> valueClass)
     {

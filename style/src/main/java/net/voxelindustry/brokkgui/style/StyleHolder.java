@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.style;
 
 import com.google.common.collect.ImmutableMap;
 import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.style.event.StyleRefreshEvent;
 import net.voxelindustry.brokkgui.style.shorthand.GenericShorthandProperty;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMapper;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
@@ -223,6 +224,8 @@ public class StyleHolder
         StyleList tree = this.styleSupplier.get();
         if (tree == null)
             return;
+
+        getOwner().getEventDispatcher().dispatchEvent(StyleRefreshEvent.BEFORE, new StyleRefreshEvent.BeforeEvent(getOwner()));
         List<StyleEntry> entries = tree.getEntries(this);
 
         this.resetToDefault();
@@ -232,6 +235,8 @@ public class StyleHolder
                 this.setProperty(rule.getRuleIdentifier(), rule.getRuleValue(), StyleSource.AUTHOR,
                         entry.getSelector().getSpecificity());
         }));
+
+        getOwner().getEventDispatcher().dispatchEvent(StyleRefreshEvent.AFTER, new StyleRefreshEvent.AfterEvent(getOwner()));
     }
 
     /**

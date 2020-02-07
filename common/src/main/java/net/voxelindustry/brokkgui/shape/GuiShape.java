@@ -12,6 +12,7 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.sprite.SpriteAnimationInstance;
 import net.voxelindustry.brokkgui.sprite.SpriteBackgroundDrawer;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
+import net.voxelindustry.brokkgui.sprite.SpriteRotation;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.HeldPropertyState;
 import net.voxelindustry.brokkgui.style.optional.BackgroundProperties;
@@ -24,6 +25,9 @@ public abstract class GuiShape extends GuiNode
 
     private SpriteAnimationInstance backgroundAnimation;
     private SpriteAnimationInstance foregroundAnimation;
+
+    private SpriteRotation[] backgroundRotationArray;
+    private SpriteRotation[] foregroundRotationArray;
 
     public GuiShape(String type, ShapeDefinition shape)
     {
@@ -147,6 +151,29 @@ public abstract class GuiShape extends GuiNode
         this.backgroundAnimation = backgroundAnimation;
     }
 
+    public SpriteRotation[] getBackgroundRotationArray()
+    {
+        return backgroundRotationArray;
+    }
+
+    public void setBackgroundRotationArray(SpriteRotation[] backgroundRotationArray)
+    {
+        this.backgroundRotationArray = backgroundRotationArray;
+    }
+
+    public SpriteRotation getBackgroundRotation()
+    {
+        return this.backgroundRotationArray == null ? SpriteRotation.NONE : this.backgroundRotationArray[0];
+    }
+
+    public void setBackgroundRotation(SpriteRotation rotation)
+    {
+        if (this.backgroundRotationArray == null)
+            this.backgroundRotationArray = new SpriteRotation[]{rotation};
+        else
+            this.backgroundRotationArray[0] = rotation;
+    }
+
     public Texture getForegroundTexture()
     {
         return this.getStyle().getStyleValue("foreground-texture", Texture.class, Texture.EMPTY);
@@ -205,6 +232,29 @@ public abstract class GuiShape extends GuiNode
     public void setForegroundAnimation(SpriteAnimationInstance foregroundAnimation)
     {
         this.foregroundAnimation = foregroundAnimation;
+    }
+
+    public SpriteRotation[] getForegroundRotationArray()
+    {
+        return foregroundRotationArray;
+    }
+
+    public void setForegroundRotationArray(SpriteRotation[] foregroundRotationArray)
+    {
+        this.foregroundRotationArray = foregroundRotationArray;
+    }
+
+    public SpriteRotation getForegroundRotation()
+    {
+        return this.foregroundRotationArray == null ? SpriteRotation.NONE : this.foregroundRotationArray[0];
+    }
+
+    public void setForegroundRotation(SpriteRotation rotation)
+    {
+        if (this.foregroundRotationArray == null)
+            this.foregroundRotationArray = new SpriteRotation[]{rotation};
+        else
+            this.foregroundRotationArray[0] = rotation;
     }
 
     public boolean hasBorder()

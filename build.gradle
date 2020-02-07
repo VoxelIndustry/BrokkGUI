@@ -125,6 +125,7 @@ project(":style") {
 
     dependencies {
         api "fr.ourten:teabeans:${project.teabeans_version}"
+        api "net.voxelindustry:hermod:${project.hermod_version}"
 
         implementation "org.apache.commons:commons-lang3:3.4"
         implementation "com.google.code.findbugs:jsr305:3.0.1"
