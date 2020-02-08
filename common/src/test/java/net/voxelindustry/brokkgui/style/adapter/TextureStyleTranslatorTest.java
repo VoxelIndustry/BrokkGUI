@@ -1,10 +1,13 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,6 +20,8 @@ public class TextureStyleTranslatorTest
     public void init()
     {
         this.adapter = new TextureStyleTranslator();
+
+        BrokkGuiPlatform.getInstance().setLogger(Logger.getLogger("TextureStyleTranslator"));
     }
 
     @Test
@@ -68,9 +73,9 @@ public class TextureStyleTranslatorTest
     }
 
     @Test
-    public void decode_givenInvalidUrl_thenShouldReturnNull()
+    public void decode_givenInvalidUrl_thenShouldReturnNullResource()
     {
-        assertThat(adapter.decode("file(brokkgui:textures/gui/container_background.png"))
+        assertThat(adapter.decode("file(brokkgui:textures/gui/container_background.png").getResource())
                 .isNull();
     }
 }
