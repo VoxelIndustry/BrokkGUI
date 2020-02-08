@@ -4,7 +4,11 @@ import net.voxelindustry.brokkgui.animation.ITickSender;
 import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 import net.voxelindustry.brokkgui.internal.IMouseUtil;
+import net.voxelindustry.brokkgui.internal.IResourceHandler;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
+
+import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * @author Ourten 5 oct. 2016
@@ -20,17 +24,35 @@ public class BrokkGuiPlatform
         return BrokkGuiPlatform.INSTANCE;
     }
 
-    private IGuiHelper    guiHelper;
-    private IKeyboardUtil keyboardUtil;
-    private IMouseUtil    mouseUtil;
-    private ITickSender   tickSender;
-    private String        platformName;
+    private IGuiHelper       guiHelper;
+    private IKeyboardUtil    keyboardUtil;
+    private IMouseUtil       mouseUtil;
+    private IResourceHandler resourceHandler;
+    private ITickSender      tickSender;
+
+    private Logger logger;
+
+    private String platformName;
 
     private boolean enableRenderDebug;
+
+    private final Random random;
 
     private BrokkGuiPlatform()
     {
         StyleEngine.getInstance().start();
+
+        this.random = new Random();
+    }
+
+    public Logger getLogger()
+    {
+        return this.logger;
+    }
+
+    public void setLogger(Logger logger)
+    {
+        this.logger = logger;
     }
 
     public IKeyboardUtil getKeyboardUtil()
@@ -51,6 +73,16 @@ public class BrokkGuiPlatform
     public void setMouseUtil(final IMouseUtil mouseUtil)
     {
         this.mouseUtil = mouseUtil;
+    }
+
+    public IResourceHandler getResourceHandler()
+    {
+        return this.resourceHandler;
+    }
+
+    public void setResourceHandler(IResourceHandler resourceHandler)
+    {
+        this.resourceHandler = resourceHandler;
     }
 
     public String getPlatformName()
@@ -91,5 +123,10 @@ public class BrokkGuiPlatform
     public void setTickSender(ITickSender sender)
     {
         this.tickSender = sender;
+    }
+
+    public Random getRandom()
+    {
+        return this.random;
     }
 }

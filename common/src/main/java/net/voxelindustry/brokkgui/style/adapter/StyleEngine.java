@@ -1,8 +1,11 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.data.RectBox;
+import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
+import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
+import net.voxelindustry.brokkgui.sprite.Texture;
 
 public class StyleEngine
 {
@@ -22,19 +25,15 @@ public class StyleEngine
 
     public void start()
     {
-        ColorStyleTranslator colorTranslator = new ColorStyleTranslator();
+        StyleTranslator.getInstance().registerTranslator(Color.class, new ColorStyleTranslator());
+        StyleTranslator.getInstance().registerTranslator(Texture.class, new TextureStyleTranslator());
 
-        StyleTranslator.getInstance().registerTranslator(Color.class, colorTranslator, colorTranslator,
-                colorTranslator);
+        StyleTranslator.getInstance().registerTranslator(RectBox.class, new RectBoxTranslator());
 
-        TextureStyleTranslator textureTranslator = new TextureStyleTranslator();
+        StyleTranslator.getInstance().registerTranslator(SpriteRepeat.class, new BackgroundRepeatStyleTranslator());
 
-        StyleTranslator.getInstance().registerTranslator(Texture.class, textureTranslator, textureTranslator,
-                textureTranslator);
+        StyleTranslator.getInstance().registerTranslator(Resource.class, new ResourceStyleTranslator());
 
-        RectBoxTranslator rectBoxTranslator = new RectBoxTranslator();
-
-        StyleTranslator.getInstance().registerTranslator(RectBox.class, rectBoxTranslator, rectBoxTranslator,
-                rectBoxTranslator);
+        StyleTranslator.getInstance().registerTranslator(RandomSpriteRotation.class, new RandomSpriteRotationStyleTranslator());
     }
 }

@@ -9,31 +9,42 @@ import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.sprite.SpriteAnimationInstance;
+import net.voxelindustry.brokkgui.sprite.SpriteBackgroundDrawer;
+import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
+import net.voxelindustry.brokkgui.sprite.SpriteRotation;
+import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.HeldPropertyState;
+import net.voxelindustry.brokkgui.style.optional.SpriteProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
+import net.voxelindustry.brokkgui.style.optional.SpriteRandomRotationProperties;
 
 public abstract class GuiShape extends GuiNode
 {
     private ShapeDefinition shape;
+
+    private SpriteAnimationInstance backgroundAnimation;
+    private SpriteAnimationInstance foregroundAnimation;
+
+    private SpriteRotation[] backgroundRotationArray;
+    private SpriteRotation[] foregroundRotationArray;
 
     public GuiShape(String type, ShapeDefinition shape)
     {
         super(type);
 
         this.shape = shape;
-        
-        this.getStyle().registerProperty("background-color", Color.ALPHA, Color.class);
-        this.getStyle().registerProperty("foreground-color", Color.ALPHA, Color.class);
 
-        this.getStyle().registerProperty("background-texture", Texture.EMPTY, Texture.class);
-        this.getStyle().registerProperty("foreground-texture", Texture.EMPTY, Texture.class);
+        this.getStyle().registerConditionalProperties("background*", SpriteProperties.getBackgroundInstance());
+        this.getStyle().registerConditionalProperties("foreground*", SpriteProperties.getForegroundInstance());
 
-        this.getStyle().registerProperty("background-position", RectBox.EMPTY, RectBox.class);
+        this.getStyle().registerConditionalProperties("background-rotation", SpriteRandomRotationProperties.getBackgroundInstance());
+        this.getStyle().registerConditionalProperties("foreground-rotation", SpriteRandomRotationProperties.getForegroundInstance());
 
         this.getStyle().registerConditionalProperties("border*", BorderProperties.getInstance());
         this.getStyle().registerConditionalProperties("border-image*", BorderImageProperties.getInstance());
+
     }
 
     @Override
@@ -43,12 +54,7 @@ public abstract class GuiShape extends GuiNode
         {
             if (this.getBackgroundTexture() != Texture.EMPTY)
             {
-                Texture background = this.getBackgroundTexture();
-
-                renderer.getHelper().bindTexture(background);
-                this.shape.drawTextured(this, renderer,
-                        getxPos() + getxTranslate(), getyPos() + getyTranslate(),
-                        background, getzLevel());
+                SpriteBackgroundDrawer.drawBackground(this, renderer);
             }
             if (this.getBackgroundColor().getAlpha() != 0)
             {
@@ -71,12 +77,7 @@ public abstract class GuiShape extends GuiNode
         {
             if (this.getForegroundTexture() != Texture.EMPTY)
             {
-                Texture foreground = this.getForegroundTexture();
-
-                renderer.getHelper().bindTexture(foreground);
-                this.shape.drawTextured(this, renderer,
-                        getxPos() + getxTranslate(), getyPos() + getyTranslate(),
-                        foreground, getzLevel());
+                SpriteBackgroundDrawer.drawForeground(this, renderer);
             }
             if (this.getForegroundColor().getAlpha() != 0)
             {
@@ -115,6 +116,69 @@ public abstract class GuiShape extends GuiNode
         this.getStyle().setPropertyDirect("background-color", color, Color.class);
     }
 
+    public SpriteRepeat getBackgroundRepeat()
+    {
+        return this.getStyle().getStyleValue("background-repeat", SpriteRepeat.class, SpriteRepeat.NONE);
+    }
+
+    public void setBackgroundRepeat(SpriteRepeat spriteRepeat)
+    {
+        this.getStyle().setPropertyDirect("background-repeat", spriteRepeat, SpriteRepeat.class);
+    }
+
+    public String getBackgroundAnimationResource()
+    {
+        return this.getStyle().getStyleValue("background-animation", String.class, "");
+    }
+
+    public void setBackgroundAnimationResource(String spriteAnimationResource)
+    {
+        this.getStyle().setPropertyDirect("background-animation", spriteAnimationResource, String.class);
+    }
+
+    public RectBox getBackgroundPosition()
+    {
+        return this.getStyle().getStyleValue("background-position", RectBox.class, RectBox.EMPTY);
+    }
+
+    public void setBackgroundPosition(RectBox position)
+    {
+        this.getStyle().setPropertyDirect("background-position", position, RectBox.class);
+    }
+
+    public SpriteAnimationInstance getBackgroundAnimation()
+    {
+        return backgroundAnimation;
+    }
+
+    public void setBackgroundAnimation(SpriteAnimationInstance backgroundAnimation)
+    {
+        this.backgroundAnimation = backgroundAnimation;
+    }
+
+    public SpriteRotation[] getBackgroundRotationArray()
+    {
+        return backgroundRotationArray;
+    }
+
+    public void setBackgroundRotationArray(SpriteRotation[] backgroundRotationArray)
+    {
+        this.backgroundRotationArray = backgroundRotationArray;
+    }
+
+    public SpriteRotation getBackgroundRotation()
+    {
+        return this.backgroundRotationArray == null ? SpriteRotation.NONE : this.backgroundRotationArray[0];
+    }
+
+    public void setBackgroundRotation(SpriteRotation rotation)
+    {
+        if (this.backgroundRotationArray == null)
+            this.backgroundRotationArray = new SpriteRotation[]{rotation};
+        else
+            this.backgroundRotationArray[0] = rotation;
+    }
+
     public Texture getForegroundTexture()
     {
         return this.getStyle().getStyleValue("foreground-texture", Texture.class, Texture.EMPTY);
@@ -133,6 +197,69 @@ public abstract class GuiShape extends GuiNode
     public void setForegroundColor(Color color)
     {
         this.getStyle().setPropertyDirect("foreground-color", color, Color.class);
+    }
+
+    public SpriteRepeat getForegroundRepeat()
+    {
+        return this.getStyle().getStyleValue("foreground-repeat", SpriteRepeat.class, SpriteRepeat.NONE);
+    }
+
+    public void setForegroundRepeat(SpriteRepeat spriteRepeat)
+    {
+        this.getStyle().setPropertyDirect("foreground-repeat", spriteRepeat, SpriteRepeat.class);
+    }
+
+    public String getForegroundAnimationResource()
+    {
+        return this.getStyle().getStyleValue("foreground-animation", String.class, "");
+    }
+
+    public void setForegroundAnimationResource(String spriteAnimationResource)
+    {
+        this.getStyle().setPropertyDirect("foreground-animation", spriteAnimationResource, String.class);
+    }
+
+    public RectBox getForegroundPosition()
+    {
+        return this.getStyle().getStyleValue("foreground-position", RectBox.class, RectBox.EMPTY);
+    }
+
+    public void setForegroundPosition(RectBox position)
+    {
+        this.getStyle().setPropertyDirect("foreground-position", position, RectBox.class);
+    }
+
+    public SpriteAnimationInstance getForegroundAnimation()
+    {
+        return foregroundAnimation;
+    }
+
+    public void setForegroundAnimation(SpriteAnimationInstance foregroundAnimation)
+    {
+        this.foregroundAnimation = foregroundAnimation;
+    }
+
+    public SpriteRotation[] getForegroundRotationArray()
+    {
+        return foregroundRotationArray;
+    }
+
+    public void setForegroundRotationArray(SpriteRotation[] foregroundRotationArray)
+    {
+        this.foregroundRotationArray = foregroundRotationArray;
+    }
+
+    public SpriteRotation getForegroundRotation()
+    {
+        return this.foregroundRotationArray == null ? SpriteRotation.NONE : this.foregroundRotationArray[0];
+    }
+
+    public void setForegroundRotation(SpriteRotation rotation)
+    {
+        if (this.foregroundRotationArray == null)
+            this.foregroundRotationArray = new SpriteRotation[]{rotation};
+        else
+            this.foregroundRotationArray[0] = rotation;
     }
 
     public boolean hasBorder()

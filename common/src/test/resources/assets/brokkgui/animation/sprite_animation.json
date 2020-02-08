@@ -1,0 +1,12 @@
+{
+  "frameCount": 9,
+  "orientation": "vertical",
+  "duration": 1000,
+  "interpolator": "linear",
+  "frames": [
+    {
+      "index": 8,
+      "time": 1000
+    }
+  ]
+}

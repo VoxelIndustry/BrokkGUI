@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.shape;
 
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.paint.Texture;
+import net.voxelindustry.brokkgui.sprite.Texture;
 
 public class CircleShape implements ShapeDefinition
 {
