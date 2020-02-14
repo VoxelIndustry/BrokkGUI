@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.event;
 
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.IEventEmitter;
@@ -27,6 +28,16 @@ public class KeyEvent extends GuiInputEvent
     public int getKey()
     {
         return this.key;
+    }
+
+    public boolean isCtrlDown()
+    {
+        return BrokkGuiPlatform.getInstance().getKeyboardUtil().isCtrlKeyDown();
+    }
+
+    public boolean isShiftDown()
+    {
+        return BrokkGuiPlatform.getInstance().getKeyboardUtil().isShiftKeyDown();
     }
 
     @Override
