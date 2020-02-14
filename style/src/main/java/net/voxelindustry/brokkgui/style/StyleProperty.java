@@ -22,13 +22,19 @@ public class StyleProperty<T> extends BaseProperty<T>
 
     public boolean setStyleRaw(StyleSource source, int specificity, String rawValue)
     {
-        return this.setStyle(source, specificity, StyleTranslator.getInstance().decode(rawValue, this.getValueClass()));
+        if (source.ordinal() > this.source.ordinal() ||
+                (source.ordinal() == this.source.ordinal() && specificity >= this.specificitySet))
+        {
+            this.internalSetStyle(source, specificity, StyleTranslator.getInstance().decode(rawValue, this.getValueClass()));
+            return true;
+        }
+        return false;
     }
 
     public boolean setStyle(StyleSource source, int specificity, T value)
     {
-        if (source.ordinal() > this.source.ordinal() || (source.ordinal() == this.source.ordinal() &&
-                specificity >= this.specificitySet))
+        if (source.ordinal() > this.source.ordinal() ||
+                (source.ordinal() == this.source.ordinal() && specificity >= this.specificitySet))
         {
             internalSetStyle(source, specificity, value);
             return true;

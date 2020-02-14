@@ -30,7 +30,6 @@ public class ShorthandProperty<T> extends StyleProperty<T>
         childProperties.remove(childProperty);
     }
 
-
     @Override
     public boolean setStyle(StyleSource source, int specificity, T value)
     {

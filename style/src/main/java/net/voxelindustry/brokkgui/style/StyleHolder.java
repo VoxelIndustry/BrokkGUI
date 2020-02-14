@@ -79,8 +79,10 @@ public class StyleHolder
 
     private void setProperty(String propertyName, String value, StyleSource source, int specificity)
     {
-        if (this.properties.containsKey(propertyName))
-            this.properties.get(propertyName).setStyleRaw(source, specificity, value);
+        StyleProperty<?> property = this.properties.get(propertyName);
+
+        if (property != null)
+            property.setStyleRaw(source, specificity, value);
     }
 
     public <T> void setPropertyDirect(String propertyName, T value, Class<T> valueClass)
@@ -232,7 +234,9 @@ public class StyleHolder
         entries.forEach(entry -> entry.getRules().forEach(rule ->
         {
             if (this.hasProperty(rule.getRuleIdentifier()))
-                this.setProperty(rule.getRuleIdentifier(), rule.getRuleValue(), StyleSource.AUTHOR,
+                this.setProperty(rule.getRuleIdentifier(),
+                        rule.getRuleValue(),
+                        StyleSource.AUTHOR,
                         entry.getSelector().getSpecificity());
         }));
 
