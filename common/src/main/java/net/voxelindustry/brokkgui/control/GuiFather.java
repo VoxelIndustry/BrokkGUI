@@ -181,7 +181,7 @@ public class GuiFather extends GuiShape implements IStyleParent
 
         super.handleClickDrag(mouseX, mouseY, key, originalMouseX, originalMouseY);
 
-        this.getChildrens().stream().filter(child -> child.isPointInside(originalMouseX, originalMouseY))
+        this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
                 .forEach(child -> child.handleClickDrag(mouseX, mouseY, key, originalMouseX, originalMouseY));
     }
 
@@ -193,7 +193,7 @@ public class GuiFather extends GuiShape implements IStyleParent
 
         super.handleClickStop(mouseX, mouseY, key, originalMouseX, originalMouseY);
 
-        this.getChildrens().stream().filter(child -> child.isPointInside(originalMouseX, originalMouseY))
+        this.getChildrens().stream().filter(child -> child.isPointInside(mouseX, mouseY))
                 .forEach(child -> child.handleClickStop(mouseX, mouseY, key, originalMouseX, originalMouseY));
     }
 
