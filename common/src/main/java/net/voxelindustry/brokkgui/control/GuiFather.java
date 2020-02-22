@@ -19,6 +19,7 @@ import net.voxelindustry.brokkgui.style.tree.StyleList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -121,6 +122,28 @@ public class GuiFather extends GuiShape implements IStyleParent
     public boolean hasChild(final GuiNode node)
     {
         return this.getChildrensProperty().contains(node);
+    }
+
+    public List<GuiNode> getNodesAtPoint(float pointX, float pointY, boolean searchChildren)
+    {
+        return streamNodesAtPoint(pointX, pointY, searchChildren).collect(toList());
+    }
+
+    public Stream<GuiNode> streamNodesAtPoint(float pointX, float pointY, boolean searchChildren)
+    {
+        Stream<GuiNode> filteredChildren = this.getChildrensProperty().getModifiableValue().stream()
+                .filter(child -> child.isPointInside(pointX, pointY));
+
+        if (searchChildren)
+            filteredChildren = filteredChildren.flatMap(child ->
+            {
+                if (child instanceof GuiFather)
+                    return streamNodesAtPoint(pointX, pointY, true);
+                else
+                    return Stream.of(child);
+            });
+
+        return filteredChildren;
     }
 
     public void addStyleChild(ICascadeStyleable styleable)
