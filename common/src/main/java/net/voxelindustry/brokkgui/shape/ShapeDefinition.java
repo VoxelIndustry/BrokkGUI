@@ -13,5 +13,5 @@ public interface ShapeDefinition
 
     void drawTextured(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Texture texture, float zLevel);
 
-    boolean isMouseInside(GuiShape shape, int mouseX, int mouseY);
+    boolean isMouseInside(GuiShape shape, float mouseX, float mouseY);
 }

@@ -54,7 +54,7 @@ public class RectangleShape implements ShapeDefinition
     }
 
     @Override
-    public boolean isMouseInside(GuiShape shape, int mouseX, int mouseY)
+    public boolean isMouseInside(GuiShape shape, float mouseX, float mouseY)
     {
         return mouseX > shape.getxPos() + shape.getxTranslate()
                 && mouseX < shape.getxPos() + shape.getxTranslate() + shape.getWidth()

@@ -41,7 +41,7 @@ public class LineShape implements ShapeDefinition
     }
 
     @Override
-    public boolean isMouseInside(GuiShape shape, int mouseX, int mouseY)
+    public boolean isMouseInside(GuiShape shape, float mouseX, float mouseY)
     {
         if(!Rectangle.SHAPE.isMouseInside(shape, mouseX, mouseY)) // Bad behavior expected with very high line width
             return false;                                         // and at line's extremities

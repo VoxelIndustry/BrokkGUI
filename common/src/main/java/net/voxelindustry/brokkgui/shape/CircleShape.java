@@ -30,7 +30,7 @@ public class CircleShape implements ShapeDefinition
     }
 
     @Override
-    public boolean isMouseInside(GuiShape shape, int mouseX, int mouseY)
+    public boolean isMouseInside(GuiShape shape, float mouseX, float mouseY)
     {
         if (!Rectangle.SHAPE.isMouseInside(shape, mouseX, mouseY))
             return false;

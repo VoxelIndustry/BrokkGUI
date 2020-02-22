@@ -91,7 +91,7 @@ public abstract class GuiShape extends GuiNode
     }
 
     @Override
-    public boolean isPointInside(int mouseX, int mouseY)
+    public boolean isPointInside(float mouseX, float mouseY)
     {
         return shape.isMouseInside(this, mouseX, mouseY);
     }

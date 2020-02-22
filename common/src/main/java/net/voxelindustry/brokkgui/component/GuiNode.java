@@ -310,7 +310,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.getEventDispatcher().dispatchEvent(KeyEvent.RELEASE, new KeyEvent.Release(this, key));
     }
 
-    public boolean isPointInside(final int pointX, final int pointY)
+    public boolean isPointInside(final float pointX, final float pointY)
     {
         return this.getLeftPos() < pointX
                 && pointX < this.getRightPos()
