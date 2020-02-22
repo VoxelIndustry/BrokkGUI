@@ -10,6 +10,7 @@ public class ColorConstants
     {
         colors = new HashMap<>();
 
+        colors.put("transparent", Color.ALPHA);
         colors.put("indianred", Color.fromHex("CD5C5C"));
         colors.put("lightcoral", Color.fromHex("F08080"));
         colors.put("salmon", Color.fromHex("FA8072"));

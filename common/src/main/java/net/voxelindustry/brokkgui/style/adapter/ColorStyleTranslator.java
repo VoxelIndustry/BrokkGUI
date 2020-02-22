@@ -101,7 +101,7 @@ public class ColorStyleTranslator implements IStyleDecoder<Color>, IStyleEncoder
         }
         if (ColorConstants.hasConstant(style))
             return ColorConstants.getColor(style);
-        return null;
+        throw new RuntimeException("Cannot retrieve specified Color constant. constant=" + style);
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionThrownBy;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ColorStyleTranslatorTest
@@ -60,6 +61,6 @@ public class ColorStyleTranslatorTest
     @Test
     public void testError()
     {
-        assertThat(adapter.decode("abcdef")).isNull();
+        assertThatExceptionThrownBy(() -> adapter.decode("abcdef")).hasMessageContaining("Cannot retrieve specified Color constant.");
     }
 }
