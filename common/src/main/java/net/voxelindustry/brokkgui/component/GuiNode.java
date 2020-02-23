@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.component;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.BaseSetProperty;
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.Position;
@@ -23,6 +24,7 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.ScissorBox;
 import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.style.event.StyleRefreshEvent;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
@@ -167,6 +169,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         if (!this.isVisible())
             return;
 
+        BrokkGuiPlatform.getInstance().getProfiler().preElementRender(this);
+
         boolean createdMatrix = false;
         if (this.getRotation() != Rotation.NONE && this.getRotation().getAngle() % 360 != 0)
         {
@@ -214,6 +218,8 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
 
         if (createdMatrix)
             renderer.endMatrix();
+
+        BrokkGuiPlatform.getInstance().getProfiler().postElementRender(this);
     }
 
     protected abstract void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY);
@@ -1008,5 +1014,11 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     public void setParent(ICascadeStyleable styleable)
     {
         this.getStyle().getParent().setValue(styleable);
+    }
+
+    public void beginStyleProfiling()
+    {
+        this.getEventDispatcher().addHandler(StyleRefreshEvent.BEFORE, e -> BrokkGuiPlatform.getInstance().getProfiler().preElementStyleRefresh(this));
+        this.getEventDispatcher().addHandler(StyleRefreshEvent.AFTER, e -> BrokkGuiPlatform.getInstance().getProfiler().postElementStyleRefresh(this));
     }
 }

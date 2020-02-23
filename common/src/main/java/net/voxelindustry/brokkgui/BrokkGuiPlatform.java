@@ -4,7 +4,9 @@ import net.voxelindustry.brokkgui.animation.ITickSender;
 import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 import net.voxelindustry.brokkgui.internal.IMouseUtil;
+import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
 import net.voxelindustry.brokkgui.internal.IResourceHandler;
+import net.voxelindustry.brokkgui.internal.profiler.ProfilerNoop;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
 import java.util.Random;
@@ -29,6 +31,7 @@ public class BrokkGuiPlatform
     private IMouseUtil       mouseUtil;
     private IResourceHandler resourceHandler;
     private ITickSender      tickSender;
+    private IProfiler        profiler;
 
     private Logger logger;
 
@@ -43,6 +46,17 @@ public class BrokkGuiPlatform
         StyleEngine.getInstance().start();
 
         this.random = new Random();
+        this.profiler = new ProfilerNoop();
+    }
+
+    public IProfiler getProfiler()
+    {
+        return profiler;
+    }
+
+    public void setProfiler(IProfiler profiler)
+    {
+        this.profiler = profiler;
     }
 
     public Logger getLogger()
