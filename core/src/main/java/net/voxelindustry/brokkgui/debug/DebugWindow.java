@@ -1,16 +1,18 @@
 package net.voxelindustry.brokkgui.debug;
 
-import fr.ourten.teabeans.binding.BaseExpression;
-import net.voxelindustry.brokkgui.event.LayoutEvent;
+import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
+import net.voxelindustry.brokkgui.immediate.ImmediateWindow;
+import net.voxelindustry.brokkgui.immediate.style.BoxStyle;
+import net.voxelindustry.brokkgui.immediate.style.TextStyle;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.ColorConstants;
-import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
 
 import java.text.NumberFormat;
 
-public class DebugWindow extends BrokkGuiScreen
+public class DebugWindow extends ImmediateWindow
 {
     private static final NumberFormat FORMAT;
 
@@ -25,29 +27,46 @@ public class DebugWindow extends BrokkGuiScreen
     public static final Color HOVERED_TEXT_COLOR = ColorConstants.getColor("gold").shade(0.2f);
     public static final Color BOX_COLOR          = Color.BLACK.addAlpha(-0.5f);
 
-    private DebugLayoutPanel debugLayoutPanel;
-    private IGuiWindow       window;
+    private final IGuiWindow window;
 
     public DebugWindow(IGuiWindow window)
     {
-        super(0.5f, 0.5f, 0, 0);
-        this.getWidthProperty().bind(BaseExpression.transform(this.getScreenWidthProperty(), Integer::floatValue));
-        this.getHeightProperty().bind(BaseExpression.transform(this.getScreenHeightProperty(), Integer::floatValue));
         this.window = window;
 
-        GuiAbsolutePane mainPanel = new GuiAbsolutePane();
-        this.setMainPanel(mainPanel);
+        this.setBoxStyle(BoxStyle.build()
+                .setBoxColor(Color.BLACK.addAlpha(-0.5F))
+                .setBorderColor(ColorConstants.getColor("steelblue"))
+                .create());
 
-        this.debugLayoutPanel = new DebugLayoutPanel();
-        debugLayoutPanel.setHeightRatio(1);
-        debugLayoutPanel.setWidth(200);
-        mainPanel.addChild(debugLayoutPanel, 0, 0);
+        this.setTextStyle(TextStyle.build()
+                .setTextColor(ColorConstants.getColor("gold"))
+                .create());
+    }
 
-        debugLayoutPanel.updateLayout(window);
-        window.addEventHandler(LayoutEvent.ANY, e -> debugLayoutPanel.updateLayout(window));
+    @Override
+    public void immediateRender()
+    {
+        if (!(window instanceof BrokkGuiScreen))
+            return;
 
-        this.isDebugged = true;
+        box(0, 0, 100, getScreenHeight());
 
-        this.addStylesheet("/assets/brokkgui/css/debug.css");
+        drawHierarchy(((BrokkGuiScreen) window).getMainPanel(), 0, 0);
+    }
+
+    private int drawHierarchy(GuiFather node, int depth, int height)
+    {
+        int addedHeight = 0;
+        for (GuiNode child : node.getChildrens())
+        {
+            text(DebugRenderer.getNodeName(child),
+                    2 + depth * 5,
+                    2 + (height + addedHeight) * getRenderer().getHelper().getStringHeight());
+            addedHeight++;
+
+            if (child instanceof GuiFather)
+                addedHeight += drawHierarchy((GuiFather) child, depth + 1, height + addedHeight);
+        }
+        return addedHeight;
     }
 }
