@@ -19,10 +19,19 @@ import net.voxelindustry.brokkgui.panel.GuiPane;
 import net.voxelindustry.brokkgui.style.IStyleRoot;
 import net.voxelindustry.brokkgui.style.StylesheetManager;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
-import net.voxelindustry.hermod.*;
+import net.voxelindustry.hermod.EventDispatcher;
+import net.voxelindustry.hermod.EventHandler;
+import net.voxelindustry.hermod.EventType;
+import net.voxelindustry.hermod.HermodEvent;
+import net.voxelindustry.hermod.IEventEmitter;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
 
 public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
@@ -410,7 +419,6 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         return null;
     }
 
-    @Override
     public GuiPane getMainPanel()
     {
         return this.mainPanel;

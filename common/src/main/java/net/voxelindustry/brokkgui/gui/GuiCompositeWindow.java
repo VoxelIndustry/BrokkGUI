@@ -5,7 +5,6 @@ import fr.ourten.teabeans.value.IProperty;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
-import net.voxelindustry.brokkgui.panel.GuiPane;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
@@ -99,12 +98,6 @@ public class GuiCompositeWindow implements IGuiWindow
     public IBrokkGuiImpl getWrapper()
     {
         return first.getWrapper();
-    }
-
-    @Override
-    public GuiPane getMainPanel()
-    {
-        return first.getMainPanel();
     }
 
     @Override
