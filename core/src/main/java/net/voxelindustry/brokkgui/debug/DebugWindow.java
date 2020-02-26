@@ -23,8 +23,8 @@ public class DebugWindow extends ImmediateWindow
     }
 
     public static final Color BORDER_COLOR       = ColorConstants.getColor("steelblue");
-    public static final Color TEXT_COLOR         = ColorConstants.getColor("gold");
-    public static final Color HOVERED_TEXT_COLOR = ColorConstants.getColor("gold").shade(0.2f);
+    public static final Color TEXT_COLOR         = ColorConstants.getColor("gold").shade(-0.1F);
+    public static final Color HOVERED_TEXT_COLOR = ColorConstants.getColor("gold").shade(0.2F);
     public static final Color BOX_COLOR          = Color.BLACK.addAlpha(-0.5f);
 
     private final IGuiWindow window;
@@ -34,12 +34,13 @@ public class DebugWindow extends ImmediateWindow
         this.window = window;
 
         this.setBoxStyle(BoxStyle.build()
-                .setBoxColor(Color.BLACK.addAlpha(-0.5F))
-                .setBorderColor(ColorConstants.getColor("steelblue"))
+                .setBoxColor(BOX_COLOR)
+                .setBorderColor(BORDER_COLOR)
                 .create());
 
         this.setTextStyle(TextStyle.build()
-                .setTextColor(ColorConstants.getColor("gold"))
+                .setTextColor(TEXT_COLOR)
+                .setHoverTextColor(HOVERED_TEXT_COLOR)
                 .create());
     }
 

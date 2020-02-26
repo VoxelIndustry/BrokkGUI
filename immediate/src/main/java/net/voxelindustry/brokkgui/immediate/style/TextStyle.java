@@ -6,11 +6,15 @@ public class TextStyle
 {
     public final Color textColor;
     public final Color shadowColor;
+    public final Color hoverTextColor;
+    public final Color hoverShadowColor;
 
-    public TextStyle(Color textColor, Color shadowColor)
+    public TextStyle(Color textColor, Color shadowColor, Color hoverTextColor, Color hoverShadowColor)
     {
         this.textColor = textColor;
         this.shadowColor = shadowColor;
+        this.hoverTextColor = hoverTextColor;
+        this.hoverShadowColor = hoverShadowColor;
     }
 
     public static TextStyleBuilder build()
@@ -22,6 +26,8 @@ public class TextStyle
     {
         private Color textColor;
         private Color shadowColor = Color.ALPHA;
+        private Color hoverTextColor;
+        private Color hoverShadowColor;
 
         public TextStyleBuilder setTextColor(Color textColor)
         {
@@ -35,9 +41,26 @@ public class TextStyle
             return this;
         }
 
+        public TextStyleBuilder setHoverTextColor(Color hoverTextColor)
+        {
+            this.hoverTextColor = hoverTextColor;
+            return this;
+        }
+
+        public TextStyleBuilder setHoverShadowColor(Color hoverShadowColor)
+        {
+            this.hoverShadowColor = hoverShadowColor;
+            return this;
+        }
+
         public TextStyle create()
         {
-            return new TextStyle(textColor, shadowColor);
+            if (hoverTextColor == null)
+                hoverTextColor = textColor;
+            if (hoverShadowColor == null)
+                hoverShadowColor = shadowColor;
+
+            return new TextStyle(textColor, shadowColor, hoverTextColor, hoverShadowColor);
         }
     }
 }
