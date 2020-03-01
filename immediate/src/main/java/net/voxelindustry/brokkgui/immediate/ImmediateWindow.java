@@ -2,6 +2,8 @@ package net.voxelindustry.brokkgui.immediate;
 
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.immediate.style.BoxStyle;
+import net.voxelindustry.brokkgui.immediate.style.ButtonStyle;
+import net.voxelindustry.brokkgui.immediate.style.EmptyBoxStyle;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.immediate.style.TextStyle;
 import net.voxelindustry.brokkgui.paint.Color;
@@ -13,8 +15,10 @@ import static net.voxelindustry.brokkgui.paint.Color.ALPHA;
 
 public abstract class ImmediateWindow extends BaseImmediateWindow
 {
-    private EnumMap<StyleType, TextStyle> textStyles = new EnumMap<>(StyleType.class);
-    private EnumMap<StyleType, BoxStyle>  boxStyles  = new EnumMap<>(StyleType.class);
+    private EnumMap<StyleType, TextStyle>     textStyles     = new EnumMap<>(StyleType.class);
+    private EnumMap<StyleType, BoxStyle>      boxStyles      = new EnumMap<>(StyleType.class);
+    private EnumMap<StyleType, EmptyBoxStyle> emptyBoxStyles = new EnumMap<>(StyleType.class);
+    private EnumMap<StyleType, ButtonStyle>   buttonStyles   = new EnumMap<>(StyleType.class);
 
     public void setTextStyle(TextStyle style)
     {
@@ -36,6 +40,26 @@ public abstract class ImmediateWindow extends BaseImmediateWindow
         this.boxStyles.put(type, style);
     }
 
+    public void setEmptyBoxStyle(EmptyBoxStyle style)
+    {
+        setEmptyBoxStyle(style, NORMAL);
+    }
+
+    public void setEmptyBoxStyle(EmptyBoxStyle style, StyleType type)
+    {
+        this.emptyBoxStyles.put(type, style);
+    }
+
+    public void setButtonStyle(ButtonStyle style)
+    {
+        setButtonStyle(style, NORMAL);
+    }
+
+    public void setButtonStyle(ButtonStyle style, StyleType type)
+    {
+        this.buttonStyles.put(type, style);
+    }
+
     public boolean text(String text, float x, float y)
     {
         return text(text, x, y, NORMAL);
@@ -54,12 +78,12 @@ public abstract class ImmediateWindow extends BaseImmediateWindow
 
     public boolean text(String text, float x, float y, Color color, Color shadowColor, Color hoverColor, Color hoverShadowColor)
     {
-        boolean isHovered = getMouseX() > x && getMouseY() > y && getMouseY() < y + getRenderer().getHelper().getStringHeight() && getMouseX() < x + getRenderer().getHelper().getStringWidth(text);
+        boolean isHovered = getMouseX() > x && getMouseY() > y && getMouseY() < y + getRenderer().getHelper().getStringHeightMultiLine(text) && getMouseX() < x + getRenderer().getHelper().getStringWidthMultiLine(text);
 
         if (!isHovered)
-            getRenderer().getHelper().drawString(text, x, y, 1, color, shadowColor);
+            getRenderer().getHelper().drawStringMultiline(text, x, y, 1, color, shadowColor);
         else
-            getRenderer().getHelper().drawString(text, x, y, 1, hoverColor, hoverShadowColor);
+            getRenderer().getHelper().drawStringMultiline(text, x, y, 1, hoverColor, hoverShadowColor);
 
         return isHovered;
     }
@@ -82,7 +106,7 @@ public abstract class ImmediateWindow extends BaseImmediateWindow
 
     public boolean box(float x, float y, float width, float height, Color color, Color borderColor, float borderThin, Color hoverColor, Color hoverBorderColor)
     {
-        boolean isHovered = getMouseX() > x && getMouseY() < y && getMouseX() > x + width && getMouseY() > y + height;
+        boolean isHovered = getMouseX() > x && getMouseY() > y && getMouseX() < x + width && getMouseY() < y + height;
 
         if (!isHovered)
         {
@@ -153,13 +177,77 @@ public abstract class ImmediateWindow extends BaseImmediateWindow
                            Color hoverBorderColor)
     {
         if (width == 0)
-            width = getRenderer().getHelper().getStringWidth(text) + textPadding.getHorizontal();
+            width = getRenderer().getHelper().getStringWidthMultiLine(text) + textPadding.getHorizontal() + borderThin;
         if (height == 0)
-            height = getRenderer().getHelper().getStringHeight() + textPadding.getVertical();
+            height = getRenderer().getHelper().getStringHeightMultiLine(text) + textPadding.getVertical() + borderThin;
 
         boolean isHovered = box(x, y, width, height, boxColor, borderColor, borderThin, hoverBoxColor, hoverBorderColor);
-        text(text, x + textPadding.getLeft(), y + textPadding.getTop(), textColor, shadowColor, hoverTextColor, hoverShadowColor);
+        text(text, x + textPadding.getLeft() + borderThin, y + textPadding.getTop() + borderThin, textColor, shadowColor, hoverTextColor, hoverShadowColor);
 
         return isHovered;
+    }
+
+    public boolean emptyBox(float x, float y, float width, float height, StyleType type)
+    {
+        EmptyBoxStyle style = emptyBoxStyles.get(type);
+
+        if (style == null)
+        {
+            BoxStyle boxStyle = boxStyles.get(type);
+            return emptyBox(x, y, width, height, boxStyle.borderColor, boxStyle.hoverBorderColor, boxStyle.borderThin);
+        }
+        return emptyBox(x, y, width, height, style.borderColor, style.hoverBorderColor, style.borderThin);
+    }
+
+    public boolean emptyBox(float x, float y, float width, float height, Color borderColor, Color hoverBorderColor, float borderThin)
+    {
+        boolean isHovered = getMouseX() > x && getMouseY() < y && getMouseX() < x + width && getMouseY() < y + height;
+
+        if (!isHovered)
+        {
+            getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, borderColor, borderThin);
+        }
+        else
+        {
+            getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, hoverBorderColor, borderThin);
+        }
+        return isHovered;
+    }
+
+    public InteractionResult button(String text, float x, float y, float width, float height, StyleType type)
+    {
+        return button(text, x, y, width, height, buttonStyles.get(type));
+    }
+
+    public InteractionResult button(String text, float x, float y, float width, float height, ButtonStyle style)
+    {
+        boolean isHovered = getMouseX() > x && getMouseY() < y && getMouseX() < x + width && getMouseY() < y + height;
+        boolean isClicked = getLastClickX() > x && getLastClickY() < y && getLastClickX() > x + width && getLastClickY() > y + height;
+
+        if (isClicked)
+        {
+            getRenderer().getHelper().drawColoredRect(getRenderer(), x, y, width, height, 1, style.clickBoxColor);
+            getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.clickBorderColor, style.borderThin);
+
+            getRenderer().getHelper().drawString(text, x + style.padding.getLeft(), y + style.padding.getTop(), 1, style.clickTextColor, style.clickShadowColor);
+
+            return InteractionResult.CLICKED;
+        }
+        if (isHovered)
+        {
+            getRenderer().getHelper().drawColoredRect(getRenderer(), x, y, width, height, 1, style.hoverBoxColor);
+            getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.hoverBorderColor, style.borderThin);
+
+            getRenderer().getHelper().drawString(text, x + style.padding.getLeft(), y + style.padding.getTop(), 1, style.hoverTextColor, style.hoverShadowColor);
+
+            return InteractionResult.HOVERED;
+        }
+
+        getRenderer().getHelper().drawColoredRect(getRenderer(), x, y, width, height, 1, style.boxColor);
+        getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.borderColor, style.borderThin);
+
+        getRenderer().getHelper().drawString(text, x + style.padding.getLeft(), y + style.padding.getTop(), 1, style.textColor, style.shadowColor);
+
+        return InteractionResult.NONE;
     }
 }

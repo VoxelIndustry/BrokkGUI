@@ -20,10 +20,20 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     private EventDispatcher eventDispatcher;
     private IBrokkGuiImpl   wrapper;
 
-    private final BaseProperty<Integer> screenWidthProperty, screenHeightProperty;
+    private final BaseProperty<Integer> screenWidthProperty;
+    private final BaseProperty<Integer> screenHeightProperty;
+
     private IGuiRenderer renderer;
 
-    private int mouseX, mouseY;
+    private int mouseX;
+    private int mouseY;
+
+    private int lastClickX;
+    private int lastClickY;
+
+    private int    lastWheelX;
+    private int    lastWheelY;
+    private double lastWheelValue;
 
     public BaseImmediateWindow()
     {
@@ -42,7 +52,9 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public void renderLast(int mouseX, int mouseY)
     {
-
+        this.lastWheelX = -1;
+        this.lastWheelY = -1;
+        this.lastWheelValue = 0;
     }
 
     public abstract void immediateRender();
@@ -60,6 +72,21 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     public int getMouseY()
     {
         return mouseY;
+    }
+
+    public boolean isMouseOverBox(float xStart, float yStart, float xEnd, float yEnd)
+    {
+        return getMouseX() > xStart && getMouseX() < xEnd && getMouseY() > yStart && getMouseY() < yEnd;
+    }
+
+    public boolean hasMouseClickedBox(float xStart, float yStart, float xEnd, float yEnd)
+    {
+        return getLastClickX() > xStart && getLastClickX() < xEnd && getLastClickY() > yStart && getLastClickY() < yEnd;
+    }
+
+    public boolean hasMouseWheeledBox(float xStart, float yStart, float xEnd, float yEnd)
+    {
+        return getLastWheelX() > xStart && getLastWheelX() < xEnd && getLastWheelY() > yStart && getLastWheelY() < yEnd;
     }
 
     @Override
@@ -161,7 +188,8 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public void onClick(int mouseX, int mouseY, int key)
     {
-
+        lastClickX = mouseX;
+        lastClickY = mouseY;
     }
 
     @Override
@@ -173,13 +201,16 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public void onClickStop(int mouseX, int mouseY, int state)
     {
-
+        this.lastClickX = -1;
+        this.lastClickY = -1;
     }
 
     @Override
     public void handleMouseScroll(double scrolled)
     {
-
+        lastWheelX = mouseX;
+        lastWheelY = mouseY;
+        lastWheelValue = scrolled;
     }
 
     @Override
@@ -192,6 +223,31 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     public void close()
     {
 
+    }
+
+    public int getLastClickX()
+    {
+        return lastClickX;
+    }
+
+    public int getLastClickY()
+    {
+        return lastClickY;
+    }
+
+    public int getLastWheelX()
+    {
+        return lastWheelX;
+    }
+
+    public int getLastWheelY()
+    {
+        return lastWheelY;
+    }
+
+    public double getLastWheelValue()
+    {
+        return lastWheelValue;
     }
 
     @Override
