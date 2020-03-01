@@ -23,6 +23,23 @@ public interface IGuiHelper
 
     void drawString(String string, float x, float y, float zLevel, Color textColor);
 
+    default void drawStringMultiline(String string, float x, float y, float zLevel, Color textColor)
+    {
+        drawStringMultiline(string, x, y, zLevel, textColor, getStringHeight() / 4);
+    }
+
+    default void drawStringMultiline(String string, float x, float y, float zLevel, Color textColor, float lineSpacing)
+    {
+        drawStringMultiline(string, x, y, zLevel, textColor, Color.ALPHA, lineSpacing);
+    }
+
+    default void drawStringMultiline(String string, float x, float y, float zLevel, Color textColor, Color shadowColor)
+    {
+        drawStringMultiline(string, x, y, zLevel, textColor, shadowColor, getStringHeight() / 4);
+    }
+
+    void drawStringMultiline(String string, float x, float y, float zLevel, Color textColor, Color shadowColor, float lineSpacing);
+
     void drawTexturedRect(IGuiRenderer renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
                           float vMax, float width, float height, float zLevel, SpriteRotation rotation);
 
@@ -60,7 +77,21 @@ public interface IGuiHelper
 
     float getStringWidth(String str);
 
+    float getStringWidthMultiLine(String str);
+
     float getStringHeight();
+
+    default float getStringHeightMultiLine(String str)
+    {
+        return getStringHeightMultiLine(str, getDefaultLineSpacing());
+    }
+
+    float getStringHeightMultiLine(String str, float lineSpacing);
+
+    default float getDefaultLineSpacing()
+    {
+        return getStringHeight() / 4;
+    }
 
     void startAlphaMask(double opacity);
 
