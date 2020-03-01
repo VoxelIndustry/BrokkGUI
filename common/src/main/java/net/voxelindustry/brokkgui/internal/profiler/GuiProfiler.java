@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.internal.profiler;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
+import com.google.common.collect.LinkedListMultimap;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -9,6 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -20,10 +20,10 @@ import static java.lang.System.nanoTime;
 
 public class GuiProfiler implements IProfiler
 {
-    private final Map<GuiNode, Long> styleRefreshCounters = new HashMap<>();
+    private final LinkedHashMap<GuiNode, Long> styleRefreshCounters = new LinkedHashMap<>();
 
-    private final Multimap<GuiNode, Long> renderTimes       = MultimapBuilder.hashKeys().arrayListValues().build();
-    private final Multimap<GuiNode, Long> styleRefreshTimes = MultimapBuilder.hashKeys().arrayListValues().build();
+    private final LinkedListMultimap<GuiNode, Long> renderTimes       = LinkedListMultimap.create();
+    private final LinkedListMultimap<GuiNode, Long> styleRefreshTimes = LinkedListMultimap.create();
 
     private final List<Long> frameRenderTimes = new ArrayList<>();
 
@@ -42,6 +42,9 @@ public class GuiProfiler implements IProfiler
     public void postElementRender(GuiNode node)
     {
         renderTimes.put(node, nanoTime() - currentNodeRenderTime.remove(node));
+
+        if (renderTimes.size() > 10_000)
+            renderTimes.entries().remove(0);
     }
 
     @Override
@@ -55,6 +58,9 @@ public class GuiProfiler implements IProfiler
     public void postElementStyleRefresh(GuiNode node)
     {
         styleRefreshTimes.put(node, nanoTime() - currentNodeStyleRefreshTime.remove(node));
+
+        if (styleRefreshTimes.size() > 10_000)
+            styleRefreshTimes.entries().remove(0);
     }
 
     @Override
@@ -67,6 +73,9 @@ public class GuiProfiler implements IProfiler
     public void endRenderFrame()
     {
         frameRenderTimes.add(nanoTime() - currentFrameTime);
+
+        if(frameRenderTimes.size() > 10_000)
+            frameRenderTimes.remove(0);
     }
 
     public String getHumanReport()
@@ -150,5 +159,10 @@ public class GuiProfiler implements IProfiler
             name.append("]");
         }
         return name.toString();
+    }
+
+    public long getRecordsCount()
+    {
+        return renderTimes.size() + styleRefreshTimes.size() + styleRefreshCounters.size() + frameRenderTimes.size();
     }
 }
