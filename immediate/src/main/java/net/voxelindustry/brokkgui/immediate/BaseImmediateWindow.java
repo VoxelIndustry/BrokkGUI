@@ -31,9 +31,14 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     private int lastClickX;
     private int lastClickY;
 
+    private int lastHeldClickX;
+    private int lastHeldClickY;
+
     private int    lastWheelX;
     private int    lastWheelY;
     private double lastWheelValue;
+
+    private int lastKeyPressed;
 
     public BaseImmediateWindow()
     {
@@ -42,10 +47,15 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void render(int mouseX, int mouseY, RenderTarget target, RenderPass... pass)
+    public void onMouseMoved(int mouseX, int mouseY)
     {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
+    }
+
+    @Override
+    public void render(int mouseX, int mouseY, RenderTarget target, RenderPass... pass)
+    {
         this.immediateRender();
     }
 
@@ -55,6 +65,11 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
         this.lastWheelX = -1;
         this.lastWheelY = -1;
         this.lastWheelValue = 0;
+
+        this.lastKeyPressed = -1;
+
+        this.lastClickX = -1;
+        this.lastClickY = -1;
     }
 
     public abstract void immediateRender();
@@ -62,6 +77,31 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     public IGuiRenderer getRenderer()
     {
         return renderer;
+    }
+
+    public float getStringWidth(String text)
+    {
+        return getRenderer().getHelper().getStringWidth(text);
+    }
+
+    public float getStringWidthMultiLine(String multilineText)
+    {
+        return getRenderer().getHelper().getStringWidthMultiLine(multilineText);
+    }
+
+    public float getStringHeight()
+    {
+        return getRenderer().getHelper().getStringHeight();
+    }
+
+    public float getStringHeightMultiLine(String multilineText)
+    {
+        return getRenderer().getHelper().getStringHeightMultiLine(multilineText);
+    }
+
+    public float getStringHeightMultiLine(String multilineText, float lineSpacing)
+    {
+        return getRenderer().getHelper().getStringHeightMultiLine(multilineText, lineSpacing);
     }
 
     public int getMouseX()
@@ -87,6 +127,11 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     public boolean hasMouseWheeledBox(float xStart, float yStart, float xEnd, float yEnd)
     {
         return getLastWheelX() > xStart && getLastWheelX() < xEnd && getLastWheelY() > yStart && getLastWheelY() < yEnd;
+    }
+
+    public int getLastKeyPressed()
+    {
+        return lastKeyPressed;
     }
 
     @Override
@@ -170,7 +215,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public void onKeyPressed(int key)
     {
-
+        this.lastKeyPressed = key;
     }
 
     @Override
@@ -190,6 +235,9 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     {
         lastClickX = mouseX;
         lastClickY = mouseY;
+
+        lastHeldClickX = mouseX;
+        lastHeldClickY = mouseY;
     }
 
     @Override
@@ -201,8 +249,8 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public void onClickStop(int mouseX, int mouseY, int state)
     {
-        this.lastClickX = -1;
-        this.lastClickY = -1;
+        this.lastHeldClickX = -1;
+        this.lastHeldClickY = -1;
     }
 
     @Override

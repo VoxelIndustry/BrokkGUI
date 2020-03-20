@@ -61,7 +61,7 @@ public class ButtonStyle
 
     public static class ButtonStyleBuilder
     {
-        private Color boxColor;
+        private Color boxColor    = Color.ALPHA;
         private Color borderColor = Color.ALPHA;
         private float borderThin  = 1;
 
@@ -70,7 +70,7 @@ public class ButtonStyle
         private Color hoverBoxColor;
         private Color hoverBorderColor;
 
-        private Color textColor;
+        private Color textColor   = Color.BLACK;
         private Color shadowColor = Color.ALPHA;
 
         private Color hoverTextColor;

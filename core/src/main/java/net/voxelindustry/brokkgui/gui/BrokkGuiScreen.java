@@ -58,7 +58,6 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     private IBrokkGuiImpl wrapper;
 
-    private int cachedMouseX, cachedMouseY;
     private int lastClickX, lastClickY;
 
     private PriorityQueue<Pair<Runnable, Long>> tasksQueue;
@@ -88,9 +87,6 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         this.stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
         this.styleTreeProperty = new BaseProperty<>(null, "styleTreeProperty");
-
-        this.cachedMouseX = -1;
-        this.cachedMouseY = -1;
 
         this.lastClickX = -1;
         this.lastClickY = -1;
@@ -144,30 +140,29 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
+    public void onMouseMoved(int mouseX, int mouseY)
+    {
+        if (!this.windows.isEmpty() && this.windows.stream().anyMatch(gui ->
+                gui.isPointInside(mouseX, mouseY)))
+        {
+            this.windows.forEach(gui -> gui.handleHover(mouseX, mouseY, gui.isPointInside(mouseX, mouseY)));
+            this.mainPanel.handleHover(mouseX, mouseY, false);
+        }
+        else
+        {
+            this.windows.forEach(gui -> gui.handleHover(mouseX, mouseY, false));
+            this.mainPanel.handleHover(mouseX, mouseY, this.mainPanel.isPointInside(mouseX, mouseY));
+        }
+
+        PopupHandler.getInstance(this).handleHover(mouseX, mouseY);
+    }
+
+    @Override
     public void render(int mouseX, int mouseY, RenderTarget target, RenderPass... passes)
     {
         switch (target)
         {
             case MAIN:
-                if (this.cachedMouseX != mouseX || this.cachedMouseY != mouseY)
-                {
-                    if (!this.windows.isEmpty() && this.windows.stream().anyMatch(gui ->
-                            gui.isPointInside(mouseX, mouseY)))
-                    {
-                        this.windows.forEach(gui -> gui.handleHover(mouseX, mouseY, gui.isPointInside(mouseX, mouseY)));
-                        this.mainPanel.handleHover(mouseX, mouseY, false);
-                    }
-                    else
-                    {
-                        this.windows.forEach(gui -> gui.handleHover(mouseX, mouseY, false));
-                        this.mainPanel.handleHover(mouseX, mouseY, this.mainPanel.isPointInside(mouseX, mouseY));
-                    }
-
-                    PopupHandler.getInstance(this).handleHover(mouseX, mouseY);
-                    this.cachedMouseX = mouseX;
-                    this.cachedMouseY = mouseY;
-                }
-
                 for (RenderPass pass : passes)
                 {
                     this.renderer.beginPass(pass);

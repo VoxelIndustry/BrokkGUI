@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.internal.profiler;
 
 import com.google.common.collect.LinkedListMultimap;
+import com.google.common.math.Quantiles;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -74,7 +75,7 @@ public class GuiProfiler implements IProfiler
     {
         frameRenderTimes.add(nanoTime() - currentFrameTime);
 
-        if(frameRenderTimes.size() > 10_000)
+        if (frameRenderTimes.size() > 10_000)
             frameRenderTimes.remove(0);
     }
 
@@ -164,5 +165,20 @@ public class GuiProfiler implements IProfiler
     public long getRecordsCount()
     {
         return renderTimes.size() + styleRefreshTimes.size() + styleRefreshCounters.size() + frameRenderTimes.size();
+    }
+
+    public double getFrameRenderTimePercentile(int percentile)
+    {
+        return Quantiles.percentiles().index(percentile).compute(frameRenderTimes);
+    }
+
+    public int getFrameCount()
+    {
+        return frameRenderTimes.size();
+    }
+
+    public long getFrameRenderTimeMax()
+    {
+        return frameRenderTimes.stream().mapToLong(Long::longValue).max().orElse(0);
     }
 }

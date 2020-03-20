@@ -40,6 +40,8 @@ public interface IGuiWindow extends IGuiSubWindow
     // INPUTS //
     ////////////
 
+    void onMouseMoved(int mouseX, int mouseY);
+
     void onKeyPressed(int key);
 
     void onKeyTyped(char c, int key);

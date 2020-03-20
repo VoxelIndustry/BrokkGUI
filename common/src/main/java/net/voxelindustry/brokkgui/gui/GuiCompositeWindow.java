@@ -9,14 +9,24 @@ import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
 
+import java.util.Optional;
+import java.util.function.BiPredicate;
+
 public class GuiCompositeWindow implements IGuiWindow
 {
     private final IGuiWindow first, second;
+
+    private Optional<BiPredicate<IGuiWindow, InputType>> inputEventFilter = Optional.empty();
 
     public GuiCompositeWindow(IGuiWindow first, IGuiWindow second)
     {
         this.first = first;
         this.second = second;
+    }
+
+    public void setInputEventFilter(BiPredicate<IGuiWindow, InputType> inputEventFilter)
+    {
+        this.inputEventFilter = Optional.ofNullable(inputEventFilter);
     }
 
     @Override
@@ -107,52 +117,139 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
+    public void onMouseMoved(int mouseX, int mouseY)
+    {
+        if (inputEventFilter.isPresent())
+        {
+            if (inputEventFilter.get().test(first, InputType.MOUSE_MOVE))
+                first.onMouseMoved(mouseX, mouseY);
+            if (inputEventFilter.get().test(second, InputType.MOUSE_MOVE))
+                second.onMouseMoved(mouseX, mouseY);
+        }
+        else
+        {
+            first.onMouseMoved(mouseX, mouseY);
+            second.onMouseMoved(mouseX, mouseY);
+        }
+    }
+
+    @Override
     public void onKeyPressed(int key)
     {
-        first.onKeyPressed(key);
-        second.onKeyPressed(key);
+        if (inputEventFilter.isPresent())
+        {
+            if (inputEventFilter.get().test(first, InputType.KEY_PRESS))
+                first.onKeyPressed(key);
+            if (inputEventFilter.get().test(second, InputType.KEY_PRESS))
+                second.onKeyPressed(key);
+        }
+        else
+        {
+            first.onKeyPressed(key);
+            second.onKeyPressed(key);
+        }
     }
 
     @Override
     public void onKeyTyped(char c, int key)
     {
-        first.onKeyTyped(c, key);
-        second.onKeyTyped(c, key);
+        if (inputEventFilter.isPresent())
+        {
+            if (inputEventFilter.get().test(first, InputType.KEY_TYPE))
+                first.onKeyTyped(c, key);
+            if (inputEventFilter.get().test(second, InputType.KEY_TYPE))
+                second.onKeyTyped(c, key);
+        }
+        else
+        {
+            first.onKeyTyped(c, key);
+            second.onKeyTyped(c, key);
+        }
     }
 
     @Override
     public void onKeyReleased(int key)
     {
-        first.onKeyPressed(key);
-        second.onKeyPressed(key);
+        if (inputEventFilter.isPresent())
+        {
+            if (inputEventFilter.get().test(first, InputType.KEY_RELEASE))
+                first.onKeyReleased(key);
+            if (inputEventFilter.get().test(second, InputType.KEY_RELEASE))
+                second.onKeyReleased(key);
+        }
+        else
+        {
+            first.onKeyReleased(key);
+            second.onKeyReleased(key);
+        }
     }
 
     @Override
     public void onClick(int mouseX, int mouseY, int key)
     {
-        first.onClick(mouseX, mouseY, key);
-        second.onClick(mouseX, mouseY, key);
+        if (inputEventFilter.isPresent())
+        {
+            if (inputEventFilter.get().test(first, InputType.MOUSE_CLICK))
+                first.onClick(mouseX, mouseY, key);
+            if (inputEventFilter.get().test(second, InputType.MOUSE_CLICK))
+                second.onClick(mouseX, mouseY, key);
+        }
+        else
+        {
+            first.onClick(mouseX, mouseY, key);
+            second.onClick(mouseX, mouseY, key);
+        }
     }
 
     @Override
     public void onClickDrag(int mouseX, int mouseY, int key, double dragX, double dragY)
     {
-        first.onClickDrag(mouseX, mouseY, key, dragX, dragY);
-        second.onClickDrag(mouseX, mouseY, key, dragX, dragY);
+        if (inputEventFilter.isPresent())
+        {
+            if (inputEventFilter.get().test(first, InputType.MOUSE_DRAG_START))
+                first.onClickDrag(mouseX, mouseY, key, dragX, dragY);
+            if (inputEventFilter.get().test(second, InputType.MOUSE_DRAG_START))
+                second.onClickDrag(mouseX, mouseY, key, dragX, dragY);
+        }
+        else
+        {
+            first.onClickDrag(mouseX, mouseY, key, dragX, dragY);
+            second.onClickDrag(mouseX, mouseY, key, dragX, dragY);
+        }
     }
 
     @Override
     public void onClickStop(int mouseX, int mouseY, int state)
     {
-        first.onClickStop(mouseX, mouseY, state);
-        second.onClickStop(mouseX, mouseY, state);
+        if (inputEventFilter.isPresent())
+        {
+            if (inputEventFilter.get().test(first, InputType.MOUSE_DRAG_STOP))
+                first.onClickStop(mouseX, mouseY, state);
+            if (inputEventFilter.get().test(second, InputType.MOUSE_DRAG_STOP))
+                second.onClickStop(mouseX, mouseY, state);
+        }
+        else
+        {
+            first.onClickStop(mouseX, mouseY, state);
+            second.onClickStop(mouseX, mouseY, state);
+        }
     }
 
     @Override
     public void handleMouseScroll(double scrolled)
     {
-        first.handleMouseScroll(scrolled);
-        second.handleMouseScroll(scrolled);
+        if (inputEventFilter.isPresent())
+        {
+            if (inputEventFilter.get().test(first, InputType.MOUSE_SCROLL))
+                first.handleMouseScroll(scrolled);
+            if (inputEventFilter.get().test(second, InputType.MOUSE_SCROLL))
+                second.handleMouseScroll(scrolled);
+        }
+        else
+        {
+            first.handleMouseScroll(scrolled);
+            second.handleMouseScroll(scrolled);
+        }
     }
 
     @Override
