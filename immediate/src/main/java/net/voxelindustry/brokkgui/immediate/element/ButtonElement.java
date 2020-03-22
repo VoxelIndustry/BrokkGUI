@@ -43,12 +43,21 @@ public interface ButtonElement extends ImmediateElement
         boolean isHovered = getMouseX() > x && getMouseY() > y && getMouseX() < x + width && getMouseY() < y + height;
         boolean isClicked = getLastClickX() > x && getLastClickY() > y && getLastClickX() < x + width && getLastClickY() < y + height;
 
+        float textWidth = getRenderer().getHelper().getStringWidthMultiLine(text);
+        float textHeight = getRenderer().getHelper().getStringHeightMultiLine(text);
+        float textOffsetX = style.textAlignment.isLeft() ? style.padding.getLeft() :
+                (style.textAlignment.isRight() ? width - textWidth - style.padding.getRight() :
+                        width / 2 - textWidth / 2 + style.padding.getLeft() - style.padding.getRight());
+        float textOffsetY = style.textAlignment.isUp() ? style.padding.getTop() :
+                (style.textAlignment.isDown() ? height - textHeight - style.padding.getBottom() :
+                        height / 2 - textHeight / 2 + style.padding.getTop());
+
         if (isClicked)
         {
             getRenderer().getHelper().drawColoredRect(getRenderer(), x, y, width, height, 1, style.clickBoxColor);
             getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.clickBorderColor, style.borderThin);
 
-            getRenderer().getHelper().drawString(text, x + style.padding.getLeft(), y + style.padding.getTop(), 1, style.clickTextColor, style.clickShadowColor);
+            getRenderer().getHelper().drawString(text, x + textOffsetX, y + textOffsetY, 1, style.clickTextColor, style.clickShadowColor);
 
             return InteractionResult.CLICKED;
         }
@@ -57,7 +66,7 @@ public interface ButtonElement extends ImmediateElement
             getRenderer().getHelper().drawColoredRect(getRenderer(), x, y, width, height, 1, style.hoverBoxColor);
             getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.hoverBorderColor, style.borderThin);
 
-            getRenderer().getHelper().drawString(text, x + style.padding.getLeft(), y + style.padding.getTop(), 1, style.hoverTextColor, style.hoverShadowColor);
+            getRenderer().getHelper().drawString(text, x + textOffsetX, y + textOffsetY, 1, style.hoverTextColor, style.hoverShadowColor);
 
             return InteractionResult.HOVERED;
         }
@@ -65,7 +74,7 @@ public interface ButtonElement extends ImmediateElement
         getRenderer().getHelper().drawColoredRect(getRenderer(), x, y, width, height, 1, style.boxColor);
         getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.borderColor, style.borderThin);
 
-        getRenderer().getHelper().drawString(text, x + style.padding.getLeft(), y + style.padding.getTop(), 1, style.textColor, style.shadowColor);
+        getRenderer().getHelper().drawString(text, x + textOffsetX, y + textOffsetY, 1, style.textColor, style.shadowColor);
 
         return InteractionResult.NONE;
     }

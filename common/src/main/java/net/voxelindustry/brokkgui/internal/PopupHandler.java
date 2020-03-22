@@ -9,7 +9,11 @@ import net.voxelindustry.brokkgui.style.ICascadeStyleable;
 import net.voxelindustry.brokkgui.style.IStyleable;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class PopupHandler
@@ -19,7 +23,7 @@ public class PopupHandler
     public static PopupHandler getInstance(IGuiSubWindow window)
     {
         Objects.requireNonNull(window);
-        
+
         if (!instances.containsKey(window))
             instances.put(window, new PopupHandler());
         return instances.get(window);
@@ -134,5 +138,15 @@ public class PopupHandler
             if (popup instanceof GuiNode)
                 ((GuiNode) popup).handleClick(mouseX, mouseY, key);
         });
+    }
+
+    public int getPopupCount()
+    {
+        return popups.size();
+    }
+
+    public List<IGuiPopup> getPopups()
+    {
+        return popups;
     }
 }

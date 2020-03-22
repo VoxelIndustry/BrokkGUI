@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.immediate.style;
 
+import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.paint.Color;
 
@@ -9,7 +10,8 @@ public class ButtonStyle
     public final Color borderColor;
     public final float borderThin;
 
-    public final RectBox padding;
+    public final RectBox       padding;
+    public final RectAlignment textAlignment;
 
     public final Color textColor;
     public final Color shadowColor;
@@ -27,7 +29,9 @@ public class ButtonStyle
     public ButtonStyle(Color boxColor,
                        Color borderColor,
                        float borderThin,
-                       RectBox padding, Color textColor,
+                       RectBox padding,
+                       RectAlignment textAlignment,
+                       Color textColor,
                        Color shadowColor,
                        Color hoverBoxColor,
                        Color hoverBorderColor,
@@ -42,6 +46,7 @@ public class ButtonStyle
         this.borderColor = borderColor;
         this.borderThin = borderThin;
         this.padding = padding;
+        this.textAlignment = textAlignment;
         this.textColor = textColor;
         this.shadowColor = shadowColor;
         this.hoverBoxColor = hoverBoxColor;
@@ -65,7 +70,8 @@ public class ButtonStyle
         private Color borderColor = Color.ALPHA;
         private float borderThin  = 1;
 
-        private RectBox padding = RectBox.EMPTY;
+        private RectBox       padding       = RectBox.EMPTY;
+        private RectAlignment textAlignment = RectAlignment.MIDDLE_CENTER;
 
         private Color hoverBoxColor;
         private Color hoverBorderColor;
@@ -102,6 +108,12 @@ public class ButtonStyle
         public ButtonStyleBuilder setPadding(RectBox padding)
         {
             this.padding = padding;
+            return this;
+        }
+
+        public ButtonStyleBuilder setTextAlignment(RectAlignment textAlignment)
+        {
+            this.textAlignment = textAlignment;
             return this;
         }
 
@@ -189,6 +201,7 @@ public class ButtonStyle
                     borderColor,
                     borderThin,
                     padding,
+                    textAlignment,
                     textColor,
                     shadowColor,
                     hoverBoxColor,

@@ -298,6 +298,17 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
         return lastWheelValue;
     }
 
+    public void scissor(float startX, float startY, float endX, float endY)
+    {
+        getRenderer().getHelper().beginScissor();
+        getRenderer().getHelper().scissorBox(startX, startY, endX, endY);
+    }
+
+    public void stopScissor()
+    {
+        getRenderer().getHelper().endScissor();
+    }
+
     @Override
     public float getxRelativePos()
     {

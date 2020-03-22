@@ -15,6 +15,7 @@ import net.voxelindustry.brokkgui.immediate.style.EmptyBoxStyle;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.immediate.style.TextBoxStyle;
 import net.voxelindustry.brokkgui.immediate.style.TextStyle;
+import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.internal.profiler.GuiProfiler;
 import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
 import net.voxelindustry.brokkgui.paint.Color;
@@ -24,10 +25,14 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 import java.util.function.BiPredicate;
 
+import static com.google.common.base.Predicates.not;
+import static java.lang.Math.signum;
 import static java.util.stream.Collectors.joining;
 import static net.voxelindustry.brokkgui.debug.DebugRenderer.getNodeName;
 
@@ -83,17 +88,27 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
             .setHoverTextColor(INVISIBLE_HOVERED_TEXT_COLOR.shade(-0.2F))
             .create();
 
+    private static final ButtonStyle MENU_HEADER_STYLE = ButtonStyle.build()
+            .setTextColor(Color.BLACK)
+            .setBoxColor(Color.fromHex("#FAFAFA"))
+            .setHoverBoxColor(Color.fromHex("#F5F5F5"))
+            .setBorderColor(Color.fromHex("#212121"))
+            .setPadding(RectBox.build().all(2).create())
+            .create();
+
     private final IGuiWindow window;
 
-    private float   layoutPanelScroll;
     private GuiNode hoveredNode;
     private GuiNode selectedNode;
+    private GuiNode hoveredHierarchyNode;
 
     private boolean isInputLocked;
     private int     lockedMouseX;
     private int     lockedMouseY;
 
     private List<GuiNode> hiddenNodes = new ArrayList<>();
+
+    private Map<String, DebugHierarchy> hierarchiesByName = new HashMap<>();
 
     public DebugWindow(IGuiWindow window)
     {
@@ -141,19 +156,69 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
             return;
 
         handleInputLock();
+        hoveredNode = getDeepestHoveredNode(((BrokkGuiScreen) window).getMainPanel(), getMouseX(), getMouseY(), 0).getKey();
+        hoveredHierarchyNode = null;
 
+        // WINDOWS
         box(0, 0, 120, getScreenHeight());
 
-        hoveredNode = getDeepestHoveredNode(((BrokkGuiScreen) window).getMainPanel(), getMouseX(), getMouseY(), 0).getKey();
+        String mainWindowName = window.getClass().getSimpleName();
 
-        if (hasMouseWheeledBox(0, 0, 100, getScreenHeight()))
-            layoutPanelScroll = MathUtils.clamp(-1000, 0, (float) (layoutPanelScroll + getLastWheelValue() / 10));
+        List<String> windowsThisFrame = new ArrayList<>();
+        windowsThisFrame.add("Popups");
+        windowsThisFrame.add(mainWindowName);
 
-        drawHierarchy(((BrokkGuiScreen) window).getMainPanel(), 0, 0, layoutPanelScroll);
+        hierarchiesByName.putIfAbsent("Popups", new DebugHierarchy("Popups", 0, true));
+        hierarchiesByName.putIfAbsent(mainWindowName, new DebugHierarchy(mainWindowName, 0, true));
+        ((BrokkGuiScreen) window).getSubGuis().forEach(subWindow ->
+        {
+            String subWindowName = subWindow.getClass().getSimpleName();
+            windowsThisFrame.add(subWindowName);
+            hierarchiesByName.computeIfAbsent(subWindowName, name -> new DebugHierarchy(name, 0, false));
+        });
+        hierarchiesByName.keySet().removeIf(not(windowsThisFrame::contains));
+
+        drawWindowHierarchy(mainWindowName,
+                hierarchiesByName.get(mainWindowName),
+                getChildCountDeep(((BrokkGuiScreen) window).getMainPanel()),
+                0,
+                getScreenHeight() / 2,
+                ((BrokkGuiScreen) window).getMainPanel());
+        drawWindowHierarchy(
+                "Popups",
+                hierarchiesByName.get("Popups"),
+                PopupHandler.getInstance(window).getPopups()
+                        .stream().mapToInt(popup -> popup instanceof GuiFather ? getChildCountDeep((GuiFather) popup) : 1)
+                        .sum(),
+                getScreenHeight() / 2,
+                getScreenHeight(),
+                PopupHandler.getInstance(window).getPopups().stream()
+                        .filter(GuiNode.class::isInstance)
+                        .map(GuiNode.class::cast)
+                        .toArray(GuiNode[]::new));
+
+        if (selectedNode != null)
+            drawNodeInfos(selectedNode);
+        if (hoveredNode != null)
+            drawNodeInfos(hoveredNode);
+        if (hoveredHierarchyNode != null)
+            drawNodeInfos(hoveredHierarchyNode);
 
         IProfiler profiler = BrokkGuiPlatform.getInstance().getProfiler();
         if (profiler instanceof GuiProfiler)
             drawProfilerBox((GuiProfiler) profiler);
+    }
+
+    private void drawWindowHierarchy(String name, DebugHierarchy hierarchy, int childCount, float startY, float maxY, GuiNode... rootNodes)
+    {
+        if (hasMouseWheeledBox(0, startY + 14, 120, maxY))
+            hierarchy.setScrollY(MathUtils.clamp(-1000, 0, (float) (hierarchy.getScrollY() + signum(getLastWheelValue()) * getStringHeight())));
+
+        scissor(0, startY, 120, maxY);
+        drawHierarchy(hierarchy.getScrollY() + startY, rootNodes);
+        stopScissor();
+
+        button("- " + name + " (" + childCount + ") -", 0, startY, 120, 14, MENU_HEADER_STYLE);
     }
 
     private void handleInputLock()
@@ -188,7 +253,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         String recordsText = "Collected records: " + profiler.getRecordsCount();
         textBox(recordsText, getScreenWidth() - getStringWidth(recordsText) - 4, 0, StyleType.NORMAL);
 
-        String framesText = "Frame render time: (" + profiler.getFrameCount() + ")\n" +
+        String framesText = "Frame render time:\n" +
                 TWO_DECIMAL_FORMAT.format(profiler.getFrameRenderTimePercentile(50) / 1_000_000) + " Med " +
                 TWO_DECIMAL_FORMAT.format(profiler.getFrameRenderTimeMax() / 1_000_000) + " Max\n" +
                 TWO_DECIMAL_FORMAT.format(profiler.getFrameRenderTimePercentile(95) / 1_000_000) + " Perc95 " +
@@ -196,64 +261,72 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         textBox(framesText, getScreenWidth() - getStringWidthMultiLine(framesText) - 4, getStringHeight() + 6, StyleType.NORMAL);
     }
 
-    private int drawHierarchy(GuiFather node, int depth, int height, float startY)
+    private void drawHierarchy(float startY, GuiNode... nodes)
     {
         int addedHeight = 0;
-        for (GuiNode child : node.getChildrens())
+        for (GuiNode node : nodes)
         {
-            boolean isHidden = this.hiddenNodes.contains(child);
+            addedHeight += drawHierarchyOfNode(node, 0, addedHeight, startY);
+        }
+    }
 
-            float currentY = 2 + (height + addedHeight) * getStringHeight() + startY;
-            String nodeName = getNodeName(child);
-            InteractionResult nodeClick = button(nodeName,
-                    9 + depth * 5,
-                    currentY,
-                    getNodeButtonStyle(child));
+    private int drawHierarchyOfNode(GuiNode node, int depth, int height, float startY)
+    {
+        int addedHeight = 0;
+        boolean isHidden = this.hiddenNodes.contains(node);
 
-            if (nodeClick.isClicked())
-                selectedNode = child;
+        float currentY = 16 + (height + addedHeight) * getStringHeight() + startY;
+        String nodeName = getNodeName(node);
+        InteractionResult nodeClick = button(nodeName,
+                9 + depth * 5,
+                currentY,
+                getNodeButtonStyle(node));
 
-            drawHoveredNodeInfos(node, height, startY, addedHeight, child);
+        if (nodeClick.isClicked())
+            selectedNode = node;
 
-            addedHeight++;
+        if (isMouseOverBox(0,
+                16 + (height + addedHeight) * getStringHeight() + startY,
+                100,
+                16 + (height + addedHeight + 1) * getStringHeight() + startY))
+            hoveredHierarchyNode = node;
 
-            if (child instanceof GuiFather)
+        addedHeight++;
+
+        if (node instanceof GuiFather)
+        {
+            if (((GuiFather) node).getChildCount() != 0 && button(isHidden ? "+" : "-", 2, currentY, getNodeButtonStyle(node)).isClicked())
             {
-                if (((GuiFather) child).getChildCount() != 0 && button(isHidden ? "+" : "-", 2, currentY, getNodeButtonStyle(child)).isClicked())
-                {
-                    if (hiddenNodes.contains(child))
-                        hiddenNodes.remove(child);
-                    else
-                        hiddenNodes.add(child);
-                }
-
-                if (isHidden)
-                    text("(" + getChildCountDeep((GuiFather) child) + ")", 11 + depth * 5 + getStringWidth(nodeName), currentY, getNodeNameStyle(child));
+                if (hiddenNodes.contains(node))
+                    hiddenNodes.remove(node);
                 else
-                    addedHeight += drawHierarchy((GuiFather) child, depth + 1, height + addedHeight, startY);
+                    hiddenNodes.add(node);
+            }
+
+            if (isHidden)
+                text("(" + getChildCountDeep((GuiFather) node) + ")", 11 + depth * 5 + getStringWidth(nodeName), currentY, getNodeNameStyle(node));
+            else
+            {
+                for (GuiNode child : ((GuiFather) node).getChildrens())
+                    addedHeight += drawHierarchyOfNode(child, depth + 1, height + addedHeight, startY);
             }
         }
         return addedHeight;
     }
 
-    private void drawHoveredNodeInfos(GuiFather node, int height, float startY, int addedHeight, GuiNode child)
+    private void drawNodeInfos(GuiNode node)
     {
-        if (hoveredNode == child || isMouseOverBox(0,
-                2 + (height + addedHeight) * getStringHeight() + startY,
-                100,
-                2 + (height + addedHeight + 1) * getStringHeight() + startY))
-        {
-            emptyBox(child.getLeftPos(), child.getTopPos(), child.getWidth(), child.getHeight(), StyleType.NORMAL);
+        emptyBox(node.getLeftPos(), node.getTopPos(), node.getWidth(), node.getHeight(), StyleType.NORMAL);
 
-            StringJoiner builder = new StringJoiner("\n");
+        StringJoiner builder = new StringJoiner("\n");
 
-            String nodeName = getNodeName(child) + child.getStyleClass().getValue().stream().map(str -> " ." + str).collect(joining());
-            builder.add(nodeName);
+        String nodeName = getNodeName(node) + node.getStyleClass().getValue().stream().map(str -> " ." + str).collect(joining());
+        builder.add(nodeName);
 
-            builder.add("x: " + NO_DECIMAL_FORMAT.format(child.getLeftPos()) + " y: " + NO_DECIMAL_FORMAT.format(child.getTopPos()) + " w: " + NO_DECIMAL_FORMAT.format(child.getWidth()) + " h: " + NO_DECIMAL_FORMAT.format(child.getHeight()));
-            builder.add("visible: " + node.isVisible());
+        builder.add("x: " + NO_DECIMAL_FORMAT.format(node.getLeftPos()) + " y: " + NO_DECIMAL_FORMAT.format(node.getTopPos()) + " w: " + NO_DECIMAL_FORMAT.format(node.getWidth()) + " h: " + NO_DECIMAL_FORMAT.format(node.getHeight()));
+        builder.add("visible: " + isNodeVisible(node));
 
-            textBox(builder.toString(), child.getLeftPos(), child.getBottomPos(), StyleType.NORMAL);
+        textBox(builder.toString(), node.getLeftPos(), node.getBottomPos(), StyleType.NORMAL);
 
 /*                List<String> styleText = new ArrayList<>();
             for (Map.Entry<String, StyleProperty<?>> entry : node.getStyle().getProperties().entrySet())
@@ -273,7 +346,6 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
                 text(line, child.getLeftPos() + 2, child.getBottomPos() + currentY, StyleType.NORMAL);
                 currentY += getStringHeight();
             }*/
-        }
     }
 
     private Pair<GuiNode, Integer> getDeepestHoveredNode(GuiNode current, int mouseX, int mouseY, int depth)
@@ -295,7 +367,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
             if (deepest != null)
                 return deepest;
         }
-        return Pair.of(current, depth);
+        return Pair.of(current.isPointInside(mouseX, mouseY) ? current : null, depth);
     }
 
     private int getChildCountDeep(GuiFather node)
