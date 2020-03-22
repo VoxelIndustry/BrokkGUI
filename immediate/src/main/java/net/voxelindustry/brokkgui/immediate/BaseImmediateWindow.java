@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.immediate;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.IProperty;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
@@ -39,6 +40,9 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     private double lastWheelValue;
 
     private int lastKeyPressed;
+
+    private boolean isScissorActive;
+    private RectBox scissorBox;
 
     public BaseImmediateWindow()
     {
@@ -112,21 +116,6 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     public int getMouseY()
     {
         return mouseY;
-    }
-
-    public boolean isMouseOverBox(float xStart, float yStart, float xEnd, float yEnd)
-    {
-        return getMouseX() > xStart && getMouseX() < xEnd && getMouseY() > yStart && getMouseY() < yEnd;
-    }
-
-    public boolean hasMouseClickedBox(float xStart, float yStart, float xEnd, float yEnd)
-    {
-        return getLastClickX() > xStart && getLastClickX() < xEnd && getLastClickY() > yStart && getLastClickY() < yEnd;
-    }
-
-    public boolean hasMouseWheeledBox(float xStart, float yStart, float xEnd, float yEnd)
-    {
-        return getLastWheelX() > xStart && getLastWheelX() < xEnd && getLastWheelY() > yStart && getLastWheelY() < yEnd;
     }
 
     public int getLastKeyPressed()
@@ -300,13 +289,28 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
 
     public void scissor(float startX, float startY, float endX, float endY)
     {
+        isScissorActive = true;
+
+        scissorBox = RectBox.build().left(startX).right(endX).top(startY).bottom(endY).create();
         getRenderer().getHelper().beginScissor();
         getRenderer().getHelper().scissorBox(startX, startY, endX, endY);
     }
 
     public void stopScissor()
     {
+        isScissorActive = false;
+        scissorBox = RectBox.EMPTY;
         getRenderer().getHelper().endScissor();
+    }
+
+    public boolean isScissorActive()
+    {
+        return isScissorActive;
+    }
+
+    public RectBox getScissorBox()
+    {
+        return scissorBox;
     }
 
     @Override

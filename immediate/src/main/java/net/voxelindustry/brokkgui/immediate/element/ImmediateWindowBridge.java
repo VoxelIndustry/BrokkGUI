@@ -18,4 +18,10 @@ public interface ImmediateWindowBridge
     int getLastClickX();
 
     int getLastClickY();
+
+    boolean isAreaHovered(float startX, float startY, float endX, float endY);
+
+    boolean isAreaClicked(float startX, float startY, float endX, float endY);
+
+    boolean isAreaWheeled(float startX, float startY, float endX, float endY);
 }

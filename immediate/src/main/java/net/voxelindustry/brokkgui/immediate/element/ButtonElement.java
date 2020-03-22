@@ -40,8 +40,8 @@ public interface ButtonElement extends ImmediateElement
 
     default InteractionResult button(String text, float x, float y, float width, float height, ButtonStyle style)
     {
-        boolean isHovered = getMouseX() > x && getMouseY() > y && getMouseX() < x + width && getMouseY() < y + height;
-        boolean isClicked = getLastClickX() > x && getLastClickY() > y && getLastClickX() < x + width && getLastClickY() < y + height;
+        boolean isHovered = isAreaHovered(x, y, x + width, y + height);
+        boolean isClicked = isAreaClicked(x, y, x + width, y + height);
 
         float textWidth = getRenderer().getHelper().getStringWidthMultiLine(text);
         float textHeight = getRenderer().getHelper().getStringHeightMultiLine(text);

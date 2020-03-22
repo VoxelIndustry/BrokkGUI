@@ -35,7 +35,7 @@ public interface TextElement extends ImmediateElement
 
     default boolean text(String text, float x, float y, Color color, Color shadowColor, Color hoverColor, Color hoverShadowColor)
     {
-        boolean isHovered = getMouseX() > x && getMouseY() > y && getMouseY() < y + getRenderer().getHelper().getStringHeightMultiLine(text) && getMouseX() < x + getRenderer().getHelper().getStringWidthMultiLine(text);
+        boolean isHovered = isAreaHovered(x, y, x + getRenderer().getHelper().getStringWidthMultiLine(text), y + getRenderer().getHelper().getStringHeightMultiLine(text));
 
         if (!isHovered)
             getRenderer().getHelper().drawStringMultiline(text, x, y, 1, color, shadowColor);

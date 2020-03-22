@@ -54,6 +54,11 @@ public class RectBox
         return top + bottom;
     }
 
+    public boolean isInside(float x, float y)
+    {
+        return x > getLeft() && x < getRight() && y > getTop() && y < getBottom();
+    }
+
     @Override
     public boolean equals(Object o)
     {

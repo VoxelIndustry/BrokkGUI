@@ -48,7 +48,7 @@ public interface BoxElement extends ImmediateElement
 
     default boolean emptyBox(float x, float y, float width, float height, Color borderColor, Color hoverBorderColor, float borderThin)
     {
-        boolean isHovered = getMouseX() > x && getMouseY() < y && getMouseX() < x + width && getMouseY() < y + height;
+        boolean isHovered = isAreaHovered(x, y, x + width, y + height);
 
         if (!isHovered)
         {
@@ -78,7 +78,7 @@ public interface BoxElement extends ImmediateElement
 
     default boolean box(float x, float y, float width, float height, Color color, Color borderColor, float borderThin, Color hoverColor, Color hoverBorderColor)
     {
-        boolean isHovered = getMouseX() > x && getMouseY() > y && getMouseX() < x + width && getMouseY() < y + height;
+        boolean isHovered = isAreaHovered(x, y, x + width, y + height);
 
         if (!isHovered)
         {

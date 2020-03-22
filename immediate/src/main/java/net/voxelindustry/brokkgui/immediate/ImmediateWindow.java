@@ -26,4 +26,37 @@ public abstract class ImmediateWindow extends BaseImmediateWindow implements Imm
     {
         return (T) this.elementStyles.get(objectClass, type);
     }
+
+    @Override
+    public boolean isAreaHovered(float startX, float startY, float endX, float endY)
+    {
+        if (isScissorActive())
+        {
+            if (!getScissorBox().isInside(getMouseX(), getMouseY()))
+                return false;
+        }
+        return getMouseX() > startX && getMouseX() < endX && getMouseY() > startY && getMouseY() < endY;
+    }
+
+    @Override
+    public boolean isAreaClicked(float startX, float startY, float endX, float endY)
+    {
+        if (isScissorActive())
+        {
+            if (!getScissorBox().isInside(getLastClickX(), getLastClickY()))
+                return false;
+        }
+        return getLastClickX() > startX && getLastClickX() < endX && getLastClickY() > startY && getLastClickY() < endY;
+    }
+
+    @Override
+    public boolean isAreaWheeled(float startX, float startY, float endX, float endY)
+    {
+        if (isScissorActive())
+        {
+            if (!getScissorBox().isInside(getLastWheelX(), getLastWheelY()))
+                return false;
+        }
+        return getLastWheelX() > startX && getLastWheelX() < endX && getLastWheelY() > startY && getLastWheelY() < endY;
+    }
 }
