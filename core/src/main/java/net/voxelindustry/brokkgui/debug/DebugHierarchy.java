@@ -1,20 +1,22 @@
 package net.voxelindustry.brokkgui.debug;
 
+import net.voxelindustry.brokkgui.debug.hierarchy.AccordionItem;
+
 import java.util.Objects;
 
-public class DebugHierarchy
+public class DebugHierarchy implements AccordionItem
 {
-    private String name;
-    private float scrollY;
-    private boolean isOpen;
-    private float headerPosY;
+    private String  name;
+    private float   scrollY;
+    private boolean isCollapsed;
+    private float   headerPos;
 
-    public DebugHierarchy(String name, float scrollY, boolean isOpen, float headerPosY)
+    public DebugHierarchy(String name, float scrollY, boolean isCollapsed, float headerPos)
     {
         this.name = name;
         this.scrollY = scrollY;
-        this.isOpen = isOpen;
-        this.headerPosY = headerPosY;
+        this.isCollapsed = isCollapsed;
+        this.headerPos = headerPos;
     }
 
     public String getName()
@@ -37,24 +39,27 @@ public class DebugHierarchy
         this.scrollY = scrollY;
     }
 
-    public boolean isOpen()
+    @Override
+    public boolean isCollapsed()
     {
-        return isOpen;
+        return isCollapsed;
     }
 
-    public void setOpen(boolean open)
+    public void setCollapsed(boolean collapsed)
     {
-        isOpen = open;
+        isCollapsed = collapsed;
     }
 
-    public float getHeaderPosY()
+    @Override
+    public float getHeaderPos()
     {
-        return headerPosY;
+        return headerPos;
     }
 
-    public void setHeaderPosY(float headerPosY)
+    @Override
+    public void setHeaderPos(float headerPos)
     {
-        this.headerPosY = headerPosY;
+        this.headerPos = headerPos;
     }
 
     @Override
@@ -64,15 +69,15 @@ public class DebugHierarchy
         if (o == null || getClass() != o.getClass()) return false;
         DebugHierarchy that = (DebugHierarchy) o;
         return Float.compare(that.scrollY, scrollY) == 0 &&
-                isOpen == that.isOpen &&
-                Float.compare(that.headerPosY, headerPosY) == 0 &&
+                isCollapsed == that.isCollapsed &&
+                Float.compare(that.headerPos, headerPos) == 0 &&
                 Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(name, scrollY, isOpen, headerPosY);
+        return Objects.hash(name, scrollY, isCollapsed, headerPos);
     }
 
     @Override
@@ -81,8 +86,20 @@ public class DebugHierarchy
         return "DebugHierarchy{" +
                 "name='" + name + '\'' +
                 ", scrollY=" + scrollY +
-                ", isOpen=" + isOpen +
-                ", headerPosY=" + headerPosY +
+                ", isOpen=" + isCollapsed +
+                ", headerPosY=" + headerPos +
                 '}';
+    }
+
+    @Override
+    public float getHeaderSize()
+    {
+        return 14;
+    }
+
+    @Override
+    public float getMinimalSize()
+    {
+        return getHeaderSize() * 3;
     }
 }

@@ -4,6 +4,8 @@ import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RectBox;
+import net.voxelindustry.brokkgui.debug.hierarchy.AccordionItem;
+import net.voxelindustry.brokkgui.debug.hierarchy.AccordionLayout;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.gui.IGuiWindow;
 import net.voxelindustry.brokkgui.gui.InputType;
@@ -20,12 +22,11 @@ import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.internal.profiler.GuiProfiler;
 import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
 import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.paint.ColorConstants;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -36,6 +37,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.util.stream.Collectors.joining;
 import static net.voxelindustry.brokkgui.debug.DebugRenderer.getNodeName;
+import static net.voxelindustry.brokkgui.util.ListUtil.tryGetIndex;
 import static net.voxelindustry.brokkgui.util.MathUtils.clamp;
 
 public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWindow, InputType>
@@ -53,15 +55,12 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         TWO_DECIMAL_FORMAT.setMaximumFractionDigits(2);
     }
 
-    public static final Color BORDER_COLOR = ColorConstants.getColor("steelblue");
-
     public static final Color TEXT_COLOR         = Color.fromHex("#D4AF37");
     public static final Color HOVERED_TEXT_COLOR = Color.fromHex("#E0C56E");
 
-    public static final Color INVISIBLE_TEXT_COLOR         = Color.GRAY.addAlpha(-0.62F).shade(0.1F);
-    public static final Color INVISIBLE_HOVERED_TEXT_COLOR = Color.LIGHT_GRAY.addAlpha(-0.62F).shade(0.1F);
+    public static final Color INVISIBLE_TEXT_COLOR         = Color.GRAY.addAlpha(-0.22F).shade(0.1F);
+    public static final Color INVISIBLE_HOVERED_TEXT_COLOR = Color.LIGHT_GRAY.addAlpha(-0.22F).shade(0.1F);
 
-    public static final Color BOX_COLOR           = Color.BLACK.addAlpha(-0.5f);
     public static final Color SELECTION_BOX_COLOR = Color.AQUA;
 
     private static final BoxStyle LOCKED_MOUSE_STYLE = BoxStyle.build()
@@ -116,19 +115,19 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
 
     private List<GuiNode> hiddenNodes = new ArrayList<>();
 
-    private Map<String, DebugHierarchy> hierarchiesByName = new HashMap<>();
+    private Map<String, DebugHierarchy> hierarchiesByName = new LinkedHashMap<>();
 
     public DebugWindow(IGuiWindow window)
     {
         this.window = window;
 
         this.setBoxStyle(BoxStyle.build()
-                .setBoxColor(BOX_COLOR)
-                .setBorderColor(BORDER_COLOR)
+                .setBoxColor(Color.fromHex("#505050"))
+                .setBorderColor(Color.fromHex("#424242"))
                 .create());
 
         this.setTextStyle(TextStyle.build()
-                .setTextColor(TEXT_COLOR)
+                .setTextColor(Color.fromHex("#FAFAFA"))
                 .setHoverTextColor(HOVERED_TEXT_COLOR)
                 .create());
 
@@ -141,8 +140,8 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         this.setTextBoxStyle(TextBoxStyle.build()
                 .setTextColor(TEXT_COLOR)
                 .setHoverTextColor(HOVERED_TEXT_COLOR)
-                .setBoxColor(BOX_COLOR)
-                .setBorderColor(BORDER_COLOR)
+                .setBoxColor(Color.fromHex("#E0E0E0"))
+                .setBorderColor(Color.fromHex("#424242"))
                 .setPadding(RectBox.build().all(2).create())
                 .create());
 
@@ -152,8 +151,8 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
                 .create());
 
         this.setButtonStyle(ButtonStyle.build()
-                .setTextColor(TEXT_COLOR)
-                .setHoverTextColor(HOVERED_TEXT_COLOR)
+                .setTextColor(Color.fromHex("#EEEEEE"))
+                .setHoverTextColor(Color.fromHex("#E0E0E0"))
                 .create());
     }
 
@@ -176,10 +175,15 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         windowsThisFrame.add("Popups");
         windowsThisFrame.add(mainWindowName);
 
-        hierarchiesByName.putIfAbsent(mainWindowName, new DebugHierarchy(mainWindowName, 0, true, 0));
-        hierarchiesByName.putIfAbsent("Popups", new DebugHierarchy("Popups", 0, true,
+        hierarchiesByName.putIfAbsent(mainWindowName, new DebugHierarchy(mainWindowName, 0, false, 0));
+        hierarchiesByName.putIfAbsent("Popups", new DebugHierarchy("Popups", 0, false,
                 getScreenHeight() - ((BrokkGuiScreen) window).getSubGuis().size() * 14 - 14
                         - max(PopupHandler.getInstance(window).getPopups().stream().filter(GuiNode.class::isInstance).count(), 3) * 14));
+
+        List<AccordionItem> items = new ArrayList<>();
+        items.add(hierarchiesByName.get(mainWindowName));
+        items.add(hierarchiesByName.get("Popups"));
+
 
         int subWindowIndex = 0;
         for (SubGuiScreen subWindow : ((BrokkGuiScreen) window).getSubGuis())
@@ -187,30 +191,47 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
             String subWindowName = subWindow.getClass().getSimpleName();
             windowsThisFrame.add(subWindowName);
 
-            hierarchiesByName.putIfAbsent(subWindowName, new DebugHierarchy(subWindowName, 0, false,
-                    getScreenHeight() - (((BrokkGuiScreen) window).getSubGuis().size() - subWindowIndex) * 14));
+            if (!hierarchiesByName.containsKey(subWindowName))
+            {
+                AccordionItem aboveItem = items.get(items.size() - 1);
+                if (aboveItem.isCollapsed())
+                    AccordionLayout.moveUp(aboveItem.getHeaderSize(), aboveItem, items);
+            }
+            items.add(hierarchiesByName.putIfAbsent(subWindowName, new DebugHierarchy(subWindowName, 0, true,
+                    getScreenHeight() - (((BrokkGuiScreen) window).getSubGuis().size() - subWindowIndex) * 14)));
             subWindowIndex++;
         }
         hierarchiesByName.keySet().removeIf(not(windowsThisFrame::contains));
 
         drawWindowHierarchy(mainWindowName,
                 hierarchiesByName.get(mainWindowName),
+                items,
                 getChildCountDeep(((BrokkGuiScreen) window).getMainPanel()),
-                0,
-                hierarchiesByName.get("Popups").getHeaderPosY(),
                 ((BrokkGuiScreen) window).getMainPanel());
+
         drawWindowHierarchy(
                 "Popups",
                 hierarchiesByName.get("Popups"),
+                items,
                 PopupHandler.getInstance(window).getPopups()
-                        .stream().mapToInt(popup -> popup instanceof GuiFather ? getChildCountDeep((GuiFather) popup) : 1)
+                        .stream().mapToInt(popup -> popup instanceof GuiFather ? getChildCountDeep((GuiFather) popup) + 1 : 1)
                         .sum(),
-                hierarchiesByName.get("Popups").getHeaderPosY(),
-                getScreenHeight(),
                 PopupHandler.getInstance(window).getPopups().stream()
                         .filter(GuiNode.class::isInstance)
                         .map(GuiNode.class::cast)
                         .toArray(GuiNode[]::new));
+
+        for (SubGuiScreen subWindow : ((BrokkGuiScreen) window).getSubGuis())
+        {
+            String subWindowName = subWindow.getClass().getSimpleName();
+            DebugHierarchy subWindowHierarchy = hierarchiesByName.get(subWindowName);
+
+            drawWindowHierarchy(subWindowName,
+                    subWindowHierarchy,
+                    items,
+                    getChildCountDeep(subWindow),
+                    subWindow);
+        }
 
         if (selectedNode != null)
             drawNodeInfos(selectedNode);
@@ -224,15 +245,34 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
             drawProfilerBox((GuiProfiler) profiler);
     }
 
-    private void drawWindowHierarchy(String name, DebugHierarchy hierarchy, int childCount, float startY, float maxY, GuiNode... rootNodes)
+    private void drawWindowHierarchy(String name, DebugHierarchy hierarchy, List<AccordionItem> accordionItems, int childCount, GuiNode... rootNodes)
     {
         float headerOffset = 14;
+        float startY = hierarchy.getHeaderPos();
 
-        scissor(0, startY, 120, maxY);
+        char stateChar = !hierarchy.isCollapsed() ? '-' : '+';
+        if (button(stateChar + " " + name + " (" + childCount + ") " + stateChar, 0, startY, 120, headerOffset, MENU_HEADER_STYLE).isClicked())
+        {
+            hierarchy.setCollapsed(!hierarchy.isCollapsed());
+            if (!hierarchy.isCollapsed())
+            {
+                hierarchy.setScrollY(0);
+                AccordionLayout.openItem(hierarchy, accordionItems, getScreenHeight());
+            }
+            else
+            {
+                AccordionLayout.closeItem(hierarchy, accordionItems, getScreenHeight());
+            }
+        }
+
+        if (hierarchy.isCollapsed())
+            return;
+
+        float maxY = tryGetIndex(accordionItems, accordionItems.indexOf(hierarchy) + 1).map(AccordionItem::getHeaderPos).orElse((float) getScreenHeight());
+
+        scissor(0, startY + headerOffset, 120, maxY);
         float hierarchyLength = drawHierarchy(hierarchy.getScrollY() + startY, rootNodes);
         stopScissor();
-
-        button("- " + name + " (" + childCount + ") -", 0, startY, 120, headerOffset, MENU_HEADER_STYLE);
 
         float height = maxY - startY - headerOffset;
         if (isAreaWheeled(0, startY + headerOffset, 120, maxY))
