@@ -60,17 +60,26 @@ public class StylesheetManager
 
     public void refreshStylesheets(IStyleRoot screen)
     {
-        StyleList list = new StyleList(this.getUserAgent(screen.getThemeID()));
+        refreshStylesheets(screen, true);
+    }
+
+    public void refreshStylesheets(IStyleRoot screen, boolean useUserAgent)
+    {
+        StyleList list;
+
+        if (useUserAgent)
+            list = new StyleList(this.getUserAgent(screen.getThemeID()));
+        else
+            list = new StyleList();
 
         try
         {
-            list.merge(this.loadStylesheets(screen.getStylesheetsProperty().getValue().toArray(
-                    new String[screen.getStylesheetsProperty().size()])));
+            list.merge(this.loadStylesheets(screen.getStylesheets().toArray(new String[0])));
         } catch (ExecutionException e)
         {
             e.printStackTrace();
         }
-        screen.setStyleTree(list);
+        screen.setStyleList(list);
     }
 
     StyleList loadStylesheets(String... styleSheets) throws ExecutionException

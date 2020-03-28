@@ -1,13 +1,14 @@
 package net.voxelindustry.brokkgui.style;
 
-import fr.ourten.teabeans.value.BaseListProperty;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
+
+import java.util.List;
 
 public interface IStyleRoot
 {
     String getThemeID();
 
-     BaseListProperty<String> getStylesheetsProperty();
+     List<String> getStylesheets();
 
-    void setStyleTree(StyleList tree);
+    void setStyleList(StyleList list);
 }

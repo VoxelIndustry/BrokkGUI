@@ -14,6 +14,8 @@ public class DebugRenderer
         composite.setInputEventFilter(debugWindow);
         debugWindow.setWrapper(brokkGuiScreen.getWrapper());
         brokkGuiScreen.getWrapper().setGuiWindow(composite);
+
+        debugWindow.initGui();
         return debugWindow;
     }
 

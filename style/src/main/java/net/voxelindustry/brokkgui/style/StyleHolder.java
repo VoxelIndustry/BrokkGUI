@@ -228,7 +228,7 @@ public class StyleHolder
             return;
 
         getOwner().getEventDispatcher().dispatchEvent(StyleRefreshEvent.BEFORE, new StyleRefreshEvent.BeforeEvent(getOwner()));
-        List<StyleEntry> entries = tree.getEntries(this);
+        List<StyleEntry> entries = tree.getEntriesMatching(this);
 
         this.resetToDefault();
         entries.forEach(entry -> entry.getRules().forEach(rule ->

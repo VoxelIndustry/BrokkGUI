@@ -10,14 +10,14 @@ import java.util.Optional;
 
 public class StyleList
 {
-    private List<StyleEntry> styleList;
+    private List<StyleEntry> styleEntries;
     private StyleEntry       wildcard;
 
     public StyleList()
     {
         this.wildcard = new StyleEntry(new StyleSelector().addWildcard());
-        this.styleList = new ArrayList<>();
-        this.styleList.add(this.wildcard);
+        this.styleEntries = new ArrayList<>();
+        this.styleEntries.add(this.wildcard);
     }
 
     public StyleList(StyleList original)
@@ -36,13 +36,13 @@ public class StyleList
     {
         StyleEntry lastAdded;
 
-        Optional<StyleEntry> match = this.styleList.stream().filter(styleEntry ->
+        Optional<StyleEntry> match = this.styleEntries.stream().filter(styleEntry ->
                 styleEntry.getSelector().match(selectors)).findFirst();
 
         if (!match.isPresent())
         {
             StyleEntry newEntry = new StyleEntry(selectors);
-            this.styleList.add(newEntry);
+            this.styleEntries.add(newEntry);
             lastAdded = newEntry;
         }
         else
@@ -52,7 +52,7 @@ public class StyleList
 
     public List<StyleEntry> getInternalStyleList()
     {
-        return this.styleList;
+        return this.styleEntries;
     }
 
     public StyleEntry getWildcard()
@@ -62,22 +62,22 @@ public class StyleList
 
     void clear()
     {
-        this.styleList.clear();
-        this.styleList.add(wildcard);
+        this.styleEntries.clear();
+        this.styleEntries.add(wildcard);
         this.wildcard.getRules().clear();
     }
 
     boolean isEmpty()
     {
-        return this.styleList.size() == 1 && this.wildcard.getRules().isEmpty();
+        return this.styleEntries.size() == 1 && this.wildcard.getRules().isEmpty();
     }
 
-    public List<StyleEntry> getEntries(StyleHolder styleHolder)
+    public List<StyleEntry> getEntriesMatching(StyleHolder styleHolder)
     {
         List<StyleEntry> entries = new ArrayList<>();
 
         entries.add(this.wildcard);
-        this.styleList.forEach(entry ->
+        this.styleEntries.forEach(entry ->
         {
             if (entry.getSelector().match(styleHolder))
                 entries.add(entry);

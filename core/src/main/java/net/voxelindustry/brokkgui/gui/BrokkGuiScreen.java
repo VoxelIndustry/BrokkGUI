@@ -705,6 +705,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     /////////////////////
 
     @Override
+    public List<String> getStylesheets()
+    {
+        return stylesheetsProperty.getModifiableValue();
+    }
+
     public BaseListProperty<String> getStylesheetsProperty()
     {
         return stylesheetsProperty;
@@ -716,9 +721,9 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void setStyleTree(StyleList tree)
+    public void setStyleList(StyleList list)
     {
-        this.getStyleTreeProperty().setValue(tree);
+        this.getStyleTreeProperty().setValue(list);
     }
 
     public void addStylesheet(String stylesheetLocation)

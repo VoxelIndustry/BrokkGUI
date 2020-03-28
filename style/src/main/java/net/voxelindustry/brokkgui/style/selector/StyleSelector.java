@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static net.voxelindustry.brokkgui.style.selector.StyleSelectorType.STRUCTURAL_PSEUDOCLASS;
 
@@ -127,5 +128,21 @@ public class StyleSelector implements IStyleSelector
                 ", structuralSelectors=" + structuralSelectors +
                 ", computedSpecificity=" + computedSpecificity +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StyleSelector that = (StyleSelector) o;
+        return Objects.equals(selectors, that.selectors) &&
+                Objects.equals(structuralSelectors, that.structuralSelectors);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(selectors, structuralSelectors);
     }
 }

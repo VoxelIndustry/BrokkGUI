@@ -9,6 +9,8 @@ import static net.voxelindustry.brokkgui.immediate.style.StyleType.NORMAL;
 
 public interface BoxElement extends ImmediateElement
 {
+    String BOX_TYPE = "box";
+
     default void setBoxStyle(BoxStyle style)
     {
         setBoxStyle(style, NORMAL);
@@ -68,7 +70,18 @@ public interface BoxElement extends ImmediateElement
 
     default boolean box(float x, float y, float width, float height, StyleType type)
     {
-        return box(x, y, width, height, getStyleObject(type, BoxStyle.class));
+        BoxStyle boxStyle = getStyleObject(type, BoxStyle.class);
+
+        if (boxStyle != null)
+            return box(x, y, width, height, boxStyle);
+        else
+            return box(x, y, width, height,
+                    getStyleValue(BOX_TYPE, type, "background-color", Color.WHITE),
+                    getStyleValue(BOX_TYPE, type, "border-color", Color.BLACK),
+                    getStyleValue(BOX_TYPE, type, "border-width", 1F),
+                    getStyleValue(BOX_TYPE, type, "hover", "background-color", Color.WHITE),
+                    getStyleValue(BOX_TYPE, type, "hover", "border-color", Color.BLACK)
+            );
     }
 
     default boolean box(float x, float y, float width, float height, BoxStyle style)

@@ -9,6 +9,13 @@ public interface ImmediateWindowBridge
 
     <T> T getStyleObject(StyleType type, Class<T> objectClass);
 
+    default <T> T getStyleValue(String element, StyleType styleType, String rule, T defaultValue)
+    {
+        return getStyleValue(element, styleType, "", rule, defaultValue);
+    }
+
+    <T> T getStyleValue(String element, StyleType styleType, String pseudoClass, String rule, T defaultValue);
+
     IGuiRenderer getRenderer();
 
     int getMouseX();

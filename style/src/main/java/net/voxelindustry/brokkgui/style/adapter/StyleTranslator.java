@@ -43,6 +43,24 @@ public class StyleTranslator
     }
 
     @SuppressWarnings("unchecked")
+    public <T> IStyleDecoder<T> getDecoder(Class<T> valueClass)
+    {
+        return (IStyleDecoder<T>) this.styleDecoders.get(valueClass);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> IStyleEncoder<T> getEncoder(Class<T> valueClass)
+    {
+        return (IStyleEncoder<T>) this.styleEncoders.get(valueClass);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> IStyleValidator<T> getValidator(Class<T> valueClass)
+    {
+        return (IStyleValidator<T>) this.styleValidators.get(valueClass);
+    }
+
+    @SuppressWarnings("unchecked")
     public <T> T decode(String cssString, Class<?> valueClass)
     {
         return (T) this.styleDecoders.get(valueClass).decode(cssString);
