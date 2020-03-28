@@ -3,13 +3,13 @@ package net.voxelindustry.brokkgui.style.tree;
 import com.google.common.collect.Lists;
 import net.voxelindustry.brokkgui.style.selector.StyleSelector;
 import net.voxelindustry.brokkgui.style.selector.StyleSelectorType;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StyleListTest
 {
     @Test

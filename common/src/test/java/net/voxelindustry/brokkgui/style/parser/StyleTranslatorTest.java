@@ -1,13 +1,13 @@
 package net.voxelindustry.brokkgui.style.parser;
 
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StyleTranslatorTest
 {
     @Test

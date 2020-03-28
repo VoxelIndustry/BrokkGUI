@@ -2,8 +2,8 @@ package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import org.assertj.core.data.MapEntry;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static net.voxelindustry.brokkgui.sprite.SpriteRotation.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +12,7 @@ public class RandomSpriteRotationStyleTranslatorTest
 {
     private RandomSpriteRotationStyleTranslator translator;
 
-    @Before
+    @BeforeEach
     public void setup()
     {
         translator = new RandomSpriteRotationStyleTranslator();

@@ -3,8 +3,8 @@ package net.voxelindustry.brokkgui.style.shorthand;
 import net.voxelindustry.brokkgui.style.StyleProperty;
 import net.voxelindustry.brokkgui.style.StyleSource;
 import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.stream.IntStream;
 
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShorthandPropertyTest
 {
-    @Before
+    @BeforeEach
     public void init()
     {
         StyleEngine.getInstance().start();
