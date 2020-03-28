@@ -60,12 +60,13 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public void render(int mouseX, int mouseY, RenderTarget target, RenderPass... pass)
     {
-        this.immediateRender();
     }
 
     @Override
     public void renderLast(int mouseX, int mouseY)
     {
+        this.immediateRender();
+
         this.lastWheelX = -1;
         this.lastWheelY = -1;
         this.lastWheelValue = 0;
