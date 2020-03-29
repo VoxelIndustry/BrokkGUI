@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.debug;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiNode;
 import net.voxelindustry.brokkgui.control.GuiFather;
-import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.debug.hierarchy.AccordionItem;
 import net.voxelindustry.brokkgui.debug.hierarchy.AccordionLayout;
 import net.voxelindustry.brokkgui.gui.BrokkGuiScreen;
@@ -12,16 +11,12 @@ import net.voxelindustry.brokkgui.gui.InputType;
 import net.voxelindustry.brokkgui.gui.SubGuiScreen;
 import net.voxelindustry.brokkgui.immediate.ImmediateWindow;
 import net.voxelindustry.brokkgui.immediate.InteractionResult;
-import net.voxelindustry.brokkgui.immediate.style.BoxStyle;
-import net.voxelindustry.brokkgui.immediate.style.ButtonStyle;
-import net.voxelindustry.brokkgui.immediate.style.EmptyBoxStyle;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
-import net.voxelindustry.brokkgui.immediate.style.TextBoxStyle;
-import net.voxelindustry.brokkgui.immediate.style.TextStyle;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.internal.profiler.GuiProfiler;
 import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
-import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.style.IStyleRoot;
+import net.voxelindustry.brokkgui.style.StylesheetManager;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.NumberFormat;
@@ -55,53 +50,13 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         TWO_DECIMAL_FORMAT.setMaximumFractionDigits(2);
     }
 
-    public static final Color TEXT_COLOR         = Color.fromHex("#D4AF37");
-    public static final Color HOVERED_TEXT_COLOR = Color.fromHex("#E0C56E");
+    private static final StyleType MENU        = StyleType.of("menu");
+    private static final StyleType MENU_DARKER = StyleType.combine(MENU, StyleType.DARK);
+    private static final StyleType INVISIBLE = StyleType.of("invisible");
+    private static final StyleType INVISIBLE_PARENT = StyleType.combine(INVISIBLE, StyleType.DARK);
+    private static final StyleType LOCKED_MOUSE = StyleType.of("mouse-lock");
+    private static final StyleType BUTTON_ACTION = StyleType.of("action");
 
-    public static final Color INVISIBLE_TEXT_COLOR         = Color.GRAY.addAlpha(-0.22F).shade(0.1F);
-    public static final Color INVISIBLE_HOVERED_TEXT_COLOR = Color.LIGHT_GRAY.addAlpha(-0.22F).shade(0.1F);
-
-    public static final Color SELECTION_BOX_COLOR = Color.AQUA;
-
-    private static final BoxStyle LOCKED_MOUSE_STYLE = BoxStyle.build()
-            .setBoxColor(Color.AQUA.addAlpha(-0.6F))
-            .setBorderColor(Color.AQUA.addAlpha(-0.4F))
-            .setBorderThin(1)
-            .create();
-
-    private static final TextStyle INVISIBLE_NODE_STYLE = TextStyle.build()
-            .setTextColor(INVISIBLE_TEXT_COLOR)
-            .setHoverTextColor(INVISIBLE_HOVERED_TEXT_COLOR)
-            .create();
-
-    private static final TextStyle INVISIBLE_PARENT_NODE_STYLE = TextStyle.build()
-            .setTextColor(INVISIBLE_TEXT_COLOR.shade(-0.2F))
-            .setHoverTextColor(INVISIBLE_HOVERED_TEXT_COLOR.shade(-0.2F))
-            .create();
-
-    private static final ButtonStyle INVISIBLE_NODE_BUTTON_STYLE = ButtonStyle.build()
-            .setTextColor(INVISIBLE_TEXT_COLOR)
-            .setHoverTextColor(INVISIBLE_HOVERED_TEXT_COLOR)
-            .create();
-
-    private static final ButtonStyle INVISIBLE_PARENT_NODE_BUTTON_STYLE = ButtonStyle.build()
-            .setTextColor(INVISIBLE_TEXT_COLOR.shade(-0.2F))
-            .setHoverTextColor(INVISIBLE_HOVERED_TEXT_COLOR.shade(-0.2F))
-            .create();
-
-    private static final ButtonStyle MENU_HEADER_STYLE = ButtonStyle.build()
-            .setTextColor(Color.fromHex("#212121"))
-            .setBoxColor(Color.fromHex("#FAFAFA"))
-            .setHoverBoxColor(Color.fromHex("#EEEEEE"))
-            .setBorderColor(Color.fromHex("#212121"))
-            .setPadding(RectBox.build().all(2).create())
-            .create();
-
-    private static final BoxStyle MENU_SCROLL_GRIP_STYLE = BoxStyle.build()
-            .setBoxColor(Color.fromHex("#E0E0E0"))
-            .setHoverBoxColor(Color.fromHex("#BDBDBD"))
-            .setBorderColor(Color.fromHex("#212121"))
-            .create();
 
     private final IGuiWindow window;
 
@@ -121,39 +76,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
     {
         this.window = window;
 
-        this.setBoxStyle(BoxStyle.build()
-                .setBoxColor(Color.fromHex("#505050"))
-                .setBorderColor(Color.fromHex("#424242"))
-                .create());
-
-        this.setTextStyle(TextStyle.build()
-                .setTextColor(Color.fromHex("#FAFAFA"))
-                .setHoverTextColor(HOVERED_TEXT_COLOR)
-                .create());
-
-        this.setTextStyle(TextStyle.build()
-                        .setTextColor(INVISIBLE_TEXT_COLOR)
-                        .setHoverTextColor(INVISIBLE_HOVERED_TEXT_COLOR)
-                        .create(),
-                StyleType.LIGHT);
-
-        this.setTextBoxStyle(TextBoxStyle.build()
-                .setTextColor(TEXT_COLOR)
-                .setHoverTextColor(HOVERED_TEXT_COLOR)
-                .setBoxColor(Color.fromHex("#E0E0E0"))
-                .setBorderColor(Color.fromHex("#424242"))
-                .setPadding(RectBox.build().all(2).create())
-                .create());
-
-        this.setEmptyBoxStyle(EmptyBoxStyle.build()
-                .setBorderColor(SELECTION_BOX_COLOR)
-                .setBorderThin(0.5F)
-                .create());
-
-        this.setButtonStyle(ButtonStyle.build()
-                .setTextColor(Color.fromHex("#EEEEEE"))
-                .setHoverTextColor(Color.fromHex("#E0E0E0"))
-                .create());
+        this.addStyleSheet("/assets/brokkgui/css/debug-window.css");
     }
 
     @Override
@@ -243,6 +166,15 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         IProfiler profiler = BrokkGuiPlatform.getInstance().getProfiler();
         if (profiler instanceof GuiProfiler)
             drawProfilerBox((GuiProfiler) profiler);
+
+        if (button("RELOAD CSS", 120, 0, BUTTON_ACTION).isClicked())
+        {
+            StylesheetManager.getInstance().forceReload((IStyleRoot) window);
+            ((BrokkGuiScreen) window).getMainPanel().refreshStyle();
+
+            StylesheetManager.getInstance().forceReload(this, false);
+            refreshStyle();
+        }
     }
 
     private void drawWindowHierarchy(String name, DebugHierarchy hierarchy, List<AccordionItem> accordionItems, int childCount, GuiNode... rootNodes)
@@ -251,7 +183,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         float startY = hierarchy.getHeaderPos();
 
         char stateChar = !hierarchy.isCollapsed() ? '-' : '+';
-        if (button(stateChar + " " + name + " (" + childCount + ") " + stateChar, 0, startY, 120, headerOffset, MENU_HEADER_STYLE).isClicked())
+        if (button(stateChar + " " + name + " (" + childCount + ") " + stateChar, 0, startY, 120, headerOffset, MENU).isClicked())
         {
             hierarchy.setCollapsed(!hierarchy.isCollapsed());
             if (!hierarchy.isCollapsed())
@@ -275,6 +207,13 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         stopScissor();
 
         float height = maxY - startY - headerOffset;
+
+        if(height > hierarchyLength)
+        {
+            hierarchy.setScrollY(0);
+            return;
+        }
+
         if (isAreaWheeled(0, startY + headerOffset, 120, maxY))
             hierarchy.setScrollY(clamp(min(height - hierarchyLength, 0), 0, (float) (hierarchy.getScrollY() + getLastWheelValue() / 20)));
 
@@ -283,7 +222,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
                 startY + headerOffset - 1 - (height + 2 - scrollGripHeight) * (hierarchy.getScrollY() / (hierarchyLength - height)),
                 5,
                 scrollGripHeight,
-                MENU_SCROLL_GRIP_STYLE);
+                MENU_DARKER);
     }
 
     private void handleInputLock()
@@ -304,7 +243,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
             String text = "Input LOCKED (CTRL + D)";
             textBox(text, getScreenWidth() - getStringWidth(text) - 4, getScreenHeight() - getStringHeight() - 4, StyleType.NORMAL);
 
-            box(lockedMouseX, lockedMouseY, 8, 8, LOCKED_MOUSE_STYLE);
+            box(lockedMouseX, lockedMouseY, 8, 8, LOCKED_MOUSE);
         }
         else
         {
@@ -347,7 +286,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         InteractionResult nodeClick = button(nodeName,
                 9 + depth * 5,
                 currentY,
-                getNodeButtonStyle(node));
+                getNodeNameStyle(node));
 
         if (nodeClick.isClicked())
             selectedNode = node;
@@ -362,7 +301,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
 
         if (node instanceof GuiFather)
         {
-            if (((GuiFather) node).getChildCount() != 0 && button(isHidden ? "+" : "-", 2, currentY, getNodeButtonStyle(node)).isClicked())
+            if (((GuiFather) node).getChildCount() != 0 && button(isHidden ? "+" : "-", 2, currentY, getNodeNameStyle(node)).isClicked())
             {
                 if (hiddenNodes.contains(node))
                     hiddenNodes.remove(node);
@@ -442,22 +381,13 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         return node.getChildCount() + node.getChildrens().stream().mapToInt(child -> child instanceof GuiFather ? getChildCountDeep((GuiFather) child) : 0).sum();
     }
 
-    private TextStyle getNodeNameStyle(GuiNode node)
+    private StyleType getNodeNameStyle(GuiNode node)
     {
         if (!node.isVisible())
-            return INVISIBLE_NODE_STYLE;
+            return INVISIBLE;
         if (!isNodeVisible(node))
-            return INVISIBLE_PARENT_NODE_STYLE;
-        return getStyleObject(StyleType.NORMAL, TextStyle.class);
-    }
-
-    private ButtonStyle getNodeButtonStyle(GuiNode node)
-    {
-        if (!node.isVisible())
-            return INVISIBLE_NODE_BUTTON_STYLE;
-        if (!isNodeVisible(node))
-            return INVISIBLE_PARENT_NODE_BUTTON_STYLE;
-        return getStyleObject(StyleType.NORMAL, ButtonStyle.class);
+            return INVISIBLE_PARENT;
+        return StyleType.NORMAL;
     }
 
     private boolean isNodeVisible(GuiNode node)

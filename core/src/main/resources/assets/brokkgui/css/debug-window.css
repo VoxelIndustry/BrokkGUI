@@ -1,0 +1,101 @@
+box {
+    background-color: #505050;
+    border-color: #424242;
+}
+
+text {
+    text-color: #FAFAFA;
+}
+
+text:hover {
+    text-color: #FDFDFD;
+}
+
+text.light {
+    text-color: #9E9E9E 78%;
+}
+
+text.light:hover {
+    text-color: #757575 78%;
+}
+
+text-box {
+    text-color: #212121;
+    background-color: #FAFAFA;
+    border-color: #212121;
+    padding: 2;
+}
+
+text-box:hover {
+    background-color: #EEEEEE;
+}
+
+empty-box {
+    border-color: #00FFFF;
+    border-width: 0.5;
+}
+
+button {
+    text-color: #EEEEEE;
+}
+
+button:hover {
+    text-color: #E0E0E0;
+}
+
+.menu {
+    background-color: #FAFAFA;
+    text-color: #212121;
+    border-color: #212121;
+    padding: 2;
+}
+
+.menu:hover {
+    text-color: #212121;
+}
+
+.menu:hover {
+    background-color: #EEEEEE;
+}
+
+.menu.dark {
+    background-color: #E0E0E0;
+}
+
+.menu.dark:hover {
+    background-color: #BDBDBD;
+}
+
+.invisible {
+    text-color: #9E9E9E 78%;
+}
+
+.invisible:hover {
+    text-color: #898989 78%;
+}
+
+.invisible.dark {
+    text-color: #BEBEBE 94%;
+}
+
+.invisible.dark:hover {
+    text-color: #AEAEAE 94%;
+}
+
+.mouse-lock {
+    background-color: #00CCCC 50%;
+    border-color: #00FFFF 60%;
+    border-width: 1;
+}
+
+button.action {
+    padding: 4;
+    text-color: #212121;
+    background-color: #cfd8dc;
+    border-color: #212121;
+}
+
+button.action:hover {
+    background-color: #b0bec5;
+    text-color: #212121;
+}
