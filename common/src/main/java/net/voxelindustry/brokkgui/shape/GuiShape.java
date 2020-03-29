@@ -15,9 +15,9 @@ import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.SpriteRotation;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.HeldPropertyState;
-import net.voxelindustry.brokkgui.style.optional.SpriteProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
+import net.voxelindustry.brokkgui.style.optional.SpriteProperties;
 import net.voxelindustry.brokkgui.style.optional.SpriteRandomRotationProperties;
 
 public abstract class GuiShape extends GuiNode
@@ -62,7 +62,7 @@ public abstract class GuiShape extends GuiNode
 
                 this.shape.drawColored(this, renderer,
                         getxPos() + getxTranslate(), getyPos() + getyTranslate(),
-                        background, getzLevel());
+                        background, getzLevel(), getBackgroundPosition());
             }
 
             if (this.hasBorder())
@@ -85,7 +85,7 @@ public abstract class GuiShape extends GuiNode
 
                 this.shape.drawColored(this, renderer,
                         getxPos() + getxTranslate(), getyPos() + getyTranslate(),
-                        foreground, getzLevel());
+                        foreground, getzLevel(), getForegroundPosition());
             }
         }
     }

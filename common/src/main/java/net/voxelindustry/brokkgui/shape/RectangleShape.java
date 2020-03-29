@@ -9,19 +9,17 @@ public class RectangleShape implements ShapeDefinition
 {
     @Override
     public void drawColored(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Color color,
-                            float zLevel)
+                            float zLevel, RectBox spritePosition)
     {
-        RectBox position = shape.getStyle().getStyleValue("background-position", RectBox.class);
-
-        if (position == RectBox.EMPTY)
+        if (spritePosition == RectBox.EMPTY)
             renderer.getHelper().drawColoredRect(renderer, startX, startY, shape.getWidth(), shape.getHeight(), zLevel,
                     color);
         else
             renderer.getHelper().drawColoredRect(renderer,
-                    startX + position.getLeft(),
-                    startY + position.getTop(),
-                    shape.getWidth() - position.getHorizontal(),
-                    shape.getHeight() - position.getVertical(),
+                    startX + spritePosition.getLeft(),
+                    startY + spritePosition.getTop(),
+                    shape.getWidth() - spritePosition.getHorizontal(),
+                    shape.getHeight() - spritePosition.getVertical(),
                     zLevel, color);
     }
 
@@ -35,21 +33,19 @@ public class RectangleShape implements ShapeDefinition
 
     @Override
     public void drawTextured(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Texture texture,
-                             float zLevel)
+                             float zLevel, RectBox spritePosition)
     {
-        RectBox position = shape.getStyle().getStyleValue("background-position", RectBox.class);
-
-        if (position == RectBox.EMPTY)
+        if (spritePosition == RectBox.EMPTY)
             renderer.getHelper().drawTexturedRect(renderer, startX, startY, texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(), shape.getWidth(), shape.getHeight(), zLevel);
         else
             renderer.getHelper().drawTexturedRect(renderer,
-                    startX + position.getLeft(),
-                    startY + position.getTop(),
+                    startX + spritePosition.getLeft(),
+                    startY + spritePosition.getTop(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
-                    shape.getWidth() - position.getHorizontal(),
-                    shape.getHeight() - position.getVertical(),
+                    shape.getWidth() - spritePosition.getHorizontal(),
+                    shape.getHeight() - spritePosition.getVertical(),
                     zLevel);
     }
 
