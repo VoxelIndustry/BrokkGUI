@@ -48,7 +48,7 @@ public class PopupHandler
 
         if (popup instanceof ICascadeStyleable)
         {
-            ((ICascadeStyleable) popup).setStyleTree(this.styleSupplier);
+            ((ICascadeStyleable) popup).setStyleListSupplier(this.styleSupplier);
             ((ICascadeStyleable) popup).refreshStyle();
         }
     }
@@ -91,7 +91,7 @@ public class PopupHandler
         {
             if (popup instanceof ICascadeStyleable)
             {
-                ((ICascadeStyleable) popup).setStyleTree(styleSupplier);
+                ((ICascadeStyleable) popup).setStyleListSupplier(styleSupplier);
                 ((ICascadeStyleable) popup).refreshStyle();
             }
         });
@@ -99,7 +99,7 @@ public class PopupHandler
         {
             if (popup instanceof ICascadeStyleable)
             {
-                ((ICascadeStyleable) popup).setStyleTree(styleSupplier);
+                ((ICascadeStyleable) popup).setStyleListSupplier(styleSupplier);
                 ((ICascadeStyleable) popup).refreshStyle();
             }
         });
@@ -116,7 +116,7 @@ public class PopupHandler
         {
             if (popup instanceof ICascadeStyleable)
             {
-                ((ICascadeStyleable) popup).setStyleTree(styleSupplier);
+                ((ICascadeStyleable) popup).setStyleListSupplier(styleSupplier);
                 ((ICascadeStyleable) popup).refreshStyle();
             }
         });

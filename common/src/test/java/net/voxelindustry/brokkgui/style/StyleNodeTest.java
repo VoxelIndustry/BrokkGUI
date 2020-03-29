@@ -37,7 +37,7 @@ public class StyleNodeTest
 
         GuiPane pane = new GuiPane();
         StyleList finalTree = tree;
-        pane.setStyleTree(() -> finalTree);
+        pane.setStyleListSupplier(() -> finalTree);
         pane.refreshStyle();
 
         assertThat(pane.getBorderColor()).isEqualTo(ColorConstants.getColor("khaki"));
@@ -59,18 +59,18 @@ public class StyleNodeTest
 
         GuiPane pane = new GuiPane();
         pane.getStyleClass().add("myPane");
-        pane.setStyleTree(() -> finalTree);
+        pane.setStyleListSupplier(() -> finalTree);
         pane.refreshStyle();
 
         GuiPane childPane = new GuiPane();
         childPane.getStyleClass().add("myChildPane");
         pane.addChild(childPane);
-        childPane.setStyleTree(() -> finalTree);
+        childPane.setStyleListSupplier(() -> finalTree);
         childPane.refreshStyle();
 
         GuiPane fakeChildPane = new GuiPane();
         fakeChildPane.getStyleClass().add("myChildPane");
-        fakeChildPane.setStyleTree(() -> finalTree);
+        fakeChildPane.setStyleListSupplier(() -> finalTree);
         fakeChildPane.refreshStyle();
 
         assertThat(pane.getBorderColor()).isEqualTo(ColorConstants.getColor("khaki"));
@@ -91,7 +91,7 @@ public class StyleNodeTest
         StyleList finalTree = tree;
 
         GuiPane pane = new GuiPane();
-        pane.setStyleTree(() -> finalTree);
+        pane.setStyleListSupplier(() -> finalTree);
         pane.refreshStyle();
 
         assertThat(pane.getBackgroundColor()).isEqualTo(ColorConstants.getColor("limegreen"));

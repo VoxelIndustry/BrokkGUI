@@ -135,9 +135,9 @@ public class GuiTooltip implements IGuiTooltip, ICascadeStyleable
     }
 
     @Override
-    public void setStyleTree(Supplier<StyleList> treeSupplier)
+    public void setStyleListSupplier(Supplier<StyleList> treeSupplier)
     {
-        this.getContent().setStyleTree(treeSupplier);
+        this.getContent().setStyleListSupplier(treeSupplier);
     }
 
     @Override

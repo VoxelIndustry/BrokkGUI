@@ -266,14 +266,14 @@ public class GuiTabPane extends GuiElement
     /////////////////////
 
     @Override
-    public void setStyleTree(Supplier<StyleList> treeSupplier)
+    public void setStyleListSupplier(Supplier<StyleList> styleListSupplier)
     {
-        super.setStyleTree(treeSupplier);
+        super.setStyleListSupplier(styleListSupplier);
 
         this.getTabs().forEach(node ->
         {
             if (node.getContent() != null)
-                node.getContent().setStyleTree(treeSupplier);
+                node.getContent().setStyleListSupplier(styleListSupplier);
         });
     }
 

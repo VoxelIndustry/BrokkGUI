@@ -52,7 +52,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     private final BaseProperty<Integer> screenWidthProperty, screenHeightProperty;
 
     private final BaseListProperty<String> stylesheetsProperty;
-    private final BaseProperty<StyleList>  styleTreeProperty;
+    private final BaseProperty<StyleList>  styleListProperty;
 
     private final ListenerPool listenerPool;
 
@@ -86,7 +86,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         this.listenerPool = new ListenerPool();
 
         this.stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
-        this.styleTreeProperty = new BaseProperty<>(null, "styleTreeProperty");
+        this.styleListProperty = new BaseProperty<>(null, "styleTreeProperty");
 
         this.lastClickX = -1;
         this.lastClickY = -1;
@@ -136,7 +136,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         if (this.getMainPanel() != null)
             this.getMainPanel().refreshStyle();
         this.windows.forEach(GuiFather::refreshStyle);
-        PopupHandler.getInstance(this).setStyleSupplier(this.getStyleTreeProperty()::getValue);
+        PopupHandler.getInstance(this).setStyleSupplier(this.getStyleListProperty()::getValue);
     }
 
     @Override
@@ -339,7 +339,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         subGui.open();
 
-        subGui.setStyleTree(this.getStyleTreeProperty()::getValue);
+        subGui.setStyleListSupplier(this.getStyleListProperty()::getValue);
         if (this.wrapper != null)
             subGui.refreshStyle();
     }
@@ -352,7 +352,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         subGui.getyPosProperty().unbind();
         this.windows.remove(subGui);
 
-        subGui.setStyleTree(null);
+        subGui.setStyleListSupplier(null);
     }
 
     public boolean hasSubGui(final SubGuiScreen subGui)
@@ -440,7 +440,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         this.mainPanel.getxPosProperty().bind(this.xPosProperty);
         this.mainPanel.getyPosProperty().bind(this.yPosProperty);
 
-        this.mainPanel.setStyleTree(this.getStyleTreeProperty()::getValue);
+        this.mainPanel.setStyleListSupplier(this.getStyleListProperty()::getValue);
         if (this.wrapper != null)
             this.mainPanel.refreshStyle();
         this.mainPanel.setWindow(this);
@@ -715,15 +715,15 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         return stylesheetsProperty;
     }
 
-    private BaseProperty<StyleList> getStyleTreeProperty()
+    private BaseProperty<StyleList> getStyleListProperty()
     {
-        return this.styleTreeProperty;
+        return this.styleListProperty;
     }
 
     @Override
     public void setStyleList(StyleList list)
     {
-        this.getStyleTreeProperty().setValue(list);
+        this.getStyleListProperty().setValue(list);
     }
 
     public void addStylesheet(String stylesheetLocation)

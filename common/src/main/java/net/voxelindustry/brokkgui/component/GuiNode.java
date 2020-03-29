@@ -742,7 +742,7 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
         this.getStyle().getParent().setValue(father);
         if (father != null)
         {
-            this.setStyleTree(father.getStyle().getStyleSupplier());
+            this.setStyleListSupplier(father.getStyle().getStyleSupplier());
             this.setWindow(father.getWindow());
 
             if (this.getWindow() != null)
@@ -982,9 +982,9 @@ public abstract class GuiNode implements IEventEmitter, ICascadeStyleable
     }
 
     @Override
-    public void setStyleTree(Supplier<StyleList> treeSupplier)
+    public void setStyleListSupplier(Supplier<StyleList> styleListSupplier)
     {
-        this.getStyle().setStyleSupplier(treeSupplier);
+        this.getStyle().setStyleSupplier(styleListSupplier);
     }
 
     @Override

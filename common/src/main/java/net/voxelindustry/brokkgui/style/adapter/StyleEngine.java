@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
+import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.paint.Color;
@@ -35,5 +36,7 @@ public class StyleEngine
         StyleTranslator.getInstance().registerTranslator(Resource.class, new ResourceStyleTranslator());
 
         StyleTranslator.getInstance().registerTranslator(RandomSpriteRotation.class, new RandomSpriteRotationStyleTranslator());
+
+        StyleTranslator.getInstance().registerTranslator(RectAlignment.class, new RectAlignmentStyleTranslator());
     }
 }

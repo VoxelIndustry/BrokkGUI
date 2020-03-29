@@ -151,7 +151,7 @@ public class GuiFather extends GuiShape implements IStyleParent
         if (this.styleChilds.contains(styleable))
             return;
         this.styleChilds.add(styleable);
-        styleable.setStyleTree(this.getStyle().getStyleSupplier());
+        styleable.setStyleListSupplier(this.getStyle().getStyleSupplier());
         styleable.setParent(this);
 
         styleChilds.forEach(IStyleable::refreshStyle);
@@ -293,11 +293,11 @@ public class GuiFather extends GuiShape implements IStyleParent
     /////////////////////
 
     @Override
-    public void setStyleTree(Supplier<StyleList> treeSupplier)
+    public void setStyleListSupplier(Supplier<StyleList> styleListSupplier)
     {
-        super.setStyleTree(treeSupplier);
+        super.setStyleListSupplier(styleListSupplier);
 
-        this.styleChilds.forEach(node -> node.setStyleTree(treeSupplier));
+        this.styleChilds.forEach(node -> node.setStyleListSupplier(styleListSupplier));
     }
 
     @Override
