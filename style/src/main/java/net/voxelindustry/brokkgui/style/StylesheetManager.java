@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.style;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.util.concurrent.ListenableFuture;
 import net.voxelindustry.brokkgui.style.parser.StylesheetParser;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +41,7 @@ public class StylesheetManager
     {
         logger = Logger.getLogger("BrokkGui CSS Loader");
 
-        this.styleCache = CacheBuilder.newBuilder()
+        styleCache = CacheBuilder.newBuilder()
                 .maximumSize(100)
                 .expireAfterAccess(10, TimeUnit.MINUTES)
                 .build(new CacheLoader<String, StyleList>()
@@ -50,12 +51,31 @@ public class StylesheetManager
                     {
                         return styleParser.loadStylesheet(stylesheet);
                     }
-                });
-        this.styleParser = new StylesheetParser(logger);
 
-        this.themeIDs = new ArrayList<>();
-        this.styleSheets = new ArrayList<>();
-        this.userAgents = new ArrayList<>();
+                    @Override
+                    public ListenableFuture<StyleList> reload(String key, StyleList oldValue) throws Exception
+                    {
+                        logger.info("Stylesheet has been forced to reload. path=" + key);
+                        return super.reload(key, oldValue);
+                    }
+                });
+        styleParser = new StylesheetParser(logger);
+
+        themeIDs = new ArrayList<>();
+        styleSheets = new ArrayList<>();
+        userAgents = new ArrayList<>();
+    }
+
+    public void forceReload(IStyleRoot screen)
+    {
+        forceReload(screen, true);
+    }
+
+    public void forceReload(IStyleRoot screen, boolean useUserAgent)
+    {
+        screen.getStylesheets().forEach(styleCache::refresh);
+        refreshStylesheets(screen, useUserAgent);
+
     }
 
     public void refreshStylesheets(IStyleRoot screen)
@@ -68,13 +88,13 @@ public class StylesheetManager
         StyleList list;
 
         if (useUserAgent)
-            list = new StyleList(this.getUserAgent(screen.getThemeID()));
+            list = new StyleList(getUserAgent(screen.getThemeID()));
         else
             list = new StyleList();
 
         try
         {
-            list.merge(this.loadStylesheets(screen.getStylesheets().toArray(new String[0])));
+            list.merge(loadStylesheets(screen.getStylesheets().toArray(new String[0])));
         } catch (ExecutionException e)
         {
             e.printStackTrace();
@@ -87,13 +107,13 @@ public class StylesheetManager
         StyleList list = new StyleList();
 
         for (String styleSheet : styleSheets)
-            list.merge(this.getStyleList(styleSheet));
+            list.merge(getStyleList(styleSheet));
         return list;
     }
 
     StyleList getStyleList(String styleSheet) throws ExecutionException
     {
-        return this.styleCache.get(styleSheet);
+        return styleCache.get(styleSheet);
     }
 
     public StyleList loadDependencies(String styleSheet, List<String> dependencies)
@@ -114,20 +134,20 @@ public class StylesheetManager
 
     public void addUserAgent(String themeID, String styleSheet)
     {
-        if (StringUtils.isEmpty(themeID) || this.DEFAULT_THEME.equals(themeID))
+        if (StringUtils.isEmpty(themeID) || DEFAULT_THEME.equals(themeID))
             throw new IllegalArgumentException("Invalid themeID " + themeID);
         try
         {
-            if (!this.themeIDs.contains(themeID))
-                this.createUserAgent(themeID);
+            if (!themeIDs.contains(themeID))
+                createUserAgent(themeID);
 
-            int index = this.themeIDs.indexOf(themeID);
+            int index = themeIDs.indexOf(themeID);
 
-            if (this.styleSheets.get(index).contains(styleSheet))
+            if (styleSheets.get(index).contains(styleSheet))
                 return;
 
-            this.styleSheets.get(index).add(styleSheet);
-            this.userAgents.get(index).merge(this.getStyleList(styleSheet));
+            styleSheets.get(index).add(styleSheet);
+            userAgents.get(index).merge(getStyleList(styleSheet));
 
         } catch (ExecutionException e)
         {
@@ -137,21 +157,21 @@ public class StylesheetManager
 
     public void removeUserAgent(String themeID, String styleSheet)
     {
-        if (StringUtils.isEmpty(themeID) || this.DEFAULT_THEME.equals(themeID))
+        if (StringUtils.isEmpty(themeID) || DEFAULT_THEME.equals(themeID))
             throw new IllegalArgumentException("Invalid themeID " + themeID);
-        if (!this.themeIDs.contains(themeID))
+        if (!themeIDs.contains(themeID))
             return;
 
-        int index = this.themeIDs.indexOf(themeID);
+        int index = themeIDs.indexOf(themeID);
 
-        if (!this.styleSheets.get(index).contains(styleSheet))
+        if (!styleSheets.get(index).contains(styleSheet))
             return;
 
-        this.styleSheets.get(index).remove(styleSheet);
+        styleSheets.get(index).remove(styleSheet);
         try
         {
-            this.userAgents.set(index, this.loadStylesheets(this.styleSheets.get(index).toArray(
-                    new String[this.styleSheets.get(index).size()])));
+            userAgents.set(index, loadStylesheets(styleSheets.get(index).toArray(
+                    new String[styleSheets.get(index).size()])));
         } catch (ExecutionException e)
         {
             e.printStackTrace();
@@ -160,23 +180,23 @@ public class StylesheetManager
 
     private StyleList getUserAgent(String themeID)
     {
-        if (!this.themeIDs.contains(themeID))
-            this.createUserAgent(themeID);
-        return this.userAgents.get(this.themeIDs.indexOf(themeID));
+        if (!themeIDs.contains(themeID))
+            createUserAgent(themeID);
+        return userAgents.get(themeIDs.indexOf(themeID));
     }
 
     private void createUserAgent(String themeID)
     {
         try
         {
-            this.themeIDs.add(themeID);
-            this.styleSheets.add(new ArrayList<>());
-            this.userAgents.add(new StyleList());
+            themeIDs.add(themeID);
+            styleSheets.add(new ArrayList<>());
+            userAgents.add(new StyleList());
 
-            this.styleSheets.get(this.themeIDs.indexOf(themeID)).add("/assets/brokkgui/css/user_agent.css");
+            styleSheets.get(themeIDs.indexOf(themeID)).add("/assets/brokkgui/css/user_agent.css");
 
-            this.userAgents.get(this.themeIDs.indexOf(themeID)).merge(
-                    this.getStyleList("/assets/brokkgui/css/user_agent.css"));
+            userAgents.get(themeIDs.indexOf(themeID)).merge(
+                    getStyleList("/assets/brokkgui/css/user_agent.css"));
         } catch (ExecutionException e)
         {
             e.printStackTrace();

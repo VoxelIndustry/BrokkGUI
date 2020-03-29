@@ -62,6 +62,12 @@ public class StyleSelector implements IStyleSelector
         return selectors;
     }
 
+    public boolean isSupersetOf(StyleSelector selector)
+    {
+        // This check does not use the structuralSelectors since they cannot be compared effectively
+        return this.selectors.containsAll(selector.selectors);
+    }
+
     @Override
     public boolean match(StyleHolder styleHolder)
     {

@@ -11,5 +11,5 @@ public interface ICascadeStyleable extends IStyleable, IEventEmitter
 
     void setParent(ICascadeStyleable styleable);
 
-    void setStyleTree(Supplier<StyleList> treeSupplier);
+    void setStyleListSupplier(Supplier<StyleList> treeSupplier);
 }
