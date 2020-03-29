@@ -2,7 +2,15 @@ package net.voxelindustry.brokkgui.data;
 
 public enum RectAlignment
 {
-    LEFT_CENTER, RIGHT_CENTER, MIDDLE_CENTER, LEFT_UP, RIGHT_UP, MIDDLE_UP, LEFT_DOWN, MIDDLE_DOWN, RIGHT_DOWN;
+    LEFT_CENTER,
+    RIGHT_CENTER,
+    MIDDLE_CENTER,
+    LEFT_UP,
+    RIGHT_UP,
+    MIDDLE_UP,
+    LEFT_DOWN,
+    MIDDLE_DOWN,
+    RIGHT_DOWN;
 
     public boolean isVerticalCentered()
     {
