@@ -14,16 +14,18 @@ import net.voxelindustry.brokkgui.style.tree.StyleList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 public class ReducedStyleList
 {
-    private final LoadingCache<Triple<String, StyleType, String>, IStyleSelector> selectorCache = CacheBuilder.newBuilder().maximumSize(256)
-            .build(new CacheLoader<Triple<String, StyleType, String>, IStyleSelector>()
+    private final LoadingCache<Triple<String, StyleType, String>, StyleSelector> selectorCache = CacheBuilder.newBuilder().maximumSize(256)
+            .build(new CacheLoader<Triple<String, StyleType, String>, StyleSelector>()
             {
                 @Override
-                public IStyleSelector load(Triple<String, StyleType, String> key)
+                public StyleSelector load(Triple<String, StyleType, String> key)
                 {
                     StyleSelector selector = new StyleSelector();
 
@@ -32,38 +34,48 @@ public class ReducedStyleList
                     if (!StringUtils.isBlank(key.getRight()))
                         selector.add(StyleSelectorType.PSEUDOCLASS, key.getRight());
 
-                    key.getMiddle().getNames().forEach(clazz ->
+                    if (key.getMiddle() != null)
                     {
-                        if ("normal".equalsIgnoreCase(clazz))
-                            return;
-                        selector.add(StyleSelectorType.CLASS, clazz);
-                    });
+                        key.getMiddle().getNames().forEach(clazz ->
+                        {
+                            if ("normal".equalsIgnoreCase(clazz))
+                                return;
+                            selector.add(StyleSelectorType.CLASS, clazz);
+                        });
+                    }
                     return selector;
                 }
             });
 
-    private final Table<IStyleSelector, String, Object> styleValues = HashBasedTable.create();
+    private final Table<StyleSelector, String, Object> styleValues = HashBasedTable.create();
 
     public ReducedStyleList(StyleList styleList, Map<String, IStyleDecoder<?>> styleDecodersByRules)
     {
         styleList.getInternalStyleList()
                 .forEach(entry ->
-                        entry.getRules().forEach(rule ->
+                {
+                    // Only simple selectors are supported
+                    // Hierarchic are always evicted since this is intended for use in a ImmediateGui context
+                    if (!(entry.getSelector() instanceof StyleSelector))
+                        return;
+
+                    entry.getRules().forEach(rule ->
+                            {
+                                IStyleDecoder<?> decoder = styleDecodersByRules.get(rule.getRuleIdentifier());
+
+                                if (decoder == null)
                                 {
-                                    IStyleDecoder<?> decoder = styleDecodersByRules.get(rule.getRuleIdentifier());
-
-                                    if (decoder == null)
-                                    {
-                                        BrokkGuiPlatform.getInstance().getLogger().warning("Unknown rule identifier given to ImmediateWindow CSS. An ImmediateElement did not register its rules or a invalid css file was provided. rule=" + rule);
-                                        return;
-                                    }
-
-                                    styleValues.put(
-                                            entry.getSelector(),
-                                            rule.getRuleIdentifier(),
-                                            decoder.decode(rule.getRuleValue()));
+                                    BrokkGuiPlatform.getInstance().getLogger().warning("Unknown rule identifier given to ImmediateWindow CSS. An ImmediateElement did not register its rules or a invalid css file was provided. rule=" + rule);
+                                    return;
                                 }
-                        ));
+
+                                styleValues.put(
+                                        (StyleSelector) entry.getSelector(),
+                                        rule.getRuleIdentifier(),
+                                        decoder.decode(rule.getRuleValue()));
+                            }
+                    );
+                });
     }
 
     @SuppressWarnings("unchecked")
@@ -71,17 +83,16 @@ public class ReducedStyleList
     {
         try
         {
-            Object value = styleValues.get(selectorCache.get(Triple.of(element, type, pseudoClass)), rule);
+            StyleSelector selector = selectorCache.get(Triple.of(element, type, pseudoClass));
 
-            if (value == null && !StringUtils.isBlank(pseudoClass))
-                value = styleValues.get(selectorCache.get(Triple.of(element, type, "")), rule);
+            Optional<StyleSelector> mostSpecificSelector = styleValues.column(rule).keySet().stream()
+                    .filter(selector::isSupersetOf).max(Comparator.comparingInt(IStyleSelector::getSpecificity));
 
-            return (T) value;
+            return mostSpecificSelector.map(styleSelector -> (T) styleValues.get(styleSelector, rule)).orElse(null);
         } catch (ExecutionException e)
         {
             e.printStackTrace();
         }
-
         return null;
     }
 }

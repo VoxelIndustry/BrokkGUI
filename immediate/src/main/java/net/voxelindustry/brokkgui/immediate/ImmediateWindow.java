@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.immediate;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.immediate.element.BoxElement;
 import net.voxelindustry.brokkgui.immediate.element.ButtonElement;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public abstract class ImmediateWindow extends BaseImmediateWindow implements ImmediateWindowBridge, IStyleRoot,
         BoxElement, TextElement, TextBoxElement, ButtonElement
@@ -32,19 +34,21 @@ public abstract class ImmediateWindow extends BaseImmediateWindow implements Imm
 
     private Map<String, IStyleDecoder<?>> styleDecodersByRules = new HashMap<>();
 
+    private Table<Class<?>, StyleType, Object> styleObjectByTypeAndClass = HashBasedTable.create();
+
     public void registerStyleRule(String rule, Class<?> ruleClass)
     {
-        this.registerStyleRule(rule, StyleTranslator.getInstance().getDecoder(ruleClass));
+        registerStyleRule(rule, StyleTranslator.getInstance().getDecoder(ruleClass));
     }
 
     public void registerStyleRule(String rule, IStyleDecoder<?> decoder)
     {
-        this.styleDecodersByRules.put(rule, decoder);
+        styleDecodersByRules.put(rule, decoder);
     }
 
     public void addStyleSheet(String styleSheetPath)
     {
-        this.styleSheets.add(styleSheetPath);
+        styleSheets.add(styleSheetPath);
     }
 
     @Override
@@ -55,10 +59,13 @@ public abstract class ImmediateWindow extends BaseImmediateWindow implements Imm
         registerStyleRule("color", Color.class);
         registerStyleRule("background-color", Color.class);
         registerStyleRule("border-color", Color.class);
+        registerStyleRule("text-color", Color.class);
         registerStyleRule("shadow-color", Color.class);
 
         registerStyleRule("border-width", Float.class);
         registerStyleRule("padding", RectBox.class);
+
+        registerStyleRule("text-alignment", RectAlignment.class);
 
         StylesheetManager.getInstance().refreshStylesheets(this, false);
     }
@@ -84,14 +91,27 @@ public abstract class ImmediateWindow extends BaseImmediateWindow implements Imm
     @Override
     public <T> void setStyleObject(T object, StyleType type)
     {
-        this.elementStyles.put(object.getClass(), type, object);
+        elementStyles.put(object.getClass(), type, object);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getStyleObject(StyleType type, Class<T> objectClass)
+    public <T> T getStyleObject(StyleType type, Class<T> objectClass, Function<StyleType, T> styleObjectSupplier)
     {
-        return (T) this.elementStyles.get(objectClass, type);
+        Object styleObject = elementStyles.get(objectClass, type);
+
+        if (styleObject == null)
+        {
+            styleObject = styleObjectByTypeAndClass.get(objectClass, type);
+
+            if (styleObject == null)
+            {
+                styleObject = styleObjectSupplier.apply(type);
+                styleObjectByTypeAndClass.put(objectClass, type, styleObject);
+            }
+        }
+
+        return (T) styleObject;
     }
 
     @Override
@@ -102,6 +122,11 @@ public abstract class ImmediateWindow extends BaseImmediateWindow implements Imm
         if (styleValue == null)
             return defaultValue;
         return styleValue;
+    }
+
+    public void refreshStyle()
+    {
+        styleObjectByTypeAndClass.clear();
     }
 
     @Override

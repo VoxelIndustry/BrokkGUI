@@ -3,11 +3,13 @@ package net.voxelindustry.brokkgui.immediate.element;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 
+import java.util.function.Function;
+
 public interface ImmediateWindowBridge
 {
     <T> void setStyleObject(T object, StyleType type);
 
-    <T> T getStyleObject(StyleType type, Class<T> objectClass);
+    <T> T getStyleObject(StyleType type, Class<T> objectClass, Function<StyleType, T> styleObjectSupplier);
 
     default <T> T getStyleValue(String element, StyleType styleType, String rule, T defaultValue)
     {

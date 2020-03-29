@@ -9,7 +9,8 @@ import static net.voxelindustry.brokkgui.immediate.style.StyleType.NORMAL;
 
 public interface BoxElement extends ImmediateElement
 {
-    String BOX_TYPE = "box";
+    String BOX_TYPE       = "box";
+    String EMPTY_BOX_TYPE = "empty-box";
 
     default void setBoxStyle(BoxStyle style)
     {
@@ -31,16 +32,29 @@ public interface BoxElement extends ImmediateElement
         setStyleObject(style, type);
     }
 
+    default EmptyBoxStyle emptyBoxStyleFromType(StyleType type)
+    {
+        return EmptyBoxStyle.build()
+                .setBorderColor(getStyleValue(EMPTY_BOX_TYPE, type, "border-color", Color.BLACK))
+                .setHoverBorderColor(getStyleValue(EMPTY_BOX_TYPE, type, "hover", "border-color", Color.BLACK))
+                .setBorderThin(getStyleValue(EMPTY_BOX_TYPE, type, "border-width", 1F))
+                .create();
+    }
+
+    default BoxStyle boxStyleFromType(StyleType type)
+    {
+        return BoxStyle.build()
+                .setBoxColor(getStyleValue(BOX_TYPE, type, "background-color", Color.WHITE))
+                .setHoverBoxColor(getStyleValue(BOX_TYPE, type, "hover", "background-color", Color.WHITE))
+                .setBorderColor(getStyleValue(BOX_TYPE, type, "border-color", Color.BLACK))
+                .setHoverBorderColor(getStyleValue(BOX_TYPE, type, "hover", "border-color", Color.BLACK))
+                .setBorderThin(getStyleValue(BOX_TYPE, type, "border-width", 1F))
+                .create();
+    }
+
     default boolean emptyBox(float x, float y, float width, float height, StyleType type)
     {
-        EmptyBoxStyle style = getStyleObject(type, EmptyBoxStyle.class);
-
-        if (style == null)
-        {
-            BoxStyle boxStyle = getStyleObject(type, BoxStyle.class);
-            return emptyBox(x, y, width, height, boxStyle.borderColor, boxStyle.hoverBorderColor, boxStyle.borderThin);
-        }
-        return emptyBox(x, y, width, height, style);
+        return emptyBox(x, y, width, height, getStyleObject(type, EmptyBoxStyle.class, this::emptyBoxStyleFromType));
     }
 
     default boolean emptyBox(float x, float y, float width, float height, EmptyBoxStyle style)
@@ -70,18 +84,7 @@ public interface BoxElement extends ImmediateElement
 
     default boolean box(float x, float y, float width, float height, StyleType type)
     {
-        BoxStyle boxStyle = getStyleObject(type, BoxStyle.class);
-
-        if (boxStyle != null)
-            return box(x, y, width, height, boxStyle);
-        else
-            return box(x, y, width, height,
-                    getStyleValue(BOX_TYPE, type, "background-color", Color.WHITE),
-                    getStyleValue(BOX_TYPE, type, "border-color", Color.BLACK),
-                    getStyleValue(BOX_TYPE, type, "border-width", 1F),
-                    getStyleValue(BOX_TYPE, type, "hover", "background-color", Color.WHITE),
-                    getStyleValue(BOX_TYPE, type, "hover", "border-color", Color.BLACK)
-            );
+        return box(x, y, width, height, getStyleObject(type, BoxStyle.class, this::boxStyleFromType));
     }
 
     default boolean box(float x, float y, float width, float height, BoxStyle style)
