@@ -188,7 +188,7 @@ public class SpriteBackgroundDrawer
             for (int xIndex = 0; xIndex < repeatCountX; xIndex++)
             {
                 renderer.getHelper().drawTexturedRect(renderer,
-                        shape.getLeftPos() + position.getLeft(),
+                        shape.getLeftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
                         shape.getTopPos() + position.getTop() + repeatCountY * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
