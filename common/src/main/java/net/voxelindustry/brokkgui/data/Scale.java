@@ -38,7 +38,7 @@ public class Scale
 
     public boolean apply(IGuiRenderer renderer, GuiNode node, boolean createdMatrix)
     {
-        if (x == 1 || y == 1 || z == 1)
+        if (x == 1 && y == 1 && z == 1)
             return false;
 
         if (!createdMatrix)

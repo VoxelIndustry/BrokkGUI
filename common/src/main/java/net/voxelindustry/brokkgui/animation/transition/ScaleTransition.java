@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.animation.transition;
 
 import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.data.Position;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,6 +12,8 @@ public class ScaleTransition extends Transition
 
     private float fromX, fromY, fromZ;
     private float translateX, translateY, translateZ;
+
+    private Position scalePivot;
 
     public ScaleTransition(GuiNode node, long duration, TimeUnit unit)
     {
@@ -26,6 +29,8 @@ public class ScaleTransition extends Transition
         getNode().setScaleX(fromX + (endX - fromX) * interpolated);
         getNode().setScaleY(fromY + (endY - fromY) * interpolated);
         getNode().setScaleZ(fromZ + (endZ - fromZ) * interpolated);
+
+        getNode().setScalePivot(scalePivot);
     }
 
     @Override
@@ -144,5 +149,15 @@ public class ScaleTransition extends Transition
     public void setTranslateZ(float translateZ)
     {
         this.translateZ = translateZ;
+    }
+
+    public Position getScalePivot()
+    {
+        return scalePivot;
+    }
+
+    public void setScalePivot(Position scalePivot)
+    {
+        this.scalePivot = scalePivot;
     }
 }
