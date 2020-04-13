@@ -20,7 +20,7 @@ public class StylesheetManager
 {
     private static StylesheetManager INSTANCE;
 
-    public static StylesheetManager getInstance()
+    public synchronized static StylesheetManager getInstance()
     {
         if (INSTANCE == null)
             INSTANCE = new StylesheetManager();
@@ -66,24 +66,24 @@ public class StylesheetManager
         userAgents = new ArrayList<>();
     }
 
-    public void forceReload(IStyleRoot screen)
+    public synchronized void forceReload(IStyleRoot screen)
     {
         forceReload(screen, true);
     }
 
-    public void forceReload(IStyleRoot screen, boolean useUserAgent)
+    public synchronized void forceReload(IStyleRoot screen, boolean useUserAgent)
     {
         screen.getStylesheets().forEach(styleCache::refresh);
         refreshStylesheets(screen, useUserAgent);
 
     }
 
-    public void refreshStylesheets(IStyleRoot screen)
+    public synchronized void refreshStylesheets(IStyleRoot screen)
     {
         refreshStylesheets(screen, true);
     }
 
-    public void refreshStylesheets(IStyleRoot screen, boolean useUserAgent)
+    public synchronized void refreshStylesheets(IStyleRoot screen, boolean useUserAgent)
     {
         StyleList list;
 
@@ -116,7 +116,7 @@ public class StylesheetManager
         return styleCache.get(styleSheet);
     }
 
-    public StyleList loadDependencies(String styleSheet, List<String> dependencies)
+    public synchronized StyleList loadDependencies(String styleSheet, List<String> dependencies)
     {
         try
         {
@@ -132,7 +132,7 @@ public class StylesheetManager
     // USER-AGENT //
     ////////////////
 
-    public void addUserAgent(String themeID, String styleSheet)
+    public synchronized void addUserAgent(String themeID, String styleSheet)
     {
         if (StringUtils.isEmpty(themeID) || DEFAULT_THEME.equals(themeID))
             throw new IllegalArgumentException("Invalid themeID " + themeID);
@@ -155,7 +155,7 @@ public class StylesheetManager
         }
     }
 
-    public void removeUserAgent(String themeID, String styleSheet)
+    public synchronized void removeUserAgent(String themeID, String styleSheet)
     {
         if (StringUtils.isEmpty(themeID) || DEFAULT_THEME.equals(themeID))
             throw new IllegalArgumentException("Invalid themeID " + themeID);
@@ -178,14 +178,14 @@ public class StylesheetManager
         }
     }
 
-    private StyleList getUserAgent(String themeID)
+    private synchronized StyleList getUserAgent(String themeID)
     {
         if (!themeIDs.contains(themeID))
             createUserAgent(themeID);
         return userAgents.get(themeIDs.indexOf(themeID));
     }
 
-    private void createUserAgent(String themeID)
+    private synchronized void createUserAgent(String themeID)
     {
         try
         {
