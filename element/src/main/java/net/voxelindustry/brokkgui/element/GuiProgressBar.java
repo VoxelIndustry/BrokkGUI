@@ -16,29 +16,29 @@ public class GuiProgressBar extends GuiLabeled
     private final BaseProperty<Float>    progressBarProgressProperty;
     private final BaseProperty<RectSide> progressBarProgressDirection;
 
-    public GuiProgressBar(final String text, final float progressRatio)
+    public GuiProgressBar(String text, float progressRatio)
     {
-        super("progressbar", text);
-        this.progressBarProgressProperty = new BaseProperty<>(0f, "progressProperty");
-        this.progressBarProgressDirection = new BaseProperty<>(RectSide.RIGHT, "progressDirectionProperty");
+        super(text);
+        progressBarProgressProperty = new BaseProperty<>(0f, "progressProperty");
+        progressBarProgressDirection = new BaseProperty<>(RectSide.RIGHT, "progressDirectionProperty");
 
-        this.progressBarProgressProperty.setChecker((old, set) ->
+        progressBarProgressProperty.setChecker((old, set) ->
         {
             if (set < 0 || set > 1)
                 return old;
             return set;
         });
 
-        this.progressBarProgressProperty.setValue(progressRatio);
-        this.getTextAlignmentProperty().setValue(RectAlignment.MIDDLE_CENTER);
+        progressBarProgressProperty.setValue(progressRatio);
+        getTextAlignmentProperty().setValue(RectAlignment.MIDDLE_CENTER);
     }
 
-    public GuiProgressBar(final String text)
+    public GuiProgressBar(String text)
     {
         this(text, 0);
     }
 
-    public GuiProgressBar(final float progressRatio)
+    public GuiProgressBar(float progressRatio)
     {
         this("", progressRatio);
     }
@@ -49,6 +49,12 @@ public class GuiProgressBar extends GuiLabeled
     }
 
     @Override
+    public String type()
+    {
+        return "progress";
+    }
+
+    @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
         return new GuiProgressBarSkin<>(this, new GuiBehaviorBase<>(this));
@@ -56,32 +62,32 @@ public class GuiProgressBar extends GuiLabeled
 
     public BaseProperty<Float> getProgressProperty()
     {
-        return this.progressBarProgressProperty;
+        return progressBarProgressProperty;
     }
 
     public BaseProperty<RectSide> getProgressDirectionProperty()
     {
-        return this.progressBarProgressDirection;
+        return progressBarProgressDirection;
     }
 
     public float getProgress()
     {
-        return this.getProgressProperty().getValue();
+        return getProgressProperty().getValue();
     }
 
     public void setProgress(float progress)
     {
-        this.getProgressProperty().setValue(progress);
+        getProgressProperty().setValue(progress);
     }
 
     public RectSide getProgressDirection()
     {
-        return this.getProgressDirectionProperty().getValue();
+        return getProgressDirectionProperty().getValue();
     }
 
     public void setProgressDirection(RectSide direction)
     {
-        this.getProgressDirectionProperty().setValue(direction);
+        getProgressDirectionProperty().setValue(direction);
     }
 
 }

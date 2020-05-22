@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.element.pane;
 
 import net.voxelindustry.brokkgui.behavior.GuiScrollableBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiScrollableBase;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.skin.GuiScrollableSkin;
@@ -12,12 +12,10 @@ import net.voxelindustry.brokkgui.skin.GuiSkinBase;
  */
 public class ScrollPane extends GuiScrollableBase
 {
-    private GuiNode contentNode;
+    private GuiElement contentNode;
 
-    public ScrollPane(final GuiNode node)
+    public ScrollPane(GuiElement node)
     {
-        super("scrollpane");
-
         if (node != null)
             this.setChild(node);
     }
@@ -27,9 +25,15 @@ public class ScrollPane extends GuiScrollableBase
         this(null);
     }
 
-    public void setChild(final GuiNode node)
+    @Override
+    public String type()
     {
-        if(contentNode != null)
+        return "scrollpane";
+    }
+
+    public void setChild(GuiElement node)
+    {
+        if (contentNode != null)
         {
             this.getTrueWidthProperty().unbind();
             this.getTrueHeightProperty().unbind();
@@ -38,10 +42,10 @@ public class ScrollPane extends GuiScrollableBase
 
         this.contentNode = node;
         this.addChild(node);
-        RelativeBindingHelper.bindToPos(node, this, this.getScrollXProperty(), this.getScrollYProperty());
+        RelativeBindingHelper.bindToPos(node.transform(), transform(), this.getScrollXProperty(), this.getScrollYProperty());
 
-        this.getTrueWidthProperty().bind(node.getWidthProperty());
-        this.getTrueHeightProperty().bind(node.getHeightProperty());
+        this.getTrueWidthProperty().bind(node.transform().widthProperty());
+        this.getTrueHeightProperty().bind(node.transform().heightProperty());
     }
 
     @Override

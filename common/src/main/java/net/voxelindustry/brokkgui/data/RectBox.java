@@ -5,6 +5,8 @@ import java.util.Objects;
 public class RectBox
 {
     public static RectBox EMPTY = new RectBox(0);
+    public static RectBox ONE   = new RectBox(1);
+    public static RectBox TWO   = new RectBox(2);
 
     private final float top;
     private final float left;

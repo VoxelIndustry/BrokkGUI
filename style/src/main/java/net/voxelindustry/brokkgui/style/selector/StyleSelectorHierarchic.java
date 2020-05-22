@@ -1,8 +1,7 @@
 package net.voxelindustry.brokkgui.style.selector;
 
-import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.style.ICascadeStyleable;
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 
 public class StyleSelectorHierarchic implements IStyleSelector
 {
@@ -42,34 +41,34 @@ public class StyleSelectorHierarchic implements IStyleSelector
     }
 
     @Override
-    public boolean match(StyleHolder styleHolder)
+    public boolean match(StyleComponent styleComponent)
     {
-        if (!styleHolder.getParent().isPresent())
+        if (styleComponent.parent() == null)
             return false;
 
         if (this.isDirectChild())
         {
-            if (!this.parentSelector.match(styleHolder.getParent().getValue().getStyle()))
+            if (!styleComponent.parent().has(StyleComponent.class) || !this.parentSelector.match(styleComponent.parent().get(StyleComponent.class)))
                 return false;
         }
         else
         {
-            BaseProperty<ICascadeStyleable> current = styleHolder.getParent();
+            GuiElement current = styleComponent.parent();
 
             boolean matched = false;
-            while (current.isPresent())
+            while (current != null)
             {
-                if (this.parentSelector.match(current.getValue().getStyle()))
+                if (styleComponent.parent().has(StyleComponent.class) && this.parentSelector.match(current.get(StyleComponent.class)))
                 {
                     matched = true;
                     break;
                 }
-                current = current.getValue().getStyle().getParent();
+                current = current.transform().parent() != null ? current.transform().parent().element() : null;
             }
             if (!matched)
                 return false;
         }
-        return this.childSelector.match(styleHolder);
+        return this.childSelector.match(styleComponent);
     }
 
     @Override

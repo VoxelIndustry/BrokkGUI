@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui.style.selector;
 
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 
 public interface IStyleSelector
 {
-    boolean match(StyleHolder styleHolder);
+    boolean match(StyleComponent styleComponent);
 
     boolean match(IStyleSelector selector);
 

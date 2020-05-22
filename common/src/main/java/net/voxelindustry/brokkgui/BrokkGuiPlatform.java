@@ -4,10 +4,9 @@ import net.voxelindustry.brokkgui.animation.ITickSender;
 import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 import net.voxelindustry.brokkgui.internal.IMouseUtil;
-import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
 import net.voxelindustry.brokkgui.internal.IResourceHandler;
+import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
 import net.voxelindustry.brokkgui.internal.profiler.ProfilerNoop;
-import net.voxelindustry.brokkgui.style.adapter.StyleEngine;
 
 import java.util.Random;
 import java.util.logging.Logger;
@@ -17,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class BrokkGuiPlatform
 {
-    private static volatile BrokkGuiPlatform INSTANCE;
+    private static BrokkGuiPlatform INSTANCE;
 
     public static BrokkGuiPlatform getInstance()
     {
@@ -43,10 +42,8 @@ public class BrokkGuiPlatform
 
     private BrokkGuiPlatform()
     {
-        StyleEngine.getInstance().start();
-
-        this.random = new Random();
-        this.profiler = new ProfilerNoop();
+        random = new Random();
+        profiler = new ProfilerNoop();
     }
 
     public IProfiler getProfiler()
@@ -61,7 +58,7 @@ public class BrokkGuiPlatform
 
     public Logger getLogger()
     {
-        return this.logger;
+        return logger;
     }
 
     public void setLogger(Logger logger)
@@ -71,27 +68,27 @@ public class BrokkGuiPlatform
 
     public IKeyboardUtil getKeyboardUtil()
     {
-        return this.keyboardUtil;
+        return keyboardUtil;
     }
 
-    public void setKeyboardUtil(final IKeyboardUtil util)
+    public void setKeyboardUtil(IKeyboardUtil util)
     {
-        this.keyboardUtil = util;
+        keyboardUtil = util;
     }
 
     public IMouseUtil getMouseUtil()
     {
-        return this.mouseUtil;
+        return mouseUtil;
     }
 
-    public void setMouseUtil(final IMouseUtil mouseUtil)
+    public void setMouseUtil(IMouseUtil mouseUtil)
     {
         this.mouseUtil = mouseUtil;
     }
 
     public IResourceHandler getResourceHandler()
     {
-        return this.resourceHandler;
+        return resourceHandler;
     }
 
     public void setResourceHandler(IResourceHandler resourceHandler)
@@ -101,20 +98,20 @@ public class BrokkGuiPlatform
 
     public String getPlatformName()
     {
-        return this.platformName;
+        return platformName;
     }
 
-    public void setPlatformName(final String platformName)
+    public void setPlatformName(String platformName)
     {
         this.platformName = platformName;
     }
 
     public IGuiHelper getGuiHelper()
     {
-        return this.guiHelper;
+        return guiHelper;
     }
 
-    public void setGuiHelper(final IGuiHelper guiHelper)
+    public void setGuiHelper(IGuiHelper guiHelper)
     {
         this.guiHelper = guiHelper;
     }
@@ -136,11 +133,11 @@ public class BrokkGuiPlatform
 
     public void setTickSender(ITickSender sender)
     {
-        this.tickSender = sender;
+        tickSender = sender;
     }
 
     public Random getRandom()
     {
-        return this.random;
+        return random;
     }
 }

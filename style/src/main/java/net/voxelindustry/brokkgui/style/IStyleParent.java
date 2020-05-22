@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface IStyleParent
 {
-    List<StyleHolder> getChildStyles();
+    List<StyleComponent> getChildStyles();
 
     int getChildCount();
 }

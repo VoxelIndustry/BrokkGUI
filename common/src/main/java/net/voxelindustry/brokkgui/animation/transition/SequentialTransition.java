@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.animation.transition;
 
 import net.voxelindustry.brokkgui.animation.Animation;
 import net.voxelindustry.brokkgui.animation.Interpolators;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +14,7 @@ public class SequentialTransition extends Transition
 
     private Animation current;
 
-    public SequentialTransition(GuiNode node, Animation... animations)
+    public SequentialTransition(GuiElement node, Animation... animations)
     {
         super(node, 0, TimeUnit.MILLISECONDS);
 

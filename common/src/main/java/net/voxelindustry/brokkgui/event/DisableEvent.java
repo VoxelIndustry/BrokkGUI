@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.event;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.IEventEmitter;
 
@@ -10,12 +10,12 @@ public class DisableEvent extends GuiStateEvent
 
     private final boolean disabled;
 
-    public DisableEvent(GuiNode source)
+    public DisableEvent(GuiElement source)
     {
         this(source, false);
     }
 
-    public DisableEvent(GuiNode source, boolean disabled)
+    public DisableEvent(GuiElement source, boolean disabled)
     {
         super(source);
 
@@ -30,6 +30,6 @@ public class DisableEvent extends GuiStateEvent
     @Override
     public DisableEvent copy(IEventEmitter source)
     {
-        return new DisableEvent((GuiNode) source, isDisabled());
+        return new DisableEvent((GuiElement) source, isDisabled());
     }
 }

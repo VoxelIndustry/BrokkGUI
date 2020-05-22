@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiLinkBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.skin.GuiLabeledSkinBase;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
@@ -14,11 +14,10 @@ public class GuiLink extends GuiLabeled
 {
     private final BaseProperty<String> urlProperty;
 
-    public GuiLink(String url, String text, GuiNode icon)
+    public GuiLink(String url, String text, GuiElement icon)
     {
-        super("link", text, icon);
-        this.urlProperty = new BaseProperty<>(url, "urlProperty");
-        this.setStyle("text-color: blue");
+        super(text, icon);
+        urlProperty = new BaseProperty<>(url, "urlProperty");
     }
 
     public GuiLink(String url, String text)
@@ -37,6 +36,12 @@ public class GuiLink extends GuiLabeled
     }
 
     @Override
+    public String type()
+    {
+        return "type";
+    }
+
+    @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
         return new GuiLabeledSkinBase<>(this, new GuiLinkBehavior(this));
@@ -44,16 +49,16 @@ public class GuiLink extends GuiLabeled
 
     public BaseProperty<String> getUrlProperty()
     {
-        return this.urlProperty;
+        return urlProperty;
     }
 
     public String getUrl()
     {
-        return this.getUrlProperty().getValue();
+        return getUrlProperty().getValue();
     }
 
-    public void setUrl(final String URL)
+    public void setUrl(String URL)
     {
-        this.getUrlProperty().setValue(URL);
+        getUrlProperty().setValue(URL);
     }
 }

@@ -1,52 +1,50 @@
 package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
+import net.voxelindustry.brokkgui.element.pane.GuiAbsolutePane;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
 
 public class GuiToast extends GuiFather implements IGuiPopup
 {
-    private final BaseProperty<GuiNode> contentProperty;
-    private final BaseProperty<Long>    lifeTimeProperty;
-    private final BaseProperty<Long>    currentTimeProperty;
+    private final BaseProperty<GuiElement> contentProperty;
+    private final BaseProperty<Long>       lifeTimeProperty;
+    private final BaseProperty<Long>       currentTimeProperty;
 
     private long millisStart;
 
-    public GuiToast(GuiNode content, long lifeTime)
+    public GuiToast(GuiElement content, long lifeTime)
     {
-        super("toast");
+        contentProperty = new BaseProperty<>(null, "contentProperty");
 
-        this.contentProperty = new BaseProperty<>(null, "contentProperty");
-
-        this.contentProperty.addListener((obs, oldValue, newValue) ->
+        contentProperty.addListener((obs, oldValue, newValue) ->
         {
             if (oldValue != null)
             {
-                this.removeChild(oldValue);
-                this.getWidthProperty().unbind();
-                this.getHeightProperty().unbind();
-                oldValue.getxPosProperty().unbind();
-                oldValue.getyPosProperty().unbind();
+                removeChild(oldValue);
+                transform().widthProperty().unbind();
+                transform().heightProperty().unbind();
+                oldValue.transform().xPosProperty().unbind();
+                oldValue.transform().yPosProperty().unbind();
             }
 
             if (newValue != null)
             {
-                this.addChild(newValue);
-                RelativeBindingHelper.bindToPos(newValue, this);
-                this.getWidthProperty().bind(newValue.getWidthProperty());
-                this.getHeightProperty().bind(newValue.getHeightProperty());
+                addChild(newValue);
+                RelativeBindingHelper.bindToPos(newValue.transform(), transform());
+                transform().widthProperty().bind(newValue.transform().widthProperty());
+                transform().heightProperty().bind(newValue.transform().heightProperty());
             }
         });
 
-        this.contentProperty.setValue(content);
+        contentProperty.setValue(content);
 
-        this.lifeTimeProperty = new BaseProperty<>(lifeTime, "lifeTimeProperty");
-        this.currentTimeProperty = new BaseProperty<>(0L, "currentTimeProperty");
+        lifeTimeProperty = new BaseProperty<>(lifeTime, "lifeTimeProperty");
+        currentTimeProperty = new BaseProperty<>(0L, "currentTimeProperty");
     }
 
     public GuiToast(long lifeTime)
@@ -67,7 +65,13 @@ public class GuiToast extends GuiFather implements IGuiPopup
         }
     }
 
-    public BaseProperty<GuiNode> getContentProperty()
+    @Override
+    public String type()
+    {
+        return "toast";
+    }
+
+    public BaseProperty<GuiElement> getContentProperty()
     {
         return contentProperty;
     }
@@ -82,39 +86,39 @@ public class GuiToast extends GuiFather implements IGuiPopup
         return currentTimeProperty;
     }
 
-    public GuiNode getContent()
+    public GuiElement getContent()
     {
-        return this.getContentProperty().getValue();
+        return getContentProperty().getValue();
     }
 
-    public void setContent(GuiNode content)
+    public void setContent(GuiElement content)
     {
-        this.getContentProperty().setValue(content);
+        getContentProperty().setValue(content);
     }
 
     public long getLifeTime()
     {
-        return this.getLifeTimeProperty().getValue();
+        return getLifeTimeProperty().getValue();
     }
 
     public void setLifeTime(long lifeTime)
     {
-        this.getLifeTimeProperty().setValue(lifeTime);
+        getLifeTimeProperty().setValue(lifeTime);
     }
 
     public long getCurrentTime()
     {
-        return this.getCurrentTimeProperty().getValue();
+        return getCurrentTimeProperty().getValue();
     }
 
     public void resetCurrentTime()
     {
-        this.getCurrentTimeProperty().setValue(0L);
-        this.millisStart = 0;
+        getCurrentTimeProperty().setValue(0L);
+        millisStart = 0;
     }
 
     private void addCurrentTime(long currentLife)
     {
-        this.getCurrentTimeProperty().setValue(this.getCurrentTime() + currentLife);
+        getCurrentTimeProperty().setValue(getCurrentTime() + currentLife);
     }
 }

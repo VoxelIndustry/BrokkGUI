@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.animation.transition;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,12 +12,12 @@ public class TranslateTransition extends Transition
     private float fromX, fromY;
     private float translateX, translateY;
 
-    public TranslateTransition(GuiNode node, long millis)
+    public TranslateTransition(GuiElement node, long millis)
     {
         this(node, millis, TimeUnit.MILLISECONDS);
     }
 
-    public TranslateTransition(GuiNode node, long duration, TimeUnit unit)
+    public TranslateTransition(GuiElement node, long duration, TimeUnit unit)
     {
         super(node, duration, unit);
     }
@@ -28,7 +28,7 @@ public class TranslateTransition extends Transition
         if (getNode() == null)
             return;
 
-        getNode().setTranslate(fromX + (endX - fromX) * interpolated, fromY + (endY - fromY) * interpolated);
+        getNode().transform().translate(fromX + (endX - fromX) * interpolated, fromY + (endY - fromY) * interpolated);
     }
 
     @Override
@@ -37,12 +37,12 @@ public class TranslateTransition extends Transition
         super.restart();
 
         if (startX == null)
-            fromX = getNode().getxTranslate();
+            fromX = getNode().transform().xTranslate();
         else
             fromX = startX;
 
         if (startY == null)
-            fromY = getNode().getyTranslate();
+            fromY = getNode().transform().yTranslate();
         else
             fromY = startY;
 

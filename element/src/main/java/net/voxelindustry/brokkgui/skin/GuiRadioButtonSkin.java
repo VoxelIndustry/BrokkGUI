@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.skin;
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.binding.BaseExpression;
 import net.voxelindustry.brokkgui.behavior.GuiButtonBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.element.input.GuiRadioButton;
 
@@ -18,8 +18,8 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             if (oldValue != null)
             {
                 this.getModel().removeChild(oldValue);
-                oldValue.getxPosProperty().unbind();
-                oldValue.getyPosProperty().unbind();
+                oldValue.transform().xPosProperty().unbind();
+                oldValue.transform().yPosProperty().unbind();
             }
             if (newValue != null)
                 this.bindButton(newValue);
@@ -28,19 +28,19 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
         this.bindButton(this.getModel().getButtonNode());
     }
 
-    private void bindButton(GuiNode node)
+    private void bindButton(GuiElement node)
     {
         this.getModel().addChild(node);
 
-        node.getxPosProperty().bind(new BaseBinding<Float>()
+        node.transform().xPosProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(getModel().getButtonSideProperty(),
-                        getModel().getxPosProperty(),
-                        getModel().getxTranslateProperty(),
-                        getModel().getLabel().getWidthProperty(),
-                        getModel().getWidthProperty(),
-                        node.getWidthProperty());
+                        transform().xPosProperty(),
+                        transform().xTranslateProperty(),
+                        getModel().getLabel().transform().widthProperty(),
+                        transform().widthProperty(),
+                        node.transform().widthProperty());
             }
 
             @Override
@@ -49,21 +49,21 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
                 if (getModel().getButtonSide() == RectSide.LEFT)
                     return getModel().getLeftPos();
                 if (getModel().getButtonSide() == RectSide.RIGHT)
-                    return getModel().getRightPos() - node.getWidth();
-                return getModel().getLeftPos() + getModel().getWidth() / 2
-                        - node.getWidth() / 2;
+                    return getModel().getRightPos() - node.width();
+                return getModel().getLeftPos() + getModel().width() / 2
+                        - node.width() / 2;
             }
         });
 
-        node.getyPosProperty().bind(new BaseBinding<Float>()
+        node.transform().yPosProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(getModel().getButtonSideProperty(),
-                        getModel().getyPosProperty(),
-                        getModel().getyTranslateProperty(),
-                        getModel().getLabel().getHeightProperty(),
-                        getModel().getHeightProperty(),
-                        node.getHeightProperty());
+                        transform().yPosProperty(),
+                        transform().yTranslateProperty(),
+                        getModel().getLabel().transform().heightProperty(),
+                        transform().heightProperty(),
+                        node.transform().heightProperty());
             }
 
             @Override
@@ -72,8 +72,8 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
                 if (getModel().getButtonSide() == RectSide.UP)
                     return getModel().getTopPos();
                 if (getModel().getButtonSide() == RectSide.DOWN)
-                    return getModel().getBottomPos() - getModel().getLabel().getHeight();
-                return getModel().getTopPos() + getModel().getHeight() / 2 - node.getHeight() / 2;
+                    return getModel().getBottomPos() - getModel().getLabel().height();
+                return getModel().getTopPos() + getModel().height() / 2 - node.height() / 2;
             }
         });
     }
@@ -82,71 +82,71 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
     protected void bindLabel()
     {
         if (!getModel().expandToLabel())
-            getModel().getLabel().getWidthProperty().bind(getModel().getWidthProperty());
+            getModel().getLabel().transform().widthProperty().bind(transform().widthProperty());
         else
         {
             getModel().getLabel().setExpandToText(true);
-            getModel().getWidthProperty().bind(BaseExpression.biCombine(
-                    getModel().getButtonNode().getWidthProperty(),
-                    getModel().getLabel().getWidthProperty(),
+            transform().widthProperty().bind(BaseExpression.biCombine(
+                    getModel().getButtonNode().transform().widthProperty(),
+                    getModel().getLabel().transform().widthProperty(),
                     Float::sum));
         }
 
-        getModel().getLabel().getHeightProperty().bind(getModel().getHeightProperty());
+        getModel().getLabel().transform().heightProperty().bind(transform().heightProperty());
 
-        getModel().getLabel().getxPosProperty().bind(new BaseBinding<Float>()
+        getModel().getLabel().transform().xPosProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(getModel().getButtonSideProperty(),
-                        getModel().getxPosProperty(),
-                        getModel().getxTranslateProperty(),
-                        getModel().getLabel().getWidthProperty(),
-                        getModel().getWidthProperty(),
-                        getModel().getButtonNode().getWidthProperty());
+                        transform().xPosProperty(),
+                        transform().xTranslateProperty(),
+                        getModel().getLabel().transform().widthProperty(),
+                        transform().widthProperty(),
+                        getModel().getButtonNode().transform().widthProperty());
             }
 
             @Override
             public Float computeValue()
             {
                 if (getModel().getButtonSide() == RectSide.LEFT)
-                    return getModel().getLeftPos() + getModel().getButtonNode().getWidth();
+                    return getModel().getLeftPos() + getModel().getButtonNode().width();
                 if (getModel().getButtonSide() == RectSide.RIGHT)
                     return getModel().getLeftPos();
-                return getModel().getLeftPos() + getModel().getWidth() / 2
-                        - getModel().getLabel().getWidth() / 2;
+                return getModel().getLeftPos() + getModel().width() / 2
+                        - getModel().getLabel().width() / 2;
             }
         });
 
-        getModel().getLabel().getyPosProperty().bind(new BaseBinding<Float>()
+        getModel().getLabel().transform().yPosProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(getModel().getButtonSideProperty(),
-                        getModel().getyPosProperty(),
-                        getModel().getyTranslateProperty(),
-                        getModel().getLabel().getHeightProperty(),
-                        getModel().getHeightProperty(),
-                        getModel().getButtonNode().getHeightProperty());
+                        transform().yPosProperty(),
+                        transform().yTranslateProperty(),
+                        getModel().getLabel().transform().heightProperty(),
+                        transform().heightProperty(),
+                        getModel().getButtonNode().transform().heightProperty());
             }
 
             @Override
             public Float computeValue()
             {
                 if (getModel().getButtonSide() == RectSide.UP)
-                    return getModel().getTopPos() + getModel().getButtonNode().getHeight();
+                    return getModel().getTopPos() + getModel().getButtonNode().height();
                 if (getModel().getButtonSide() == RectSide.DOWN)
                     return getModel().getTopPos();
-                return getModel().getTopPos() + getModel().getHeight() / 2
-                        - getModel().getLabel().getHeight() / 2;
+                return getModel().getTopPos() + getModel().height() / 2
+                        - getModel().getLabel().height() / 2;
             }
         });
 
         getModel().getExpandToLabelProperty().addListener(obs ->
         {
-            getModel().getLabel().getWidthProperty().unbind();
+            getModel().getLabel().transform().widthProperty().unbind();
             getModel().getLabel().setExpandToText(true);
-            getModel().getWidthProperty().bind(BaseExpression.biCombine(
-                    getModel().getButtonNode().getWidthProperty(),
-                    getModel().getLabel().getWidthProperty(),
+            transform().widthProperty().bind(BaseExpression.biCombine(
+                    getModel().getButtonNode().transform().widthProperty(),
+                    getModel().getLabel().transform().widthProperty(),
                     Float::sum));
         });
     }

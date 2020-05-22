@@ -6,7 +6,7 @@ import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldBehavior;
 import net.voxelindustry.brokkgui.component.ITextInput;
-import net.voxelindustry.brokkgui.control.GuiElement;
+import net.voxelindustry.brokkgui.control.GuiSkinedElement;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.event.CursorMoveEvent;
 import net.voxelindustry.brokkgui.event.TextTypedEvent;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author Ourten 2 oct. 2016
  */
-public class GuiTextfield extends GuiElement implements ITextInput
+public class GuiTextfield extends GuiSkinedElement implements ITextInput
 {
     private final BaseProperty<String> textProperty, promptTextProperty, promptEllipsisProperty;
 
@@ -37,32 +37,36 @@ public class GuiTextfield extends GuiElement implements ITextInput
     private EventHandler<TextTypedEvent>  onTextTyped;
     private EventHandler<CursorMoveEvent> onCursorMoveEvent;
 
-    public GuiTextfield(final String text)
+    public GuiTextfield(String text)
     {
-        super("textfield");
+        textProperty = new BaseProperty<>(text, "textProperty");
+        promptTextProperty = new BaseProperty<>("", "promptTextProperty");
+        promptEllipsisProperty = new BaseProperty<>("...", "promptEllipsisProperty");
 
-        this.textProperty = new BaseProperty<>(text, "textProperty");
-        this.promptTextProperty = new BaseProperty<>("", "promptTextProperty");
-        this.promptEllipsisProperty = new BaseProperty<>("...", "promptEllipsisProperty");
+        maxTextLengthProperty = new BaseProperty<>(-1, "maxTextLength");
+        cursorPosProperty = new BaseProperty<>(0, "cursorPosProperty");
+        textPaddingProperty = new BaseProperty<>(new RectBox(2), "textPaddingProperty");
 
-        this.maxTextLengthProperty = new BaseProperty<>(-1, "maxTextLength");
-        this.cursorPosProperty = new BaseProperty<>(0, "cursorPosProperty");
-        this.textPaddingProperty = new BaseProperty<>(new RectBox(2), "textPaddingProperty");
+        promptTextAlwaysDisplayedProperty = new BaseProperty<>(false, "promptTextAlwaysDisplayedProperty");
+        editableProperty = new BaseProperty<>(true, "editableProperty");
+        validatedProperty = new BaseProperty<>(true, "validatedProperty");
 
-        this.promptTextAlwaysDisplayedProperty = new BaseProperty<>(false, "promptTextAlwaysDisplayedProperty");
-        this.editableProperty = new BaseProperty<>(true, "editableProperty");
-        this.validatedProperty = new BaseProperty<>(true, "validatedProperty");
+        expandToTextProperty = new BaseProperty<>(false, "expandToTextProperty");
 
-        this.expandToTextProperty = new BaseProperty<>(false, "expandToTextProperty");
+        validatorsProperty = new BaseListProperty<>(null, "validatorsProperty");
 
-        this.validatorsProperty = new BaseListProperty<>(null, "validatorsProperty");
-
-        this.setFocusable(true);
+        setFocusable(true);
     }
 
     public GuiTextfield()
     {
         this("");
+    }
+
+    @Override
+    public String type()
+    {
+        return "textfield";
     }
 
     @Override
@@ -73,52 +77,52 @@ public class GuiTextfield extends GuiElement implements ITextInput
 
     public BaseProperty<String> getTextProperty()
     {
-        return this.textProperty;
+        return textProperty;
     }
 
     public BaseProperty<String> getPrompTextProperty()
     {
-        return this.promptTextProperty;
+        return promptTextProperty;
     }
 
     public BaseProperty<Boolean> getEditableProperty()
     {
-        return this.editableProperty;
+        return editableProperty;
     }
 
     public BaseListProperty<BaseTextValidator> getValidatorsProperty()
     {
-        return this.validatorsProperty;
+        return validatorsProperty;
     }
 
     public BaseProperty<Boolean> getValidatedProperty()
     {
-        return this.validatedProperty;
+        return validatedProperty;
     }
 
     public BaseProperty<Boolean> getPromptTextAlwaysDisplayedProperty()
     {
-        return this.promptTextAlwaysDisplayedProperty;
+        return promptTextAlwaysDisplayedProperty;
     }
 
     public BaseProperty<Integer> getMaxTextLengthProperty()
     {
-        return this.maxTextLengthProperty;
+        return maxTextLengthProperty;
     }
 
     public BaseProperty<Integer> getCursorPosProperty()
     {
-        return this.cursorPosProperty;
+        return cursorPosProperty;
     }
 
     public BaseProperty<RectBox> getTextPaddingProperty()
     {
-        return this.textPaddingProperty;
+        return textPaddingProperty;
     }
 
     public BaseProperty<String> getPromptEllipsisProperty()
     {
-        return this.promptEllipsisProperty;
+        return promptEllipsisProperty;
     }
 
     public BaseProperty<Boolean> getExpandToTextProperty()
@@ -129,35 +133,35 @@ public class GuiTextfield extends GuiElement implements ITextInput
     @Override
     public String getText()
     {
-        return this.getTextProperty().getValue();
+        return getTextProperty().getValue();
     }
 
     @Override
-    public void setText(final String text)
+    public void setText(String text)
     {
-        this.getTextProperty().setValue(text);
+        getTextProperty().setValue(text);
     }
 
     public String getPromptText()
     {
-        return this.getPrompTextProperty().getValue();
+        return getPrompTextProperty().getValue();
     }
 
-    public void setPromptText(final String text)
+    public void setPromptText(String text)
     {
-        this.getPrompTextProperty().setValue(text);
+        getPrompTextProperty().setValue(text);
     }
 
     @Override
     public boolean isEditable()
     {
-        return this.getEditableProperty().getValue();
+        return getEditableProperty().getValue();
     }
 
     @Override
-    public void setEditable(final boolean editable)
+    public void setEditable(boolean editable)
     {
-        this.getEditableProperty().setValue(editable);
+        getEditableProperty().setValue(editable);
     }
 
     /**
@@ -165,46 +169,46 @@ public class GuiTextfield extends GuiElement implements ITextInput
      */
     public List<BaseTextValidator> getValidators()
     {
-        return this.getValidatorsProperty().getValue();
+        return getValidatorsProperty().getValue();
     }
 
-    public void addValidator(final BaseTextValidator validator)
+    public void addValidator(BaseTextValidator validator)
     {
-        this.getValidatorsProperty().add(validator);
+        getValidatorsProperty().add(validator);
     }
 
-    public void removeValidator(final BaseTextValidator validator)
+    public void removeValidator(BaseTextValidator validator)
     {
-        this.getValidatorsProperty().remove(validator);
+        getValidatorsProperty().remove(validator);
     }
 
     @Override
     public void validate()
     {
-        this.setValid(true);
-        if (!this.getValidators().isEmpty())
-            this.getValidators().forEach(validator ->
+        setValid(true);
+        if (!getValidators().isEmpty())
+            getValidators().forEach(validator ->
             {
                 validator.setErrored(false);
-                validator.validate(this.getText());
+                validator.validate(getText());
                 if (validator.isErrored())
-                    this.setValid(false);
+                    setValid(false);
             });
     }
 
     public boolean isValid()
     {
-        return this.getValidatedProperty().getValue();
+        return getValidatedProperty().getValue();
     }
 
-    public void setValid(final boolean valid)
+    public void setValid(boolean valid)
     {
-        this.getValidatedProperty().setValue(valid);
+        getValidatedProperty().setValue(valid);
     }
 
     public int getMaxTextLength()
     {
-        return this.getMaxTextLengthProperty().getValue();
+        return getMaxTextLengthProperty().getValue();
     }
 
     /**
@@ -213,84 +217,84 @@ public class GuiTextfield extends GuiElement implements ITextInput
      *
      * @param length
      */
-    public void setMaxTextLength(final int length)
+    public void setMaxTextLength(int length)
     {
-        this.getMaxTextLengthProperty().setValue(length);
+        getMaxTextLengthProperty().setValue(length);
     }
 
     public int getCursorPos()
     {
-        return this.getCursorPosProperty().getValue();
+        return getCursorPosProperty().getValue();
     }
 
     public void setCursorPos(int cursorPos)
     {
-        if (cursorPos >= 0 && cursorPos <= this.getText().length())
+        if (cursorPos >= 0 && cursorPos <= getText().length())
         {
-            if (this.getOnCursorMoveEvent() != null)
-                this.getEventDispatcher().dispatchEvent(CursorMoveEvent.TYPE,
-                        new CursorMoveEvent(this, this.getCursorPos(), cursorPos));
-            this.getCursorPosProperty().setValue(cursorPos);
+            if (getOnCursorMoveEvent() != null)
+                getEventDispatcher().dispatchEvent(CursorMoveEvent.TYPE,
+                        new CursorMoveEvent(this, getCursorPos(), cursorPos));
+            getCursorPosProperty().setValue(cursorPos);
         }
     }
 
     public boolean isPromptTextAlwaysDisplayed()
     {
-        return this.getPromptTextAlwaysDisplayedProperty().getValue();
+        return getPromptTextAlwaysDisplayedProperty().getValue();
     }
 
-    public void setPromptTextAlwaysDisplayed(final boolean always)
+    public void setPromptTextAlwaysDisplayed(boolean always)
     {
-        this.getPromptTextAlwaysDisplayedProperty().setValue(always);
+        getPromptTextAlwaysDisplayedProperty().setValue(always);
     }
 
     public void setPromptEllipsis(String ellipsis)
     {
-        this.getPromptEllipsisProperty().setValue(ellipsis);
+        getPromptEllipsisProperty().setValue(ellipsis);
     }
 
     public String getPromptEllipsis()
     {
-        return this.getPromptEllipsisProperty().getValue();
+        return getPromptEllipsisProperty().getValue();
     }
 
     public void setTextPadding(RectBox padding)
     {
-        this.getTextPaddingProperty().setValue(padding);
+        getTextPaddingProperty().setValue(padding);
     }
 
     public RectBox getTextPadding()
     {
-        return this.getTextPaddingProperty().getValue();
+        return getTextPaddingProperty().getValue();
     }
 
     public boolean expandToText()
     {
-        return this.expandToTextProperty.getValue();
+        return expandToTextProperty.getValue();
     }
 
     public void setExpandToText(boolean expandToText)
     {
-        if (expandToText && !this.expandToText())
-            this.bindSizeToText();
-        else if (!expandToText && this.expandToText())
-            this.getWidthProperty().unbind();
-        this.expandToTextProperty.setValue(expandToText);
+        if (expandToText && !expandToText())
+            bindSizeToText();
+        else if (!expandToText && expandToText())
+            transform().widthProperty().unbind();
+        expandToTextProperty.setValue(expandToText);
     }
 
     private void bindSizeToText()
     {
-        this.getWidthProperty().bind(new BaseBinding<Float>()
+        transform().widthProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(getTextProperty(),
-                        getTextPaddingProperty(), getHeightProperty());
+                        getTextPaddingProperty(), transform().heightProperty());
             }
 
             @Override
             public Float computeValue()
             {
-                return Math.max(getHeight(),
+                return Math.max(transform().height(),
                         Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getPromptText()),
                                 BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())) +
                                 getTextPadding().getLeft() + getTextPadding().getRight());
@@ -304,25 +308,25 @@ public class GuiTextfield extends GuiElement implements ITextInput
 
     public EventHandler<TextTypedEvent> getOnTextTyped()
     {
-        return this.onTextTyped;
+        return onTextTyped;
     }
 
-    public void setOnTextTyped(final EventHandler<TextTypedEvent> onTextTyped)
+    public void setOnTextTyped(EventHandler<TextTypedEvent> onTextTyped)
     {
-        this.getEventDispatcher().removeHandler(TextTypedEvent.TYPE, this.onTextTyped);
+        getEventDispatcher().removeHandler(TextTypedEvent.TYPE, this.onTextTyped);
         this.onTextTyped = onTextTyped;
-        this.getEventDispatcher().addHandler(TextTypedEvent.TYPE, this.onTextTyped);
+        getEventDispatcher().addHandler(TextTypedEvent.TYPE, this.onTextTyped);
     }
 
     public EventHandler<CursorMoveEvent> getOnCursorMoveEvent()
     {
-        return this.onCursorMoveEvent;
+        return onCursorMoveEvent;
     }
 
-    public void setOnCursorMoveEvent(final EventHandler<CursorMoveEvent> onCursorMoveEvent)
+    public void setOnCursorMoveEvent(EventHandler<CursorMoveEvent> onCursorMoveEvent)
     {
-        this.getEventDispatcher().removeHandler(CursorMoveEvent.TYPE, this.onCursorMoveEvent);
+        getEventDispatcher().removeHandler(CursorMoveEvent.TYPE, this.onCursorMoveEvent);
         this.onCursorMoveEvent = onCursorMoveEvent;
-        this.getEventDispatcher().addHandler(CursorMoveEvent.TYPE, this.onCursorMoveEvent);
+        getEventDispatcher().addHandler(CursorMoveEvent.TYPE, this.onCursorMoveEvent);
     }
 }

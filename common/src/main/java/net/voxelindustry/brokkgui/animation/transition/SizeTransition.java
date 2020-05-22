@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.animation.transition;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +12,7 @@ public class SizeTransition extends Transition
     private float fromX, fromY;
     private float translateX, translateY;
 
-    public SizeTransition(GuiNode node, long duration, TimeUnit unit)
+    public SizeTransition(GuiElement node, long duration, TimeUnit unit)
     {
         super(node, duration, unit);
     }
@@ -23,7 +23,7 @@ public class SizeTransition extends Transition
         if (getNode() == null)
             return;
 
-        getNode().setSize(fromX + (endX - fromX) * interpolated, fromY + (endY - fromY) * interpolated);
+        getNode().transform().size(fromX + (endX - fromX) * interpolated, fromY + (endY - fromY) * interpolated);
     }
 
     @Override
@@ -32,12 +32,12 @@ public class SizeTransition extends Transition
         super.restart();
 
         if (startX == null)
-            fromX = getNode().getScaleX();
+            fromX = getNode().transform().scaleX();
         else
             fromX = startX;
 
         if (startY == null)
-            fromY = getNode().getScaleY();
+            fromY = getNode().transform().scaleY();
         else
             fromY = startY;
 

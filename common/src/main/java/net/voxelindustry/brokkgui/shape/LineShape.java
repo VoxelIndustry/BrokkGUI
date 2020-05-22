@@ -1,5 +1,7 @@
 package net.voxelindustry.brokkgui.shape;
 
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
@@ -17,34 +19,34 @@ public class LineShape implements ShapeDefinition
     }
 
     @Override
-    public void drawColored(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Color color,
+    public void drawColored(Transform transform, IGuiRenderer renderer, float startX, float startY, Color color,
                             float zLevel, RectBox spritePosition)
     {
         renderer.getHelper().drawColoredLine(renderer, startX, startY,
-                startX + shape.getWidth(), startY + shape.getHeight(),
+                startX + transform.width(), startY + transform.height(),
                 lineWidthSupplier.get(), zLevel, color);
     }
 
     @Override
-    public void drawColoredEmpty(GuiShape shape, IGuiRenderer renderer, float startX, float startY, float lineWidth,
+    public void drawColoredEmpty(Transform transform, IGuiRenderer renderer, float startX, float startY, float lineWidth,
                                  Color color, float zLevel)
     {
         renderer.getHelper().drawColoredLine(renderer, startX, startY,
-                startX + shape.getWidth(), startY + shape.getHeight(),
+                startX + transform.width(), startY + transform.height(),
                 lineWidthSupplier.get(), zLevel, color);
     }
 
     @Override
-    public void drawTextured(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Texture texture,
+    public void drawTextured(Transform transform, IGuiRenderer renderer, float startX, float startY, Texture texture,
                              float zLevel, RectBox spritePosition)
     {
         // TODO : Add helper for drawing textured lines
     }
 
     @Override
-    public boolean isMouseInside(GuiShape shape, float mouseX, float mouseY)
+    public boolean isMouseInside(GuiElement element, float mouseX, float mouseY)
     {
-        if(!Rectangle.SHAPE.isMouseInside(shape, mouseX, mouseY)) // Bad behavior expected with very high line width
+        if (!Rectangle.SHAPE.isMouseInside(element, mouseX, mouseY)) // Bad behavior expected with very high line width
             return false;                                         // and at line's extremities
 
         /*
@@ -54,11 +56,11 @@ public class LineShape implements ShapeDefinition
         */
 
         // Vector from segment beginning to mouse position
-        float AMx = mouseX - (shape.getxPos() + shape.getxTranslate());
-        float AMy = mouseY - (shape.getyPos() + shape.getyTranslate());
+        float AMx = mouseX - (element.transform().xPos() + element.transform().xTranslate());
+        float AMy = mouseY - (element.transform().yPos() + element.transform().yTranslate());
 
-        float ABx = shape.getWidth();
-        float ABy = shape.getHeight();
+        float ABx = element.transform().width();
+        float ABy = element.transform().height();
 
         // Remember : det(A,B) = Ax * By - Ay * Bx
 

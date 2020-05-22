@@ -1,5 +1,7 @@
 package net.voxelindustry.brokkgui.shape;
 
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
@@ -7,54 +9,53 @@ import net.voxelindustry.brokkgui.sprite.Texture;
 
 public class RectangleShape implements ShapeDefinition
 {
+    public static final RectangleShape RECTANGLE_SHAPE = new RectangleShape();
+
     @Override
-    public void drawColored(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Color color,
+    public void drawColored(Transform transform, IGuiRenderer renderer, float startX, float startY, Color color,
                             float zLevel, RectBox spritePosition)
     {
         if (spritePosition == RectBox.EMPTY)
-            renderer.getHelper().drawColoredRect(renderer, startX, startY, shape.getWidth(), shape.getHeight(), zLevel,
+            renderer.getHelper().drawColoredRect(renderer, startX, startY, transform.width(), transform.height(), zLevel,
                     color);
         else
             renderer.getHelper().drawColoredRect(renderer,
                     startX + spritePosition.getLeft(),
                     startY + spritePosition.getTop(),
-                    shape.getWidth() - spritePosition.getHorizontal(),
-                    shape.getHeight() - spritePosition.getVertical(),
+                    transform.width() - spritePosition.getHorizontal(),
+                    transform.height() - spritePosition.getVertical(),
                     zLevel, color);
     }
 
     @Override
-    public void drawColoredEmpty(GuiShape shape, IGuiRenderer renderer, float startX, float startY, float lineWidth,
+    public void drawColoredEmpty(Transform shape, IGuiRenderer renderer, float startX, float startY, float lineWidth,
                                  Color color, float zLevel)
     {
-        renderer.getHelper().drawColoredEmptyRect(renderer, startX, startY, shape.getWidth(), shape.getHeight(),
+        renderer.getHelper().drawColoredEmptyRect(renderer, startX, startY, shape.width(), shape.height(),
                 zLevel, color, lineWidth);
     }
 
     @Override
-    public void drawTextured(GuiShape shape, IGuiRenderer renderer, float startX, float startY, Texture texture,
+    public void drawTextured(Transform shape, IGuiRenderer renderer, float startX, float startY, Texture texture,
                              float zLevel, RectBox spritePosition)
     {
         if (spritePosition == RectBox.EMPTY)
             renderer.getHelper().drawTexturedRect(renderer, startX, startY, texture.getUMin(), texture.getVMin(),
-                    texture.getUMax(), texture.getVMax(), shape.getWidth(), shape.getHeight(), zLevel);
+                    texture.getUMax(), texture.getVMax(), shape.width(), shape.height(), zLevel);
         else
             renderer.getHelper().drawTexturedRect(renderer,
                     startX + spritePosition.getLeft(),
                     startY + spritePosition.getTop(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
-                    shape.getWidth() - spritePosition.getHorizontal(),
-                    shape.getHeight() - spritePosition.getVertical(),
+                    shape.width() - spritePosition.getHorizontal(),
+                    shape.height() - spritePosition.getVertical(),
                     zLevel);
     }
 
     @Override
-    public boolean isMouseInside(GuiShape shape, float mouseX, float mouseY)
+    public boolean isMouseInside(GuiElement element, float mouseX, float mouseY)
     {
-        return mouseX > shape.getxPos() + shape.getxTranslate()
-                && mouseX < shape.getxPos() + shape.getxTranslate() + shape.getWidth()
-                && mouseY > shape.getyPos() + shape.getyTranslate()
-                && mouseY < shape.getyPos() + shape.getyTranslate() + shape.getHeight();
+        return element.transform().isPointInside(mouseX, mouseY);
     }
 }

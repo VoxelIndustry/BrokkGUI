@@ -1,17 +1,20 @@
 package net.voxelindustry.brokkgui.shape;
 
-public class Circle extends GuiShape
+import net.voxelindustry.brokkgui.component.GuiElement;
+
+public class Circle extends GuiElement
 {
     public static final CircleShape SHAPE = new CircleShape();
 
     public Circle(float xPosition, float yPosition, float radius)
     {
-        super("circle", SHAPE);
+        transform().xTranslate(xPosition);
+        transform().yTranslate(yPosition);
 
-        this.setxTranslate(xPosition);
-        this.setyTranslate(yPosition);
-        this.setWidth(radius);
-        this.setHeight(radius);
+        transform().width(radius);
+        transform().height(radius);
+
+        paint().shape(SHAPE);
     }
 
     public Circle(float radius)
@@ -22,5 +25,11 @@ public class Circle extends GuiShape
     public Circle()
     {
         this(0, 0, 0);
+    }
+
+    @Override
+    public String type()
+    {
+        return "circle";
     }
 }

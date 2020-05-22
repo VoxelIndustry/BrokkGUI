@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.event;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
 import net.voxelindustry.hermod.IEventEmitter;
@@ -11,7 +11,7 @@ public class LayoutEvent extends HermodEvent
     public static final EventType<Add>         ADD    = new EventType<>(ANY, "LAYOUT_ADD_EVENT");
     public static final EventType<Remove>      REMOVE = new EventType<>(ANY, "LAYOUT_REMOVE_EVENT");
 
-    public LayoutEvent(GuiNode source)
+    public LayoutEvent(GuiElement source)
     {
         super(source);
     }
@@ -19,12 +19,12 @@ public class LayoutEvent extends HermodEvent
     @Override
     public LayoutEvent copy(IEventEmitter source)
     {
-        return new LayoutEvent((GuiNode) source);
+        return new LayoutEvent((GuiElement) source);
     }
 
     public static class Add extends LayoutEvent
     {
-        public Add(GuiNode source)
+        public Add(GuiElement source)
         {
             super(source);
         }
@@ -32,13 +32,13 @@ public class LayoutEvent extends HermodEvent
         @Override
         public Add copy(IEventEmitter source)
         {
-            return new Add((GuiNode) source);
+            return new Add((GuiElement) source);
         }
     }
 
     public static class Remove extends LayoutEvent
     {
-        public Remove(GuiNode source)
+        public Remove(GuiElement source)
         {
             super(source);
         }
@@ -46,7 +46,7 @@ public class LayoutEvent extends HermodEvent
         @Override
         public Remove copy(IEventEmitter source)
         {
-            return new Remove((GuiNode) source);
+            return new Remove((GuiElement) source);
         }
     }
 }

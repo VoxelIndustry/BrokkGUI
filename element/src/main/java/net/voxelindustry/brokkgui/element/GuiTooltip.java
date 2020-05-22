@@ -2,33 +2,26 @@ package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.listener.ValueChangeListener;
 import fr.ourten.teabeans.value.BaseProperty;
-import fr.ourten.teabeans.value.BaseSetProperty;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiTooltip;
-import net.voxelindustry.brokkgui.control.GuiElement;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.style.ICascadeStyleable;
-import net.voxelindustry.brokkgui.style.StyleHolder;
-import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.hermod.EventDispatcher;
 
-import java.util.function.Supplier;
-
-public class GuiTooltip implements IGuiTooltip, ICascadeStyleable
+public class GuiTooltip implements IGuiTooltip
 {
     private EventDispatcher eventDispatcher;
 
-    private BaseProperty<GuiNode>        contentProperty;
+    private BaseProperty<GuiElement>     contentProperty;
     private GuiElement                   owner;
     private ValueChangeListener<Boolean> ownerHoverListener;
 
     private float mouseXOffset, mouseYOffset;
 
-    public GuiTooltip(GuiNode content, float mouseXOffset, float mouseYOffset)
+    public GuiTooltip(GuiElement content, float mouseXOffset, float mouseYOffset)
     {
-        this.ownerHoverListener = (observable, oldValue, newValue) ->
+        ownerHoverListener = (observable, oldValue, newValue) ->
         {
             if (newValue)
                 PopupHandler.getInstance(owner.getWindow()).addPopup(this);
@@ -39,17 +32,17 @@ public class GuiTooltip implements IGuiTooltip, ICascadeStyleable
         this.mouseXOffset = mouseXOffset;
         this.mouseYOffset = mouseYOffset;
 
-        this.contentProperty = new BaseProperty<>(null, "contentProperty");
+        contentProperty = new BaseProperty<>(null, "contentProperty");
 
-        this.setContent(content);
+        setContent(content);
     }
 
-    public GuiTooltip(GuiNode content)
+    public GuiTooltip(GuiElement content)
     {
         this(content, 5, 5);
     }
 
-    public GuiTooltip(String text, GuiNode icon)
+    public GuiTooltip(String text, GuiElement icon)
     {
         this(new GuiLabel(text, icon), 5, 5);
     }
@@ -59,29 +52,29 @@ public class GuiTooltip implements IGuiTooltip, ICascadeStyleable
         this(text, null);
     }
 
-    public BaseProperty<GuiNode> getContentProperty()
+    public BaseProperty<GuiElement> getContentProperty()
     {
         return contentProperty;
     }
 
-    public GuiNode getContent()
+    public GuiElement getContent()
     {
-        return this.getContentProperty().getValue();
+        return getContentProperty().getValue();
     }
 
-    public void setContent(GuiNode content)
+    public void setContent(GuiElement content)
     {
-        this.getContentProperty().setValue(content);
+        getContentProperty().setValue(content);
     }
 
     @Override
     public void setOwner(GuiElement newOwner)
     {
         if (owner != null && owner != newOwner)
-            owner.getHoveredProperty().removeListener(ownerHoverListener);
+            owner.hoveredProperty().removeListener(ownerHoverListener);
         if (newOwner != null)
-            newOwner.getHoveredProperty().addListener(ownerHoverListener);
-        this.owner = newOwner;
+            newOwner.hoveredProperty().addListener(ownerHoverListener);
+        owner = newOwner;
     }
 
     public float getMouseXOffset()
@@ -110,88 +103,11 @@ public class GuiTooltip implements IGuiTooltip, ICascadeStyleable
         if (getContent() == null)
             return;
 
-        if (getContent().getxPos() != mouseX + mouseXOffset)
-            getContent().getxPosProperty().setValue(mouseX + mouseXOffset);
-        if (getContent().getyPos() != mouseY + mouseYOffset)
-            getContent().getyPosProperty().setValue(mouseY + mouseYOffset);
+        if (getContent().transform().xPos() != mouseX + mouseXOffset)
+            getContent().transform().xPosProperty().setValue(mouseX + mouseXOffset);
+        if (getContent().transform().yPos() != mouseY + mouseYOffset)
+            getContent().transform().yPosProperty().setValue(mouseY + mouseYOffset);
 
         getContent().renderNode(renderer, pass, mouseX, mouseY);
-    }
-
-    ///////////
-    // STYLE //
-    ///////////
-
-    @Override
-    public ICascadeStyleable getParent()
-    {
-        return this.owner;
-    }
-
-    @Override
-    public void setParent(ICascadeStyleable styleable)
-    {
-        throw new RuntimeException("Cannot set style parent of a Tooltip!");
-    }
-
-    @Override
-    public void setStyleListSupplier(Supplier<StyleList> treeSupplier)
-    {
-        this.getContent().setStyleListSupplier(treeSupplier);
-    }
-
-    @Override
-    public void setID(String id)
-    {
-        this.getContent().setID(id);
-    }
-
-    @Override
-    public String getID()
-    {
-        return this.getContent().getID();
-    }
-
-    @Override
-    public BaseSetProperty<String> getStyleClass()
-    {
-        return this.getContent().getStyleClass();
-    }
-
-    @Override
-    public BaseSetProperty<String> getActivePseudoClass()
-    {
-        return this.getContent().getActivePseudoClass();
-    }
-
-    @Override
-    public StyleHolder getStyle()
-    {
-        return this.getContent().getStyle();
-    }
-
-    @Override
-    public String getType()
-    {
-        return this.getContent().getType();
-    }
-
-    @Override
-    public void refreshStyle()
-    {
-        this.getContent().refreshStyle();
-    }
-
-    @Override
-    public EventDispatcher getEventDispatcher()
-    {
-        if (this.eventDispatcher == null)
-            this.initEventDispatcher();
-        return this.eventDispatcher;
-    }
-
-    private void initEventDispatcher()
-    {
-        this.eventDispatcher = new EventDispatcher();
     }
 }

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.data;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 
 import java.util.Optional;
@@ -36,7 +36,7 @@ public class Scale
         this(x, y, y);
     }
 
-    public boolean apply(IGuiRenderer renderer, GuiNode node, boolean createdMatrix)
+    public boolean apply(IGuiRenderer renderer, GuiElement node, boolean createdMatrix)
     {
         if (x == 1 && y == 1 && z == 1)
             return false;

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.data;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 public class Position
 {
@@ -26,17 +26,17 @@ public class Position
         return new Position(x, y, PositionType.RELATIVE);
     }
 
-    public float getX(GuiNode node)
+    public float getX(GuiElement node)
     {
         if (type == PositionType.RELATIVE)
-            return node.getWidth() * x;
+            return node.width() * x;
         return x;
     }
 
-    public float getY(GuiNode node)
+    public float getY(GuiElement node)
     {
         if (type == PositionType.RELATIVE)
-            return node.getHeight() * y;
+            return node.height() * y;
         return y;
     }
 }

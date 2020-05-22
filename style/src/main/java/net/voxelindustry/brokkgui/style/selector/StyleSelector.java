@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.selector;
 
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.style.selector.structural.StructuralSelector;
 import net.voxelindustry.brokkgui.style.selector.structural.StructuralSelectors;
 import org.apache.commons.lang3.tuple.Pair;
@@ -19,15 +19,15 @@ public class StyleSelector implements IStyleSelector
 
     public StyleSelector()
     {
-        this.selectors = new ArrayList<>();
-        this.structuralSelectors = new ArrayList<>(1);
-        this.computedSpecificity = -1;
+        selectors = new ArrayList<>();
+        structuralSelectors = new ArrayList<>(1);
+        computedSpecificity = -1;
     }
 
     public StyleSelector addWildcard()
     {
-        this.add(StyleSelectorType.WILDCARD, "*");
-        this.computedSpecificity = 0;
+        add(StyleSelectorType.WILDCARD, "*");
+        computedSpecificity = 0;
         return this;
     }
 
@@ -37,24 +37,24 @@ public class StyleSelector implements IStyleSelector
         if (type == STRUCTURAL_PSEUDOCLASS)
             structuralSelectors.add(StructuralSelectors.fromString(selector));
         else
-            this.selectors.add(Pair.of(type, selector));
+            selectors.add(Pair.of(type, selector));
 
-        this.computedSpecificity = -1;
+        computedSpecificity = -1;
         return this;
     }
 
     @Override
     public int getSpecificity()
     {
-        if (this.computedSpecificity == -1)
+        if (computedSpecificity == -1)
         {
-            this.computedSpecificity = 0;
-            for (Pair<StyleSelectorType, String> selector : this.selectors)
-                this.computedSpecificity += selector.getKey().getSpecificity();
+            computedSpecificity = 0;
+            for (Pair<StyleSelectorType, String> selector : selectors)
+                computedSpecificity += selector.getKey().getSpecificity();
 
-            this.computedSpecificity += structuralSelectors.size() * STRUCTURAL_PSEUDOCLASS.getSpecificity();
+            computedSpecificity += structuralSelectors.size() * STRUCTURAL_PSEUDOCLASS.getSpecificity();
         }
-        return this.computedSpecificity;
+        return computedSpecificity;
     }
 
     public List<Pair<StyleSelectorType, String>> getSelectors()
@@ -65,22 +65,22 @@ public class StyleSelector implements IStyleSelector
     public boolean isSupersetOf(StyleSelector selector)
     {
         // This check does not use the structuralSelectors since they cannot be compared effectively
-        return this.selectors.containsAll(selector.selectors);
+        return selectors.containsAll(selector.selectors);
     }
 
     @Override
-    public boolean match(StyleHolder styleHolder)
+    public boolean match(StyleComponent styleComponent)
     {
-        for (Pair<StyleSelectorType, String> selector : this.selectors)
+        for (Pair<StyleSelectorType, String> selector : selectors)
         {
             if (selector.getKey() == StyleSelectorType.WILDCARD)
                 return true;
-            if (!this.checkSelector(selector, styleHolder))
+            if (!checkSelector(selector, styleComponent))
                 return false;
         }
         for (StructuralSelector structuralSelector : structuralSelectors)
         {
-            if (!structuralSelector.test(styleHolder))
+            if (!structuralSelector.test(styleComponent))
                 return false;
         }
         return true;
@@ -94,32 +94,32 @@ public class StyleSelector implements IStyleSelector
         if (!(selector instanceof StyleSelector))
             return false;
         StyleSelector other = (StyleSelector) selector;
-        return this.selectors.size() == other.selectors.size()
-                && this.selectors.containsAll(other.selectors)
-                && this.structuralSelectors.size() == other.structuralSelectors.size()
-                && this.structuralSelectors.containsAll(other.structuralSelectors);
+        return selectors.size() == other.selectors.size()
+                && selectors.containsAll(other.selectors)
+                && structuralSelectors.size() == other.structuralSelectors.size()
+                && structuralSelectors.containsAll(other.structuralSelectors);
     }
 
-    protected boolean checkSelector(Pair<StyleSelectorType, String> selector, StyleHolder styleHolder)
+    protected boolean checkSelector(Pair<StyleSelectorType, String> selector, StyleComponent styleComponent)
     {
         switch (selector.getKey())
         {
             case WILDCARD:
                 return true;
             case TYPE:
-                if (!selector.getValue().equals(styleHolder.getOwner().getType()))
+                if (!selector.getValue().equals(styleComponent.element().type()))
                     return false;
                 break;
             case CLASS:
-                if (!styleHolder.getOwner().getStyleClass().getValue().contains(selector.getValue()))
+                if (!styleComponent.styleClass().getValue().contains(selector.getValue()))
                     return false;
                 break;
             case ID:
-                if (!selector.getValue().equals(styleHolder.getOwner().getID()))
+                if (!selector.getValue().equals(styleComponent.element().id()))
                     return false;
                 break;
             case PSEUDOCLASS:
-                if (!styleHolder.getOwner().getActivePseudoClass().getValue().contains(selector.getValue()))
+                if (!styleComponent.activePseudoClass().getValue().contains(selector.getValue()))
                     return false;
                 break;
         }

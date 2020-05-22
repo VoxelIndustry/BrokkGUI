@@ -5,6 +5,7 @@ import net.voxelindustry.hermod.IEventEmitter;
 
 import java.util.function.Supplier;
 
+@Deprecated
 public interface ICascadeStyleable extends IStyleable, IEventEmitter
 {
     ICascadeStyleable getParent();

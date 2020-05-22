@@ -1,91 +1,45 @@
 package net.voxelindustry.brokkgui.shape;
 
 import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
-import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
-public class Text extends GuiShape
+public class Text extends GuiElement
 {
-    private final BaseProperty<String>  textProperty;
-    private final BaseProperty<Integer> lineSpacingProperty;
+    private final String        startingText;
+    private       TextComponent textComponent;
 
-    public Text(float posX, float posY, String text)
+    public Text(String text)
     {
-        super("text", Rectangle.SHAPE);
-
-        this.setxTranslate(posX);
-        this.setyTranslate(posY);
-
-        this.textProperty = new BaseProperty<>(text, "textProperty");
-        this.lineSpacingProperty = new BaseProperty<>(1, "lineSpacingProperty");
-
-        this.getStyle().registerProperty("shadow-color", Color.WHITE, Color.class);
-        this.getStyle().registerProperty("shadow", true, Boolean.class);
-
-        this.getStyle().registerProperty("color", Color.BLACK, Color.class);
-    }
-
-    public Text(final String text)
-    {
-        this(0, 0, text);
+        startingText = text;
     }
 
     @Override
-    public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
+    public void postConstruct()
     {
-        super.renderContent(renderer, pass, mouseX, mouseY);
+        super.postConstruct();
 
-        if (pass == RenderPass.MAIN)
-        {
-            renderer.getHelper().drawString(this.getText(), this.getxPos() + this.getxTranslate(),
-                    this.getyPos() + this.getyTranslate(), this.getzLevel(),
-                    this.getColor(), this.useShadow() ? this.getShadowColor() : Color.ALPHA);
-        }
+        textComponent = provide(TextComponent.class);
+        textComponent.text(startingText);
     }
 
-    public BaseProperty<String> getTextProperty()
+    @Override
+    public String type()
     {
-        return this.textProperty;
+        return "text";
     }
 
-    public BaseProperty<Integer> getLineSpacingProperty()
+    public BaseProperty<String> textProperty()
     {
-        return this.lineSpacingProperty;
+        return textComponent.textProperty();
     }
 
-    public String getText()
+    public String text()
     {
-        return this.getTextProperty().getValue();
+        return textComponent.text();
     }
 
-    public void setText(final String text)
+    public void text(String text)
     {
-        this.getTextProperty().setValue(text);
-    }
-
-    public int getLineSpacing()
-    {
-        return this.getLineSpacingProperty().getValue();
-    }
-
-    public void setLineSpacing(final int lineSpacing)
-    {
-        this.getLineSpacingProperty().setValue(lineSpacing);
-    }
-
-    public Color getShadowColor()
-    {
-        return this.getStyle().getStyleValue("shadow-color", Color.class, Color.ALPHA);
-    }
-
-    public boolean useShadow()
-    {
-        return this.getStyle().getStyleValue("shadow", Boolean.class, false);
-    }
-
-    public Color getColor()
-    {
-        return this.getStyle().getStyleValue("color", Color.class, Color.BLACK);
+        textComponent.text(text);
     }
 }

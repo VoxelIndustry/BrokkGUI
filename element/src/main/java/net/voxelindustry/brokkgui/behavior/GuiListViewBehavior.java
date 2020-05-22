@@ -1,7 +1,8 @@
 package net.voxelindustry.brokkgui.behavior;
 
 import fr.ourten.teabeans.value.BaseListProperty;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.element.GuiListCell;
 import net.voxelindustry.brokkgui.element.GuiListView;
 import net.voxelindustry.brokkgui.event.ClickEvent;
@@ -12,19 +13,19 @@ import java.util.stream.Collectors;
 
 public class GuiListViewBehavior<T> extends GuiScrollableBehavior<GuiListView<T>>
 {
-    private Supplier<BaseListProperty<GuiNode>> childrenSupplier;
+    private Supplier<BaseListProperty<Transform>> childrenSupplier;
 
-    public GuiListViewBehavior(final GuiListView<T> model, Supplier<BaseListProperty<GuiNode>> childrenSupplier)
+    public GuiListViewBehavior(GuiListView<T> model, Supplier<BaseListProperty<Transform>> childrenSupplier)
     {
         super(model);
 
         this.childrenSupplier = childrenSupplier;
 
-        this.mapAllCells();
-        this.getModel().getElementsProperty()
-                .addListener(obs -> this.mapAllCells());
+        mapAllCells();
+        getModel().getElementsProperty()
+                .addListener(obs -> mapAllCells());
 
-        this.getModel().getEventDispatcher().addHandler(ClickEvent.TYPE, this::onClick);
+        getModel().getEventDispatcher().addHandler(ClickEvent.TYPE, this::onClick);
     }
 
     /**
@@ -34,14 +35,14 @@ public class GuiListViewBehavior<T> extends GuiScrollableBehavior<GuiListView<T>
      *
      * @param e
      */
-    private void onClick(final ClickEvent e)
+    private void onClick(ClickEvent e)
     {
-        if (!this.childrenSupplier.get().isEmpty())
+        if (!childrenSupplier.get().isEmpty())
         {
-            this.childrenSupplier.get().getModifiableValue().stream()
-                    .filter(cell -> cell instanceof GuiListCell && cell.isPointInside(e.getMouseX(), e.getMouseY()))
+            childrenSupplier.get().getModifiableValue().stream()
+                    .filter(cell -> cell.element() instanceof GuiListCell && cell.isPointInside(e.getMouseX(), e.getMouseY()))
                     .findFirst()
-                    .ifPresent(guiNode -> this.selectCell(this.childrenSupplier.get().indexOf(guiNode)));
+                    .ifPresent(guiNode -> selectCell(childrenSupplier.get().indexOf(guiNode)));
         }
     }
 
@@ -51,31 +52,33 @@ public class GuiListViewBehavior<T> extends GuiScrollableBehavior<GuiListView<T>
      *
      * @param cellIndex
      */
-    private void selectCell(final int cellIndex)
+    private void selectCell(int cellIndex)
     {
-        this.getModel().setSelectedCellIndex(cellIndex);
+        getModel().setSelectedCellIndex(cellIndex);
     }
 
     private void mapAllCells()
     {
         // Remove without triggering the listeners and with one iteration only
-        Iterator<GuiNode> childrenIterator = this.childrenSupplier.get().getModifiableValue().iterator();
+        Iterator<Transform> childrenIterator = childrenSupplier.get().getModifiableValue().iterator();
 
         while (childrenIterator.hasNext())
         {
-            GuiNode next = childrenIterator.next();
+            Transform next = childrenIterator.next();
 
-            if (next instanceof GuiListCell)
+            if (next.element() instanceof GuiListCell)
             {
-                next.setFather(null);
+                next.transform().setParent(null);
                 childrenIterator.remove();
             }
         }
 
         // Add and trigger the listeners to refresh the style of the cell
-        this.childrenSupplier.get().addAll(
-                this.getModel().getElements().stream().map(this.getModel().getCellFactory())
-                        .peek(cell -> cell.setFather(this.getModel()))
+        childrenSupplier.get().addAll(
+                getModel().getElements().stream()
+                        .map(getModel().getCellFactory())
+                        .peek(cell -> cell.transform().setParent(getModel().transform()))
+                        .map(GuiElement::transform)
                         .collect(Collectors.toList()));
     }
 }

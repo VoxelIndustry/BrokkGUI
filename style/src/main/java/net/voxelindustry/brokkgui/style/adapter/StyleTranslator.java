@@ -1,5 +1,7 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
+import net.voxelindustry.brokkgui.style.adapter.translator.DoubleTranslator;
+import net.voxelindustry.brokkgui.style.adapter.translator.FloatTranslator;
 import net.voxelindustry.brokkgui.util.StringCountUtils;
 
 import java.util.IdentityHashMap;

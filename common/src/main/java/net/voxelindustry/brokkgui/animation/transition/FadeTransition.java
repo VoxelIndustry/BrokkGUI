@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.animation.transition;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +12,7 @@ public class FadeTransition extends Transition
     private double fromOpacity;
     private double opacity;
 
-    public FadeTransition(GuiNode node, long duration, TimeUnit unit)
+    public FadeTransition(GuiElement node, long duration, TimeUnit unit)
     {
         super(node, duration, unit);
     }

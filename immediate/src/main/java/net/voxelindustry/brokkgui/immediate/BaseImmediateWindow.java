@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.immediate;
 import fr.ourten.teabeans.value.BaseProperty;
 import fr.ourten.teabeans.value.IProperty;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.gui.IGuiWindow;
+import net.voxelindustry.brokkgui.window.IGuiWindow;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;

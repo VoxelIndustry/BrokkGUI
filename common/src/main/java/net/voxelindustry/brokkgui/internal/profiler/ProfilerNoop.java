@@ -1,29 +1,29 @@
 package net.voxelindustry.brokkgui.internal.profiler;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 public class ProfilerNoop implements IProfiler
 {
     @Override
-    public void preElementRender(GuiNode node)
+    public void preElementRender(GuiElement node)
     {
         // NOOP
     }
 
     @Override
-    public void postElementRender(GuiNode node)
+    public void postElementRender(GuiElement node)
     {
         // NOOP
     }
 
     @Override
-    public void preElementStyleRefresh(GuiNode node)
+    public void preElementStyleRefresh(GuiElement node)
     {
         // NOOP
     }
 
     @Override
-    public void postElementStyleRefresh(GuiNode node)
+    public void postElementStyleRefresh(GuiElement node)
     {
         // NOOP
     }

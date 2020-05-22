@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.element.input;
 
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiTogglableButtonBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiButtonBase;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.element.GuiLabel;
@@ -19,40 +19,41 @@ public class GuiToggleButton extends GuiButtonBase implements IGuiTogglable
 
     private EventHandler<SelectEvent> onSelectEvent;
 
-    public GuiToggleButton(String type, String text, GuiNode icon)
+    public GuiToggleButton(String text, GuiElement icon)
     {
-        super(type, text, icon);
+        super(text, icon);
 
-        this.selectedProperty = new BaseProperty<>(false, "selectedProperty");
-        this.toggleGroupProperty = new BaseProperty<>(null, "toggleGroupProperty");
+        selectedProperty = new BaseProperty<>(false, "selectedProperty");
+        toggleGroupProperty = new BaseProperty<>(null, "toggleGroupProperty");
 
-        this.selectedProperty.addListener((obs, oldValue, newValue) ->
+        selectedProperty.addListener((obs, oldValue, newValue) ->
         {
             if (newValue)
-                this.getActivePseudoClass().add("active");
+                style().activePseudoClass().add("active");
             else
-                this.getActivePseudoClass().remove("active");
-            this.getEventDispatcher().dispatchEvent(SelectEvent.TYPE, new SelectEvent(this, isSelected()));
+                style().activePseudoClass().remove("active");
+            getEventDispatcher().dispatchEvent(SelectEvent.TYPE, new SelectEvent(this, isSelected()));
         });
     }
 
-    public GuiToggleButton(String type, String text)
+    public GuiToggleButton(String text)
     {
-        this(type, text, null);
-    }
-
-    public GuiToggleButton(String type)
-    {
-        this(type, "");
+        this(text, null);
     }
 
     public GuiToggleButton()
     {
-        this("button", "");
+        this("");
     }
 
     @Override
-    protected GuiLabeled createGuiLabel(String text, GuiNode icon)
+    public String type()
+    {
+        return "button";
+    }
+
+    @Override
+    protected GuiLabeled createGuiLabel(String text, GuiElement icon)
     {
         return new GuiLabel(text, icon);
     }
@@ -63,70 +64,70 @@ public class GuiToggleButton extends GuiButtonBase implements IGuiTogglable
         return new GuiButtonSkin<>(this, new GuiTogglableButtonBehavior<>(this));
     }
 
-    public void setToggleGroup(final GuiToggleGroup group)
+    public void setToggleGroup(GuiToggleGroup group)
     {
-        this.getToggleGroupProperty().setValue(group);
+        getToggleGroupProperty().setValue(group);
         group.addButton(this);
     }
 
     @Override
     public GuiToggleGroup getToggleGroup()
     {
-        return this.getToggleGroupProperty().getValue();
+        return getToggleGroupProperty().getValue();
     }
 
     @Override
     public BaseProperty<Boolean> getSelectedProperty()
     {
-        return this.selectedProperty;
+        return selectedProperty;
     }
 
     public BaseProperty<GuiToggleGroup> getToggleGroupProperty()
     {
-        return this.toggleGroupProperty;
+        return toggleGroupProperty;
     }
 
     @Override
     public boolean setSelected(boolean selected)
     {
-        if (!selected && this.isSelected())
+        if (!selected && isSelected())
         {
-            if (this.getToggleGroup() == null)
+            if (getToggleGroup() == null)
             {
-                this.getSelectedProperty().setValue(false);
+                getSelectedProperty().setValue(false);
                 return false;
             }
-            if (this.getToggleGroup().getSelectedButton() == this && !this.getToggleGroup().allowNothing())
+            if (getToggleGroup().getSelectedButton() == this && !getToggleGroup().allowNothing())
                 return true;
-            this.getToggleGroup().setSelectedButton(null);
+            getToggleGroup().setSelectedButton(null);
             return false;
         }
-        if (selected && !this.isSelected())
+        if (selected && !isSelected())
         {
-            if (this.getToggleGroup() == null)
+            if (getToggleGroup() == null)
             {
-                this.getSelectedProperty().setValue(true);
+                getSelectedProperty().setValue(true);
                 return true;
             }
             else
             {
-                if (this.getToggleGroup().getSelectedButton() == this)
+                if (getToggleGroup().getSelectedButton() == this)
                     return false;
-                this.getToggleGroup().setSelectedButton(this);
+                getToggleGroup().setSelectedButton(this);
                 return true;
             }
         }
-        return this.isSelected();
+        return isSelected();
     }
 
     /////////////////////
     // EVENTS HANDLING //
     /////////////////////
 
-    public void setOnSelectEvent(final EventHandler<SelectEvent> onSelectEvent)
+    public void setOnSelectEvent(EventHandler<SelectEvent> onSelectEvent)
     {
-        this.getEventDispatcher().removeHandler(SelectEvent.TYPE, this.onSelectEvent);
+        getEventDispatcher().removeHandler(SelectEvent.TYPE, this.onSelectEvent);
         this.onSelectEvent = onSelectEvent;
-        this.getEventDispatcher().addHandler(SelectEvent.TYPE, this.onSelectEvent);
+        getEventDispatcher().addHandler(SelectEvent.TYPE, this.onSelectEvent);
     }
 }

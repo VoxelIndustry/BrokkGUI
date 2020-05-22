@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.element.input;
 
 import net.voxelindustry.brokkgui.behavior.GuiButtonBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiButtonBase;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.data.RectAlignment;
@@ -11,11 +11,11 @@ import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
 public class GuiButton extends GuiButtonBase
 {
-    public GuiButton(String text, GuiNode icon)
+    public GuiButton(String text, GuiElement icon)
     {
-        super("button", text, icon);
+        super(text, icon);
 
-        this.getLabel().setTextAlignment(RectAlignment.MIDDLE_CENTER);
+        getLabel().setTextAlignment(RectAlignment.MIDDLE_CENTER);
     }
 
     public GuiButton(String text)
@@ -29,7 +29,13 @@ public class GuiButton extends GuiButtonBase
     }
 
     @Override
-    protected GuiLabeled createGuiLabel(String text, GuiNode icon)
+    public String type()
+    {
+        return "button";
+    }
+
+    @Override
+    protected GuiLabeled createGuiLabel(String text, GuiElement icon)
     {
         return new GuiLabel(text, icon);
     }

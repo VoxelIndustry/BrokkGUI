@@ -5,37 +5,38 @@ import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.element.GuiProgressBar;
 import net.voxelindustry.brokkgui.shape.Rectangle;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 
 public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorBase<C>> extends GuiLabeledSkinBase<C, B>
 {
     private final Rectangle track;
 
-    public GuiProgressBarSkin(final C model, final B behaviour)
+    public GuiProgressBarSkin(C model, B behaviour)
     {
         super(model, behaviour);
 
-        this.track = new Rectangle(model.getxPos(), model.getyPos(), model.getWidth(), model.getHeight());
-        this.track.getxPosProperty().bind(new BaseExpression<>(() ->
+        track = new Rectangle(model.transform().xPos(), model.transform().yPos(), model.width(), model.height());
+        track.transform().xPosProperty().bind(new BaseExpression<>(() ->
         {
             if (model.getProgressDirection() == RectSide.LEFT)
-                return model.getxPos() + model.getWidth() - this.track.getWidth();
-            return model.getxPos();
-        }, model.getxPosProperty(), model.getWidthProperty(), model.getProgressDirectionProperty()));
-        this.track.getyPosProperty().bind(model.getyPosProperty());
-        this.track.getWidthProperty().bind(new BaseExpression<>(() ->
-                model.getWidth() * model.getProgress(), model.getProgressProperty(), model.getWidthProperty()));
+                return model.transform().xPos() + model.width() - track.width();
+            return model.transform().xPos();
+        }, model.transform().xPosProperty(), model.transform().widthProperty(), model.getProgressDirectionProperty()));
+        track.transform().yPosProperty().bind(model.transform().yPosProperty());
+        track.transform().widthProperty().bind(new BaseExpression<>(() ->
+                model.width() * model.getProgress(), model.getProgressProperty(), model.transform().widthProperty()));
 
-        this.track.getStyleClass().add("track");
+        track.get(StyleComponent.class).styleClass().add("track");
 
-        this.getText().getxPosProperty().bind(new BaseExpression<>(() ->
-                model.getxPos() + model.getWidth() / 2, model.getxPosProperty(), model.getWidthProperty()));
+        getText().transform().xPosProperty().bind(new BaseExpression<>(() ->
+                model.transform().xPos() + model.width() / 2, model.transform().xPosProperty(), model.transform().widthProperty()));
 
-        this.getText().getyPosProperty().bind(new BaseExpression<>(() ->
-                model.getyPos() + model.getHeight() / 2, model.getyPosProperty(), model.getHeightProperty()));
+        getText().transform().yPosProperty().bind(new BaseExpression<>(() ->
+                model.transform().yPos() + model.height() / 2, model.transform().yPosProperty(), model.transform().heightProperty()));
 
-        this.getText().getzLevelProperty().bind(new BaseExpression<>(() ->
-                model.getzLevel() + 1, model.getzLevelProperty()));
+        getText().transform().zLevelProperty().bind(new BaseExpression<>(() ->
+                model.transform().zLevel() + 1, model.transform().zLevelProperty()));
 
-        this.getModel().addChild(track);
+        getModel().addChild(track);
     }
 }

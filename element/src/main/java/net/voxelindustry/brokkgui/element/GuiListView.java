@@ -4,7 +4,7 @@ import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseListProperty;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiListViewBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiScrollableBase;
 import net.voxelindustry.brokkgui.data.RectAxis;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
@@ -19,9 +19,9 @@ public class GuiListView<T> extends GuiScrollableBase
 {
     private final BaseProperty<Boolean> editableProperty;
 
-    private final BaseListProperty<T>    elementsProperty;
-    private final BaseProperty<GuiNode>  placeholderProperty;
-    private final BaseProperty<RectAxis> orientationProperty;
+    private final BaseListProperty<T>      elementsProperty;
+    private final BaseProperty<GuiElement> placeholderProperty;
+    private final BaseProperty<RectAxis>   orientationProperty;
 
     private final BaseProperty<Function<T, GuiListCell<T>>> cellFactoryProperty;
 
@@ -32,39 +32,37 @@ public class GuiListView<T> extends GuiScrollableBase
 
     public GuiListView(List<T> elements)
     {
-        super("listview");
+        elementsProperty = new BaseListProperty<>(elements, "elementsListProperty");
 
-        this.elementsProperty = new BaseListProperty<>(elements, "elementsListProperty");
+        editableProperty = new BaseProperty<>(false, "editableProperty");
+        placeholderProperty = new BaseProperty<>(null, "placeholderProperty");
+        orientationProperty = new BaseProperty<>(RectAxis.VERTICAL, "orientationProperty");
 
-        this.editableProperty = new BaseProperty<>(false, "editableProperty");
-        this.placeholderProperty = new BaseProperty<>(null, "placeholderProperty");
-        this.orientationProperty = new BaseProperty<>(RectAxis.VERTICAL, "orientationProperty");
+        cellFactoryProperty = new BaseProperty<>(null, "cellFactoryProperty");
 
-        this.cellFactoryProperty = new BaseProperty<>(null, "cellFactoryProperty");
+        cellWidthProperty = new BaseProperty<>(100f, "cellWidthProperty");
+        cellHeightProperty = new BaseProperty<>(20f, "cellHeightProperty");
 
-        this.cellWidthProperty = new BaseProperty<>(100f, "cellWidthProperty");
-        this.cellHeightProperty = new BaseProperty<>(20f, "cellHeightProperty");
+        cellXPaddingProperty = new BaseProperty<>(0f, "cellXPaddingProperty");
+        cellYPaddingProperty = new BaseProperty<>(0f, "cellYPaddingProperty");
 
-        this.cellXPaddingProperty = new BaseProperty<>(0f, "cellXPaddingProperty");
-        this.cellYPaddingProperty = new BaseProperty<>(0f, "cellYPaddingProperty");
+        selectedCellIndexProperty = new BaseProperty<>(-1, "selectedCellIndexProperty");
 
-        this.selectedCellIndexProperty = new BaseProperty<>(-1, "selectedCellIndexProperty");
-
-        this.getChildrensProperty().addListener(obs ->
+        transform().childrenProperty().addListener(obs ->
         {
-            if (!this.getPlaceholderProperty().isPresent())
+            if (!getPlaceholderProperty().isPresent())
                 return;
 
-            if (this.getChildrensProperty().size() == 1 && !this.getPlaceholder().isVisible())
-                this.getPlaceholder().setVisible(true);
-            else if (this.getChildrensProperty().size() != 1 && this.getPlaceholder().isVisible())
-                this.getPlaceholder().setVisible(false);
+            if (transform().childrenProperty().size() == 1 && !getPlaceholder().isVisible())
+                getPlaceholder().setVisible(true);
+            else if (transform().childrenProperty().size() != 1 && getPlaceholder().isVisible())
+                getPlaceholder().setVisible(false);
         });
 
-        this.getTrueWidthProperty().bind(new BaseBinding<Float>()
+        getTrueWidthProperty().bind(new BaseBinding<Float>()
         {
             {
-                this.bind(orientationProperty, cellWidthProperty, cellXPaddingProperty, elementsProperty);
+                bind(orientationProperty, cellWidthProperty, cellXPaddingProperty, elementsProperty);
             }
 
             @Override
@@ -76,10 +74,10 @@ public class GuiListView<T> extends GuiScrollableBase
             }
         });
 
-        this.getTrueHeightProperty().bind(new BaseBinding<Float>()
+        getTrueHeightProperty().bind(new BaseBinding<Float>()
         {
             {
-                this.bind(orientationProperty, cellHeightProperty, cellYPaddingProperty, elementsProperty);
+                bind(orientationProperty, cellHeightProperty, cellYPaddingProperty, elementsProperty);
             }
 
             @Override
@@ -98,49 +96,55 @@ public class GuiListView<T> extends GuiScrollableBase
     }
 
     @Override
+    public String type()
+    {
+        return "list-view";
+    }
+
+    @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
-        return new GuiListViewSkin<>(this, new GuiListViewBehavior<>(this, this::getChildrensProperty));
+        return new GuiListViewSkin<>(this, new GuiListViewBehavior<>(this, transform()::childrenProperty));
     }
 
     public BaseListProperty<T> getElementsProperty()
     {
-        return this.elementsProperty;
+        return elementsProperty;
     }
 
     public BaseProperty<Boolean> getEditableProperty()
     {
-        return this.editableProperty;
+        return editableProperty;
     }
 
-    public BaseProperty<GuiNode> getPlaceholderProperty()
+    public BaseProperty<GuiElement> getPlaceholderProperty()
     {
-        return this.placeholderProperty;
+        return placeholderProperty;
     }
 
     public BaseProperty<RectAxis> getOrientationProperty()
     {
-        return this.orientationProperty;
+        return orientationProperty;
     }
 
     public BaseProperty<Function<T, GuiListCell<T>>> getCellFactoryProperty()
     {
-        return this.cellFactoryProperty;
+        return cellFactoryProperty;
     }
 
     public BaseProperty<Float> getCellWidthProperty()
     {
-        return this.cellWidthProperty;
+        return cellWidthProperty;
     }
 
     public BaseProperty<Float> getCellHeightProperty()
     {
-        return this.cellHeightProperty;
+        return cellHeightProperty;
     }
 
     public BaseProperty<Integer> getSelectedCellIndexProperty()
     {
-        return this.selectedCellIndexProperty;
+        return selectedCellIndexProperty;
     }
 
     public BaseProperty<Float> getCellXPaddingProperty()
@@ -158,12 +162,12 @@ public class GuiListView<T> extends GuiScrollableBase
      */
     public List<T> getElements()
     {
-        return this.getElementsProperty().getValue();
+        return getElementsProperty().getValue();
     }
 
-    public void setElements(final List<T> elements)
+    public void setElements(List<T> elements)
     {
-        this.getElementsProperty().muteWhile(() ->
+        getElementsProperty().muteWhile(() ->
         {
             getElementsProperty().clear();
             getElementsProperty().addAll(elements);
@@ -172,96 +176,92 @@ public class GuiListView<T> extends GuiScrollableBase
 
     public void addElement(T element)
     {
-        this.getElementsProperty().add(element);
+        getElementsProperty().add(element);
     }
 
     public boolean removeElement(T element)
     {
-        return this.getElementsProperty().remove(element);
+        return getElementsProperty().remove(element);
     }
 
     public boolean hasElement(T element)
     {
-        return this.getElementsProperty().contains(element);
+        return getElementsProperty().contains(element);
     }
 
     public boolean isEditable()
     {
-        return this.getEditableProperty().getValue();
+        return getEditableProperty().getValue();
     }
 
-    public void setEditable(final boolean editable)
+    public void setEditable(boolean editable)
     {
-        this.getEditableProperty().setValue(editable);
+        getEditableProperty().setValue(editable);
     }
 
-    public GuiNode getPlaceholder()
+    public GuiElement getPlaceholder()
     {
-        return this.getPlaceholderProperty().getValue();
+        return getPlaceholderProperty().getValue();
     }
 
-    public void setPlaceholder(final GuiNode placeholder)
+    public void setPlaceholder(GuiElement placeholder)
     {
-        if (this.getPlaceholder() != null)
+        if (getPlaceholder() != null)
         {
-            this.getPlaceholder().getxPosProperty().unbind();
-            this.getPlaceholder().getyPosProperty().unbind();
-            this.getPlaceholder().setFather(null);
-            this.getChildrensProperty().remove(this.getPlaceholder());
+            transform().removeChild(getPlaceholder().transform());
         }
 
-        this.getPlaceholderProperty().setValue(placeholder);
+        getPlaceholderProperty().setValue(placeholder);
 
-        if (this.getPlaceholder() != null)
+        if (getPlaceholder() != null)
         {
-            RelativeBindingHelper.bindToCenter(placeholder, this);
-            this.getPlaceholder().setFather(this);
-            this.getChildrensProperty().add(this.getPlaceholder());
+            transform().addChild(getPlaceholder().transform());
+            RelativeBindingHelper.bindToCenter(placeholder.transform(), transform());
 
-            if (this.getChildrensProperty().size() == 1)
-                this.getPlaceholder().setVisible(true);
+            if (transform().childrenProperty().size() == 1)
+                getPlaceholder().setVisible(true);
             else
-                this.getPlaceholder().setVisible(false);
+                getPlaceholder().setVisible(false);
         }
     }
 
     public RectAxis getOrientation()
     {
-        return this.getOrientationProperty().getValue();
+        return getOrientationProperty().getValue();
     }
 
-    public void setOrientation(final RectAxis orientation)
+    public void setOrientation(RectAxis orientation)
     {
-        this.getOrientationProperty().setValue(orientation);
+        getOrientationProperty().setValue(orientation);
     }
 
     public boolean isEmpty()
     {
-        return this.getElementsProperty().getValue().isEmpty();
+        return getElementsProperty().getValue().isEmpty();
     }
 
-    public void setCellFactory(final Function<T, GuiListCell<T>> cellFactory)
+    public void setCellFactory(Function<T, GuiListCell<T>> cellFactory)
     {
-        this.getCellFactoryProperty().setValue(cellFactory);
+        getCellFactoryProperty().setValue(cellFactory);
     }
 
     public Function<T, GuiListCell<T>> getCellFactory()
     {
-        if (!this.getCellFactoryProperty().isPresent())
-            this.setCellFactory(this.getDefaultCellFactory());
-        return this.getCellFactoryProperty().getValue();
+        if (!getCellFactoryProperty().isPresent())
+            setCellFactory(getDefaultCellFactory());
+        return getCellFactoryProperty().getValue();
     }
 
     private Function<T, GuiListCell<T>> getDefaultCellFactory()
     {
         return content ->
         {
-            final GuiListCell<T> cell = new GuiListCell<>(this, content);
+            GuiListCell<T> cell = new GuiListCell<>(this, content);
 
             if (content == null)
                 cell.setGraphic(null);
-            else if (content instanceof GuiNode)
-                cell.setGraphic((GuiNode) content);
+            else if (content instanceof GuiElement)
+                cell.setGraphic((GuiElement) content);
             else
             {
                 GuiLabel label = new GuiLabel(content.toString());
@@ -274,63 +274,63 @@ public class GuiListView<T> extends GuiScrollableBase
 
     public float getCellWidth()
     {
-        return this.getCellWidthProperty().getValue();
+        return getCellWidthProperty().getValue();
     }
 
-    public void setCellWidth(final float cellWidth)
+    public void setCellWidth(float cellWidth)
     {
-        this.getCellWidthProperty().setValue(cellWidth);
+        getCellWidthProperty().setValue(cellWidth);
     }
 
     public float getCellHeight()
     {
-        return this.getCellHeightProperty().getValue();
+        return getCellHeightProperty().getValue();
     }
 
-    public void setCellHeight(final float cellHeight)
+    public void setCellHeight(float cellHeight)
     {
-        this.getCellHeightProperty().setValue(cellHeight);
+        getCellHeightProperty().setValue(cellHeight);
     }
 
     public void setCellSize(float cellWidth, float cellHeight)
     {
-        this.setCellWidth(cellWidth);
-        this.setCellHeight(cellHeight);
+        setCellWidth(cellWidth);
+        setCellHeight(cellHeight);
     }
 
     public float getCellXPadding()
     {
-        return this.getCellXPaddingProperty().getValue();
+        return getCellXPaddingProperty().getValue();
     }
 
     public void setCellXPadding(float cellXPadding)
     {
-        this.getCellXPaddingProperty().setValue(cellXPadding);
+        getCellXPaddingProperty().setValue(cellXPadding);
     }
 
     public float getCellYPadding()
     {
-        return this.getCellYPaddingProperty().getValue();
+        return getCellYPaddingProperty().getValue();
     }
 
     public void setCellYPadding(float cellYPadding)
     {
-        this.getCellYPaddingProperty().setValue(cellYPadding);
+        getCellYPaddingProperty().setValue(cellYPadding);
     }
 
     public void setCellPadding(float cellXPadding, float cellYPadding)
     {
-        this.setCellXPadding(cellXPadding);
-        this.setCellYPadding(cellYPadding);
+        setCellXPadding(cellXPadding);
+        setCellYPadding(cellYPadding);
     }
 
     public int getSelectedCellIndex()
     {
-        return this.getSelectedCellIndexProperty().getValue();
+        return getSelectedCellIndexProperty().getValue();
     }
 
-    public void setSelectedCellIndex(final int selectedCell)
+    public void setSelectedCellIndex(int selectedCell)
     {
-        this.getSelectedCellIndexProperty().setValue(selectedCell);
+        getSelectedCellIndexProperty().setValue(selectedCell);
     }
 }

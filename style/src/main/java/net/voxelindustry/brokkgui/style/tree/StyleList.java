@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.tree;
 
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.style.selector.IStyleSelector;
 import net.voxelindustry.brokkgui.style.selector.StyleSelector;
 
@@ -72,14 +72,14 @@ public class StyleList
         return this.styleEntries.size() == 1 && this.wildcard.getRules().isEmpty();
     }
 
-    public List<StyleEntry> getEntriesMatching(StyleHolder styleHolder)
+    public List<StyleEntry> getEntriesMatching(StyleComponent styleComponent)
     {
         List<StyleEntry> entries = new ArrayList<>();
 
         entries.add(this.wildcard);
         this.styleEntries.forEach(entry ->
         {
-            if (entry.getSelector().match(styleHolder))
+            if (entry.getSelector().match(styleComponent))
                 entries.add(entry);
         });
         return entries;

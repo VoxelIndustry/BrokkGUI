@@ -1,18 +1,23 @@
 package net.voxelindustry.brokkgui.shape;
 
-public class Line extends GuiShape
+import fr.ourten.teabeans.value.BaseProperty;
+import net.voxelindustry.brokkgui.component.GuiElement;
+
+public class Line extends GuiElement
 {
+    private final BaseProperty<Float> lineThinProperty;
+
     public Line(float startX, float startY, float endX, float endY)
     {
-        super("line", null);
-        this.setShape(new LineShape(this::getLineThin));
-        this.setxTranslate(startX);
-        this.setyTranslate(startY);
+        transform().xTranslate(startX);
+        transform().yTranslate(startY);
 
-        this.setWidth(Math.abs(startX - endX));
-        this.setHeight(Math.abs(startY - endY));
+        transform().width(Math.abs(startX - endX));
+        transform().height(Math.abs((startY - endY)));
 
-        this.getStyle().registerProperty("line-thin", 1f, Float.class);
+        lineThinProperty = new BaseProperty<>(1F, "lineThinProperty");
+
+        paint().shape(new LineShape(this::getLineThin));
     }
 
     public Line(float endX, float endY)
@@ -25,13 +30,24 @@ public class Line extends GuiShape
         this(0, 0);
     }
 
+    public BaseProperty<Float> lineThinProperty()
+    {
+        return lineThinProperty;
+    }
+
     public float getLineThin()
     {
-        return this.getStyle().getStyleValue("line-thin", Float.class, 1f);
+        return lineThinProperty().getValue();
     }
 
     public void setLineThin(float lineThin)
     {
-        this.getStyle().setPropertyDirect("line-thin", lineThin, Float.class);
+        lineThinProperty().setValue(lineThin);
+    }
+
+    @Override
+    public String type()
+    {
+        return "line";
     }
 }

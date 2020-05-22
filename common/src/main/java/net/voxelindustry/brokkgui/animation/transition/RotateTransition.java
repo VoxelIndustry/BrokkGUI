@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.animation.transition;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +12,7 @@ public class RotateTransition extends Transition
     private float fromAngle;
     private float rotateAngle;
 
-    public RotateTransition(GuiNode node, long duration, TimeUnit unit)
+    public RotateTransition(GuiElement node, long duration, TimeUnit unit)
     {
         super(node, duration, unit);
     }
@@ -23,7 +23,7 @@ public class RotateTransition extends Transition
         if (getNode() == null)
             return;
 
-        getNode().getRotation().setAngle(fromAngle + (endAngle - fromAngle) * interpolated);
+        getNode().transform().rotation().setAngle(fromAngle + (endAngle - fromAngle) * interpolated);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class RotateTransition extends Transition
         super.restart();
 
         if (startAngle == null)
-            fromAngle = getNode().getRotation().getAngle();
+            fromAngle = getNode().transform().rotation().getAngle();
         else
             fromAngle = startAngle;
 

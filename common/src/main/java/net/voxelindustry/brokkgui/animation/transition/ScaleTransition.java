@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.animation.transition;
 
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.Position;
 
 import java.util.concurrent.TimeUnit;
@@ -15,7 +16,7 @@ public class ScaleTransition extends Transition
 
     private Position scalePivot;
 
-    public ScaleTransition(GuiNode node, long duration, TimeUnit unit)
+    public ScaleTransition(GuiElement node, long duration, TimeUnit unit)
     {
         super(node, duration, unit);
     }
@@ -26,11 +27,12 @@ public class ScaleTransition extends Transition
         if (getNode() == null)
             return;
 
-        getNode().setScaleX(fromX + (endX - fromX) * interpolated);
-        getNode().setScaleY(fromY + (endY - fromY) * interpolated);
-        getNode().setScaleZ(fromZ + (endZ - fromZ) * interpolated);
+        Transform transform = getNode().transform();
+        transform.scaleX(fromX + (endX - fromX) * interpolated);
+        transform.scaleY(fromY + (endY - fromY) * interpolated);
+        transform.scaleZ(fromZ + (endZ - fromZ) * interpolated);
 
-        getNode().setScalePivot(scalePivot);
+        transform.scalePivot(scalePivot);
     }
 
     @Override
@@ -39,17 +41,17 @@ public class ScaleTransition extends Transition
         super.restart();
 
         if (startX == null)
-            fromX = getNode().getScaleX();
+            fromX = getNode().transform().scaleX();
         else
             fromX = startX;
 
         if (startY == null)
-            fromY = getNode().getScaleY();
+            fromY = getNode().transform().scaleY();
         else
             fromY = startY;
 
         if (startZ == null)
-            fromZ = getNode().getScaleZ();
+            fromZ = getNode().transform().scaleZ();
         else
             fromZ = startZ;
 

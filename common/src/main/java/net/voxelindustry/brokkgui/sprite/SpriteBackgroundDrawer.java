@@ -1,169 +1,169 @@
 package net.voxelindustry.brokkgui.sprite;
 
+import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
-import net.voxelindustry.brokkgui.shape.GuiShape;
 
 public class SpriteBackgroundDrawer
 {
-    public static void drawBackground(GuiShape shape, IGuiRenderer renderer)
+    public static void drawBackground(Paint paint, IGuiRenderer renderer)
     {
-        Texture texture = shape.getBackgroundTexture();
-        if (shape.getBackgroundAnimation() != null)
-            texture = shape.getBackgroundAnimation().getCurrentFrame(System.currentTimeMillis());
+        Texture texture = paint.backgroundTexture();
+        if (paint.backgroundAnimationResource() != null)
+            texture = paint.backgroundAnimation().getCurrentFrame(System.currentTimeMillis());
 
-        draw(shape, renderer, texture, shape.getBackgroundRepeat(), shape.getBackgroundPosition(), shape.getBackgroundRotationArray());
+        draw(paint, renderer, texture, paint.backgroundRepeat(), paint.backgroundPosition(), paint.backgroundRotationArray());
     }
 
-    public static void drawForeground(GuiShape shape, IGuiRenderer renderer)
+    public static void drawForeground(Paint paint, IGuiRenderer renderer)
     {
-        Texture texture = shape.getForegroundTexture();
-        if (shape.getForegroundAnimation() != null)
-            texture = shape.getForegroundAnimation().getCurrentFrame(System.currentTimeMillis());
+        Texture texture = paint.foregroundTexture();
+        if (paint.foregroundAnimationResource() != null)
+            texture = paint.foregroundAnimation().getCurrentFrame(System.currentTimeMillis());
 
-        draw(shape, renderer, texture, shape.getForegroundRepeat(), shape.getForegroundPosition(), shape.getForegroundRotationArray());
+        draw(paint, renderer, texture, paint.foregroundRepeat(), paint.foregroundPosition(), paint.foregroundRotationArray());
     }
 
-    private static void draw(GuiShape shape, IGuiRenderer renderer, Texture texture, SpriteRepeat repeat, RectBox position, SpriteRotation... rotations)
+    private static void draw(Paint paint, IGuiRenderer renderer, Texture texture, SpriteRepeat repeat, RectBox position, SpriteRotation... rotations)
     {
         renderer.getHelper().bindTexture(texture);
 
         if (repeat == SpriteRepeat.NONE)
         {
-            drawSimple(shape, renderer, texture, position, rotations == null ? SpriteRotation.NONE : rotations[0]);
+            drawSimple(paint, renderer, texture, position, rotations == null ? SpriteRotation.NONE : rotations[0]);
         }
         else if (repeat == SpriteRepeat.REPEAT_X)
         {
-            drawRepeatX(shape, renderer, texture, position, rotations);
+            drawRepeatX(paint, renderer, texture, position, rotations);
         }
         else if (repeat == SpriteRepeat.REPEAT_Y)
         {
-            drawRepeatY(shape, renderer, texture, position, rotations);
+            drawRepeatY(paint, renderer, texture, position, rotations);
         }
         else
         {
-            drawRepeatBoth(shape, renderer, texture, position, rotations);
+            drawRepeatBoth(paint, renderer, texture, position, rotations);
         }
     }
 
-    private static void drawSimple(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation rotation)
+    private static void drawSimple(Paint paint, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation rotation)
     {
         if (position == RectBox.EMPTY)
         {
             if (rotation != SpriteRotation.NONE)
-                renderer.getHelper().drawTexturedRect(renderer, shape.getLeftPos(), shape.getTopPos(), texture.getUMin(), texture.getVMin(),
-                        texture.getUMax(), texture.getVMax(), shape.getWidth(), shape.getHeight(), shape.getzLevel(), rotation);
+                renderer.getHelper().drawTexturedRect(renderer, paint.transform().leftPos(), paint.transform().topPos(), texture.getUMin(), texture.getVMin(),
+                        texture.getUMax(), texture.getVMax(), paint.transform().width(), paint.transform().height(), paint.transform().zLevel(), rotation);
             else
-                renderer.getHelper().drawTexturedRect(renderer, shape.getLeftPos(), shape.getTopPos(), texture.getUMin(), texture.getVMin(),
-                        texture.getUMax(), texture.getVMax(), shape.getWidth(), shape.getHeight(), shape.getzLevel());
+                renderer.getHelper().drawTexturedRect(renderer, paint.transform().leftPos(), paint.transform().topPos(), texture.getUMin(), texture.getVMin(),
+                        texture.getUMax(), texture.getVMax(), paint.transform().width(), paint.transform().height(), paint.transform().zLevel());
         }
         else
         {
             if (rotation != SpriteRotation.NONE)
                 renderer.getHelper().drawTexturedRect(renderer,
-                        shape.getLeftPos() + position.getLeft(),
-                        shape.getTopPos() + position.getTop(),
+                        paint.transform().leftPos() + position.getLeft(),
+                        paint.transform().topPos() + position.getTop(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
-                        shape.getWidth() - position.getHorizontal(),
-                        shape.getHeight() - position.getVertical(),
-                        shape.getzLevel(),
+                        paint.transform().width() - position.getHorizontal(),
+                        paint.transform().height() - position.getVertical(),
+                        paint.transform().zLevel(),
                         rotation);
             else
                 renderer.getHelper().drawTexturedRect(renderer,
-                        shape.getLeftPos() + position.getLeft(),
-                        shape.getTopPos() + position.getTop(),
+                        paint.transform().leftPos() + position.getLeft(),
+                        paint.transform().topPos() + position.getTop(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
-                        shape.getWidth() - position.getHorizontal(),
-                        shape.getHeight() - position.getVertical(),
-                        shape.getzLevel());
+                        paint.transform().width() - position.getHorizontal(),
+                        paint.transform().height() - position.getVertical(),
+                        paint.transform().zLevel());
         }
     }
 
-    private static void drawRepeatX(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation... rotations)
+    private static void drawRepeatX(Paint paint, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation... rotations)
     {
-        int repeatCount = (int) ((shape.getWidth() - position.getHorizontal()) / texture.getPixelWidth());
-        float leftOver = (shape.getWidth() - position.getHorizontal()) % texture.getPixelWidth();
+        int repeatCount = (int) ((paint.transform().width() - position.getHorizontal()) / texture.getPixelWidth());
+        float leftOver = (paint.transform().width() - position.getHorizontal()) % texture.getPixelWidth();
 
         for (int index = 0; index < repeatCount; index++)
         {
             renderer.getHelper().drawTexturedRect(renderer,
-                    shape.getLeftPos() + position.getLeft() + index * texture.getPixelWidth(),
-                    shape.getTopPos() + position.getTop(),
+                    paint.transform().leftPos() + position.getLeft() + index * texture.getPixelWidth(),
+                    paint.transform().topPos() + position.getTop(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
                     texture.getPixelWidth(),
-                    shape.getHeight() - position.getVertical(),
-                    shape.getzLevel(),
+                    paint.transform().height() - position.getVertical(),
+                    paint.transform().zLevel(),
                     rotations == null ? SpriteRotation.NONE : rotations[index]);
         }
 
         if (leftOver != 0)
         {
             renderer.getHelper().drawTexturedRect(renderer,
-                    shape.getLeftPos() + position.getLeft() + repeatCount * texture.getPixelWidth(),
-                    shape.getTopPos() + position.getTop(),
+                    paint.transform().leftPos() + position.getLeft() + repeatCount * texture.getPixelWidth(),
+                    paint.transform().topPos() + position.getTop(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
                     leftOver,
-                    shape.getHeight() - position.getVertical(),
-                    shape.getzLevel(),
+                    paint.transform().height() - position.getVertical(),
+                    paint.transform().zLevel(),
                     rotations == null ? SpriteRotation.NONE : rotations[repeatCount]);
         }
     }
 
-    private static void drawRepeatY(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation... rotations)
+    private static void drawRepeatY(Paint paint, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation... rotations)
     {
-        int repeatCount = (int) ((shape.getHeight() - position.getVertical()) / texture.getPixelHeight());
-        float leftOver = (shape.getHeight() - position.getVertical()) % texture.getPixelHeight();
+        int repeatCount = (int) ((paint.transform().height() - position.getVertical()) / texture.getPixelHeight());
+        float leftOver = (paint.transform().height() - position.getVertical()) % texture.getPixelHeight();
 
         for (int index = 0; index < repeatCount; index++)
         {
             renderer.getHelper().drawTexturedRect(renderer,
-                    shape.getLeftPos() + position.getLeft(),
-                    shape.getTopPos() + position.getTop() + index * texture.getPixelHeight(),
+                    paint.transform().leftPos() + position.getLeft(),
+                    paint.transform().topPos() + position.getTop() + index * texture.getPixelHeight(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
-                    shape.getWidth() - position.getHorizontal(),
+                    paint.transform().width() - position.getHorizontal(),
                     texture.getPixelHeight(),
-                    shape.getzLevel(),
+                    paint.transform().zLevel(),
                     rotations == null ? SpriteRotation.NONE : rotations[index]);
         }
 
         if (leftOver != 0)
         {
             renderer.getHelper().drawTexturedRect(renderer,
-                    shape.getLeftPos() + position.getLeft(),
-                    shape.getTopPos() + position.getTop() + repeatCount * texture.getPixelHeight(),
+                    paint.transform().leftPos() + position.getLeft(),
+                    paint.transform().topPos() + position.getTop() + repeatCount * texture.getPixelHeight(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
-                    shape.getWidth() - position.getHorizontal(),
+                    paint.transform().width() - position.getHorizontal(),
                     leftOver,
-                    shape.getzLevel(),
+                    paint.transform().zLevel(),
                     rotations == null ? SpriteRotation.NONE : rotations[repeatCount]);
         }
     }
 
-    private static void drawRepeatBoth(GuiShape shape, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation... rotations)
+    private static void drawRepeatBoth(Paint paint, IGuiRenderer renderer, Texture texture, RectBox position, SpriteRotation... rotations)
     {
-        int repeatCountX = (int) ((shape.getWidth() - position.getHorizontal()) / texture.getPixelWidth());
-        float leftOverX = (shape.getWidth() - position.getHorizontal()) % texture.getPixelWidth();
-        int repeatCountY = (int) ((shape.getHeight() - position.getVertical()) / texture.getPixelHeight());
-        float leftOverY = (shape.getHeight() - position.getVertical()) % texture.getPixelHeight();
+        int repeatCountX = (int) ((paint.transform().width() - position.getHorizontal()) / texture.getPixelWidth());
+        float leftOverX = (paint.transform().width() - position.getHorizontal()) % texture.getPixelWidth();
+        int repeatCountY = (int) ((paint.transform().height() - position.getVertical()) / texture.getPixelHeight());
+        float leftOverY = (paint.transform().height() - position.getVertical()) % texture.getPixelHeight();
 
         for (int xIndex = 0; xIndex < repeatCountX; xIndex++)
         {
             for (int yIndex = 0; yIndex < repeatCountY; yIndex++)
             {
                 renderer.getHelper().drawTexturedRect(renderer,
-                        shape.getLeftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
-                        shape.getTopPos() + position.getTop() + yIndex * texture.getPixelHeight(),
+                        paint.transform().leftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
+                        paint.transform().topPos() + position.getTop() + yIndex * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
                         texture.getPixelWidth(),
                         texture.getPixelHeight(),
-                        shape.getzLevel(),
+                        paint.transform().zLevel(),
                         rotations == null ? SpriteRotation.NONE : rotations[yIndex * repeatCountX + xIndex]);
             }
         }
@@ -173,13 +173,13 @@ public class SpriteBackgroundDrawer
             for (int yIndex = 0; yIndex < repeatCountY; yIndex++)
             {
                 renderer.getHelper().drawTexturedRect(renderer,
-                        shape.getLeftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
-                        shape.getTopPos() + position.getTop() + yIndex * texture.getPixelHeight(),
+                        paint.transform().leftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
+                        paint.transform().topPos() + position.getTop() + yIndex * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
                         leftOverX,
                         texture.getPixelHeight(),
-                        shape.getzLevel(),
+                        paint.transform().zLevel(),
                         rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + yIndex]);
             }
         }
@@ -188,26 +188,26 @@ public class SpriteBackgroundDrawer
             for (int xIndex = 0; xIndex < repeatCountX; xIndex++)
             {
                 renderer.getHelper().drawTexturedRect(renderer,
-                        shape.getLeftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
-                        shape.getTopPos() + position.getTop() + repeatCountY * texture.getPixelHeight(),
+                        paint.transform().leftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
+                        paint.transform().topPos() + position.getTop() + repeatCountY * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
                         texture.getPixelWidth(),
                         leftOverY,
-                        shape.getzLevel(),
+                        paint.transform().zLevel(),
                         rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + repeatCountY + xIndex]);
             }
         }
         if (leftOverX != 0 && leftOverY != 0)
         {
             renderer.getHelper().drawTexturedRect(renderer,
-                    shape.getLeftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
-                    shape.getTopPos() + position.getTop() + repeatCountY * texture.getPixelHeight(),
+                    paint.transform().leftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
+                    paint.transform().topPos() + position.getTop() + repeatCountY * texture.getPixelHeight(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
                     leftOverX,
                     leftOverY,
-                    shape.getzLevel(),
+                    paint.transform().zLevel(),
                     rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + repeatCountX + repeatCountY]);
         }
     }

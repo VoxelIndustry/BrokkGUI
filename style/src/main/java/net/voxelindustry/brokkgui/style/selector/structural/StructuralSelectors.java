@@ -1,96 +1,91 @@
 package net.voxelindustry.brokkgui.style.selector.structural;
 
-import net.voxelindustry.brokkgui.style.IStyleParent;
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import fr.ourten.teabeans.value.BaseListProperty;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 
 import java.util.List;
 
 public class StructuralSelectors
 {
-    private static StructuralSelector FIRST_CHILD = style -> style.getParent().isPresent()
-            && style.getParent().getValue() instanceof IStyleParent
-            && (((IStyleParent) style.getParent().getValue()).getChildCount() == 1
-            || ((IStyleParent) style.getParent().getValue()).getChildStyles().get(0) == style);
+    private static final StructuralSelector FIRST_CHILD = style ->
+            style.transform().parentProperty().isPresent() &&
+                    (style.transform().parent().childrenProperty().size() == 1
+                            || style.transform().parent().childrenProperty().get(0) == style.transform());
 
-    private static StructuralSelector LAST_CHILD = style ->
+    private static final StructuralSelector LAST_CHILD = style ->
     {
-        if (!style.getParent().isPresent()
-                || !(style.getParent().getValue() instanceof IStyleParent))
+        if (style.transform().parentProperty().isPresent())
             return false;
-        if (((IStyleParent) style.getParent().getValue()).getChildCount() == 1)
+
+        BaseListProperty<Transform> children = style.transform().parent().childrenProperty();
+        if (children.size() == 1)
             return true;
 
-        List<StyleHolder> childStyles = ((IStyleParent) style.getParent().getValue()).getChildStyles();
-
-        return childStyles.get(childStyles.size() - 1) == style;
+        return children.get(children.size() - 1) == style.transform();
     };
 
-    private static StructuralSelector ONLY_CHILD = style -> style.getParent().isPresent()
-            && style.getParent().getValue() instanceof IStyleParent
-            && ((IStyleParent) style.getParent().getValue()).getChildCount() == 1;
+    private static StructuralSelector ONLY_CHILD = style ->
+            style.transform().parentProperty().isPresent()
+                    && style.transform().parent().childrenProperty().size() == 1;
 
-    private static StructuralSelector FIRST_OF_TYPE = style ->
+    private static final StructuralSelector FIRST_OF_TYPE = style ->
     {
-        if (!style.getParent().isPresent()
-                || !(style.getParent().getValue() instanceof IStyleParent))
+        if (style.transform().parentProperty().isPresent())
             return false;
-        if (((IStyleParent) style.getParent().getValue()).getChildCount() == 1)
+
+        List<Transform> children = style.transform().parent().childrenProperty().getModifiableValue();
+        if (children.size() == 1)
             return true;
 
-        List<StyleHolder> childStyles = ((IStyleParent) style.getParent().getValue()).getChildStyles();
-
-        for (StyleHolder childStyle : childStyles)
+        for (Transform child : children)
         {
-            if (childStyle == style)
+            if (child == style.transform())
                 return true;
-            if (childStyle.getOwner().getType().equals(style.getOwner().getType()))
+            if (child.element().type().equals(style.element().type()))
                 return false;
         }
         return false;
     };
 
-    private static StructuralSelector LAST_OF_TYPE = style ->
+    private static final StructuralSelector LAST_OF_TYPE = style ->
     {
-        if (!style.getParent().isPresent()
-                || !(style.getParent().getValue() instanceof IStyleParent))
+        if (style.transform().parentProperty().isPresent())
             return false;
-        if (((IStyleParent) style.getParent().getValue()).getChildCount() == 1)
+
+        BaseListProperty<Transform> children = style.transform().parent().childrenProperty();
+        if (children.size() == 1)
             return true;
 
-        List<StyleHolder> childStyles = ((IStyleParent) style.getParent().getValue()).getChildStyles();
-
-        for (int i = childStyles.size() - 1; i >= 0; i--)
+        for (int i = children.size() - 1; i >= 0; i--)
         {
-            StyleHolder childStyle = childStyles.get(i);
-            if (childStyle == style)
+            Transform child = children.get(i);
+            if (child == style.transform())
                 return true;
-            if (childStyle.getOwner().getType().equals(style.getOwner().getType()))
+            if (child.element().type().equals(style.element().type()))
                 return false;
         }
         return false;
     };
 
-    private static StructuralSelector ONLY_OF_TYPE = style ->
+    private static final StructuralSelector ONLY_OF_TYPE = style ->
     {
-        if (!style.getParent().isPresent()
-                || !(style.getParent().getValue() instanceof IStyleParent))
+        if (style.transform().parentProperty().isPresent())
             return false;
-        if (((IStyleParent) style.getParent().getValue()).getChildCount() == 1)
+
+        List<Transform> children = style.transform().parent().childrenProperty().getModifiableValue();
+        if (children.size() == 1)
             return true;
 
-        List<StyleHolder> childStyles = ((IStyleParent) style.getParent().getValue()).getChildStyles();
-
-        for (StyleHolder childStyle : childStyles)
+        for (Transform childStyle : children)
         {
-            if (childStyle.getOwner().getType().equals(style.getOwner().getType()) && childStyle != style)
+            if (childStyle.element().type().equals(style.element().type()) && childStyle != style.transform())
                 return false;
         }
         return true;
     };
 
     // Non functional until rework of the skin system. Cause stackoverflow from endless refreshStyle at the node level.
-    private static StructuralSelector EMPTY = style -> style.getOwner() instanceof IStyleParent &&
-            ((IStyleParent) style).getChildCount() == 0;
+    private static final StructuralSelector EMPTY = style -> style.transform().childrenProperty().isEmpty();
 
     public static boolean isStructural(String selector)
     {

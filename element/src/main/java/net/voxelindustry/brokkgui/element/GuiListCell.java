@@ -2,36 +2,34 @@ package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.binding.BaseBinding;
 import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.component.GuiNode;
-import net.voxelindustry.brokkgui.control.GuiElement;
+import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.control.GuiSkinedElement;
 import net.voxelindustry.brokkgui.data.RectAxis;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.skin.GuiListCellSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
-public class GuiListCell<T> extends GuiElement
+public class GuiListCell<T> extends GuiSkinedElement
 {
     private final GuiListView<T> listView;
 
-    private final BaseProperty<T>       itemProperty;
-    private final BaseProperty<GuiNode> graphicProperty;
+    private final BaseProperty<T>          itemProperty;
+    private final BaseProperty<GuiElement> graphicProperty;
 
-    public GuiListCell(final GuiListView<T> listView, final T item)
+    public GuiListCell(GuiListView<T> listView, T item)
     {
-        super("listcell");
-
         this.listView = listView;
 
-        this.itemProperty = new BaseProperty<>(item, "itemProperty");
-        this.graphicProperty = new BaseProperty<>(null, "graphicProperty");
+        itemProperty = new BaseProperty<>(item, "itemProperty");
+        graphicProperty = new BaseProperty<>(null, "graphicProperty");
 
-        this.getWidthProperty().bind(listView.getCellWidthProperty());
-        this.getHeightProperty().bind(listView.getCellHeightProperty());
+        transform().widthProperty().bind(listView.getCellWidthProperty());
+        transform().heightProperty().bind(listView.getCellHeightProperty());
 
-        this.getxPosProperty().bind(new BaseBinding<Float>()
+        transform().xPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(listView.getxPosProperty(), getWidthProperty(),
+                super.bind(listView.transform().xPosProperty(), transform().widthProperty(),
                         listView.getOrientationProperty(), listView.getScrollXProperty(),
                         listView.getCellXPaddingProperty());
             }
@@ -40,19 +38,19 @@ public class GuiListCell<T> extends GuiElement
             public Float computeValue()
             {
                 if (listView.getOrientation() == RectAxis.HORIZONTAL)
-                    return listView.getxPos() + listView.getScrollX()
-                            + listView.getElements().indexOf(GuiListCell.this.getItem()) * GuiListCell.this.getWidth()
-                            + GuiListCell.this.getWidth() / 2
-                            + listView.getCellXPadding() * listView.getElements().indexOf(GuiListCell.this.getItem());
+                    return listView.transform().xPos() + listView.getScrollX()
+                            + listView.getElements().indexOf(getItem()) * transform().width()
+                            + transform().width() / 2
+                            + listView.getCellXPadding() * listView.getElements().indexOf(getItem());
                 else
-                    return listView.getxPos() + listView.getScrollX();
+                    return listView.transform().xPos() + listView.getScrollX();
             }
         });
 
-        this.getyPosProperty().bind(new BaseBinding<Float>()
+        transform().yPosProperty().bind(new BaseBinding<Float>()
         {
             {
-                super.bind(listView.getyPosProperty(), GuiListCell.this.getHeightProperty(),
+                super.bind(listView.transform().yPosProperty(), transform().heightProperty(),
                         listView.getOrientationProperty(), listView.getScrollYProperty(),
                         listView.getCellYPaddingProperty());
             }
@@ -61,16 +59,16 @@ public class GuiListCell<T> extends GuiElement
             public Float computeValue()
             {
                 if (listView.getOrientation() == RectAxis.VERTICAL)
-                    return listView.getyPos() + listView.getScrollY()
-                            + listView.getElements().indexOf(GuiListCell.this.getItem()) * GuiListCell.this.getHeight()
-                            + listView.getCellYPadding() * listView.getElements().indexOf(GuiListCell.this.getItem());
+                    return listView.transform().yPos() + listView.getScrollY()
+                            + listView.getElements().indexOf(getItem()) * transform().height()
+                            + listView.getCellYPadding() * listView.getElements().indexOf(getItem());
                 else
-                    return listView.getyPos() + listView.getScrollY();
+                    return listView.transform().yPos() + listView.getScrollY();
             }
         });
     }
 
-    public GuiListCell(final GuiListView<T> listView)
+    public GuiListCell(GuiListView<T> listView)
     {
         this(listView, null);
     }
@@ -83,50 +81,56 @@ public class GuiListCell<T> extends GuiElement
 
     public BaseProperty<T> getItemProperty()
     {
-        return this.itemProperty;
+        return itemProperty;
     }
 
-    public BaseProperty<GuiNode> getGraphicProperty()
+    public BaseProperty<GuiElement> getGraphicProperty()
     {
-        return this.graphicProperty;
+        return graphicProperty;
     }
 
     public T getItem()
     {
-        return this.getItemProperty().getValue();
+        return getItemProperty().getValue();
     }
 
     public void setItem(T item)
     {
-        this.getItemProperty().setValue(item);
+        getItemProperty().setValue(item);
     }
 
-    public GuiNode getGraphic()
+    public GuiElement getGraphic()
     {
-        return this.getGraphicProperty().getValue();
+        return getGraphicProperty().getValue();
     }
 
-    public void setGraphic(GuiNode graphic)
+    public void setGraphic(GuiElement graphic)
     {
-        if (this.getGraphic() != null)
+        if (getGraphic() != null)
         {
-            this.removeChild(this.getGraphic());
-            this.getGraphic().getWidthProperty().unbind();
-            this.getGraphic().getHeightProperty().unbind();
+            removeChild(getGraphic());
+            getGraphic().transform().widthProperty().unbind();
+            getGraphic().transform().heightProperty().unbind();
         }
-        this.getGraphicProperty().setValue(graphic);
-        if (this.getGraphic() != null)
+        getGraphicProperty().setValue(graphic);
+        if (getGraphic() != null)
         {
-            this.addChild(this.getGraphic());
+            addChild(getGraphic());
 
-            RelativeBindingHelper.bindToPos(this.getGraphic(), this);
-            this.getGraphic().getWidthProperty().bind(this.getWidthProperty());
-            this.getGraphic().getHeightProperty().bind(this.getHeightProperty());
+            RelativeBindingHelper.bindToPos(getGraphic().transform(), transform());
+            getGraphic().transform().widthProperty().bind(transform().widthProperty());
+            getGraphic().transform().heightProperty().bind(transform().heightProperty());
         }
     }
 
     public GuiListView<T> getListView()
     {
-        return this.listView;
+        return listView;
+    }
+
+    @Override
+    public String type()
+    {
+        return "list-cell";
     }
 }

@@ -1,18 +1,18 @@
 package net.voxelindustry.brokkgui.shape;
 
-public class Rectangle extends GuiShape
+import net.voxelindustry.brokkgui.component.GuiElement;
+
+public class Rectangle extends GuiElement
 {
     public static final RectangleShape SHAPE = new RectangleShape();
 
     public Rectangle(float xLeft, float yLeft, float width, float height)
     {
-        super("rectangle", SHAPE);
+        transform().xTranslate(xLeft);
+        transform().yTranslate(yLeft);
 
-        this.setxTranslate(xLeft);
-        this.setyTranslate(yLeft);
-
-        this.setWidth(width);
-        this.setHeight(height);
+        transform().width(width);
+        transform().height(height);
     }
 
     public Rectangle(float width, float height)
@@ -23,5 +23,11 @@ public class Rectangle extends GuiShape
     public Rectangle()
     {
         this(0, 0, 0, 0);
+    }
+
+    @Override
+    public String type()
+    {
+        return "rectangle";
     }
 }

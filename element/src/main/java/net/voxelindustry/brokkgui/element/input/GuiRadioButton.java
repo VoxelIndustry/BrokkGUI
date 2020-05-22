@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.element.input;
 import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiTogglableButtonBehavior;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
@@ -11,21 +11,22 @@ import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.shape.Rectangle;
 import net.voxelindustry.brokkgui.skin.GuiRadioButtonSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 
 public class GuiRadioButton extends GuiToggleButton
 {
-    private final BaseProperty<RectSide> buttonSideProperty;
-    private final BaseProperty<GuiNode>  buttonNodeProperty;
+    private final BaseProperty<RectSide>   buttonSideProperty;
+    private final BaseProperty<GuiElement> buttonNodeProperty;
 
     public GuiRadioButton(String text)
     {
-        super("radio-button", text);
+        super(text);
 
-        this.buttonSideProperty = new BaseProperty<>(RectSide.LEFT, "buttonSideProperty");
-        this.buttonNodeProperty = new BaseProperty<>(new RadioButtonContent(this), "buttonNodeProperty");
+        buttonSideProperty = new BaseProperty<>(RectSide.LEFT, "buttonSideProperty");
+        buttonNodeProperty = new BaseProperty<>(new RadioButtonContent(this), "buttonNodeProperty");
 
-        this.setExpandToLabel(true);
-        this.getLabel().setTextPadding(new RectBox(0, 2, 0, 0));
+        setExpandToLabel(true);
+        getLabel().setTextPadding(new RectBox(0, 2, 0, 0));
     }
 
     public GuiRadioButton()
@@ -38,35 +39,41 @@ public class GuiRadioButton extends GuiToggleButton
         return buttonSideProperty;
     }
 
-    public BaseProperty<GuiNode> getButtonNodeProperty()
+    public BaseProperty<GuiElement> getButtonNodeProperty()
     {
         return buttonNodeProperty;
     }
 
     public void setButtonSide(RectSide side)
     {
-        this.getButtonSideProperty().setValue(side);
+        getButtonSideProperty().setValue(side);
     }
 
     public RectSide getButtonSide()
     {
-        return this.getButtonSideProperty().getValue();
+        return getButtonSideProperty().getValue();
     }
 
-    public void setButtonNode(GuiNode buttonNode)
+    public void setButtonNode(GuiElement buttonNode)
     {
-        this.getButtonNodeProperty().setValue(buttonNode);
+        getButtonNodeProperty().setValue(buttonNode);
     }
 
-    public GuiNode getButtonNode()
+    public GuiElement getButtonNode()
     {
-        return this.getButtonNodeProperty().getValue();
+        return getButtonNodeProperty().getValue();
     }
 
     @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
         return new GuiRadioButtonSkin(this, new GuiTogglableButtonBehavior<>(this));
+    }
+
+    @Override
+    public String type()
+    {
+        return "radio-button";
     }
 
     public static class RadioButtonContent extends GuiFather
@@ -76,41 +83,45 @@ public class GuiRadioButton extends GuiToggleButton
 
         public RadioButtonContent(GuiRadioButton parent)
         {
-            super("radiobutton-content");
+            transform().heightRatio(1);
+            transform().widthProperty().bind(transform().heightProperty());
 
-            this.setHeightRatio(1);
-            this.getWidthProperty().bind(this.getHeightProperty());
+            box = new Rectangle();
+            mark = new Rectangle();
 
-            this.box = new Rectangle();
-            this.mark = new Rectangle();
+            box.get(StyleComponent.class).styleClass().add("box");
+            mark.get(StyleComponent.class).styleClass().add("mark");
 
-            this.box.getStyleClass().add("box");
-            this.mark.getStyleClass().add("mark");
+            addChild(box);
+            RelativeBindingHelper.bindToCenter(box.transform(), transform());
 
-            this.addChild(this.box);
-            RelativeBindingHelper.bindToCenter(this.box, this);
+            addChild(mark);
+            RelativeBindingHelper.bindToCenter(mark.transform(), transform());
 
-            this.addChild(this.mark);
-            RelativeBindingHelper.bindToCenter(this.mark, this);
+            box.transform().widthProperty().bind(box.transform().heightProperty());
+            box.transform().heightProperty().bind(transform().heightProperty());
 
-            this.box.getWidthProperty().bind(this.box.getHeightProperty());
-            this.box.getHeightProperty().bind(this.getHeightProperty());
-
-            this.mark.getWidthProperty().bind(this.mark.getHeightProperty());
-            this.mark.getHeightProperty().bind(BaseExpression.transform(this.box.getHeightProperty(),
+            mark.transform().widthProperty().bind(mark.transform().heightProperty());
+            mark.transform().heightProperty().bind(BaseExpression.transform(box.transform().heightProperty(),
                     height -> height - 4));
 
-            this.mark.getVisibleProperty().bind(parent.getSelectedProperty());
+            mark.visibleProperty().bind(parent.getSelectedProperty());
         }
 
-        public GuiNode getBox()
+        public GuiElement getBox()
         {
-            return this.box;
+            return box;
         }
 
-        public GuiNode getMark()
+        public GuiElement getMark()
         {
-            return this.mark;
+            return mark;
+        }
+
+        @Override
+        public String type()
+        {
+            return "radio-button-content";
         }
     }
 }

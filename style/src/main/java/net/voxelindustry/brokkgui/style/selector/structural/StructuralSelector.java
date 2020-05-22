@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.style.selector.structural;
 
-import net.voxelindustry.brokkgui.style.StyleHolder;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 
 import java.util.function.Predicate;
 
-public interface StructuralSelector extends Predicate<StyleHolder>
+public interface StructuralSelector extends Predicate<StyleComponent>
 {
 }

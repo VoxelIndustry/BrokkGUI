@@ -8,8 +8,9 @@ import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.input.GuiTextfieldComplete;
+import net.voxelindustry.brokkgui.element.pane.GuiAbsolutePane;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
-import net.voxelindustry.brokkgui.panel.GuiAbsolutePane;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -25,24 +26,24 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
     {
         super(model, behaviour);
 
-        this.popup = new CompletePopup(model, this);
-        model.addStyleChild(popup);
+        popup = new CompletePopup(model, this);
+        transform().addChild(popup.transform());
     }
 
     public void showCompletePopup()
     {
-        if (this.getModel().getSuggestionsProperty().isEmpty())
+        if (getModel().getSuggestionsProperty().isEmpty())
             return;
 
-        this.popup.mapSuggestions();
-        this.isCompletePopupShown = true;
+        popup.mapSuggestions();
+        isCompletePopupShown = true;
         PopupHandler.getInstance(getModel().getWindow()).addPopup(popup);
     }
 
     public void hideCompletePopup()
     {
         PopupHandler.getInstance(getModel().getWindow()).removePopup(popup);
-        this.isCompletePopupShown = false;
+        isCompletePopupShown = false;
     }
 
     public boolean isCompletePopupShown()
@@ -52,7 +53,7 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
 
     public int getActualSuggestionSize()
     {
-        return popup.getChildrens().size();
+        return popup.getChildren().size();
     }
 
     public void selectSuggestion(int index)
@@ -67,7 +68,7 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
 
     public int getSelectedIndex()
     {
-        return popup.getChildrens().indexOf(popup.selected);
+        return popup.getChildren().indexOf(popup.selected);
     }
 
     public String getSelectedValue()
@@ -93,22 +94,22 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
 
         CompletePopup(GuiTextfieldComplete model, GuiTextfieldCompleteSkin skin)
         {
-            this.addStyleClass("complete-popup");
+            get(StyleComponent.class).styleClass().add("complete-popup");
 
-            this.getxPosProperty().bind(BaseExpression.biCombine(model.getxPosProperty(), model.getxTranslateProperty(),
+            transform().xPosProperty().bind(BaseExpression.biCombine(model.transform().xPosProperty(), model.transform().xTranslateProperty(),
                     (xPos, xTranslate) -> xPos + xTranslate));
-            this.getyPosProperty().bind(BaseExpression.triCombine(model.getyPosProperty(),
-                    model.getyTranslateProperty(), model.getHeightProperty(),
+            transform().yPosProperty().bind(BaseExpression.triCombine(model.transform().yPosProperty(),
+                    model.transform().yTranslateProperty(), model.transform().heightProperty(),
                     (yPos, yTranslate, height) -> yPos + yTranslate + height));
 
-            this.getWidthProperty().bind(model.getCompletePopupWidthProperty());
-            this.getHeightProperty().bind(
-                    BaseExpression.biCombine(model.getCellHeightProperty(), this.getChildrensProperty(),
+            transform().widthProperty().bind(model.getCompletePopupWidthProperty());
+            transform().heightProperty().bind(
+                    BaseExpression.biCombine(model.getCellHeightProperty(), transform().childrenProperty(),
                             (cellHeight, children) -> cellHeight * children.size()));
 
             this.model = model;
             this.skin = skin;
-            this.labelList = new ArrayList<>();
+            labelList = new ArrayList<>();
 
             model.getTextProperty().addListener((obs, oldValue, newValue) ->
             {
@@ -120,16 +121,16 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
         void setSelected(int index)
         {
             if (selected != null)
-                selected.getActivePseudoClass().remove("select");
-            selected = (GuiLabel) this.getChildrensProperty().get(index);
-            selected.getActivePseudoClass().add("select");
+                selected.get(StyleComponent.class).activePseudoClass().remove("select");
+            selected = (GuiLabel) transform().childrenProperty().get(index).element();
+            selected.get(StyleComponent.class).activePseudoClass().add("select");
         }
 
         void deselect()
         {
             if (selected == null)
                 return;
-            selected.getActivePseudoClass().remove("select");
+            selected.get(StyleComponent.class).activePseudoClass().remove("select");
             selected = null;
         }
 
@@ -153,26 +154,26 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
 
         void mapSuggestions()
         {
-            if (!this.labelList.isEmpty())
+            if (!labelList.isEmpty())
                 return;
-            this.labelList.addAll(model.getSuggestions().stream().map(this::makeLabel)
+            labelList.addAll(model.getSuggestions().stream().map(this::makeLabel)
                     .collect(Collectors.toList()));
 
             model.getSuggestionsProperty().addListener((ListValueChangeListener<String>) (obs, oldValue, newValue) ->
             {
                 if (oldValue != null)
-                    this.labelList.removeIf(label -> label.getText().equals(oldValue));
+                    labelList.removeIf(label -> label.getText().equals(oldValue));
                 if (newValue != null)
-                    this.labelList.add(makeLabel(newValue));
+                    labelList.add(makeLabel(newValue));
             });
-            this.refreshSuggestions(model.getText());
+            refreshSuggestions(model.getText());
         }
 
         private GuiLabel makeLabel(String text)
         {
             GuiLabel label = new GuiLabel(text);
-            label.getWidthProperty().bind(this.getWidthProperty());
-            label.getHeightProperty().bind(this.model.getCellHeightProperty());
+            label.transform().widthProperty().bind(transform().widthProperty());
+            label.transform().heightProperty().bind(model.getCellHeightProperty());
             label.setTextPadding(LABEL_PADDING);
             label.setTextAlignment(RectAlignment.LEFT_CENTER);
             label.setOnClickEvent(e -> marked = text);
@@ -184,19 +185,19 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
             if (StringUtils.isEmpty(text) && model.getCharBeforeCompletion() != 0)
                 return;
 
-            this.clearChilds();
+            clearChildren();
 
             if (StringUtils.isEmpty(text))
             {
                 labelList.forEach(label ->
-                        this.addChild(label, 0, model.getCellHeight() * getChildrensProperty().size()));
+                        addChild(label, 0, model.getCellHeight() * transform().childrenProperty().size()));
                 return;
             }
 
             String toSearch = text.toLowerCase().trim();
             labelList.stream().filter(label -> label.getText().toLowerCase().contains(toSearch))
                     .sorted((first, second) -> compareLabel(first, second, toSearch)).forEach(label ->
-                    this.addChild(label, 0, model.getCellHeight() * getChildrensProperty().size()));
+                    addChild(label, 0, model.getCellHeight() * transform().childrenProperty().size()));
         }
 
         @Override

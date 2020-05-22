@@ -21,13 +21,13 @@ public class GuiTextfieldComplete extends GuiTextfield
     {
         super(text);
 
-        this.suggestionsProperty = new BaseListProperty<>(null, "suggestionsListProperty");
-        this.cellHeightProperty = new BaseProperty<>(16f, "cellHeightProperty");
-        this.maxSuggestionProperty = new BaseProperty<>(4, "maxSuggestionProperty");
-        this.charBeforeCompletionProperty = new BaseProperty<>(3, "charBeforeCompletionProperty");
-        this.completePopupWidthProperty = new BaseProperty<>(0f, "completePopupWidthProperty");
+        suggestionsProperty = new BaseListProperty<>(null, "suggestionsListProperty");
+        cellHeightProperty = new BaseProperty<>(16f, "cellHeightProperty");
+        maxSuggestionProperty = new BaseProperty<>(4, "maxSuggestionProperty");
+        charBeforeCompletionProperty = new BaseProperty<>(3, "charBeforeCompletionProperty");
+        completePopupWidthProperty = new BaseProperty<>(0f, "completePopupWidthProperty");
 
-        this.completePopupWidthProperty.bind(this.getWidthProperty());
+        completePopupWidthProperty.bind(transform().widthProperty());
     }
 
     public GuiTextfieldComplete()
@@ -68,58 +68,58 @@ public class GuiTextfieldComplete extends GuiTextfield
 
     public List<String> getSuggestions()
     {
-        return this.getSuggestionsProperty().getValue();
+        return getSuggestionsProperty().getValue();
     }
 
     public void addSuggestion(String suggestion)
     {
-        this.getSuggestionsProperty().add(suggestion);
+        getSuggestionsProperty().add(suggestion);
     }
 
     public boolean removeSuggestion(String suggestion)
     {
-        return this.getSuggestionsProperty().remove(suggestion);
+        return getSuggestionsProperty().remove(suggestion);
     }
 
     public void setSuggestions(Collection<String> suggestions)
     {
-        this.getSuggestionsProperty().clear();
-        this.getSuggestionsProperty().addAll(suggestions);
+        getSuggestionsProperty().clear();
+        getSuggestionsProperty().addAll(suggestions);
     }
 
     public float getCellHeight()
     {
-        return this.getCellHeightProperty().getValue();
+        return getCellHeightProperty().getValue();
     }
 
     public void setCellHeight(float cellHeight)
     {
-        this.getCellHeightProperty().setValue(cellHeight);
+        getCellHeightProperty().setValue(cellHeight);
     }
 
     public int getMaxSuggestion()
     {
-        return this.getMaxSuggestionProperty().getValue();
+        return getMaxSuggestionProperty().getValue();
     }
 
     public void setMaxSuggestion(int maxSuggestion)
     {
-        this.getMaxSuggestionProperty().setValue(maxSuggestion);
+        getMaxSuggestionProperty().setValue(maxSuggestion);
     }
 
     public int getCharBeforeCompletion()
     {
-        return this.getCharBeforeCompletionProperty().getValue();
+        return getCharBeforeCompletionProperty().getValue();
     }
 
     public void setCharBeforeCompletion(int charBeforeCompletion)
     {
-        this.getCharBeforeCompletionProperty().setValue(charBeforeCompletion);
+        getCharBeforeCompletionProperty().setValue(charBeforeCompletion);
     }
 
     public float getCompletePopupWidth()
     {
-        return this.getCompletePopupWidthProperty().getValue();
+        return getCompletePopupWidthProperty().getValue();
     }
 
     /**
@@ -131,13 +131,13 @@ public class GuiTextfieldComplete extends GuiTextfield
      */
     public void setCompletePopupWidth(float completePopupWidth)
     {
-        if (this.getCompletePopupWidthProperty().isBound() && completePopupWidth != -1)
-            this.getCompletePopupWidthProperty().unbind();
+        if (getCompletePopupWidthProperty().isBound() && completePopupWidth != -1)
+            getCompletePopupWidthProperty().unbind();
         else if (completePopupWidth == -1)
         {
-            this.getCompletePopupWidthProperty().bind(this.getWidthProperty());
+            getCompletePopupWidthProperty().bind(transform().widthProperty());
             return;
         }
-        this.getCompletePopupWidthProperty().setValue(completePopupWidth);
+        getCompletePopupWidthProperty().setValue(completePopupWidth);
     }
 }

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.internal;
 
-import net.voxelindustry.brokkgui.gui.IGuiWindow;
+import net.voxelindustry.brokkgui.window.IGuiWindow;
 
 public interface IBrokkGuiImpl
 {

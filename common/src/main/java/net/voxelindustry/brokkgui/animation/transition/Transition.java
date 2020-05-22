@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.animation.transition;
 import net.voxelindustry.brokkgui.animation.Animation;
 import net.voxelindustry.brokkgui.animation.Interpolator;
 import net.voxelindustry.brokkgui.animation.Interpolators;
-import net.voxelindustry.brokkgui.component.GuiNode;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.event.DisposeEvent;
 
 import java.util.concurrent.TimeUnit;
@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit;
 public abstract class Transition extends Animation
 {
     private Interpolator interpolator;
-    private GuiNode      node;
+    private GuiElement   node;
 
-    public Transition(GuiNode node, long duration, TimeUnit unit)
+    public Transition(GuiElement node, long duration, TimeUnit unit)
     {
         super(duration, unit);
 
@@ -37,7 +37,7 @@ public abstract class Transition extends Animation
         this.interpolator = interpolator;
     }
 
-    public GuiNode getNode()
+    public GuiElement getNode()
     {
         if (node == null && getParent() instanceof Transition)
             return ((Transition) getParent()).getNode();
