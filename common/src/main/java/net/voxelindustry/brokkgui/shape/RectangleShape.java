@@ -56,6 +56,11 @@ public class RectangleShape implements ShapeDefinition
     @Override
     public boolean isMouseInside(GuiElement element, float mouseX, float mouseY)
     {
-        return element.transform().isPointInside(mouseX, mouseY);
+        if (mouseX >= element.transform().leftPos()
+                && mouseX < element.transform().rightPos()
+                && mouseY >= element.transform().topPos()
+                && mouseY < element.transform().bottomPos())
+            return true;
+        return false;
     }
 }
