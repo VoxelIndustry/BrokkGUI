@@ -23,8 +23,8 @@ public class GuiCompositeWindow implements IGuiWindow
         this.first = first;
         this.second = second;
 
-        this.second.getScreenWidthProperty().bind(this.first.getScreenWidthProperty());
-        this.second.getScreenHeightProperty().bind(this.first.getScreenHeightProperty());
+        this.second.getScreenWidthProperty().bindBidirectional(this.first.getScreenWidthProperty());
+        this.second.getScreenHeightProperty().bindBidirectional(this.first.getScreenHeightProperty());
     }
 
     public void setInputEventFilter(BiPredicate<IGuiWindow, InputType> inputEventFilter)
