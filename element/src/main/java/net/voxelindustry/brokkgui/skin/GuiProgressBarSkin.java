@@ -28,15 +28,6 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
 
         track.get(StyleComponent.class).styleClass().add("track");
 
-        getText().transform().xPosProperty().bind(new BaseExpression<>(() ->
-                model.transform().xPos() + model.width() / 2, model.transform().xPosProperty(), model.transform().widthProperty()));
-
-        getText().transform().yPosProperty().bind(new BaseExpression<>(() ->
-                model.transform().yPos() + model.height() / 2, model.transform().yPosProperty(), model.transform().heightProperty()));
-
-        getText().transform().zLevelProperty().bind(new BaseExpression<>(() ->
-                model.transform().zLevel() + 1, model.transform().zLevelProperty()));
-
         getModel().addChild(track);
     }
 }

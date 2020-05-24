@@ -249,4 +249,9 @@ public abstract class GuiLabeled extends GuiSkinedElement
             }
         });
     }
+
+    public TextComponent textComponent()
+    {
+        return textComponent;
+    }
 }

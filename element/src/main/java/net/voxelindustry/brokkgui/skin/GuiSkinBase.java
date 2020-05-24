@@ -5,6 +5,7 @@ import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.control.GuiSkinedElement;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,18 +15,18 @@ public class GuiSkinBase<T extends GuiSkinedElement> implements IGuiSkin
     private final List<GuiElement> childrens;
     private final T                model;
 
-    public GuiSkinBase(final T model)
+    public GuiSkinBase(T model)
     {
         if (model == null)
             throw new IllegalArgumentException("Cannot pass a null model");
         this.model = model;
 
-        this.childrens = new ArrayList<>();
+        childrens = new ArrayList<>();
     }
 
     public T getModel()
     {
-        return this.model;
+        return model;
     }
 
     public Transform transform()
@@ -33,13 +34,18 @@ public class GuiSkinBase<T extends GuiSkinedElement> implements IGuiSkin
         return getModel().transform();
     }
 
+    public StyleComponent style()
+    {
+        return getModel().style();
+    }
+
     @Override
-    public void render(final RenderPass pass, final IGuiRenderer renderer, final int mouseX, final int mouseY)
+    public void render(RenderPass pass, IGuiRenderer renderer, int mouseX, int mouseY)
     {
     }
 
     public List<GuiElement> getChildrens()
     {
-        return this.childrens;
+        return childrens;
     }
 }

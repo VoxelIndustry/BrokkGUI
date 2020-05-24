@@ -1,14 +1,13 @@
 package net.voxelindustry.brokkgui.skin;
 
 import fr.ourten.teabeans.binding.BaseBinding;
-import fr.ourten.teabeans.binding.BaseExpression;
 import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.data.RectSide;
-import net.voxelindustry.brokkgui.shape.Text;
+import net.voxelindustry.brokkgui.shape.TextComponent;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 
 /**
@@ -19,22 +18,20 @@ import net.voxelindustry.brokkgui.style.StyleComponent;
  */
 public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<C>> extends GuiBehaviorSkinBase<C, B>
 {
-    private final Text text;
-
     private final BaseProperty<String> ellipsedTextProperty;
 
     public GuiLabeledSkinBase(C model, B behaviour)
     {
         super(model, behaviour);
 
-        text = new Text(model.getText());
+        TextComponent text = model.textComponent();
 
         ellipsedTextProperty = new BaseProperty<>("", "ellipsedTextProperty");
 
         // Bindings
         bindEllipsed();
 
-        text.get(StyleComponent.class).styleClass().add("text");
+        style().styleClass().add("text");
 
         getModel().getIconProperty().addListener((obs, oldValue, newValue) ->
         {
@@ -49,10 +46,9 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         if (model.getIconProperty().isPresent())
             bindIcon(model.getIcon());
 
-        text.textProperty().bind(ellipsedTextProperty);
-        text.transform().zLevelProperty().bind(model.transform().zLevelProperty());
+        text.renderTextProperty().bind(ellipsedTextProperty);
 
-        text.transform().xPosProperty().bind(new BaseBinding<Float>()
+/*        text.transform().xPosProperty().bind(new BaseBinding<Float>()
         {
             {
                 super.bind(model.getTextAlignmentProperty(),
@@ -128,21 +124,11 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
                             + model.getTextPadding().getTop()
                             - model.getTextPadding().getBottom();
             }
-        });
+        });*/
 
-        text.transform().widthProperty().bind(BaseExpression.transform(getEllipsedTextProperty(),
-                BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
+/*        text.transform().widthProperty().bind(BaseExpression.transform(getEllipsedTextProperty(),
+                BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));*/
         text.transform().height(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
-
-        getModel().addChild(text);
-    }
-
-    /**
-     * @return the Text element used to represent the control
-     */
-    public Text getText()
-    {
-        return text;
     }
 
     public BaseProperty<String> getEllipsedTextProperty()
