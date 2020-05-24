@@ -39,6 +39,8 @@ public abstract class GuiLabeled extends GuiSkinedElement
         iconSideProperty = new BaseProperty<>(RectSide.LEFT, "iconSideProperty");
         iconPaddingProperty = new BaseProperty<>(2f, "iconPaddingProperty");
 
+        textComponent.text(startingText);
+
         bindSizeToText();
     }
 
@@ -58,7 +60,6 @@ public abstract class GuiLabeled extends GuiSkinedElement
         super.postConstruct();
 
         textComponent = provide(TextComponent.class);
-        textComponent.text(startingText);
     }
 
     public BaseProperty<RectAlignment> getTextAlignmentProperty()
@@ -113,12 +114,12 @@ public abstract class GuiLabeled extends GuiSkinedElement
 
     public String getText()
     {
-        return getTextProperty().getValue();
+        return textComponent.text();
     }
 
     public void setText(@Nonnull String text)
     {
-        getTextProperty().setValue(text);
+        textComponent.text(text);
     }
 
     public String getEllipsis()

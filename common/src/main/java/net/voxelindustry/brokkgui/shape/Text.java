@@ -11,6 +11,7 @@ public class Text extends GuiElement
     public Text(String text)
     {
         startingText = text;
+        textComponent.text(startingText);
     }
 
     @Override
@@ -19,7 +20,6 @@ public class Text extends GuiElement
         super.postConstruct();
 
         textComponent = provide(TextComponent.class);
-        textComponent.text(startingText);
     }
 
     @Override

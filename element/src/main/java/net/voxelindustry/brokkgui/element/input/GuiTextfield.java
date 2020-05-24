@@ -22,10 +22,13 @@ import java.util.List;
  */
 public class GuiTextfield extends GuiSkinedElement implements ITextInput
 {
-    private final BaseProperty<String> textProperty, promptTextProperty, promptEllipsisProperty;
+    private final BaseProperty<String> textProperty;
+    private final BaseProperty<String> promptTextProperty;
+    private final BaseProperty<String> promptEllipsisProperty;
 
-    private final BaseProperty<Boolean> promptTextAlwaysDisplayedProperty, editableProperty,
-            validatedProperty;
+    private final BaseProperty<Boolean> promptTextAlwaysDisplayedProperty;
+    private final BaseProperty<Boolean> editableProperty;
+    private final BaseProperty<Boolean> validatedProperty;
     private final BaseProperty<Boolean> expandToTextProperty;
 
     private final BaseProperty<Integer> maxTextLengthProperty;
