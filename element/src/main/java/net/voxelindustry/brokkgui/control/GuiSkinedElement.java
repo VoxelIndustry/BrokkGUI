@@ -37,7 +37,11 @@ public abstract class GuiSkinedElement extends GuiFather implements IGuiSkinnabl
 
         style = get(StyleComponent.class);
 
-        skinProperty.setValue(makeDefaultSkin());
+        style.onStyleInit(() ->
+        {
+            if (!skinProperty.isPresent())
+                skinProperty.setValue(makeDefaultSkin());
+        });
     }
 
     public StyleComponent style()

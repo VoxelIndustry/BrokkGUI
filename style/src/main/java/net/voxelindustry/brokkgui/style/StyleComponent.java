@@ -40,6 +40,8 @@ public class StyleComponent extends GuiComponent
     private final BaseSetProperty<String> styleClass;
     private final BaseSetProperty<String> activePseudoClass;
 
+    private Runnable onStyleInit;
+
     private ValueChangeListener<String>    styleRefreshListener = this::valueChanged;
     private ValueChangeListener<Transform> styleParentListener  = this::parentChanged;
 
@@ -148,6 +150,21 @@ public class StyleComponent extends GuiComponent
         return styleClass;
     }
 
+    public void addStyleClass(String styleClass)
+    {
+        styleClass().add(styleClass);
+    }
+
+    public void removeStyleClass(String styleClass)
+    {
+        styleClass().remove(styleClass);
+    }
+
+    public boolean hasStyleClass(String styleClass)
+    {
+        return styleClass().contains(styleClass);
+    }
+
     public String type()
     {
         return element().type();
@@ -156,6 +173,21 @@ public class StyleComponent extends GuiComponent
     public BaseSetProperty<String> activePseudoClass()
     {
         return activePseudoClass;
+    }
+
+    public void addPseudoClass(String pseudoClass)
+    {
+        activePseudoClass().add(pseudoClass);
+    }
+
+    public void removePseudoClass(String pseudoClass)
+    {
+        activePseudoClass().remove(pseudoClass);
+    }
+
+    public boolean hasPseudoClass(String pseudoClass)
+    {
+        return activePseudoClass().contains(pseudoClass);
     }
 
     public String id()
@@ -363,6 +395,9 @@ public class StyleComponent extends GuiComponent
     public void setStyleSupplier(Supplier<StyleList> styleSupplier)
     {
         this.styleSupplier = styleSupplier;
+
+        if (onStyleInit != null)
+            onStyleInit.run();
     }
 
     public void refresh()
@@ -416,5 +451,10 @@ public class StyleComponent extends GuiComponent
     {
         element().getEventDispatcher().addHandler(StyleRefreshEvent.BEFORE, e -> BrokkGuiPlatform.getInstance().getProfiler().preElementStyleRefresh(element()));
         element().getEventDispatcher().addHandler(StyleRefreshEvent.AFTER, e -> BrokkGuiPlatform.getInstance().getProfiler().postElementStyleRefresh(element()));
+    }
+
+    public void onStyleInit(Runnable onStyleInit)
+    {
+        this.onStyleInit = onStyleInit;
     }
 }

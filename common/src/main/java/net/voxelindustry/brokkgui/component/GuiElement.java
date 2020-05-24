@@ -86,21 +86,10 @@ public abstract class GuiElement implements IEventEmitter
         hoveredProperty = new BaseProperty<>(false, "hoveredProperty");
 
         focusableProperty = new BaseProperty<>(false, "focusableProperty");
-
         visibleProperty = new BaseProperty<>(true, "visibleProperty");
-
         draggedProperty = new BaseProperty<>(false, "draggedProperty");
 
-        disabledProperty().addListener(obs ->
-        {
-            if (isDisabled())
-            {
-                if (isHovered())
-                    setHovered(false);
-                if (isFocused())
-                    GuiFocusManager.instance().requestFocus(null);
-            }
-        });
+        opacityProperty = new BaseProperty<>(1D, "opacityProperty");
 
         ComponentEngine.instance().inject(this);
 
@@ -108,6 +97,8 @@ public abstract class GuiElement implements IEventEmitter
         paint.shape(RECTANGLE_SHAPE);
 
         postConstruct();
+
+        disabledProperty.addListener(disableListener);
     }
 
     /**
@@ -379,14 +370,64 @@ public abstract class GuiElement implements IEventEmitter
         return transform().bottomPos();
     }
 
+    public float xPos()
+    {
+        return transform().xPos();
+    }
+
+    public float yPos()
+    {
+        return transform().yPos();
+    }
+
+    public float xTranslate()
+    {
+        return transform().xTranslate();
+    }
+
+    public void xTranslate(float xTranslate)
+    {
+        transform().xTranslate(xTranslate);
+    }
+
+    public float yTranslate()
+    {
+        return transform().yTranslate();
+    }
+
+    public void yTranslate(float yTranslate)
+    {
+        transform().yTranslate(yTranslate);
+    }
+
+    public void translate(float xTranslate, float yTranslate)
+    {
+        transform().translate(xTranslate, yTranslate);
+    }
+
     public float width()
     {
         return transform().width();
     }
 
+    public void width(float width)
+    {
+        transform().width(width);
+    }
+
     public float height()
     {
         return transform().height();
+    }
+
+    public void height(float height)
+    {
+        transform().height(height);
+    }
+
+    public void size(float width, float height)
+    {
+        transform().size(width, height);
     }
 
     public BaseProperty<Boolean> focusedProperty()
