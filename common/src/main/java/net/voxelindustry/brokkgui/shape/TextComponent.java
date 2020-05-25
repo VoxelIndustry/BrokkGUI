@@ -1,6 +1,8 @@
 package net.voxelindustry.brokkgui.shape;
 
 import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.value.ObservableValue;
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.data.RectAlignment;
@@ -25,6 +27,9 @@ public class TextComponent extends GuiComponent implements RenderComponent
     protected BaseProperty<Boolean> useShadowProperty;
     protected BaseProperty<Color>   colorProperty;
 
+    private final ObservableValue<Float> lazyTextWidth;
+    private final ObservableValue<Float> lazyTextHeight;
+
     public TextComponent()
     {
         textProperty = new BaseProperty<>("", "textProperty");
@@ -36,6 +41,20 @@ public class TextComponent extends GuiComponent implements RenderComponent
         multilineProperty = new BaseProperty<>(false, "multilineProperty");
 
         renderTextProperty.bind(textProperty);
+
+        lazyTextWidth = renderTextProperty.combine(multilineProperty, (renderText, multiline) ->
+        {
+            if (multiline)
+                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidthMultiLine(renderText);
+            return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(renderText);
+        });
+
+        lazyTextHeight = renderTextProperty.combine(multilineProperty, lineSpacingProperty, (renderText, multiline, lineSpacing) ->
+        {
+            if (multiline)
+                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeightMultiLine(renderText, lineSpacing);
+            return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight();
+        });
     }
 
     @Override
@@ -45,18 +64,26 @@ public class TextComponent extends GuiComponent implements RenderComponent
             return;
 
         float xPos = transform().leftPos();
+        float yPos = transform().topPos();
 
         if (textAlignment().isLeft())
             xPos += textPadding().getLeft();
         else if (textAlignment().isRight())
-            xPos += transform().width() - textWidth(renderer.getHelper()) - textPadding().getRight();
+            xPos += transform().width() - lazyTextWidth.getValue() - textPadding().getRight();
         else
-            xPos += textPadding().getLeft() + (transform().width() - textPadding().getHorizontal()) / 2;
+            xPos += textPadding().getLeft() + (transform().width() - textPadding().getHorizontal()) / 2 - lazyTextWidth.getValue() / 2;
+
+        if (textAlignment().isUp())
+            yPos += textPadding().getTop();
+        else if (textAlignment().isDown())
+            yPos += transform().height() - lazyTextHeight.getValue() - textPadding().getBottom();
+        else
+            yPos += textPadding().getTop() + (transform().height() - textPadding().getVertical()) / 2 - lazyTextHeight.getValue() / 2;
 
         renderer.getHelper().drawString(
-                text(),
+                renderText(),
                 xPos,
-                transform().topPos() + textPadding().getTop(),
+                yPos,
                 transform().zLevel(),
                 color(),
                 useShadow() ? shadowColor() : Color.ALPHA);
@@ -64,16 +91,12 @@ public class TextComponent extends GuiComponent implements RenderComponent
 
     private float textWidth(IGuiHelper helper)
     {
-        if (multiline())
-            return helper.getStringWidthMultiLine(renderText());
-        return helper.getStringWidth(renderText());
+        return lazyTextWidth.getValue();
     }
 
     private float textHeight(IGuiHelper helper)
     {
-        if (multiline())
-            return helper.getStringHeightMultiLine(renderText(), lineSpacing());
-        return helper.getStringHeight();
+        return lazyTextHeight.getValue();
     }
 
     ////////////////
@@ -129,11 +152,6 @@ public class TextComponent extends GuiComponent implements RenderComponent
     public BaseProperty<Boolean> multilineProperty()
     {
         return multilineProperty;
-    }
-
-    public BaseProperty<CharSequence> multilineSplitProperty()
-    {
-        return multilineSplitProperty;
     }
 
     ////////////
@@ -202,16 +220,6 @@ public class TextComponent extends GuiComponent implements RenderComponent
     public void multiline(boolean multiline)
     {
         multilineProperty().setValue(multiline);
-    }
-
-    public CharSequence multilineSplit()
-    {
-        return multilineSplitProperty().getValue();
-    }
-
-    public void multilineSplit(CharSequence multilineSplit)
-    {
-        multilineSplitProperty().setValue(multilineSplit);
     }
 
     public Color shadowColor()

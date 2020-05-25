@@ -121,7 +121,7 @@ public class Paint extends GuiComponent implements RenderComponent
                     ColorBorderDrawer.drawBorder(this, renderer);
             }
         }
-        if (pass == RenderPass.FOREGROUND)
+        else if (pass == RenderPass.FOREGROUND)
         {
             if (hasTextureForeground() && foregroundTexture() != Texture.EMPTY)
             {

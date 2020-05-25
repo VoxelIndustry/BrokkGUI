@@ -13,10 +13,9 @@ import javax.annotation.Nonnull;
 
 public abstract class GuiLabeled extends GuiSkinedElement
 {
-    private final BaseProperty<RectAlignment> textAlignmentProperty;
-    private final BaseProperty<String>        ellipsisProperty;
-    private final BaseProperty<Boolean>       expandToTextProperty;
-    private final BaseProperty<RectBox>       textPaddingProperty;
+    private final BaseProperty<String>  ellipsisProperty;
+    private final BaseProperty<Boolean> expandToTextProperty;
+    private final BaseProperty<RectBox> textPaddingProperty;
 
     private final BaseProperty<GuiElement> iconProperty;
     private final BaseProperty<RectSide>   iconSideProperty;
@@ -30,7 +29,6 @@ public abstract class GuiLabeled extends GuiSkinedElement
     {
         startingText = text;
 
-        textAlignmentProperty = new BaseProperty<>(RectAlignment.MIDDLE_CENTER, "textAlignmentProperty");
         ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
         expandToTextProperty = new BaseProperty<>(true, "expandToTextProperty");
         textPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "textPaddingProperty");
@@ -64,7 +62,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
 
     public BaseProperty<RectAlignment> getTextAlignmentProperty()
     {
-        return textAlignmentProperty;
+        return textComponent().textAlignmentProperty();
     }
 
     public BaseProperty<String> getTextProperty()

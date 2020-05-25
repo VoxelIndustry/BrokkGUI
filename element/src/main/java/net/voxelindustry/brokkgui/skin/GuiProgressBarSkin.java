@@ -7,7 +7,7 @@ import net.voxelindustry.brokkgui.element.GuiProgressBar;
 import net.voxelindustry.brokkgui.shape.Rectangle;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 
-public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorBase<C>> extends GuiLabeledSkinBase<C, B>
+public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorBase<C>> extends GuiLabeledSkin<C, B>
 {
     private final Rectangle track;
 

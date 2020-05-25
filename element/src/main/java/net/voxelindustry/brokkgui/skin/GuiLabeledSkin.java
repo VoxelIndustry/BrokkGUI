@@ -6,9 +6,9 @@ import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.shape.TextComponent;
-import net.voxelindustry.brokkgui.style.StyleComponent;
 
 /**
  * @param <C> the labeled gui control this skin must render
@@ -16,11 +16,12 @@ import net.voxelindustry.brokkgui.style.StyleComponent;
  *            purpose
  * @author Ourten
  */
-public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<C>> extends GuiBehaviorSkinBase<C, B>
+public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> extends GuiBehaviorSkinBase<C, B>
 {
     private final BaseProperty<String> ellipsedTextProperty;
+    private       BaseBinding<RectBox> paddingBinding;
 
-    public GuiLabeledSkinBase(C model, B behaviour)
+    public GuiLabeledSkin(C model, B behaviour)
     {
         super(model, behaviour);
 
@@ -29,106 +30,32 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
         ellipsedTextProperty = new BaseProperty<>("", "ellipsedTextProperty");
 
         // Bindings
-        bindEllipsed();
+        //   bindEllipsed();
 
         style().styleClass().add("text");
 
         getModel().getIconProperty().addListener((obs, oldValue, newValue) ->
         {
             if (oldValue != null)
+            {
                 getModel().removeChild(oldValue);
+                if (newValue == null)
+                    bindText();
+            }
             if (newValue != null)
             {
-                getModel().get(StyleComponent.class).styleClass().add("icon");
+                getModel().style().styleClass().add("icon");
                 bindIcon(newValue);
+                bindTextWithIcon(newValue);
             }
         });
         if (model.getIconProperty().isPresent())
+        {
             bindIcon(model.getIcon());
-
-        text.renderTextProperty().bind(ellipsedTextProperty);
-
-/*        text.transform().xPosProperty().bind(new BaseBinding<Float>()
-        {
-            {
-                super.bind(model.getTextAlignmentProperty(),
-                        model.transform().xPosProperty(),
-                        model.transform().xTranslateProperty(),
-                        model.transform().widthProperty(),
-                        model.getIconProperty(),
-                        model.getIconSideProperty(),
-                        model.getIconPaddingProperty(),
-                        model.getTextPaddingProperty(),
-                        getEllipsedTextProperty());
-            }
-
-            @Override
-            public Float computeValue()
-            {
-                float iconWidth = 0;
-                if (model.getIconProperty().isPresent() && model.getIconSide().isHorizontal())
-                    iconWidth = model.getIcon().width() + model.getIconPadding();
-
-                if (model.getTextAlignment().isLeft())
-                    return model.transform().xPos() + model.transform().xTranslate() + model.getTextPadding().getLeft()
-                            + (model.getIconSide() == RectSide.LEFT ? iconWidth : 0);
-                else if (model.getTextAlignment().isRight())
-                    return model.transform().xPos() + model.transform().xTranslate()
-                            + model.width()
-                            - model.getTextPadding().getRight()
-                            - BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getEllipsedText())
-                            - (model.getIconSide() == RectSide.RIGHT ? iconWidth : 0);
-                else
-                    return model.transform().xPos() + model.transform().xTranslate()
-                            + model.getTextPadding().getLeft()
-                            + (model.getIconSide() == RectSide.LEFT ? iconWidth : 0)
-                            + getAvailableTextWidth() / 2
-                            - BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getEllipsedText()) / 2
-                            - model.getTextPadding().getRight();
-            }
-        });
-        text.transform().yPosProperty().bind(new BaseBinding<Float>()
-        {
-            {
-                super.bind(model.getTextAlignmentProperty(),
-                        model.transform().yPosProperty(),
-                        model.transform().yTranslateProperty(),
-                        model.transform().heightProperty(),
-                        model.getIconProperty(),
-                        model.getIconSideProperty(),
-                        model.getIconPaddingProperty(),
-                        model.getTextPaddingProperty());
-            }
-
-            @Override
-            public Float computeValue()
-            {
-                float iconHeight = 0;
-                if (model.getIconProperty().isPresent() && model.getIconSide().isVertical())
-                    iconHeight = model.getIcon().height() + model.getIconPadding();
-
-                if (model.getTextAlignment().isUp())
-                    return model.transform().yPos() + model.transform().yTranslate() + model.getTextPadding().getTop()
-                            + (model.getIconSide() == RectSide.UP ? iconHeight : 0);
-                else if (model.getTextAlignment().isDown())
-                    return model.transform().yPos() + model.transform().yTranslate()
-                            + model.height()
-                            - model.getTextPadding().getBottom()
-                            - BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight()
-                            - (model.getIconSide() == RectSide.DOWN ? iconHeight : 0);
-                else
-                    return model.transform().yPos() + model.transform().yTranslate() + model.height() / 2
-                            + (model.getIconSide() == RectSide.UP ? iconHeight :
-                            (model.getIconSide() == RectSide.DOWN ? -iconHeight : 0)) / 2
-                            - BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight() / 2
-                            + model.getTextPadding().getTop()
-                            - model.getTextPadding().getBottom();
-            }
-        });*/
-
-/*        text.transform().widthProperty().bind(BaseExpression.transform(getEllipsedTextProperty(),
-                BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));*/
-        text.transform().height(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
+            bindTextWithIcon(model.getIcon());
+        }
+        else
+            bindText();
     }
 
     public BaseProperty<String> getEllipsedTextProperty()
@@ -139,6 +66,73 @@ public class GuiLabeledSkinBase<C extends GuiLabeled, B extends GuiBehaviorBase<
     public String getEllipsedText()
     {
         return ellipsedTextProperty.getValue();
+    }
+
+    private void bindText()
+    {
+        if (paddingBinding != null)
+            paddingBinding.unbindAll();
+
+        paddingBinding = new BaseBinding<RectBox>()
+        {
+            {
+                super.bind(getModel().getTextPaddingProperty());
+            }
+
+            @Override
+            public RectBox computeValue()
+            {
+                return getModel().getTextPadding();
+            }
+        };
+
+        getModel().textComponent().textPaddingProperty().bind(paddingBinding);
+    }
+
+    private void bindTextWithIcon(GuiElement icon)
+    {
+        if (paddingBinding != null)
+            paddingBinding.unbindAll();
+
+        paddingBinding = new BaseBinding<RectBox>()
+        {
+            {
+                bind(
+                        getModel().getTextPaddingProperty(),
+                        getModel().getIconPaddingProperty(),
+                        getModel().getIconSideProperty(),
+                        icon.transform().widthProperty(),
+                        icon.transform().heightProperty()
+                );
+            }
+
+            @Override
+            public RectBox computeValue()
+            {
+                float left = getModel().getTextPadding().getLeft();
+                float top = getModel().getTextPadding().getTop();
+                float right = getModel().getTextPadding().getRight();
+                float bottom = getModel().getTextPadding().getBottom();
+
+                if (getModel().getIconSide() == RectSide.LEFT)
+                    left += getModel().getIcon().width() + getModel().getIconPadding();
+                else if (getModel().getIconSide() == RectSide.RIGHT)
+                    right += getModel().getIcon().width() + getModel().getIconPadding();
+                else if (getModel().getIconSide() == RectSide.UP)
+                    top += getModel().getIcon().height() + getModel().getIconPadding();
+                else if (getModel().getIconSide() == RectSide.DOWN)
+                    bottom += getModel().getIcon().height() + getModel().getIconPadding();
+
+                return RectBox.build()
+                        .left(left)
+                        .right(right)
+                        .top(top)
+                        .bottom(bottom)
+                        .create();
+            }
+        };
+
+        getModel().textComponent().textPaddingProperty().bind(paddingBinding);
     }
 
     private void bindEllipsed()

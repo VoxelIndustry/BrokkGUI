@@ -1,42 +1,33 @@
 package net.voxelindustry.brokkgui.component;
 
-import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.IEventEmitter;
 
 public abstract class GuiComponent implements IEventEmitter
 {
-    private BaseProperty<GuiElement> elementProperty;
-
-    public GuiComponent()
-    {
-        this.elementProperty = new BaseProperty<>(null, "elementProperty");
-    }
+    private GuiElement element;
+    private Transform  transform;
 
     public void attach(GuiElement element)
     {
-        this.elementProperty.setValue(element);
+        this.element = element;
+        transform = element.transform();
     }
 
     public GuiElement element()
     {
-        return this.elementProperty.getValue();
+        return element;
     }
 
     public boolean hasElement()
     {
-        return this.elementProperty.isPresent();
-    }
-
-    public BaseProperty<GuiElement> getElementProperty()
-    {
-        return this.elementProperty;
+        return element == null;
     }
 
     public Transform transform()
     {
-        return this.element().transform();
+        return transform;
     }
 
     @Override

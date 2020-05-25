@@ -4,7 +4,7 @@ import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.behavior.GuiLinkBehavior;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
-import net.voxelindustry.brokkgui.skin.GuiLabeledSkinBase;
+import net.voxelindustry.brokkgui.skin.GuiLabeledSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
 /**
@@ -44,7 +44,7 @@ public class GuiLink extends GuiLabeled
     @Override
     protected GuiSkinBase<?> makeDefaultSkin()
     {
-        return new GuiLabeledSkinBase<>(this, new GuiLinkBehavior(this));
+        return new GuiLabeledSkin<>(this, new GuiLinkBehavior(this));
     }
 
     public BaseProperty<String> getUrlProperty()
