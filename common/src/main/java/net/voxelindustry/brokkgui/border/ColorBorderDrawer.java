@@ -1,16 +1,20 @@
 package net.voxelindustry.brokkgui.border;
 
+import com.google.common.base.Stopwatch;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 
+import java.util.concurrent.TimeUnit;
+
 public class ColorBorderDrawer
 {
     public static void drawBorder(Paint paint, IGuiRenderer renderer)
     {
         Color color = paint.borderColor();
+
         float borderLeft = paint.borderWidth(RectSide.LEFT);
         float borderRight = paint.borderWidth(RectSide.RIGHT);
         float borderTop = paint.borderWidth(RectSide.UP);
@@ -21,56 +25,80 @@ public class ColorBorderDrawer
         float bottomLeftRadius = paint.borderRadius(RectCorner.BOTTOM_LEFT);
         float bottomRightRadius = paint.borderRadius(RectCorner.BOTTOM_RIGHT);
 
+        float leftPos = paint.transform().leftPos();
+        float rightPos = paint.transform().rightPos();
+        float bottomPos = paint.transform().bottomPos();
+        float topPos = paint.transform().topPos();
+        float zLevel = paint.transform().zLevel();
+
+        if (bottomLeftRadius == 0 && bottomRightRadius == 0 && topRightRadius == 0 && topLeftRadius == 0 &&
+                borderLeft == borderRight && borderLeft == borderTop && borderLeft == borderBottom)
+        {
+            renderer.getHelper().drawColoredEmptyRect(renderer,
+                    leftPos - borderLeft,
+                    topPos - borderLeft,
+                    paint.transform().width() + borderLeft * 2,
+                    paint.transform().height() + borderLeft * 2,
+                    zLevel,
+                    color,
+                    borderLeft);
+            return;
+        }
+
         if (bottomRightRadius > 0)
             renderer.getHelper().drawColoredArc(renderer,
-                    paint.transform().leftPos() + paint.transform().width() - bottomRightRadius + borderRight - 1,
-                    paint.transform().topPos() + paint.transform().height() - bottomRightRadius + borderBottom - 1,
-                    bottomRightRadius, paint.transform().zLevel(), color, RectCorner.BOTTOM_RIGHT);
+                    rightPos - bottomRightRadius + borderRight - 1,
+                    bottomPos - bottomRightRadius + borderBottom - 1,
+                    bottomRightRadius, zLevel, color, RectCorner.BOTTOM_RIGHT);
         if (bottomLeftRadius > 0)
             renderer.getHelper().drawColoredArc(renderer,
-                    paint.transform().leftPos() - borderLeft + bottomLeftRadius,
-                    paint.transform().topPos() + paint.transform().height() - bottomLeftRadius + borderBottom - 1,
-                    bottomRightRadius, paint.transform().zLevel(), color, RectCorner.BOTTOM_LEFT);
+                    leftPos - borderLeft + bottomLeftRadius,
+                    bottomPos - bottomLeftRadius + borderBottom - 1,
+                    bottomRightRadius, zLevel, color, RectCorner.BOTTOM_LEFT);
         if (topLeftRadius > 0)
             renderer.getHelper().drawColoredArc(renderer,
-                    paint.transform().leftPos() - borderLeft + topLeftRadius,
-                    paint.transform().topPos() - borderTop + topLeftRadius,
-                    topLeftRadius, paint.transform().zLevel(), color, RectCorner.TOP_LEFT);
+                    leftPos - borderLeft + topLeftRadius,
+                    topPos - borderTop + topLeftRadius,
+                    topLeftRadius, zLevel, color, RectCorner.TOP_LEFT);
         if (topRightRadius > 0)
             renderer.getHelper().drawColoredArc(renderer,
-                    paint.transform().leftPos() + paint.transform().width() - topRightRadius + borderRight - 1,
-                    paint.transform().topPos() - borderTop + topLeftRadius,
-                    topLeftRadius, paint.transform().zLevel(), color, RectCorner.TOP_RIGHT);
+                    rightPos - topRightRadius + borderRight - 1,
+                    topPos - borderTop + topLeftRadius,
+                    topLeftRadius, zLevel, color, RectCorner.TOP_RIGHT);
 
+        Stopwatch watch = Stopwatch.createStarted();
         float bottomLeftRadiusOffset = bottomLeftRadius > 0 ? bottomLeftRadius - borderBottom : 0;
         if (borderLeft > 0)
-            renderer.getHelper().drawColoredRect(renderer, paint.transform().leftPos() - borderLeft,
-                    paint.transform().topPos() - borderTop + topLeftRadius, borderLeft,
+            renderer.getHelper().drawColoredRect(renderer, leftPos - borderLeft,
+                    topPos - borderTop + topLeftRadius, borderLeft,
                     paint.transform().height() + borderTop - bottomLeftRadiusOffset - topLeftRadius,
-                    paint.transform().zLevel(), color);
+                    zLevel, color);
 
         float topLeftRadiusOffset = topLeftRadius > 0 && topLeftRadius <= borderLeft ? topLeftRadius - borderLeft : 0;
         if (borderTop > 0)
             renderer.getHelper().drawColoredRect(renderer,
-                    paint.transform().leftPos() + topLeftRadiusOffset,
-                    paint.transform().topPos() - borderTop,
+                    leftPos + topLeftRadiusOffset,
+                    topPos - borderTop,
                     paint.transform().width() + borderRight - topLeftRadiusOffset - topRightRadius, borderTop,
-                    paint.transform().zLevel(), color);
+                    zLevel, color);
 
         float topRightRadiusOffset = topRightRadius > 0 ? topRightRadius - borderTop : 0;
         if (borderRight > 0)
-            renderer.getHelper().drawColoredRect(renderer, paint.transform().leftPos() + paint.transform().width(),
-                    paint.transform().topPos() + topRightRadiusOffset, borderRight,
+            renderer.getHelper().drawColoredRect(renderer, rightPos,
+                    topPos + topRightRadiusOffset, borderRight,
                     paint.transform().height() + borderBottom - bottomRightRadius - topRightRadiusOffset,
-                    paint.transform().zLevel(), color);
+                    zLevel, color);
 
         float bottomRightRadiusOffset = bottomRightRadius > 0 && bottomRightRadius <= borderRight ?
                 bottomRightRadius - borderRight : 0;
         if (borderBottom > 0)
             renderer.getHelper().drawColoredRect(renderer,
-                    paint.transform().leftPos() - borderLeft + bottomLeftRadius,
-                    paint.transform().topPos() + paint.transform().height(),
+                    leftPos - borderLeft + bottomLeftRadius,
+                    bottomPos,
                     paint.transform().width() + borderLeft - bottomRightRadiusOffset - bottomLeftRadius,
-                    borderBottom, paint.transform().zLevel(), color);
+                    borderBottom, zLevel, color);
+
+        System.out.println("Took " + watch.elapsed(TimeUnit.MICROSECONDS));
+
     }
 }
