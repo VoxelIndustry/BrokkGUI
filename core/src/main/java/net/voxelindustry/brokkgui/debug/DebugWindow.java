@@ -66,6 +66,8 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
     private Transform selectedNode;
     private Transform hoveredHierarchyNode;
 
+    private boolean drawHotspots;
+
     private boolean isInputLocked;
     private int     lockedMouseX;
     private int     lockedMouseY;
@@ -264,8 +266,30 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
                 TWO_DECIMAL_FORMAT.format(profiler.getFrameRenderTimePercentile(50) / 1_000_000) + " Med " +
                 TWO_DECIMAL_FORMAT.format(profiler.getFrameRenderTimeMax() / 1_000_000) + " Max\n" +
                 TWO_DECIMAL_FORMAT.format(profiler.getFrameRenderTimePercentile(95) / 1_000_000) + " Perc95 " +
-                TWO_DECIMAL_FORMAT.format(profiler.getFrameRenderTimePercentile(99) / 1_000_000) + " Perc99 ";
-        textBox(framesText, getScreenWidth() - getStringWidthMultiLine(framesText) - 4, getStringHeight() + 6, StyleType.NORMAL);
+                TWO_DECIMAL_FORMAT.format(profiler.getFrameRenderTimePercentile(99) / 1_000_000) + " Perc99 \n" +
+                "Style:\n" +
+                profiler.getTotalStyleRefresh() + " refresh.";
+        textBox(framesText, getScreenWidth() - getStringWidthMultiLine(framesText) - 4, getStringHeight() + 4, StyleType.NORMAL);
+
+        String hotspotText = drawHotspots ? "Hide HotSpots" : "Show HotSpots";
+        if (button(hotspotText, getScreenWidth() - getStringWidth(hotspotText) - 4, getStringHeight() + 8 + getStringHeightMultiLine(framesText), BUTTON_ACTION) == InteractionResult.CLICKED)
+        {
+            drawHotspots = !drawHotspots;
+        }
+
+        String flushText = "Clear Data";
+        if (button(flushText, getScreenWidth() - getStringWidth(hotspotText) - 11 - getStringWidth(flushText), getStringHeight() + 8 + getStringHeightMultiLine(framesText), BUTTON_ACTION) == InteractionResult.CLICKED)
+            profiler.clearData();
+
+        if (drawHotspots)
+        {
+            List<Map.Entry<GuiElement, Double>> worstRenderTimes = profiler.getWorstRenderTimeElements(15, false);
+
+            worstRenderTimes.forEach(element ->
+            {
+                textBox(TWO_DECIMAL_FORMAT.format(element.getValue() / 1_000_000F) + "ms", element.getKey().getLeftPos(), element.getKey().getBottomPos(), StyleType.NORMAL);
+            });
+        }
     }
 
     private float drawHierarchy(float startY, Transform... nodes)

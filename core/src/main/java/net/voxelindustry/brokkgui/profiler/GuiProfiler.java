@@ -20,6 +20,7 @@ import static com.google.common.math.Quantiles.median;
 import static com.google.common.math.Stats.meanOf;
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
+import static java.util.stream.Collectors.toList;
 
 public class GuiProfiler implements IProfiler
 {
@@ -183,5 +184,27 @@ public class GuiProfiler implements IProfiler
     public long getFrameRenderTimeMax()
     {
         return frameRenderTimes.stream().mapToLong(Long::longValue).max().orElse(0);
+    }
+
+    public long getTotalStyleRefresh()
+    {
+        return styleRefreshCounters.values().stream().mapToLong(l -> l).sum();
+    }
+
+    public List<Map.Entry<GuiElement, Double>> getWorstRenderTimeElements(int count, boolean includeInvisible)
+    {
+        return renderTimes.asMap().entrySet().stream()
+                .filter(entry -> includeInvisible || entry.getKey().isVisible())
+                .map(entry -> Pair.of(entry.getKey(), entry.getValue().stream().mapToLong(l -> l).average().orElse(0)))
+                .sorted(Comparator.comparingDouble(guiElementDoublePair -> ((Pair<GuiElement, Double>) guiElementDoublePair).getValue()).reversed())
+                .limit(count).collect(toList());
+    }
+
+    public void clearData()
+    {
+        renderTimes.clear();
+        frameRenderTimes.clear();
+        styleRefreshCounters.clear();
+        styleRefreshTimes.clear();
     }
 }
