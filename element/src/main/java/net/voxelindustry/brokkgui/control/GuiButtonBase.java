@@ -1,26 +1,17 @@
 package net.voxelindustry.brokkgui.control;
 
-import fr.ourten.teabeans.value.BaseProperty;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.ButtonComponent;
 import net.voxelindustry.brokkgui.event.ActionEvent;
 import net.voxelindustry.hermod.EventHandler;
 
-import javax.annotation.Nonnull;
-
-public abstract class GuiButtonBase extends GuiSkinedElement
+public abstract class GuiButtonBase extends GuiLabeled
 {
-    private EventHandler<ActionEvent> onActionEvent;
-
-    private final GuiLabeled label;
-
-    private final BaseProperty<Boolean> expandToLabel;
+    private ButtonComponent buttonComponent;
 
     public GuiButtonBase(String text, GuiElement icon)
     {
-        label = createGuiLabel(text, icon);
-        addChild(label);
-
-        expandToLabel = new BaseProperty<>(true, "expandToLabelProperty");
+        super(text, icon);
     }
 
     public GuiButtonBase(String text)
@@ -33,71 +24,26 @@ public abstract class GuiButtonBase extends GuiSkinedElement
         this("");
     }
 
-    protected abstract GuiLabeled createGuiLabel(String text, GuiElement icon);
+    @Override
+    public void postConstruct()
+    {
+        super.postConstruct();
+
+        buttonComponent = provide(ButtonComponent.class);
+    }
+
+    public ButtonComponent buttonComponent()
+    {
+        return buttonComponent;
+    }
 
     public void activate()
     {
-        getEventDispatcher().dispatchEvent(ActionEvent.TYPE, new ActionEvent(this));
+        buttonComponent().activate();
     }
-
-    public GuiLabeled getLabel()
-    {
-        return label;
-    }
-
-    public BaseProperty<Boolean> getExpandToLabelProperty()
-    {
-        return expandToLabel;
-    }
-
-    public void setExpandToLabel(boolean expandToLabel)
-    {
-        getExpandToLabelProperty().setValue(expandToLabel);
-    }
-
-    public boolean expandToLabel()
-    {
-        return getExpandToLabelProperty().getValue();
-    }
-
-    public String getText()
-    {
-        return label.getText();
-    }
-
-    public void setText(@Nonnull String text)
-    {
-        label.setText(text);
-    }
-
-    public String getEllipsis()
-    {
-        return label.getEllipsis();
-    }
-
-    public void setEllipsis(String ellipsis)
-    {
-        label.setEllipsis(ellipsis);
-    }
-
-    public GuiElement getIcon()
-    {
-        return label.getIcon();
-    }
-
-    public void setIcon(GuiElement icon)
-    {
-        label.setIcon(icon);
-    }
-
-    /////////////////////
-    // EVENTS HANDLING //
-    /////////////////////
 
     public void setOnActionEvent(EventHandler<ActionEvent> onActionEvent)
     {
-        getEventDispatcher().removeHandler(ActionEvent.TYPE, this.onActionEvent);
-        this.onActionEvent = onActionEvent;
-        getEventDispatcher().addHandler(ActionEvent.TYPE, this.onActionEvent);
+        buttonComponent().setOnActionEvent(onActionEvent);
     }
 }
