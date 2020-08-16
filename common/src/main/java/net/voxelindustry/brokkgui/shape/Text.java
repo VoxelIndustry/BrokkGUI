@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.shape;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 
 public class Text extends GuiElement
@@ -28,7 +28,7 @@ public class Text extends GuiElement
         return "text";
     }
 
-    public BaseProperty<String> textProperty()
+    public Property<String> textProperty()
     {
         return textComponent.textProperty();
     }

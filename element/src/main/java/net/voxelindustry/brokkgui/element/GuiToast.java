@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.element;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.control.GuiFather;
@@ -11,15 +11,15 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 
 public class GuiToast extends GuiFather implements IGuiPopup
 {
-    private final BaseProperty<GuiElement> contentProperty;
-    private final BaseProperty<Long>       lifeTimeProperty;
-    private final BaseProperty<Long>       currentTimeProperty;
+    private final Property<GuiElement> contentProperty;
+    private final Property<Long>       lifeTimeProperty;
+    private final Property<Long>       currentTimeProperty;
 
     private long millisStart;
 
     public GuiToast(GuiElement content, long lifeTime)
     {
-        contentProperty = new BaseProperty<>(null, "contentProperty");
+        contentProperty = new Property<>(null);
 
         contentProperty.addListener((obs, oldValue, newValue) ->
         {
@@ -36,15 +36,15 @@ public class GuiToast extends GuiFather implements IGuiPopup
             {
                 addChild(newValue);
                 RelativeBindingHelper.bindToPos(newValue.transform(), transform());
-                transform().widthProperty().bind(newValue.transform().widthProperty());
-                transform().heightProperty().bind(newValue.transform().heightProperty());
+                transform().widthProperty().bindProperty(newValue.transform().widthProperty());
+                transform().heightProperty().bindProperty(newValue.transform().heightProperty());
             }
         });
 
         contentProperty.setValue(content);
 
-        lifeTimeProperty = new BaseProperty<>(lifeTime, "lifeTimeProperty");
-        currentTimeProperty = new BaseProperty<>(0L, "currentTimeProperty");
+        lifeTimeProperty = new Property<>(lifeTime);
+        currentTimeProperty = new Property<>(0L);
     }
 
     public GuiToast(long lifeTime)
@@ -71,17 +71,17 @@ public class GuiToast extends GuiFather implements IGuiPopup
         return "toast";
     }
 
-    public BaseProperty<GuiElement> getContentProperty()
+    public Property<GuiElement> getContentProperty()
     {
         return contentProperty;
     }
 
-    public BaseProperty<Long> getLifeTimeProperty()
+    public Property<Long> getLifeTimeProperty()
     {
         return lifeTimeProperty;
     }
 
-    public BaseProperty<Long> getCurrentTimeProperty()
+    public Property<Long> getCurrentTimeProperty()
     {
         return currentTimeProperty;
     }

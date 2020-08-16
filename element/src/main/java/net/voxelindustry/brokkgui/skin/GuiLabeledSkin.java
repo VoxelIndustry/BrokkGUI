@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.skin;
 
-import fr.ourten.teabeans.binding.BaseBinding;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.binding.Binding;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.component.GuiElement;
@@ -18,8 +18,8 @@ import net.voxelindustry.brokkgui.shape.TextComponent;
  */
 public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> extends GuiBehaviorSkinBase<C, B>
 {
-    private final BaseProperty<String> ellipsedTextProperty;
-    private       BaseBinding<RectBox> paddingBinding;
+    private final Property<String> ellipsedTextProperty;
+    private       Binding<RectBox> paddingBinding;
 
     public GuiLabeledSkin(C model, B behaviour)
     {
@@ -27,7 +27,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
 
         TextComponent text = model.textComponent();
 
-        ellipsedTextProperty = new BaseProperty<>("", "ellipsedTextProperty");
+        ellipsedTextProperty = new Property<>("");
 
         // Bindings
         //   bindEllipsed();
@@ -58,7 +58,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             bindText();
     }
 
-    public BaseProperty<String> getEllipsedTextProperty()
+    public Property<String> getEllipsedTextProperty()
     {
         return ellipsedTextProperty;
     }
@@ -73,7 +73,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         if (paddingBinding != null)
             paddingBinding.unbindAll();
 
-        paddingBinding = new BaseBinding<RectBox>()
+        paddingBinding = new Binding<RectBox>()
         {
             {
                 super.bind(getModel().getTextPaddingProperty());
@@ -86,7 +86,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             }
         };
 
-        getModel().textComponent().textPaddingProperty().bind(paddingBinding);
+        getModel().textComponent().textPaddingProperty().bindProperty(paddingBinding);
     }
 
     private void bindTextWithIcon(GuiElement icon)
@@ -94,7 +94,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         if (paddingBinding != null)
             paddingBinding.unbindAll();
 
-        paddingBinding = new BaseBinding<RectBox>()
+        paddingBinding = new Binding<RectBox>()
         {
             {
                 bind(
@@ -132,12 +132,12 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             }
         };
 
-        getModel().textComponent().textPaddingProperty().bind(paddingBinding);
+        getModel().textComponent().textPaddingProperty().bindProperty(paddingBinding);
     }
 
     private void bindEllipsed()
     {
-        ellipsedTextProperty.bind(new BaseBinding<String>()
+        ellipsedTextProperty.bindProperty(new Binding<String>()
         {
             {
                 super.bind(getModel().getTextProperty(),
@@ -201,7 +201,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
     {
         getModel().addChild(icon);
 
-        icon.transform().xPosProperty().bind(new BaseBinding<Float>()
+        icon.transform().xPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(getModel().getIconSideProperty(),
@@ -229,7 +229,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             }
         });
 
-        icon.transform().yPosProperty().bind(new BaseBinding<Float>()
+        icon.transform().yPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(getModel().getIconSideProperty(),

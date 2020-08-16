@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.selector.structural;
 
-import fr.ourten.teabeans.value.BaseListProperty;
+import fr.ourten.teabeans.property.ListProperty;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class StructuralSelectors
         if (style.transform().parentProperty().isPresent())
             return false;
 
-        BaseListProperty<Transform> children = style.transform().parent().childrenProperty();
+        ListProperty<Transform> children = style.transform().parent().childrenProperty();
         if (children.size() == 1)
             return true;
 
@@ -52,7 +52,7 @@ public class StructuralSelectors
         if (style.transform().parentProperty().isPresent())
             return false;
 
-        BaseListProperty<Transform> children = style.transform().parent().childrenProperty();
+        ListProperty<Transform> children = style.transform().parent().childrenProperty();
         if (children.size() == 1)
             return true;
 

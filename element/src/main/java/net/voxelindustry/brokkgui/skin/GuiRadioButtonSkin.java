@@ -1,38 +1,37 @@
 package net.voxelindustry.brokkgui.skin;
 
-import fr.ourten.teabeans.binding.BaseBinding;
-import fr.ourten.teabeans.binding.BaseExpression;
-import net.voxelindustry.brokkgui.behavior.GuiButtonBehavior;
+import fr.ourten.teabeans.binding.Binding;
+import fr.ourten.teabeans.binding.Expression;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.element.input.GuiRadioButton;
 
 public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonBehavior<GuiRadioButton>>
 {
-    public GuiRadioButtonSkin(final GuiRadioButton model, final GuiButtonBehavior<GuiRadioButton> behaviour)
+    public GuiRadioButtonSkin(GuiRadioButton model, GuiButtonBehavior<GuiRadioButton> behaviour)
     {
         super(model, behaviour);
 
-        this.getModel().getButtonNodeProperty().addListener((obs, oldValue, newValue) ->
+        getModel().getButtonNodeProperty().addListener((obs, oldValue, newValue) ->
         {
             if (oldValue != null)
             {
-                this.getModel().removeChild(oldValue);
+                getModel().removeChild(oldValue);
                 oldValue.transform().xPosProperty().unbind();
                 oldValue.transform().yPosProperty().unbind();
             }
             if (newValue != null)
-                this.bindButton(newValue);
+                bindButton(newValue);
         });
 
-        this.bindButton(this.getModel().getButtonNode());
+        bindButton(getModel().getButtonNode());
     }
 
     private void bindButton(GuiElement node)
     {
-        this.getModel().addChild(node);
+        getModel().addChild(node);
 
-        node.transform().xPosProperty().bind(new BaseBinding<Float>()
+        node.transform().xPosProperty().bind(new Binding<Float>()
         {
             {
                 super.bind(getModel().getButtonSideProperty(),
@@ -55,7 +54,7 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             }
         });
 
-        node.transform().yPosProperty().bind(new BaseBinding<Float>()
+        node.transform().yPosProperty().bind(new Binding<Float>()
         {
             {
                 super.bind(getModel().getButtonSideProperty(),
@@ -86,7 +85,7 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
         else
         {
             getModel().getLabel().setExpandToText(true);
-            transform().widthProperty().bind(BaseExpression.biCombine(
+            transform().widthProperty().bind(Expression.biCombine(
                     getModel().getButtonNode().transform().widthProperty(),
                     getModel().getLabel().transform().widthProperty(),
                     Float::sum));
@@ -94,7 +93,7 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
 
         getModel().getLabel().transform().heightProperty().bind(transform().heightProperty());
 
-        getModel().getLabel().transform().xPosProperty().bind(new BaseBinding<Float>()
+        getModel().getLabel().transform().xPosProperty().bind(new Binding<Float>()
         {
             {
                 super.bind(getModel().getButtonSideProperty(),
@@ -117,7 +116,7 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
             }
         });
 
-        getModel().getLabel().transform().yPosProperty().bind(new BaseBinding<Float>()
+        getModel().getLabel().transform().yPosProperty().bind(new Binding<Float>()
         {
             {
                 super.bind(getModel().getButtonSideProperty(),
@@ -144,7 +143,7 @@ public class GuiRadioButtonSkin extends GuiButtonSkin<GuiRadioButton, GuiButtonB
         {
             getModel().getLabel().transform().widthProperty().unbind();
             getModel().getLabel().setExpandToText(true);
-            transform().widthProperty().bind(BaseExpression.biCombine(
+            transform().widthProperty().bind(Expression.biCombine(
                     getModel().getButtonNode().transform().widthProperty(),
                     getModel().getLabel().transform().widthProperty(),
                     Float::sum));

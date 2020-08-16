@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.data;
 
-import fr.ourten.teabeans.binding.BaseExpression;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.binding.Expression;
+import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 
@@ -20,12 +20,12 @@ public class RectArea
         RectArea rectArea = new RectArea();
         rectArea.transform = transform;
 
-        rectArea.startX = BaseExpression.biCombine(transform.xPosProperty(), transform.xTranslateProperty(), Float::sum);
-        rectArea.startY = BaseExpression.biCombine(transform.yPosProperty(), transform.yTranslateProperty(), Float::sum);
+        rectArea.startX = Expression.biCombine(transform.xPosProperty(), transform.xTranslateProperty(), Float::sum);
+        rectArea.startY = Expression.biCombine(transform.yPosProperty(), transform.yTranslateProperty(), Float::sum);
 
-        rectArea.endX = BaseExpression.biCombine(rectArea.startX, transform.widthProperty(),
+        rectArea.endX = Expression.biCombine(rectArea.startX, transform.widthProperty(),
                 (startX, width) -> startX + width * widthFrac);
-        rectArea.endY = BaseExpression.biCombine(rectArea.startY, transform.heightProperty(),
+        rectArea.endY = Expression.biCombine(rectArea.startY, transform.heightProperty(),
                 (startY, height) -> startY + height * heightFrac);
 
         return rectArea;
@@ -35,10 +35,10 @@ public class RectArea
     {
         RectArea rectArea = new RectArea();
 
-        rectArea.startX = new BaseProperty<>(startX, "startXProperty");
-        rectArea.startY = new BaseProperty<>(startY, "startYProperty");
-        rectArea.endX = new BaseProperty<>(endX, "endXProperty");
-        rectArea.endY = new BaseProperty<>(endY, "endYProperty");
+        rectArea.startX = new Property<>(startX);
+        rectArea.startY = new Property<>(startY);
+        rectArea.endX = new Property<>(endX);
+        rectArea.endY = new Property<>(endY);
 
         return rectArea;
     }
@@ -48,11 +48,11 @@ public class RectArea
         if (transform == null)
             return;
 
-        ((BaseExpression<Float>) startX).unbind(transform.xPosProperty(), transform.xTranslateProperty());
-        ((BaseExpression<Float>) startY).unbind(transform.yPosProperty(), transform.yTranslateProperty());
+        ((Expression<Float>) startX).unbind(transform.xPosProperty(), transform.xTranslateProperty());
+        ((Expression<Float>) startY).unbind(transform.yPosProperty(), transform.yTranslateProperty());
 
-        ((BaseExpression<Float>) endX).unbind(startX, transform.widthProperty());
-        ((BaseExpression<Float>) endY).unbind(startY, transform.heightProperty());
+        ((Expression<Float>) endX).unbind(startX, transform.widthProperty());
+        ((Expression<Float>) endY).unbind(startY, transform.heightProperty());
     }
 
     public boolean isPointInside(float x, float y)

@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.style;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.named.NamedProperty;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 
-public class StyleProperty<T> extends BaseProperty<T>
+public class StyleProperty<T> extends NamedProperty<T>
 {
     private final Class<T>    valueClass;
     private       int         specificitySet;
@@ -15,17 +15,17 @@ public class StyleProperty<T> extends BaseProperty<T>
         super(defaultValue, name);
 
         this.valueClass = valueClass;
-        this.source = StyleSource.USER_AGENT;
-        this.specificitySet = 0;
+        source = StyleSource.USER_AGENT;
+        specificitySet = 0;
         this.defaultValue = defaultValue;
     }
 
     public boolean setStyleRaw(StyleSource source, int specificity, String rawValue)
     {
         if (source.ordinal() > this.source.ordinal() ||
-                (source.ordinal() == this.source.ordinal() && specificity >= this.specificitySet))
+                (source.ordinal() == this.source.ordinal() && specificity >= specificitySet))
         {
-            this.internalSetStyle(source, specificity, StyleTranslator.getInstance().decode(rawValue, this.getValueClass()));
+            internalSetStyle(source, specificity, StyleTranslator.getInstance().decode(rawValue, getValueClass()));
             return true;
         }
         return false;
@@ -34,7 +34,7 @@ public class StyleProperty<T> extends BaseProperty<T>
     public boolean setStyle(StyleSource source, int specificity, T value)
     {
         if (source.ordinal() > this.source.ordinal() ||
-                (source.ordinal() == this.source.ordinal() && specificity >= this.specificitySet))
+                (source.ordinal() == this.source.ordinal() && specificity >= specificitySet))
         {
             internalSetStyle(source, specificity, value);
             return true;
@@ -45,21 +45,21 @@ public class StyleProperty<T> extends BaseProperty<T>
     protected void internalSetStyle(StyleSource source, int specificity, T value)
     {
         this.source = source;
-        this.specificitySet = specificity;
+        specificitySet = specificity;
         super.setValue(value);
     }
 
     @Override
     public void setValue(T value)
     {
-        this.source = StyleSource.CODE;
-        this.specificitySet = 10_000;
+        source = StyleSource.CODE;
+        specificitySet = 10_000;
         super.setValue(value);
     }
 
     public void setToDefault()
     {
-        this.internalSetStyle(StyleSource.USER_AGENT, 0, defaultValue);
+        internalSetStyle(StyleSource.USER_AGENT, 0, defaultValue);
     }
 
     public Class<T> getValueClass()

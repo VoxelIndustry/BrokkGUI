@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.element;
 
-import fr.ourten.teabeans.binding.BaseBinding;
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.binding.Binding;
+import fr.ourten.teabeans.property.ListProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.behavior.GuiListViewBehavior;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiScrollableBase;
@@ -17,36 +17,36 @@ import java.util.function.Function;
 
 public class GuiListView<T> extends GuiScrollableBase
 {
-    private final BaseProperty<Boolean> editableProperty;
+    private final Property<Boolean> editableProperty;
 
-    private final BaseListProperty<T>      elementsProperty;
-    private final BaseProperty<GuiElement> placeholderProperty;
-    private final BaseProperty<RectAxis>   orientationProperty;
+    private final ListProperty<T>      elementsProperty;
+    private final Property<GuiElement> placeholderProperty;
+    private final Property<RectAxis>   orientationProperty;
 
-    private final BaseProperty<Function<T, GuiListCell<T>>> cellFactoryProperty;
+    private final Property<Function<T, GuiListCell<T>>> cellFactoryProperty;
 
-    private final BaseProperty<Float> cellWidthProperty, cellHeightProperty;
-    private final BaseProperty<Float> cellXPaddingProperty, cellYPaddingProperty;
+    private final Property<Float> cellWidthProperty, cellHeightProperty;
+    private final Property<Float> cellXPaddingProperty, cellYPaddingProperty;
 
-    private final BaseProperty<Integer> selectedCellIndexProperty;
+    private final Property<Integer> selectedCellIndexProperty;
 
     public GuiListView(List<T> elements)
     {
-        elementsProperty = new BaseListProperty<>(elements, "elementsListProperty");
+        elementsProperty = new ListProperty<>(elements);
 
-        editableProperty = new BaseProperty<>(false, "editableProperty");
-        placeholderProperty = new BaseProperty<>(null, "placeholderProperty");
-        orientationProperty = new BaseProperty<>(RectAxis.VERTICAL, "orientationProperty");
+        editableProperty = new Property<>(false);
+        placeholderProperty = new Property<>(null);
+        orientationProperty = new Property<>(RectAxis.VERTICAL);
 
-        cellFactoryProperty = new BaseProperty<>(null, "cellFactoryProperty");
+        cellFactoryProperty = new Property<>(null);
 
-        cellWidthProperty = new BaseProperty<>(100f, "cellWidthProperty");
-        cellHeightProperty = new BaseProperty<>(20f, "cellHeightProperty");
+        cellWidthProperty = new Property<>(100F);
+        cellHeightProperty = new Property<>(20F);
 
-        cellXPaddingProperty = new BaseProperty<>(0f, "cellXPaddingProperty");
-        cellYPaddingProperty = new BaseProperty<>(0f, "cellYPaddingProperty");
+        cellXPaddingProperty = new Property<>(0F);
+        cellYPaddingProperty = new Property<>(0F);
 
-        selectedCellIndexProperty = new BaseProperty<>(-1, "selectedCellIndexProperty");
+        selectedCellIndexProperty = new Property<>(-1);
 
         transform().childrenProperty().addListener(obs ->
         {
@@ -59,7 +59,7 @@ public class GuiListView<T> extends GuiScrollableBase
                 getPlaceholder().setVisible(false);
         });
 
-        getTrueWidthProperty().bind(new BaseBinding<Float>()
+        getTrueWidthProperty().bindProperty(new Binding<Float>()
         {
             {
                 bind(orientationProperty, cellWidthProperty, cellXPaddingProperty, elementsProperty);
@@ -74,7 +74,7 @@ public class GuiListView<T> extends GuiScrollableBase
             }
         });
 
-        getTrueHeightProperty().bind(new BaseBinding<Float>()
+        getTrueHeightProperty().bindProperty(new Binding<Float>()
         {
             {
                 bind(orientationProperty, cellHeightProperty, cellYPaddingProperty, elementsProperty);
@@ -107,52 +107,52 @@ public class GuiListView<T> extends GuiScrollableBase
         return new GuiListViewSkin<>(this, new GuiListViewBehavior<>(this, transform()::childrenProperty));
     }
 
-    public BaseListProperty<T> getElementsProperty()
+    public ListProperty<T> getElementsProperty()
     {
         return elementsProperty;
     }
 
-    public BaseProperty<Boolean> getEditableProperty()
+    public Property<Boolean> getEditableProperty()
     {
         return editableProperty;
     }
 
-    public BaseProperty<GuiElement> getPlaceholderProperty()
+    public Property<GuiElement> getPlaceholderProperty()
     {
         return placeholderProperty;
     }
 
-    public BaseProperty<RectAxis> getOrientationProperty()
+    public Property<RectAxis> getOrientationProperty()
     {
         return orientationProperty;
     }
 
-    public BaseProperty<Function<T, GuiListCell<T>>> getCellFactoryProperty()
+    public Property<Function<T, GuiListCell<T>>> getCellFactoryProperty()
     {
         return cellFactoryProperty;
     }
 
-    public BaseProperty<Float> getCellWidthProperty()
+    public Property<Float> getCellWidthProperty()
     {
         return cellWidthProperty;
     }
 
-    public BaseProperty<Float> getCellHeightProperty()
+    public Property<Float> getCellHeightProperty()
     {
         return cellHeightProperty;
     }
 
-    public BaseProperty<Integer> getSelectedCellIndexProperty()
+    public Property<Integer> getSelectedCellIndexProperty()
     {
         return selectedCellIndexProperty;
     }
 
-    public BaseProperty<Float> getCellXPaddingProperty()
+    public Property<Float> getCellXPaddingProperty()
     {
         return cellXPaddingProperty;
     }
 
-    public BaseProperty<Float> getCellYPaddingProperty()
+    public Property<Float> getCellYPaddingProperty()
     {
         return cellYPaddingProperty;
     }

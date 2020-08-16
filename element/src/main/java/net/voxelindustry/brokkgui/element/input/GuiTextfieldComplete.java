@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.element.input;
 
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.ListProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldCompleteBehavior;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 import net.voxelindustry.brokkgui.skin.GuiTextfieldCompleteSkin;
@@ -11,23 +11,23 @@ import java.util.List;
 
 public class GuiTextfieldComplete extends GuiTextfield
 {
-    private final BaseListProperty<String> suggestionsProperty;
-    private final BaseProperty<Float>      cellHeightProperty;
-    private final BaseProperty<Integer>    maxSuggestionProperty;
-    private final BaseProperty<Integer>    charBeforeCompletionProperty;
-    private final BaseProperty<Float>      completePopupWidthProperty;
+    private final ListProperty<String> suggestionsProperty;
+    private final Property<Float>      cellHeightProperty;
+    private final Property<Integer>    maxSuggestionProperty;
+    private final Property<Integer>    charBeforeCompletionProperty;
+    private final Property<Float>      completePopupWidthProperty;
 
     public GuiTextfieldComplete(String text)
     {
         super(text);
 
-        suggestionsProperty = new BaseListProperty<>(null, "suggestionsListProperty");
-        cellHeightProperty = new BaseProperty<>(16f, "cellHeightProperty");
-        maxSuggestionProperty = new BaseProperty<>(4, "maxSuggestionProperty");
-        charBeforeCompletionProperty = new BaseProperty<>(3, "charBeforeCompletionProperty");
-        completePopupWidthProperty = new BaseProperty<>(0f, "completePopupWidthProperty");
+        suggestionsProperty = new ListProperty<>(null);
+        cellHeightProperty = new Property<>(16F);
+        maxSuggestionProperty = new Property<>(4);
+        charBeforeCompletionProperty = new Property<>(3);
+        completePopupWidthProperty = new Property<>(0F);
 
-        completePopupWidthProperty.bind(transform().widthProperty());
+        completePopupWidthProperty.bindProperty(transform().widthProperty());
     }
 
     public GuiTextfieldComplete()
@@ -41,27 +41,27 @@ public class GuiTextfieldComplete extends GuiTextfield
         return new GuiTextfieldCompleteSkin<>(this, new GuiTextfieldCompleteBehavior<>(this));
     }
 
-    public BaseListProperty<String> getSuggestionsProperty()
+    public ListProperty<String> getSuggestionsProperty()
     {
         return suggestionsProperty;
     }
 
-    public BaseProperty<Float> getCellHeightProperty()
+    public Property<Float> getCellHeightProperty()
     {
         return cellHeightProperty;
     }
 
-    public BaseProperty<Integer> getMaxSuggestionProperty()
+    public Property<Integer> getMaxSuggestionProperty()
     {
         return maxSuggestionProperty;
     }
 
-    public BaseProperty<Integer> getCharBeforeCompletionProperty()
+    public Property<Integer> getCharBeforeCompletionProperty()
     {
         return charBeforeCompletionProperty;
     }
 
-    public BaseProperty<Float> getCompletePopupWidthProperty()
+    public Property<Float> getCompletePopupWidthProperty()
     {
         return completePopupWidthProperty;
     }
@@ -135,7 +135,7 @@ public class GuiTextfieldComplete extends GuiTextfield
             getCompletePopupWidthProperty().unbind();
         else if (completePopupWidth == -1)
         {
-            getCompletePopupWidthProperty().bind(transform().widthProperty());
+            getCompletePopupWidthProperty().bindProperty(transform().widthProperty());
             return;
         }
         getCompletePopupWidthProperty().setValue(completePopupWidth);

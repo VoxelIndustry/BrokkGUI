@@ -1,15 +1,15 @@
 package net.voxelindustry.brokkgui.behavior;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 
 public interface IGuiBehavable<B extends GuiBehaviorBase<?>>
 {
     default B getBehaviour()
     {
-        return this.getBehaviourProperty().getValue();
+        return getBehaviourProperty().getValue();
     }
 
-    BaseProperty<B> getBehaviourProperty();
+    Property<B> getBehaviourProperty();
 
     void setBehaviour(B value);
 }

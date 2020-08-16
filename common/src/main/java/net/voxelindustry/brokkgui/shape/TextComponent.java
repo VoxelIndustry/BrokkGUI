@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.shape;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
@@ -14,33 +14,33 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 
 public class TextComponent extends GuiComponent implements RenderComponent
 {
-    private final BaseProperty<String>  textProperty;
-    private final BaseProperty<String>  renderTextProperty;
-    private final BaseProperty<Integer> lineSpacingProperty;
+    private final Property<String>  textProperty;
+    private final Property<String>  renderTextProperty;
+    private final Property<Integer> lineSpacingProperty;
 
-    private final BaseProperty<RectBox>       textPaddingProperty;
-    private final BaseProperty<RectAlignment> textAlignmentProperty;
+    private final Property<RectBox>       textPaddingProperty;
+    private final Property<RectAlignment> textAlignmentProperty;
 
-    private final BaseProperty<Boolean> multilineProperty;
+    private final Property<Boolean> multilineProperty;
 
-    protected BaseProperty<Color>   shadowColorProperty;
-    protected BaseProperty<Boolean> useShadowProperty;
-    protected BaseProperty<Color>   colorProperty;
+    protected Property<Color>   shadowColorProperty;
+    protected Property<Boolean> useShadowProperty;
+    protected Property<Color>   colorProperty;
 
     private final ObservableValue<Float> lazyTextWidth;
     private final ObservableValue<Float> lazyTextHeight;
 
     public TextComponent()
     {
-        textProperty = new BaseProperty<>("", "textProperty");
-        renderTextProperty = new BaseProperty<>("", "renderTextProperty");
-        lineSpacingProperty = new BaseProperty<>(1, "lineSpacingProperty");
-        textPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "textPaddingProperty");
-        textAlignmentProperty = new BaseProperty<>(RectAlignment.MIDDLE_CENTER, "textAlignmentProperty");
+        textProperty = new Property<>("");
+        renderTextProperty = new Property<>("");
+        lineSpacingProperty = new Property<>(1);
+        textPaddingProperty = new Property<>(RectBox.EMPTY);
+        textAlignmentProperty = new Property<>(RectAlignment.MIDDLE_CENTER);
 
-        multilineProperty = new BaseProperty<>(false, "multilineProperty");
+        multilineProperty = new Property<>(false);
 
-        renderTextProperty.bind(textProperty);
+        renderTextProperty.bindProperty(textProperty);
 
         lazyTextWidth = renderTextProperty.combine(multilineProperty, (renderText, multiline) ->
         {
@@ -103,53 +103,53 @@ public class TextComponent extends GuiComponent implements RenderComponent
     // PROPERTIES //
     ////////////////
 
-    public BaseProperty<Color> shadowColorProperty()
+    public Property<Color> shadowColorProperty()
     {
         if (shadowColorProperty == null)
-            shadowColorProperty = new BaseProperty<>(Color.WHITE, "shadowColorProperty");
+            shadowColorProperty = new Property<>(Color.WHITE);
         return shadowColorProperty;
     }
 
-    public BaseProperty<Boolean> useShadowProperty()
+    public Property<Boolean> useShadowProperty()
     {
         if (useShadowProperty == null)
-            useShadowProperty = new BaseProperty<>(false, "useShadowProperty");
+            useShadowProperty = new Property<>(false);
         return useShadowProperty;
     }
 
-    public BaseProperty<Color> colorProperty()
+    public Property<Color> colorProperty()
     {
         if (colorProperty == null)
-            colorProperty = new BaseProperty<>(Color.BLACK, "colorProperty");
+            colorProperty = new Property<>(Color.BLACK);
         return colorProperty;
     }
 
-    public BaseProperty<String> textProperty()
+    public Property<String> textProperty()
     {
         return textProperty;
     }
 
-    public BaseProperty<String> renderTextProperty()
+    public Property<String> renderTextProperty()
     {
         return renderTextProperty;
     }
 
-    public BaseProperty<Integer> lineSpacingProperty()
+    public Property<Integer> lineSpacingProperty()
     {
         return lineSpacingProperty;
     }
 
-    public BaseProperty<RectBox> textPaddingProperty()
+    public Property<RectBox> textPaddingProperty()
     {
         return textPaddingProperty;
     }
 
-    public BaseProperty<RectAlignment> textAlignmentProperty()
+    public Property<RectAlignment> textAlignmentProperty()
     {
         return textAlignmentProperty;
     }
 
-    public BaseProperty<Boolean> multilineProperty()
+    public Property<Boolean> multilineProperty()
     {
         return multilineProperty;
     }

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.component.impl;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.paint.Color;
@@ -36,7 +36,7 @@ public class TextComponentStyle extends TextComponent
     ////////////////
 
     @Override
-    public BaseProperty<Color> shadowColorProperty()
+    public Property<Color> shadowColorProperty()
     {
         if (shadowColorProperty == null)
             shadowColorProperty = style().getOrCreateProperty("shadow-color", Color.class);
@@ -44,7 +44,7 @@ public class TextComponentStyle extends TextComponent
     }
 
     @Override
-    public BaseProperty<Boolean> useShadowProperty()
+    public Property<Boolean> useShadowProperty()
     {
         if (useShadowProperty == null)
             useShadowProperty = style().getOrCreateProperty("shadow", Boolean.class);
@@ -52,7 +52,7 @@ public class TextComponentStyle extends TextComponent
     }
 
     @Override
-    public BaseProperty<Color> colorProperty()
+    public Property<Color> colorProperty()
     {
         if (colorProperty == null)
             colorProperty = style().getOrCreateProperty("color", Color.class);

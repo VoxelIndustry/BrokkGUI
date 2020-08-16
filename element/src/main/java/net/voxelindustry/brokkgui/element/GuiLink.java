@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.element;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.behavior.GuiLinkBehavior;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
@@ -12,12 +12,12 @@ import net.voxelindustry.brokkgui.skin.GuiSkinBase;
  */
 public class GuiLink extends GuiLabeled
 {
-    private final BaseProperty<String> urlProperty;
+    private final Property<String> urlProperty;
 
     public GuiLink(String url, String text, GuiElement icon)
     {
         super(text, icon);
-        urlProperty = new BaseProperty<>(url, "urlProperty");
+        urlProperty = new Property<>(url);
     }
 
     public GuiLink(String url, String text)
@@ -47,7 +47,7 @@ public class GuiLink extends GuiLabeled
         return new GuiLabeledSkin<>(this, new GuiLinkBehavior(this));
     }
 
-    public BaseProperty<String> getUrlProperty()
+    public Property<String> getUrlProperty()
     {
         return urlProperty;
     }

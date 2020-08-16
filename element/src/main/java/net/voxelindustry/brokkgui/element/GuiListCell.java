@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.element;
 
-import fr.ourten.teabeans.binding.BaseBinding;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.binding.Binding;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiSkinedElement;
 import net.voxelindustry.brokkgui.data.RectAxis;
@@ -13,20 +13,20 @@ public class GuiListCell<T> extends GuiSkinedElement
 {
     private final GuiListView<T> listView;
 
-    private final BaseProperty<T>          itemProperty;
-    private final BaseProperty<GuiElement> graphicProperty;
+    private final Property<T>          itemProperty;
+    private final Property<GuiElement> graphicProperty;
 
     public GuiListCell(GuiListView<T> listView, T item)
     {
         this.listView = listView;
 
-        itemProperty = new BaseProperty<>(item, "itemProperty");
-        graphicProperty = new BaseProperty<>(null, "graphicProperty");
+        itemProperty = new Property<>(item);
+        graphicProperty = new Property<>(null);
 
-        transform().widthProperty().bind(listView.getCellWidthProperty());
-        transform().heightProperty().bind(listView.getCellHeightProperty());
+        transform().widthProperty().bindProperty(listView.getCellWidthProperty());
+        transform().heightProperty().bindProperty(listView.getCellHeightProperty());
 
-        transform().xPosProperty().bind(new BaseBinding<Float>()
+        transform().xPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(listView.transform().xPosProperty(), transform().widthProperty(),
@@ -47,7 +47,7 @@ public class GuiListCell<T> extends GuiSkinedElement
             }
         });
 
-        transform().yPosProperty().bind(new BaseBinding<Float>()
+        transform().yPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(listView.transform().yPosProperty(), transform().heightProperty(),
@@ -79,12 +79,12 @@ public class GuiListCell<T> extends GuiSkinedElement
         return new GuiListCellSkin<>(this);
     }
 
-    public BaseProperty<T> getItemProperty()
+    public Property<T> getItemProperty()
     {
         return itemProperty;
     }
 
-    public BaseProperty<GuiElement> getGraphicProperty()
+    public Property<GuiElement> getGraphicProperty()
     {
         return graphicProperty;
     }
@@ -118,8 +118,8 @@ public class GuiListCell<T> extends GuiSkinedElement
             addChild(getGraphic());
 
             RelativeBindingHelper.bindToPos(getGraphic().transform(), transform());
-            getGraphic().transform().widthProperty().bind(transform().widthProperty());
-            getGraphic().transform().heightProperty().bind(transform().heightProperty());
+            getGraphic().transform().widthProperty().bindProperty(transform().widthProperty());
+            getGraphic().transform().heightProperty().bindProperty(transform().heightProperty());
         }
     }
 

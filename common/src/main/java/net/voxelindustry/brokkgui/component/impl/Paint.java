@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.component.impl;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.border.ColorBorderDrawer;
 import net.voxelindustry.brokkgui.border.ImageBorderDrawer;
 import net.voxelindustry.brokkgui.component.GuiComponent;
@@ -25,42 +25,42 @@ public class Paint extends GuiComponent implements RenderComponent
 {
     private ShapeDefinition shape;
 
-    protected BaseProperty<Texture> backgroundTextureProperty;
-    protected BaseProperty<Color>   backgroundColorProperty;
+    protected Property<Texture> backgroundTextureProperty;
+    protected Property<Color>   backgroundColorProperty;
 
-    protected BaseProperty<SpriteRepeat> backgroundRepeatProperty;
-    protected BaseProperty<Resource>     backgroundAnimationProperty;
-    protected BaseProperty<RectBox>      backgroundPositionProperty;
+    protected Property<SpriteRepeat> backgroundRepeatProperty;
+    protected Property<Resource>     backgroundAnimationProperty;
+    protected Property<RectBox>      backgroundPositionProperty;
 
-    protected BaseProperty<RandomSpriteRotation> backgroundRotationProperty;
+    protected Property<RandomSpriteRotation> backgroundRotationProperty;
 
-    protected BaseProperty<Texture> foregroundTextureProperty;
-    protected BaseProperty<Color>   foregroundColorProperty;
+    protected Property<Texture> foregroundTextureProperty;
+    protected Property<Color>   foregroundColorProperty;
 
-    protected BaseProperty<SpriteRepeat> foregroundRepeatProperty;
-    protected BaseProperty<Resource>     foregroundAnimationProperty;
-    protected BaseProperty<RectBox>      foregroundPositionProperty;
+    protected Property<SpriteRepeat> foregroundRepeatProperty;
+    protected Property<Resource>     foregroundAnimationProperty;
+    protected Property<RectBox>      foregroundPositionProperty;
 
-    protected BaseProperty<RandomSpriteRotation> foregroundRotationProperty;
+    protected Property<RandomSpriteRotation> foregroundRotationProperty;
 
-    protected BaseProperty<Color> borderColorProperty;
+    protected Property<Color> borderColorProperty;
 
-    protected BaseProperty<Float> borderWidthLeftProperty;
-    protected BaseProperty<Float> borderWidthRightProperty;
-    protected BaseProperty<Float> borderWidthTopProperty;
-    protected BaseProperty<Float> borderWidthBottomProperty;
+    protected Property<Float> borderWidthLeftProperty;
+    protected Property<Float> borderWidthRightProperty;
+    protected Property<Float> borderWidthTopProperty;
+    protected Property<Float> borderWidthBottomProperty;
 
-    protected BaseProperty<Integer> borderRadiusTopLeftProperty;
-    protected BaseProperty<Integer> borderRadiusTopRightProperty;
-    protected BaseProperty<Integer> borderRadiusBottomLeftProperty;
-    protected BaseProperty<Integer> borderRadiusBottomRightProperty;
+    protected Property<Integer> borderRadiusTopLeftProperty;
+    protected Property<Integer> borderRadiusTopRightProperty;
+    protected Property<Integer> borderRadiusBottomLeftProperty;
+    protected Property<Integer> borderRadiusBottomRightProperty;
 
-    protected BaseProperty<Texture> borderImageProperty;
-    protected BaseProperty<RectBox> borderImageSliceProperty;
-    protected BaseProperty<RectBox> borderImageWidthProperty;
-    protected BaseProperty<RectBox> borderImageOutsetProperty;
+    protected Property<Texture> borderImageProperty;
+    protected Property<RectBox> borderImageSliceProperty;
+    protected Property<RectBox> borderImageWidthProperty;
+    protected Property<RectBox> borderImageOutsetProperty;
 
-    protected BaseProperty<Boolean> borderImageFillProperty;
+    protected Property<Boolean> borderImageFillProperty;
 
     private SpriteAnimationInstance backgroundAnimation;
     private SpriteAnimationInstance foregroundAnimation;
@@ -170,188 +170,185 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderImageProperty != null;
     }
 
-    public BaseProperty<Texture> backgroundTextureProperty()
+    public Property<Texture> backgroundTextureProperty()
     {
         if (backgroundTextureProperty == null)
-            backgroundTextureProperty = new BaseProperty<>(Texture.EMPTY, "backgroundTextureProperty");
+            backgroundTextureProperty = new Property<>(Texture.EMPTY);
         return backgroundTextureProperty;
     }
 
-    public BaseProperty<SpriteRepeat> backgroundRepeatProperty()
+    public Property<SpriteRepeat> backgroundRepeatProperty()
     {
         if (backgroundRepeatProperty == null)
-            backgroundRepeatProperty = new BaseProperty<>(SpriteRepeat.NONE, "backgroundRepeatProperty");
+            backgroundRepeatProperty = new Property<>(SpriteRepeat.NONE);
         return backgroundRepeatProperty;
     }
 
-    public BaseProperty<Resource> backgroundAnimationResourceProperty()
+    public Property<Resource> backgroundAnimationResourceProperty()
     {
         if (backgroundAnimationProperty == null)
-            backgroundAnimationProperty = new BaseProperty<>(null, "backgroundAnimationProperty");
+            backgroundAnimationProperty = new Property<>(null);
         return backgroundAnimationProperty;
     }
 
-    public BaseProperty<RectBox> backgroundPositionProperty()
+    public Property<RectBox> backgroundPositionProperty()
     {
         if (backgroundPositionProperty == null)
-            backgroundPositionProperty = new BaseProperty<>(RectBox.EMPTY, "backgroundPositionProperty");
+            backgroundPositionProperty = new Property<>(RectBox.EMPTY);
         return backgroundPositionProperty;
     }
 
-    public BaseProperty<RandomSpriteRotation> backgroundRandomRotationProperty()
+    public Property<RandomSpriteRotation> backgroundRandomRotationProperty()
     {
         if (backgroundRotationProperty == null)
-            backgroundRotationProperty = new BaseProperty<>(null, "backgroundRotationProperty");
+            backgroundRotationProperty = new Property<>(null);
         return backgroundRotationProperty;
     }
 
-    public BaseProperty<Color> backgroundColorProperty()
+    public Property<Color> backgroundColorProperty()
     {
         if (backgroundColorProperty == null)
-            backgroundColorProperty = new BaseProperty<>(Color.ALPHA, "backgroundColorProperty");
+            backgroundColorProperty = new Property<>(Color.ALPHA);
         return backgroundColorProperty;
     }
 
-    public BaseProperty<Texture> foregroundTextureProperty()
+    public Property<Texture> foregroundTextureProperty()
     {
         if (foregroundTextureProperty == null)
-            foregroundTextureProperty = new BaseProperty<>(Texture.EMPTY, "foregroundTextureProperty");
+            foregroundTextureProperty = new Property<>(Texture.EMPTY);
         return foregroundTextureProperty;
     }
 
-    public BaseProperty<SpriteRepeat> foregroundRepeatProperty()
+    public Property<SpriteRepeat> foregroundRepeatProperty()
     {
         if (foregroundRepeatProperty == null)
-            foregroundRepeatProperty = new BaseProperty<>(SpriteRepeat.NONE, "foregroundRepeatProperty");
+            foregroundRepeatProperty = new Property<>(SpriteRepeat.NONE);
         return foregroundRepeatProperty;
     }
 
-    public BaseProperty<Resource> foregroundAnimationResourceProperty()
+    public Property<Resource> foregroundAnimationResourceProperty()
     {
         if (foregroundAnimationProperty == null)
-            foregroundAnimationProperty = new BaseProperty<>(null, "foregroundAnimationProperty");
+            foregroundAnimationProperty = new Property<>(null);
         return foregroundAnimationProperty;
     }
 
-    public BaseProperty<RectBox> foregroundPositionProperty()
+    public Property<RectBox> foregroundPositionProperty()
     {
         if (foregroundPositionProperty == null)
-            foregroundPositionProperty = new BaseProperty<>(RectBox.EMPTY, "foregroundPositionProperty");
+            foregroundPositionProperty = new Property<>(RectBox.EMPTY);
         return foregroundPositionProperty;
     }
 
-    public BaseProperty<RandomSpriteRotation> foregroundRandomRotationProperty()
+    public Property<RandomSpriteRotation> foregroundRandomRotationProperty()
     {
         if (foregroundRotationProperty == null)
-            foregroundRotationProperty = new BaseProperty<>(null, "foregroundRotationProperty");
+            foregroundRotationProperty = new Property<>(null);
         return foregroundRotationProperty;
     }
 
-    public BaseProperty<Color> foregroundColorProperty()
+    public Property<Color> foregroundColorProperty()
     {
         if (foregroundColorProperty == null)
-            foregroundColorProperty = new BaseProperty<>(Color.ALPHA, "foregroundColorProperty");
+            foregroundColorProperty = new Property<>(Color.ALPHA);
         return foregroundColorProperty;
     }
 
-    public BaseProperty<Color> borderColorProperty()
+    public Property<Color> borderColorProperty()
     {
         if (borderColorProperty == null)
-            borderColorProperty = new BaseProperty<>(Color.ALPHA, "borderColorProperty");
+            borderColorProperty = new Property<>(Color.ALPHA);
         return borderColorProperty;
     }
 
-    public BaseProperty<Float> borderWidthLeftProperty()
+    public Property<Float> borderWidthLeftProperty()
     {
         if (borderWidthLeftProperty == null)
-            borderWidthLeftProperty = new BaseProperty<>(1f, "borderWidthLeftProperty");
+            borderWidthLeftProperty = new Property<>(1F);
         return borderWidthLeftProperty;
     }
 
-    public BaseProperty<Float> borderWidthRightProperty()
+    public Property<Float> borderWidthRightProperty()
     {
         if (borderWidthRightProperty == null)
-            borderWidthRightProperty = new BaseProperty<>(1f, "borderWidthRightProperty");
+            borderWidthRightProperty = new Property<>(1F);
         return borderWidthRightProperty;
     }
 
-    public BaseProperty<Float> borderWidthTopProperty()
+    public Property<Float> borderWidthTopProperty()
     {
         if (borderWidthTopProperty == null)
-            borderWidthTopProperty = new BaseProperty<>(1f, "borderWidthTopProperty");
+            borderWidthTopProperty = new Property<>(1F);
         return borderWidthTopProperty;
     }
 
-    public BaseProperty<Float> borderWidthBottomProperty()
+    public Property<Float> borderWidthBottomProperty()
     {
         if (borderWidthBottomProperty == null)
-            borderWidthBottomProperty = new BaseProperty<>(1f, "borderWidthBottomProperty");
+            borderWidthBottomProperty = new Property<>(1F);
         return borderWidthBottomProperty;
     }
 
-    public BaseProperty<Integer> borderRadiusTopLeftProperty()
+    public Property<Integer> borderRadiusTopLeftProperty()
     {
         if (borderRadiusTopLeftProperty == null)
-            borderRadiusTopLeftProperty = new BaseProperty<>(0, "borderRadiusTopLeftProperty");
+            borderRadiusTopLeftProperty = new Property<>(0);
         return borderRadiusTopLeftProperty;
     }
 
-    public BaseProperty<Integer> borderRadiusTopRightProperty()
+    public Property<Integer> borderRadiusTopRightProperty()
     {
         if (borderRadiusTopRightProperty == null)
-            borderRadiusTopRightProperty = new BaseProperty<>(0, "borderRadiusTopRightProperty");
+            borderRadiusTopRightProperty = new Property<>(0);
         return borderRadiusTopRightProperty;
     }
 
-    public BaseProperty<Integer> borderRadiusBottomLeftProperty()
+    public Property<Integer> borderRadiusBottomLeftProperty()
     {
         if (borderRadiusBottomLeftProperty == null)
-            borderRadiusBottomLeftProperty = new BaseProperty<>(0, "borderRadiusBottomLeftProperty");
+            borderRadiusBottomLeftProperty = new Property<>(0);
         return borderRadiusBottomLeftProperty;
     }
 
-    public BaseProperty<Integer> borderRadiusBottomRightProperty()
+    public Property<Integer> borderRadiusBottomRightProperty()
     {
         if (borderRadiusBottomRightProperty == null)
-            borderRadiusBottomRightProperty = new BaseProperty<>(0, "borderRadiusBottomRightProperty");
+            borderRadiusBottomRightProperty = new Property<>(0);
         return borderRadiusBottomRightProperty;
     }
 
-    public BaseProperty<Texture> borderImageProperty()
+    public Property<Texture> borderImageProperty()
     {
         if (borderImageProperty == null)
-            borderImageProperty = new BaseProperty<>(Texture.EMPTY, "borderImageProperty");
+            borderImageProperty = new Property<>(Texture.EMPTY);
         return borderImageProperty;
     }
 
-    public BaseProperty<RectBox> borderImageSliceProperty()
+    public Property<RectBox> borderImageSliceProperty()
     {
         if (borderImageSliceProperty == null)
-            borderImageSliceProperty = new BaseProperty<>(RectBox.build().all(1).create(),
-                    "borderImageSliceProperty");
+            borderImageSliceProperty = new Property<>(RectBox.build().all(1).create());
         return borderImageSliceProperty;
     }
 
-    public BaseProperty<RectBox> borderImageWidthProperty()
+    public Property<RectBox> borderImageWidthProperty()
     {
         if (borderImageWidthProperty == null)
-            borderImageWidthProperty = new BaseProperty<>(RectBox.build().all(1).create(),
-                    "borderImageWidthProperty");
+            borderImageWidthProperty = new Property<>(RectBox.build().all(1).create());
         return borderImageWidthProperty;
     }
 
-    public BaseProperty<RectBox> borderImageOutsetProperty()
+    public Property<RectBox> borderImageOutsetProperty()
     {
         if (borderImageOutsetProperty == null)
-            borderImageOutsetProperty = new BaseProperty<>(RectBox.build().all(0).create(),
-                    "borderImageOutsetProperty");
+            borderImageOutsetProperty = new Property<>(RectBox.build().all(0).create());
         return borderImageOutsetProperty;
     }
 
-    public BaseProperty<Boolean> borderImageFillProperty()
+    public Property<Boolean> borderImageFillProperty()
     {
         if (borderImageFillProperty == null)
-            borderImageFillProperty = new BaseProperty<>(Boolean.FALSE, "borderImageFillProperty");
+            borderImageFillProperty = new Property<>(Boolean.FALSE);
         return borderImageFillProperty;
     }
 

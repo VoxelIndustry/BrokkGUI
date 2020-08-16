@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.window;
 
-import fr.ourten.teabeans.value.BaseProperty;
-import fr.ourten.teabeans.value.IProperty;
+import fr.ourten.teabeans.property.IProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
@@ -282,13 +282,13 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public BaseProperty<Float> getxRelativePosProperty()
+    public Property<Float> getxRelativePosProperty()
     {
         return first.getxRelativePosProperty();
     }
 
     @Override
-    public BaseProperty<Float> getyRelativePosProperty()
+    public Property<Float> getyRelativePosProperty()
     {
         return first.getyRelativePosProperty();
     }

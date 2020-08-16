@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.listener.ListValueChangeListener;
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.ListProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.data.Position;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
@@ -17,22 +17,22 @@ import java.util.stream.Stream;
 
 public class Transform extends GuiComponent
 {
-    private final BaseProperty<Float> xPosProperty;
-    private final BaseProperty<Float> yPosProperty;
-    private final BaseProperty<Float> xTranslateProperty;
-    private final BaseProperty<Float> yTranslateProperty;
-    private final BaseProperty<Float> widthProperty;
-    private final BaseProperty<Float> heightProperty;
-    private final BaseProperty<Float> widthRatioProperty;
-    private final BaseProperty<Float> heightRatioProperty;
-    private final BaseProperty<Float> zLevelProperty;
+    private final Property<Float> xPosProperty;
+    private final Property<Float> yPosProperty;
+    private final Property<Float> xTranslateProperty;
+    private final Property<Float> yTranslateProperty;
+    private final Property<Float> widthProperty;
+    private final Property<Float> heightProperty;
+    private final Property<Float> widthRatioProperty;
+    private final Property<Float> heightRatioProperty;
+    private final Property<Float> zLevelProperty;
 
-    private final BaseProperty<Rotation> rotationProperty;
+    private final Property<Rotation> rotationProperty;
 
-    private final BaseProperty<Scale> scaleProperty;
+    private final Property<Scale> scaleProperty;
 
-    private final BaseProperty<Transform>     parentProperty;
-    private final BaseListProperty<Transform> childrenListProperty;
+    private final Property<Transform>     parentProperty;
+    private final ListProperty<Transform> childrenListProperty;
 
     private MouseInBoundsChecker mouseInBoundsChecker;
 
@@ -42,25 +42,25 @@ public class Transform extends GuiComponent
 
     public Transform()
     {
-        xPosProperty = new BaseProperty<>(0f, "xPosProperty");
-        yPosProperty = new BaseProperty<>(0f, "yPosProperty");
+        xPosProperty = new Property<>(0F);
+        yPosProperty = new Property<>(0F);
 
-        xTranslateProperty = new BaseProperty<>(0f, "xTranslateProperty");
-        yTranslateProperty = new BaseProperty<>(0f, "yTranslateProperty");
+        xTranslateProperty = new Property<>(0F);
+        yTranslateProperty = new Property<>(0F);
 
-        widthProperty = new BaseProperty<>(0f, "widthProperty");
-        heightProperty = new BaseProperty<>(0f, "heightProperty");
+        widthProperty = new Property<>(0F);
+        heightProperty = new Property<>(0F);
 
-        widthRatioProperty = new BaseProperty<>(-1f, "widthRatioProperty");
-        heightRatioProperty = new BaseProperty<>(-1f, "heightRatioProperty");
+        widthRatioProperty = new Property<>(-1F);
+        heightRatioProperty = new Property<>(-1F);
 
-        zLevelProperty = new BaseProperty<>(0f, "zLevelProperty");
+        zLevelProperty = new Property<>(0F);
 
-        rotationProperty = new BaseProperty<>(Rotation.NONE, "rotationProperty");
-        scaleProperty = new BaseProperty<>(null, "scaleXProperty");
+        rotationProperty = new Property<>(Rotation.NONE);
+        scaleProperty = new Property<>(null);
 
-        parentProperty = new BaseProperty<>(null, "parentProperty");
-        childrenListProperty = new BaseListProperty<>(null, "childrenListProperty");
+        parentProperty = new Property<>(null);
+        childrenListProperty = new ListProperty<>(null);
 
         childrenListProperty.addListener((ListValueChangeListener<Transform>) (obs, oldValue, newValue) ->
         {
@@ -77,7 +77,7 @@ public class Transform extends GuiComponent
     // HIERARCHY //
     ///////////////
 
-    public BaseProperty<Transform> parentProperty()
+    public Property<Transform> parentProperty()
     {
         return parentProperty;
     }
@@ -123,7 +123,7 @@ public class Transform extends GuiComponent
         return childrenProperty().getValue();
     }
 
-    public BaseListProperty<Transform> childrenProperty()
+    public ListProperty<Transform> childrenProperty()
     {
         return childrenListProperty;
     }
@@ -204,7 +204,7 @@ public class Transform extends GuiComponent
         mouseInBoundsChecker = checker;
     }
 
-    public BaseProperty<Float> zLevelProperty()
+    public Property<Float> zLevelProperty()
     {
         return zLevelProperty;
     }
@@ -219,52 +219,52 @@ public class Transform extends GuiComponent
         zLevelProperty().setValue(zLevel);
     }
 
-    public BaseProperty<Float> xPosProperty()
+    public Property<Float> xPosProperty()
     {
         return xPosProperty;
     }
 
-    public BaseProperty<Float> yPosProperty()
+    public Property<Float> yPosProperty()
     {
         return yPosProperty;
     }
 
-    public BaseProperty<Float> xTranslateProperty()
+    public Property<Float> xTranslateProperty()
     {
         return xTranslateProperty;
     }
 
-    public BaseProperty<Float> yTranslateProperty()
+    public Property<Float> yTranslateProperty()
     {
         return yTranslateProperty;
     }
 
-    public BaseProperty<Float> widthProperty()
+    public Property<Float> widthProperty()
     {
         return widthProperty;
     }
 
-    public BaseProperty<Float> heightProperty()
+    public Property<Float> heightProperty()
     {
         return heightProperty;
     }
 
-    public BaseProperty<Float> widthRatioProperty()
+    public Property<Float> widthRatioProperty()
     {
         return widthRatioProperty;
     }
 
-    public BaseProperty<Float> heightRatioProperty()
+    public Property<Float> heightRatioProperty()
     {
         return heightRatioProperty;
     }
 
-    public BaseProperty<Rotation> rotationProperty()
+    public Property<Rotation> rotationProperty()
     {
         return rotationProperty;
     }
 
-    public BaseProperty<Scale> scaleProperty()
+    public Property<Scale> scaleProperty()
     {
         return scaleProperty;
     }

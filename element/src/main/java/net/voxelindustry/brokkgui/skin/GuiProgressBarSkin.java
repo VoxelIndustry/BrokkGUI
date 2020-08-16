@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.skin;
 
-import fr.ourten.teabeans.binding.BaseExpression;
+import fr.ourten.teabeans.binding.Expression;
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.element.GuiProgressBar;
@@ -16,14 +16,14 @@ public class GuiProgressBarSkin<C extends GuiProgressBar, B extends GuiBehaviorB
         super(model, behaviour);
 
         track = new Rectangle(model.transform().xPos(), model.transform().yPos(), model.width(), model.height());
-        track.transform().xPosProperty().bind(new BaseExpression<>(() ->
+        track.transform().xPosProperty().bindProperty(new Expression<>(() ->
         {
             if (model.getProgressDirection() == RectSide.LEFT)
                 return model.transform().xPos() + model.width() - track.width();
             return model.transform().xPos();
         }, model.transform().xPosProperty(), model.transform().widthProperty(), model.getProgressDirectionProperty()));
-        track.transform().yPosProperty().bind(model.transform().yPosProperty());
-        track.transform().widthProperty().bind(new BaseExpression<>(() ->
+        track.transform().yPosProperty().bindProperty(model.transform().yPosProperty());
+        track.transform().widthProperty().bindProperty(new Expression<>(() ->
                 model.width() * model.getProgress(), model.getProgressProperty(), model.transform().widthProperty()));
 
         track.get(StyleComponent.class).styleClass().add("track");

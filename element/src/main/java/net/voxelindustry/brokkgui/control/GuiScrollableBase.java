@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.control;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
 import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
@@ -9,14 +9,14 @@ import net.voxelindustry.hermod.EventHandler;
 
 public abstract class GuiScrollableBase extends GuiSkinedElement
 {
-    private final BaseProperty<Float> scrollXProperty, scrollYProperty;
-    private final BaseProperty<Float> trueWidthProperty, trueHeightProperty;
-    private final BaseProperty<Float> scrollSpeedProperty;
-    private final BaseProperty<Float> gripXWidthProperty, gripXHeightProperty, gripYWidthProperty, gripYHeightProperty;
+    private final Property<Float> scrollXProperty, scrollYProperty;
+    private final Property<Float> trueWidthProperty, trueHeightProperty;
+    private final Property<Float> scrollSpeedProperty;
+    private final Property<Float> gripXWidthProperty, gripXHeightProperty, gripYWidthProperty, gripYHeightProperty;
 
-    private final BaseProperty<GuiScrollbarPolicy> scrollXPolicyProperty, scrollYPolicyProperty;
+    private final Property<GuiScrollbarPolicy> scrollXPolicyProperty, scrollYPolicyProperty;
 
-    private final BaseProperty<Float> panSpeedProperty;
+    private final Property<Float> panSpeedProperty;
 
     private boolean isPannable;
     private boolean isScalable;
@@ -28,23 +28,23 @@ public abstract class GuiScrollableBase extends GuiSkinedElement
     {
         isScrollable = true;
 
-        scrollXProperty = new BaseProperty<>(0f, "scrollXProperty");
-        scrollYProperty = new BaseProperty<>(0f, "scrollYProperty");
+        scrollXProperty = new Property<>(0F);
+        scrollYProperty = new Property<>(0F);
 
-        trueWidthProperty = new BaseProperty<>(0f, "trueWidthProperty");
-        trueHeightProperty = new BaseProperty<>(0f, "trueHeightProperty");
+        trueWidthProperty = new Property<>(0F);
+        trueHeightProperty = new Property<>(0F);
 
-        scrollSpeedProperty = new BaseProperty<>(1f, "scrollSpeedProperty");
+        scrollSpeedProperty = new Property<>(1F);
 
-        gripXWidthProperty = new BaseProperty<>(0f, "gripXWidthProperty");
-        gripXHeightProperty = new BaseProperty<>(5f, "gripXHeightProperty");
-        gripYWidthProperty = new BaseProperty<>(20f, "gripYWidthProperty");
-        gripYHeightProperty = new BaseProperty<>(0f, "gripYHeightProperty");
+        gripXWidthProperty = new Property<>(0F);
+        gripXHeightProperty = new Property<>(5F);
+        gripYWidthProperty = new Property<>(20F);
+        gripYHeightProperty = new Property<>(0F);
 
-        scrollXPolicyProperty = new BaseProperty<>(GuiScrollbarPolicy.NEEDED, "scrollXPolicyProperty");
-        scrollYPolicyProperty = new BaseProperty<>(GuiScrollbarPolicy.NEEDED, "scrollYPolicyProperty");
+        scrollXPolicyProperty = new Property<>(GuiScrollbarPolicy.NEEDED);
+        scrollYPolicyProperty = new Property<>(GuiScrollbarPolicy.NEEDED);
 
-        panSpeedProperty = new BaseProperty<>(1F, "panSpeedProperty");
+        panSpeedProperty = new Property<>(1F);
 
         setScissorBox(ScissorBox.fitNode(transform()));
         setGuiOverflow(GuiOverflowPolicy.TRIM_ALL);
@@ -52,52 +52,52 @@ public abstract class GuiScrollableBase extends GuiSkinedElement
         setFocusable(true);
     }
 
-    public BaseProperty<Float> getScrollXProperty()
+    public Property<Float> getScrollXProperty()
     {
         return scrollXProperty;
     }
 
-    public BaseProperty<Float> getScrollYProperty()
+    public Property<Float> getScrollYProperty()
     {
         return scrollYProperty;
     }
 
-    public BaseProperty<Float> getTrueWidthProperty()
+    public Property<Float> getTrueWidthProperty()
     {
         return trueWidthProperty;
     }
 
-    public BaseProperty<Float> getTrueHeightProperty()
+    public Property<Float> getTrueHeightProperty()
     {
         return trueHeightProperty;
     }
 
-    public BaseProperty<Float> getScrollSpeedProperty()
+    public Property<Float> getScrollSpeedProperty()
     {
         return scrollSpeedProperty;
     }
 
-    public BaseProperty<Float> getGripXWidthProperty()
+    public Property<Float> getGripXWidthProperty()
     {
         return gripXWidthProperty;
     }
 
-    public BaseProperty<Float> getGripXHeightProperty()
+    public Property<Float> getGripXHeightProperty()
     {
         return gripXHeightProperty;
     }
 
-    public BaseProperty<Float> getGripYWidthProperty()
+    public Property<Float> getGripYWidthProperty()
     {
         return gripYWidthProperty;
     }
 
-    public BaseProperty<Float> getGripYHeightProperty()
+    public Property<Float> getGripYHeightProperty()
     {
         return gripYHeightProperty;
     }
 
-    public BaseProperty<Float> getPanSpeedProperty()
+    public Property<Float> getPanSpeedProperty()
     {
         return panSpeedProperty;
     }
@@ -132,12 +132,12 @@ public abstract class GuiScrollableBase extends GuiSkinedElement
         return getTrueHeightProperty().getValue();
     }
 
-    public BaseProperty<GuiScrollbarPolicy> getScrollXPolicyProperty()
+    public Property<GuiScrollbarPolicy> getScrollXPolicyProperty()
     {
         return scrollXPolicyProperty;
     }
 
-    public BaseProperty<GuiScrollbarPolicy> getScrollYPolicyProperty()
+    public Property<GuiScrollbarPolicy> getScrollYPolicyProperty()
     {
         return scrollYPolicyProperty;
     }

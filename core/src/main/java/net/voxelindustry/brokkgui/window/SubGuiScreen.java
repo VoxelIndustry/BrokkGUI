@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.window;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.hermod.EventHandler;
@@ -12,19 +12,19 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
 
-    private final BaseProperty<Float> xRelativePosProperty, yRelativePosProperty;
+    private final Property<Float> xRelativePosProperty, yRelativePosProperty;
 
     private boolean closeOnClick;
     private boolean hasWarFog;
 
     public SubGuiScreen(float xRelativePos, float yRelativePos)
     {
-        this.transform().zLevel(300);
+        transform().zLevel(300);
 
-        this.xRelativePosProperty = new BaseProperty<>(xRelativePos, "xRelativePosProperty");
-        this.yRelativePosProperty = new BaseProperty<>(yRelativePos, "yRelativePosProperty");
+        xRelativePosProperty = new Property<>(xRelativePos);
+        yRelativePosProperty = new Property<>(yRelativePos);
 
-        this.setWindow(this);
+        setWindow(this);
     }
 
     public SubGuiScreen()
@@ -43,10 +43,10 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
      */
     public boolean closeOnClick()
     {
-        return this.closeOnClick;
+        return closeOnClick;
     }
 
-    public void setCloseOnClick(final boolean closeOnClick)
+    public void setCloseOnClick(boolean closeOnClick)
     {
         this.closeOnClick = closeOnClick;
     }
@@ -56,46 +56,46 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
      */
     public boolean hasWarFog()
     {
-        return this.hasWarFog;
+        return hasWarFog;
     }
 
-    public void setWarFog(final boolean warFog)
+    public void setWarFog(boolean warFog)
     {
-        this.hasWarFog = warFog;
-    }
-
-    @Override
-    public BaseProperty<Float> getxRelativePosProperty()
-    {
-        return this.xRelativePosProperty;
+        hasWarFog = warFog;
     }
 
     @Override
-    public BaseProperty<Float> getyRelativePosProperty()
+    public Property<Float> getxRelativePosProperty()
     {
-        return this.yRelativePosProperty;
+        return xRelativePosProperty;
+    }
+
+    @Override
+    public Property<Float> getyRelativePosProperty()
+    {
+        return yRelativePosProperty;
     }
 
     @Override
     public float getxRelativePos()
     {
-        return this.getxRelativePosProperty().getValue();
+        return getxRelativePosProperty().getValue();
     }
 
-    public void setxRelativePos(final float xRelativePos)
+    public void setxRelativePos(float xRelativePos)
     {
-        this.getxRelativePosProperty().setValue(xRelativePos);
+        getxRelativePosProperty().setValue(xRelativePos);
     }
 
     @Override
     public float getyRelativePos()
     {
-        return this.getyRelativePosProperty().getValue();
+        return getyRelativePosProperty().getValue();
     }
 
-    public void setyRelativePos(final float yRelativePos)
+    public void setyRelativePos(float yRelativePos)
     {
-        this.getyRelativePosProperty().setValue(yRelativePos);
+        getyRelativePosProperty().setValue(yRelativePos);
     }
 
     @Override
@@ -117,51 +117,51 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     @Override
     public <T extends HermodEvent> void addEventHandler(EventType<T> type, EventHandler<? super T> handler)
     {
-        this.getEventDispatcher().addHandler(type, handler);
+        getEventDispatcher().addHandler(type, handler);
     }
 
     @Override
     public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler)
     {
-        this.getEventDispatcher().removeHandler(type, handler);
+        getEventDispatcher().removeHandler(type, handler);
     }
 
     @Override
     public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
     {
-        this.getEventDispatcher().dispatchEvent(type, event.copy(this));
+        getEventDispatcher().dispatchEvent(type, event.copy(this));
     }
 
     @Override
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
     {
-        this.getEventDispatcher().dispatchEvent(type, event);
+        getEventDispatcher().dispatchEvent(type, event);
     }
 
     @Override
     public void open()
     {
-        this.getEventDispatcher().dispatchEvent(WindowEvent.OPEN, new WindowEvent.Open(this));
+        getEventDispatcher().dispatchEvent(WindowEvent.OPEN, new WindowEvent.Open(this));
     }
 
     @Override
     public void close()
     {
-        this.dispose();
-        this.getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
+        dispose();
+        getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
-    public void setOnOpenEvent(final EventHandler<WindowEvent.Open> onOpenEvent)
+    public void setOnOpenEvent(EventHandler<WindowEvent.Open> onOpenEvent)
     {
-        this.getEventDispatcher().removeHandler(WindowEvent.OPEN, this.onOpenEvent);
+        getEventDispatcher().removeHandler(WindowEvent.OPEN, this.onOpenEvent);
         this.onOpenEvent = onOpenEvent;
-        this.getEventDispatcher().addHandler(WindowEvent.OPEN, this.onOpenEvent);
+        getEventDispatcher().addHandler(WindowEvent.OPEN, this.onOpenEvent);
     }
 
-    public void setOnCloseEvent(final EventHandler<WindowEvent.Close> onCloseEvent)
+    public void setOnCloseEvent(EventHandler<WindowEvent.Close> onCloseEvent)
     {
-        this.getEventDispatcher().removeHandler(WindowEvent.CLOSE, this.onCloseEvent);
+        getEventDispatcher().removeHandler(WindowEvent.CLOSE, this.onCloseEvent);
         this.onCloseEvent = onCloseEvent;
-        this.getEventDispatcher().addHandler(WindowEvent.CLOSE, this.onCloseEvent);
+        getEventDispatcher().addHandler(WindowEvent.CLOSE, this.onCloseEvent);
     }
 }

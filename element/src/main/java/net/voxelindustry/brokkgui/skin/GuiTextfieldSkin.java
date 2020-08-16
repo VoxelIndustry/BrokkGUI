@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.skin;
 
-import fr.ourten.teabeans.binding.BaseBinding;
-import fr.ourten.teabeans.binding.BaseExpression;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.binding.Binding;
+import fr.ourten.teabeans.binding.Expression;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldBehavior;
 import net.voxelindustry.brokkgui.element.input.GuiTextfield;
@@ -20,11 +20,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBase<T, GuiTextfieldBehavior<T>>
 {
-    private final BaseProperty<String>  ellipsedPromptProperty;
-    private final BaseProperty<Integer> displayOffsetProperty;
+    private final Property<String>  ellipsedPromptProperty;
+    private final Property<Integer> displayOffsetProperty;
     // Here to keep last value of the displayOffsetProperty
-    private       int                   displayOffset = 0;
-    private final BaseProperty<String>  displayedTextProperty;
+    private       int               displayOffset = 0;
+    private final Property<String>  displayedTextProperty;
 
     private Text text;
     private Text promptText;
@@ -33,9 +33,9 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
     {
         super(model, behaviour);
 
-        ellipsedPromptProperty = new BaseProperty<>("", "ellipsedPromptProperty");
-        displayOffsetProperty = new BaseProperty<>(0, "displayOffsetProperty");
-        displayedTextProperty = new BaseProperty<>("", "displayedTextProperty");
+        ellipsedPromptProperty = new Property<>("");
+        displayOffsetProperty = new Property<>(0);
+        displayedTextProperty = new Property<>("");
 
         bindDisplayText();
 
@@ -46,10 +46,10 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
         promptText.get(StyleComponent.class).styleClass().add("prompt");
         getModel().get(StyleComponent.class).registerProperty("cursor-color", Color.WHITE.shade(0.3f), Color.class);
 
-        text.textProperty().bind(displayedTextProperty);
-        text.transform().zLevelProperty().bind(model.transform().zLevelProperty());
+        text.textProperty().bindProperty(displayedTextProperty);
+        text.transform().zLevelProperty().bindProperty(model.transform().zLevelProperty());
 
-        text.transform().xPosProperty().bind(new BaseBinding<Float>()
+        text.transform().xPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().xPosProperty(), transform().xTranslateProperty(),
@@ -62,7 +62,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 return getModel().getLeftPos() + getModel().getTextPadding().getLeft();
             }
         });
-        text.transform().yPosProperty().bind(new BaseBinding<Float>()
+        text.transform().yPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().yPosProperty(), transform().yTranslateProperty(),
@@ -75,16 +75,16 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 return getModel().getTopPos() + getModel().getTextPadding().getTop();
             }
         });
-        text.transform().widthProperty().bind(BaseExpression.transform(displayedTextProperty,
+        text.transform().widthProperty().bindProperty(Expression.transform(displayedTextProperty,
                 BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
         text.transform().height(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
 
         getModel().addChild(text);
 
-        promptText.textProperty().bind(ellipsedPromptProperty);
-        promptText.transform().zLevelProperty().bind(model.transform().zLevelProperty());
+        promptText.textProperty().bindProperty(ellipsedPromptProperty);
+        promptText.transform().zLevelProperty().bindProperty(model.transform().zLevelProperty());
 
-        promptText.transform().xPosProperty().bind(new BaseBinding<Float>()
+        promptText.transform().xPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().xPosProperty(), transform().xTranslateProperty(),
@@ -97,7 +97,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 return getModel().getLeftPos() + getModel().getTextPadding().getLeft();
             }
         });
-        promptText.transform().yPosProperty().bind(new BaseBinding<Float>()
+        promptText.transform().yPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().yPosProperty(), transform().yTranslateProperty(),
@@ -110,11 +110,11 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 return getModel().getTopPos() + getModel().getTextPadding().getTop();
             }
         });
-        promptText.transform().widthProperty().bind(BaseExpression.transform(ellipsedPromptProperty,
+        promptText.transform().widthProperty().bindProperty(Expression.transform(ellipsedPromptProperty,
                 BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
         promptText.transform().height(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
 
-        promptText.visibleProperty().bind(new BaseBinding<Boolean>()
+        promptText.visibleProperty().bindProperty(new Binding<Boolean>()
         {
             {
                 super.bind(getModel().getPrompTextProperty(), getModel().getPromptTextAlwaysDisplayedProperty(),
@@ -175,7 +175,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
 
     private void bindDisplayText()
     {
-        ellipsedPromptProperty.bind(new BaseBinding<String>()
+        ellipsedPromptProperty.bindProperty(new Binding<String>()
         {
             {
                 super.bind(getModel().getPrompTextProperty(), getModel().getPromptEllipsisProperty(),
@@ -192,7 +192,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
 
         });
 
-        displayOffsetProperty.bind(new BaseBinding<Integer>()
+        displayOffsetProperty.bindProperty(new Binding<Integer>()
         {
             {
                 super.bind(getModel().getCursorPosProperty(), getModel().getTextPaddingProperty(),
@@ -222,7 +222,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
 
         });
 
-        displayedTextProperty.bind(new BaseBinding<String>()
+        displayedTextProperty.bindProperty(new Binding<String>()
         {
             {
                 super.bind(displayOffsetProperty, getModel().getTextProperty(), transform().widthProperty(),

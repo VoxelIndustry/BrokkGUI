@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.element.input;
 
-import fr.ourten.teabeans.binding.BaseExpression;
-import net.voxelindustry.brokkgui.behavior.GuiTogglableButtonBehavior;
+import fr.ourten.teabeans.binding.Expression;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.shape.Rectangle;
@@ -62,7 +61,7 @@ public class GuiCheckbox extends GuiRadioButton
             box.transform().heightProperty().bind(transform().heightProperty());
 
             mark.transform().widthProperty().bind(mark.transform().heightProperty());
-            mark.transform().heightProperty().bind(BaseExpression.transform(box.transform().heightProperty(),
+            mark.transform().heightProperty().bind(Expression.transform(box.transform().heightProperty(),
                     height -> height - 2));
 
             mark.visibleProperty().bind(parent.getSelectedProperty());

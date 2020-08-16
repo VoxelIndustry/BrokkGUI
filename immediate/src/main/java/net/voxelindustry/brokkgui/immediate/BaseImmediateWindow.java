@@ -1,13 +1,13 @@
 package net.voxelindustry.brokkgui.immediate;
 
-import fr.ourten.teabeans.value.BaseProperty;
-import fr.ourten.teabeans.value.IProperty;
+import fr.ourten.teabeans.property.IProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.window.IGuiWindow;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
+import net.voxelindustry.brokkgui.window.IGuiWindow;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
@@ -16,13 +16,13 @@ import net.voxelindustry.hermod.IEventEmitter;
 
 public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
 {
-    private static final BaseProperty<Float> RELATIVE_POS_PROPERTY = new BaseProperty<>(0.5F, "fixedRelativePosProperty");
+    private static final Property<Float> RELATIVE_POS_PROPERTY = new Property<>(0.5F);
 
     private EventDispatcher eventDispatcher;
     private IBrokkGuiImpl   wrapper;
 
-    private final BaseProperty<Integer> screenWidthProperty;
-    private final BaseProperty<Integer> screenHeightProperty;
+    private final Property<Integer> screenWidthProperty;
+    private final Property<Integer> screenHeightProperty;
 
     private IGuiRenderer renderer;
 
@@ -46,8 +46,8 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
 
     public BaseImmediateWindow()
     {
-        this.screenWidthProperty = new BaseProperty<>(0, "screenWidthProperty");
-        this.screenHeightProperty = new BaseProperty<>(0, "screenHeightProperty");
+        screenWidthProperty = new Property<>(0);
+        screenHeightProperty = new Property<>(0);
     }
 
     @Override
@@ -65,16 +65,16 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public void renderLast(int mouseX, int mouseY)
     {
-        this.immediateRender();
+        immediateRender();
 
-        this.lastWheelX = -1;
-        this.lastWheelY = -1;
-        this.lastWheelValue = 0;
+        lastWheelX = -1;
+        lastWheelY = -1;
+        lastWheelValue = 0;
 
-        this.lastKeyPressed = -1;
+        lastKeyPressed = -1;
 
-        this.lastClickX = -1;
-        this.lastClickY = -1;
+        lastClickX = -1;
+        lastClickY = -1;
     }
 
     public abstract void immediateRender();
@@ -141,41 +141,41 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     {
         this.wrapper = wrapper;
 
-        this.renderer = wrapper.getRenderer();
+        renderer = wrapper.getRenderer();
     }
 
     @Override
     public IProperty<Integer> getScreenWidthProperty()
     {
-        return this.screenWidthProperty;
+        return screenWidthProperty;
     }
 
     @Override
     public IProperty<Integer> getScreenHeightProperty()
     {
-        return this.screenHeightProperty;
+        return screenHeightProperty;
     }
 
     public int getScreenWidth()
     {
-        return this.getScreenWidthProperty().getValue();
+        return getScreenWidthProperty().getValue();
     }
 
     public int getScreenHeight()
     {
-        return this.getScreenHeightProperty().getValue();
+        return getScreenHeightProperty().getValue();
     }
 
     @Override
     public void setScreenWidth(int width)
     {
-        this.getScreenWidthProperty().setValue(width);
+        getScreenWidthProperty().setValue(width);
     }
 
     @Override
     public void setScreenHeight(int height)
     {
-        this.getScreenHeightProperty().setValue(height);
+        getScreenHeightProperty().setValue(height);
     }
 
     @Override
@@ -193,7 +193,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public IBrokkGuiImpl getWrapper()
     {
-        return this.wrapper;
+        return wrapper;
     }
 
     @Override
@@ -205,7 +205,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public void onKeyPressed(int key)
     {
-        this.lastKeyPressed = key;
+        lastKeyPressed = key;
     }
 
     @Override
@@ -239,8 +239,8 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public void onClickStop(int mouseX, int mouseY, int state)
     {
-        this.lastHeldClickX = -1;
-        this.lastHeldClickY = -1;
+        lastHeldClickX = -1;
+        lastHeldClickY = -1;
     }
 
     @Override
@@ -327,13 +327,13 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public BaseProperty<Float> getxRelativePosProperty()
+    public Property<Float> getxRelativePosProperty()
     {
         return RELATIVE_POS_PROPERTY;
     }
 
     @Override
-    public BaseProperty<Float> getyRelativePosProperty()
+    public Property<Float> getyRelativePosProperty()
     {
         return RELATIVE_POS_PROPERTY;
     }
@@ -353,37 +353,37 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     @Override
     public EventDispatcher getEventDispatcher()
     {
-        if (this.eventDispatcher == null)
-            this.initEventDispatcher();
-        return this.eventDispatcher;
+        if (eventDispatcher == null)
+            initEventDispatcher();
+        return eventDispatcher;
     }
 
     private void initEventDispatcher()
     {
-        this.eventDispatcher = new EventDispatcher();
+        eventDispatcher = new EventDispatcher();
     }
 
     @Override
     public <T extends HermodEvent> void addEventHandler(EventType<T> type, EventHandler<? super T> handler)
     {
-        this.getEventDispatcher().addHandler(type, handler);
+        getEventDispatcher().addHandler(type, handler);
     }
 
     @Override
     public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler)
     {
-        this.getEventDispatcher().removeHandler(type, handler);
+        getEventDispatcher().removeHandler(type, handler);
     }
 
     @Override
     public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
     {
-        this.getEventDispatcher().dispatchEvent(type, event.copy(this));
+        getEventDispatcher().dispatchEvent(type, event.copy(this));
     }
 
     @Override
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
     {
-        this.getEventDispatcher().dispatchEvent(type, event);
+        getEventDispatcher().dispatchEvent(type, event);
     }
 }

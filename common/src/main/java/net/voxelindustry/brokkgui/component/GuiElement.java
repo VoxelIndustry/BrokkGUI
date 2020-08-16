@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.listener.ValueInvalidationListener;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
@@ -46,7 +46,7 @@ public abstract class GuiElement implements IEventEmitter
 
     private final Paint paint;
 
-    private final BaseProperty<String> idProperty;
+    private final Property<String> idProperty;
 
     private EventDispatcher            eventDispatcher;
     private EventHandler<FocusEvent>   onFocusEvent;
@@ -56,14 +56,14 @@ public abstract class GuiElement implements IEventEmitter
 
     private final ValueInvalidationListener disableListener = this::disableListener;
 
-    private BaseProperty<Double> opacityProperty;
+    private Property<Double> opacityProperty;
 
-    private final BaseProperty<Boolean> focusedProperty;
-    private final BaseProperty<Boolean> disabledProperty;
-    private final BaseProperty<Boolean> hoveredProperty;
-    private final BaseProperty<Boolean> focusableProperty;
-    private final BaseProperty<Boolean> visibleProperty;
-    private final BaseProperty<Boolean> draggedProperty;
+    private final Property<Boolean> focusedProperty;
+    private final Property<Boolean> disabledProperty;
+    private final Property<Boolean> hoveredProperty;
+    private final Property<Boolean> focusableProperty;
+    private final Property<Boolean> visibleProperty;
+    private final Property<Boolean> draggedProperty;
 
     private int draggedX;
     private int draggedY;
@@ -79,17 +79,17 @@ public abstract class GuiElement implements IEventEmitter
         updateComponents = new ArrayList<>(1);
 
         transform = add(new Transform());
-        idProperty = new BaseProperty<>(null, "idProperty");
+        idProperty = new Property<>(null);
 
-        focusedProperty = new BaseProperty<>(false, "focusedProperty");
-        disabledProperty = new BaseProperty<>(false, "disabledProperty");
-        hoveredProperty = new BaseProperty<>(false, "hoveredProperty");
+        focusedProperty = new Property<>(false);
+        disabledProperty = new Property<>(false);
+        hoveredProperty = new Property<>(false);
 
-        focusableProperty = new BaseProperty<>(false, "focusableProperty");
-        visibleProperty = new BaseProperty<>(true, "visibleProperty");
-        draggedProperty = new BaseProperty<>(false, "draggedProperty");
+        focusableProperty = new Property<>(false);
+        visibleProperty = new Property<>(true);
+        draggedProperty = new Property<>(false);
 
-        opacityProperty = new BaseProperty<>(1D, "opacityProperty");
+        opacityProperty = new Property<>(1D);
 
         ComponentEngine.instance().inject(this);
 
@@ -433,32 +433,32 @@ public abstract class GuiElement implements IEventEmitter
         transform().size(width, height);
     }
 
-    public BaseProperty<Boolean> focusedProperty()
+    public Property<Boolean> focusedProperty()
     {
         return focusedProperty;
     }
 
-    public BaseProperty<Boolean> disabledProperty()
+    public Property<Boolean> disabledProperty()
     {
         return disabledProperty;
     }
 
-    public BaseProperty<Boolean> hoveredProperty()
+    public Property<Boolean> hoveredProperty()
     {
         return hoveredProperty;
     }
 
-    public BaseProperty<Boolean> focusableProperty()
+    public Property<Boolean> focusableProperty()
     {
         return focusableProperty;
     }
 
-    public BaseProperty<Boolean> visibleProperty()
+    public Property<Boolean> visibleProperty()
     {
         return visibleProperty;
     }
 
-    public BaseProperty<Boolean> draggedProperty()
+    public Property<Boolean> draggedProperty()
     {
         return draggedProperty;
     }
@@ -676,7 +676,7 @@ public abstract class GuiElement implements IEventEmitter
 
     public abstract String type();
 
-    public BaseProperty<String> idProperty()
+    public Property<String> idProperty()
     {
         return idProperty;
     }
@@ -695,12 +695,12 @@ public abstract class GuiElement implements IEventEmitter
     // DISPLAY //
     /////////////
 
-    public BaseProperty<Double> getOpacityProperty()
+    public Property<Double> getOpacityProperty()
     {
         return opacityProperty;
     }
 
-    public void replaceOpacityProperty(BaseProperty<Double> opacityProperty)
+    public void replaceOpacityProperty(Property<Double> opacityProperty)
     {
         this.opacityProperty = opacityProperty;
     }

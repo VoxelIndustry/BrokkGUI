@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.skin;
 
-import fr.ourten.teabeans.binding.BaseBinding;
+import fr.ourten.teabeans.binding.Binding;
 import net.voxelindustry.brokkgui.behavior.GuiScrollableBehavior;
 import net.voxelindustry.brokkgui.control.GuiScrollableBase;
 import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
@@ -20,7 +20,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
         super(model, behavior);
 
         gripX = new Rectangle();
-        gripX.transform().xPosProperty().bind(new BaseBinding<Float>()
+        gripX.transform().xPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().xPosProperty(),
@@ -46,7 +46,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                 }
             }
         });
-        gripX.transform().yPosProperty().bind(new BaseBinding<Float>()
+        gripX.transform().yPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().yPosProperty(),
@@ -61,8 +61,8 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                 return getModel().getBottomPos() - gripX.height();
             }
         });
-        gripX.transform().heightProperty().bind(getModel().getGripXHeightProperty());
-        gripX.transform().widthProperty().bind(new BaseBinding<Float>()
+        gripX.transform().heightProperty().bindProperty(getModel().getGripXHeightProperty());
+        gripX.transform().widthProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().widthProperty(),
@@ -81,10 +81,10 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                 return Math.min(10, getModel().width() / getModel().getTrueWidth() * getModel().width());
             }
         });
-        gripX.transform().zLevelProperty().bind(transform().zLevelProperty());
+        gripX.transform().zLevelProperty().bindProperty(transform().zLevelProperty());
 
         gripY = new Rectangle();
-        gripY.transform().xPosProperty().bind(new BaseBinding<Float>()
+        gripY.transform().xPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().xPosProperty(),
@@ -99,7 +99,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                 return getModel().getRightPos() - gripY.width();
             }
         });
-        gripY.transform().yPosProperty().bind(new BaseBinding<Float>()
+        gripY.transform().yPosProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().yPosProperty(),
@@ -126,8 +126,8 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                 }
             }
         });
-        gripY.transform().widthProperty().bind(getModel().getGripYWidthProperty());
-        gripY.transform().heightProperty().bind(new BaseBinding<Float>()
+        gripY.transform().widthProperty().bindProperty(getModel().getGripYWidthProperty());
+        gripY.transform().heightProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(transform().heightProperty(),
@@ -146,7 +146,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                 return Math.min(10, getModel().height() / getModel().getTrueHeight() * getModel().height());
             }
         });
-        gripY.transform().zLevelProperty().bind(transform().zLevelProperty());
+        gripY.transform().zLevelProperty().bindProperty(transform().zLevelProperty());
 
         getModel().addChild(gripX);
         getModel().addChild(gripY);
@@ -154,7 +154,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
         gripX.get(StyleComponent.class).styleClass().add("grip-x");
         gripY.get(StyleComponent.class).styleClass().add("grip-y");
 
-        gripX.visibleProperty().bind(new BaseBinding<Boolean>()
+        gripX.visibleProperty().bindProperty(new Binding<Boolean>()
         {
             {
                 super.bind(getModel().getScrollXPolicyProperty(),
@@ -177,7 +177,7 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
             }
         });
 
-        gripY.visibleProperty().bind(new BaseBinding<Boolean>()
+        gripY.visibleProperty().bindProperty(new Binding<Boolean>()
         {
             {
                 super.bind(getModel().getScrollYPolicyProperty(),

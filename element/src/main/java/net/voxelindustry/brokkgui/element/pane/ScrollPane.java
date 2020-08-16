@@ -17,7 +17,7 @@ public class ScrollPane extends GuiScrollableBase
     public ScrollPane(GuiElement node)
     {
         if (node != null)
-            this.setChild(node);
+            setChild(node);
     }
 
     public ScrollPane()
@@ -35,17 +35,17 @@ public class ScrollPane extends GuiScrollableBase
     {
         if (contentNode != null)
         {
-            this.getTrueWidthProperty().unbind();
-            this.getTrueHeightProperty().unbind();
-            this.removeChild(contentNode);
+            getTrueWidthProperty().unbind();
+            getTrueHeightProperty().unbind();
+            removeChild(contentNode);
         }
 
-        this.contentNode = node;
-        this.addChild(node);
-        RelativeBindingHelper.bindToPos(node.transform(), transform(), this.getScrollXProperty(), this.getScrollYProperty());
+        contentNode = node;
+        addChild(node);
+        RelativeBindingHelper.bindToPos(node.transform(), transform(), getScrollXProperty(), getScrollYProperty());
 
-        this.getTrueWidthProperty().bind(node.transform().widthProperty());
-        this.getTrueHeightProperty().bind(node.transform().heightProperty());
+        getTrueWidthProperty().bindProperty(node.transform().widthProperty());
+        getTrueHeightProperty().bindProperty(node.transform().heightProperty());
     }
 
     @Override

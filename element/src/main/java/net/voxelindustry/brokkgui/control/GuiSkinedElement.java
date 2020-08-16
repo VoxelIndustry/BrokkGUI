@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.control;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.IGuiTooltip;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -11,15 +11,15 @@ import net.voxelindustry.brokkgui.style.StyleComponent;
 @Deprecated
 public abstract class GuiSkinedElement extends GuiFather implements IGuiSkinnable
 {
-    private final BaseProperty<GuiSkinBase<?>> skinProperty;
-    private final BaseProperty<IGuiTooltip>    tooltipProperty;
+    private final Property<GuiSkinBase<?>> skinProperty;
+    private final Property<IGuiTooltip>    tooltipProperty;
 
     private StyleComponent style;
 
     public GuiSkinedElement()
     {
-        skinProperty = new BaseProperty<>(null, "skinProperty");
-        tooltipProperty = new BaseProperty<>(null, "tooltipProperty");
+        skinProperty = new Property<>(null);
+        tooltipProperty = new Property<>(null);
 
         tooltipProperty.addListener((obs, oldValue, newValue) ->
         {
@@ -66,7 +66,7 @@ public abstract class GuiSkinedElement extends GuiFather implements IGuiSkinnabl
         return skinProperty.getValue();
     }
 
-    public BaseProperty<IGuiTooltip> getTooltipProperty()
+    public Property<IGuiTooltip> getTooltipProperty()
     {
         return tooltipProperty;
     }

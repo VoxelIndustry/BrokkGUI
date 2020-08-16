@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.control;
 
-import fr.ourten.teabeans.binding.BaseBinding;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.binding.Binding;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
@@ -13,13 +13,13 @@ import javax.annotation.Nonnull;
 
 public abstract class GuiLabeled extends GuiSkinedElement
 {
-    private final BaseProperty<String>  ellipsisProperty;
-    private final BaseProperty<Boolean> expandToTextProperty;
-    private final BaseProperty<RectBox> textPaddingProperty;
+    private final Property<String>  ellipsisProperty;
+    private final Property<Boolean> expandToTextProperty;
+    private final Property<RectBox> textPaddingProperty;
 
-    private final BaseProperty<GuiElement> iconProperty;
-    private final BaseProperty<RectSide>   iconSideProperty;
-    private final BaseProperty<Float>      iconPaddingProperty;
+    private final Property<GuiElement> iconProperty;
+    private final Property<RectSide>   iconSideProperty;
+    private final Property<Float>      iconPaddingProperty;
 
     private TextComponent textComponent;
 
@@ -29,13 +29,13 @@ public abstract class GuiLabeled extends GuiSkinedElement
     {
         startingText = text;
 
-        ellipsisProperty = new BaseProperty<>("...", "ellipsisProperty");
-        expandToTextProperty = new BaseProperty<>(true, "expandToTextProperty");
-        textPaddingProperty = new BaseProperty<>(RectBox.EMPTY, "textPaddingProperty");
+        ellipsisProperty = new Property<>("...");
+        expandToTextProperty = new Property<>(true);
+        textPaddingProperty = new Property<>(RectBox.EMPTY);
 
-        iconProperty = new BaseProperty<>(icon, "iconProperty");
-        iconSideProperty = new BaseProperty<>(RectSide.LEFT, "iconSideProperty");
-        iconPaddingProperty = new BaseProperty<>(2f, "iconPaddingProperty");
+        iconProperty = new Property<>(icon);
+        iconSideProperty = new Property<>(RectSide.LEFT);
+        iconPaddingProperty = new Property<>(2f);
 
         textComponent.text(startingText);
 
@@ -60,42 +60,42 @@ public abstract class GuiLabeled extends GuiSkinedElement
         textComponent = provide(TextComponent.class);
     }
 
-    public BaseProperty<RectAlignment> getTextAlignmentProperty()
+    public Property<RectAlignment> getTextAlignmentProperty()
     {
         return textComponent().textAlignmentProperty();
     }
 
-    public BaseProperty<String> getTextProperty()
+    public Property<String> getTextProperty()
     {
         return textComponent.textProperty();
     }
 
-    public BaseProperty<String> getEllipsisProperty()
+    public Property<String> getEllipsisProperty()
     {
         return ellipsisProperty;
     }
 
-    public BaseProperty<Boolean> getExpandToTextProperty()
+    public Property<Boolean> getExpandToTextProperty()
     {
         return expandToTextProperty;
     }
 
-    public BaseProperty<RectBox> getTextPaddingProperty()
+    public Property<RectBox> getTextPaddingProperty()
     {
         return textPaddingProperty;
     }
 
-    public BaseProperty<GuiElement> getIconProperty()
+    public Property<GuiElement> getIconProperty()
     {
         return iconProperty;
     }
 
-    public BaseProperty<RectSide> getIconSideProperty()
+    public Property<RectSide> getIconSideProperty()
     {
         return iconSideProperty;
     }
 
-    public BaseProperty<Float> getIconPaddingProperty()
+    public Property<Float> getIconPaddingProperty()
     {
         return iconPaddingProperty;
     }
@@ -189,7 +189,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
 
     private void bindSizeToText()
     {
-        transform().widthProperty().bind(new BaseBinding<Float>()
+        transform().widthProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(getTextProperty(),
@@ -218,7 +218,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
             }
         });
 
-        transform().heightProperty().bind(new BaseBinding<Float>()
+        transform().heightProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(getTextProperty(),

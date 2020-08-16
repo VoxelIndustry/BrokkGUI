@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.shape;
 
-import fr.ourten.teabeans.binding.BaseExpression;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.binding.Expression;
+import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
@@ -26,11 +26,11 @@ public class ScissorBox
         ScissorBox box = new ScissorBox();
         box.transform = transform;
 
-        box.startX = BaseExpression.biCombine(transform.xPosProperty(), transform.xTranslateProperty(), Float::sum);
-        box.startY = BaseExpression.biCombine(transform.yPosProperty(), transform.yTranslateProperty(), Float::sum);
+        box.startX = Expression.biCombine(transform.xPosProperty(), transform.xTranslateProperty(), Float::sum);
+        box.startY = Expression.biCombine(transform.yPosProperty(), transform.yTranslateProperty(), Float::sum);
 
-        box.endX = BaseExpression.biCombine(box.startX, transform.widthProperty(), Float::sum);
-        box.endY = BaseExpression.biCombine(box.startY, transform.heightProperty(), Float::sum);
+        box.endX = Expression.biCombine(box.startX, transform.widthProperty(), Float::sum);
+        box.endY = Expression.biCombine(box.startY, transform.heightProperty(), Float::sum);
 
         return box;
     }
@@ -39,10 +39,10 @@ public class ScissorBox
     {
         ScissorBox box = new ScissorBox();
 
-        box.startX = new BaseProperty<>(startX, "startXProperty");
-        box.startY = new BaseProperty<>(startY, "startYProperty");
-        box.endX = new BaseProperty<>(endX, "endXProperty");
-        box.endY = new BaseProperty<>(endY, "endYProperty");
+        box.startX = new Property<>(startX);
+        box.startY = new Property<>(startY);
+        box.endX = new Property<>(endX);
+        box.endY = new Property<>(endY);
 
         return box;
     }
@@ -52,11 +52,11 @@ public class ScissorBox
         if (transform == null)
             return;
 
-        ((BaseExpression<Float>) startX).unbind(transform.xPosProperty(), transform.xTranslateProperty());
-        ((BaseExpression<Float>) startY).unbind(transform.yPosProperty(), transform.yTranslateProperty());
+        ((Expression<Float>) startX).unbind(transform.xPosProperty(), transform.xTranslateProperty());
+        ((Expression<Float>) startY).unbind(transform.yPosProperty(), transform.yTranslateProperty());
 
-        ((BaseExpression<Float>) endX).unbind(startX, transform.widthProperty());
-        ((BaseExpression<Float>) endY).unbind(startY, transform.heightProperty());
+        ((Expression<Float>) endX).unbind(startX, transform.widthProperty());
+        ((Expression<Float>) endY).unbind(startY, transform.heightProperty());
     }
 
     public void setValidPass(RenderPass... passArray)

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.window;
 
-import fr.ourten.teabeans.value.IProperty;
+import fr.ourten.teabeans.property.IProperty;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;

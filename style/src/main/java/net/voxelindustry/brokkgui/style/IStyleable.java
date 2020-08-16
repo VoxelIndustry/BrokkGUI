@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style;
 
-import fr.ourten.teabeans.value.BaseSetProperty;
+import fr.ourten.teabeans.property.SetProperty;
 
 public interface IStyleable
 {
@@ -10,28 +10,28 @@ public interface IStyleable
 
     default void addStyleClass(String styleClass)
     {
-		getStyleClass().add(styleClass);
+        getStyleClass().add(styleClass);
     }
 
     default void removeStyleClass(String styleClass)
     {
-		getStyleClass().remove(styleClass);
+        getStyleClass().remove(styleClass);
     }
 
     default void clearStyleClass()
     {
-		getStyleClass().clear();
+        getStyleClass().clear();
     }
 
-    BaseSetProperty<String> getStyleClass();
+    SetProperty<String> getStyleClass();
 
-    BaseSetProperty<String> getActivePseudoClass();
+    SetProperty<String> getActivePseudoClass();
 
     StyleComponent getStyle();
 
     default void setStyle(String style)
     {
-		getStyle().parseInlineCSS(style);
+        getStyle().parseInlineCSS(style);
     }
 
     String type();

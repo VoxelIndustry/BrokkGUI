@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.listener.ValueChangeListener;
 import fr.ourten.teabeans.listener.ValueInvalidationListener;
-import fr.ourten.teabeans.value.BaseSetProperty;
+import fr.ourten.teabeans.property.SetProperty;
 import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
@@ -37,8 +37,8 @@ public class StyleComponent extends GuiComponent
 
     private Supplier<StyleList> styleSupplier;
 
-    private final BaseSetProperty<String> styleClass;
-    private final BaseSetProperty<String> activePseudoClass;
+    private final SetProperty<String> styleClass;
+    private final SetProperty<String> activePseudoClass;
 
     private Runnable onStyleInit;
 
@@ -54,8 +54,8 @@ public class StyleComponent extends GuiComponent
         properties = new HashMap<>();
         conditionalProperties = new ArrayList<>();
 
-        styleClass = new BaseSetProperty<>(Collections.emptySet(), "styleClassListProperty");
-        activePseudoClass = new BaseSetProperty<>(Collections.emptySet(), "activePseudoClassListProperty");
+        styleClass = new SetProperty<>(Collections.emptySet());
+        activePseudoClass = new SetProperty<>(Collections.emptySet());
 
         ListValueChangeListener<String> styleListRefreshListener = this::valueListChanged;
         styleClass.addListener(styleListRefreshListener);
@@ -145,7 +145,7 @@ public class StyleComponent extends GuiComponent
     // PROPERTIES //
     ////////////////
 
-    public BaseSetProperty<String> styleClass()
+    public SetProperty<String> styleClass()
     {
         return styleClass;
     }
@@ -170,7 +170,7 @@ public class StyleComponent extends GuiComponent
         return element().type();
     }
 
-    public BaseSetProperty<String> activePseudoClass()
+    public SetProperty<String> activePseudoClass()
     {
         return activePseudoClass;
     }

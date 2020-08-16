@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.behavior;
 
-import fr.ourten.teabeans.value.BaseListProperty;
+import fr.ourten.teabeans.property.ListProperty;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.element.GuiListCell;
@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 
 public class GuiListViewBehavior<T> extends GuiScrollableBehavior<GuiListView<T>>
 {
-    private Supplier<BaseListProperty<Transform>> childrenSupplier;
+    private Supplier<ListProperty<Transform>> childrenSupplier;
 
-    public GuiListViewBehavior(GuiListView<T> model, Supplier<BaseListProperty<Transform>> childrenSupplier)
+    public GuiListViewBehavior(GuiListView<T> model, Supplier<ListProperty<Transform>> childrenSupplier)
     {
         super(model);
 

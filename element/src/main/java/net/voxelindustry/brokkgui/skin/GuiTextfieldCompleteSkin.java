@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.skin;
 
-import fr.ourten.teabeans.binding.BaseExpression;
+import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldCompleteBehavior;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
@@ -96,15 +96,15 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
         {
             get(StyleComponent.class).styleClass().add("complete-popup");
 
-            transform().xPosProperty().bind(BaseExpression.biCombine(model.transform().xPosProperty(), model.transform().xTranslateProperty(),
+            transform().xPosProperty().bindProperty(Expression.biCombine(model.transform().xPosProperty(), model.transform().xTranslateProperty(),
                     (xPos, xTranslate) -> xPos + xTranslate));
-            transform().yPosProperty().bind(BaseExpression.triCombine(model.transform().yPosProperty(),
+            transform().yPosProperty().bindProperty(Expression.triCombine(model.transform().yPosProperty(),
                     model.transform().yTranslateProperty(), model.transform().heightProperty(),
                     (yPos, yTranslate, height) -> yPos + yTranslate + height));
 
-            transform().widthProperty().bind(model.getCompletePopupWidthProperty());
-            transform().heightProperty().bind(
-                    BaseExpression.biCombine(model.getCellHeightProperty(), transform().childrenProperty(),
+            transform().widthProperty().bindProperty(model.getCompletePopupWidthProperty());
+            transform().heightProperty().bindProperty(
+                    Expression.biCombine(model.getCellHeightProperty(), transform().childrenProperty(),
                             (cellHeight, children) -> cellHeight * children.size()));
 
             this.model = model;
@@ -172,8 +172,8 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
         private GuiLabel makeLabel(String text)
         {
             GuiLabel label = new GuiLabel(text);
-            label.transform().widthProperty().bind(transform().widthProperty());
-            label.transform().heightProperty().bind(model.getCellHeightProperty());
+            label.transform().widthProperty().bindProperty(transform().widthProperty());
+            label.transform().heightProperty().bindProperty(model.getCellHeightProperty());
             label.setTextPadding(LABEL_PADDING);
             label.setTextAlignment(RectAlignment.LEFT_CENTER);
             label.setOnClickEvent(e -> marked = text);

@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.window;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.listener.ValueChangeListener;
 import fr.ourten.teabeans.listener.ValueInvalidationListener;
-import fr.ourten.teabeans.value.ListProperty;
+import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
 
@@ -19,62 +19,61 @@ public class ListenerPool
 
     public ListenerPool()
     {
-        this.invalidationMap = new IdentityHashMap<>(8);
-        this.valueChangeMap = new IdentityHashMap<>(8);
-        this.listValueChangeMap = new IdentityHashMap<>(8);
+        invalidationMap = new IdentityHashMap<>(8);
+        valueChangeMap = new IdentityHashMap<>(8);
+        listValueChangeMap = new IdentityHashMap<>(8);
     }
 
     public void attach(Observable obs, ValueInvalidationListener listener)
     {
-        if (!this.invalidationMap.containsKey(obs))
-            this.invalidationMap.put(obs, new ArrayList<>(4));
-        this.invalidationMap.get(obs).add(listener);
+        if (!invalidationMap.containsKey(obs))
+            invalidationMap.put(obs, new ArrayList<>(4));
+        invalidationMap.get(obs).add(listener);
 
         obs.addListener(listener);
     }
 
     public <T> void attach(ObservableValue<T> obs, ValueChangeListener<T> listener)
     {
-        if (!this.valueChangeMap.containsKey(obs))
-            this.valueChangeMap.put(obs, new ArrayList<>(4));
-        this.valueChangeMap.get(obs).add(listener);
+        if (!valueChangeMap.containsKey(obs))
+            valueChangeMap.put(obs, new ArrayList<>(4));
+        valueChangeMap.get(obs).add(listener);
 
         obs.addListener(listener);
     }
 
     public <T> void attach(ListProperty<T> obs, ListValueChangeListener<T> listener)
     {
-        if (!this.listValueChangeMap.containsKey(obs))
-            this.listValueChangeMap.put(obs, new ArrayList<>(4));
-        this.listValueChangeMap.get(obs).add(listener);
+        if (!listValueChangeMap.containsKey(obs))
+            listValueChangeMap.put(obs, new ArrayList<>(4));
+        listValueChangeMap.get(obs).add(listener);
 
         obs.addListener(listener);
     }
 
-    @SuppressWarnings("unchecked")
     public void clear()
     {
-        this.invalidationMap.forEach((obs, listeners) ->
+        invalidationMap.forEach((obs, listeners) ->
         {
             listeners.forEach(obs::removeListener);
             listeners.clear();
         });
-        this.invalidationMap.clear();
+        invalidationMap.clear();
 
-        this.valueChangeMap.forEach((obs, listeners) ->
+        valueChangeMap.forEach((obs, listeners) ->
         {
             for (ValueChangeListener<?> listener : listeners)
                 obs.removeListener((ValueChangeListener<Object>) listener);
             listeners.clear();
         });
-        this.valueChangeMap.clear();
+        valueChangeMap.clear();
 
-        this.listValueChangeMap.forEach((obs, listeners) ->
+        listValueChangeMap.forEach((obs, listeners) ->
         {
             for (ListValueChangeListener<?> listener : listeners)
                 obs.removeListener((ListValueChangeListener<Object>) listener);
             listeners.clear();
         });
-        this.listValueChangeMap.clear();
+        listValueChangeMap.clear();
     }
 }

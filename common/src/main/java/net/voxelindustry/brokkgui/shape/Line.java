@@ -1,11 +1,11 @@
 package net.voxelindustry.brokkgui.shape;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 
 public class Line extends GuiElement
 {
-    private final BaseProperty<Float> lineThinProperty;
+    private final Property<Float> lineThinProperty;
 
     public Line(float startX, float startY, float endX, float endY)
     {
@@ -15,7 +15,7 @@ public class Line extends GuiElement
         transform().width(Math.abs(startX - endX));
         transform().height(Math.abs((startY - endY)));
 
-        lineThinProperty = new BaseProperty<>(1F, "lineThinProperty");
+        lineThinProperty = new Property<>(1F);
 
         paint().shape(new LineShape(this::getLineThin));
     }
@@ -30,7 +30,7 @@ public class Line extends GuiElement
         this(0, 0);
     }
 
-    public BaseProperty<Float> lineThinProperty()
+    public Property<Float> lineThinProperty()
     {
         return lineThinProperty;
     }

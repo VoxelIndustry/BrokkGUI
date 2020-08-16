@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.event;
 
-import net.voxelindustry.brokkgui.control.GuiButtonBase;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.IEventEmitter;
 
@@ -10,7 +10,7 @@ public class SelectEvent extends GuiInputEvent
 
     private boolean isSelected;
 
-    public SelectEvent(GuiButtonBase source, boolean isSelected)
+    public SelectEvent(GuiElement source, boolean isSelected)
     {
         super(source);
 
@@ -25,6 +25,6 @@ public class SelectEvent extends GuiInputEvent
     @Override
     public SelectEvent copy(IEventEmitter source)
     {
-        return new SelectEvent((GuiButtonBase) source, isSelected);
+        return new SelectEvent((GuiElement) source, isSelected);
     }
 }

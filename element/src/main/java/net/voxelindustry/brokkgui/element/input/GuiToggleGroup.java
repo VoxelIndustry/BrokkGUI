@@ -1,83 +1,83 @@
 package net.voxelindustry.brokkgui.element.input;
 
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.element.IGuiTogglable;
+import fr.ourten.teabeans.property.ListProperty;
+import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkgui.element.IGuiToggleable;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class GuiToggleGroup
 {
-    private final BaseProperty<IGuiTogglable>     selectedButtonProperty;
-    private final BaseListProperty<IGuiTogglable> buttonListProperty;
-    private boolean                               allowNothing;
+    private final Property<IGuiToggleable>     selectedButtonProperty;
+    private final ListProperty<IGuiToggleable> buttonListProperty;
+    private       boolean                      allowNothing;
 
     public GuiToggleGroup()
     {
-        this.selectedButtonProperty = new BaseProperty<>(null, "selectedButtonProperty");
-        this.buttonListProperty = new BaseListProperty<>(null, "buttonListProperty");
+        selectedButtonProperty = new Property<>(null);
+        buttonListProperty = new ListProperty<>(null);
     }
 
-    public void setSelectedButton(final IGuiTogglable button)
+    public void setSelectedButton(IGuiToggleable button)
     {
-        if (this.buttonListProperty.contains(button))
+        if (buttonListProperty.contains(button))
         {
-            this.selectedButtonProperty.setValue(button);
-            this.buttonListProperty.getValue()
+            selectedButtonProperty.setValue(button);
+            buttonListProperty.getValue()
                     .forEach(button2 -> button2.getSelectedProperty().setValue(button2 == button));
         }
-        else if (this.allowNothing() && button == null)
+        else if (allowNothing() && button == null)
         {
-            this.selectedButtonProperty.setValue(null);
-            this.buttonListProperty.getValue().forEach(button2 -> button2.getSelectedProperty().setValue(false));
+            selectedButtonProperty.setValue(null);
+            buttonListProperty.getValue().forEach(button2 -> button2.getSelectedProperty().setValue(false));
         }
     }
 
-    public IGuiTogglable getSelectedButton()
+    public IGuiToggleable getSelectedButton()
     {
-        return this.getSelectedButtonProperty().getValue();
+        return getSelectedButtonProperty().getValue();
     }
 
     /**
      * @return an immutable list
      */
-    public List<IGuiTogglable> getButtonList()
+    public List<IGuiToggleable> getButtonList()
     {
-        return this.getButtonListProperty().getValue();
+        return getButtonListProperty().getValue();
     }
 
-    public void addButton(final GuiToggleButton button)
+    public void addButton(IGuiToggleable button)
     {
-        if (!this.getButtonListProperty().contains(button))
+        if (!getButtonListProperty().contains(button))
         {
-            this.getButtonListProperty().add(button);
+            getButtonListProperty().add(button);
             button.setToggleGroup(this);
         }
     }
 
-    public void addButtons(final GuiToggleButton... buttons)
+    public void addButtons(IGuiToggleable... buttons)
     {
         Arrays.asList(buttons).forEach(this::addButton);
     }
 
     public boolean allowNothing()
     {
-        return this.allowNothing;
+        return allowNothing;
     }
 
-    public void setAllowNothing(final boolean allowNothing)
+    public void setAllowNothing(boolean allowNothing)
     {
         this.allowNothing = allowNothing;
     }
 
-    public BaseProperty<IGuiTogglable> getSelectedButtonProperty()
+    public Property<IGuiToggleable> getSelectedButtonProperty()
     {
-        return this.selectedButtonProperty;
+        return selectedButtonProperty;
     }
 
-    public BaseListProperty<IGuiTogglable> getButtonListProperty()
+    public ListProperty<IGuiToggleable> getButtonListProperty()
     {
-        return this.buttonListProperty;
+        return buttonListProperty;
     }
 }

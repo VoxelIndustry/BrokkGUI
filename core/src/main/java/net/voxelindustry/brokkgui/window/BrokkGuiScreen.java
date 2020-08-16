@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.window;
 
-import fr.ourten.teabeans.binding.BaseExpression;
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
-import fr.ourten.teabeans.value.IProperty;
+import fr.ourten.teabeans.binding.Expression;
+import fr.ourten.teabeans.property.IProperty;
+import fr.ourten.teabeans.property.ListProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.control.GuiFather;
@@ -36,6 +36,8 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Collections.emptyList;
+
 public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 {
     private EventDispatcher                 eventDispatcher;
@@ -46,15 +48,15 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     private final ArrayList<SubGuiScreen> windows;
     private       IGuiRenderer            renderer;
 
-    private final BaseProperty<Float> widthProperty, heightProperty, xPosProperty, yPosProperty;
+    private final Property<Float> widthProperty, heightProperty, xPosProperty, yPosProperty;
 
-    private final BaseProperty<Float> xRelativePosProperty, yRelativePosProperty;
-    private final BaseProperty<Float> xOffsetProperty, yOffsetProperty;
+    private final Property<Float> xRelativePosProperty, yRelativePosProperty;
+    private final Property<Float> xOffsetProperty, yOffsetProperty;
 
-    private final BaseProperty<Integer> screenWidthProperty, screenHeightProperty;
+    private final Property<Integer> screenWidthProperty, screenHeightProperty;
 
-    private final BaseListProperty<String> stylesheetsProperty;
-    private final BaseProperty<StyleList>  styleListProperty;
+    private final ListProperty<String> stylesheetsProperty;
+    private final Property<StyleList>  styleListProperty;
 
     private final ListenerPool listenerPool;
 
@@ -68,27 +70,27 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     public BrokkGuiScreen(float xRelativePos, float yRelativePos, float width, float height)
     {
-        widthProperty = new BaseProperty<>(width, "widthProperty");
-        heightProperty = new BaseProperty<>(height, "heightProperty");
+        widthProperty = new Property<>(width);
+        heightProperty = new Property<>(height);
 
-        xRelativePosProperty = new BaseProperty<>(xRelativePos, "xRelativePosProperty");
-        yRelativePosProperty = new BaseProperty<>(yRelativePos, "yRelativePosProperty");
+        xRelativePosProperty = new Property<>(xRelativePos);
+        yRelativePosProperty = new Property<>(yRelativePos);
 
-        xPosProperty = new BaseProperty<>(0f, "xPosProperty");
-        yPosProperty = new BaseProperty<>(0f, "yPosProperty");
+        xPosProperty = new Property<>(0F);
+        yPosProperty = new Property<>(0F);
 
-        xOffsetProperty = new BaseProperty<>(0f, "xOffsetProperty");
-        yOffsetProperty = new BaseProperty<>(0f, "yOffsetProperty");
+        xOffsetProperty = new Property<>(0F);
+        yOffsetProperty = new Property<>(0F);
 
         windows = new ArrayList<>();
 
-        screenWidthProperty = new BaseProperty<>(0, "screenWidthProperty");
-        screenHeightProperty = new BaseProperty<>(0, "screenHeightProperty");
+        screenWidthProperty = new Property<>(0);
+        screenHeightProperty = new Property<>(0);
 
         listenerPool = new ListenerPool();
 
-        stylesheetsProperty = new BaseListProperty<>(Collections.emptyList(), "styleSheetsListProperty");
-        styleListProperty = new BaseProperty<>(null, "styleTreeProperty");
+        stylesheetsProperty = new ListProperty<>(emptyList());
+        styleListProperty = new Property<>(null);
 
         lastClickX = -1;
         lastClickY = -1;
@@ -116,11 +118,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         renderer = wrapper.getRenderer();
 
-        xPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosX(getxRelativePos(), getWidth()) + getxOffset(),
+        xPosProperty.bindProperty(new Expression<>(() -> wrapper.getGuiRelativePosX(getxRelativePos(), getWidth()) + getxOffset(),
                 getScreenWidthProperty(), getxRelativePosProperty(), getWidthProperty(),
                 getxOffsetProperty()));
 
-        yPosProperty.bind(new BaseExpression<>(() -> wrapper.getGuiRelativePosY(getyRelativePos(), getHeight()) + getyOffset(),
+        yPosProperty.bindProperty(new Expression<>(() -> wrapper.getGuiRelativePosY(getyRelativePos(), getHeight()) + getyOffset(),
                 getyRelativePosProperty(), getScreenHeightProperty(), getHeightProperty(),
                 getyOffsetProperty()));
 
@@ -326,11 +328,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         windows.add(0, subGui);
 
-        subGui.transform().xPosProperty().bind(new BaseExpression<>(() -> getScreenWidth() / (1 / subGui.getxRelativePos())
+        subGui.transform().xPosProperty().bindProperty(new Expression<>(() -> getScreenWidth() / (1 / subGui.getxRelativePos())
                 - subGui.getWidth() / 2, subGui.getxRelativePosProperty(), getScreenWidthProperty(),
                 subGui.transform().widthProperty()));
 
-        subGui.transform().yPosProperty().bind(new BaseExpression<>(() -> getScreenHeight() / (1 / subGui.getyRelativePos())
+        subGui.transform().yPosProperty().bindProperty(new Expression<>(() -> getScreenHeight() / (1 / subGui.getyRelativePos())
                 - subGui.getHeight() / 2, subGui.getyRelativePosProperty(), getScreenHeightProperty(),
                 subGui.transform().heightProperty()));
 
@@ -431,11 +433,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         this.mainPanel = mainPanel;
 
-        this.mainPanel.transform().widthProperty().bind(widthProperty);
-        this.mainPanel.transform().heightProperty().bind(heightProperty);
+        this.mainPanel.transform().widthProperty().bindProperty(widthProperty);
+        this.mainPanel.transform().heightProperty().bindProperty(heightProperty);
 
-        this.mainPanel.transform().xPosProperty().bind(xPosProperty);
-        this.mainPanel.transform().yPosProperty().bind(yPosProperty);
+        this.mainPanel.transform().xPosProperty().bindProperty(xPosProperty);
+        this.mainPanel.transform().yPosProperty().bindProperty(yPosProperty);
 
         StyleEngine.setStyleSupplierHierarchy(mainPanel.transform(), getStyleListProperty()::getValue);
         if (wrapper != null)
@@ -453,44 +455,44 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         runLater(runnable, ticks * 50, TimeUnit.MILLISECONDS);
     }
 
-    public BaseProperty<Float> getWidthProperty()
+    public Property<Float> getWidthProperty()
     {
         return widthProperty;
     }
 
-    public BaseProperty<Float> getHeightProperty()
+    public Property<Float> getHeightProperty()
     {
         return heightProperty;
     }
 
-    public BaseProperty<Float> getxPosProperty()
+    public Property<Float> getxPosProperty()
     {
         return xPosProperty;
     }
 
-    public BaseProperty<Float> getyPosProperty()
+    public Property<Float> getyPosProperty()
     {
         return yPosProperty;
     }
 
     @Override
-    public BaseProperty<Float> getxRelativePosProperty()
+    public Property<Float> getxRelativePosProperty()
     {
         return xRelativePosProperty;
     }
 
     @Override
-    public BaseProperty<Float> getyRelativePosProperty()
+    public Property<Float> getyRelativePosProperty()
     {
         return yRelativePosProperty;
     }
 
-    public BaseProperty<Float> getxOffsetProperty()
+    public Property<Float> getxOffsetProperty()
     {
         return xOffsetProperty;
     }
 
-    public BaseProperty<Float> getyOffsetProperty()
+    public Property<Float> getyOffsetProperty()
     {
         return yOffsetProperty;
     }
@@ -707,12 +709,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         return stylesheetsProperty.getModifiableValue();
     }
 
-    public BaseListProperty<String> getStylesheetsProperty()
+    public ListProperty<String> getStylesheetsProperty()
     {
         return stylesheetsProperty;
     }
 
-    private BaseProperty<StyleList> getStyleListProperty()
+    private Property<StyleList> getStyleListProperty()
     {
         return styleListProperty;
     }

@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.animation;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.event.AnimationFinishEvent;
 import net.voxelindustry.hermod.EventDispatcher;
@@ -15,13 +15,13 @@ public abstract class Animation implements ITicking, IEventEmitter
     private long startTime;
     private long elapsedTime;
 
-    private int                   maxCycles;
-    private boolean               reverse;
-    private BaseProperty<Integer> currentCycleProperty;
+    private int               maxCycles;
+    private boolean           reverse;
+    private Property<Integer> currentCycleProperty;
 
-    private BaseProperty<AnimationStatus> statusProperty;
-    private BaseProperty<Float>           progressProperty;
-    private BaseProperty<Float>           totalProgressProperty;
+    private Property<AnimationStatus> statusProperty;
+    private Property<Float>           progressProperty;
+    private Property<Float>           totalProgressProperty;
 
     private Animation                          parent;
     private EventDispatcher                    eventDispatcher;
@@ -30,35 +30,36 @@ public abstract class Animation implements ITicking, IEventEmitter
     public Animation(long duration, TimeUnit unit)
     {
         this.duration = unit.toMillis(duration);
-        this.maxCycles = 1;
+        maxCycles = 1;
 
-        this.statusProperty = new BaseProperty<>(AnimationStatus.NOT_STARTED, "statusProperty");
-        this.currentCycleProperty = new BaseProperty<>(0, "currentCycleProperty");
-        this.progressProperty = new BaseProperty<>(0f, "progressProperty");
-        this.totalProgressProperty = new BaseProperty<>(0f, "totalProgressProperty");
+        statusProperty = new Property<>(AnimationStatus.NOT_STARTED);
+        currentCycleProperty = new Property<>(0);
+        progressProperty = new Property<>(0F);
+        totalProgressProperty = new Property<>(0F);
     }
 
+    @Override
     public void tick(long currentMillis)
     {
-        this.elapsedTime = currentMillis - this.startTime;
+        elapsedTime = currentMillis - startTime;
 
         if (elapsedTime >= duration)
         {
-            this.startTime = currentMillis;
-            this.elapsedTime = 0;
+            startTime = currentMillis;
+            elapsedTime = 0;
 
-            this.getCurrentCycleProperty().setValue(this.getCurrentCycle() + 1);
-            if (this.getCurrentCycle() == this.maxCycles)
+            getCurrentCycleProperty().setValue(getCurrentCycle() + 1);
+            if (getCurrentCycle() == maxCycles)
             {
-                this.complete();
+                complete();
                 return;
             }
         }
 
         float currentProgress = reverse && getCurrentCycle() % 2 != 0 ? 1 - ((float) elapsedTime / duration) :
                 ((float) elapsedTime / duration);
-        this.getProgressProperty().setValue(currentProgress);
-        this.getTotalProgressProperty().setValue((float) (this.getCurrentCycle() / this.getMaxCycles()) + (currentProgress / getMaxCycles()));
+        getProgressProperty().setValue(currentProgress);
+        getTotalProgressProperty().setValue((float) (getCurrentCycle() / getMaxCycles()) + (currentProgress / getMaxCycles()));
     }
 
     public void setCurrentProgress(float progress)
@@ -71,71 +72,71 @@ public abstract class Animation implements ITicking, IEventEmitter
 
     public void start()
     {
-        if (this.isRunning())
+        if (isRunning())
             return;
         BrokkGuiPlatform.getInstance().getTickSender().addTicking(this);
-        this.restart();
+        restart();
     }
 
     public void reset()
     {
-        this.complete();
+        complete();
     }
 
     public void restart()
     {
-        if (!this.isRunning())
+        if (!isRunning())
             BrokkGuiPlatform.getInstance().getTickSender().addTicking(this);
 
-        this.getStatusProperty().setValue(AnimationStatus.RUNNING);
-        this.getCurrentCycleProperty().setValue(0);
-        this.startTime = System.currentTimeMillis();
-        this.elapsedTime = 0;
+        getStatusProperty().setValue(AnimationStatus.RUNNING);
+        getCurrentCycleProperty().setValue(0);
+        startTime = System.currentTimeMillis();
+        elapsedTime = 0;
     }
 
     public void pause()
     {
-        this.getStatusProperty().setValue(AnimationStatus.PAUSED);
+        getStatusProperty().setValue(AnimationStatus.PAUSED);
         BrokkGuiPlatform.getInstance().getTickSender().removeTicking(this);
     }
 
     public void resume()
     {
-        if (this.getStatus() != AnimationStatus.PAUSED)
+        if (getStatus() != AnimationStatus.PAUSED)
             return;
 
         BrokkGuiPlatform.getInstance().getTickSender().addTicking(this);
-        this.startTime = System.currentTimeMillis() - this.elapsedTime;
-        this.getStatusProperty().setValue(AnimationStatus.RUNNING);
+        startTime = System.currentTimeMillis() - elapsedTime;
+        getStatusProperty().setValue(AnimationStatus.RUNNING);
     }
 
     public void complete()
     {
-        this.getStatusProperty().setValue(AnimationStatus.COMPLETED);
+        getStatusProperty().setValue(AnimationStatus.COMPLETED);
         BrokkGuiPlatform.getInstance().getTickSender().removeTicking(this);
 
-        this.startTime = 0;
+        startTime = 0;
 
-        if (this.onFinishEvent != null)
-            this.onFinishEvent.handle(new AnimationFinishEvent(this));
+        if (onFinishEvent != null)
+            onFinishEvent.handle(new AnimationFinishEvent(this));
     }
 
-    public BaseProperty<AnimationStatus> getStatusProperty()
+    public Property<AnimationStatus> getStatusProperty()
     {
         return statusProperty;
     }
 
-    public BaseProperty<Integer> getCurrentCycleProperty()
+    public Property<Integer> getCurrentCycleProperty()
     {
         return currentCycleProperty;
     }
 
-    public BaseProperty<Float> getProgressProperty()
+    public Property<Float> getProgressProperty()
     {
         return progressProperty;
     }
 
-    public BaseProperty<Float> getTotalProgressProperty()
+    public Property<Float> getTotalProgressProperty()
     {
         return totalProgressProperty;
     }
@@ -145,7 +146,7 @@ public abstract class Animation implements ITicking, IEventEmitter
      */
     public float getProgress()
     {
-        return this.getProgressProperty().getValue();
+        return getProgressProperty().getValue();
     }
 
     /**
@@ -153,22 +154,22 @@ public abstract class Animation implements ITicking, IEventEmitter
      */
     public float getTotalProgress()
     {
-        return this.getTotalProgressProperty().getValue();
+        return getTotalProgressProperty().getValue();
     }
 
     public AnimationStatus getStatus()
     {
-        return this.getStatusProperty().getValue();
+        return getStatusProperty().getValue();
     }
 
     public boolean isRunning()
     {
-        return this.getStatus() == AnimationStatus.RUNNING;
+        return getStatus() == AnimationStatus.RUNNING;
     }
 
     public boolean isCompleted()
     {
-        return this.getStatus() == AnimationStatus.COMPLETED;
+        return getStatus() == AnimationStatus.COMPLETED;
     }
 
     public long getDuration()
@@ -198,7 +199,7 @@ public abstract class Animation implements ITicking, IEventEmitter
 
     public int getCurrentCycle()
     {
-        return this.getCurrentCycleProperty().getValue();
+        return getCurrentCycleProperty().getValue();
     }
 
     public boolean isReverse()
@@ -223,8 +224,8 @@ public abstract class Animation implements ITicking, IEventEmitter
 
     public void setOnFinishEvent(EventHandler<AnimationFinishEvent> onFinishEvent)
     {
-        if (this.eventDispatcher == null)
-            this.eventDispatcher = new EventDispatcher();
+        if (eventDispatcher == null)
+            eventDispatcher = new EventDispatcher();
         this.onFinishEvent = onFinishEvent;
     }
 

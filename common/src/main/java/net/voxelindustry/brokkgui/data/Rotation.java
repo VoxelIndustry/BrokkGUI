@@ -1,48 +1,48 @@
 package net.voxelindustry.brokkgui.data;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 
 public class Rotation
 {
     public static final Rotation NONE = Rotation.build().fromCenter().angle(0).create();
 
-    private final BaseProperty<Float>          angleProperty;
-    private final BaseProperty<RotationOrigin> originProperty;
+    private final Property<Float>          angleProperty;
+    private final Property<RotationOrigin> originProperty;
 
     private Rotation(float angle, RotationOrigin origin)
     {
-        this.angleProperty = new BaseProperty<>(angle, "angleProperty");
-        this.originProperty = new BaseProperty<>(origin, "originProperty");
+        angleProperty = new Property<>(angle);
+        originProperty = new Property<>(origin);
     }
 
-    public BaseProperty<Float> getAngleProperty()
+    public Property<Float> getAngleProperty()
     {
         return angleProperty;
     }
 
-    public BaseProperty<RotationOrigin> getOriginProperty()
+    public Property<RotationOrigin> getOriginProperty()
     {
         return originProperty;
     }
 
     public float getAngle()
     {
-        return this.getAngleProperty().getValue();
+        return getAngleProperty().getValue();
     }
 
     public void setAngle(float angle)
     {
-        this.getAngleProperty().setValue(angle);
+        getAngleProperty().setValue(angle);
     }
 
     public RotationOrigin getOrigin()
     {
-        return this.getOriginProperty().getValue();
+        return getOriginProperty().getValue();
     }
 
     public void setOrigin(RotationOrigin origin)
     {
-        this.getOriginProperty().setValue(origin);
+        getOriginProperty().setValue(origin);
     }
 
     public static Builder build()
@@ -68,19 +68,19 @@ public class Rotation
 
         public Builder fromCenter()
         {
-            this.origin = RotationOrigin.CENTER;
+            origin = RotationOrigin.CENTER;
             return this;
         }
 
         public Builder from(float fromX, float fromY)
         {
-            this.origin = new RotationOrigin(fromX, fromY, false);
+            origin = new RotationOrigin(fromX, fromY, false);
             return this;
         }
 
         public Builder fromRelative(float fromX, float fromY)
         {
-            this.origin = new RotationOrigin(fromX, fromY, true);
+            origin = new RotationOrigin(fromX, fromY, true);
             return this;
         }
 

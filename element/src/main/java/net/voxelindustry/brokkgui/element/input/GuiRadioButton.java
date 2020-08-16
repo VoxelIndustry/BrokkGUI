@@ -1,9 +1,10 @@
 package net.voxelindustry.brokkgui.element.input;
 
-import fr.ourten.teabeans.binding.BaseExpression;
-import fr.ourten.teabeans.value.BaseProperty;
-import net.voxelindustry.brokkgui.behavior.GuiTogglableButtonBehavior;
+import fr.ourten.teabeans.binding.Expression;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.BooleanFormFieldComponent;
+import net.voxelindustry.brokkgui.component.impl.ToggleButtonComponent;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
@@ -15,18 +16,12 @@ import net.voxelindustry.brokkgui.style.StyleComponent;
 
 public class GuiRadioButton extends GuiToggleButton
 {
-    private final BaseProperty<RectSide>   buttonSideProperty;
-    private final BaseProperty<GuiElement> buttonNodeProperty;
+    private BooleanFormFieldComponent booleanFormFieldComponent;
 
     public GuiRadioButton(String text)
     {
         super(text);
 
-        buttonSideProperty = new BaseProperty<>(RectSide.LEFT, "buttonSideProperty");
-        buttonNodeProperty = new BaseProperty<>(new RadioButtonContent(this), "buttonNodeProperty");
-
-        setExpandToLabel(true);
-        getLabel().setTextPadding(new RectBox(0, 2, 0, 0));
     }
 
     public GuiRadioButton()
@@ -34,14 +29,30 @@ public class GuiRadioButton extends GuiToggleButton
         this("");
     }
 
-    public BaseProperty<RectSide> getButtonSideProperty()
+    @Override
+    public void postConstruct()
     {
-        return buttonSideProperty;
+        super.postConstruct();
+
+        booleanFormFieldComponent = provide(BooleanFormFieldComponent.class);
+        booleanFormFieldComponent.getButtonNodeProperty().setValue(new RadioButtonContent(toggleButtonComponent()));
+
+        textComponent().textPadding(new RectBox(0, 2, 0, 0));
     }
 
-    public BaseProperty<GuiElement> getButtonNodeProperty()
+    public BooleanFormFieldComponent radioButtonComponent()
     {
-        return buttonNodeProperty;
+        return booleanFormFieldComponent;
+    }
+
+    public Property<RectSide> getButtonSideProperty()
+    {
+        return radioButtonComponent().getButtonSideProperty();
+    }
+
+    public Property<GuiElement> getButtonNodeProperty()
+    {
+        return radioButtonComponent().getButtonNodeProperty();
     }
 
     public void setButtonSide(RectSide side)
@@ -78,10 +89,10 @@ public class GuiRadioButton extends GuiToggleButton
 
     public static class RadioButtonContent extends GuiFather
     {
-        private Rectangle box;
-        private Rectangle mark;
+        private final Rectangle box;
+        private final Rectangle mark;
 
-        public RadioButtonContent(GuiRadioButton parent)
+        public RadioButtonContent(ToggleButtonComponent toggleButtonComponent)
         {
             transform().heightRatio(1);
             transform().widthProperty().bind(transform().heightProperty());
@@ -102,10 +113,10 @@ public class GuiRadioButton extends GuiToggleButton
             box.transform().heightProperty().bind(transform().heightProperty());
 
             mark.transform().widthProperty().bind(mark.transform().heightProperty());
-            mark.transform().heightProperty().bind(BaseExpression.transform(box.transform().heightProperty(),
+            mark.transform().heightProperty().bind(Expression.transform(box.transform().heightProperty(),
                     height -> height - 4));
 
-            mark.visibleProperty().bind(parent.getSelectedProperty());
+            mark.visibleProperty().bind(toggleButtonComponent.getSelectedProperty());
         }
 
         public GuiElement getBox()

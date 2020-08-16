@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.control;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
@@ -17,11 +17,11 @@ import static java.util.stream.Collectors.toList;
 
 public abstract class GuiFather extends GuiElement implements IStyleParent
 {
-    private BaseProperty<GuiOverflowPolicy> guiOverflowProperty;
+    private Property<GuiOverflowPolicy> guiOverflowProperty;
 
     public GuiFather()
     {
-        guiOverflowProperty = new BaseProperty<>(GuiOverflowPolicy.NONE, "overflowProperty");
+        guiOverflowProperty = new Property<>(GuiOverflowPolicy.NONE);
         guiOverflowProperty.addListener(obs ->
         {
             if (getScissorBox() == null)
@@ -95,7 +95,7 @@ public abstract class GuiFather extends GuiElement implements IStyleParent
         return filteredChildren;
     }
 
-    public BaseProperty<GuiOverflowPolicy> getGuiOverflowProperty()
+    public Property<GuiOverflowPolicy> getGuiOverflowProperty()
     {
         return guiOverflowProperty;
     }

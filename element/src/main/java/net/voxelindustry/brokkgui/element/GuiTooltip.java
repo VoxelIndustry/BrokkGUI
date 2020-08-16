@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.listener.ValueChangeListener;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiTooltip;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
@@ -13,7 +13,7 @@ public class GuiTooltip implements IGuiTooltip
 {
     private EventDispatcher eventDispatcher;
 
-    private BaseProperty<GuiElement>     contentProperty;
+    private Property<GuiElement>         contentProperty;
     private GuiElement                   owner;
     private ValueChangeListener<Boolean> ownerHoverListener;
 
@@ -32,7 +32,7 @@ public class GuiTooltip implements IGuiTooltip
         this.mouseXOffset = mouseXOffset;
         this.mouseYOffset = mouseYOffset;
 
-        contentProperty = new BaseProperty<>(null, "contentProperty");
+        contentProperty = new Property<>(null);
 
         setContent(content);
     }
@@ -52,7 +52,7 @@ public class GuiTooltip implements IGuiTooltip
         this(text, null);
     }
 
-    public BaseProperty<GuiElement> getContentProperty()
+    public Property<GuiElement> getContentProperty()
     {
         return contentProperty;
     }

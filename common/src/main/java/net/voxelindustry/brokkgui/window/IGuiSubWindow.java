@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.window;
 
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
@@ -18,9 +18,9 @@ public interface IGuiSubWindow
 
     float getyRelativePos();
 
-    BaseProperty<Float> getxRelativePosProperty();
+    Property<Float> getxRelativePosProperty();
 
-    BaseProperty<Float> getyRelativePosProperty();
+    Property<Float> getyRelativePosProperty();
 
     float getWidth();
 

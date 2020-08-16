@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.style.optional;
 
 import fr.ourten.teabeans.listener.ValueInvalidationListener;
-import fr.ourten.teabeans.value.BaseProperty;
-import fr.ourten.teabeans.value.IProperty;
+import fr.ourten.teabeans.property.IProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.shape.ShapeSpriteRotationCache;
@@ -54,7 +54,7 @@ public class SpriteRandomRotationProperties implements Consumer<StyleComponent>
         IProperty<SpriteRepeat> repeatProperty = holder.getProperty(key + "-repeat", SpriteRepeat.class);
 
         ShapeSpriteRotationCache cache = new ShapeSpriteRotationCache();
-        BaseProperty<Boolean> styleRefreshProperty = new BaseProperty<>(Boolean.FALSE, "styleRefreshProperty");
+        Property<Boolean> styleRefreshProperty = new Property<>(Boolean.FALSE);
 
         holder.element().getEventDispatcher().addHandler(StyleRefreshEvent.BEFORE, event -> styleRefreshProperty.setValue(true));
         holder.element().getEventDispatcher().addHandler(StyleRefreshEvent.AFTER, event ->

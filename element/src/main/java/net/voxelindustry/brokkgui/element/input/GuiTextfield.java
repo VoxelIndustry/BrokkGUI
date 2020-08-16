@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.element.input;
 
-import fr.ourten.teabeans.binding.BaseBinding;
-import fr.ourten.teabeans.value.BaseListProperty;
-import fr.ourten.teabeans.value.BaseProperty;
+import fr.ourten.teabeans.binding.Binding;
+import fr.ourten.teabeans.property.ListProperty;
+import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldBehavior;
 import net.voxelindustry.brokkgui.component.ITextInput;
@@ -22,41 +22,41 @@ import java.util.List;
  */
 public class GuiTextfield extends GuiSkinedElement implements ITextInput
 {
-    private final BaseProperty<String> textProperty;
-    private final BaseProperty<String> promptTextProperty;
-    private final BaseProperty<String> promptEllipsisProperty;
+    private final Property<String> textProperty;
+    private final Property<String> promptTextProperty;
+    private final Property<String> promptEllipsisProperty;
 
-    private final BaseProperty<Boolean> promptTextAlwaysDisplayedProperty;
-    private final BaseProperty<Boolean> editableProperty;
-    private final BaseProperty<Boolean> validatedProperty;
-    private final BaseProperty<Boolean> expandToTextProperty;
+    private final Property<Boolean> promptTextAlwaysDisplayedProperty;
+    private final Property<Boolean> editableProperty;
+    private final Property<Boolean> validatedProperty;
+    private final Property<Boolean> expandToTextProperty;
 
-    private final BaseProperty<Integer> maxTextLengthProperty;
-    private final BaseProperty<Integer> cursorPosProperty;
-    private final BaseProperty<RectBox> textPaddingProperty;
+    private final Property<Integer> maxTextLengthProperty;
+    private final Property<Integer> cursorPosProperty;
+    private final Property<RectBox> textPaddingProperty;
 
-    private final BaseListProperty<BaseTextValidator> validatorsProperty;
+    private final ListProperty<BaseTextValidator> validatorsProperty;
 
     private EventHandler<TextTypedEvent>  onTextTyped;
     private EventHandler<CursorMoveEvent> onCursorMoveEvent;
 
     public GuiTextfield(String text)
     {
-        textProperty = new BaseProperty<>(text, "textProperty");
-        promptTextProperty = new BaseProperty<>("", "promptTextProperty");
-        promptEllipsisProperty = new BaseProperty<>("...", "promptEllipsisProperty");
+        textProperty = new Property<>(text);
+        promptTextProperty = new Property<>("");
+        promptEllipsisProperty = new Property<>("...");
 
-        maxTextLengthProperty = new BaseProperty<>(-1, "maxTextLength");
-        cursorPosProperty = new BaseProperty<>(0, "cursorPosProperty");
-        textPaddingProperty = new BaseProperty<>(new RectBox(2), "textPaddingProperty");
+        maxTextLengthProperty = new Property<>(-1);
+        cursorPosProperty = new Property<>(0);
+        textPaddingProperty = new Property<>(new RectBox(2));
 
-        promptTextAlwaysDisplayedProperty = new BaseProperty<>(false, "promptTextAlwaysDisplayedProperty");
-        editableProperty = new BaseProperty<>(true, "editableProperty");
-        validatedProperty = new BaseProperty<>(true, "validatedProperty");
+        promptTextAlwaysDisplayedProperty = new Property<>(false);
+        editableProperty = new Property<>(true);
+        validatedProperty = new Property<>(true);
 
-        expandToTextProperty = new BaseProperty<>(false, "expandToTextProperty");
+        expandToTextProperty = new Property<>(false);
 
-        validatorsProperty = new BaseListProperty<>(null, "validatorsProperty");
+        validatorsProperty = new ListProperty<>(null);
 
         setFocusable(true);
     }
@@ -78,57 +78,57 @@ public class GuiTextfield extends GuiSkinedElement implements ITextInput
         return new GuiTextfieldSkin<>(this, new GuiTextfieldBehavior<>(this));
     }
 
-    public BaseProperty<String> getTextProperty()
+    public Property<String> getTextProperty()
     {
         return textProperty;
     }
 
-    public BaseProperty<String> getPrompTextProperty()
+    public Property<String> getPrompTextProperty()
     {
         return promptTextProperty;
     }
 
-    public BaseProperty<Boolean> getEditableProperty()
+    public Property<Boolean> getEditableProperty()
     {
         return editableProperty;
     }
 
-    public BaseListProperty<BaseTextValidator> getValidatorsProperty()
+    public ListProperty<BaseTextValidator> getValidatorsProperty()
     {
         return validatorsProperty;
     }
 
-    public BaseProperty<Boolean> getValidatedProperty()
+    public Property<Boolean> getValidatedProperty()
     {
         return validatedProperty;
     }
 
-    public BaseProperty<Boolean> getPromptTextAlwaysDisplayedProperty()
+    public Property<Boolean> getPromptTextAlwaysDisplayedProperty()
     {
         return promptTextAlwaysDisplayedProperty;
     }
 
-    public BaseProperty<Integer> getMaxTextLengthProperty()
+    public Property<Integer> getMaxTextLengthProperty()
     {
         return maxTextLengthProperty;
     }
 
-    public BaseProperty<Integer> getCursorPosProperty()
+    public Property<Integer> getCursorPosProperty()
     {
         return cursorPosProperty;
     }
 
-    public BaseProperty<RectBox> getTextPaddingProperty()
+    public Property<RectBox> getTextPaddingProperty()
     {
         return textPaddingProperty;
     }
 
-    public BaseProperty<String> getPromptEllipsisProperty()
+    public Property<String> getPromptEllipsisProperty()
     {
         return promptEllipsisProperty;
     }
 
-    public BaseProperty<Boolean> getExpandToTextProperty()
+    public Property<Boolean> getExpandToTextProperty()
     {
         return expandToTextProperty;
     }
@@ -287,7 +287,7 @@ public class GuiTextfield extends GuiSkinedElement implements ITextInput
 
     private void bindSizeToText()
     {
-        transform().widthProperty().bind(new BaseBinding<Float>()
+        transform().widthProperty().bindProperty(new Binding<Float>()
         {
             {
                 super.bind(getTextProperty(),
