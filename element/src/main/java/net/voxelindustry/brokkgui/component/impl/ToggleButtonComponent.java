@@ -97,7 +97,7 @@ public class ToggleButtonComponent extends GuiComponent implements IGuiToggleabl
             else
             {
                 if (getToggleGroup().getSelectedButton() == this)
-                    return false;
+                    return true;
                 getToggleGroup().setSelectedButton(this);
                 return true;
             }
