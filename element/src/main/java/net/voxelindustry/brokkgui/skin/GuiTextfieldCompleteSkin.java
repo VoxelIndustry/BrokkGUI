@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.skin;
 
-import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldCompleteBehavior;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
@@ -96,15 +95,14 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
         {
             get(StyleComponent.class).styleClass().add("complete-popup");
 
-            transform().xPosProperty().bindProperty(Expression.biCombine(model.transform().xPosProperty(), model.transform().xTranslateProperty(),
-                    (xPos, xTranslate) -> xPos + xTranslate));
-            transform().yPosProperty().bindProperty(Expression.triCombine(model.transform().yPosProperty(),
+            transform().xPosProperty().bindProperty(model.transform().xPosProperty().combine(model.transform().xTranslateProperty(), Float::sum));
+            transform().yPosProperty().bindProperty(model.transform().yPosProperty().combine(
                     model.transform().yTranslateProperty(), model.transform().heightProperty(),
                     (yPos, yTranslate, height) -> yPos + yTranslate + height));
 
             transform().widthProperty().bindProperty(model.getCompletePopupWidthProperty());
             transform().heightProperty().bindProperty(
-                    Expression.biCombine(model.getCellHeightProperty(), transform().childrenProperty(),
+                    model.getCellHeightProperty().combine(transform().childrenProperty(),
                             (cellHeight, children) -> cellHeight * children.size()));
 
             this.model = model;

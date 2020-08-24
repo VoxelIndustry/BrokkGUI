@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.binding.Binding;
-import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
@@ -224,7 +223,7 @@ public class ToastManager
             getxPosProperty().unbind();
         else if (!getxPosProperty().isBound() && screen != null)
         {
-            getxPosProperty().bindProperty(Expression.biCombine(getRelativeXPosProperty(),
+            getxPosProperty().bindProperty(getRelativeXPosProperty().combine(
                     screen.getScreenWidthProperty(),
                     (relativeX, screenWidth) -> screenWidth * relativeX));
         }
@@ -242,7 +241,7 @@ public class ToastManager
             getyPosProperty().unbind();
         else if (!getyPosProperty().isBound() && screen != null)
         {
-            getyPosProperty().bindProperty(Expression.biCombine(getRelativeYPosProperty(),
+            getyPosProperty().bindProperty(getRelativeYPosProperty().combine(
                     screen.getScreenHeightProperty(),
                     (relativeY, screenHeight) -> screenHeight * relativeY));
         }

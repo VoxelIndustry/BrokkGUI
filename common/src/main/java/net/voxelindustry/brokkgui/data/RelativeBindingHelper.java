@@ -17,14 +17,12 @@ public class RelativeBindingHelper
 
     public static void bindWidthRelative(Transform toBind, Transform parent, float widthRatio)
     {
-        toBind.widthProperty().bindProperty(
-                Expression.constantCombine(parent.widthProperty(), widthRatio, (width, ratio) -> width * ratio));
+        toBind.widthProperty().bindProperty(parent.widthProperty().map(width -> width * widthRatio));
     }
 
     public static void bindHeightRelative(Transform toBind, Transform parent, float heightRatio)
     {
-        toBind.heightProperty().bindProperty(Expression.constantCombine(parent.heightProperty(), heightRatio,
-                (height, ratio) -> height * ratio));
+        toBind.heightProperty().bindProperty(parent.heightProperty().map(height -> height * heightRatio));
     }
 
     public static void bindSizeRelative(Transform toBind, Transform parent, ObservableValue<Float> widthRatio,
@@ -36,14 +34,12 @@ public class RelativeBindingHelper
 
     public static void bindWidthRelative(Transform toBind, Transform parent, ObservableValue<Float> widthRatio)
     {
-        toBind.widthProperty()
-                .bindProperty(Expression.biCombine(parent.widthProperty(), widthRatio, (width, ratio) -> width * ratio));
+        toBind.widthProperty().bindProperty(parent.widthProperty().combine(widthRatio, (width, ratio) -> width * ratio));
     }
 
     public static void bindHeightRelative(Transform toBind, Transform parent, ObservableValue<Float> heightRatio)
     {
-        toBind.heightProperty().bindProperty(
-                Expression.biCombine(parent.heightProperty(), heightRatio, (height, ratio) -> height * ratio));
+        toBind.heightProperty().bindProperty(parent.heightProperty().combine(heightRatio, (height, ratio) -> height * ratio));
     }
 
     public static void bindToPos(Transform toBind, Transform parent, ObservableValue<Float> addX, ObservableValue<Float>
@@ -69,28 +65,28 @@ public class RelativeBindingHelper
 
     public static void bindToPos(Transform toBind, Transform parent, float addX, float addY)
     {
-        toBind.xPosProperty().bindProperty(Expression.biCombine(parent.xPosProperty(), parent.xTranslateProperty(),
+        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(parent.xTranslateProperty(),
                 (x, translate) -> x + translate + addX));
-        toBind.yPosProperty().bindProperty(Expression.biCombine(parent.yPosProperty(), parent.yTranslateProperty(),
+        toBind.yPosProperty().bindProperty(parent.yPosProperty().combine(parent.yTranslateProperty(),
                 (y, translate) -> y + translate + addY));
     }
 
     public static void bindToPos(Transform toBind, Transform parent)
     {
-        toBind.xPosProperty().bindProperty(Expression.biCombine(parent.xPosProperty(), parent.xTranslateProperty(),
+        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(parent.xTranslateProperty(),
                 Float::sum));
-        toBind.yPosProperty().bindProperty(Expression.biCombine(parent.yPosProperty(), parent.yTranslateProperty(),
+        toBind.yPosProperty().bindProperty(parent.yPosProperty().combine(parent.yTranslateProperty(),
                 Float::sum));
     }
 
     public static void bindToCenter(Transform toBind, Transform parent)
     {
         toBind.xPosProperty()
-                .bindProperty(Expression.tetraCombine(parent.xPosProperty(),
+                .bindProperty(parent.xPosProperty().combine(
                         parent.widthProperty(), parent.xTranslateProperty(), toBind.widthProperty(),
                         (xPos, width, xTranslate, childWidth) -> xPos + xTranslate + (width / 2 - childWidth / 2)));
         toBind.yPosProperty()
-                .bindProperty(Expression.tetraCombine(parent.yPosProperty(),
+                .bindProperty(parent.yPosProperty().combine(
                         parent.heightProperty(), parent.yTranslateProperty(), toBind.heightProperty(),
                         (yPos, height, yTranslate, childHeight) -> yPos + yTranslate + (height / 2 - childHeight / 2)));
     }
@@ -98,12 +94,12 @@ public class RelativeBindingHelper
     public static void bindToCenter(Transform toBind, Transform parent, float addX, float addY)
     {
         toBind.xPosProperty()
-                .bindProperty(Expression.tetraCombine(parent.xPosProperty(),
+                .bindProperty(parent.xPosProperty().combine(
                         parent.widthProperty(), parent.xTranslateProperty(), toBind.widthProperty(),
                         (xPos, width, xTranslate, childWidth) ->
                                 xPos + xTranslate + (width / 2 - childWidth / 2) + addX));
         toBind.yPosProperty()
-                .bindProperty(Expression.tetraCombine(parent.yPosProperty(),
+                .bindProperty(parent.yPosProperty().combine(
                         parent.heightProperty(), parent.yTranslateProperty(), toBind.heightProperty(),
                         (yPos, height, yTranslate, childHeight) ->
                                 yPos + yTranslate + (height / 2 - childHeight / 2) + addY));
@@ -111,12 +107,12 @@ public class RelativeBindingHelper
 
     public static void bindToRelative(Transform toBind, Transform parent, float ratioX, float ratioY)
     {
-        toBind.xPosProperty().bindProperty(Expression.tetraCombine(parent.xPosProperty(), parent.widthProperty(),
+        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(parent.widthProperty(),
                 parent.xTranslateProperty(), toBind.widthProperty(),
                 (xPos, width, xTranslate, childWidth) -> xPos + xTranslate + (width / (1 / ratioX) - childWidth / 2)));
 
         toBind.yPosProperty()
-                .bindProperty(Expression.tetraCombine(parent.yPosProperty(), parent.heightProperty(),
+                .bindProperty(parent.yPosProperty().combine(parent.heightProperty(),
                         parent.yTranslateProperty(), toBind.heightProperty(),
                         (yPos, height, yTranslate, childHeight) ->
                                 yPos + yTranslate + (height / (1 / ratioY) - childHeight / 2)));

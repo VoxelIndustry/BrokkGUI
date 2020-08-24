@@ -20,12 +20,12 @@ public class RectArea
         RectArea rectArea = new RectArea();
         rectArea.transform = transform;
 
-        rectArea.startX = Expression.biCombine(transform.xPosProperty(), transform.xTranslateProperty(), Float::sum);
-        rectArea.startY = Expression.biCombine(transform.yPosProperty(), transform.yTranslateProperty(), Float::sum);
+        rectArea.startX = transform.xPosProperty().combine(transform.xTranslateProperty(), Float::sum);
+        rectArea.startY = transform.yPosProperty().combine(transform.yTranslateProperty(), Float::sum);
 
-        rectArea.endX = Expression.biCombine(rectArea.startX, transform.widthProperty(),
+        rectArea.endX = rectArea.startX.combine(transform.widthProperty(),
                 (startX, width) -> startX + width * widthFrac);
-        rectArea.endY = Expression.biCombine(rectArea.startY, transform.heightProperty(),
+        rectArea.endY = rectArea.startY.combine(transform.heightProperty(),
                 (startY, height) -> startY + height * heightFrac);
 
         return rectArea;

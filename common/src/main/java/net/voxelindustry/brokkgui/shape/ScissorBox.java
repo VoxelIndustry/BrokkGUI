@@ -26,11 +26,11 @@ public class ScissorBox
         ScissorBox box = new ScissorBox();
         box.transform = transform;
 
-        box.startX = Expression.biCombine(transform.xPosProperty(), transform.xTranslateProperty(), Float::sum);
-        box.startY = Expression.biCombine(transform.yPosProperty(), transform.yTranslateProperty(), Float::sum);
+        box.startX = transform.xPosProperty().combine(transform.xTranslateProperty(), Float::sum);
+        box.startY = transform.yPosProperty().combine(transform.yTranslateProperty(), Float::sum);
 
-        box.endX = Expression.biCombine(box.startX, transform.widthProperty(), Float::sum);
-        box.endY = Expression.biCombine(box.startY, transform.heightProperty(), Float::sum);
+        box.endX = box.startX.combine(transform.widthProperty(), Float::sum);
+        box.endY = box.startY.combine(transform.heightProperty(), Float::sum);
 
         return box;
     }

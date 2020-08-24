@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.skin;
 
 import fr.ourten.teabeans.binding.Binding;
-import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldBehavior;
@@ -75,8 +74,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 return getModel().getTopPos() + getModel().getTextPadding().getTop();
             }
         });
-        text.transform().widthProperty().bindProperty(Expression.transform(displayedTextProperty,
-                BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
+        text.transform().widthProperty().bindProperty(displayedTextProperty.map(BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
         text.transform().height(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
 
         getModel().addChild(text);
@@ -110,8 +108,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                 return getModel().getTopPos() + getModel().getTextPadding().getTop();
             }
         });
-        promptText.transform().widthProperty().bindProperty(Expression.transform(ellipsedPromptProperty,
-                BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
+        promptText.transform().widthProperty().bindProperty(ellipsedPromptProperty.map(BrokkGuiPlatform.getInstance().getGuiHelper()::getStringWidth));
         promptText.transform().height(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight());
 
         promptText.visibleProperty().bindProperty(new Binding<Boolean>()
