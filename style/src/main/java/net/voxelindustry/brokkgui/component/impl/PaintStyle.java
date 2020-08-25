@@ -6,7 +6,10 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
+import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
+import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.HeldPropertyState;
 import net.voxelindustry.brokkgui.style.StyleComponent;
@@ -86,6 +89,38 @@ public class PaintStyle extends Paint
     }
 
     @Override
+    public Property<SpriteRepeat> backgroundRepeatProperty()
+    {
+        if (backgroundRepeatProperty == null)
+            backgroundRepeatProperty = style.getOrCreateProperty("background-repeat", SpriteRepeat.class);
+        return backgroundRepeatProperty;
+    }
+
+    @Override
+    public Property<Resource> backgroundAnimationResourceProperty()
+    {
+        if (backgroundAnimationProperty == null)
+            backgroundAnimationProperty = style.getOrCreateProperty("background-animation", Resource.class);
+        return backgroundAnimationProperty;
+    }
+
+    @Override
+    public Property<RectBox> backgroundPositionProperty()
+    {
+        if (backgroundPositionProperty == null)
+            backgroundPositionProperty = style.getOrCreateProperty("background-position", RectBox.class);
+        return backgroundPositionProperty;
+    }
+
+    @Override
+    public Property<RandomSpriteRotation> backgroundRandomRotationProperty()
+    {
+        if (backgroundRotationProperty == null)
+            backgroundRotationProperty = style.getOrCreateProperty("background-rotation", RandomSpriteRotation.class);
+        return backgroundRotationProperty;
+    }
+
+    @Override
     public Property<Color> backgroundColorProperty()
     {
         if (backgroundColorProperty == null)
@@ -99,6 +134,38 @@ public class PaintStyle extends Paint
         if (foregroundTextureProperty == null)
             foregroundTextureProperty = style().getOrCreateProperty("foreground-texture", Texture.class);
         return foregroundTextureProperty;
+    }
+
+    @Override
+    public Property<SpriteRepeat> foregroundRepeatProperty()
+    {
+        if (foregroundRepeatProperty == null)
+            foregroundRepeatProperty = style.getOrCreateProperty("foreground-repeat", SpriteRepeat.class);
+        return foregroundRepeatProperty;
+    }
+
+    @Override
+    public Property<Resource> foregroundAnimationResourceProperty()
+    {
+        if (foregroundAnimationProperty == null)
+            foregroundAnimationProperty = style.getOrCreateProperty("foreground-animation", Resource.class);
+        return foregroundAnimationProperty;
+    }
+
+    @Override
+    public Property<RectBox> foregroundPositionProperty()
+    {
+        if (foregroundPositionProperty == null)
+            foregroundPositionProperty = style.getOrCreateProperty("foreground-position", RectBox.class);
+        return foregroundPositionProperty;
+    }
+
+    @Override
+    public Property<RandomSpriteRotation> foregroundRandomRotationProperty()
+    {
+        if (foregroundRotationProperty == null)
+            foregroundRotationProperty = style.getOrCreateProperty("foreground-rotation", RandomSpriteRotation.class);
+        return foregroundRotationProperty;
     }
 
     @Override
@@ -238,6 +305,54 @@ public class PaintStyle extends Paint
     }
 
     @Override
+    public SpriteRepeat backgroundRepeat()
+    {
+        return style().getValue("background-repeat", SpriteRepeat.class, SpriteRepeat.NONE);
+    }
+
+    @Override
+    public void backgroundRepeat(SpriteRepeat spriteRepeat)
+    {
+        style().setPropertyDirect("background-repeat", spriteRepeat, SpriteRepeat.class);
+    }
+
+    @Override
+    public Resource backgroundAnimationResource()
+    {
+        return style().getValue("background-animation", Resource.class, null);
+    }
+
+    @Override
+    public void backgroundAnimationResource(Resource resource)
+    {
+        style().setPropertyDirect("background-animation", resource, Resource.class);
+    }
+
+    @Override
+    public RectBox backgroundPosition()
+    {
+        return style().getValue("background-position", RectBox.class, RectBox.EMPTY);
+    }
+
+    @Override
+    public void backgroundPosition(RectBox position)
+    {
+        style().setPropertyDirect("background-position", position, RectBox.class);
+    }
+
+    @Override
+    public RandomSpriteRotation backgroundRandomRotation()
+    {
+        return style().getValue("background-rotation", RandomSpriteRotation.class, null);
+    }
+
+    @Override
+    public void backgroundRandomRotation(RandomSpriteRotation rotation)
+    {
+        style().setPropertyDirect("background-rotation", rotation, RandomSpriteRotation.class);
+    }
+
+    @Override
     public Color backgroundColor()
     {
         return style().getValue("background-color", Color.class, Color.ALPHA);
@@ -259,6 +374,54 @@ public class PaintStyle extends Paint
     public void foregroundTexture(Texture texture)
     {
         style().setPropertyDirect("foreground-texture", texture, Texture.class);
+    }
+
+    @Override
+    public SpriteRepeat foregroundRepeat()
+    {
+        return style().getValue("foreground-repeat", SpriteRepeat.class, SpriteRepeat.NONE);
+    }
+
+    @Override
+    public void foregroundRepeat(SpriteRepeat spriteRepeat)
+    {
+        style().setPropertyDirect("foreground-repeat", spriteRepeat, SpriteRepeat.class);
+    }
+
+    @Override
+    public Resource foregroundAnimationResource()
+    {
+        return style().getValue("foreground-animation", Resource.class, null);
+    }
+
+    @Override
+    public void foregroundAnimationResource(Resource resource)
+    {
+        style().setPropertyDirect("foreground-animation", resource, Resource.class);
+    }
+
+    @Override
+    public RectBox foregroundPosition()
+    {
+        return style().getValue("foreground-position", RectBox.class, RectBox.EMPTY);
+    }
+
+    @Override
+    public void foregroundPosition(RectBox position)
+    {
+        style().setPropertyDirect("foreground-position", position, RectBox.class);
+    }
+
+    @Override
+    public RandomSpriteRotation foregroundRandomRotation()
+    {
+        return style().getValue("foreground-rotation", RandomSpriteRotation.class, null);
+    }
+
+    @Override
+    public void foregroundRandomRotation(RandomSpriteRotation rotation)
+    {
+        style().setPropertyDirect("foreground-rotation", rotation, RandomSpriteRotation.class);
     }
 
     @Override
@@ -286,9 +449,15 @@ public class PaintStyle extends Paint
     }
 
     @Override
+    public float borderWidth()
+    {
+        return style().getValue("border-top-width", Float.class, 0F);
+    }
+
+    @Override
     public float borderWidth(RectSide side)
     {
-        return style().getValue("border-" + side.getCssString() + "-width", Float.class, 0f);
+        return style().getValue("border-" + side.getCssString() + "-width", Float.class, 0F);
     }
 
     @Override

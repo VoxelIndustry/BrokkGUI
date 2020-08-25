@@ -6,6 +6,7 @@ import net.voxelindustry.brokkgui.border.ImageBorderDrawer;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.RenderComponent;
+import net.voxelindustry.brokkgui.component.RequiredOverride;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
@@ -140,36 +141,43 @@ public class Paint extends GuiComponent implements RenderComponent
     // PROPERTIES //
     ////////////////
 
+    @RequiredOverride
     public boolean hasTextureBackground()
     {
         return backgroundTextureProperty != null;
     }
 
+    @RequiredOverride
     public boolean hasColorBackground()
     {
         return backgroundColorProperty != null;
     }
 
+    @RequiredOverride
     public boolean hasTextureForeground()
     {
         return foregroundTextureProperty != null;
     }
 
+    @RequiredOverride
     public boolean hasColorForeground()
     {
         return foregroundColorProperty != null;
     }
 
+    @RequiredOverride
     public boolean hasBorder()
     {
         return borderColorProperty != null;
     }
 
+    @RequiredOverride
     public boolean hasBorderImage()
     {
         return borderImageProperty != null;
     }
 
+    @RequiredOverride
     public Property<Texture> backgroundTextureProperty()
     {
         if (backgroundTextureProperty == null)
@@ -177,6 +185,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return backgroundTextureProperty;
     }
 
+    @RequiredOverride
     public Property<SpriteRepeat> backgroundRepeatProperty()
     {
         if (backgroundRepeatProperty == null)
@@ -184,6 +193,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return backgroundRepeatProperty;
     }
 
+    @RequiredOverride
     public Property<Resource> backgroundAnimationResourceProperty()
     {
         if (backgroundAnimationProperty == null)
@@ -191,6 +201,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return backgroundAnimationProperty;
     }
 
+    @RequiredOverride
     public Property<RectBox> backgroundPositionProperty()
     {
         if (backgroundPositionProperty == null)
@@ -198,6 +209,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return backgroundPositionProperty;
     }
 
+    @RequiredOverride
     public Property<RandomSpriteRotation> backgroundRandomRotationProperty()
     {
         if (backgroundRotationProperty == null)
@@ -205,6 +217,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return backgroundRotationProperty;
     }
 
+    @RequiredOverride
     public Property<Color> backgroundColorProperty()
     {
         if (backgroundColorProperty == null)
@@ -212,6 +225,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return backgroundColorProperty;
     }
 
+    @RequiredOverride
     public Property<Texture> foregroundTextureProperty()
     {
         if (foregroundTextureProperty == null)
@@ -219,6 +233,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return foregroundTextureProperty;
     }
 
+    @RequiredOverride
     public Property<SpriteRepeat> foregroundRepeatProperty()
     {
         if (foregroundRepeatProperty == null)
@@ -226,6 +241,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return foregroundRepeatProperty;
     }
 
+    @RequiredOverride
     public Property<Resource> foregroundAnimationResourceProperty()
     {
         if (foregroundAnimationProperty == null)
@@ -233,6 +249,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return foregroundAnimationProperty;
     }
 
+    @RequiredOverride
     public Property<RectBox> foregroundPositionProperty()
     {
         if (foregroundPositionProperty == null)
@@ -240,6 +257,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return foregroundPositionProperty;
     }
 
+    @RequiredOverride
     public Property<RandomSpriteRotation> foregroundRandomRotationProperty()
     {
         if (foregroundRotationProperty == null)
@@ -247,6 +265,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return foregroundRotationProperty;
     }
 
+    @RequiredOverride
     public Property<Color> foregroundColorProperty()
     {
         if (foregroundColorProperty == null)
@@ -254,6 +273,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return foregroundColorProperty;
     }
 
+    @RequiredOverride
     public Property<Color> borderColorProperty()
     {
         if (borderColorProperty == null)
@@ -261,6 +281,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderColorProperty;
     }
 
+    @RequiredOverride
     public Property<Float> borderWidthLeftProperty()
     {
         if (borderWidthLeftProperty == null)
@@ -268,6 +289,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderWidthLeftProperty;
     }
 
+    @RequiredOverride
     public Property<Float> borderWidthRightProperty()
     {
         if (borderWidthRightProperty == null)
@@ -275,6 +297,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderWidthRightProperty;
     }
 
+    @RequiredOverride
     public Property<Float> borderWidthTopProperty()
     {
         if (borderWidthTopProperty == null)
@@ -282,6 +305,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderWidthTopProperty;
     }
 
+    @RequiredOverride
     public Property<Float> borderWidthBottomProperty()
     {
         if (borderWidthBottomProperty == null)
@@ -289,6 +313,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderWidthBottomProperty;
     }
 
+    @RequiredOverride
     public Property<Integer> borderRadiusTopLeftProperty()
     {
         if (borderRadiusTopLeftProperty == null)
@@ -296,6 +321,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderRadiusTopLeftProperty;
     }
 
+    @RequiredOverride
     public Property<Integer> borderRadiusTopRightProperty()
     {
         if (borderRadiusTopRightProperty == null)
@@ -303,6 +329,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderRadiusTopRightProperty;
     }
 
+    @RequiredOverride
     public Property<Integer> borderRadiusBottomLeftProperty()
     {
         if (borderRadiusBottomLeftProperty == null)
@@ -310,6 +337,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderRadiusBottomLeftProperty;
     }
 
+    @RequiredOverride
     public Property<Integer> borderRadiusBottomRightProperty()
     {
         if (borderRadiusBottomRightProperty == null)
@@ -317,6 +345,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderRadiusBottomRightProperty;
     }
 
+    @RequiredOverride
     public Property<Texture> borderImageProperty()
     {
         if (borderImageProperty == null)
@@ -324,6 +353,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderImageProperty;
     }
 
+    @RequiredOverride
     public Property<RectBox> borderImageSliceProperty()
     {
         if (borderImageSliceProperty == null)
@@ -331,6 +361,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderImageSliceProperty;
     }
 
+    @RequiredOverride
     public Property<RectBox> borderImageWidthProperty()
     {
         if (borderImageWidthProperty == null)
@@ -338,6 +369,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderImageWidthProperty;
     }
 
+    @RequiredOverride
     public Property<RectBox> borderImageOutsetProperty()
     {
         if (borderImageOutsetProperty == null)
@@ -345,6 +377,7 @@ public class Paint extends GuiComponent implements RenderComponent
         return borderImageOutsetProperty;
     }
 
+    @RequiredOverride
     public Property<Boolean> borderImageFillProperty()
     {
         if (borderImageFillProperty == null)
@@ -356,51 +389,61 @@ public class Paint extends GuiComponent implements RenderComponent
     // VALUES //
     ////////////
 
+    @RequiredOverride
     public Texture backgroundTexture()
     {
         return backgroundTextureProperty().getValue();
     }
 
+    @RequiredOverride
     public void backgroundTexture(Texture texture)
     {
         backgroundTextureProperty().setValue(texture);
     }
 
+    @RequiredOverride
     public SpriteRepeat backgroundRepeat()
     {
         return backgroundRepeatProperty().getValue();
     }
 
+    @RequiredOverride
     public void backgroundRepeat(SpriteRepeat spriteRepeat)
     {
         backgroundRepeatProperty().setValue(spriteRepeat);
     }
 
+    @RequiredOverride
     public Resource backgroundAnimationResource()
     {
         return backgroundAnimationResourceProperty().getValue();
     }
 
+    @RequiredOverride
     public void backgroundAnimationResource(Resource resource)
     {
         backgroundAnimationResourceProperty().setValue(resource);
     }
 
+    @RequiredOverride
     public RectBox backgroundPosition()
     {
         return backgroundPositionProperty().getValue();
     }
 
+    @RequiredOverride
     public void backgroundPosition(RectBox position)
     {
         backgroundPositionProperty().setValue(position);
     }
 
+    @RequiredOverride
     public RandomSpriteRotation backgroundRandomRotation()
     {
         return backgroundRandomRotationProperty().getValue();
     }
 
+    @RequiredOverride
     public void backgroundRandomRotation(RandomSpriteRotation rotation)
     {
         backgroundRandomRotationProperty().setValue(rotation);
@@ -439,61 +482,73 @@ public class Paint extends GuiComponent implements RenderComponent
             backgroundRotationArray[0] = rotation;
     }
 
+    @RequiredOverride
     public Color backgroundColor()
     {
         return backgroundColorProperty().getValue();
     }
 
+    @RequiredOverride
     public void backgroundColor(Color color)
     {
         backgroundColorProperty().setValue(color);
     }
 
+    @RequiredOverride
     public Texture foregroundTexture()
     {
         return foregroundTextureProperty().getValue();
     }
 
+    @RequiredOverride
     public void foregroundTexture(Texture texture)
     {
         foregroundTextureProperty().setValue(texture);
     }
 
+    @RequiredOverride
     public SpriteRepeat foregroundRepeat()
     {
         return foregroundRepeatProperty().getValue();
     }
 
+    @RequiredOverride
     public void foregroundRepeat(SpriteRepeat spriteRepeat)
     {
         foregroundRepeatProperty().setValue(spriteRepeat);
     }
 
+    @RequiredOverride
     public Resource foregroundAnimationResource()
     {
         return foregroundAnimationResourceProperty().getValue();
     }
 
+    @RequiredOverride
     public void foregroundAnimationResource(Resource resource)
     {
         foregroundAnimationResourceProperty().setValue(resource);
     }
 
+    @RequiredOverride
     public RectBox foregroundPosition()
     {
         return foregroundPositionProperty().getValue();
     }
 
+    @RequiredOverride
     public void foregroundPosition(RectBox position)
     {
         foregroundPositionProperty().setValue(position);
     }
 
+    @RequiredOverride
     public RandomSpriteRotation foregroundRandomRotation()
     {
         return foregroundRandomRotationProperty().getValue();
     }
 
+    @RequiredOverride
     public void foregroundRandomRotation(RandomSpriteRotation rotation)
     {
         foregroundRandomRotationProperty().setValue(rotation);
@@ -532,31 +587,37 @@ public class Paint extends GuiComponent implements RenderComponent
             foregroundRotationArray[0] = rotation;
     }
 
+    @RequiredOverride
     public Color foregroundColor()
     {
         return foregroundColorProperty().getValue();
     }
 
+    @RequiredOverride
     public void foregroundColor(Color color)
     {
         foregroundColorProperty().setValue(color);
     }
 
+    @RequiredOverride
     public Color borderColor()
     {
         return borderColorProperty().getValue();
     }
 
+    @RequiredOverride
     public void borderColor(Color color)
     {
         borderColorProperty().setValue(color);
     }
 
+    @RequiredOverride
     public float borderWidth()
     {
         return borderWidth(RectSide.UP);
     }
 
+    @RequiredOverride
     public float borderWidth(RectSide side)
     {
         switch (side)
@@ -574,6 +635,7 @@ public class Paint extends GuiComponent implements RenderComponent
         }
     }
 
+    @RequiredOverride
     public void borderWidth(RectSide side, float width)
     {
         switch (side)
@@ -593,6 +655,7 @@ public class Paint extends GuiComponent implements RenderComponent
         }
     }
 
+    @RequiredOverride
     public int borderRadius(RectCorner corner)
     {
         switch (corner)
@@ -610,6 +673,7 @@ public class Paint extends GuiComponent implements RenderComponent
         }
     }
 
+    @RequiredOverride
     public void borderRadius(RectCorner corner, int width)
     {
         switch (corner)
@@ -629,51 +693,61 @@ public class Paint extends GuiComponent implements RenderComponent
         }
     }
 
+    @RequiredOverride
     public Texture borderImage()
     {
         return borderImageProperty().getValue();
     }
 
+    @RequiredOverride
     public void borderImage(Texture texture)
     {
         borderImageProperty().setValue(texture);
     }
 
+    @RequiredOverride
     public RectBox borderImageSlice()
     {
         return borderImageSliceProperty().getValue();
     }
 
+    @RequiredOverride
     public void borderImageSlice(RectBox box)
     {
         borderImageSliceProperty().setValue(box);
     }
 
+    @RequiredOverride
     public RectBox borderImageWidth()
     {
         return borderImageWidthProperty().getValue();
     }
 
+    @RequiredOverride
     public void borderImageWidth(RectBox box)
     {
         borderImageWidthProperty().setValue(box);
     }
 
+    @RequiredOverride
     public RectBox borderImageOutset()
     {
         return borderImageOutsetProperty().getValue();
     }
 
+    @RequiredOverride
     public void borderImageOutset(RectBox box)
     {
         borderImageOutsetProperty().setValue(box);
     }
 
+    @RequiredOverride
     public boolean borderImageFill()
     {
         return borderImageFillProperty().getValue();
     }
 
+    @RequiredOverride
     public void borderImageFill(boolean doFill)
     {
         borderImageFillProperty().setValue(doFill);
