@@ -52,7 +52,8 @@ public abstract class GuiSkinedElement extends GuiFather implements IGuiSkinnabl
     @Override
     public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
     {
-        getSkin().render(pass, renderer, mouseX, mouseY);
+        if (getSkin() != null)
+            getSkin().render(pass, renderer, mouseX, mouseY);
         super.renderContent(renderer, pass, mouseX, mouseY);
     }
 

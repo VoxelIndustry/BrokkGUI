@@ -1,6 +1,5 @@
 package net.voxelindustry.brokkgui.element.input;
 
-import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.BooleanFormFieldComponent;
@@ -10,8 +9,6 @@ import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.shape.Rectangle;
-import net.voxelindustry.brokkgui.skin.GuiRadioButtonSkin;
-import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 
 public class GuiRadioButton extends GuiToggleButton
@@ -76,12 +73,6 @@ public class GuiRadioButton extends GuiToggleButton
     }
 
     @Override
-    protected GuiSkinBase<?> makeDefaultSkin()
-    {
-        return new GuiRadioButtonSkin(this, new GuiTogglableButtonBehavior<>(this));
-    }
-
-    @Override
     public String type()
     {
         return "radio-button";
@@ -95,7 +86,7 @@ public class GuiRadioButton extends GuiToggleButton
         public RadioButtonContent(ToggleButtonComponent toggleButtonComponent)
         {
             transform().heightRatio(1);
-            transform().widthProperty().bind(transform().heightProperty());
+            transform().widthProperty().bindProperty(transform().heightProperty());
 
             box = new Rectangle();
             mark = new Rectangle();
@@ -109,14 +100,13 @@ public class GuiRadioButton extends GuiToggleButton
             addChild(mark);
             RelativeBindingHelper.bindToCenter(mark.transform(), transform());
 
-            box.transform().widthProperty().bind(box.transform().heightProperty());
-            box.transform().heightProperty().bind(transform().heightProperty());
+            box.transform().widthProperty().bindProperty(box.transform().heightProperty());
+            box.transform().heightProperty().bindProperty(transform().heightProperty());
 
-            mark.transform().widthProperty().bind(mark.transform().heightProperty());
-            mark.transform().heightProperty().bind(Expression.transform(box.transform().heightProperty(),
-                    height -> height - 4));
+            mark.transform().widthProperty().bindProperty(mark.transform().heightProperty());
+            mark.transform().heightProperty().bindProperty(box.transform().heightProperty().map(height -> height - 4));
 
-            mark.visibleProperty().bind(toggleButtonComponent.getSelectedProperty());
+            mark.visibleProperty().bindProperty(toggleButtonComponent.getSelectedProperty());
         }
 
         public GuiElement getBox()
