@@ -398,6 +398,12 @@ public class StyleComponent extends GuiComponent
 
         if (onStyleInit != null)
             onStyleInit.run();
+
+        if (element() != null)
+        {
+            element().transform().children().forEach(child ->
+                    child.element().ifHas(StyleComponent.class, childStyle -> childStyle.setStyleSupplier(styleSupplier)));
+        }
     }
 
     public void refresh()
@@ -405,14 +411,14 @@ public class StyleComponent extends GuiComponent
         if (styleSupplier == null)
             return;
 
-        StyleList tree = styleSupplier.get();
-        if (tree == null)
+        StyleList styleList = styleSupplier.get();
+        if (styleList == null)
             return;
 
         if (element() != null)
             element().getEventDispatcher().dispatchEvent(StyleRefreshEvent.BEFORE, new StyleRefreshEvent.BeforeEvent(this));
 
-        List<StyleEntry> entries = tree.getEntriesMatching(this);
+        List<StyleEntry> entries = styleList.getEntriesMatching(this);
 
         resetToDefault();
         entries.forEach(entry -> entry.getRules().forEach(rule ->
