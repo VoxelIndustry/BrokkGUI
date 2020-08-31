@@ -61,6 +61,22 @@ public class RectBox
         return x > getLeft() && x < getRight() && y > getTop() && y < getBottom();
     }
 
+    public float getSide(RectSide side)
+    {
+        switch (side)
+        {
+            case UP:
+                return getTop();
+            case DOWN:
+                return getBottom();
+            case LEFT:
+                return getLeft();
+            case RIGHT:
+                return getRight();
+        }
+        return 0;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -88,6 +104,27 @@ public class RectBox
                 ", bottom=" + bottom +
                 ", right=" + right +
                 '}';
+    }
+
+    public static RectBox fromSide(RectSide side, float size)
+    {
+        switch (side)
+        {
+            case UP:
+                return new RectBox(size, 0, 0, 0);
+            case DOWN:
+                return new RectBox(0, 0, size, 0);
+            case LEFT:
+                return new RectBox(0, size, 0, 0);
+            case RIGHT:
+                return new RectBox(0, 0, 0, size);
+        }
+        return EMPTY;
+    }
+
+    public static RectBox sum(RectBox first, RectBox second)
+    {
+        return new RectBox(first.top + second.top, first.left + second.left, first.bottom + second.bottom, first.right + second.right);
     }
 
     public static Builder build()
@@ -128,14 +165,14 @@ public class RectBox
 
         public Builder all(float all)
         {
-            if (this.top == -1)
-                this.top = all;
-            if (this.left == -1)
-                this.left = all;
-            if (this.bottom == -1)
-                this.bottom = all;
-            if (this.right == -1)
-                this.right = all;
+            if (top == -1)
+                top = all;
+            if (left == -1)
+                left = all;
+            if (bottom == -1)
+                bottom = all;
+            if (right == -1)
+                right = all;
             return this;
         }
 

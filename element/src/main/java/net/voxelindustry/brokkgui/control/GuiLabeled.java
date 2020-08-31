@@ -13,13 +13,11 @@ import javax.annotation.Nonnull;
 
 public abstract class GuiLabeled extends GuiSkinedElement
 {
-    private final Property<String>  ellipsisProperty;
-    private final Property<Boolean> expandToTextProperty;
-    private final Property<RectBox> textPaddingProperty;
-
+    private final Property<String>     ellipsisProperty     = new Property<>("...");
+    private final Property<Boolean>    expandToTextProperty = new Property<>(true);
     private final Property<GuiElement> iconProperty;
-    private final Property<RectSide>   iconSideProperty;
-    private final Property<Float>      iconPaddingProperty;
+    private final Property<RectSide>   iconSideProperty     = new Property<>(RectSide.LEFT);
+    private final Property<Float>      iconPaddingProperty  = new Property<>(2F);
 
     private TextComponent textComponent;
 
@@ -28,14 +26,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
     public GuiLabeled(String text, GuiElement icon)
     {
         startingText = text;
-
-        ellipsisProperty = new Property<>("...");
-        expandToTextProperty = new Property<>(true);
-        textPaddingProperty = new Property<>(RectBox.EMPTY);
-
         iconProperty = new Property<>(icon);
-        iconSideProperty = new Property<>(RectSide.LEFT);
-        iconPaddingProperty = new Property<>(2f);
 
         textComponent.text(startingText);
 
@@ -80,9 +71,9 @@ public abstract class GuiLabeled extends GuiSkinedElement
         return expandToTextProperty;
     }
 
-    public Property<RectBox> getTextPaddingProperty()
+    public Property<RectBox> textPaddingProperty()
     {
-        return textPaddingProperty;
+        return textComponent().textPaddingProperty();
     }
 
     public Property<GuiElement> getIconProperty()
@@ -130,14 +121,14 @@ public abstract class GuiLabeled extends GuiSkinedElement
         ellipsisProperty.setValue(ellipsis);
     }
 
-    public RectBox getTextPadding()
+    public RectBox textPadding()
     {
-        return textPaddingProperty.getValue();
+        return textPaddingProperty().getValue();
     }
 
     public void setTextPadding(RectBox textPadding)
     {
-        textPaddingProperty.setValue(textPadding);
+        textPaddingProperty().setValue(textPadding);
     }
 
     public GuiElement getIcon()
@@ -193,7 +184,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
         {
             {
                 super.bind(getTextProperty(),
-                        getTextPaddingProperty(),
+                        textPaddingProperty(),
                         getIconProperty(),
                         getIconPaddingProperty(),
                         getIconSideProperty());
@@ -206,15 +197,15 @@ public abstract class GuiLabeled extends GuiSkinedElement
                 {
                     if (getIconSide().isHorizontal())
                         return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())
-                                + getTextPadding().getLeft() + getTextPadding().getRight()
+                                + textComponent().computedTextPadding().getHorizontal()
                                 + getIcon().width() + getIconPadding();
                     else
                         return Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText()),
                                 getIcon().height())
-                                + getTextPadding().getLeft() + getTextPadding().getRight();
+                                + textComponent().computedTextPadding().getHorizontal();
                 }
                 return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())
-                        + getTextPadding().getLeft() + getTextPadding().getRight();
+                        + textComponent().computedTextPadding().getHorizontal();
             }
         });
 
@@ -222,7 +213,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
         {
             {
                 super.bind(getTextProperty(),
-                        getTextPaddingProperty(),
+                        textPaddingProperty(),
                         getIconProperty(),
                         getIconPaddingProperty(),
                         getIconSideProperty());
@@ -235,15 +226,15 @@ public abstract class GuiLabeled extends GuiSkinedElement
                 {
                     if (getIconSide().isVertical())
                         return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight()
-                                + getTextPadding().getTop() + getTextPadding().getBottom()
+                                + textComponent().computedTextPadding().getVertical()
                                 + getIcon().height() + getIconPadding();
                     else
                         return Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight(),
                                 getIcon().height())
-                                + getTextPadding().getTop() + getTextPadding().getBottom();
+                                + textComponent().computedTextPadding().getVertical();
                 }
                 return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight()
-                        + getTextPadding().getTop() + getTextPadding().getBottom();
+                        + textComponent().computedTextPadding().getVertical();
             }
         });
     }

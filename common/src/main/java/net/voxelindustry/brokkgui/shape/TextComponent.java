@@ -1,5 +1,7 @@
 package net.voxelindustry.brokkgui.shape;
 
+import com.google.common.collect.Lists;
+import fr.ourten.teabeans.binding.Binding;
 import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
@@ -12,16 +14,23 @@ import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
+import java.util.List;
+
 public class TextComponent extends GuiComponent implements RenderComponent
 {
-    private final Property<String>  textProperty;
-    private final Property<String>  renderTextProperty;
-    private final Property<Integer> lineSpacingProperty;
+    private final Property<String>  textProperty        = new Property<>("");
+    private final Property<String>  renderTextProperty  = new Property<>("");
+    private final Property<Integer> lineSpacingProperty = new Property<>(1);
 
-    private final Property<RectBox>       textPaddingProperty;
-    private final Property<RectAlignment> textAlignmentProperty;
+    private final Property<RectBox> textPaddingProperty = new Property<>(RectBox.EMPTY);
 
-    private final Property<Boolean> multilineProperty;
+    private ObservableValue<RectBox> computedTextPadding = textPaddingProperty;
+
+    private final List<ObservableValue<RectBox>> textPaddingList = Lists.newArrayList(textPaddingProperty);
+
+    private final Property<RectAlignment> textAlignmentProperty = new Property<>(RectAlignment.MIDDLE_CENTER);
+
+    private final Property<Boolean> multilineProperty = new Property<>(false);
 
     protected Property<Color>   shadowColorProperty;
     protected Property<Boolean> useShadowProperty;
@@ -32,14 +41,6 @@ public class TextComponent extends GuiComponent implements RenderComponent
 
     public TextComponent()
     {
-        textProperty = new Property<>("");
-        renderTextProperty = new Property<>("");
-        lineSpacingProperty = new Property<>(1);
-        textPaddingProperty = new Property<>(RectBox.EMPTY);
-        textAlignmentProperty = new Property<>(RectAlignment.MIDDLE_CENTER);
-
-        multilineProperty = new Property<>(false);
-
         renderTextProperty.bindProperty(textProperty);
 
         lazyTextWidth = renderTextProperty.combine(multilineProperty, (renderText, multiline) ->
@@ -66,19 +67,21 @@ public class TextComponent extends GuiComponent implements RenderComponent
         float xPos = transform().leftPos();
         float yPos = transform().topPos();
 
+        RectBox currentTextPadding = computedTextPadding();
+
         if (textAlignment().isLeft())
-            xPos += textPadding().getLeft();
+            xPos += currentTextPadding.getLeft();
         else if (textAlignment().isRight())
-            xPos += transform().width() - lazyTextWidth.getValue() - textPadding().getRight();
+            xPos += transform().width() - lazyTextWidth.getValue() - currentTextPadding.getRight();
         else
-            xPos += textPadding().getLeft() + (transform().width() - textPadding().getHorizontal()) / 2 - lazyTextWidth.getValue() / 2;
+            xPos += currentTextPadding.getLeft() + (transform().width() - currentTextPadding.getHorizontal()) / 2 - lazyTextWidth.getValue() / 2;
 
         if (textAlignment().isUp())
-            yPos += textPadding().getTop();
+            yPos += currentTextPadding.getTop();
         else if (textAlignment().isDown())
-            yPos += transform().height() - lazyTextHeight.getValue() - textPadding().getBottom();
+            yPos += transform().height() - lazyTextHeight.getValue() - currentTextPadding.getBottom();
         else
-            yPos += textPadding().getTop() + (transform().height() - textPadding().getVertical()) / 2 - lazyTextHeight.getValue() / 2;
+            yPos += currentTextPadding.getTop() + (transform().height() - currentTextPadding.getVertical()) / 2 - lazyTextHeight.getValue() / 2;
 
         renderer.getHelper().drawString(
                 renderText(),
@@ -144,6 +147,11 @@ public class TextComponent extends GuiComponent implements RenderComponent
         return textPaddingProperty;
     }
 
+    public ObservableValue<RectBox> computedTextPaddingValue()
+    {
+        return computedTextPadding;
+    }
+
     public Property<RectAlignment> textAlignmentProperty()
     {
         return textAlignmentProperty;
@@ -198,6 +206,50 @@ public class TextComponent extends GuiComponent implements RenderComponent
         if (textPaddingProperty().isBound())
             textPaddingProperty().unbind();
         textPaddingProperty().setValue(textPadding);
+    }
+
+    public void addTextPaddingProperty(ObservableValue<RectBox> textPaddingValue)
+    {
+        textPaddingList.add(textPaddingValue);
+        recomputeTextPadding();
+    }
+
+    public void removeTextPaddingProperty(ObservableValue<RectBox> textPaddingValue)
+    {
+        textPaddingList.remove(textPaddingValue);
+        recomputeTextPadding();
+    }
+
+    public void replaceTextPaddingProperty(ObservableValue<RectBox> previousValue, ObservableValue<RectBox> currentValue)
+    {
+        if (previousValue != null)
+            textPaddingList.remove(previousValue);
+        textPaddingList.add(currentValue);
+        recomputeTextPadding();
+    }
+
+    private void recomputeTextPadding()
+    {
+        if (computedTextPadding instanceof Binding)
+            ((Binding<RectBox>) computedTextPadding).unbindAll();
+
+        computedTextPadding = new Binding<RectBox>()
+        {
+            {
+                textPaddingList.forEach(super::bind);
+            }
+
+            @Override
+            public RectBox computeValue()
+            {
+                return textPaddingList.stream().map(ObservableValue::getValue).reduce(RectBox.EMPTY, RectBox::sum);
+            }
+        };
+    }
+
+    public RectBox computedTextPadding()
+    {
+        return computedTextPadding.getValue();
     }
 
     public RectAlignment textAlignment()

@@ -21,11 +21,13 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
     private final Property<String> ellipsedTextProperty;
     private       Binding<RectBox> paddingBinding;
 
+    private final TextComponent text;
+
     public GuiLabeledSkin(C model, B behaviour)
     {
         super(model, behaviour);
 
-        TextComponent text = model.textComponent();
+        text = model.textComponent();
 
         ellipsedTextProperty = new Property<>("");
 
@@ -70,27 +72,17 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
 
     private void bindText()
     {
+        text.removeTextPaddingProperty(paddingBinding);
         if (paddingBinding != null)
-            paddingBinding.unbindAll();
-
-        paddingBinding = new Binding<RectBox>()
         {
-            {
-                super.bind(getModel().getTextPaddingProperty());
-            }
-
-            @Override
-            public RectBox computeValue()
-            {
-                return getModel().getTextPadding();
-            }
-        };
-
-        getModel().textComponent().textPaddingProperty().bindProperty(paddingBinding);
+            paddingBinding.unbindAll();
+            paddingBinding = null;
+        }
     }
 
     private void bindTextWithIcon(GuiElement icon)
     {
+        Binding<RectBox> previousBinding = paddingBinding;
         if (paddingBinding != null)
             paddingBinding.unbindAll();
 
@@ -98,7 +90,6 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         {
             {
                 bind(
-                        getModel().getTextPaddingProperty(),
                         getModel().getIconPaddingProperty(),
                         getModel().getIconSideProperty(),
                         icon.transform().widthProperty(),
@@ -109,10 +100,10 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             @Override
             public RectBox computeValue()
             {
-                float left = getModel().getTextPadding().getLeft();
-                float top = getModel().getTextPadding().getTop();
-                float right = getModel().getTextPadding().getRight();
-                float bottom = getModel().getTextPadding().getBottom();
+                float left = 0;
+                float top = 0;
+                float right = 0;
+                float bottom = 0;
 
                 if (getModel().getIconSide() == RectSide.LEFT)
                     left += getModel().getIcon().width() + getModel().getIconPadding();
@@ -131,8 +122,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
                         .create();
             }
         };
-
-        getModel().textComponent().textPaddingProperty().bindProperty(paddingBinding);
+        text.replaceTextPaddingProperty(previousBinding, paddingBinding);
     }
 
     private void bindEllipsed()
@@ -144,7 +134,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
                         getModel().getExpandToTextProperty(),
                         transform().widthProperty(),
                         getModel().getEllipsisProperty(),
-                        getModel().getTextPaddingProperty(),
+                        text.computedTextPaddingValue(),
                         getModel().getIconPaddingProperty(),
                         getModel().getIconSideProperty(),
                         getModel().getIconProperty());
@@ -174,15 +164,15 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         {
             if (getModel().getIconSide().isHorizontal())
                 return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText())
-                        + getModel().getTextPadding().getLeft() + getModel().getTextPadding().getRight()
+                        + text.computedTextPadding().getHorizontal()
                         + getModel().getIcon().width() + getModel().getIconPadding();
             else
                 return Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText()),
                         getModel().getIcon().width())
-                        + getModel().getTextPadding().getLeft() + getModel().getTextPadding().getRight();
+                        + text.computedTextPadding().getHorizontal();
         }
         return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText())
-                + getModel().getTextPadding().getLeft() + getModel().getTextPadding().getRight();
+                + text.computedTextPadding().getHorizontal();
     }
 
     private float getAvailableTextWidth()
@@ -190,11 +180,11 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         if (getModel().getIconProperty().isPresent() && getModel().getIconSide().isHorizontal())
         {
             return getModel().width()
-                    - getModel().getTextPadding().getLeft() - getModel().getTextPadding().getRight()
+                    - text.computedTextPadding().getHorizontal()
                     - getModel().getIcon().width() - getModel().getIconPadding();
         }
         return getModel().width()
-                - getModel().getTextPadding().getLeft() - getModel().getTextPadding().getRight();
+                - text.computedTextPadding().getHorizontal();
     }
 
     private void bindIcon(GuiElement icon)
@@ -207,7 +197,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
                 super.bind(getModel().getIconSideProperty(),
                         transform().xPosProperty(),
                         transform().xTranslateProperty(),
-                        getModel().getTextPaddingProperty(),
+                        text.computedTextPaddingValue(),
                         transform().widthProperty(),
                         icon.transform().widthProperty());
             }
@@ -217,15 +207,15 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             {
                 if (getModel().getIconSide() == RectSide.LEFT)
                     return getModel().getLeftPos()
-                            + getModel().getTextPadding().getLeft();
+                            + text.computedTextPadding().getLeft();
                 if (getModel().getIconSide() == RectSide.RIGHT)
                     return getModel().getRightPos()
-                            - getModel().getTextPadding().getRight()
+                            - text.computedTextPadding().getRight()
                             - icon.width();
                 return getModel().getLeftPos()
                         + getModel().width() / 2 - icon.width() / 2
-                        + getModel().getTextPadding().getLeft()
-                        - getModel().getTextPadding().getRight();
+                        + text.computedTextPadding().getLeft()
+                        - text.computedTextPadding().getRight();
             }
         });
 
@@ -235,7 +225,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
                 super.bind(getModel().getIconSideProperty(),
                         transform().yPosProperty(),
                         transform().yTranslateProperty(),
-                        getModel().getTextPaddingProperty(),
+                        text.computedTextPaddingValue(),
                         transform().heightProperty(),
                         icon.transform().heightProperty());
             }
@@ -245,15 +235,15 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             {
                 if (getModel().getIconSide() == RectSide.UP)
                     return getModel().getTopPos()
-                            + getModel().getTextPadding().getTop();
+                            + text.computedTextPadding().getTop();
                 if (getModel().getIconSide() == RectSide.DOWN)
                     return getModel().getBottomPos()
-                            - getModel().getTextPadding().getBottom()
+                            - text.computedTextPadding().getBottom()
                             - icon.height();
                 return getModel().getTopPos()
                         + getModel().height() / 2 - icon.height() / 2
-                        + getModel().getTextPadding().getTop()
-                        - getModel().getTextPadding().getBottom();
+                        + text.computedTextPadding().getTop()
+                        - text.computedTextPadding().getBottom();
             }
         });
     }
