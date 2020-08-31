@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.element.input;
 
+import net.voxelindustry.brokkgui.component.impl.BooleanFormFieldComponent;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.shape.Rectangle;
@@ -12,7 +13,7 @@ public class GuiCheckbox extends GuiRadioButton
     {
         super(text);
 
-        setButtonNode(new CheckboxButtonContent(this));
+        buttonNode(new CheckboxButtonContent(this, booleanFormFieldComponent()));
     }
 
     public GuiCheckbox()
@@ -28,12 +29,12 @@ public class GuiCheckbox extends GuiRadioButton
 
     public static class CheckboxButtonContent extends GuiFather
     {
-        private Rectangle box;
-        private Text      mark;
+        private final Rectangle box;
+        private final Text      mark;
 
-        public CheckboxButtonContent(GuiCheckbox parent)
+        public CheckboxButtonContent(GuiCheckbox parent, BooleanFormFieldComponent booleanFormFieldComponent)
         {
-            transform().heightRatio(1);
+            transform().heightProperty().bindProperty(booleanFormFieldComponent.buttonSizeProperty());
             transform().widthProperty().bindProperty(transform().heightProperty());
 
             box = new Rectangle();
@@ -43,7 +44,7 @@ public class GuiCheckbox extends GuiRadioButton
             mark.get(StyleComponent.class).styleClass().add("mark");
 
             addChild(mark);
-            RelativeBindingHelper.bindToCenter(mark.transform(), transform(), 0, -1);
+            RelativeBindingHelper.bindToCenter(mark.transform(), transform());
 
             addChild(box);
             RelativeBindingHelper.bindToCenter(box.transform(), transform());
