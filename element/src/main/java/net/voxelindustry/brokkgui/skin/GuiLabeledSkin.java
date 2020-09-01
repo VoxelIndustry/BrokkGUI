@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.skin;
 
 import fr.ourten.teabeans.binding.Binding;
+import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
@@ -18,8 +19,8 @@ import net.voxelindustry.brokkgui.shape.TextComponent;
  */
 public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> extends GuiBehaviorSkinBase<C, B>
 {
-    private final Property<String> ellipsedTextProperty;
-    private       Binding<RectBox> paddingBinding;
+    private final Property<String>    ellipsedTextProperty;
+    private       Expression<RectBox> paddingForIconBinding;
 
     private final TextComponent text;
 
@@ -42,22 +43,22 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             {
                 getModel().removeChild(oldValue);
                 if (newValue == null)
-                    bindText();
+                    bindText(oldValue);
             }
             if (newValue != null)
             {
                 getModel().style().styleClass().add("icon");
+                bindTextWithIcon(oldValue, newValue);
                 bindIcon(newValue);
-                bindTextWithIcon(newValue);
             }
         });
         if (model.getIconProperty().isPresent())
         {
+            bindTextWithIcon(null, model.getIcon());
             bindIcon(model.getIcon());
-            bindTextWithIcon(model.getIcon());
         }
         else
-            bindText();
+            bindText(null);
     }
 
     public Property<String> getEllipsedTextProperty()
@@ -70,59 +71,48 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         return ellipsedTextProperty.getValue();
     }
 
-    private void bindText()
+    private void bindText(GuiElement previousIcon)
     {
-        text.removeTextPaddingProperty(paddingBinding);
-        if (paddingBinding != null)
+        if (paddingForIconBinding == null)
         {
-            paddingBinding.unbindAll();
-            paddingBinding = null;
+            paddingForIconBinding = new Expression<>(() -> RectBox.EMPTY,
+                    getModel().getIconSideProperty(),
+                    getModel().getIconPaddingProperty());
+            text.addTextPaddingProperty(paddingForIconBinding);
+            return;
+        }
+
+        paddingForIconBinding.setClosure(() -> RectBox.EMPTY);
+        if (previousIcon != null)
+        {
+            paddingForIconBinding.unbind(previousIcon.transform().widthProperty());
+            paddingForIconBinding.unbind(previousIcon.transform().heightProperty());
         }
     }
 
-    private void bindTextWithIcon(GuiElement icon)
+    private void bindTextWithIcon(GuiElement previousIcon, GuiElement icon)
     {
-        Binding<RectBox> previousBinding = paddingBinding;
-        if (paddingBinding != null)
-            paddingBinding.unbindAll();
-
-        paddingBinding = new Binding<RectBox>()
+        if (paddingForIconBinding == null)
         {
-            {
-                bind(
-                        getModel().getIconPaddingProperty(),
-                        getModel().getIconSideProperty(),
-                        icon.transform().widthProperty(),
-                        icon.transform().heightProperty()
-                );
-            }
+            paddingForIconBinding = new Expression<>(this::getTextPaddingForIcon,
+                    getModel().getIconSideProperty(),
+                    getModel().getIconPaddingProperty(),
+                    icon.transform().widthProperty(),
+                    icon.transform().heightProperty());
+            text.addTextPaddingProperty(paddingForIconBinding);
+            return;
+        }
 
-            @Override
-            public RectBox computeValue()
-            {
-                float left = 0;
-                float top = 0;
-                float right = 0;
-                float bottom = 0;
+        if (previousIcon != null)
+        {
+            paddingForIconBinding.unbind(previousIcon.transform().widthProperty());
+            paddingForIconBinding.unbind(previousIcon.transform().heightProperty());
+        }
 
-                if (getModel().getIconSide() == RectSide.LEFT)
-                    left += getModel().getIcon().width() + getModel().getIconPadding();
-                else if (getModel().getIconSide() == RectSide.RIGHT)
-                    right += getModel().getIcon().width() + getModel().getIconPadding();
-                else if (getModel().getIconSide() == RectSide.UP)
-                    top += getModel().getIcon().height() + getModel().getIconPadding();
-                else if (getModel().getIconSide() == RectSide.DOWN)
-                    bottom += getModel().getIcon().height() + getModel().getIconPadding();
+        paddingForIconBinding.bind(icon.transform().widthProperty());
+        paddingForIconBinding.bind(icon.transform().heightProperty());
 
-                return RectBox.build()
-                        .left(left)
-                        .right(right)
-                        .top(top)
-                        .bottom(bottom)
-                        .create();
-            }
-        };
-        text.replaceTextPaddingProperty(previousBinding, paddingBinding);
+        paddingForIconBinding.setClosure(this::getTextPaddingForIcon);
     }
 
     private void bindEllipsed()
@@ -198,6 +188,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
                         transform().xPosProperty(),
                         transform().xTranslateProperty(),
                         text.computedTextPaddingValue(),
+                        paddingForIconBinding,
                         transform().widthProperty(),
                         icon.transform().widthProperty());
             }
@@ -205,17 +196,21 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             @Override
             public Float computeValue()
             {
+                RectBox paddingForIcon = paddingForIconBinding.getValue();
+
                 if (getModel().getIconSide() == RectSide.LEFT)
-                    return getModel().getLeftPos()
-                            + text.computedTextPadding().getLeft();
+                {
+                    return transform().leftPos()
+                            + text.computedTextPadding().getLeft() - paddingForIcon.getLeft();
+                }
                 if (getModel().getIconSide() == RectSide.RIGHT)
-                    return getModel().getRightPos()
-                            - text.computedTextPadding().getRight()
+                    return transform().rightPos()
+                            - text.computedTextPadding().getRight() + paddingForIcon.getRight()
                             - icon.width();
-                return getModel().getLeftPos()
+                return transform().leftPos()
                         + getModel().width() / 2 - icon.width() / 2
-                        + text.computedTextPadding().getLeft()
-                        - text.computedTextPadding().getRight();
+                        + text.computedTextPadding().getLeft() - paddingForIcon.getLeft()
+                        - text.computedTextPadding().getRight() + paddingForIcon.getRight();
             }
         });
 
@@ -226,6 +221,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
                         transform().yPosProperty(),
                         transform().yTranslateProperty(),
                         text.computedTextPaddingValue(),
+                        paddingForIconBinding,
                         transform().heightProperty(),
                         icon.transform().heightProperty());
             }
@@ -233,18 +229,44 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             @Override
             public Float computeValue()
             {
+                RectBox paddingForIcon = paddingForIconBinding.getValue();
+
                 if (getModel().getIconSide() == RectSide.UP)
-                    return getModel().getTopPos()
-                            + text.computedTextPadding().getTop();
+                    return transform().topPos()
+                            + text.computedTextPadding().getTop() - paddingForIcon.getTop();
                 if (getModel().getIconSide() == RectSide.DOWN)
-                    return getModel().getBottomPos()
-                            - text.computedTextPadding().getBottom()
+                    return transform().bottomPos()
+                            - text.computedTextPadding().getBottom() + paddingForIcon.getBottom()
                             - icon.height();
-                return getModel().getTopPos()
+                return transform().topPos()
                         + getModel().height() / 2 - icon.height() / 2
-                        + text.computedTextPadding().getTop()
-                        - text.computedTextPadding().getBottom();
+                        + text.computedTextPadding().getTop() - paddingForIcon.getTop()
+                        - text.computedTextPadding().getBottom() + paddingForIcon.getBottom();
             }
         });
+    }
+
+    private RectBox getTextPaddingForIcon()
+    {
+        float left = 0;
+        float top = 0;
+        float right = 0;
+        float bottom = 0;
+
+        if (getModel().getIconSide() == RectSide.LEFT)
+            left += getModel().getIcon().width() + getModel().getIconPadding();
+        else if (getModel().getIconSide() == RectSide.RIGHT)
+            right += getModel().getIcon().width() + getModel().getIconPadding();
+        else if (getModel().getIconSide() == RectSide.UP)
+            top += getModel().getIcon().height() + getModel().getIconPadding();
+        else if (getModel().getIconSide() == RectSide.DOWN)
+            bottom += getModel().getIcon().height() + getModel().getIconPadding();
+
+        return RectBox.build()
+                .left(left)
+                .right(right)
+                .top(top)
+                .bottom(bottom)
+                .create();
     }
 }

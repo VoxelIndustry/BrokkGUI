@@ -213,6 +213,8 @@ public class TextComponent extends GuiComponent implements RenderComponent
 
     public void addTextPaddingProperty(ObservableValue<RectBox> textPaddingValue)
     {
+        if (textPaddingList.contains(textPaddingValue))
+            return;
         textPaddingList.add(textPaddingValue);
         recomputeTextPadding();
     }
