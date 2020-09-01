@@ -4,6 +4,7 @@ import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.control.GuiFather;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.debug.hierarchy.AccordionItem;
 import net.voxelindustry.brokkgui.debug.hierarchy.AccordionLayout;
 import net.voxelindustry.brokkgui.immediate.ImmediateWindow;
@@ -11,7 +12,9 @@ import net.voxelindustry.brokkgui.immediate.InteractionResult;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
+import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.profiler.GuiProfiler;
+import net.voxelindustry.brokkgui.shape.TextComponent;
 import net.voxelindustry.brokkgui.style.IStyleRoot;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.style.StyleEngine;
@@ -162,7 +165,10 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         }
 
         if (selectedNode != null)
+        {
             drawNodeInfos(selectedNode);
+            drawSelectedNodeInfos(selectedNode);
+        }
         if (hoveredNode != null)
             drawNodeInfos(hoveredNode);
         if (hoveredHierarchyNode != null)
@@ -356,7 +362,25 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         builder.add("x: " + NO_DECIMAL_FORMAT.format(node.leftPos()) + " y: " + NO_DECIMAL_FORMAT.format(node.topPos()) + " w: " + NO_DECIMAL_FORMAT.format(node.width()) + " h: " + NO_DECIMAL_FORMAT.format(node.height()));
         builder.add("visible: " + isNodeVisible(node));
 
+        if (node.element().has(TextComponent.class))
+        {
+            RectBox padding = node.element().get(TextComponent.class).computedTextPadding();
+            builder.add("Padding: Up=" + padding.getTop() + ", Down=" + padding.getBottom() + ", Left=" + padding.getLeft() + ", Right=" + padding.getRight());
+        }
+
         textBox(builder.toString(), node.leftPos(), node.bottomPos(), StyleType.NORMAL);
+    }
+
+    private void drawSelectedNodeInfos(Transform node)
+    {
+        if (node.element().has(TextComponent.class))
+        {
+            RectBox padding = node.element().get(TextComponent.class).computedTextPadding();
+            box(node.leftPos(), node.topPos(), padding.getLeft(), node.height(), Color.RED.addAlpha(-0.5F), Color.RED.addAlpha(-0.15F), 0.5F, Color.RED.addAlpha(-0.5F), Color.RED.addAlpha(-0.3F));
+            box(node.leftPos(), node.topPos(), node.width(), padding.getTop(), Color.AQUA.addAlpha(-0.5F), Color.AQUA.addAlpha(-0.15F), 0.5F, Color.AQUA.addAlpha(-0.5F), Color.AQUA.addAlpha(-0.3F));
+            box(node.rightPos() - padding.getRight(), node.topPos(), padding.getRight(), node.height(), Color.YELLOW.addAlpha(-0.5F), Color.YELLOW.addAlpha(-0.15F), 0.5F, Color.YELLOW.addAlpha(-0.5F), Color.YELLOW.addAlpha(-0.3F));
+            box(node.leftPos(), node.bottomPos() - padding.getBottom(), node.width(), padding.getBottom(), Color.GREEN.addAlpha(-0.5F), Color.GREEN.addAlpha(-0.15F), 0.5F, Color.GREEN.addAlpha(-0.5F), Color.GREEN.addAlpha(-0.3F));
+        }
     }
 
     private Pair<Transform, Integer> getDeepestHoveredNode(Transform current, int mouseX, int mouseY, int depth)

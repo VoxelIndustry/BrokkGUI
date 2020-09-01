@@ -658,7 +658,9 @@ public abstract class GuiElement implements IEventEmitter
 
     public <T extends GuiComponent> boolean has(Class<T> componentClass)
     {
-        return componentMap.containsKey(componentClass);
+        return componentMap.containsKey(componentClass) ||
+                componentMap.keySet().stream()
+                        .anyMatch(componentClass::isAssignableFrom);
     }
 
     public boolean has(GuiComponent component)
