@@ -184,7 +184,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
         {
             {
                 super.bind(getTextProperty(),
-                        textPaddingProperty(),
+                        textComponent().computedTextPaddingValue(),
                         getIconProperty(),
                         getIconPaddingProperty(),
                         getIconSideProperty());
@@ -213,7 +213,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
         {
             {
                 super.bind(getTextProperty(),
-                        textPaddingProperty(),
+                        textComponent().computedTextPaddingValue(),
                         getIconProperty(),
                         getIconPaddingProperty(),
                         getIconSideProperty());

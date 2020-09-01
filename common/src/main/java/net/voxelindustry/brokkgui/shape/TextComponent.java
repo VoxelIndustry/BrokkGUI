@@ -1,8 +1,9 @@
 package net.voxelindustry.brokkgui.shape;
 
 import com.google.common.collect.Lists;
-import fr.ourten.teabeans.binding.Binding;
+import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
@@ -24,9 +25,11 @@ public class TextComponent extends GuiComponent implements RenderComponent
 
     private final Property<RectBox> textPaddingProperty = new Property<>(RectBox.EMPTY);
 
-    private ObservableValue<RectBox> computedTextPadding = textPaddingProperty;
-
     private final List<ObservableValue<RectBox>> textPaddingList = Lists.newArrayList(textPaddingProperty);
+
+    private final Expression<RectBox> computedTextPadding = new Expression<>(
+            () -> textPaddingList.stream().map(ObservableValue::getValue).reduce(RectBox.EMPTY, RectBox::sum),
+            textPaddingList.toArray(new Observable[0]));
 
     private final Property<RectAlignment> textAlignmentProperty = new Property<>(RectAlignment.MIDDLE_CENTER);
 
@@ -230,21 +233,18 @@ public class TextComponent extends GuiComponent implements RenderComponent
 
     private void recomputeTextPadding()
     {
-        if (computedTextPadding instanceof Binding)
-            ((Binding<RectBox>) computedTextPadding).unbindAll();
-
-        computedTextPadding = new Binding<RectBox>()
+        Observable[] currentDependencies = computedTextPadding.getDependencies().toArray(new Observable[0]);
+        for (Observable observable : currentDependencies)
         {
-            {
-                textPaddingList.forEach(super::bind);
-            }
-
-            @Override
-            public RectBox computeValue()
-            {
-                return textPaddingList.stream().map(ObservableValue::getValue).reduce(RectBox.EMPTY, RectBox::sum);
-            }
-        };
+            if (!textPaddingList.contains(observable))
+                computedTextPadding.unbind(observable);
+        }
+        textPaddingList.forEach(observable ->
+        {
+            if (!computedTextPadding.getDependencies().contains(observable))
+                computedTextPadding.bind(observable);
+        });
+        computedTextPadding.invalidate();
     }
 
     public RectBox computedTextPadding()
