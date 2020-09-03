@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.element.input;
 
 import net.voxelindustry.brokkgui.component.impl.BooleanFormFieldComponent;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.shape.Rectangle;
 import net.voxelindustry.brokkgui.shape.Text;
@@ -27,33 +26,25 @@ public class GuiCheckbox extends GuiRadioButton
         return "checkbox";
     }
 
-    public static class CheckboxButtonContent extends GuiFather
+    public static class CheckboxButtonContent extends Rectangle
     {
-        private final Rectangle box;
-        private final Text      mark;
+        private final Text mark;
 
         public CheckboxButtonContent(GuiCheckbox parent, BooleanFormFieldComponent booleanFormFieldComponent)
         {
             transform().heightProperty().bindProperty(booleanFormFieldComponent.buttonSizeProperty());
             transform().widthProperty().bindProperty(transform().heightProperty());
 
-            box = new Rectangle();
             mark = new Text("✔");
 
-            box.get(StyleComponent.class).styleClass().add("box");
+            get(StyleComponent.class).styleClass().add("box");
             mark.get(StyleComponent.class).styleClass().add("mark");
 
-            addChild(mark);
+            transform().addChild(mark.transform());
             RelativeBindingHelper.bindToCenter(mark.transform(), transform());
 
-            addChild(box);
-            RelativeBindingHelper.bindToCenter(box.transform(), transform());
-
-            box.transform().widthProperty().bindProperty(box.transform().heightProperty());
-            box.transform().heightProperty().bindProperty(transform().heightProperty());
-
             mark.transform().widthProperty().bindProperty(mark.transform().heightProperty());
-            mark.transform().heightProperty().bindProperty(box.transform().heightProperty().map(height -> height - 2));
+            mark.transform().heightProperty().bindProperty(transform().heightProperty().map(height -> height - 2));
 
             mark.visibleProperty().bindProperty(parent.getSelectedProperty());
         }
@@ -62,11 +53,6 @@ public class GuiCheckbox extends GuiRadioButton
         public String type()
         {
             return "checkbox-button";
-        }
-
-        public Rectangle getBox()
-        {
-            return box;
         }
 
         public Text getMark()

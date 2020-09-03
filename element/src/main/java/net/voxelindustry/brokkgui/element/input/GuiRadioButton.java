@@ -4,7 +4,6 @@ import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.BooleanFormFieldComponent;
 import net.voxelindustry.brokkgui.component.impl.ToggleButtonComponent;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.shape.Rectangle;
@@ -91,9 +90,8 @@ public class GuiRadioButton extends GuiToggleButton
         return "radio-button";
     }
 
-    public static class RadioButtonContent extends GuiFather
+    public static class RadioButtonContent extends Rectangle
     {
-        private final Rectangle box;
         private final Rectangle mark;
 
         public RadioButtonContent(ToggleButtonComponent toggleButtonComponent, BooleanFormFieldComponent booleanFormFieldComponent)
@@ -101,30 +99,18 @@ public class GuiRadioButton extends GuiToggleButton
             transform().heightProperty().bindProperty(booleanFormFieldComponent.buttonSizeProperty());
             transform().widthProperty().bindProperty(transform().heightProperty());
 
-            box = new Rectangle();
             mark = new Rectangle();
 
-            box.get(StyleComponent.class).styleClass().add("box");
+            get(StyleComponent.class).styleClass().add("box");
             mark.get(StyleComponent.class).styleClass().add("mark");
 
-            addChild(box);
-            RelativeBindingHelper.bindToCenter(box.transform(), transform());
-
-            addChild(mark);
+            transform().addChild(mark.transform());
             RelativeBindingHelper.bindToCenter(mark.transform(), transform());
 
-            box.transform().widthProperty().bindProperty(box.transform().heightProperty());
-            box.transform().heightProperty().bindProperty(transform().heightProperty());
-
             mark.transform().widthProperty().bindProperty(mark.transform().heightProperty());
-            mark.transform().heightProperty().bindProperty(box.transform().heightProperty().map(height -> height - 4));
+            mark.transform().heightProperty().bindProperty(transform().heightProperty().map(height -> height - 4));
 
             mark.visibleProperty().bindProperty(toggleButtonComponent.getSelectedProperty());
-        }
-
-        public GuiElement getBox()
-        {
-            return box;
         }
 
         public GuiElement getMark()
@@ -135,7 +121,7 @@ public class GuiRadioButton extends GuiToggleButton
         @Override
         public String type()
         {
-            return "radio-button-content";
+            return "radio-button-box";
         }
     }
 }
