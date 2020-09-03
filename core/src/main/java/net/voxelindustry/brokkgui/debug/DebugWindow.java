@@ -365,7 +365,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         if (node.element().has(TextComponent.class))
         {
             RectBox padding = node.element().get(TextComponent.class).computedTextPadding();
-            builder.add("Padding: Up=" + padding.getTop() + ", Down=" + padding.getBottom() + ", Left=" + padding.getLeft() + ", Right=" + padding.getRight());
+            builder.add("Padding: Up=" + NO_DECIMAL_FORMAT.format(padding.getTop()) + ", Down=" + NO_DECIMAL_FORMAT.format(padding.getBottom()) + ", Left=" + NO_DECIMAL_FORMAT.format(padding.getLeft()) + ", Right=" + NO_DECIMAL_FORMAT.format(padding.getRight()));
         }
 
         textBox(builder.toString(), node.leftPos(), node.bottomPos(), StyleType.NORMAL);
