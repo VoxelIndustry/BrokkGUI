@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.internal;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
+import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.window.IGuiSubWindow;
 import net.voxelindustry.brokkgui.window.IGuiWindow;
@@ -85,7 +86,7 @@ public class PopupHandler
         });
     }
 
-    public void handleClick(int mouseX, int mouseY, int key)
+    public void handleClick(int mouseX, int mouseY, MouseInputCode key)
     {
         popups.forEach(popup ->
         {

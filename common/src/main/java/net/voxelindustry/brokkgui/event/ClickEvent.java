@@ -8,23 +8,23 @@ public class ClickEvent extends GuiMouseEvent
 {
     public static final EventType<ClickEvent> TYPE = new EventType<>(ANY, "MOUSE_CLICK_EVENT");
 
-    private final int key;
+    private final MouseInputCode key;
 
     public ClickEvent(GuiElement source)
     {
-        this(source, 0, 0, 0);
+        this(source, 0, 0, MouseInputCode.MOUSE_LEFT);
     }
 
-    public ClickEvent(GuiElement source, int mouseX, int mouseY, int key)
+    public ClickEvent(GuiElement source, int mouseX, int mouseY, MouseInputCode key)
     {
         super(source, mouseX, mouseY);
 
         this.key = key;
     }
 
-    public int getKey()
+    public MouseInputCode getKey()
     {
-        return this.key;
+        return key;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ClickEvent extends GuiMouseEvent
 
         public Left(GuiElement source, int mouseX, int mouseY)
         {
-            super(source, mouseX, mouseY, 0);
+            super(source, mouseX, mouseY, MouseInputCode.MOUSE_LEFT);
         }
 
         @Override
@@ -57,7 +57,7 @@ public class ClickEvent extends GuiMouseEvent
 
         public Right(GuiElement source, int mouseX, int mouseY)
         {
-            super(source, mouseX, mouseY, 1);
+            super(source, mouseX, mouseY, MouseInputCode.MOUSE_RIGHT);
         }
 
         @Override
@@ -74,7 +74,7 @@ public class ClickEvent extends GuiMouseEvent
 
         public Middle(GuiElement source, int mouseX, int mouseY)
         {
-            super(source, mouseX, mouseY, 2);
+            super(source, mouseX, mouseY, MouseInputCode.MOUSE_BUTTON_MIDDLE);
         }
 
         @Override

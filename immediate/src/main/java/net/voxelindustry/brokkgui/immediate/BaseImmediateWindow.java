@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.immediate;
 import fr.ourten.teabeans.property.IProperty;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.data.RectBox;
+import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -221,7 +222,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void onClick(int mouseX, int mouseY, int key)
+    public void onClick(int mouseX, int mouseY, MouseInputCode key)
     {
         lastClickX = mouseX;
         lastClickY = mouseY;
@@ -231,13 +232,13 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void onClickDrag(int mouseX, int mouseY, int clickedMouseButton, double dragX, double dragY)
+    public void onClickDrag(int mouseX, int mouseY, MouseInputCode clickedMouseButton, double dragX, double dragY)
     {
 
     }
 
     @Override
-    public void onClickStop(int mouseX, int mouseY, int state)
+    public void onClickStop(int mouseX, int mouseY, MouseInputCode mouseInputCode)
     {
         lastHeldClickX = -1;
         lastHeldClickY = -1;

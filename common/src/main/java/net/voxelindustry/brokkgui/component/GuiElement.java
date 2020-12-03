@@ -16,6 +16,7 @@ import net.voxelindustry.brokkgui.event.FocusEvent;
 import net.voxelindustry.brokkgui.event.GuiMouseEvent;
 import net.voxelindustry.brokkgui.event.HoverEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent;
+import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.ScissorBox;
@@ -218,21 +219,21 @@ public abstract class GuiElement implements IEventEmitter
                 .forEach(child -> child.element().handleMouseScroll(mouseX, mouseY, scroll));
     }
 
-    public void handleClick(int mouseX, int mouseY, int key)
+    public void handleClick(int mouseX, int mouseY, MouseInputCode key)
     {
         if (isDisabled() || !isVisible())
             return;
         switch (key)
         {
-            case 0:
+            case MOUSE_LEFT:
                 getEventDispatcher().dispatchEvent(ClickEvent.Left.TYPE,
                         new ClickEvent.Left(this, mouseX, mouseY));
                 break;
-            case 1:
+            case MOUSE_RIGHT:
                 getEventDispatcher().dispatchEvent(ClickEvent.Right.TYPE,
                         new ClickEvent.Right(this, mouseX, mouseY));
                 break;
-            case 2:
+            case MOUSE_BUTTON_MIDDLE:
                 getEventDispatcher().dispatchEvent(ClickEvent.Middle.TYPE,
                         new ClickEvent.Middle(this, mouseX, mouseY));
                 break;
@@ -250,7 +251,7 @@ public abstract class GuiElement implements IEventEmitter
                 .forEach(child -> child.element().handleClick(mouseX, mouseY, key));
     }
 
-    public void handleClickDrag(int mouseX, int mouseY, int key, int originalMouseX, int originalMouseY)
+    public void handleClickDrag(int mouseX, int mouseY, MouseInputCode key, int originalMouseX, int originalMouseY)
     {
         if (isDisabled() || !isVisible())
             return;
@@ -274,7 +275,7 @@ public abstract class GuiElement implements IEventEmitter
                         originalMouseY));
     }
 
-    public void handleClickStop(int mouseX, int mouseY, int key, int originalMouseX, int originalMouseY)
+    public void handleClickStop(int mouseX, int mouseY, MouseInputCode key, int originalMouseX, int originalMouseY)
     {
         if (isDisabled() || !isVisible())
             return;

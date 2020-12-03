@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.window;
 
 import fr.ourten.teabeans.property.IProperty;
+import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
@@ -48,11 +49,11 @@ public interface IGuiWindow extends IGuiSubWindow
 
     void onKeyReleased(int key);
 
-    void onClick(int mouseX, int mouseY, int key);
+    void onClick(int mouseX, int mouseY, MouseInputCode key);
 
-    void onClickDrag(int mouseX, int mouseY, int clickedMouseButton, double dragX, double dragY);
+    void onClickDrag(int mouseX, int mouseY, MouseInputCode clickedMouseButton, double dragX, double dragY);
 
-    void onClickStop(int mouseX, int mouseY, int state);
+    void onClickStop(int mouseX, int mouseY, MouseInputCode key);
 
     void handleMouseScroll(double scrolled);
 }

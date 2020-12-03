@@ -9,6 +9,7 @@ import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.debug.DebugRenderer;
 import net.voxelindustry.brokkgui.element.pane.GuiPane;
+import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
@@ -236,7 +237,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void onClick(int mouseX, int mouseY, int key)
+    public void onClick(int mouseX, int mouseY, MouseInputCode key)
     {
         if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !isDebugged)
         {
@@ -269,14 +270,14 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void onClickDrag(int mouseX, int mouseY, int key, double dragX, double dragY)
+    public void onClickDrag(int mouseX, int mouseY, MouseInputCode key, double dragX, double dragY)
     {
         if (mainPanel.isPointInside(lastClickX, lastClickY))
             mainPanel.handleClickDrag(mouseX, mouseY, key, lastClickX, lastClickY);
     }
 
     @Override
-    public void onClickStop(int mouseX, int mouseY, int key)
+    public void onClickStop(int mouseX, int mouseY, MouseInputCode key)
     {
         if (mainPanel.isPointInside(lastClickX, lastClickY))
             mainPanel.handleClickStop(mouseX, mouseY, key, lastClickX, lastClickY);

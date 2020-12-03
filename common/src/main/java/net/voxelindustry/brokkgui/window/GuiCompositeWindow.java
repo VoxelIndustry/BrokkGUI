@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.window;
 
 import fr.ourten.teabeans.property.IProperty;
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
@@ -188,53 +189,53 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void onClick(int mouseX, int mouseY, int key)
+    public void onClick(int mouseX, int mouseY, MouseInputCode mouseInputCode)
     {
         if (inputEventFilter.isPresent())
         {
             if (inputEventFilter.get().test(first, InputType.MOUSE_CLICK))
-                first.onClick(mouseX, mouseY, key);
+                first.onClick(mouseX, mouseY, mouseInputCode);
             if (inputEventFilter.get().test(second, InputType.MOUSE_CLICK))
-                second.onClick(mouseX, mouseY, key);
+                second.onClick(mouseX, mouseY, mouseInputCode);
         }
         else
         {
-            first.onClick(mouseX, mouseY, key);
-            second.onClick(mouseX, mouseY, key);
+            first.onClick(mouseX, mouseY, mouseInputCode);
+            second.onClick(mouseX, mouseY, mouseInputCode);
         }
     }
 
     @Override
-    public void onClickDrag(int mouseX, int mouseY, int key, double dragX, double dragY)
+    public void onClickDrag(int mouseX, int mouseY, MouseInputCode mouseInputCode, double dragX, double dragY)
     {
         if (inputEventFilter.isPresent())
         {
             if (inputEventFilter.get().test(first, InputType.MOUSE_DRAG_START))
-                first.onClickDrag(mouseX, mouseY, key, dragX, dragY);
+                first.onClickDrag(mouseX, mouseY, mouseInputCode, dragX, dragY);
             if (inputEventFilter.get().test(second, InputType.MOUSE_DRAG_START))
-                second.onClickDrag(mouseX, mouseY, key, dragX, dragY);
+                second.onClickDrag(mouseX, mouseY, mouseInputCode, dragX, dragY);
         }
         else
         {
-            first.onClickDrag(mouseX, mouseY, key, dragX, dragY);
-            second.onClickDrag(mouseX, mouseY, key, dragX, dragY);
+            first.onClickDrag(mouseX, mouseY, mouseInputCode, dragX, dragY);
+            second.onClickDrag(mouseX, mouseY, mouseInputCode, dragX, dragY);
         }
     }
 
     @Override
-    public void onClickStop(int mouseX, int mouseY, int state)
+    public void onClickStop(int mouseX, int mouseY, MouseInputCode mouseInputCode)
     {
         if (inputEventFilter.isPresent())
         {
             if (inputEventFilter.get().test(first, InputType.MOUSE_DRAG_STOP))
-                first.onClickStop(mouseX, mouseY, state);
+                first.onClickStop(mouseX, mouseY, mouseInputCode);
             if (inputEventFilter.get().test(second, InputType.MOUSE_DRAG_STOP))
-                second.onClickStop(mouseX, mouseY, state);
+                second.onClickStop(mouseX, mouseY, mouseInputCode);
         }
         else
         {
-            first.onClickStop(mouseX, mouseY, state);
-            second.onClickStop(mouseX, mouseY, state);
+            first.onClickStop(mouseX, mouseY, mouseInputCode);
+            second.onClickStop(mouseX, mouseY, mouseInputCode);
         }
     }
 

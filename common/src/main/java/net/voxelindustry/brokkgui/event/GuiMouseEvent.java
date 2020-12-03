@@ -28,12 +28,12 @@ public class GuiMouseEvent extends GuiInputEvent
 
     public int getMouseX()
     {
-        return this.mouseX;
+        return mouseX;
     }
 
     public int getMouseY()
     {
-        return this.mouseY;
+        return mouseY;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class GuiMouseEvent extends GuiInputEvent
 
         public int getDwheel()
         {
-            return this.dwheel;
+            return dwheel;
         }
 
         @Override
@@ -67,16 +67,16 @@ public class GuiMouseEvent extends GuiInputEvent
 
     public static class DragStart extends GuiMouseEvent
     {
-        private final int key;
+        private final MouseInputCode key;
 
-        public DragStart(GuiElement source, int mouseX, int mouseY, int mouseKey)
+        public DragStart(GuiElement source, int mouseX, int mouseY, MouseInputCode mouseKey)
         {
             super(source, mouseX, mouseY);
 
-            this.key = mouseKey;
+            key = mouseKey;
         }
 
-        public int getKey()
+        public MouseInputCode getKey()
         {
             return key;
         }
@@ -92,7 +92,7 @@ public class GuiMouseEvent extends GuiInputEvent
     {
         private final int dragX, dragY;
 
-        public Dragging(GuiElement source, int mouseX, int mouseY, int mouseKey, int dragX, int dragY)
+        public Dragging(GuiElement source, int mouseX, int mouseY, MouseInputCode mouseKey, int dragX, int dragY)
         {
             super(source, mouseX, mouseY, mouseKey);
 
@@ -119,7 +119,7 @@ public class GuiMouseEvent extends GuiInputEvent
 
     public static final class DragStop extends Dragging
     {
-        public DragStop(GuiElement source, int mouseX, int mouseY, int mouseKey, int dragX, int dragY)
+        public DragStop(GuiElement source, int mouseX, int mouseY, MouseInputCode mouseKey, int dragX, int dragY)
         {
             super(source, mouseX, mouseY, mouseKey, dragX, dragY);
         }

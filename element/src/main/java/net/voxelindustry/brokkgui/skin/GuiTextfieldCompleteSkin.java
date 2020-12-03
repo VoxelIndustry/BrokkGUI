@@ -8,6 +8,7 @@ import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.element.input.GuiTextfieldComplete;
 import net.voxelindustry.brokkgui.element.pane.GuiAbsolutePane;
+import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import org.apache.commons.lang3.StringUtils;
@@ -199,7 +200,7 @@ public class GuiTextfieldCompleteSkin<T extends GuiTextfieldComplete> extends Gu
         }
 
         @Override
-        public void handleClick(int mouseX, int mouseY, int key)
+        public void handleClick(int mouseX, int mouseY, MouseInputCode key)
         {
             super.handleClick(mouseX, mouseY, key);
 
