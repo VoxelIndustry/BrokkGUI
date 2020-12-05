@@ -8,7 +8,6 @@ import net.voxelindustry.brokkgui.data.Position;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.data.Scale;
-import net.voxelindustry.brokkgui.event.LayoutEvent;
 import net.voxelindustry.brokkgui.shape.ScissorBox;
 import net.voxelindustry.brokkgui.util.MouseInBoundsChecker;
 
@@ -95,10 +94,6 @@ public class Transform extends GuiComponent
      */
     public void setParent(Transform parent)
     {
-        if (parentProperty().isPresent() && parent().element().getWindow() != null)
-            parent().element().getWindow().dispatchEvent(LayoutEvent.REMOVE,
-                    new LayoutEvent.Remove(element()));
-
         parentProperty().setValue(parent);
 
         if (parent != null)
@@ -109,10 +104,9 @@ public class Transform extends GuiComponent
                 RelativeBindingHelper.bindHeightRelative(this, parent, heightRatioProperty());
 
             element().setWindow(parent.element().getWindow());
-
-            if (element().getWindow() != null)
-                element().getWindow().dispatchEvent(LayoutEvent.ADD, new LayoutEvent.Add(element()));
         }
+        else
+            element().setWindow(null);
     }
 
     /**

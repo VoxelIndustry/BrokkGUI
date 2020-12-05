@@ -8,7 +8,6 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.policy.GuiOverflowPolicy;
 import net.voxelindustry.brokkgui.style.IStyleParent;
 import net.voxelindustry.brokkgui.style.StyleComponent;
-import net.voxelindustry.brokkgui.window.IGuiSubWindow;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -115,15 +114,6 @@ public abstract class GuiFather extends GuiElement implements IStyleParent
     {
         super.dispose();
 
-        transform().streamChildren().forEach(childTransform -> childTransform.element().dispose());
-    }
-
-    @Override
-    public void setWindow(IGuiSubWindow window)
-    {
-        super.setWindow(window);
-
-        getChildren().forEach(child -> child.element().setWindow(getWindow()));
     }
 
     /////////////////////

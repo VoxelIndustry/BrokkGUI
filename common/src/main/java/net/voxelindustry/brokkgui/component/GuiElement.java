@@ -16,6 +16,7 @@ import net.voxelindustry.brokkgui.event.FocusEvent;
 import net.voxelindustry.brokkgui.event.GuiMouseEvent;
 import net.voxelindustry.brokkgui.event.HoverEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent;
+import net.voxelindustry.brokkgui.event.LayoutEvent;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IGuiRenderer;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -113,6 +114,8 @@ public abstract class GuiElement implements IEventEmitter
 
         if (getScissorBox() != null)
             getScissorBox().dispose();
+
+        transform().children().forEach(childTransform -> childTransform.element().dispose());
     }
 
     public final void renderNode(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
@@ -557,7 +560,17 @@ public abstract class GuiElement implements IEventEmitter
 
     public void setWindow(IGuiSubWindow window)
     {
+        if (this.window != window)
+        {
+            if (window != null)
+                window.dispatchEvent(LayoutEvent.ADD, new LayoutEvent.Add(this));
+            else
+                this.window.dispatchEvent(LayoutEvent.REMOVE, new LayoutEvent.Remove(this));
+        }
+
         this.window = window;
+
+        transform().children().forEach(child -> child.element().setWindow(getWindow()));
     }
 
     ////////////////
