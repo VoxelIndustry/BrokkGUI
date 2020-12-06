@@ -436,6 +436,8 @@ public class StyleComponent extends GuiComponent
                     child.element().ifHas(StyleComponent.class, StyleComponent::refresh));
             element().getEventDispatcher().dispatchEvent(StyleRefreshEvent.AFTER, new StyleRefreshEvent.AfterEvent(this));
         }
+
+        element().markRenderDirty();
     }
 
     /**

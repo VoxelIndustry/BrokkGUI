@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkgui.border.ColorBorderDrawer;
 import net.voxelindustry.brokkgui.border.ImageBorderDrawer;
 import net.voxelindustry.brokkgui.component.GuiComponent;
@@ -71,6 +72,12 @@ public class Paint extends GuiComponent implements RenderComponent
 
     public Paint()
     {
+
+    }
+
+    private void onRenderPropertyChange(Observable observable)
+    {
+        element().markRenderDirty();
     }
 
     public ShapeDefinition shape()
@@ -181,7 +188,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Texture> backgroundTextureProperty()
     {
         if (backgroundTextureProperty == null)
-            backgroundTextureProperty = new Property<>(Texture.EMPTY);
+            backgroundTextureProperty = createRenderProperty(Texture.EMPTY);
         return backgroundTextureProperty;
     }
 
@@ -189,7 +196,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<SpriteRepeat> backgroundRepeatProperty()
     {
         if (backgroundRepeatProperty == null)
-            backgroundRepeatProperty = new Property<>(SpriteRepeat.NONE);
+            backgroundRepeatProperty = createRenderProperty(SpriteRepeat.NONE);
         return backgroundRepeatProperty;
     }
 
@@ -197,7 +204,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Resource> backgroundAnimationResourceProperty()
     {
         if (backgroundAnimationProperty == null)
-            backgroundAnimationProperty = new Property<>(null);
+            backgroundAnimationProperty = createRenderProperty(null);
         return backgroundAnimationProperty;
     }
 
@@ -205,7 +212,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<RectBox> backgroundPositionProperty()
     {
         if (backgroundPositionProperty == null)
-            backgroundPositionProperty = new Property<>(RectBox.EMPTY);
+            backgroundPositionProperty = createRenderProperty(RectBox.EMPTY);
         return backgroundPositionProperty;
     }
 
@@ -213,7 +220,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<RandomSpriteRotation> backgroundRandomRotationProperty()
     {
         if (backgroundRotationProperty == null)
-            backgroundRotationProperty = new Property<>(null);
+            backgroundRotationProperty = createRenderProperty(null);
         return backgroundRotationProperty;
     }
 
@@ -221,7 +228,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Color> backgroundColorProperty()
     {
         if (backgroundColorProperty == null)
-            backgroundColorProperty = new Property<>(Color.ALPHA);
+            backgroundColorProperty = createRenderProperty(Color.ALPHA);
         return backgroundColorProperty;
     }
 
@@ -229,7 +236,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Texture> foregroundTextureProperty()
     {
         if (foregroundTextureProperty == null)
-            foregroundTextureProperty = new Property<>(Texture.EMPTY);
+            foregroundTextureProperty = createRenderProperty(Texture.EMPTY);
         return foregroundTextureProperty;
     }
 
@@ -237,7 +244,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<SpriteRepeat> foregroundRepeatProperty()
     {
         if (foregroundRepeatProperty == null)
-            foregroundRepeatProperty = new Property<>(SpriteRepeat.NONE);
+            foregroundRepeatProperty = createRenderProperty(SpriteRepeat.NONE);
         return foregroundRepeatProperty;
     }
 
@@ -245,7 +252,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Resource> foregroundAnimationResourceProperty()
     {
         if (foregroundAnimationProperty == null)
-            foregroundAnimationProperty = new Property<>(null);
+            foregroundAnimationProperty = createRenderProperty(null);
         return foregroundAnimationProperty;
     }
 
@@ -253,7 +260,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<RectBox> foregroundPositionProperty()
     {
         if (foregroundPositionProperty == null)
-            foregroundPositionProperty = new Property<>(RectBox.EMPTY);
+            foregroundPositionProperty = createRenderProperty(RectBox.EMPTY);
         return foregroundPositionProperty;
     }
 
@@ -261,7 +268,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<RandomSpriteRotation> foregroundRandomRotationProperty()
     {
         if (foregroundRotationProperty == null)
-            foregroundRotationProperty = new Property<>(null);
+            foregroundRotationProperty = createRenderProperty(null);
         return foregroundRotationProperty;
     }
 
@@ -269,7 +276,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Color> foregroundColorProperty()
     {
         if (foregroundColorProperty == null)
-            foregroundColorProperty = new Property<>(Color.ALPHA);
+            foregroundColorProperty = createRenderProperty(Color.ALPHA);
         return foregroundColorProperty;
     }
 
@@ -277,7 +284,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Color> borderColorProperty()
     {
         if (borderColorProperty == null)
-            borderColorProperty = new Property<>(Color.ALPHA);
+            borderColorProperty = createRenderProperty(Color.ALPHA);
         return borderColorProperty;
     }
 
@@ -285,7 +292,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Float> borderWidthLeftProperty()
     {
         if (borderWidthLeftProperty == null)
-            borderWidthLeftProperty = new Property<>(1F);
+            borderWidthLeftProperty = createRenderProperty(1F);
         return borderWidthLeftProperty;
     }
 
@@ -293,7 +300,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Float> borderWidthRightProperty()
     {
         if (borderWidthRightProperty == null)
-            borderWidthRightProperty = new Property<>(1F);
+            borderWidthRightProperty = createRenderProperty(1F);
         return borderWidthRightProperty;
     }
 
@@ -301,7 +308,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Float> borderWidthTopProperty()
     {
         if (borderWidthTopProperty == null)
-            borderWidthTopProperty = new Property<>(1F);
+            borderWidthTopProperty = createRenderProperty(1F);
         return borderWidthTopProperty;
     }
 
@@ -309,7 +316,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Float> borderWidthBottomProperty()
     {
         if (borderWidthBottomProperty == null)
-            borderWidthBottomProperty = new Property<>(1F);
+            borderWidthBottomProperty = createRenderProperty(1F);
         return borderWidthBottomProperty;
     }
 
@@ -317,7 +324,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Integer> borderRadiusTopLeftProperty()
     {
         if (borderRadiusTopLeftProperty == null)
-            borderRadiusTopLeftProperty = new Property<>(0);
+            borderRadiusTopLeftProperty = createRenderProperty(0);
         return borderRadiusTopLeftProperty;
     }
 
@@ -325,7 +332,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Integer> borderRadiusTopRightProperty()
     {
         if (borderRadiusTopRightProperty == null)
-            borderRadiusTopRightProperty = new Property<>(0);
+            borderRadiusTopRightProperty = createRenderProperty(0);
         return borderRadiusTopRightProperty;
     }
 
@@ -333,7 +340,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Integer> borderRadiusBottomLeftProperty()
     {
         if (borderRadiusBottomLeftProperty == null)
-            borderRadiusBottomLeftProperty = new Property<>(0);
+            borderRadiusBottomLeftProperty = createRenderProperty(0);
         return borderRadiusBottomLeftProperty;
     }
 
@@ -341,7 +348,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Integer> borderRadiusBottomRightProperty()
     {
         if (borderRadiusBottomRightProperty == null)
-            borderRadiusBottomRightProperty = new Property<>(0);
+            borderRadiusBottomRightProperty = createRenderProperty(0);
         return borderRadiusBottomRightProperty;
     }
 
@@ -349,7 +356,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Texture> borderImageProperty()
     {
         if (borderImageProperty == null)
-            borderImageProperty = new Property<>(Texture.EMPTY);
+            borderImageProperty = createRenderProperty(Texture.EMPTY);
         return borderImageProperty;
     }
 
@@ -357,7 +364,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<RectBox> borderImageSliceProperty()
     {
         if (borderImageSliceProperty == null)
-            borderImageSliceProperty = new Property<>(RectBox.build().all(1).create());
+            borderImageSliceProperty = createRenderProperty(RectBox.build().all(1).create());
         return borderImageSliceProperty;
     }
 
@@ -365,7 +372,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<RectBox> borderImageWidthProperty()
     {
         if (borderImageWidthProperty == null)
-            borderImageWidthProperty = new Property<>(RectBox.build().all(1).create());
+            borderImageWidthProperty = createRenderProperty(RectBox.build().all(1).create());
         return borderImageWidthProperty;
     }
 
@@ -373,7 +380,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<RectBox> borderImageOutsetProperty()
     {
         if (borderImageOutsetProperty == null)
-            borderImageOutsetProperty = new Property<>(RectBox.build().all(0).create());
+            borderImageOutsetProperty = createRenderProperty(RectBox.build().all(0).create());
         return borderImageOutsetProperty;
     }
 
@@ -381,8 +388,15 @@ public class Paint extends GuiComponent implements RenderComponent
     public Property<Boolean> borderImageFillProperty()
     {
         if (borderImageFillProperty == null)
-            borderImageFillProperty = new Property<>(Boolean.FALSE);
+            borderImageFillProperty = createRenderProperty(Boolean.FALSE);
         return borderImageFillProperty;
+    }
+
+    private <T> Property<T> createRenderProperty(T initialValue)
+    {
+        Property<T> property = new Property<>(initialValue);
+        property.addListener(this::onRenderPropertyChange);
+        return property;
     }
 
     ////////////
