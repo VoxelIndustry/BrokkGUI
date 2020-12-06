@@ -81,7 +81,6 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                 return Math.min(10, getModel().width() / getModel().getTrueWidth() * getModel().width());
             }
         });
-        gripX.transform().zLevelProperty().bindProperty(transform().zLevelProperty());
 
         gripY = new Rectangle();
         gripY.transform().xPosProperty().bindProperty(new Binding<Float>()
@@ -146,7 +145,6 @@ public class GuiScrollableSkin<C extends GuiScrollableBase, B extends GuiScrolla
                 return Math.min(10, getModel().height() / getModel().getTrueHeight() * getModel().height());
             }
         });
-        gripY.transform().zLevelProperty().bindProperty(transform().zLevelProperty());
 
         getModel().addChild(gripX);
         getModel().addChild(gripY);

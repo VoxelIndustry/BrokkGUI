@@ -46,7 +46,6 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
         getModel().get(StyleComponent.class).registerProperty("cursor-color", Color.WHITE.shade(0.3f), Color.class);
 
         text.textProperty().bindProperty(displayedTextProperty);
-        text.transform().zLevelProperty().bindProperty(model.transform().zLevelProperty());
 
         text.transform().xPosProperty().bindProperty(new Binding<Float>()
         {
@@ -80,7 +79,6 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
         getModel().addChild(text);
 
         promptText.textProperty().bindProperty(ellipsedPromptProperty);
-        promptText.transform().zLevelProperty().bindProperty(model.transform().zLevelProperty());
 
         promptText.transform().xPosProperty().bindProperty(new Binding<Float>()
         {

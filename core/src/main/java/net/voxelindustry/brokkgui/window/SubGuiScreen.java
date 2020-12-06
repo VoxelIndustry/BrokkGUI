@@ -20,7 +20,7 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
 
     public SubGuiScreen(float xRelativePos, float yRelativePos)
     {
-        transform().zLevel(300);
+        transform().zTranslate(300);
 
         xRelativePosProperty = new Property<>(xRelativePos);
         yRelativePosProperty = new Property<>(yRelativePos);

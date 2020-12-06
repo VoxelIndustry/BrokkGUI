@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.component.impl;
 
+import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
@@ -16,15 +17,16 @@ import java.util.stream.Stream;
 
 public class Transform extends GuiComponent
 {
-    private final Property<Float> xPosProperty;
-    private final Property<Float> yPosProperty;
-    private final Property<Float> xTranslateProperty;
-    private final Property<Float> yTranslateProperty;
-    private final Property<Float> widthProperty;
-    private final Property<Float> heightProperty;
-    private final Property<Float> widthRatioProperty;
-    private final Property<Float> heightRatioProperty;
-    private final Property<Float> zLevelProperty;
+    private final Property<Float>   xPosProperty;
+    private final Property<Float>   yPosProperty;
+    private final Property<Float>   xTranslateProperty;
+    private final Property<Float>   yTranslateProperty;
+    private final Property<Float>   widthProperty;
+    private final Property<Float>   heightProperty;
+    private final Property<Float>   widthRatioProperty;
+    private final Property<Float>   heightRatioProperty;
+    private final Expression<Float> zDepthProperty;
+    private final Property<Float>   zTranslateProperty;
 
     private final Property<Rotation> rotationProperty;
 
@@ -53,7 +55,8 @@ public class Transform extends GuiComponent
         widthRatioProperty = new Property<>(-1F);
         heightRatioProperty = new Property<>(-1F);
 
-        zLevelProperty = new Property<>(0F);
+        zDepthProperty = new Expression<>(() -> parentProperty().isPresent() ? parent().zLevel() : 0);
+        zTranslateProperty = new Property<>(1F);
 
         rotationProperty = new Property<>(Rotation.NONE);
         scaleProperty = new Property<>(null);
@@ -102,6 +105,10 @@ public class Transform extends GuiComponent
                 RelativeBindingHelper.bindWidthRelative(this, parent, widthRatioProperty());
             if (heightRatio() != -1)
                 RelativeBindingHelper.bindHeightRelative(this, parent, heightRatioProperty());
+
+            zDepthProperty.getDependencies().clear();
+            zDepthProperty.getDependencies().add(parent.zDepthExpression());
+            zDepthProperty.getDependencies().add(parent.zTranslateProperty());
 
             element().setWindow(parent.element().getWindow());
         }
@@ -198,19 +205,37 @@ public class Transform extends GuiComponent
         mouseInBoundsChecker = checker;
     }
 
-    public Property<Float> zLevelProperty()
+    public Expression<Float> zDepthExpression()
     {
-        return zLevelProperty;
+        return zDepthProperty;
     }
 
+    public float zDepth()
+    {
+        return zDepthExpression().getValue();
+    }
+
+    /**
+     * @return sum of the zDepth inherited property from the parent and the zTranslate offset of this child
+     */
     public float zLevel()
     {
-        return zLevelProperty().getValue();
+        return zDepthExpression().getValue() + zTranslate();
     }
 
-    public void zLevel(float zLevel)
+    public Property<Float> zTranslateProperty()
     {
-        zLevelProperty().setValue(zLevel);
+        return zTranslateProperty;
+    }
+
+    public float zTranslate()
+    {
+        return zTranslateProperty().getValue();
+    }
+
+    public void zTranslate(float zTranslate)
+    {
+        zTranslateProperty().setValue(zTranslate);
     }
 
     public Property<Float> xPosProperty()
