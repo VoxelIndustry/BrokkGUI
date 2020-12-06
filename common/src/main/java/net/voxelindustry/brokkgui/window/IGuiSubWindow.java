@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.window;
 
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
@@ -33,4 +34,6 @@ public interface IGuiSubWindow
     void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event);
 
     void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event);
+
+    GuiElement getRootElement();
 }

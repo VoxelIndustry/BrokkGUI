@@ -66,7 +66,7 @@ public class PopupHandler
         instances.remove(window);
     }
 
-    public void renderPopupInPass(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderPopupInPass(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
     {
         popups.removeIf(toRemove::contains);
         toRemove.clear();

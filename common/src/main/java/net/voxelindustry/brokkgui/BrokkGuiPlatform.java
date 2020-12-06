@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui;
 
 import net.voxelindustry.brokkgui.animation.ITickSender;
-import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 import net.voxelindustry.brokkgui.internal.IMouseUtil;
 import net.voxelindustry.brokkgui.internal.IResourceHandler;
+import net.voxelindustry.brokkgui.internal.ITextHelper;
 import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
 import net.voxelindustry.brokkgui.internal.profiler.ProfilerNoop;
 
@@ -25,7 +25,7 @@ public class BrokkGuiPlatform
         return BrokkGuiPlatform.INSTANCE;
     }
 
-    private IGuiHelper       guiHelper;
+    private ITextHelper      textHelper;
     private IKeyboardUtil    keyboardUtil;
     private IMouseUtil       mouseUtil;
     private IResourceHandler resourceHandler;
@@ -106,14 +106,14 @@ public class BrokkGuiPlatform
         this.platformName = platformName;
     }
 
-    public IGuiHelper getGuiHelper()
+    public ITextHelper getTextHelper()
     {
-        return guiHelper;
+        return textHelper;
     }
 
-    public void setGuiHelper(IGuiHelper guiHelper)
+    public void setTextHelper(ITextHelper textHelper)
     {
-        this.guiHelper = guiHelper;
+        this.textHelper = textHelper;
     }
 
     public boolean isRenderDebugEnabled()

@@ -298,8 +298,8 @@ public class GuiTextfield extends GuiSkinedElement implements ITextInput
             public Float computeValue()
             {
                 return Math.max(transform().height(),
-                        Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getPromptText()),
-                                BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getText())) +
+                        Math.max(BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getPromptText()),
+                                BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getText())) +
                                 getTextPadding().getLeft() + getTextPadding().getRight());
             }
         });

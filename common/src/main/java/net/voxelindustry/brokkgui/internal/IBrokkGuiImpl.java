@@ -8,7 +8,7 @@ public interface IBrokkGuiImpl
 
     void askClose();
 
-    IGuiRenderer getRenderer();
+    IRenderCommandReceiver getRenderer();
 
     String getThemeID();
 

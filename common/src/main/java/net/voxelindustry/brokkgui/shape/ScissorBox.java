@@ -4,7 +4,7 @@ import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.impl.Transform;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -69,19 +69,18 @@ public class ScissorBox
         this.renderPassPredicate = renderPassPredicate;
     }
 
-    public boolean setupAndApply(IGuiRenderer renderer, RenderPass pass)
+    public boolean setupAndApply(IRenderCommandReceiver renderer, RenderPass pass)
     {
         if (!renderPassPredicate.test(pass))
             return false;
 
-        renderer.getHelper().beginScissor();
-        renderer.getHelper().scissorBox(startX.getValue(), startY.getValue(), endX.getValue(),
-                endY.getValue());
+        renderer.beginScissor();
+        renderer.scissorBox(startX.getValue(), startY.getValue(), endX.getValue(), endY.getValue());
         return true;
     }
 
-    public void end(IGuiRenderer renderer)
+    public void end(IRenderCommandReceiver renderer)
     {
-        renderer.getHelper().endScissor();
+        renderer.endScissor();
     }
 }

@@ -3,7 +3,7 @@ package net.voxelindustry.brokkgui.shape;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
@@ -19,25 +19,25 @@ public class LineShape implements ShapeDefinition
     }
 
     @Override
-    public void drawColored(Transform transform, IGuiRenderer renderer, float startX, float startY, Color color,
+    public void drawColored(Transform transform, IRenderCommandReceiver renderer, float startX, float startY, Color color,
                             float zLevel, RectBox spritePosition)
     {
-        renderer.getHelper().drawColoredLine(renderer, startX, startY,
+        renderer.drawColoredLine(renderer, startX, startY,
                 startX + transform.width(), startY + transform.height(),
                 lineWidthSupplier.get(), zLevel, color);
     }
 
     @Override
-    public void drawColoredEmpty(Transform transform, IGuiRenderer renderer, float startX, float startY, float lineWidth,
+    public void drawColoredEmpty(Transform transform, IRenderCommandReceiver renderer, float startX, float startY, float lineWidth,
                                  Color color, float zLevel)
     {
-        renderer.getHelper().drawColoredLine(renderer, startX, startY,
+        renderer.drawColoredLine(renderer, startX, startY,
                 startX + transform.width(), startY + transform.height(),
                 lineWidthSupplier.get(), zLevel, color);
     }
 
     @Override
-    public void drawTextured(Transform transform, IGuiRenderer renderer, float startX, float startY, Texture texture,
+    public void drawTextured(Transform transform, IRenderCommandReceiver renderer, float startX, float startY, Texture texture,
                              float zLevel, RectBox spritePosition)
     {
         // TODO : Add helper for drawing textured lines

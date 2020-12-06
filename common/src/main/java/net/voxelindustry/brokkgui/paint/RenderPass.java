@@ -7,6 +7,8 @@ public class RenderPass
     public static final RenderPass FOREGROUND = new RenderPass("foreground", 2);
     public static final RenderPass HOVER      = new RenderPass("hover", 3);
 
+    public static final RenderPass[] VALUES = new RenderPass[]{BACKGROUND, MAIN, FOREGROUND, HOVER};
+
     /**
      * Create a new RenderPass according to parameters.
      * Should only be used in wrappers and impl of the api.

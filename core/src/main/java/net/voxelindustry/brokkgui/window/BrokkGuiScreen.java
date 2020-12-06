@@ -6,13 +6,14 @@ import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.debug.DebugRenderer;
 import net.voxelindustry.brokkgui.element.pane.GuiPane;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -47,7 +48,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     private       GuiPane                 mainPanel;
     private final ArrayList<SubGuiScreen> windows;
-    private       IGuiRenderer            renderer;
+    private       IRenderCommandReceiver  renderer;
 
     private final Property<Float> widthProperty, heightProperty, xPosProperty, yPosProperty;
 
@@ -164,26 +165,18 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         {
             case MAIN:
                 for (RenderPass pass : passes)
-                {
-                    renderer.beginPass(pass);
                     mainPanel.renderNode(renderer, pass, mouseX, mouseY);
-                    renderer.endPass(pass);
-                }
                 break;
             case WINDOW:
                 if (!windows.isEmpty())
                     for (int i = windows.size() - 1; i >= 0; i--)
                     {
                         if (windows.get(i).hasWarFog())
-                            renderer.getHelper().drawColoredRect(renderer, 0, 0, getWidth(),
+                            renderer.drawColoredRect(renderer, 0, 0, getWidth(),
                                     getHeight(), 5 + i, Color.BLACK.addAlpha(-0.5f));
 
                         for (RenderPass pass : passes)
-                        {
-                            renderer.beginPass(pass);
                             windows.get(i).renderNode(renderer, pass, mouseX, mouseY);
-                            renderer.endPass(pass);
-                        }
                     }
                 break;
             case POPUP:
@@ -204,11 +197,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !isDebugged)
         {
-            renderer.getHelper().drawColoredEmptyRect(renderer, 1, 1,
-                    renderer.getHelper().getStringWidth("DEBUG") + 2,
-                    renderer.getHelper().getStringHeight() + 2,
+            renderer.drawColoredEmptyRect(renderer, 1, 1,
+                    renderer.getStringWidth("DEBUG") + 2,
+                    renderer.getStringHeight() + 2,
                     400, Color.RED, 1f);
-            renderer.getHelper().drawString("DEBUG", 2, 2.5f, 400, Color.WHITE, Color.ALPHA);
+            renderer.drawString("DEBUG", 2, 2.5f, 400, Color.WHITE, Color.ALPHA);
         }
     }
 
@@ -241,7 +234,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !isDebugged)
         {
-            if (mouseX > 0 && mouseY > 0 && mouseX < renderer.getHelper().getStringWidth("DEBUG") && mouseY < renderer.getHelper().getStringHeight())
+            if (mouseX > 0 && mouseY > 0 && mouseX < renderer.getStringWidth("DEBUG") && mouseY < renderer.getStringHeight())
             {
                 DebugRenderer.wrap(this);
                 isDebugged = true;
@@ -698,6 +691,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
     {
         getEventDispatcher().dispatchEvent(type, event);
+    }
+
+    @Override
+    public GuiElement getRootElement()
+    {
+        return getMainPanel();
     }
 
     /////////////////////

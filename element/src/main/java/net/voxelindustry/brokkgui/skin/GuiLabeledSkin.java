@@ -135,7 +135,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             {
                 if (!getModel().expandToText() && getModel().width() < getExpandedWidth())
                 {
-                    String trimmed = BrokkGuiPlatform.getInstance().getGuiHelper().trimStringToPixelWidth(
+                    String trimmed = BrokkGuiPlatform.getInstance().getTextHelper().trimStringToPixelWidth(
                             getModel().getText(), (int) (getAvailableTextWidth()));
 
                     if (trimmed.length() < getModel().getEllipsis().length())
@@ -153,15 +153,15 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         if (getModel().getIconProperty().isPresent())
         {
             if (getModel().getIconSide().isHorizontal())
-                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText())
+                return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText())
                         + text.computedTextPadding().getHorizontal()
                         + getModel().getIcon().width() + getModel().getIconPadding();
             else
-                return Math.max(BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText()),
+                return Math.max(BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText()),
                         getModel().getIcon().width())
                         + text.computedTextPadding().getHorizontal();
         }
-        return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(getModel().getText())
+        return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText())
                 + text.computedTextPadding().getHorizontal();
     }
 

@@ -68,11 +68,11 @@ public interface BoxElement extends ImmediateElement
 
         if (!isHovered)
         {
-            getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, borderColor, borderThin);
+            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, borderColor, borderThin);
         }
         else
         {
-            getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, hoverBorderColor, borderThin);
+            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, hoverBorderColor, borderThin);
         }
         return isHovered;
     }
@@ -99,14 +99,14 @@ public interface BoxElement extends ImmediateElement
         if (!isHovered)
         {
             if (borderColor.getAlpha() != 0 && borderThin > 0)
-                getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, borderColor, borderThin);
-            getRenderer().getHelper().drawColoredRect(getRenderer(), x + borderThin, y + borderThin, width - borderThin * 2, height - borderThin * 2, 1, color);
+                getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, borderColor, borderThin);
+            getRenderer().drawColoredRect(getRenderer(), x + borderThin, y + borderThin, width - borderThin * 2, height - borderThin * 2, 1, color);
         }
         else
         {
             if (borderColor.getAlpha() != 0 && borderThin > 0)
-                getRenderer().getHelper().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, hoverBorderColor, borderThin);
-            getRenderer().getHelper().drawColoredRect(getRenderer(), x + borderThin, y + borderThin, width - borderThin * 2, height - borderThin * 2, 1, hoverColor);
+                getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, hoverBorderColor, borderThin);
+            getRenderer().drawColoredRect(getRenderer(), x + borderThin, y + borderThin, width - borderThin * 2, height - borderThin * 2, 1, hoverColor);
         }
         return isHovered;
     }

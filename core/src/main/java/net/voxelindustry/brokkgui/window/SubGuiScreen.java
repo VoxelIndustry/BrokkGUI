@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.window;
 
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.hermod.EventHandler;
@@ -136,6 +137,12 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
     {
         getEventDispatcher().dispatchEvent(type, event);
+    }
+
+    @Override
+    public GuiElement getRootElement()
+    {
+        return this;
     }
 
     @Override

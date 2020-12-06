@@ -11,7 +11,7 @@ import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IGuiHelper;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
@@ -49,20 +49,20 @@ public class TextComponent extends GuiComponent implements RenderComponent
         lazyTextWidth = renderTextProperty.combine(multilineProperty, (renderText, multiline) ->
         {
             if (multiline)
-                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidthMultiLine(renderText);
-            return BrokkGuiPlatform.getInstance().getGuiHelper().getStringWidth(renderText);
+                return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidthMultiLine(renderText);
+            return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(renderText);
         });
 
         lazyTextHeight = renderTextProperty.combine(multilineProperty, lineSpacingProperty, (renderText, multiline, lineSpacing) ->
         {
             if (multiline)
-                return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeightMultiLine(renderText, lineSpacing);
-            return BrokkGuiPlatform.getInstance().getGuiHelper().getStringHeight();
+                return BrokkGuiPlatform.getInstance().getTextHelper().getStringHeightMultiLine(renderText, lineSpacing);
+            return BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight();
         });
     }
 
     @Override
-    public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
     {
         if (pass != RenderPass.MAIN)
             return;
@@ -86,7 +86,7 @@ public class TextComponent extends GuiComponent implements RenderComponent
         else
             yPos += currentTextPadding.getTop() + (transform().height() - currentTextPadding.getVertical()) / 2 - lazyTextHeight.getValue() / 2;
 
-        renderer.getHelper().drawString(
+        renderer.drawString(
                 renderText(),
                 xPos,
                 yPos,

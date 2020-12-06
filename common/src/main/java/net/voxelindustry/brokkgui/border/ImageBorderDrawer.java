@@ -3,12 +3,12 @@ package net.voxelindustry.brokkgui.border;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
 public class ImageBorderDrawer
 {
-    public static void drawBorder(Paint paint, IGuiRenderer renderer)
+    public static void drawBorder(Paint paint, IRenderCommandReceiver renderer)
     {
         Texture texture = paint.borderImage();
         float borderLeft = paint.borderWidth(RectSide.LEFT);
@@ -30,13 +30,13 @@ public class ImageBorderDrawer
 
         boolean doFill = paint.borderImageFill();
 
-        renderer.getHelper().bindTexture(texture);
+        renderer.bindTexture(texture);
 
         // Walls
 
         if (borderTop > 0)
         {
-            renderer.getHelper().drawTexturedRect(renderer,
+            renderer.drawTexturedRect(renderer,
                     leftPos, topPos - borderTop,
                     sliceBox.getLeft(), 0,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
@@ -45,7 +45,7 @@ public class ImageBorderDrawer
 
         if (borderBottom > 0)
         {
-            renderer.getHelper().drawTexturedRect(renderer,
+            renderer.drawTexturedRect(renderer,
                     leftPos, bottomPos - (widthBox.getBottom() - 1) * borderBottom,
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
                     1 - sliceBox.getRight(), 1,
@@ -54,7 +54,7 @@ public class ImageBorderDrawer
 
         if (borderLeft > 0)
         {
-            renderer.getHelper().drawTexturedRect(renderer,
+            renderer.drawTexturedRect(renderer,
                     leftPos - borderLeft, topPos,
                     0, sliceBox.getTop(),
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
@@ -63,7 +63,7 @@ public class ImageBorderDrawer
 
         if (borderRight > 0)
         {
-            renderer.getHelper().drawTexturedRect(renderer,
+            renderer.drawTexturedRect(renderer,
                     rightPos - (widthBox.getRight() - 1) * borderRight, topPos,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
                     1, 1 - sliceBox.getBottom(),
@@ -74,7 +74,7 @@ public class ImageBorderDrawer
 
         if (borderTop > 0 && borderLeft > 0)
         {
-            renderer.getHelper().drawTexturedRect(renderer,
+            renderer.drawTexturedRect(renderer,
                     leftPos - borderLeft, topPos - borderTop,
                     0, 0,
                     sliceBox.getLeft(), sliceBox.getTop(),
@@ -84,7 +84,7 @@ public class ImageBorderDrawer
 
         if (borderTop > 0 && borderRight > 0)
         {
-            renderer.getHelper().drawTexturedRect(renderer,
+            renderer.drawTexturedRect(renderer,
                     rightPos, topPos - borderTop,
                     1 - sliceBox.getRight(), 0,
                     1, sliceBox.getTop(),
@@ -94,7 +94,7 @@ public class ImageBorderDrawer
 
         if (borderBottom > 0 && borderRight > 0)
         {
-            renderer.getHelper().drawTexturedRect(renderer,
+            renderer.drawTexturedRect(renderer,
                     rightPos, bottomPos,
                     1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     1, 1,
@@ -104,7 +104,7 @@ public class ImageBorderDrawer
 
         if (borderBottom > 0 && borderLeft > 0)
         {
-            renderer.getHelper().drawTexturedRect(renderer,
+            renderer.drawTexturedRect(renderer,
                     leftPos - borderLeft, bottomPos,
                     0, 1 - sliceBox.getBottom(),
                     sliceBox.getLeft(), 1,
@@ -114,7 +114,7 @@ public class ImageBorderDrawer
 
         if (doFill)
         {
-            renderer.getHelper().drawTexturedRect(renderer,
+            renderer.drawTexturedRect(renderer,
                     leftPos + widthBox.getLeft() * borderLeft, topPos + widthBox.getTop() * borderTop,
                     sliceBox.getLeft(), sliceBox.getTop(), 1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     width - widthBox.getLeft() * borderLeft - widthBox.getRight() * borderRight,

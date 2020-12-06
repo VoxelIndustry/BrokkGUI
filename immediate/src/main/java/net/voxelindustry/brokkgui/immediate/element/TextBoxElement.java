@@ -12,12 +12,12 @@ public interface TextBoxElement extends ImmediateElement, TextElement, BoxElemen
 
     default void setTextBoxStyle(TextBoxStyle style, StyleType type)
     {
-        this.setStyleObject(style, type);
+        setStyleObject(style, type);
     }
 
     default void setTextBoxStyle(TextBoxStyle style)
     {
-        this.setTextBoxStyle(style, StyleType.NORMAL);
+        setTextBoxStyle(style, StyleType.NORMAL);
     }
 
     default TextBoxStyle textBoxStyleFromType(StyleType type)
@@ -88,9 +88,9 @@ public interface TextBoxElement extends ImmediateElement, TextElement, BoxElemen
                             Color hoverBorderColor)
     {
         if (width == 0)
-            width = getRenderer().getHelper().getStringWidthMultiLine(text) + textPadding.getHorizontal() + borderThin;
+            width = getRenderer().getStringWidthMultiLine(text) + textPadding.getHorizontal() + borderThin;
         if (height == 0)
-            height = getRenderer().getHelper().getStringHeightMultiLine(text) + textPadding.getVertical() + borderThin;
+            height = getRenderer().getStringHeightMultiLine(text) + textPadding.getVertical() + borderThin;
 
         boolean isHovered = box(x, y, width, height, boxColor, borderColor, borderThin, hoverBoxColor, hoverBorderColor);
         text(text, x + textPadding.getLeft() + borderThin, y + textPadding.getTop() + borderThin, textColor, shadowColor, hoverTextColor, hoverShadowColor);

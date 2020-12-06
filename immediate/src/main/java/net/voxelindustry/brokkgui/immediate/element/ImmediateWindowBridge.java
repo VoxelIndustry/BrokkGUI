@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.immediate.element;
 
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 
 import java.util.function.Function;
 
@@ -18,7 +18,7 @@ public interface ImmediateWindowBridge
 
     <T> T getStyleValue(String element, StyleType styleType, String pseudoClass, String rule, T defaultValue);
 
-    IGuiRenderer getRenderer();
+    IRenderCommandReceiver getRenderer();
 
     int getMouseX();
 

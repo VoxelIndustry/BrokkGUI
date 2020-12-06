@@ -5,7 +5,7 @@ import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
 import net.voxelindustry.brokkgui.window.IGuiWindow;
@@ -25,7 +25,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     private final Property<Integer> screenWidthProperty;
     private final Property<Integer> screenHeightProperty;
 
-    private IGuiRenderer renderer;
+    private IRenderCommandReceiver renderer;
 
     private int mouseX;
     private int mouseY;
@@ -80,34 +80,34 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
 
     public abstract void immediateRender();
 
-    public IGuiRenderer getRenderer()
+    public IRenderCommandReceiver getRenderer()
     {
         return renderer;
     }
 
     public float getStringWidth(String text)
     {
-        return getRenderer().getHelper().getStringWidth(text);
+        return getRenderer().getStringWidth(text);
     }
 
     public float getStringWidthMultiLine(String multilineText)
     {
-        return getRenderer().getHelper().getStringWidthMultiLine(multilineText);
+        return getRenderer().getStringWidthMultiLine(multilineText);
     }
 
     public float getStringHeight()
     {
-        return getRenderer().getHelper().getStringHeight();
+        return getRenderer().getStringHeight();
     }
 
     public float getStringHeightMultiLine(String multilineText)
     {
-        return getRenderer().getHelper().getStringHeightMultiLine(multilineText);
+        return getRenderer().getStringHeightMultiLine(multilineText);
     }
 
     public float getStringHeightMultiLine(String multilineText, float lineSpacing)
     {
-        return getRenderer().getHelper().getStringHeightMultiLine(multilineText, lineSpacing);
+        return getRenderer().getStringHeightMultiLine(multilineText, lineSpacing);
     }
 
     public int getMouseX()
@@ -294,15 +294,15 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
         isScissorActive = true;
 
         scissorBox = RectBox.build().left(startX).right(endX).top(startY).bottom(endY).create();
-        getRenderer().getHelper().beginScissor();
-        getRenderer().getHelper().scissorBox(startX, startY, endX, endY);
+        getRenderer().beginScissor();
+        getRenderer().scissorBox(startX, startY, endX, endY);
     }
 
     public void stopScissor()
     {
         isScissorActive = false;
         scissorBox = RectBox.EMPTY;
-        getRenderer().getHelper().endScissor();
+        getRenderer().endScissor();
     }
 
     public boolean isScissorActive()

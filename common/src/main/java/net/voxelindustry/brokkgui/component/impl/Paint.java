@@ -11,7 +11,7 @@ import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.Resource;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
@@ -95,7 +95,7 @@ public class Paint extends GuiComponent implements RenderComponent
     }
 
     @Override
-    public void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
     {
         float x = element().transform().leftPos();
         float y = element().transform().topPos();

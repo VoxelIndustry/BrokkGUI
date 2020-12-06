@@ -18,7 +18,7 @@ import net.voxelindustry.brokkgui.event.HoverEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.event.LayoutEvent;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.ScissorBox;
 import net.voxelindustry.brokkgui.window.IGuiSubWindow;
@@ -74,6 +74,9 @@ public abstract class GuiElement implements IEventEmitter
 
     private IGuiSubWindow window;
 
+    private boolean isRenderDirty      = true;
+    private boolean isChildRenderDirty = true;
+
     public GuiElement()
     {
         componentMap = new IdentityHashMap<>();
@@ -118,7 +121,34 @@ public abstract class GuiElement implements IEventEmitter
         transform().children().forEach(childTransform -> childTransform.element().dispose());
     }
 
-    public final void renderNode(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
+    public boolean isRenderDirty()
+    {
+        return isRenderDirty;
+    }
+
+    public void markRenderDirty()
+    {
+        isRenderDirty = true;
+    }
+
+    /**
+     * Invoked when a parent GuiElement alter the render of its child.
+     * For example a ScrollPane moving its children will alter them
+     * They would not be notified by the standard events since their absolute position does not change.
+     *
+     * @return are one or all of the children of this parent dirty
+     */
+    public boolean isChildRenderDirty()
+    {
+        return isChildRenderDirty;
+    }
+
+    public void markChildRenderDirty()
+    {
+        isChildRenderDirty = true;
+    }
+
+    public final void renderNode(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
     {
         if (!isVisible())
             return;
@@ -161,7 +191,7 @@ public abstract class GuiElement implements IEventEmitter
         }
 
         if (getOpacity() != 1)
-            renderer.getHelper().startAlphaMask(getOpacity());
+            renderer.startAlphaMask(getOpacity());
 
         boolean appliedScissor = getScissorBox() != null && getScissorBox().setupAndApply(renderer, pass);
 
@@ -171,15 +201,18 @@ public abstract class GuiElement implements IEventEmitter
             getScissorBox().end(renderer);
 
         if (getOpacity() != 1)
-            renderer.getHelper().closeAlphaMask();
+            renderer.closeAlphaMask();
 
         if (createdMatrix)
             renderer.endMatrix();
 
         BrokkGuiPlatform.getInstance().getProfiler().postElementRender(this);
+
+        isRenderDirty = false;
+        isChildRenderDirty = false;
     }
 
-    protected void renderContent(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
+    protected void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
     {
         for (RenderComponent component : renderComponents)
             component.renderContent(renderer, pass, mouseX, mouseY);

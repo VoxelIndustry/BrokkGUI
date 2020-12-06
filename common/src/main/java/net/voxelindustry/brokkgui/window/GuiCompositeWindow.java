@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.window;
 
 import fr.ourten.teabeans.property.IProperty;
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.paint.RenderPass;
@@ -332,5 +333,11 @@ public class GuiCompositeWindow implements IGuiWindow
     {
         first.dispatchEvent(type, event);
         second.dispatchEvent(type, event);
+    }
+
+    @Override
+    public GuiElement getRootElement()
+    {
+        return first.getRootElement();
     }
 }

@@ -4,7 +4,7 @@ import fr.ourten.teabeans.listener.ValueChangeListener;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiTooltip;
-import net.voxelindustry.brokkgui.internal.IGuiRenderer;
+import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.hermod.EventDispatcher;
@@ -98,7 +98,7 @@ public class GuiTooltip implements IGuiTooltip
     }
 
     @Override
-    public void renderNode(IGuiRenderer renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderNode(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
     {
         if (getContent() == null)
             return;

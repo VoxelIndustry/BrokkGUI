@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.immediate;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.immediate.element.BoxElement;
@@ -160,5 +161,11 @@ public abstract class ImmediateWindow extends BaseImmediateWindow implements Imm
                 return false;
         }
         return getLastWheelX() > startX && getLastWheelX() < endX && getLastWheelY() > startY && getLastWheelY() < endY;
+    }
+
+    @Override
+    public GuiElement getRootElement()
+    {
+        return ImmediateGuiElement.INSTANCE;
     }
 }
