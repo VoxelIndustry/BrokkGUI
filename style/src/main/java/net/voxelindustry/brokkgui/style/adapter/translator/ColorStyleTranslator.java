@@ -84,9 +84,9 @@ public class ColorStyleTranslator implements IStyleTranslator<Color>
                     float colorValue;
                     value = value.trim();
                     if (value.endsWith("%"))
-                        colorValue = Float.valueOf(value.substring(0, value.length() - 1)) / 100f;
+                        colorValue = Float.parseFloat(value.substring(0, value.length() - 1)) / 100f;
                     else
-                        colorValue = Integer.valueOf(value) / 255f;
+                        colorValue = Integer.parseInt(value) / 255f;
                     if (i == 0)
                         color.setRed(colorValue);
                     else if (i == 1)
@@ -95,12 +95,26 @@ public class ColorStyleTranslator implements IStyleTranslator<Color>
                         color.setBlue(colorValue);
                 }
                 else if (alpha)
-                    color.setAlpha(Float.valueOf(value));
+                    color.setAlpha(Float.parseFloat(value));
                 i++;
             }
             return color;
         }
-        if (ColorConstants.hasConstant(style))
+
+        if (style.contains(" "))
+        {
+            String[] split = style.split(" ");
+            String colorName = split[0];
+            float alpha = Float.parseFloat(split[1].substring(0, split[1].length() - 1)) / 100;
+
+            if (ColorConstants.hasConstant(colorName))
+            {
+                Color color = Color.from(ColorConstants.getColor(colorName));
+                color.setAlpha(alpha);
+                return color;
+            }
+        }
+        else if (ColorConstants.hasConstant(style))
             return ColorConstants.getColor(style);
         throw new RuntimeException("Cannot retrieve specified Color constant. constant=" + style);
     }
