@@ -5,6 +5,7 @@ import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
 import java.util.function.Supplier;
@@ -24,7 +25,7 @@ public class LineShape implements ShapeDefinition
     {
         renderer.drawColoredLine(renderer, startX, startY,
                 startX + transform.width(), startY + transform.height(),
-                lineWidthSupplier.get(), zLevel, color);
+                lineWidthSupplier.get(), zLevel, color, RenderPass.BACKGROUND);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class LineShape implements ShapeDefinition
     {
         renderer.drawColoredLine(renderer, startX, startY,
                 startX + transform.width(), startY + transform.height(),
-                lineWidthSupplier.get(), zLevel, color);
+                lineWidthSupplier.get(), zLevel, color, RenderPass.BACKGROUND);
     }
 
     @Override

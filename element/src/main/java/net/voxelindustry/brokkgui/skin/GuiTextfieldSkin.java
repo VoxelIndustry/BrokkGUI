@@ -147,7 +147,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                         x + xPadding - 1 + renderer.getStringWidth(
                                 getModel().getText().substring(displayOffsetProperty.getValue(),
                                         getModel().getCursorPos())), y + yPadding - 1, 1,
-                        renderer.getStringHeight() + 1, getModel().transform().zLevel() + 1, getCursorColor());
+                        renderer.getStringHeight() + 1, getModel().transform().zLevel() + 1, getCursorColor(), RenderPass.FOREGROUND);
             }
         }
         else if (pass == RenderPass.HOVER)

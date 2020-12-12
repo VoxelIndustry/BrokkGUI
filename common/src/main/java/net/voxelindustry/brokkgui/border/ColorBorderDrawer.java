@@ -6,6 +6,7 @@ import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.paint.RenderPass;
 
 public class ColorBorderDrawer
 {
@@ -39,7 +40,8 @@ public class ColorBorderDrawer
                     paint.transform().height() + borderLeft * 2,
                     zLevel,
                     color,
-                    borderLeft);
+                    borderLeft,
+                    RenderPass.BACKGROUND);
             return;
         }
 
@@ -47,22 +49,26 @@ public class ColorBorderDrawer
             renderer.drawColoredArc(renderer,
                     rightPos - bottomRightRadius + borderRight - 1,
                     bottomPos - bottomRightRadius + borderBottom - 1,
-                    bottomRightRadius, zLevel, color, RectCorner.BOTTOM_RIGHT);
+                    bottomRightRadius, zLevel, color, RectCorner.BOTTOM_RIGHT,
+                    RenderPass.BACKGROUND);
         if (bottomLeftRadius > 0)
             renderer.drawColoredArc(renderer,
                     leftPos - borderLeft + bottomLeftRadius,
                     bottomPos - bottomLeftRadius + borderBottom - 1,
-                    bottomRightRadius, zLevel, color, RectCorner.BOTTOM_LEFT);
+                    bottomRightRadius, zLevel, color, RectCorner.BOTTOM_LEFT,
+                    RenderPass.BACKGROUND);
         if (topLeftRadius > 0)
             renderer.drawColoredArc(renderer,
                     leftPos - borderLeft + topLeftRadius,
                     topPos - borderTop + topLeftRadius,
-                    topLeftRadius, zLevel, color, RectCorner.TOP_LEFT);
+                    topLeftRadius, zLevel, color, RectCorner.TOP_LEFT,
+                    RenderPass.BACKGROUND);
         if (topRightRadius > 0)
             renderer.drawColoredArc(renderer,
                     rightPos - topRightRadius + borderRight - 1,
                     topPos - borderTop + topLeftRadius,
-                    topLeftRadius, zLevel, color, RectCorner.TOP_RIGHT);
+                    topLeftRadius, zLevel, color, RectCorner.TOP_RIGHT,
+                    RenderPass.BACKGROUND);
 
         Stopwatch watch = Stopwatch.createStarted();
         float bottomLeftRadiusOffset = bottomLeftRadius > 0 ? bottomLeftRadius - borderBottom : 0;
@@ -70,7 +76,7 @@ public class ColorBorderDrawer
             renderer.drawColoredRect(renderer, leftPos - borderLeft,
                     topPos - borderTop + topLeftRadius, borderLeft,
                     paint.transform().height() + borderTop - bottomLeftRadiusOffset - topLeftRadius,
-                    zLevel, color);
+                    zLevel, color, RenderPass.BACKGROUND);
 
         float topLeftRadiusOffset = topLeftRadius > 0 && topLeftRadius <= borderLeft ? topLeftRadius - borderLeft : 0;
         if (borderTop > 0)
@@ -78,14 +84,14 @@ public class ColorBorderDrawer
                     leftPos + topLeftRadiusOffset,
                     topPos - borderTop,
                     paint.transform().width() + borderRight - topLeftRadiusOffset - topRightRadius, borderTop,
-                    zLevel, color);
+                    zLevel, color, RenderPass.BACKGROUND);
 
         float topRightRadiusOffset = topRightRadius > 0 ? topRightRadius - borderTop : 0;
         if (borderRight > 0)
             renderer.drawColoredRect(renderer, rightPos,
                     topPos + topRightRadiusOffset, borderRight,
                     paint.transform().height() + borderBottom - bottomRightRadius - topRightRadiusOffset,
-                    zLevel, color);
+                    zLevel, color, RenderPass.BACKGROUND);
 
         float bottomRightRadiusOffset = bottomRightRadius > 0 && bottomRightRadius <= borderRight ?
                                         bottomRightRadius - borderRight : 0;
@@ -94,6 +100,6 @@ public class ColorBorderDrawer
                     leftPos - borderLeft + bottomLeftRadius,
                     bottomPos,
                     paint.transform().width() + borderLeft - bottomRightRadiusOffset - bottomLeftRadius,
-                    borderBottom, zLevel, color);
+                    borderBottom, zLevel, color, RenderPass.BACKGROUND);
     }
 }

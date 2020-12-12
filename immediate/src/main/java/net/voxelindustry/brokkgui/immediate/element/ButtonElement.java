@@ -6,6 +6,7 @@ import net.voxelindustry.brokkgui.immediate.InteractionResult;
 import net.voxelindustry.brokkgui.immediate.style.ButtonStyle;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.paint.RenderPass;
 
 import static net.voxelindustry.brokkgui.immediate.style.StyleType.NORMAL;
 
@@ -80,8 +81,8 @@ public interface ButtonElement extends ImmediateElement
 
         if (isClicked)
         {
-            getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.clickBoxColor);
-            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.clickBorderColor, style.borderThin);
+            getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.clickBoxColor, RenderPass.BACKGROUND);
+            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.clickBorderColor, style.borderThin, RenderPass.BACKGROUND);
 
             getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, style.clickTextColor, style.clickShadowColor);
 
@@ -89,16 +90,16 @@ public interface ButtonElement extends ImmediateElement
         }
         if (isHovered)
         {
-            getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.hoverBoxColor);
-            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.hoverBorderColor, style.borderThin);
+            getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.hoverBoxColor, RenderPass.BACKGROUND);
+            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.hoverBorderColor, style.borderThin, RenderPass.BACKGROUND);
 
             getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, style.hoverTextColor, style.hoverShadowColor);
 
             return InteractionResult.HOVERED;
         }
 
-        getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.boxColor);
-        getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.borderColor, style.borderThin);
+        getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.boxColor, RenderPass.BACKGROUND);
+        getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.borderColor, style.borderThin, RenderPass.BACKGROUND);
 
         getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, style.textColor, style.shadowColor);
 

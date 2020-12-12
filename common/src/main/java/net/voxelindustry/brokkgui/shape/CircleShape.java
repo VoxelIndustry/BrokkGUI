@@ -5,6 +5,7 @@ import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
 public class CircleShape implements ShapeDefinition
@@ -13,7 +14,7 @@ public class CircleShape implements ShapeDefinition
     public void drawColored(Transform transform, IRenderCommandReceiver renderer, float startX, float startY, Color color,
                             float zLevel, RectBox spritePosition)
     {
-        renderer.drawColoredCircle(renderer, startX, startY, transform.width(), zLevel, color);
+        renderer.drawColoredCircle(renderer, startX, startY, transform.width(), zLevel, color, RenderPass.BACKGROUND);
     }
 
     @Override
@@ -21,7 +22,7 @@ public class CircleShape implements ShapeDefinition
                                  Color color, float zLevel)
     {
         renderer.drawColoredEmptyCircle(renderer, startX, startY, transform.width(), zLevel, color,
-                lineWidth);
+                lineWidth, RenderPass.BACKGROUND);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class CircleShape implements ShapeDefinition
                              float zLevel, RectBox spritePosition)
     {
         renderer.drawTexturedCircle(renderer, startX, startY, texture.getUMin(), texture.getVMin(),
-                texture.getUMax(), texture.getVMax(), transform.width(), zLevel);
+                texture.getUMax(), texture.getVMax(), transform.width(), zLevel, RenderPass.BACKGROUND);
     }
 
     @Override

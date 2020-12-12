@@ -5,6 +5,7 @@ import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
 public class RectangleShape implements ShapeDefinition
@@ -17,14 +18,14 @@ public class RectangleShape implements ShapeDefinition
     {
         if (spritePosition == RectBox.EMPTY)
             renderer.drawColoredRect(renderer, startX, startY, transform.width(), transform.height(), zLevel,
-                    color);
+                    color, RenderPass.BACKGROUND);
         else
             renderer.drawColoredRect(renderer,
                     startX + spritePosition.getLeft(),
                     startY + spritePosition.getTop(),
                     transform.width() - spritePosition.getHorizontal(),
                     transform.height() - spritePosition.getVertical(),
-                    zLevel, color);
+                    zLevel, color, RenderPass.BACKGROUND);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class RectangleShape implements ShapeDefinition
                                  Color color, float zLevel)
     {
         renderer.drawColoredEmptyRect(renderer, startX, startY, shape.width(), shape.height(),
-                zLevel, color, lineWidth);
+                zLevel, color, lineWidth, RenderPass.BACKGROUND);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class RectangleShape implements ShapeDefinition
     {
         if (spritePosition == RectBox.EMPTY)
             renderer.drawTexturedRect(renderer, startX, startY, texture.getUMin(), texture.getVMin(),
-                    texture.getUMax(), texture.getVMax(), shape.width(), shape.height(), zLevel);
+                    texture.getUMax(), texture.getVMax(), shape.width(), shape.height(), zLevel, RenderPass.BACKGROUND);
         else
             renderer.drawTexturedRect(renderer,
                     startX + spritePosition.getLeft(),
@@ -50,7 +51,8 @@ public class RectangleShape implements ShapeDefinition
                     texture.getUMax(), texture.getVMax(),
                     shape.width() - spritePosition.getHorizontal(),
                     shape.height() - spritePosition.getVertical(),
-                    zLevel);
+                    zLevel,
+                    RenderPass.BACKGROUND);
     }
 
     @Override

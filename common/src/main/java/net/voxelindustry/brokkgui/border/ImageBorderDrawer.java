@@ -4,6 +4,7 @@ import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
+import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
 public class ImageBorderDrawer
@@ -40,7 +41,8 @@ public class ImageBorderDrawer
                     leftPos, topPos - borderTop,
                     sliceBox.getLeft(), 0,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
-                    width, borderTop * widthBox.getTop(), paint.transform().zLevel());
+                    width, borderTop * widthBox.getTop(), paint.transform().zLevel(),
+                    RenderPass.BACKGROUND);
         }
 
         if (borderBottom > 0)
@@ -49,7 +51,8 @@ public class ImageBorderDrawer
                     leftPos, bottomPos - (widthBox.getBottom() - 1) * borderBottom,
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
                     1 - sliceBox.getRight(), 1,
-                    width, borderBottom * widthBox.getBottom(), paint.transform().zLevel());
+                    width, borderBottom * widthBox.getBottom(), paint.transform().zLevel(),
+                    RenderPass.BACKGROUND);
         }
 
         if (borderLeft > 0)
@@ -58,7 +61,8 @@ public class ImageBorderDrawer
                     leftPos - borderLeft, topPos,
                     0, sliceBox.getTop(),
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
-                    borderLeft * widthBox.getLeft(), height, paint.transform().zLevel());
+                    borderLeft * widthBox.getLeft(), height, paint.transform().zLevel(),
+                    RenderPass.BACKGROUND);
         }
 
         if (borderRight > 0)
@@ -67,7 +71,8 @@ public class ImageBorderDrawer
                     rightPos - (widthBox.getRight() - 1) * borderRight, topPos,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
                     1, 1 - sliceBox.getBottom(),
-                    borderRight * widthBox.getRight(), height, paint.transform().zLevel());
+                    borderRight * widthBox.getRight(), height, paint.transform().zLevel(),
+                    RenderPass.BACKGROUND);
         }
 
         // Corners
@@ -79,7 +84,8 @@ public class ImageBorderDrawer
                     0, 0,
                     sliceBox.getLeft(), sliceBox.getTop(),
                     borderLeft, borderTop,
-                    paint.transform().zLevel());
+                    paint.transform().zLevel(),
+                    RenderPass.BACKGROUND);
         }
 
         if (borderTop > 0 && borderRight > 0)
@@ -89,7 +95,8 @@ public class ImageBorderDrawer
                     1 - sliceBox.getRight(), 0,
                     1, sliceBox.getTop(),
                     borderRight, borderTop,
-                    paint.transform().zLevel());
+                    paint.transform().zLevel(),
+                    RenderPass.BACKGROUND);
         }
 
         if (borderBottom > 0 && borderRight > 0)
@@ -99,7 +106,8 @@ public class ImageBorderDrawer
                     1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     1, 1,
                     borderRight, borderBottom,
-                    paint.transform().zLevel());
+                    paint.transform().zLevel(),
+                    RenderPass.BACKGROUND);
         }
 
         if (borderBottom > 0 && borderLeft > 0)
@@ -109,7 +117,8 @@ public class ImageBorderDrawer
                     0, 1 - sliceBox.getBottom(),
                     sliceBox.getLeft(), 1,
                     borderLeft, borderBottom,
-                    paint.transform().zLevel());
+                    paint.transform().zLevel(),
+                    RenderPass.BACKGROUND);
         }
 
         if (doFill)
@@ -119,7 +128,8 @@ public class ImageBorderDrawer
                     sliceBox.getLeft(), sliceBox.getTop(), 1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     width - widthBox.getLeft() * borderLeft - widthBox.getRight() * borderRight,
                     height - widthBox.getTop() * borderTop - widthBox.getBottom() * borderBottom,
-                    paint.transform().zLevel());
+                    paint.transform().zLevel(),
+                    RenderPass.BACKGROUND);
         }
     }
 }

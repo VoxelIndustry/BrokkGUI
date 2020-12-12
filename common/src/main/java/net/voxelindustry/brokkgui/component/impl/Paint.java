@@ -114,7 +114,7 @@ public class Paint extends GuiComponent implements RenderComponent
             {
                 SpriteBackgroundDrawer.drawBackground(this, renderer);
             }
-            if (hasColorBackground() && backgroundColor().getAlpha() != 0)
+            else if (hasColorBackground() && backgroundColor().getAlpha() != 0)
             {
                 Color background = backgroundColor();
 
@@ -135,7 +135,7 @@ public class Paint extends GuiComponent implements RenderComponent
             {
                 SpriteBackgroundDrawer.drawForeground(this, renderer);
             }
-            if (hasColorForeground() && foregroundColor().getAlpha() != 0)
+            else if (hasColorForeground() && foregroundColor().getAlpha() != 0)
             {
                 Color foreground = foregroundColor();
 

@@ -173,7 +173,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                     {
                         if (windows.get(i).hasWarFog())
                             renderer.drawColoredRect(renderer, 0, 0, getWidth(),
-                                    getHeight(), 5 + i, Color.BLACK.addAlpha(-0.5f));
+                                    getHeight(), 5 + i, Color.BLACK.addAlpha(-0.5f), RenderPass.BACKGROUND);
 
                         for (RenderPass pass : passes)
                             windows.get(i).renderNode(renderer, pass, mouseX, mouseY);
@@ -200,7 +200,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             renderer.drawColoredEmptyRect(renderer, 1, 1,
                     renderer.getStringWidth("DEBUG") + 2,
                     renderer.getStringHeight() + 2,
-                    400, Color.RED, 1f);
+                    400, Color.RED, 1f, RenderPass.BACKGROUND);
             renderer.drawString("DEBUG", 2, 2.5f, 400, Color.WHITE, Color.ALPHA);
         }
     }
