@@ -3,6 +3,8 @@ package net.voxelindustry.brokkgui.sprite;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
+import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.paint.RenderPass;
 
 public class SpriteBackgroundDrawer
 {
@@ -12,7 +14,7 @@ public class SpriteBackgroundDrawer
         if (paint.backgroundAnimationResource() != null)
             texture = paint.backgroundAnimation().getCurrentFrame(System.currentTimeMillis());
 
-        draw(paint, renderer, texture, paint.backgroundRepeat(), paint.backgroundPosition(), paint.backgroundRotationArray());
+        draw(paint, renderer, RenderPass.BACKGROUND, texture, paint.backgroundRepeat(), paint.backgroundColor(), paint.backgroundPosition(), paint.backgroundRotationArray());
     }
 
     public static void drawForeground(Paint paint, IRenderCommandReceiver renderer)
@@ -21,46 +23,66 @@ public class SpriteBackgroundDrawer
         if (paint.foregroundAnimationResource() != null)
             texture = paint.foregroundAnimation().getCurrentFrame(System.currentTimeMillis());
 
-        draw(paint, renderer, texture, paint.foregroundRepeat(), paint.foregroundPosition(), paint.foregroundRotationArray());
+        draw(paint, renderer, RenderPass.FOREGROUND, texture, paint.foregroundRepeat(), paint.foregroundColor(), paint.foregroundPosition(), paint.foregroundRotationArray());
     }
 
-    private static void draw(Paint paint, IRenderCommandReceiver renderer, Texture texture, SpriteRepeat repeat, RectBox position, SpriteRotation... rotations)
+    private static void draw(Paint paint, IRenderCommandReceiver renderer, RenderPass renderPass, Texture texture, SpriteRepeat repeat, Color color, RectBox position, SpriteRotation... rotations)
     {
         renderer.bindTexture(texture);
 
-        if (repeat == SpriteRepeat.NONE)
+        switch (repeat)
         {
-            drawSimple(paint, renderer, texture, position, rotations == null ? SpriteRotation.NONE : rotations[0]);
-        }
-        else if (repeat == SpriteRepeat.REPEAT_X)
-        {
-            drawRepeatX(paint, renderer, texture, position, rotations);
-        }
-        else if (repeat == SpriteRepeat.REPEAT_Y)
-        {
-            drawRepeatY(paint, renderer, texture, position, rotations);
-        }
-        else
-        {
-            drawRepeatBoth(paint, renderer, texture, position, rotations);
+            case NONE:
+                drawSimple(paint, renderer, renderPass, texture, color, position, rotations == null ? SpriteRotation.NONE : rotations[0]);
+                break;
+            case REPEAT_X:
+                drawRepeatX(paint, renderer, renderPass, texture, color, position, rotations);
+                break;
+            case REPEAT_Y:
+                drawRepeatY(paint, renderer, renderPass, texture, color, position, rotations);
+                break;
+            default:
+                drawRepeatBoth(paint, renderer, renderPass, texture, color, position, rotations);
+                break;
         }
     }
 
-    private static void drawSimple(Paint paint, IRenderCommandReceiver renderer, Texture texture, RectBox position, SpriteRotation rotation)
+    private static void drawSimple(Paint paint, IRenderCommandReceiver renderer, RenderPass renderPass, Texture texture, Color color, RectBox position, SpriteRotation rotation)
     {
         if (position == RectBox.EMPTY)
         {
             if (rotation != SpriteRotation.NONE)
-                renderer.drawTexturedRect(renderer, paint.transform().leftPos(), paint.transform().topPos(), texture.getUMin(), texture.getVMin(),
-                        texture.getUMax(), texture.getVMax(), paint.transform().width(), paint.transform().height(), paint.transform().zLevel(), rotation);
+                renderer.drawTexturedRectWithColor(renderer,
+                        paint.transform().leftPos(),
+                        paint.transform().topPos(),
+                        texture.getUMin(),
+                        texture.getVMin(),
+                        texture.getUMax(),
+                        texture.getVMax(),
+                        paint.transform().width(),
+                        paint.transform().height(),
+                        paint.transform().zLevel(),
+                        rotation,
+                        renderPass,
+                        color);
             else
-                renderer.drawTexturedRect(renderer, paint.transform().leftPos(), paint.transform().topPos(), texture.getUMin(), texture.getVMin(),
-                        texture.getUMax(), texture.getVMax(), paint.transform().width(), paint.transform().height(), paint.transform().zLevel());
+                renderer.drawTexturedRectWithColor(renderer,
+                        paint.transform().leftPos(),
+                        paint.transform().topPos(),
+                        texture.getUMin(),
+                        texture.getVMin(),
+                        texture.getUMax(),
+                        texture.getVMax(),
+                        paint.transform().width(),
+                        paint.transform().height(),
+                        paint.transform().zLevel(),
+                        renderPass,
+                        color);
         }
         else
         {
             if (rotation != SpriteRotation.NONE)
-                renderer.drawTexturedRect(renderer,
+                renderer.drawTexturedRectWithColor(renderer,
                         paint.transform().leftPos() + position.getLeft(),
                         paint.transform().topPos() + position.getTop(),
                         texture.getUMin(), texture.getVMin(),
@@ -68,27 +90,31 @@ public class SpriteBackgroundDrawer
                         paint.transform().width() - position.getHorizontal(),
                         paint.transform().height() - position.getVertical(),
                         paint.transform().zLevel(),
-                        rotation);
+                        rotation,
+                        renderPass,
+                        color);
             else
-                renderer.drawTexturedRect(renderer,
+                renderer.drawTexturedRectWithColor(renderer,
                         paint.transform().leftPos() + position.getLeft(),
                         paint.transform().topPos() + position.getTop(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
                         paint.transform().width() - position.getHorizontal(),
                         paint.transform().height() - position.getVertical(),
-                        paint.transform().zLevel());
+                        paint.transform().zLevel(),
+                        renderPass,
+                        color);
         }
     }
 
-    private static void drawRepeatX(Paint paint, IRenderCommandReceiver renderer, Texture texture, RectBox position, SpriteRotation... rotations)
+    private static void drawRepeatX(Paint paint, IRenderCommandReceiver renderer, RenderPass renderPass, Texture texture, Color color, RectBox position, SpriteRotation... rotations)
     {
         int repeatCount = (int) ((paint.transform().width() - position.getHorizontal()) / texture.getPixelWidth());
         float leftOver = (paint.transform().width() - position.getHorizontal()) % texture.getPixelWidth();
 
         for (int index = 0; index < repeatCount; index++)
         {
-            renderer.drawTexturedRect(renderer,
+            renderer.drawTexturedRectWithColor(renderer,
                     paint.transform().leftPos() + position.getLeft() + index * texture.getPixelWidth(),
                     paint.transform().topPos() + position.getTop(),
                     texture.getUMin(), texture.getVMin(),
@@ -96,12 +122,14 @@ public class SpriteBackgroundDrawer
                     texture.getPixelWidth(),
                     paint.transform().height() - position.getVertical(),
                     paint.transform().zLevel(),
-                    rotations == null ? SpriteRotation.NONE : rotations[index]);
+                    rotations == null ? SpriteRotation.NONE : rotations[index],
+                    renderPass,
+                    color);
         }
 
         if (leftOver != 0)
         {
-            renderer.drawTexturedRect(renderer,
+            renderer.drawTexturedRectWithColor(renderer,
                     paint.transform().leftPos() + position.getLeft() + repeatCount * texture.getPixelWidth(),
                     paint.transform().topPos() + position.getTop(),
                     texture.getUMin(), texture.getVMin(),
@@ -109,18 +137,20 @@ public class SpriteBackgroundDrawer
                     leftOver,
                     paint.transform().height() - position.getVertical(),
                     paint.transform().zLevel(),
-                    rotations == null ? SpriteRotation.NONE : rotations[repeatCount]);
+                    rotations == null ? SpriteRotation.NONE : rotations[repeatCount],
+                    renderPass,
+                    color);
         }
     }
 
-    private static void drawRepeatY(Paint paint, IRenderCommandReceiver renderer, Texture texture, RectBox position, SpriteRotation... rotations)
+    private static void drawRepeatY(Paint paint, IRenderCommandReceiver renderer, RenderPass renderPass, Texture texture, Color color, RectBox position, SpriteRotation... rotations)
     {
         int repeatCount = (int) ((paint.transform().height() - position.getVertical()) / texture.getPixelHeight());
         float leftOver = (paint.transform().height() - position.getVertical()) % texture.getPixelHeight();
 
         for (int index = 0; index < repeatCount; index++)
         {
-            renderer.drawTexturedRect(renderer,
+            renderer.drawTexturedRectWithColor(renderer,
                     paint.transform().leftPos() + position.getLeft(),
                     paint.transform().topPos() + position.getTop() + index * texture.getPixelHeight(),
                     texture.getUMin(), texture.getVMin(),
@@ -128,12 +158,14 @@ public class SpriteBackgroundDrawer
                     paint.transform().width() - position.getHorizontal(),
                     texture.getPixelHeight(),
                     paint.transform().zLevel(),
-                    rotations == null ? SpriteRotation.NONE : rotations[index]);
+                    rotations == null ? SpriteRotation.NONE : rotations[index],
+                    renderPass,
+                    color);
         }
 
         if (leftOver != 0)
         {
-            renderer.drawTexturedRect(renderer,
+            renderer.drawTexturedRectWithColor(renderer,
                     paint.transform().leftPos() + position.getLeft(),
                     paint.transform().topPos() + position.getTop() + repeatCount * texture.getPixelHeight(),
                     texture.getUMin(), texture.getVMin(),
@@ -141,11 +173,13 @@ public class SpriteBackgroundDrawer
                     paint.transform().width() - position.getHorizontal(),
                     leftOver,
                     paint.transform().zLevel(),
-                    rotations == null ? SpriteRotation.NONE : rotations[repeatCount]);
+                    rotations == null ? SpriteRotation.NONE : rotations[repeatCount],
+                    renderPass,
+                    color);
         }
     }
 
-    private static void drawRepeatBoth(Paint paint, IRenderCommandReceiver renderer, Texture texture, RectBox position, SpriteRotation... rotations)
+    private static void drawRepeatBoth(Paint paint, IRenderCommandReceiver renderer, RenderPass renderPass, Texture texture, Color color, RectBox position, SpriteRotation... rotations)
     {
         int repeatCountX = (int) ((paint.transform().width() - position.getHorizontal()) / texture.getPixelWidth());
         float leftOverX = (paint.transform().width() - position.getHorizontal()) % texture.getPixelWidth();
@@ -156,7 +190,7 @@ public class SpriteBackgroundDrawer
         {
             for (int yIndex = 0; yIndex < repeatCountY; yIndex++)
             {
-                renderer.drawTexturedRect(renderer,
+                renderer.drawTexturedRectWithColor(renderer,
                         paint.transform().leftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
                         paint.transform().topPos() + position.getTop() + yIndex * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
@@ -164,7 +198,9 @@ public class SpriteBackgroundDrawer
                         texture.getPixelWidth(),
                         texture.getPixelHeight(),
                         paint.transform().zLevel(),
-                        rotations == null ? SpriteRotation.NONE : rotations[yIndex * repeatCountX + xIndex]);
+                        rotations == null ? SpriteRotation.NONE : rotations[yIndex * repeatCountX + xIndex],
+                        renderPass,
+                        color);
             }
         }
 
@@ -172,7 +208,7 @@ public class SpriteBackgroundDrawer
         {
             for (int yIndex = 0; yIndex < repeatCountY; yIndex++)
             {
-                renderer.drawTexturedRect(renderer,
+                renderer.drawTexturedRectWithColor(renderer,
                         paint.transform().leftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
                         paint.transform().topPos() + position.getTop() + yIndex * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
@@ -180,14 +216,16 @@ public class SpriteBackgroundDrawer
                         leftOverX,
                         texture.getPixelHeight(),
                         paint.transform().zLevel(),
-                        rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + yIndex]);
+                        rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + yIndex],
+                        renderPass,
+                        color);
             }
         }
         if (leftOverY != 0)
         {
             for (int xIndex = 0; xIndex < repeatCountX; xIndex++)
             {
-                renderer.drawTexturedRect(renderer,
+                renderer.drawTexturedRectWithColor(renderer,
                         paint.transform().leftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
                         paint.transform().topPos() + position.getTop() + repeatCountY * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
@@ -195,12 +233,14 @@ public class SpriteBackgroundDrawer
                         texture.getPixelWidth(),
                         leftOverY,
                         paint.transform().zLevel(),
-                        rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + repeatCountY + xIndex]);
+                        rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + repeatCountY + xIndex],
+                        renderPass,
+                        color);
             }
         }
         if (leftOverX != 0 && leftOverY != 0)
         {
-            renderer.drawTexturedRect(renderer,
+            renderer.drawTexturedRectWithColor(renderer,
                     paint.transform().leftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
                     paint.transform().topPos() + position.getTop() + repeatCountY * texture.getPixelHeight(),
                     texture.getUMin(), texture.getVMin(),
@@ -208,7 +248,9 @@ public class SpriteBackgroundDrawer
                     leftOverX,
                     leftOverY,
                     paint.transform().zLevel(),
-                    rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + repeatCountX + repeatCountY]);
+                    rotations == null ? SpriteRotation.NONE : rotations[repeatCountX * repeatCountY + repeatCountX + repeatCountY],
+                    renderPass,
+                    color);
         }
     }
 }
