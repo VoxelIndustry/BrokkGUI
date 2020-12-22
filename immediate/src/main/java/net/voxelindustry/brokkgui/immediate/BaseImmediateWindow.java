@@ -2,12 +2,15 @@ package net.voxelindustry.brokkgui.immediate;
 
 import fr.ourten.teabeans.property.IProperty;
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
+import net.voxelindustry.brokkgui.internal.ITextHelper;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
+import net.voxelindustry.brokkgui.text.TextSettings;
 import net.voxelindustry.brokkgui.window.IGuiWindow;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
@@ -44,6 +47,8 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
 
     private boolean isScissorActive;
     private RectBox scissorBox;
+
+    private final TextSettings textSettings = TextSettings.build().fontName("default").create();
 
     public BaseImmediateWindow()
     {
@@ -85,29 +90,39 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
         return renderer;
     }
 
+    public ITextHelper getTextHelper()
+    {
+        return BrokkGuiPlatform.getInstance().getTextHelper();
+    }
+
     public float getStringWidth(String text)
     {
-        return getRenderer().getStringWidth(text);
+        return getTextHelper().getStringWidth(text, textSettings());
     }
 
     public float getStringWidthMultiLine(String multilineText)
     {
-        return getRenderer().getStringWidthMultiLine(multilineText);
+        return getTextHelper().getStringWidthMultiLine(multilineText, textSettings());
     }
 
     public float getStringHeight()
     {
-        return getRenderer().getStringHeight();
+        return getTextHelper().getStringHeight(textSettings());
     }
 
     public float getStringHeightMultiLine(String multilineText)
     {
-        return getRenderer().getStringHeightMultiLine(multilineText);
+        return getTextHelper().getStringHeightMultiLine(multilineText, textSettings());
     }
 
-    public float getStringHeightMultiLine(String multilineText, float lineSpacing)
+    public float getStringHeightMultiLine(String multilineText, float lineSpacingMultiplier)
     {
-        return getRenderer().getStringHeightMultiLine(multilineText, lineSpacing);
+        float previousMultiplier = textSettings().lineSpacingMultiplier();
+        textSettings().lineSpacingMultiplier(lineSpacingMultiplier);
+        float stringHeight = getTextHelper().getStringHeightMultiLine(multilineText, textSettings());
+        textSettings().lineSpacingMultiplier(previousMultiplier);
+
+        return stringHeight;
     }
 
     public int getMouseX()
@@ -386,5 +401,10 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
     {
         getEventDispatcher().dispatchEvent(type, event);
+    }
+
+    public TextSettings textSettings()
+    {
+        return textSettings;
     }
 }

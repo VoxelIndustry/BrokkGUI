@@ -1,24 +1,16 @@
 package net.voxelindustry.brokkgui.internal;
 
+import net.voxelindustry.brokkgui.text.TextSettings;
+
 public interface ITextHelper
 {
-    String trimStringToPixelWidth(String text, int pixelWidth);
+    String trimStringToPixelWidth(String text, int pixelWidth, TextSettings settings);
 
-    float getStringWidth(String text);
+    float getStringWidth(String text, TextSettings settings);
 
-    float getStringWidthMultiLine(String text);
+    float getStringWidthMultiLine(String text, TextSettings settings);
 
-    float getStringHeight();
+    float getStringHeight(TextSettings settings);
 
-    default float getStringHeightMultiLine(String text)
-    {
-        return getStringHeightMultiLine(text, getDefaultLineSpacing());
-    }
-
-    float getStringHeightMultiLine(String text, float lineSpacing);
-
-    default float getDefaultLineSpacing()
-    {
-        return getStringHeight() / 4;
-    }
+    float getStringHeightMultiLine(String text, TextSettings settings);
 }

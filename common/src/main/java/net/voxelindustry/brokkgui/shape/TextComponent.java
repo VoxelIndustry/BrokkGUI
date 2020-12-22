@@ -8,39 +8,52 @@ import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.RenderComponent;
+import net.voxelindustry.brokkgui.component.RequiredOverride;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.text.TextSettings;
 
 import java.util.List;
 
 public class TextComponent extends GuiComponent implements RenderComponent
 {
     private final Property<String>  textProperty        = new Property<>("");
-    private final Property<String>  renderTextProperty  = new Property<>("");
-    private final Property<Integer> lineSpacingProperty = new Property<>(1);
+    private final Property<String>  renderTextProperty  = createRenderProperty("");
+    private final Property<Integer> lineSpacingProperty = createRenderProperty(1);
+
 
     private final Property<RectBox> textPaddingProperty = new Property<>(RectBox.EMPTY);
 
     private final List<ObservableValue<RectBox>> textPaddingList = Lists.newArrayList(textPaddingProperty);
 
     private final Expression<RectBox> computedTextPadding = new Expression<>(
-            () -> textPaddingList.stream().map(ObservableValue::getValue).reduce(RectBox.EMPTY, RectBox::sum),
+            () ->
+            {
+                element().markRenderDirty();
+                return textPaddingList.stream().map(ObservableValue::getValue).reduce(RectBox.EMPTY, RectBox::sum);
+            },
             textPaddingList.toArray(new Observable[0]));
 
-    private final Property<RectAlignment> textAlignmentProperty = new Property<>(RectAlignment.MIDDLE_CENTER);
+    private final Property<RectAlignment> textAlignmentProperty = createRenderProperty(RectAlignment.MIDDLE_CENTER);
 
-    private final Property<Boolean> multilineProperty = new Property<>(false);
+    private final Property<Boolean> multilineProperty = createRenderProperty(false);
 
     protected Property<Color>   shadowColorProperty;
     protected Property<Boolean> useShadowProperty;
     protected Property<Color>   colorProperty;
+    protected Property<String>  fontProperty;
 
     private final ObservableValue<Float> lazyTextWidth;
     private final ObservableValue<Float> lazyTextHeight;
+
+    private final TextSettings textSettings = TextSettings.build()
+            .fontName("default")
+            .textColor(Color.WHITE)
+            .create();
 
     public TextComponent()
     {
@@ -48,16 +61,18 @@ public class TextComponent extends GuiComponent implements RenderComponent
 
         lazyTextWidth = renderTextProperty.combine(multilineProperty, (renderText, multiline) ->
         {
+            updateTextSettings();
+
             if (multiline)
-                return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidthMultiLine(renderText);
-            return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(renderText);
+                return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidthMultiLine(renderText, textSettings);
+            return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(renderText, textSettings);
         });
 
         lazyTextHeight = renderTextProperty.combine(multilineProperty, lineSpacingProperty, (renderText, multiline, lineSpacing) ->
         {
             if (multiline)
-                return BrokkGuiPlatform.getInstance().getTextHelper().getStringHeightMultiLine(renderText, lineSpacing);
-            return BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight();
+                return BrokkGuiPlatform.getInstance().getTextHelper().getStringHeightMultiLine(renderText, textSettings);
+            return BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(textSettings);
         });
     }
 
@@ -86,13 +101,31 @@ public class TextComponent extends GuiComponent implements RenderComponent
         else
             yPos += currentTextPadding.getTop() + (transform().height() - currentTextPadding.getVertical()) / 2 - lazyTextHeight.getValue() / 2;
 
-        renderer.drawString(
-                renderText(),
-                xPos,
-                yPos,
-                transform().zLevel(),
-                color(),
-                useShadow() ? shadowColor() : Color.ALPHA);
+        updateTextSettings();
+
+        if (multiline())
+            renderer.drawStringMultiline(
+                    renderText(),
+                    xPos,
+                    yPos,
+                    transform().zLevel(),
+                    textSettings);
+        else
+            renderer.drawString(
+                    renderText(),
+                    xPos,
+                    yPos,
+                    transform().zLevel(),
+                    textSettings);
+    }
+
+    public void updateTextSettings()
+    {
+        textSettings
+                .textColor(color())
+                .shadowColor(shadowColor())
+                .fontName(font())
+                .lineSpacingMultiplier(lineSpacing());
     }
 
     private float textWidth(IGuiHelper helper)
@@ -109,25 +142,36 @@ public class TextComponent extends GuiComponent implements RenderComponent
     // PROPERTIES //
     ////////////////
 
+    @RequiredOverride
     public Property<Color> shadowColorProperty()
     {
         if (shadowColorProperty == null)
-            shadowColorProperty = new Property<>(Color.WHITE);
+            shadowColorProperty = createRenderProperty(Color.WHITE);
         return shadowColorProperty;
     }
 
+    @RequiredOverride
     public Property<Boolean> useShadowProperty()
     {
         if (useShadowProperty == null)
-            useShadowProperty = new Property<>(false);
+            useShadowProperty = createRenderProperty(false);
         return useShadowProperty;
     }
 
+    @RequiredOverride
     public Property<Color> colorProperty()
     {
         if (colorProperty == null)
-            colorProperty = new Property<>(Color.BLACK);
+            colorProperty = createRenderProperty(Color.BLACK);
         return colorProperty;
+    }
+
+    @RequiredOverride
+    public Property<String> fontProperty()
+    {
+        if (fontProperty == null)
+            fontProperty = createRenderProperty("default");
+        return fontProperty;
     }
 
     public Property<String> textProperty()
@@ -276,33 +320,56 @@ public class TextComponent extends GuiComponent implements RenderComponent
         multilineProperty().setValue(multiline);
     }
 
+    @RequiredOverride
     public Color shadowColor()
     {
         return shadowColorProperty().getValue();
     }
 
+    @RequiredOverride
     public void shadowColor(Color shadowColor)
     {
         shadowColorProperty().setValue(shadowColor);
     }
 
+    @RequiredOverride
     public boolean useShadow()
     {
         return useShadowProperty().getValue();
     }
 
+    @RequiredOverride
     public void useShadow(boolean useShadow)
     {
         useShadowProperty().setValue(useShadow);
     }
 
+    @RequiredOverride
     public Color color()
     {
         return colorProperty().getValue();
     }
 
+    @RequiredOverride
     public void color(Color color)
     {
         colorProperty().setValue(color);
+    }
+
+    @RequiredOverride
+    public String font()
+    {
+        return fontProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void font(String font)
+    {
+        fontProperty().setValue(font);
+    }
+
+    public TextSettings textSettings()
+    {
+        return textSettings;
     }
 }

@@ -88,9 +88,9 @@ public interface TextBoxElement extends ImmediateElement, TextElement, BoxElemen
                             Color hoverBorderColor)
     {
         if (width == 0)
-            width = getRenderer().getStringWidthMultiLine(text) + textPadding.getHorizontal() + borderThin;
+            width = getTextHelper().getStringWidthMultiLine(text, textSettings()) + textPadding.getHorizontal() + borderThin;
         if (height == 0)
-            height = getRenderer().getStringHeightMultiLine(text) + textPadding.getVertical() + borderThin;
+            height = getTextHelper().getStringHeightMultiLine(text, textSettings()) + textPadding.getVertical() + borderThin;
 
         boolean isHovered = box(x, y, width, height, boxColor, borderColor, borderThin, hoverBoxColor, hoverBorderColor);
         text(text, x + textPadding.getLeft() + borderThin, y + textPadding.getTop() + borderThin, textColor, shadowColor, hoverTextColor, hoverShadowColor);

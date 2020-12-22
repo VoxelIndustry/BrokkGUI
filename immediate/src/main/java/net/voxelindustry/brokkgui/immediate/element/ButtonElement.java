@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.immediate.style.ButtonStyle;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.text.TextSettings;
 
 import static net.voxelindustry.brokkgui.immediate.style.StyleType.NORMAL;
 
@@ -55,8 +56,8 @@ public interface ButtonElement extends ImmediateElement
         return button(text,
                 x,
                 y,
-                getRenderer().getStringWidth(text) + style.padding.getHorizontal(),
-                getRenderer().getStringHeight() + style.padding.getVertical(),
+                getTextHelper().getStringWidth(text, textSettings()) + style.padding.getHorizontal(),
+                getTextHelper().getStringHeight(textSettings()) + style.padding.getVertical(),
                 style);
     }
 
@@ -70,8 +71,8 @@ public interface ButtonElement extends ImmediateElement
         boolean isHovered = isAreaHovered(x, y, x + width, y + height);
         boolean isClicked = isAreaClicked(x, y, x + width, y + height);
 
-        float textWidth = getRenderer().getStringWidthMultiLine(text);
-        float textHeight = getRenderer().getStringHeightMultiLine(text);
+        float textWidth = getTextHelper().getStringWidthMultiLine(text, textSettings());
+        float textHeight = getTextHelper().getStringHeightMultiLine(text, textSettings());
         float textOffsetX = style.textAlignment.isLeft() ? style.padding.getLeft() :
                             (style.textAlignment.isRight() ? width - textWidth - style.padding.getRight() :
                              width / 2 - textWidth / 2 + style.padding.getLeft() - style.padding.getRight());
@@ -84,7 +85,8 @@ public interface ButtonElement extends ImmediateElement
             getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.clickBoxColor, RenderPass.BACKGROUND);
             getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.clickBorderColor, style.borderThin, RenderPass.BACKGROUND);
 
-            getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, style.clickTextColor, style.clickShadowColor);
+            textSettings().textColor(style.clickTextColor).shadowColor(style.clickShadowColor);
+            getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, textSettings());
 
             return InteractionResult.CLICKED;
         }
@@ -93,7 +95,8 @@ public interface ButtonElement extends ImmediateElement
             getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.hoverBoxColor, RenderPass.BACKGROUND);
             getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.hoverBorderColor, style.borderThin, RenderPass.BACKGROUND);
 
-            getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, style.hoverTextColor, style.hoverShadowColor);
+            textSettings().textColor(style.hoverTextColor).shadowColor(style.hoverShadowColor);
+            getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, textSettings());
 
             return InteractionResult.HOVERED;
         }
@@ -101,8 +104,11 @@ public interface ButtonElement extends ImmediateElement
         getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.boxColor, RenderPass.BACKGROUND);
         getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.borderColor, style.borderThin, RenderPass.BACKGROUND);
 
-        getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, style.textColor, style.shadowColor);
+        textSettings().textColor(style.textColor).shadowColor(style.shadowColor);
+        getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, textSettings());
 
         return InteractionResult.NONE;
     }
+
+    TextSettings textSettings();
 }

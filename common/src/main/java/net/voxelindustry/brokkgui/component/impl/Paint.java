@@ -1,7 +1,6 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.property.Property;
-import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkgui.border.ColorBorderDrawer;
 import net.voxelindustry.brokkgui.border.ImageBorderDrawer;
 import net.voxelindustry.brokkgui.component.GuiComponent;
@@ -73,11 +72,6 @@ public class Paint extends GuiComponent implements RenderComponent
     public Paint()
     {
 
-    }
-
-    private void onRenderPropertyChange(Observable observable)
-    {
-        element().markRenderDirty();
     }
 
     public ShapeDefinition shape()
@@ -391,14 +385,7 @@ public class Paint extends GuiComponent implements RenderComponent
             borderImageFillProperty = createRenderProperty(Boolean.FALSE);
         return borderImageFillProperty;
     }
-
-    private <T> Property<T> createRenderProperty(T initialValue)
-    {
-        Property<T> property = new Property<>(initialValue);
-        property.addListener(this::onRenderPropertyChange);
-        return property;
-    }
-
+    
     ////////////
     // VALUES //
     ////////////

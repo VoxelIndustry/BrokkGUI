@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.immediate.element;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.immediate.style.TextStyle;
 import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.text.TextSettings;
 
 import static net.voxelindustry.brokkgui.immediate.style.StyleType.NORMAL;
 
@@ -47,13 +48,16 @@ public interface TextElement extends ImmediateElement
 
     default boolean text(String text, float x, float y, Color color, Color shadowColor, Color hoverColor, Color hoverShadowColor)
     {
-        boolean isHovered = isAreaHovered(x, y, x + getRenderer().getStringWidthMultiLine(text), y + getRenderer().getStringHeightMultiLine(text));
+        boolean isHovered = isAreaHovered(x, y, x + getTextHelper().getStringWidthMultiLine(text, textSettings()), y + getTextHelper().getStringHeightMultiLine(text, textSettings()));
 
         if (!isHovered)
-            getRenderer().drawStringMultiline(text, x, y, 1, color, shadowColor);
+            textSettings().textColor(color).shadowColor(shadowColor);
         else
-            getRenderer().drawStringMultiline(text, x, y, 1, hoverColor, hoverShadowColor);
+            textSettings().textColor(hoverColor).shadowColor(hoverShadowColor);
 
+        getRenderer().drawStringMultiline(text, x, y, 1, textSettings());
         return isHovered;
     }
+
+    TextSettings textSettings();
 }

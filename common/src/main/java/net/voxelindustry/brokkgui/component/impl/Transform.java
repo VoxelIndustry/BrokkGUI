@@ -43,23 +43,27 @@ public class Transform extends GuiComponent
 
     public Transform()
     {
-        xPosProperty = new Property<>(0F);
-        yPosProperty = new Property<>(0F);
+        xPosProperty = createRenderProperty(0F);
+        yPosProperty = createRenderProperty(0F);
 
-        xTranslateProperty = new Property<>(0F);
-        yTranslateProperty = new Property<>(0F);
+        xTranslateProperty = createRenderProperty(0F);
+        yTranslateProperty = createRenderProperty(0F);
 
-        widthProperty = new Property<>(0F);
-        heightProperty = new Property<>(0F);
+        widthProperty = createRenderProperty(0F);
+        heightProperty = createRenderProperty(0F);
 
         widthRatioProperty = new Property<>(-1F);
         heightRatioProperty = new Property<>(-1F);
 
-        zDepthProperty = new Expression<>(() -> parentProperty().isPresent() ? parent().zLevel() : 0);
-        zTranslateProperty = new Property<>(1F);
+        zDepthProperty = new Expression<>(() ->
+        {
+            element().markRenderDirty();
+            return parentProperty().isPresent() ? parent().zLevel() : 0;
+        });
+        zTranslateProperty = createRenderProperty(1F);
 
-        rotationProperty = new Property<>(Rotation.NONE);
-        scaleProperty = new Property<>(null);
+        rotationProperty = createRenderProperty(Rotation.NONE);
+        scaleProperty = createRenderProperty(null);
 
         parentProperty = new Property<>(null);
         childrenListProperty = new ListProperty<>(null);

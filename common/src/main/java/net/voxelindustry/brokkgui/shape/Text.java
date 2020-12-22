@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.shape;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.text.TextSettings;
 
 public class Text extends GuiElement
 {
@@ -41,5 +42,10 @@ public class Text extends GuiElement
     public void text(String text)
     {
         textComponent.text(text);
+    }
+
+    public TextSettings textSettings()
+    {
+        return textComponent.textSettings();
     }
 }

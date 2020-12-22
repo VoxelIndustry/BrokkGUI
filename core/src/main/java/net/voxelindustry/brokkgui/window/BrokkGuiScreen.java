@@ -23,6 +23,7 @@ import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.style.StyleEngine;
 import net.voxelindustry.brokkgui.style.StylesheetManager;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
+import net.voxelindustry.brokkgui.text.TextSettings;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
@@ -42,6 +43,11 @@ import static java.util.Collections.emptyList;
 
 public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 {
+    private static final TextSettings DEBUG_TEXT_SETTINGS = TextSettings.build()
+            .fontName("default")
+            .textColor(Color.WHITE)
+            .create();
+
     private EventDispatcher                 eventDispatcher;
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
@@ -198,10 +204,10 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !isDebugged)
         {
             renderer.drawColoredEmptyRect(renderer, 1, 1,
-                    renderer.getStringWidth("DEBUG") + 2,
-                    renderer.getStringHeight() + 2,
+                    BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth("DEBUG", DEBUG_TEXT_SETTINGS) + 2,
+                    BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(DEBUG_TEXT_SETTINGS) + 2,
                     400, Color.RED, 1f, RenderPass.BACKGROUND);
-            renderer.drawString("DEBUG", 2, 2.5f, 400, Color.WHITE, Color.ALPHA);
+            renderer.drawString("DEBUG", 2, 2.5f, 400, DEBUG_TEXT_SETTINGS);
         }
     }
 
@@ -234,7 +240,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !isDebugged)
         {
-            if (mouseX > 0 && mouseY > 0 && mouseX < renderer.getStringWidth("DEBUG") && mouseY < renderer.getStringHeight())
+            if (mouseX > 0 && mouseY > 0 && mouseX < BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth("DEBUG", DEBUG_TEXT_SETTINGS) && mouseY < BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(DEBUG_TEXT_SETTINGS))
             {
                 DebugRenderer.wrap(this);
                 isDebugged = true;

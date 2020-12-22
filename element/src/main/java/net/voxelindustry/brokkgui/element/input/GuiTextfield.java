@@ -12,6 +12,7 @@ import net.voxelindustry.brokkgui.event.CursorMoveEvent;
 import net.voxelindustry.brokkgui.event.TextTypedEvent;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 import net.voxelindustry.brokkgui.skin.GuiTextfieldSkin;
+import net.voxelindustry.brokkgui.text.TextSettings;
 import net.voxelindustry.brokkgui.validation.BaseTextValidator;
 import net.voxelindustry.hermod.EventHandler;
 
@@ -297,9 +298,11 @@ public class GuiTextfield extends GuiSkinedElement implements ITextInput
             @Override
             public Float computeValue()
             {
+                TextSettings textSettings = ((GuiTextfieldSkin<?>) getSkin()).getText().textSettings();
+
                 return Math.max(transform().height(),
-                        Math.max(BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getPromptText()),
-                                BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getText())) +
+                        Math.max(BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getPromptText(), textSettings),
+                                BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getText(), textSettings)) +
                                 getTextPadding().getLeft() + getTextPadding().getRight());
             }
         });

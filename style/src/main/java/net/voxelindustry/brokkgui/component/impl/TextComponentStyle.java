@@ -24,6 +24,7 @@ public class TextComponentStyle extends TextComponent
         style.registerProperty("shadow-color", Color.WHITE, Color.class);
         style.registerProperty("shadow", false, Boolean.class);
         style.registerProperty("color", Color.BLACK, Color.class);
+        style.registerProperty("font", "default", String.class);
     }
 
     private StyleComponent style()
@@ -59,10 +60,17 @@ public class TextComponentStyle extends TextComponent
         return colorProperty;
     }
 
+    @Override
+    public Property<String> fontProperty()
+    {
+        if (fontProperty == null)
+            fontProperty = style().getOrCreateProperty("font", String.class);
+        return fontProperty;
+    }
+
     ////////////
     // VALUES //
     ////////////
-
 
     @Override
     public Color shadowColor()
@@ -98,5 +106,17 @@ public class TextComponentStyle extends TextComponent
     public void color(Color color)
     {
         style().setPropertyDirect("color", color, Color.class);
+    }
+
+    @Override
+    public String font()
+    {
+        return style().getValue("font", String.class, "default");
+    }
+
+    @Override
+    public void font(String font)
+    {
+        style().setPropertyDirect("font", font, String.class);
     }
 }

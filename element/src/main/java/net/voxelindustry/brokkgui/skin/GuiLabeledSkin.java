@@ -133,10 +133,11 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
             @Override
             public String computeValue()
             {
+                text.updateTextSettings();
                 if (!getModel().expandToText() && getModel().width() < getExpandedWidth())
                 {
                     String trimmed = BrokkGuiPlatform.getInstance().getTextHelper().trimStringToPixelWidth(
-                            getModel().getText(), (int) (getAvailableTextWidth()));
+                            getModel().getText(), (int) (getAvailableTextWidth()), text.textSettings());
 
                     if (trimmed.length() < getModel().getEllipsis().length())
                         return "";
@@ -153,15 +154,15 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         if (getModel().getIconProperty().isPresent())
         {
             if (getModel().getIconSide().isHorizontal())
-                return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText())
+                return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText(), text.textSettings())
                         + text.computedTextPadding().getHorizontal()
                         + getModel().getIcon().width() + getModel().getIconPadding();
             else
-                return Math.max(BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText()),
+                return Math.max(BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText(), text.textSettings()),
                         getModel().getIcon().width())
                         + text.computedTextPadding().getHorizontal();
         }
-        return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText())
+        return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText(), text.textSettings())
                 + text.computedTextPadding().getHorizontal();
     }
 
