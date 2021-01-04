@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.shape;
+package net.voxelindustry.brokkgui.text;
 
 import com.google.common.collect.Lists;
 import fr.ourten.teabeans.binding.Expression;
@@ -15,7 +15,6 @@ import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.text.TextSettings;
 
 import java.util.List;
 
@@ -24,7 +23,6 @@ public class TextComponent extends GuiComponent implements RenderComponent
     private final Property<String>  textProperty        = new Property<>("");
     private final Property<String>  renderTextProperty  = createRenderProperty("");
     private final Property<Integer> lineSpacingProperty = createRenderProperty(1);
-
 
     private final Property<RectBox> textPaddingProperty = new Property<>(RectBox.EMPTY);
 
@@ -46,6 +44,17 @@ public class TextComponent extends GuiComponent implements RenderComponent
     protected Property<Boolean> useShadowProperty;
     protected Property<Color>   colorProperty;
     protected Property<String>  fontProperty;
+    protected Property<Float>   fontSizeProperty;
+
+    protected Property<Boolean> strikeThroughProperty;
+    protected Property<Boolean> italicProperty;
+    protected Property<Boolean> boldProperty;
+    protected Property<Boolean> underlineProperty;
+
+    protected Property<Color> outlineColorProperty;
+    protected Property<Float> outlineWidthProperty;
+    protected Property<Color> glowColorProperty;
+    protected Property<Float> glowWidthProperty;
 
     private final ObservableValue<Float> lazyTextWidth;
     private final ObservableValue<Float> lazyTextHeight;
@@ -109,6 +118,7 @@ public class TextComponent extends GuiComponent implements RenderComponent
                     xPos,
                     yPos,
                     transform().zLevel(),
+                    RenderPass.MAIN,
                     textSettings);
         else
             renderer.drawString(
@@ -116,6 +126,7 @@ public class TextComponent extends GuiComponent implements RenderComponent
                     xPos,
                     yPos,
                     transform().zLevel(),
+                    RenderPass.MAIN,
                     textSettings);
     }
 
@@ -123,9 +134,18 @@ public class TextComponent extends GuiComponent implements RenderComponent
     {
         textSettings
                 .textColor(color())
-                .shadowColor(shadowColor())
+                .shadowColor(useShadow() ? shadowColor() : Color.ALPHA)
                 .fontName(font())
-                .lineSpacingMultiplier(lineSpacing());
+                .fontSize(fontSize())
+                .lineSpacingMultiplier(lineSpacing())
+                .strikethrough(strikeThrough())
+                .italic(italic())
+                .bold(bold())
+                .underline(underline())
+                .outlineColor(outlineColor())
+                .outlineWidth(outlineWidth())
+                .glowColor(glowColor())
+                .glowWidth(glowWidth());
     }
 
     private float textWidth(IGuiHelper helper)
@@ -172,6 +192,78 @@ public class TextComponent extends GuiComponent implements RenderComponent
         if (fontProperty == null)
             fontProperty = createRenderProperty("default");
         return fontProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> fontSizeProperty()
+    {
+        if (fontSizeProperty == null)
+            fontSizeProperty = createRenderProperty(BrokkGuiPlatform.getInstance().getTextHelper().getDefaultFontSize());
+        return fontSizeProperty;
+    }
+
+    @RequiredOverride
+    public Property<Boolean> strikeThroughProperty()
+    {
+        if (strikeThroughProperty == null)
+            strikeThroughProperty = createRenderProperty(false);
+        return strikeThroughProperty;
+    }
+
+    @RequiredOverride
+    public Property<Boolean> italicProperty()
+    {
+        if (italicProperty == null)
+            italicProperty = createRenderProperty(false);
+        return italicProperty;
+    }
+
+    @RequiredOverride
+    public Property<Boolean> boldProperty()
+    {
+        if (boldProperty == null)
+            boldProperty = createRenderProperty(false);
+        return boldProperty;
+    }
+
+    @RequiredOverride
+    public Property<Boolean> underlineProperty()
+    {
+        if (underlineProperty == null)
+            underlineProperty = createRenderProperty(false);
+        return underlineProperty;
+    }
+
+    @RequiredOverride
+    public Property<Color> outlineColorProperty()
+    {
+        if (outlineColorProperty == null)
+            outlineColorProperty = createRenderProperty(Color.ALPHA);
+        return outlineColorProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> outlineWidthProperty()
+    {
+        if (outlineWidthProperty == null)
+            outlineWidthProperty = createRenderProperty(0F);
+        return outlineWidthProperty;
+    }
+
+    @RequiredOverride
+    public Property<Color> glowColorProperty()
+    {
+        if (glowColorProperty == null)
+            glowColorProperty = createRenderProperty(Color.ALPHA);
+        return glowColorProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> glowWidthProperty()
+    {
+        if (glowWidthProperty == null)
+            glowWidthProperty = createRenderProperty(0F);
+        return glowWidthProperty;
     }
 
     public Property<String> textProperty()
@@ -359,6 +451,8 @@ public class TextComponent extends GuiComponent implements RenderComponent
     @RequiredOverride
     public String font()
     {
+        if (fontProperty == null)
+            return "default";
         return fontProperty().getValue();
     }
 
@@ -366,6 +460,132 @@ public class TextComponent extends GuiComponent implements RenderComponent
     public void font(String font)
     {
         fontProperty().setValue(font);
+    }
+
+    @RequiredOverride
+    public float fontSize()
+    {
+        if (fontSizeProperty == null)
+            return BrokkGuiPlatform.getInstance().getTextHelper().getDefaultFontSize();
+        return fontSizeProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void fontSize(float fontSize)
+    {
+        fontSizeProperty().setValue(fontSize);
+    }
+
+    @RequiredOverride
+    public boolean strikeThrough()
+    {
+        if (strikeThroughProperty == null)
+            return false;
+        return strikeThroughProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void strikeThrough(boolean strikeThrough)
+    {
+        strikeThroughProperty().setValue(strikeThrough);
+    }
+
+    @RequiredOverride
+    public boolean italic()
+    {
+        if (italicProperty == null)
+            return false;
+        return italicProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void italic(boolean italic)
+    {
+        italicProperty().setValue(italic);
+    }
+
+    @RequiredOverride
+    public boolean bold()
+    {
+        if (boldProperty == null)
+            return false;
+        return boldProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void bold(boolean bold)
+    {
+        boldProperty().setValue(bold);
+    }
+
+    @RequiredOverride
+    public boolean underline()
+    {
+        if (underlineProperty == null)
+            return false;
+        return underlineProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void underline(boolean underline)
+    {
+        underlineProperty().setValue(underline);
+    }
+
+    @RequiredOverride
+    public Color outlineColor()
+    {
+        if (outlineColorProperty == null)
+            return Color.ALPHA;
+        return outlineColorProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void outlineColor(Color outlineColor)
+    {
+        outlineColorProperty().setValue(outlineColor);
+    }
+
+    @RequiredOverride
+    public float outlineWidth()
+    {
+        if (outlineWidthProperty == null)
+            return 0;
+        return outlineWidthProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void outlineWidth(float outlineWidth)
+    {
+        outlineWidthProperty().setValue(outlineWidth);
+    }
+
+    @RequiredOverride
+    public Color glowColor()
+    {
+        if (glowColorProperty == null)
+            return Color.ALPHA;
+        return glowColorProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void glowColor(Color glowColor)
+    {
+        glowColorProperty().setValue(glowColor);
+    }
+
+    @RequiredOverride
+    public float glowWidth()
+    {
+        if (glowWidthProperty == null)
+            return 0;
+        return glowWidthProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void glowWidth(float glowWidth)
+    {
+        glowWidthProperty().setValue(glowWidth);
     }
 
     public TextSettings textSettings()

@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import net.voxelindustry.brokkgui.component.RequiredOverride;
-import net.voxelindustry.brokkgui.shape.TextComponent;
+import net.voxelindustry.brokkgui.text.TextComponent;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;

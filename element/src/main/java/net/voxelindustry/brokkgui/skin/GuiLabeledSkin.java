@@ -2,14 +2,12 @@ package net.voxelindustry.brokkgui.skin;
 
 import fr.ourten.teabeans.binding.Binding;
 import fr.ourten.teabeans.binding.Expression;
-import fr.ourten.teabeans.property.Property;
-import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
-import net.voxelindustry.brokkgui.shape.TextComponent;
+import net.voxelindustry.brokkgui.text.TextComponent;
 
 /**
  * @param <C> the labeled gui control this skin must render
@@ -19,8 +17,7 @@ import net.voxelindustry.brokkgui.shape.TextComponent;
  */
 public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> extends GuiBehaviorSkinBase<C, B>
 {
-    private final Property<String>    ellipsedTextProperty;
-    private       Expression<RectBox> paddingForIconBinding;
+    private Expression<RectBox> paddingForIconBinding;
 
     private final TextComponent text;
 
@@ -30,12 +27,7 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
 
         text = model.textComponent();
 
-        ellipsedTextProperty = new Property<>("");
-
         // Bindings
-        //   bindEllipsed();
-
-        style().styleClass().add("text");
 
         getModel().getIconProperty().addListener((obs, oldValue, newValue) ->
         {
@@ -59,16 +51,6 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         }
         else
             bindText(null);
-    }
-
-    public Property<String> getEllipsedTextProperty()
-    {
-        return ellipsedTextProperty;
-    }
-
-    public String getEllipsedText()
-    {
-        return ellipsedTextProperty.getValue();
     }
 
     private void bindText(GuiElement previousIcon)
@@ -115,68 +97,6 @@ public class GuiLabeledSkin<C extends GuiLabeled, B extends GuiBehaviorBase<C>> 
         paddingForIconBinding.setClosure(this::getTextPaddingForIcon);
     }
 
-    private void bindEllipsed()
-    {
-        ellipsedTextProperty.bindProperty(new Binding<String>()
-        {
-            {
-                super.bind(getModel().getTextProperty(),
-                        getModel().getExpandToTextProperty(),
-                        transform().widthProperty(),
-                        getModel().getEllipsisProperty(),
-                        text.computedTextPaddingValue(),
-                        getModel().getIconPaddingProperty(),
-                        getModel().getIconSideProperty(),
-                        getModel().getIconProperty());
-            }
-
-            @Override
-            public String computeValue()
-            {
-                text.updateTextSettings();
-                if (!getModel().expandToText() && getModel().width() < getExpandedWidth())
-                {
-                    String trimmed = BrokkGuiPlatform.getInstance().getTextHelper().trimStringToPixelWidth(
-                            getModel().getText(), (int) (getAvailableTextWidth()), text.textSettings());
-
-                    if (trimmed.length() < getModel().getEllipsis().length())
-                        return "";
-                    trimmed = trimmed.substring(0, trimmed.length() - getModel().getEllipsis().length());
-                    return trimmed + getModel().getEllipsis();
-                }
-                return getModel().getText();
-            }
-        });
-    }
-
-    private float getExpandedWidth()
-    {
-        if (getModel().getIconProperty().isPresent())
-        {
-            if (getModel().getIconSide().isHorizontal())
-                return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText(), text.textSettings())
-                        + text.computedTextPadding().getHorizontal()
-                        + getModel().getIcon().width() + getModel().getIconPadding();
-            else
-                return Math.max(BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText(), text.textSettings()),
-                        getModel().getIcon().width())
-                        + text.computedTextPadding().getHorizontal();
-        }
-        return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getModel().getText(), text.textSettings())
-                + text.computedTextPadding().getHorizontal();
-    }
-
-    private float getAvailableTextWidth()
-    {
-        if (getModel().getIconProperty().isPresent() && getModel().getIconSide().isHorizontal())
-        {
-            return getModel().width()
-                    - text.computedTextPadding().getHorizontal()
-                    - getModel().getIcon().width() - getModel().getIconPadding();
-        }
-        return getModel().width()
-                - text.computedTextPadding().getHorizontal();
-    }
 
     private void bindIcon(GuiElement icon)
     {

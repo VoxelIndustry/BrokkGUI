@@ -266,7 +266,10 @@ public class StyleComponent extends GuiComponent
         StyleProperty<T> property = getProperty(propertyName, valueClass);
 
         if (property != null)
+        {
             property.setStyle(StyleSource.CODE, 10_000, value);
+            element().markRenderDirty();
+        }
     }
 
     /**

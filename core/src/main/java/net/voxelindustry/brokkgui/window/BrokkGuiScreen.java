@@ -207,7 +207,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                     BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth("DEBUG", DEBUG_TEXT_SETTINGS) + 2,
                     BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(DEBUG_TEXT_SETTINGS) + 2,
                     400, Color.RED, 1f, RenderPass.BACKGROUND);
-            renderer.drawString("DEBUG", 2, 2.5f, 400, DEBUG_TEXT_SETTINGS);
+            renderer.drawString("DEBUG", 2, 2.5f, 400, RenderPass.BACKGROUND, DEBUG_TEXT_SETTINGS);
         }
     }
 

@@ -265,7 +265,7 @@ public class GuiListView<T> extends GuiScrollableBase
             else
             {
                 GuiLabel label = new GuiLabel(content.toString());
-                label.setExpandToText(false);
+                label.expandToText(false);
                 cell.setGraphic(label);
             }
             return cell;

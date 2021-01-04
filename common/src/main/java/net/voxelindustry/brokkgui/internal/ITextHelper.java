@@ -4,7 +4,9 @@ import net.voxelindustry.brokkgui.text.TextSettings;
 
 public interface ITextHelper
 {
-    String trimStringToPixelWidth(String text, int pixelWidth, TextSettings settings);
+    String trimStringToWidth(String text, float width, TextSettings settings);
+
+    String trimStringToWidth(String text, float width, String ellipsis, TextSettings settings);
 
     float getStringWidth(String text, TextSettings settings);
 
@@ -13,4 +15,6 @@ public interface ITextHelper
     float getStringHeight(TextSettings settings);
 
     float getStringHeightMultiLine(String text, TextSettings settings);
+
+    float getDefaultFontSize();
 }

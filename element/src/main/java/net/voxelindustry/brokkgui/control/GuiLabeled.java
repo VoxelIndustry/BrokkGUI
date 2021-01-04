@@ -1,25 +1,23 @@
 package net.voxelindustry.brokkgui.control;
 
-import fr.ourten.teabeans.binding.Binding;
 import fr.ourten.teabeans.property.Property;
-import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
-import net.voxelindustry.brokkgui.shape.TextComponent;
+import net.voxelindustry.brokkgui.text.TextComponent;
+import net.voxelindustry.brokkgui.text.TextLayoutComponent;
 
 import javax.annotation.Nonnull;
 
 public abstract class GuiLabeled extends GuiSkinedElement
 {
-    private final Property<String>     ellipsisProperty     = new Property<>("...");
-    private final Property<Boolean>    expandToTextProperty = new Property<>(true);
     private final Property<GuiElement> iconProperty;
-    private final Property<RectSide>   iconSideProperty     = new Property<>(RectSide.LEFT);
-    private final Property<Float>      iconPaddingProperty  = new Property<>(2F);
+    private final Property<RectSide>   iconSideProperty    = new Property<>(RectSide.LEFT);
+    private final Property<Float>      iconPaddingProperty = new Property<>(2F);
 
-    private TextComponent textComponent;
+    private TextComponent       textComponent;
+    private TextLayoutComponent textLayoutComponent;
 
     private final String startingText;
 
@@ -30,7 +28,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
 
         textComponent.text(startingText);
 
-        bindSizeToText();
+        style().styleClass().add("text");
     }
 
     public GuiLabeled(String text)
@@ -49,6 +47,7 @@ public abstract class GuiLabeled extends GuiSkinedElement
         super.postConstruct();
 
         textComponent = provide(TextComponent.class);
+        textLayoutComponent = provide(TextLayoutComponent.class);
     }
 
     public Property<RectAlignment> getTextAlignmentProperty()
@@ -59,16 +58,6 @@ public abstract class GuiLabeled extends GuiSkinedElement
     public Property<String> getTextProperty()
     {
         return textComponent.textProperty();
-    }
-
-    public Property<String> getEllipsisProperty()
-    {
-        return ellipsisProperty;
-    }
-
-    public Property<Boolean> getExpandToTextProperty()
-    {
-        return expandToTextProperty;
     }
 
     public Property<RectBox> textPaddingProperty()
@@ -111,16 +100,6 @@ public abstract class GuiLabeled extends GuiSkinedElement
         textComponent.text(text);
     }
 
-    public String getEllipsis()
-    {
-        return ellipsisProperty.getValue();
-    }
-
-    public void setEllipsis(String ellipsis)
-    {
-        ellipsisProperty.setValue(ellipsis);
-    }
-
     public RectBox textPadding()
     {
         return textPaddingProperty().getValue();
@@ -161,88 +140,47 @@ public abstract class GuiLabeled extends GuiSkinedElement
         iconPaddingProperty.setValue(iconPadding);
     }
 
-    public boolean expandToText()
-    {
-        return expandToTextProperty.getValue();
-    }
-
-    public void setExpandToText(boolean expandToText)
-    {
-        if (expandToText && !expandToText())
-            bindSizeToText();
-        else if (!expandToText && expandToText())
-        {
-            transform().widthProperty().unbind();
-            transform().heightProperty().unbind();
-        }
-        expandToTextProperty.setValue(expandToText);
-    }
-
-    private void bindSizeToText()
-    {
-        transform().widthProperty().bindProperty(new Binding<Float>()
-        {
-            {
-                super.bind(getTextProperty(),
-                        textComponent().computedTextPaddingValue(),
-                        getIconProperty(),
-                        getIconPaddingProperty(),
-                        getIconSideProperty());
-            }
-
-            @Override
-            public Float computeValue()
-            {
-                textComponent().updateTextSettings();
-                if (getIconProperty().isPresent())
-                {
-                    if (getIconSide().isHorizontal())
-                        return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getText(), textComponent().textSettings())
-                                + textComponent().computedTextPadding().getHorizontal()
-                                + getIcon().width() + getIconPadding();
-                    else
-                        return Math.max(BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getText(), textComponent().textSettings()),
-                                getIcon().height())
-                                + textComponent().computedTextPadding().getHorizontal();
-                }
-                return BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(getText(), textComponent().textSettings())
-                        + textComponent().computedTextPadding().getHorizontal();
-            }
-        });
-
-        transform().heightProperty().bindProperty(new Binding<Float>()
-        {
-            {
-                super.bind(getTextProperty(),
-                        textComponent().computedTextPaddingValue(),
-                        getIconProperty(),
-                        getIconPaddingProperty(),
-                        getIconSideProperty());
-            }
-
-            @Override
-            public Float computeValue()
-            {
-                textComponent().updateTextSettings();
-                if (getIconProperty().isPresent())
-                {
-                    if (getIconSide().isVertical())
-                        return BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(textComponent().textSettings())
-                                + textComponent().computedTextPadding().getVertical()
-                                + getIcon().height() + getIconPadding();
-                    else
-                        return Math.max(BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(textComponent().textSettings()),
-                                getIcon().height())
-                                + textComponent().computedTextPadding().getVertical();
-                }
-                return BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(textComponent().textSettings())
-                        + textComponent().computedTextPadding().getVertical();
-            }
-        });
-    }
+    ////////////////
+    // COMPONENTS //
+    ////////////////
 
     public TextComponent textComponent()
     {
         return textComponent;
+    }
+
+    ///////////////
+    // DELEGATES //
+    ///////////////
+
+
+    public Property<String> ellipsisProperty()
+    {
+        return textLayoutComponent.ellipsisProperty();
+    }
+
+    public Property<Boolean> expandToTextProperty()
+    {
+        return textLayoutComponent.expandToTextProperty();
+    }
+
+    public String ellipsis()
+    {
+        return textLayoutComponent.ellipsis();
+    }
+
+    public void ellipsis(String ellipsis)
+    {
+        textLayoutComponent.ellipsis(ellipsis);
+    }
+
+    public boolean expandToText()
+    {
+        return textLayoutComponent.expandToText();
+    }
+
+    public void expandToText(boolean expandToText)
+    {
+        textLayoutComponent.expandToText(expandToText);
     }
 }

@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.shape;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.text.TextComponent;
 import net.voxelindustry.brokkgui.text.TextSettings;
 
 public class Text extends GuiElement

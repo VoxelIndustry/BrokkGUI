@@ -9,7 +9,6 @@ import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.shape.TextComponent;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;
@@ -22,6 +21,7 @@ import net.voxelindustry.brokkgui.style.adapter.translator.RectBoxTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.ResourceStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.TextureStyleTranslator;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
+import net.voxelindustry.brokkgui.text.TextComponent;
 
 import java.util.function.Supplier;
 

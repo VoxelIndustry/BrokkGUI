@@ -167,7 +167,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
                                 getModel().getTopPos()
                                         + getModel().height()
                                         + i * (BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(errorTextSettings) + 1),
-                                getModel().transform().zLevel(), errorTextSettings);
+                                getModel().transform().zLevel(), RenderPass.HOVER, errorTextSettings);
                         i++;
                     }
             }
@@ -257,7 +257,7 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
 
     public String trimTextToWidth(String textToTrim, String ellipsis, int width, ITextHelper helper)
     {
-        String trimmed = helper.trimStringToPixelWidth(textToTrim, width, text.textSettings());
+        String trimmed = helper.trimStringToWidth(textToTrim, width, text.textSettings());
         if (!trimmed.equals(textToTrim))
         {
             if (trimmed.length() >= ellipsis.length())

@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.immediate.element;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.immediate.style.TextStyle;
 import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.text.TextSettings;
 
 import static net.voxelindustry.brokkgui.immediate.style.StyleType.NORMAL;
@@ -55,7 +56,7 @@ public interface TextElement extends ImmediateElement
         else
             textSettings().textColor(hoverColor).shadowColor(hoverShadowColor);
 
-        getRenderer().drawStringMultiline(text, x, y, 1, textSettings());
+        getRenderer().drawStringMultiline(text, x, y, 1, RenderPass.BACKGROUND, textSettings());
         return isHovered;
     }
 
