@@ -4,7 +4,7 @@ _A powerful generalist UI framework._
 
 BrokkGUI is a complete framework for making GUIs in Minecraft mods. It features a CSS parser/engine, clear data bindings and an extensive collection of base components.
 
-**The framework is currently in beta and will soon release in 1.0.0**
+**:construction: The framework is currently in beta and will soon release in 1.0.0**
 
 # Depending on BrokkGUI
 The framework is composed of several projects. You should use one of the available bindings since the core project is not usable alone.
@@ -16,7 +16,7 @@ To depend on a binding add the following to your gradle build file :
 ```gradle
 repositories {
     maven {
-      url 'http://maven.ferenyr.info/artifactory/libs-release'
+      url 'https://maven.ferenyr.info/artifactory/libs-release'
     }
 }
 
@@ -36,8 +36,10 @@ There are several officials bindings bundled in this repository but the creation
 
 | Platform      | Status    | Future    |
 | ------------- | --------- | --------- |
-| Minecraft 1.12 | Full support | :white_check_mark:**Latest** |
-| Minecraft 1.14 | No container support | :warning:**Experimental** |
+| Minecraft 1.12 | Obsolete | :warning:**Deprecated** |
+| Minecraft 1.14 | Full support | :white_check_mark:**Latest** |
+| Minecraft 1.15 | Obsolete | :warning:**Deprecated** |
+| Minecraft 1.16 (Fabric) | In progress | :warning:**Experimental** |
 
 # Features
 #### CSS Engine
@@ -96,10 +98,10 @@ Components available only in Minecraft bindings:
 # Examples
 Theses examples are GUIs made with the framework and showcase some features combination.
 ### Inventory GUI with a scrollable nested window
-<img src="http://i.ferenyr.info/images/storage/provider.gif" alt="Inventory GUI" width="393.5" height="402.5">
+<img src="https://i.ferenyr.info/images/storage/provider.gif" alt="Inventory GUI" width="393.5" height="402.5">
 
 ### GUI of a pressure regulator with complex shapes
-<img src="http://i.ferenyr.info/images/storage/steamvent.gif" alt="Pressure GUI" width="354.5" height="334.5">
+<img src="https://i.ferenyr.info/images/storage/steamvent.gif" alt="Pressure GUI" width="354.5" height="334.5">
 
 ## Authors
 
