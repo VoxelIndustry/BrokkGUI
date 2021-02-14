@@ -1,13 +1,13 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.Resource;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;

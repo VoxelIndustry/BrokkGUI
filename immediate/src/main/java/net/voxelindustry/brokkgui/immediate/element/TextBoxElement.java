@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui.immediate.element;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.immediate.style.TextBoxStyle;
-import net.voxelindustry.brokkgui.paint.Color;
 
 public interface TextBoxElement extends ImmediateElement, TextElement, BoxElement
 {

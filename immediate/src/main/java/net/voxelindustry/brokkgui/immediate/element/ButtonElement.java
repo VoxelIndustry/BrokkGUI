@@ -1,11 +1,11 @@
 package net.voxelindustry.brokkgui.immediate.element;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.immediate.InteractionResult;
 import net.voxelindustry.brokkgui.immediate.style.ButtonStyle;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.text.TextSettings;
 
@@ -82,8 +82,8 @@ public interface ButtonElement extends ImmediateElement
 
         if (isClicked)
         {
-            getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.clickBoxColor, RenderPass.BACKGROUND);
-            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.clickBorderColor, style.borderThin, RenderPass.BACKGROUND);
+            getRenderer().drawColoredRect(x, y, width, height, 1, style.clickBoxColor, RenderPass.BACKGROUND);
+            getRenderer().drawColoredEmptyRect(x, y, width, height, 1, style.clickBorderColor, style.borderThin, RenderPass.BACKGROUND);
 
             textSettings().textColor(style.clickTextColor).shadowColor(style.clickShadowColor);
             getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, RenderPass.BACKGROUND, textSettings());
@@ -92,8 +92,8 @@ public interface ButtonElement extends ImmediateElement
         }
         if (isHovered)
         {
-            getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.hoverBoxColor, RenderPass.BACKGROUND);
-            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.hoverBorderColor, style.borderThin, RenderPass.BACKGROUND);
+            getRenderer().drawColoredRect(x, y, width, height, 1, style.hoverBoxColor, RenderPass.BACKGROUND);
+            getRenderer().drawColoredEmptyRect(x, y, width, height, 1, style.hoverBorderColor, style.borderThin, RenderPass.BACKGROUND);
 
             textSettings().textColor(style.hoverTextColor).shadowColor(style.hoverShadowColor);
             getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, RenderPass.BACKGROUND, textSettings());
@@ -101,8 +101,8 @@ public interface ButtonElement extends ImmediateElement
             return InteractionResult.HOVERED;
         }
 
-        getRenderer().drawColoredRect(getRenderer(), x, y, width, height, 1, style.boxColor, RenderPass.BACKGROUND);
-        getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, style.borderColor, style.borderThin, RenderPass.BACKGROUND);
+        getRenderer().drawColoredRect(x, y, width, height, 1, style.boxColor, RenderPass.BACKGROUND);
+        getRenderer().drawColoredEmptyRect(x, y, width, height, 1, style.borderColor, style.borderThin, RenderPass.BACKGROUND);
 
         textSettings().textColor(style.textColor).shadowColor(style.shadowColor);
         getRenderer().drawString(text, x + textOffsetX, y + textOffsetY, 1, RenderPass.BACKGROUND, textSettings());

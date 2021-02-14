@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui.shape;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
@@ -14,14 +14,14 @@ public class CircleShape implements ShapeDefinition
     public void drawColored(Transform transform, IRenderCommandReceiver renderer, float startX, float startY, Color color,
                             float zLevel, RectBox spritePosition)
     {
-        renderer.drawColoredCircle(renderer, startX, startY, transform.width(), zLevel, color, RenderPass.BACKGROUND);
+        renderer.drawColoredCircle(startX, startY, transform.width(), zLevel, color, RenderPass.BACKGROUND);
     }
 
     @Override
     public void drawColoredEmpty(Transform transform, IRenderCommandReceiver renderer, float startX, float startY, float lineWidth,
                                  Color color, float zLevel)
     {
-        renderer.drawColoredEmptyCircle(renderer, startX, startY, transform.width(), zLevel, color,
+        renderer.drawColoredEmptyCircle(startX, startY, transform.width(), zLevel, color,
                 lineWidth, RenderPass.BACKGROUND);
     }
 
@@ -29,7 +29,7 @@ public class CircleShape implements ShapeDefinition
     public void drawTextured(Transform transform, IRenderCommandReceiver renderer, float startX, float startY, Texture texture,
                              float zLevel, RectBox spritePosition)
     {
-        renderer.drawTexturedCircle(renderer, startX, startY, texture.getUMin(), texture.getVMin(),
+        renderer.drawTexturedCircle(startX, startY, texture.getUMin(), texture.getVMin(),
                 texture.getUMax(), texture.getVMax(), transform.width(), zLevel, RenderPass.BACKGROUND);
     }
 

@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.immediate.element;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.immediate.style.BoxStyle;
 import net.voxelindustry.brokkgui.immediate.style.EmptyBoxStyle;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
 import static net.voxelindustry.brokkgui.immediate.style.StyleType.NORMAL;
@@ -69,11 +69,11 @@ public interface BoxElement extends ImmediateElement
 
         if (!isHovered)
         {
-            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, borderColor, borderThin, RenderPass.BACKGROUND);
+            getRenderer().drawColoredEmptyRect(x, y, width, height, 1, borderColor, borderThin, RenderPass.BACKGROUND);
         }
         else
         {
-            getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, hoverBorderColor, borderThin, RenderPass.BACKGROUND);
+            getRenderer().drawColoredEmptyRect(x, y, width, height, 1, hoverBorderColor, borderThin, RenderPass.BACKGROUND);
         }
         return isHovered;
     }
@@ -100,14 +100,14 @@ public interface BoxElement extends ImmediateElement
         if (!isHovered)
         {
             if (borderColor.getAlpha() != 0 && borderThin > 0)
-                getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, borderColor, borderThin, RenderPass.BACKGROUND);
-            getRenderer().drawColoredRect(getRenderer(), x + borderThin, y + borderThin, width - borderThin * 2, height - borderThin * 2, 1, color, RenderPass.BACKGROUND);
+                getRenderer().drawColoredEmptyRect(x, y, width, height, 1, borderColor, borderThin, RenderPass.BACKGROUND);
+            getRenderer().drawColoredRect(x + borderThin, y + borderThin, width - borderThin * 2, height - borderThin * 2, 1, color, RenderPass.BACKGROUND);
         }
         else
         {
             if (borderColor.getAlpha() != 0 && borderThin > 0)
-                getRenderer().drawColoredEmptyRect(getRenderer(), x, y, width, height, 1, hoverBorderColor, borderThin, RenderPass.BACKGROUND);
-            getRenderer().drawColoredRect(getRenderer(), x + borderThin, y + borderThin, width - borderThin * 2, height - borderThin * 2, 1, hoverColor, RenderPass.BACKGROUND);
+                getRenderer().drawColoredEmptyRect(x, y, width, height, 1, hoverBorderColor, borderThin, RenderPass.BACKGROUND);
+            getRenderer().drawColoredRect(x + borderThin, y + borderThin, width - borderThin * 2, height - borderThin * 2, 1, hoverColor, RenderPass.BACKGROUND);
         }
         return isHovered;
     }

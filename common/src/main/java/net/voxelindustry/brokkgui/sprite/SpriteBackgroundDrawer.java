@@ -1,9 +1,9 @@
 package net.voxelindustry.brokkgui.sprite;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
 public class SpriteBackgroundDrawer
@@ -52,8 +52,7 @@ public class SpriteBackgroundDrawer
         if (position == RectBox.EMPTY)
         {
             if (rotation != SpriteRotation.NONE)
-                renderer.drawTexturedRectWithColor(renderer,
-                        paint.transform().leftPos(),
+                renderer.drawTexturedRectWithColor(paint.transform().leftPos(),
                         paint.transform().topPos(),
                         texture.getUMin(),
                         texture.getVMin(),
@@ -66,8 +65,7 @@ public class SpriteBackgroundDrawer
                         renderPass,
                         color);
             else
-                renderer.drawTexturedRectWithColor(renderer,
-                        paint.transform().leftPos(),
+                renderer.drawTexturedRectWithColor(paint.transform().leftPos(),
                         paint.transform().topPos(),
                         texture.getUMin(),
                         texture.getVMin(),
@@ -82,8 +80,7 @@ public class SpriteBackgroundDrawer
         else
         {
             if (rotation != SpriteRotation.NONE)
-                renderer.drawTexturedRectWithColor(renderer,
-                        paint.transform().leftPos() + position.getLeft(),
+                renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft(),
                         paint.transform().topPos() + position.getTop(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
@@ -94,8 +91,7 @@ public class SpriteBackgroundDrawer
                         renderPass,
                         color);
             else
-                renderer.drawTexturedRectWithColor(renderer,
-                        paint.transform().leftPos() + position.getLeft(),
+                renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft(),
                         paint.transform().topPos() + position.getTop(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
@@ -114,8 +110,7 @@ public class SpriteBackgroundDrawer
 
         for (int index = 0; index < repeatCount; index++)
         {
-            renderer.drawTexturedRectWithColor(renderer,
-                    paint.transform().leftPos() + position.getLeft() + index * texture.getPixelWidth(),
+            renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft() + index * texture.getPixelWidth(),
                     paint.transform().topPos() + position.getTop(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
@@ -129,8 +124,7 @@ public class SpriteBackgroundDrawer
 
         if (leftOver != 0)
         {
-            renderer.drawTexturedRectWithColor(renderer,
-                    paint.transform().leftPos() + position.getLeft() + repeatCount * texture.getPixelWidth(),
+            renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft() + repeatCount * texture.getPixelWidth(),
                     paint.transform().topPos() + position.getTop(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
@@ -150,8 +144,7 @@ public class SpriteBackgroundDrawer
 
         for (int index = 0; index < repeatCount; index++)
         {
-            renderer.drawTexturedRectWithColor(renderer,
-                    paint.transform().leftPos() + position.getLeft(),
+            renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft(),
                     paint.transform().topPos() + position.getTop() + index * texture.getPixelHeight(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
@@ -165,8 +158,7 @@ public class SpriteBackgroundDrawer
 
         if (leftOver != 0)
         {
-            renderer.drawTexturedRectWithColor(renderer,
-                    paint.transform().leftPos() + position.getLeft(),
+            renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft(),
                     paint.transform().topPos() + position.getTop() + repeatCount * texture.getPixelHeight(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),
@@ -190,8 +182,7 @@ public class SpriteBackgroundDrawer
         {
             for (int yIndex = 0; yIndex < repeatCountY; yIndex++)
             {
-                renderer.drawTexturedRectWithColor(renderer,
-                        paint.transform().leftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
+                renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
                         paint.transform().topPos() + position.getTop() + yIndex * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
@@ -208,8 +199,7 @@ public class SpriteBackgroundDrawer
         {
             for (int yIndex = 0; yIndex < repeatCountY; yIndex++)
             {
-                renderer.drawTexturedRectWithColor(renderer,
-                        paint.transform().leftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
+                renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
                         paint.transform().topPos() + position.getTop() + yIndex * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
@@ -225,8 +215,7 @@ public class SpriteBackgroundDrawer
         {
             for (int xIndex = 0; xIndex < repeatCountX; xIndex++)
             {
-                renderer.drawTexturedRectWithColor(renderer,
-                        paint.transform().leftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
+                renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft() + xIndex * texture.getPixelWidth(),
                         paint.transform().topPos() + position.getTop() + repeatCountY * texture.getPixelHeight(),
                         texture.getUMin(), texture.getVMin(),
                         texture.getUMax(), texture.getVMax(),
@@ -240,8 +229,7 @@ public class SpriteBackgroundDrawer
         }
         if (leftOverX != 0 && leftOverY != 0)
         {
-            renderer.drawTexturedRectWithColor(renderer,
-                    paint.transform().leftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
+            renderer.drawTexturedRectWithColor(paint.transform().leftPos() + position.getLeft() + repeatCountX * texture.getPixelWidth(),
                     paint.transform().topPos() + position.getTop() + repeatCountY * texture.getPixelHeight(),
                     texture.getUMin(), texture.getVMin(),
                     texture.getUMax(), texture.getVMax(),

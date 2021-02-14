@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.immediate.style;
 
-import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkcolor.Color;
 
 public class TextStyle
 {

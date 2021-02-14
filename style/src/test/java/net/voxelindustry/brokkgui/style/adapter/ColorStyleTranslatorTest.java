@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.adapter;
 
-import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.style.adapter.translator.ColorStyleTranslator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

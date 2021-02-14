@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.immediate.element;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.immediate.style.TextStyle;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.text.TextSettings;
 

@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.style.adapter.translator;
 
-import net.voxelindustry.brokkgui.paint.Color;
-import net.voxelindustry.brokkgui.paint.ColorConstants;
+import net.voxelindustry.brokkcolor.Color;
+import net.voxelindustry.brokkcolor.ColorConstants;
 import net.voxelindustry.brokkgui.style.adapter.IStyleTranslator;
 
 import java.text.NumberFormat;

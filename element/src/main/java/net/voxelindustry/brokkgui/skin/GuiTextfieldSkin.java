@@ -2,12 +2,12 @@ package net.voxelindustry.brokkgui.skin;
 
 import fr.ourten.teabeans.binding.Binding;
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.behavior.GuiTextfieldBehavior;
 import net.voxelindustry.brokkgui.element.input.GuiTextfield;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.internal.ITextHelper;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.Text;
 import net.voxelindustry.brokkgui.style.StyleComponent;
@@ -148,10 +148,9 @@ public class GuiTextfieldSkin<T extends GuiTextfield> extends GuiBehaviorSkinBas
             // Cursor
             if (getModel().focusedProperty().getValue())
             {
-                renderer.drawColoredRect(renderer,
-                        x + xPadding - 1 + BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(
-                                getModel().getText().substring(displayOffsetProperty.getValue(),
-                                        getModel().getCursorPos()), text.textSettings()), y + yPadding - 1, 1,
+                renderer.drawColoredRect(x + xPadding - 1 + BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth(
+                        getModel().getText().substring(displayOffsetProperty.getValue(),
+                                getModel().getCursorPos()), text.textSettings()), y + yPadding - 1, 1,
                         BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(text.textSettings()) + 1, getModel().transform().zLevel() + 1, getCursorColor(), RenderPass.FOREGROUND);
             }
         }

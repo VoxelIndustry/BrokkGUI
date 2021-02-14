@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.text.TextComponent;
 

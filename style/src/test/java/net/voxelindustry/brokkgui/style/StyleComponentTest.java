@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style;
 
-import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

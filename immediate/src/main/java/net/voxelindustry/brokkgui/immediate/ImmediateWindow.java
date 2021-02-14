@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.immediate;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
@@ -12,7 +13,6 @@ import net.voxelindustry.brokkgui.immediate.element.TextBoxElement;
 import net.voxelindustry.brokkgui.immediate.element.TextElement;
 import net.voxelindustry.brokkgui.immediate.style.ReducedStyleList;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.style.IStyleRoot;
 import net.voxelindustry.brokkgui.style.StylesheetManager;
 import net.voxelindustry.brokkgui.style.adapter.IStyleDecoder;

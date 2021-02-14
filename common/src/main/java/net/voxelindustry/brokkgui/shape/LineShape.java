@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui.shape;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
@@ -23,7 +23,7 @@ public class LineShape implements ShapeDefinition
     public void drawColored(Transform transform, IRenderCommandReceiver renderer, float startX, float startY, Color color,
                             float zLevel, RectBox spritePosition)
     {
-        renderer.drawColoredLine(renderer, startX, startY,
+        renderer.drawColoredLine(startX, startY,
                 startX + transform.width(), startY + transform.height(),
                 lineWidthSupplier.get(), zLevel, color, RenderPass.BACKGROUND);
     }
@@ -32,7 +32,7 @@ public class LineShape implements ShapeDefinition
     public void drawColoredEmpty(Transform transform, IRenderCommandReceiver renderer, float startX, float startY, float lineWidth,
                                  Color color, float zLevel)
     {
-        renderer.drawColoredLine(renderer, startX, startY,
+        renderer.drawColoredLine(startX, startY,
                 startX + transform.width(), startY + transform.height(),
                 lineWidthSupplier.get(), zLevel, color, RenderPass.BACKGROUND);
     }

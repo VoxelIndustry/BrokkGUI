@@ -1,11 +1,11 @@
 package net.voxelindustry.brokkgui.border;
 
 import com.google.common.base.Stopwatch;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
 public class ColorBorderDrawer
@@ -33,8 +33,7 @@ public class ColorBorderDrawer
         if (bottomLeftRadius == 0 && bottomRightRadius == 0 && topRightRadius == 0 && topLeftRadius == 0 &&
                 borderLeft == borderRight && borderLeft == borderTop && borderLeft == borderBottom)
         {
-            renderer.drawColoredEmptyRect(renderer,
-                    leftPos - borderLeft,
+            renderer.drawColoredEmptyRect(leftPos - borderLeft,
                     topPos - borderLeft,
                     paint.transform().width() + borderLeft * 2,
                     paint.transform().height() + borderLeft * 2,
@@ -46,26 +45,22 @@ public class ColorBorderDrawer
         }
 
         if (bottomRightRadius > 0)
-            renderer.drawColoredArc(renderer,
-                    rightPos - bottomRightRadius + borderRight - 1,
+            renderer.drawColoredArc(rightPos - bottomRightRadius + borderRight - 1,
                     bottomPos - bottomRightRadius + borderBottom - 1,
                     bottomRightRadius, zLevel, color, RectCorner.BOTTOM_RIGHT,
                     RenderPass.BACKGROUND);
         if (bottomLeftRadius > 0)
-            renderer.drawColoredArc(renderer,
-                    leftPos - borderLeft + bottomLeftRadius,
+            renderer.drawColoredArc(leftPos - borderLeft + bottomLeftRadius,
                     bottomPos - bottomLeftRadius + borderBottom - 1,
                     bottomRightRadius, zLevel, color, RectCorner.BOTTOM_LEFT,
                     RenderPass.BACKGROUND);
         if (topLeftRadius > 0)
-            renderer.drawColoredArc(renderer,
-                    leftPos - borderLeft + topLeftRadius,
+            renderer.drawColoredArc(leftPos - borderLeft + topLeftRadius,
                     topPos - borderTop + topLeftRadius,
                     topLeftRadius, zLevel, color, RectCorner.TOP_LEFT,
                     RenderPass.BACKGROUND);
         if (topRightRadius > 0)
-            renderer.drawColoredArc(renderer,
-                    rightPos - topRightRadius + borderRight - 1,
+            renderer.drawColoredArc(rightPos - topRightRadius + borderRight - 1,
                     topPos - borderTop + topLeftRadius,
                     topLeftRadius, zLevel, color, RectCorner.TOP_RIGHT,
                     RenderPass.BACKGROUND);
@@ -73,31 +68,29 @@ public class ColorBorderDrawer
         Stopwatch watch = Stopwatch.createStarted();
         float bottomLeftRadiusOffset = bottomLeftRadius > 0 ? bottomLeftRadius - borderBottom : 0;
         if (borderLeft > 0)
-            renderer.drawColoredRect(renderer, leftPos - borderLeft,
+            renderer.drawColoredRect(leftPos - borderLeft,
                     topPos - borderTop + topLeftRadius, borderLeft,
                     paint.transform().height() + borderTop - bottomLeftRadiusOffset - topLeftRadius,
                     zLevel, color, RenderPass.BACKGROUND);
 
         float topLeftRadiusOffset = topLeftRadius > 0 && topLeftRadius <= borderLeft ? topLeftRadius - borderLeft : 0;
         if (borderTop > 0)
-            renderer.drawColoredRect(renderer,
-                    leftPos + topLeftRadiusOffset,
+            renderer.drawColoredRect(leftPos + topLeftRadiusOffset,
                     topPos - borderTop,
                     paint.transform().width() + borderRight - topLeftRadiusOffset - topRightRadius, borderTop,
                     zLevel, color, RenderPass.BACKGROUND);
 
         float topRightRadiusOffset = topRightRadius > 0 ? topRightRadius - borderTop : 0;
         if (borderRight > 0)
-            renderer.drawColoredRect(renderer, rightPos,
+            renderer.drawColoredRect(rightPos,
                     topPos + topRightRadiusOffset, borderRight,
                     paint.transform().height() + borderBottom - bottomRightRadius - topRightRadiusOffset,
                     zLevel, color, RenderPass.BACKGROUND);
 
         float bottomRightRadiusOffset = bottomRightRadius > 0 && bottomRightRadius <= borderRight ?
-                                        bottomRightRadius - borderRight : 0;
+                bottomRightRadius - borderRight : 0;
         if (borderBottom > 0)
-            renderer.drawColoredRect(renderer,
-                    leftPos - borderLeft + bottomLeftRadius,
+            renderer.drawColoredRect(leftPos - borderLeft + bottomLeftRadius,
                     bottomPos,
                     paint.transform().width() + borderLeft - bottomRightRadiusOffset - bottomLeftRadius,
                     borderBottom, zLevel, color, RenderPass.BACKGROUND);

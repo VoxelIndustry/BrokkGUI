@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.debug;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
@@ -12,7 +13,6 @@ import net.voxelindustry.brokkgui.immediate.InteractionResult;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.profiler.GuiProfiler;
 import net.voxelindustry.brokkgui.style.IStyleRoot;
 import net.voxelindustry.brokkgui.style.StyleComponent;

@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.style.optional;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Resource;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.sprite.SpriteAnimationInstance;
 import net.voxelindustry.brokkgui.sprite.SpriteAnimationParser;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;

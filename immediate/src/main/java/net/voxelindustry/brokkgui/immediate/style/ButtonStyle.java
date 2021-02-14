@@ -1,8 +1,8 @@
 package net.voxelindustry.brokkgui.immediate.style;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.paint.Color;
 
 public class ButtonStyle
 {

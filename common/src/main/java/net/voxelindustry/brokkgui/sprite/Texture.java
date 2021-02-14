@@ -1,10 +1,8 @@
 package net.voxelindustry.brokkgui.sprite;
 
-import net.voxelindustry.brokkgui.paint.GuiPaint;
-
 import java.util.Objects;
 
-public class Texture extends GuiPaint
+public class Texture
 {
     public static final Texture EMPTY = new Texture();
 

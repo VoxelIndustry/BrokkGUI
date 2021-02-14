@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.style.optional;
 
-import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.style.StyleProperty;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMappers;

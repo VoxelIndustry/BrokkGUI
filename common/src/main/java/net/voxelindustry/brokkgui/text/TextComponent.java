@@ -5,6 +5,7 @@ import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.RenderComponent;
@@ -13,7 +14,6 @@ import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
 import java.util.List;

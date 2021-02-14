@@ -1,6 +1,6 @@
 package net.voxelindustry.brokkgui.text;
 
-import net.voxelindustry.brokkgui.paint.Color;
+import net.voxelindustry.brokkcolor.Color;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;

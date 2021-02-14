@@ -1,10 +1,10 @@
 package net.voxelindustry.brokkgui.shape;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.sprite.Texture;
 
 public interface ShapeDefinition

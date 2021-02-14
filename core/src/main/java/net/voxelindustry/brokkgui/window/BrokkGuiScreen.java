@@ -4,6 +4,7 @@ import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.property.IProperty;
 import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.GuiElement;
@@ -15,7 +16,6 @@ import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
 import net.voxelindustry.brokkgui.style.IStyleRoot;
@@ -178,7 +178,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                     for (int i = windows.size() - 1; i >= 0; i--)
                     {
                         if (windows.get(i).hasWarFog())
-                            renderer.drawColoredRect(renderer, 0, 0, getWidth(),
+                            renderer.drawColoredRect(0, 0, getWidth(),
                                     getHeight(), 5 + i, Color.BLACK.addAlpha(-0.5f), RenderPass.BACKGROUND);
 
                         for (RenderPass pass : passes)
@@ -203,7 +203,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !isDebugged)
         {
-            renderer.drawColoredEmptyRect(renderer, 1, 1,
+            renderer.drawColoredEmptyRect(1, 1,
                     BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth("DEBUG", DEBUG_TEXT_SETTINGS) + 2,
                     BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(DEBUG_TEXT_SETTINGS) + 2,
                     400, Color.RED, 1f, RenderPass.BACKGROUND);
@@ -418,7 +418,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         return mainPanel;
     }
 
-    public void setMainPanel(GuiPane mainPanel)
+    public <T extends GuiPane> T setMainPanel(T mainPanel)
     {
         if (this.mainPanel != null)
         {
@@ -443,6 +443,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         if (wrapper != null)
             StyleEngine.refreshHierarchy(mainPanel.transform());
         this.mainPanel.setWindow(this);
+
+        return mainPanel;
     }
 
     public void runLater(Runnable runnable, long time, TimeUnit unit)

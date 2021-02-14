@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.style;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.ComponentEngine;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.component.impl.PaintStyle;
@@ -8,7 +9,6 @@ import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Resource;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;

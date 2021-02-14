@@ -831,4 +831,50 @@ public abstract class GuiElement implements IEventEmitter
         if (isFocused())
             GuiFocusManager.instance().requestFocus(null);
     }
+
+    //////////////////
+    //     STATIC   //
+    //////////////////
+
+    public static GuiElement createInline(String type, GuiComponent... components)
+    {
+        return new GuiElement()
+        {
+            @Override
+            public void postConstruct()
+            {
+                super.postConstruct();
+
+                for (GuiComponent component : components)
+                    add(component);
+            }
+
+            @Override
+            public String type()
+            {
+                return type;
+            }
+        };
+    }
+
+    public static GuiElement createInline(String type, Class<? extends GuiComponent>... components)
+    {
+        return new GuiElement()
+        {
+            @Override
+            public void postConstruct()
+            {
+                super.postConstruct();
+
+                for (Class<? extends GuiComponent> component : components)
+                    add(component);
+            }
+
+            @Override
+            public String type()
+            {
+                return type;
+            }
+        };
+    }
 }
