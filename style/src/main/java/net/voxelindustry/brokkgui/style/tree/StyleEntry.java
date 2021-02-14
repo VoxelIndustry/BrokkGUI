@@ -13,23 +13,33 @@ public class StyleEntry
     public StyleEntry(IStyleSelector selector)
     {
         this.selector = selector;
-        this.rules = new ArrayList<>();
+        rules = new ArrayList<>();
     }
 
     public void mergeRules(List<StyleRule> rules)
     {
-        rules.forEach(rule ->
-        {
-            if (this.rules.stream().noneMatch(rule2 -> rule2.getRuleIdentifier().equals(rule.getRuleIdentifier())))
-                this.rule(rule);
-        });
+        for (StyleRule rule : rules)
+            addOrReplaceRule(rule);
     }
 
-    public StyleEntry rule(StyleRule rule)
+    private void addOrReplaceRule(StyleRule rule)
     {
-        if (!this.rules.contains(rule))
-            this.rules.add(rule);
-        return this;
+        StyleRule previousRule = null;
+        for (StyleRule candidate : rules)
+        {
+            if (candidate.getRuleIdentifier().equals(rule.getRuleIdentifier()))
+                previousRule = candidate;
+        }
+
+        if (previousRule != null)
+            rules.remove(previousRule);
+        rule(rule);
+    }
+
+    public void rule(StyleRule rule)
+    {
+        if (!rules.contains(rule))
+            rules.add(rule);
     }
 
     public IStyleSelector getSelector()
