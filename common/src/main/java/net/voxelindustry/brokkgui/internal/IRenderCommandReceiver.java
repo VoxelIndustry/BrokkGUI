@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.internal;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.data.RectCorner;
-import net.voxelindustry.brokkgui.paint.Color;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.sprite.SpriteRotation;
 import net.voxelindustry.brokkgui.sprite.Texture;
@@ -21,63 +21,67 @@ public interface IRenderCommandReceiver extends ITextRenderer
 
     void scaleMatrix(float scaleX, float scaleY, float scaleZ);
 
-    void drawTexturedRect(IRenderCommandReceiver renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
+    void drawTexturedRect(float xStart, float yStart, float uMin, float vMin, float uMax,
                           float vMax, float width, float height, float zLevel, SpriteRotation rotation, RenderPass pass);
 
-    void drawTexturedRectWithColor(IRenderCommandReceiver renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
+    void drawTexturedRectWithColor(float xStart, float yStart, float uMin, float vMin, float uMax,
                                    float vMax, float width, float height, float zLevel, SpriteRotation rotation, RenderPass pass, Color color);
 
-    default void drawTexturedRect(IRenderCommandReceiver renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
+    default void drawTexturedRect(float xStart, float yStart, float uMin, float vMin, float uMax,
                                   float vMax, float width, float height, float zLevel, RenderPass pass)
     {
-        drawTexturedRect(renderer, xStart, yStart, uMin, vMin, uMax, vMax, width, height, zLevel, SpriteRotation.NONE, pass);
+        drawTexturedRect(xStart, yStart, uMin, vMin, uMax, vMax, width, height, zLevel, SpriteRotation.NONE, pass);
     }
 
-    default void drawTexturedRect(IRenderCommandReceiver renderer, float xStart, float yStart, float uMin, float vMin, float width,
+    default void drawTexturedRect(float xStart, float yStart, float uMin, float vMin, float width,
                                   float height, float zLevel, RenderPass pass)
     {
-        drawTexturedRect(renderer, xStart, yStart, uMin, vMin, 1, 1, width, height, zLevel, pass);
+        drawTexturedRect(xStart, yStart, uMin, vMin, 1, 1, width, height, zLevel, pass);
     }
 
-    default void drawTexturedRectWithColor(IRenderCommandReceiver renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
+    default void drawTexturedRectWithColor(float xStart, float yStart, float uMin, float vMin, float uMax,
                                            float vMax, float width, float height, float zLevel, RenderPass pass, Color color)
     {
-        drawTexturedRectWithColor(renderer, xStart, yStart, uMin, vMin, uMax, vMax, width, height, zLevel, SpriteRotation.NONE, pass, color);
+        drawTexturedRectWithColor(xStart, yStart, uMin, vMin, uMax, vMax, width, height, zLevel, SpriteRotation.NONE, pass, color);
     }
 
-    default void drawTexturedRectWithColor(IRenderCommandReceiver renderer, float xStart, float yStart, float uMin, float vMin, float width,
+    default void drawTexturedRectWithColor(float xStart, float yStart, float uMin, float vMin, float width,
                                            float height, float zLevel, RenderPass pass, Color color)
     {
-        drawTexturedRectWithColor(renderer, xStart, yStart, uMin, vMin, 1, 1, width, height, zLevel, pass, color);
+        drawTexturedRectWithColor(xStart, yStart, uMin, vMin, 1, 1, width, height, zLevel, pass, color);
     }
 
-    default void drawColoredEmptyRect(IRenderCommandReceiver renderer, float startX, float startY, float width, float height,
+    default void drawColoredEmptyRect(float startX, float startY, float width, float height,
                                       float zLevel, Color color, float thin, RenderPass pass)
     {
-        drawColoredRect(renderer, startX, startY, width - thin, thin, zLevel, color, pass);
-        drawColoredRect(renderer, startX + width - thin, startY, thin, height - thin, zLevel, color, pass);
-        drawColoredRect(renderer, startX + thin, startY + height - thin, width - thin, thin, zLevel, color, pass);
-        drawColoredRect(renderer, startX, startY + thin, thin, height - thin, zLevel, color, pass);
+        drawColoredRect(startX, startY, width - thin, thin, zLevel, color, pass);
+        drawColoredRect(startX + width - thin, startY, thin, height - thin, zLevel, color, pass);
+        drawColoredRect(startX + thin, startY + height - thin, width - thin, thin, zLevel, color, pass);
+        drawColoredRect(startX, startY + thin, thin, height - thin, zLevel, color, pass);
     }
 
-    void drawColoredRect(IRenderCommandReceiver renderer, float startX, float startY, float width, float height, float zLevel,
+    void drawColoredRect(float startX, float startY, float width, float height, float zLevel,
                          Color color, RenderPass pass);
 
-    void drawTexturedCircle(IRenderCommandReceiver renderer, float xStart, float yStart, float uMin, float vMin, float uMax,
+    void drawColoredQuad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, float zLevel, Color color, RenderPass pass);
+
+    void drawColoredTriangles(float zLevel, Color color, RenderPass pass, float... vertices);
+
+    void drawTexturedCircle(float xStart, float yStart, float uMin, float vMin, float uMax,
                             float vMax, float radius, float zLevel, RenderPass pass);
 
-    void drawTexturedCircle(IRenderCommandReceiver renderer, float xStart, float yStart, float uMin, float vMin, float radius,
+    void drawTexturedCircle(float xStart, float yStart, float uMin, float vMin, float radius,
                             float zLevel, RenderPass pass);
 
-    void drawColoredEmptyCircle(IRenderCommandReceiver renderer, float startX, float startY, float radius, float zLevel,
+    void drawColoredEmptyCircle(float startX, float startY, float radius, float zLevel,
                                 Color color, float thin, RenderPass pass);
 
-    void drawColoredCircle(IRenderCommandReceiver renderer, float startX, float startY, float radius, float zLevel, Color color, RenderPass pass);
+    void drawColoredCircle(float startX, float startY, float radius, float zLevel, Color color, RenderPass pass);
 
-    void drawColoredLine(IRenderCommandReceiver renderer, float startX, float startY, float endX, float endY, float lineWeight,
+    void drawColoredLine(float startX, float startY, float endX, float endY, float lineWeight,
                          float zLevel, Color color, RenderPass pass);
 
-    void drawColoredArc(IRenderCommandReceiver renderer, float centerX, float centerY, float radius, float zLevel, Color color, RectCorner corner, RenderPass pass);
+    void drawColoredArc(float centerX, float centerY, float radius, float zLevel, Color color, RectCorner corner, RenderPass pass);
 
     void startAlphaMask(double opacity);
 
