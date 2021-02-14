@@ -4,6 +4,7 @@ import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.BooleanFormFieldComponent;
 import net.voxelindustry.brokkgui.component.impl.ToggleButtonComponent;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.shape.Rectangle;
@@ -32,6 +33,8 @@ public class GuiRadioButton extends GuiToggleButton
 
         booleanFormFieldComponent = provide(BooleanFormFieldComponent.class);
         booleanFormFieldComponent.buttonSize(10);
+
+        textComponent().textPadding(RectBox.TWO);
     }
 
     public BooleanFormFieldComponent booleanFormFieldComponent()
