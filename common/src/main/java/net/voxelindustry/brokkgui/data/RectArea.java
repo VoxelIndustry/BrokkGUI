@@ -1,8 +1,9 @@
 package net.voxelindustry.brokkgui.data;
 
-import fr.ourten.teabeans.binding.Expression;
-import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.binding.BindingBase;
+import fr.ourten.teabeans.property.specific.FloatProperty;
 import fr.ourten.teabeans.value.ObservableValue;
+import fr.ourten.teabeans.value.specific.FloatValue;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 
 public class RectArea
@@ -20,8 +21,8 @@ public class RectArea
         RectArea rectArea = new RectArea();
         rectArea.transform = transform;
 
-        rectArea.startX = transform.xPosProperty().combine(transform.xTranslateProperty(), Float::sum);
-        rectArea.startY = transform.yPosProperty().combine(transform.yTranslateProperty(), Float::sum);
+        rectArea.startX = (FloatValue) transform.xPosProperty().add(transform.xTranslateProperty());
+        rectArea.startY = (FloatValue) transform.yPosProperty().add(transform.yTranslateProperty());
 
         rectArea.endX = rectArea.startX.combine(transform.widthProperty(),
                 (startX, width) -> startX + width * widthFrac);
@@ -35,10 +36,10 @@ public class RectArea
     {
         RectArea rectArea = new RectArea();
 
-        rectArea.startX = new Property<>(startX);
-        rectArea.startY = new Property<>(startY);
-        rectArea.endX = new Property<>(endX);
-        rectArea.endY = new Property<>(endY);
+        rectArea.startX = new FloatProperty(startX);
+        rectArea.startY = new FloatProperty(startY);
+        rectArea.endX = new FloatProperty(endX);
+        rectArea.endY = new FloatProperty(endY);
 
         return rectArea;
     }
@@ -48,11 +49,11 @@ public class RectArea
         if (transform == null)
             return;
 
-        ((Expression<Float>) startX).unbind(transform.xPosProperty(), transform.xTranslateProperty());
-        ((Expression<Float>) startY).unbind(transform.yPosProperty(), transform.yTranslateProperty());
+        ((BindingBase<Float>) startX).unbind(transform.xPosProperty(), transform.xTranslateProperty());
+        ((BindingBase<Float>) startY).unbind(transform.yPosProperty(), transform.yTranslateProperty());
 
-        ((Expression<Float>) endX).unbind(startX, transform.widthProperty());
-        ((Expression<Float>) endY).unbind(startY, transform.heightProperty());
+        ((BindingBase<Float>) endX).unbind(startX, transform.widthProperty());
+        ((BindingBase<Float>) endY).unbind(startY, transform.heightProperty());
     }
 
     public boolean isPointInside(float x, float y)

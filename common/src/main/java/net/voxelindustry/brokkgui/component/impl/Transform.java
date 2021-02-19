@@ -4,6 +4,7 @@ import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.property.specific.FloatProperty;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.data.Position;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
@@ -17,16 +18,16 @@ import java.util.stream.Stream;
 
 public class Transform extends GuiComponent
 {
-    private final Property<Float>   xPosProperty;
-    private final Property<Float>   yPosProperty;
-    private final Property<Float>   xTranslateProperty;
-    private final Property<Float>   yTranslateProperty;
-    private final Property<Float>   widthProperty;
-    private final Property<Float>   heightProperty;
-    private final Property<Float>   widthRatioProperty;
-    private final Property<Float>   heightRatioProperty;
+    private final FloatProperty     xPosProperty;
+    private final FloatProperty     yPosProperty;
+    private final FloatProperty     xTranslateProperty;
+    private final FloatProperty     yTranslateProperty;
+    private final FloatProperty     widthProperty;
+    private final FloatProperty     heightProperty;
+    private final FloatProperty     widthRatioProperty;
+    private final FloatProperty     heightRatioProperty;
     private final Expression<Float> zDepthProperty;
-    private final Property<Float>   zTranslateProperty;
+    private final FloatProperty     zTranslateProperty;
 
     private final Property<Rotation> rotationProperty;
 
@@ -43,24 +44,24 @@ public class Transform extends GuiComponent
 
     public Transform()
     {
-        xPosProperty = createRenderProperty(0F);
-        yPosProperty = createRenderProperty(0F);
+        xPosProperty = createRenderPropertyFloat(0F);
+        yPosProperty = createRenderPropertyFloat(0F);
 
-        xTranslateProperty = createRenderProperty(0F);
-        yTranslateProperty = createRenderProperty(0F);
+        xTranslateProperty = createRenderPropertyFloat(0F);
+        yTranslateProperty = createRenderPropertyFloat(0F);
 
-        widthProperty = createRenderProperty(0F);
-        heightProperty = createRenderProperty(0F);
+        widthProperty = createRenderPropertyFloat(0F);
+        heightProperty = createRenderPropertyFloat(0F);
 
-        widthRatioProperty = new Property<>(-1F);
-        heightRatioProperty = new Property<>(-1F);
+        widthRatioProperty = new FloatProperty(-1F);
+        heightRatioProperty = new FloatProperty(-1F);
 
         zDepthProperty = new Expression<>(() ->
         {
             element().markRenderDirty();
             return parentProperty().isPresent() ? parent().zLevel() : 0;
         });
-        zTranslateProperty = createRenderProperty(1F);
+        zTranslateProperty = createRenderPropertyFloat(1F);
 
         rotationProperty = createRenderProperty(Rotation.NONE);
         scaleProperty = createRenderProperty(null);
@@ -227,7 +228,7 @@ public class Transform extends GuiComponent
         return zDepthExpression().getValue() + zTranslate();
     }
 
-    public Property<Float> zTranslateProperty()
+    public FloatProperty zTranslateProperty()
     {
         return zTranslateProperty;
     }
@@ -242,42 +243,42 @@ public class Transform extends GuiComponent
         zTranslateProperty().setValue(zTranslate);
     }
 
-    public Property<Float> xPosProperty()
+    public FloatProperty xPosProperty()
     {
         return xPosProperty;
     }
 
-    public Property<Float> yPosProperty()
+    public FloatProperty yPosProperty()
     {
         return yPosProperty;
     }
 
-    public Property<Float> xTranslateProperty()
+    public FloatProperty xTranslateProperty()
     {
         return xTranslateProperty;
     }
 
-    public Property<Float> yTranslateProperty()
+    public FloatProperty yTranslateProperty()
     {
         return yTranslateProperty;
     }
 
-    public Property<Float> widthProperty()
+    public FloatProperty widthProperty()
     {
         return widthProperty;
     }
 
-    public Property<Float> heightProperty()
+    public FloatProperty heightProperty()
     {
         return heightProperty;
     }
 
-    public Property<Float> widthRatioProperty()
+    public FloatProperty widthRatioProperty()
     {
         return widthRatioProperty;
     }
 
-    public Property<Float> heightRatioProperty()
+    public FloatProperty heightRatioProperty()
     {
         return heightRatioProperty;
     }
