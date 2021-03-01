@@ -261,7 +261,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             if (mainPanel.isPointInside(mouseX, mouseY))
                 mainPanel.handleClick(mouseX, mouseY, key);
             else
-                GuiFocusManager.instance().requestFocus(null);
+                GuiFocusManager.instance.removeWindowFocus(this);
         }
 
         lastClickX = mouseX;
@@ -296,10 +296,10 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void onKeyTyped(char c, int key)
+    public void onTextTyped(String text)
     {
-        if (GuiFocusManager.instance().getFocusedNode() != null)
-            GuiFocusManager.instance().getFocusedNode().handleKeyInput(c, key);
+        if (GuiFocusManager.instance.focusedNode() != null && GuiFocusManager.instance.focusedWindow() == this)
+            GuiFocusManager.instance.focusedNode().handleTextTyped(text);
     }
 
     @Override
@@ -307,6 +307,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+
+        if (GuiFocusManager.instance.focusedNode() != null && GuiFocusManager.instance.focusedWindow() == this)
+        {
+            GuiFocusManager.instance.focusedNode().handleKeyPress(mouseX, mouseY, key);
+            return;
+        }
 
         GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
@@ -318,6 +324,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
         int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+
+        if (GuiFocusManager.instance.focusedNode() != null && GuiFocusManager.instance.focusedWindow() == this)
+        {
+            GuiFocusManager.instance.focusedNode().handleKeyRelease(mouseX, mouseY, key);
+            return;
+        }
 
         GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
@@ -387,7 +399,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onClose()
     {
-        GuiFocusManager.instance().requestFocus(null);
+        if (GuiFocusManager.instance.focusedWindow() == this)
+            GuiFocusManager.instance.requestFocus(null, this);
         listenerPool.clear();
         PopupHandler.getInstance(this).delete(this);
 

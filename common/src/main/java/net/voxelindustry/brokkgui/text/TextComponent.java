@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.text;
 import com.google.common.collect.Lists;
 import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.property.specific.FloatProperty;
 import fr.ourten.teabeans.value.Observable;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkcolor.Color;
@@ -36,6 +37,8 @@ public class TextComponent extends GuiComponent implements RenderComponent
             },
             textPaddingList.toArray(new Observable[0]));
 
+    private final FloatProperty textTranslateProperty = new FloatProperty();
+
     private final Property<RectAlignment> textAlignmentProperty = createRenderProperty(RectAlignment.MIDDLE_CENTER);
 
     private final Property<Boolean> multilineProperty = createRenderProperty(false);
@@ -63,6 +66,8 @@ public class TextComponent extends GuiComponent implements RenderComponent
             .fontName("default")
             .textColor(Color.WHITE)
             .create();
+
+    private boolean textMask;
 
     public TextComponent()
     {
@@ -97,11 +102,11 @@ public class TextComponent extends GuiComponent implements RenderComponent
         RectBox currentTextPadding = computedTextPadding();
 
         if (textAlignment().isLeft())
-            xPos += currentTextPadding.getLeft();
+            xPos += currentTextPadding.getLeft() + textTranslate();
         else if (textAlignment().isRight())
-            xPos += transform().width() - lazyTextWidth.getValue() - currentTextPadding.getRight();
+            xPos += transform().width() - lazyTextWidth.getValue() - currentTextPadding.getRight() - textTranslate();
         else
-            xPos += currentTextPadding.getLeft() + (transform().width() - currentTextPadding.getHorizontal()) / 2 - lazyTextWidth.getValue() / 2;
+            xPos += currentTextPadding.getLeft() + (transform().width() - (currentTextPadding.getHorizontal())) / 2 - lazyTextWidth.getValue() / 2 + textTranslate();
 
         if (textAlignment().isUp())
             yPos += currentTextPadding.getTop();
@@ -111,6 +116,13 @@ public class TextComponent extends GuiComponent implements RenderComponent
             yPos += currentTextPadding.getTop() + (transform().height() - currentTextPadding.getVertical()) / 2 - lazyTextHeight.getValue() / 2;
 
         updateTextSettings();
+
+        if (textMask())
+            renderer.pushMask(
+                    transform().leftPos() + currentTextPadding.getLeft(),
+                    transform().topPos() + currentTextPadding.getTop(),
+                    transform().rightPos() - currentTextPadding.getRight(),
+                    transform().bottomPos() - currentTextPadding.getBottom());
 
         if (multiline())
             renderer.drawStringMultiline(
@@ -128,6 +140,9 @@ public class TextComponent extends GuiComponent implements RenderComponent
                     transform().zLevel(),
                     RenderPass.MAIN,
                     textSettings);
+
+        if (textMask())
+            renderer.popMask();
     }
 
     public void updateTextSettings()
@@ -291,6 +306,11 @@ public class TextComponent extends GuiComponent implements RenderComponent
         return computedTextPadding;
     }
 
+    public FloatProperty textTranslateProperty()
+    {
+        return textTranslateProperty;
+    }
+
     public Property<RectAlignment> textAlignmentProperty()
     {
         return textAlignmentProperty;
@@ -390,6 +410,11 @@ public class TextComponent extends GuiComponent implements RenderComponent
         return computedTextPadding.getValue();
     }
 
+    public float textTranslate()
+    {
+        return textTranslateProperty().getValue();
+    }
+
     public RectAlignment textAlignment()
     {
         return textAlignmentProperty().getValue();
@@ -410,6 +435,16 @@ public class TextComponent extends GuiComponent implements RenderComponent
     public void multiline(boolean multiline)
     {
         multilineProperty().setValue(multiline);
+    }
+
+    public boolean textMask()
+    {
+        return textMask;
+    }
+
+    public void textMask(boolean textMask)
+    {
+        this.textMask = textMask;
     }
 
     @RequiredOverride

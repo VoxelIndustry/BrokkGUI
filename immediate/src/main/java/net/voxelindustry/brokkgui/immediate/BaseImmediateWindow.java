@@ -225,7 +225,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void onKeyTyped(char c, int key)
+    public void onTextTyped(String text)
     {
 
     }

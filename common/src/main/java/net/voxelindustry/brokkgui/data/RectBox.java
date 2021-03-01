@@ -2,6 +2,9 @@ package net.voxelindustry.brokkgui.data;
 
 import java.util.Objects;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class RectBox
 {
     public static RectBox EMPTY = new RectBox(0);
@@ -75,6 +78,54 @@ public class RectBox
                 return getRight();
         }
         return 0;
+    }
+
+    public RectBox intersection(RectBox other)
+    {
+        return new RectBox(
+                max(top, other.top),
+                max(left, other.left),
+                min(bottom, other.bottom),
+                min(right, other.right));
+    }
+
+    public RectBox intersection(float left, float top, float right, float bottom)
+    {
+        return new RectBox(
+                max(this.top, top),
+                max(this.left, left),
+                min(this.bottom, bottom),
+                min(this.right, right));
+    }
+
+    public RectBox union(RectBox other)
+    {
+        return new RectBox(
+                min(top, other.top),
+                min(left, other.left),
+                max(bottom, other.bottom),
+                max(right, other.right));
+    }
+
+    public RectBox union(float left, float top, float right, float bottom)
+    {
+        return new RectBox(
+                min(this.top, top),
+                min(this.left, left),
+                max(this.bottom, bottom),
+                max(this.right, right));
+    }
+
+    public boolean intersect(RectBox other)
+    {
+        return left < other.left && right > other.right &&
+                bottom > other.bottom && top < other.top;
+    }
+
+    public boolean intersect(float left, float top, float right, float bottom)
+    {
+        return this.left < left && this.right > right &&
+                this.bottom > bottom && this.top < top;
     }
 
     @Override

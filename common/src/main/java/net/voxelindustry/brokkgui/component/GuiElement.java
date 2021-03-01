@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.component.impl.Transform;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.event.ComponentEvent;
@@ -76,6 +77,8 @@ public abstract class GuiElement implements IEventEmitter
 
     private boolean isRenderDirty      = true;
     private boolean isChildRenderDirty = true;
+
+    private RectBox renderMask;
 
     public GuiElement()
     {
@@ -155,8 +158,12 @@ public abstract class GuiElement implements IEventEmitter
 
         BrokkGuiPlatform.getInstance().getProfiler().preElementRender(this);
 
-        if (pass == RenderPass.BACKGROUND)
-            updateComponents.forEach(UpdateComponent::update);
+        boolean appliedMask = false;
+        if (pass == RenderPass.BACKGROUND && inheritedRenderMask() != RectBox.EMPTY)
+        {
+            renderer.pushMask(inheritedRenderMask());
+            appliedMask = true;
+        }
 
         boolean createdMatrix = false;
         if (transform().rotation() != Rotation.NONE && transform().rotation().getAngle() % 360 != 0)
@@ -205,6 +212,9 @@ public abstract class GuiElement implements IEventEmitter
 
         if (createdMatrix)
             renderer.endMatrix();
+
+        if (pass == RenderPass.BACKGROUND && appliedMask)
+            renderer.popMask();
 
         BrokkGuiPlatform.getInstance().getProfiler().postElementRender(this);
 
@@ -326,9 +336,9 @@ public abstract class GuiElement implements IEventEmitter
                         originalMouseY));
     }
 
-    public void handleKeyInput(char c, int key)
+    public void handleTextTyped(String text)
     {
-        getEventDispatcher().dispatchEvent(KeyEvent.INPUT, new KeyEvent.Input(this, c, key));
+        getEventDispatcher().dispatchEvent(KeyEvent.TEXT_TYPED, new KeyEvent.TextTyped(this, text));
     }
 
     public void handleKeyPress(int mouseX, int mouseY, int key)
@@ -503,7 +513,7 @@ public abstract class GuiElement implements IEventEmitter
     public void setFocused()
     {
         if (!isDisabled() && isFocusable())
-            GuiFocusManager.instance().requestFocus(this);
+            GuiFocusManager.instance.requestFocus(this, window);
     }
 
     public void internalSetFocused(boolean focused)
@@ -599,6 +609,23 @@ public abstract class GuiElement implements IEventEmitter
         this.window = window;
 
         transform().children().forEach(child -> child.element().setWindow(getWindow()));
+    }
+
+    public RectBox inheritedRenderMask()
+    {
+        if (renderMask() == null)
+            return transform().parent() != null ? transform().parent().element().inheritedRenderMask() : RectBox.EMPTY;
+        return transform().parent().element().inheritedRenderMask() != RectBox.EMPTY ? transform().parent().element().inheritedRenderMask().intersection(renderMask()) : renderMask();
+    }
+
+    public RectBox renderMask()
+    {
+        return renderMask;
+    }
+
+    public void renderMask(RectBox box)
+    {
+        renderMask = box;
     }
 
     ////////////////
@@ -829,7 +856,7 @@ public abstract class GuiElement implements IEventEmitter
         if (isHovered())
             setHovered(false);
         if (isFocused())
-            GuiFocusManager.instance().requestFocus(null);
+            GuiFocusManager.instance.removeFocusedNode(this, window);
     }
 
     //////////////////

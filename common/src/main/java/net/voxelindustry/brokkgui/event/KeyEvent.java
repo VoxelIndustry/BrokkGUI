@@ -7,10 +7,10 @@ import net.voxelindustry.hermod.IEventEmitter;
 
 public class KeyEvent extends GuiInputEvent
 {
-    public static final EventType<KeyEvent> ANY     = new EventType<>(GuiInputEvent.ANY, "INPUT_KEY_EVENT");
-    public static final EventType<Input>    INPUT   = new EventType<>(ANY, "KEY_INPUT_EVENT");
-    public static final EventType<Press>    PRESS   = new EventType<>(ANY, "KEY_PRESS_EVENT");
-    public static final EventType<Release>  RELEASE = new EventType<>(ANY, "KEY_RELEASE_EVENT");
+    public static final EventType<KeyEvent>  ANY        = new EventType<>(GuiInputEvent.ANY, "INPUT_KEY_EVENT");
+    public static final EventType<TextTyped> TEXT_TYPED = new EventType<>(GuiInputEvent.ANY, "TEXT_TYPED_EVENT");
+    public static final EventType<Press>     PRESS      = new EventType<>(ANY, "KEY_PRESS_EVENT");
+    public static final EventType<Release>   RELEASE    = new EventType<>(ANY, "KEY_RELEASE_EVENT");
 
     private final int key;
 
@@ -27,7 +27,7 @@ public class KeyEvent extends GuiInputEvent
 
     public int getKey()
     {
-        return this.key;
+        return key;
     }
 
     public boolean isCtrlDown()
@@ -46,25 +46,25 @@ public class KeyEvent extends GuiInputEvent
         return new KeyEvent((GuiElement) source, getKey());
     }
 
-    public static class Input extends KeyEvent
+    public static class TextTyped extends GuiInputEvent
     {
-        private final char character;
+        private final String text;
 
-        public Input(GuiElement source, char character, int key)
+        public TextTyped(GuiElement source, String text)
         {
-            super(source, key);
-            this.character = character;
+            super(source);
+            this.text = text;
         }
 
-        public char getCharacter()
+        public String text()
         {
-            return this.character;
+            return text;
         }
 
         @Override
-        public KeyEvent.Input copy(IEventEmitter source)
+        public TextTyped copy(IEventEmitter source)
         {
-            return new KeyEvent.Input((GuiElement) source,getCharacter(), getKey());
+            return new TextTyped((GuiElement) source, text());
         }
     }
 

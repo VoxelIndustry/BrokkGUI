@@ -156,19 +156,19 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void onKeyTyped(char c, int key)
+    public void onTextTyped(String text)
     {
         if (inputEventFilter.isPresent())
         {
             if (inputEventFilter.get().test(first, InputType.KEY_TYPE))
-                first.onKeyTyped(c, key);
+                first.onTextTyped(text);
             if (inputEventFilter.get().test(second, InputType.KEY_TYPE))
-                second.onKeyTyped(c, key);
+                second.onTextTyped(text);
         }
         else
         {
-            first.onKeyTyped(c, key);
-            second.onKeyTyped(c, key);
+            first.onTextTyped(text);
+            second.onTextTyped(text);
         }
     }
 

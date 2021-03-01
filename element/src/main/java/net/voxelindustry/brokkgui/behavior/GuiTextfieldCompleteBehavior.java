@@ -1,9 +1,6 @@
 package net.voxelindustry.brokkgui.behavior;
 
 import net.voxelindustry.brokkgui.element.input.GuiTextfieldComplete;
-import net.voxelindustry.brokkgui.event.FocusEvent;
-import net.voxelindustry.brokkgui.event.KeyEvent;
-import net.voxelindustry.brokkgui.skin.GuiTextfieldCompleteSkin;
 
 public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extends GuiTextfieldBehavior<T>
 {
@@ -13,42 +10,38 @@ public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extend
     {
         super(model);
 
+/*
         model.getEventDispatcher().addHandler(FocusEvent.TYPE, this::onFocusEvent);
+*/
     }
 
-    private void onFocusEvent(FocusEvent e)
+/*    private void onFocusEvent(FocusEvent e)
     {
-        GuiTextfieldCompleteSkin skin = (GuiTextfieldCompleteSkin) this.getModel().getSkin();
+        GuiTextfieldCompleteSkin skin = (GuiTextfieldCompleteSkin) getModel().getSkin();
 
         if (!e.isFocused() && skin.isCompletePopupShown())
             skin.hideCompletePopup();
         else if (e.isFocused() && !skin.isCompletePopupShown() &&
-                this.getModel().getText().length() >= this.getModel().getCharBeforeCompletion())
+                getModel().getText().length() >= getModel().getCharBeforeCompletion())
             skin.showCompletePopup();
 
     }
 
-    @Override
     protected void onKeyTyped(KeyEvent.Input event)
     {
-        super.onKeyTyped(event);
+        GuiTextfieldCompleteSkin skin = (GuiTextfieldCompleteSkin) getModel().getSkin();
 
-        GuiTextfieldCompleteSkin skin = (GuiTextfieldCompleteSkin) this.getModel().getSkin();
-
-        if (this.getModel().getText().length() < this.getModel().getCharBeforeCompletion() &&
+        if (getModel().getText().length() < getModel().getCharBeforeCompletion() &&
                 skin.isCompletePopupShown())
             skin.hideCompletePopup();
-        else if (this.getModel().getText().length() >= this.getModel().getCharBeforeCompletion() &&
+        else if (getModel().getText().length() >= getModel().getCharBeforeCompletion() &&
                 !skin.isCompletePopupShown())
             skin.showCompletePopup();
     }
 
-    @Override
     protected void onKeyPressed(KeyEvent.Press event)
     {
-        super.onKeyPressed(event);
-
-        GuiTextfieldCompleteSkin skin = (GuiTextfieldCompleteSkin) this.getModel().getSkin();
+        GuiTextfieldCompleteSkin skin = (GuiTextfieldCompleteSkin) getModel().getSkin();
 
         if (!skin.isCompletePopupShown())
             return;
@@ -60,21 +53,21 @@ public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extend
             if (current == -1)
             {
                 skin.selectSuggestion(skin.getActualSuggestionSize() - 1);
-                tempText = this.getModel().getText();
-                this.getModel().setText(skin.getSelectedValue());
-                this.moveCursorToMax();
+                tempText = getModel().getText();
+                getModel().setText(skin.getSelectedValue());
+                moveCursorToMax();
             }
             else if (current > 0)
             {
                 skin.selectSuggestion(current - 1);
-                this.getModel().setText(skin.getSelectedValue());
-                this.moveCursorToMax();
+                getModel().setText(skin.getSelectedValue());
+                moveCursorToMax();
             }
             else
             {
                 skin.deselect();
-                this.getModel().setText(tempText);
-                this.moveCursorToMax();
+                getModel().setText(tempText);
+                moveCursorToMax();
             }
         }
         else if (event.getKey() == this.keyboard.getKeyCode("DOWN"))
@@ -82,18 +75,18 @@ public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extend
             int current = skin.getSelectedIndex();
 
             if (current == -1)
-                tempText = this.getModel().getText();
+                tempText = getModel().getText();
             if (current < skin.getActualSuggestionSize() - 1)
             {
                 skin.selectSuggestion(current + 1);
-                this.getModel().setText(skin.getSelectedValue());
-                this.moveCursorToMax();
+                getModel().setText(skin.getSelectedValue());
+                moveCursorToMax();
             }
             else
             {
                 skin.deselect();
-                this.getModel().setText(tempText);
-                this.moveCursorToMax();
+                getModel().setText(tempText);
+                moveCursorToMax();
             }
         }
         else if (event.getKey() == this.keyboard.getKeyCode("RETURN") ||
@@ -109,5 +102,5 @@ public class GuiTextfieldCompleteBehavior<T extends GuiTextfieldComplete> extend
     private void moveCursorToMax()
     {
         getModel().setCursorPos(getModel().getText().length());
-    }
+    }*/
 }

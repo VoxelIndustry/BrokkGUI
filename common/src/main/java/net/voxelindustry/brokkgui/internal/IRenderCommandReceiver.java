@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.internal;
 
 import net.voxelindustry.brokkcolor.Color;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.sprite.SpriteRotation;
@@ -94,4 +95,13 @@ public interface IRenderCommandReceiver extends ITextRenderer
     void endScissor();
 
     void bindTexture(Texture texture);
+
+    default void pushMask(RectBox mask)
+    {
+        pushMask(mask.getLeft(), mask.getTop(), mask.getRight(), mask.getBottom());
+    }
+
+    void pushMask(float leftPos, float topPos, float rightPos, float bottomPos);
+
+    void popMask();
 }

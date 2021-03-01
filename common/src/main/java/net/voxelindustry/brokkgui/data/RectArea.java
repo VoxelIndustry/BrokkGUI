@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.data;
 import fr.ourten.teabeans.binding.BindingBase;
 import fr.ourten.teabeans.property.specific.FloatProperty;
 import fr.ourten.teabeans.value.ObservableValue;
-import fr.ourten.teabeans.value.specific.FloatValue;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 
 public class RectArea
@@ -21,8 +20,8 @@ public class RectArea
         RectArea rectArea = new RectArea();
         rectArea.transform = transform;
 
-        rectArea.startX = (FloatValue) transform.xPosProperty().add(transform.xTranslateProperty());
-        rectArea.startY = (FloatValue) transform.yPosProperty().add(transform.yTranslateProperty());
+        rectArea.startX = (ObservableValue<Float>) transform.xPosProperty().add(transform.xTranslateProperty());
+        rectArea.startY = (ObservableValue<Float>) transform.yPosProperty().add(transform.yTranslateProperty());
 
         rectArea.endX = rectArea.startX.combine(transform.widthProperty(),
                 (startX, width) -> startX + width * widthFrac);

@@ -2,48 +2,60 @@ package net.voxelindustry.brokkgui;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.window.IGuiSubWindow;
+
+import java.util.Objects;
 
 /**
  * @author Ourten 8 oct. 2016
  */
 public class GuiFocusManager
 {
-    private static volatile GuiFocusManager INSTANCE;
+    public static final GuiFocusManager instance = new GuiFocusManager();
 
-    public static GuiFocusManager instance()
-    {
-        if (GuiFocusManager.INSTANCE == null)
-            synchronized (GuiFocusManager.class)
-            {
-                if (GuiFocusManager.INSTANCE == null)
-                    GuiFocusManager.INSTANCE = new GuiFocusManager();
-            }
-        return GuiFocusManager.INSTANCE;
-    }
+    private final Property<GuiElement>    focusedNodeProperty   = new Property<>(null);
+    private final Property<IGuiSubWindow> focusedWindowProperty = new Property<>(null);
 
-    private final Property<GuiElement> focusedNodeProperty;
-
-    private GuiFocusManager()
-    {
-        focusedNodeProperty = new Property<>(null);
-    }
-
-    public GuiElement getFocusedNode()
+    public GuiElement focusedNode()
     {
         return focusedNodeProperty.getValue();
     }
 
-    private void setFocusedNode(GuiElement node)
+    private void focusedNode(GuiElement node, IGuiSubWindow focusedWindow)
     {
         focusedNodeProperty.setValue(node);
+        focusedWindowProperty.setValue(focusedWindow);
     }
 
-    public void requestFocus(GuiElement guiElement)
+    public IGuiSubWindow focusedWindow()
     {
-        if (getFocusedNode() != null)
-            getFocusedNode().internalSetFocused(false);
-        setFocusedNode(guiElement);
-        if (getFocusedNode() != null)
-            getFocusedNode().internalSetFocused(true);
+        return focusedWindowProperty.getValue();
+    }
+
+    public void requestFocus(GuiElement guiElement, IGuiSubWindow focusedWindow)
+    {
+        if (focusedNode() != null)
+            focusedNode().internalSetFocused(false);
+        focusedNode(guiElement, guiElement == null ? null : focusedWindow);
+        if (focusedNode() != null)
+            focusedNode().internalSetFocused(true);
+    }
+
+    public void removeWindowFocus(IGuiSubWindow window)
+    {
+        if (Objects.equals(focusedWindowProperty.getValue(), window))
+        {
+            focusedNodeProperty.setValue(null);
+            focusedWindowProperty.setValue(null);
+        }
+    }
+
+    public void removeFocusedNode(GuiElement focusedNode, IGuiSubWindow focusedWindow)
+    {
+        if (Objects.equals(focusedWindowProperty.getValue(), focusedWindow) && Objects.equals(focusedNodeProperty.getValue(), focusedNode))
+        {
+            focusedNodeProperty.setValue(null);
+            focusedWindowProperty.setValue(null);
+        }
     }
 }

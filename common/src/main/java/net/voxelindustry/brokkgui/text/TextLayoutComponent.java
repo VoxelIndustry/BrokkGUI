@@ -10,8 +10,11 @@ public class TextLayoutComponent extends GuiComponent
 {
     private final Property<Boolean> expandToTextProperty = new Property<>(true);
 
-    private final Property<String> ellipsisProperty     = new Property<>("…");
-    private final Property<String> ellipsedTextProperty = new Property<>("");
+    private final Property<TextOverflow> textOverflowProperty = createRenderProperty(TextOverflow.NONE);
+
+    private final Property<String> ellipsisProperty = new Property<>("…");
+
+    private Binding<String> ellipsedTextBinding;
 
     private TextComponent textComponent;
 
@@ -26,43 +29,61 @@ public class TextLayoutComponent extends GuiComponent
         textComponent = element().get(TextComponent.class);
 
         bindSizeToText();
-        bindEllipsed();
+        bindOverflowLogic();
     }
 
     /////////////////////
     // LAYOUT BINDINGS //
     /////////////////////
 
-    private void bindEllipsed()
+    private void bindOverflowLogic()
     {
-        ellipsedTextProperty.bindProperty(new Binding<String>()
+        textOverflowProperty.addListener(obs ->
         {
+            if (textOverflow() == TextOverflow.TRUNCATE)
             {
-                super.bind(
-                        textComponent.textProperty(),
-                        expandToTextProperty(),
-                        transform().widthProperty(),
-                        ellipsisProperty(),
-                        textComponent.computedTextPaddingValue()
-                );
+                createOrUpdateEllipsedBinding();
+                textComponent.renderTextProperty().bindProperty(ellipsedTextBinding);
+            }
+            else if (ellipsedTextBinding != null && textComponent.renderTextProperty().isBoundTo(ellipsedTextBinding))
+            {
+                textComponent.renderTextProperty().unbind();
+                textComponent.renderTextProperty().bindProperty(textComponent.textProperty());
+                ellipsedTextBinding.unbindAll();
             }
 
-            @Override
-            public String computeValue()
-            {
-                textComponent.updateTextSettings();
-                if (!expandToText() && transform().width() < getExpandedWidth())
-                    return textHelper().trimStringToWidth(
-                            textComponent.text(),
-                            getAvailableTextWidth(),
-                            ellipsis(),
-                            textComponent.textSettings()
-                    );
-                return textComponent.text();
-            }
+            if (textOverflow() == TextOverflow.MASK)
+                textComponent.textMask(true);
         });
+    }
 
-        textComponent.renderTextProperty().bindProperty(ellipsedTextProperty);
+    private void createOrUpdateEllipsedBinding()
+    {
+        if (ellipsedTextBinding == null)
+        {
+            ellipsedTextBinding = new Binding<String>()
+            {
+
+                @Override
+                public String computeValue()
+                {
+                    textComponent.updateTextSettings();
+                    if (!expandToText() && transform().width() < getExpandedWidth())
+                        return textHelper().trimStringToWidth(
+                                textComponent.text(),
+                                getAvailableTextWidth(),
+                                ellipsis(),
+                                textComponent.textSettings()
+                        );
+                    return textComponent.text();
+                }
+            };
+        }
+        ellipsedTextBinding.bind(textComponent.textProperty(),
+                expandToTextProperty(),
+                transform().widthProperty(),
+                ellipsisProperty(),
+                textComponent.computedTextPaddingValue());
     }
 
     private void bindSizeToText()
@@ -85,7 +106,7 @@ public class TextLayoutComponent extends GuiComponent
             {
                 textComponent.updateTextSettings();
                 float stringWidth = textComponent.multiline() ? textHelper().getStringWidthMultiLine(textComponent.text(), textComponent.textSettings())
-                        : textHelper().getStringWidth(textComponent.text(), textComponent.textSettings());
+                                                              : textHelper().getStringWidth(textComponent.text(), textComponent.textSettings());
 
                 return stringWidth + textComponent.computedTextPadding().getHorizontal();
             }
@@ -107,7 +128,7 @@ public class TextLayoutComponent extends GuiComponent
             {
                 textComponent.updateTextSettings();
                 float stringHeight = textComponent.multiline() ? textHelper().getStringHeightMultiLine(textComponent.text(), textComponent.textSettings())
-                        : textHelper().getStringHeight(textComponent.textSettings());
+                                                               : textHelper().getStringHeight(textComponent.textSettings());
 
                 return stringHeight + textComponent.computedTextPadding().getVertical();
             }
@@ -139,6 +160,11 @@ public class TextLayoutComponent extends GuiComponent
         return expandToTextProperty;
     }
 
+    public Property<TextOverflow> textOverflowProperty()
+    {
+        return textOverflowProperty;
+    }
+
     ////////////
     // VALUES //
     ////////////
@@ -168,5 +194,15 @@ public class TextLayoutComponent extends GuiComponent
             transform().heightProperty().unbind();
         }
         expandToTextProperty().setValue(expandToText);
+    }
+
+    public TextOverflow textOverflow()
+    {
+        return textOverflowProperty().getValue();
+    }
+
+    public void textOverflow(TextOverflow textOverflow)
+    {
+        textOverflowProperty().setValue(textOverflow);
     }
 }

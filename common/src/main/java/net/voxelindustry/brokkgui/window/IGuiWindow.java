@@ -45,7 +45,7 @@ public interface IGuiWindow extends IGuiSubWindow
 
     void onKeyPressed(int key);
 
-    void onKeyTyped(char c, int key);
+    void onTextTyped(String text);
 
     void onKeyReleased(int key);
 
