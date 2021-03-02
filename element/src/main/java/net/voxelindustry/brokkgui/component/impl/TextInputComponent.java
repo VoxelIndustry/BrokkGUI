@@ -74,15 +74,15 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             cursorPos += textHelper().getStringWidth(textComponent.text().substring(cursorPos()), textComponent.textSettings());
         else
         {
-            cursorPos += transform().width() / 2
+            cursorPos += -textComponent.computedTextPadding().getLeft() + transform().width() / 2
                     - textHelper().getStringWidth(textComponent.text(), textComponent.textSettings()) / 2
                     + textHelper().getStringWidth(textComponent.text().substring(0, cursorPos()), textComponent.textSettings());
         }
 
         RectBox textPadding = textComponent.computedTextPadding();
 
-        if (cursorPos < textPadding.getLeft())
-            textComponent.textTranslateProperty().set(textComponent.textTranslate() - (cursorPos - textPadding.getLeft()));
+        if (cursorPos < 0)
+            textComponent.textTranslateProperty().set(textComponent.textTranslate() - (cursorPos));
         else if (cursorPos > transform().width() - textPadding.getHorizontal())
             textComponent.textTranslateProperty().set(textComponent.textTranslate() + (transform().width() - textPadding.getHorizontal() - cursorPos));
     }
