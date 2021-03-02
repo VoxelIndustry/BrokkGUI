@@ -149,10 +149,14 @@ public abstract class GuiLabeled extends GuiSkinedElement
         return textComponent;
     }
 
+    public TextLayoutComponent textLayoutComponent()
+    {
+        return textLayoutComponent;
+    }
+
     ///////////////
     // DELEGATES //
     ///////////////
-
 
     public Property<String> ellipsisProperty()
     {
