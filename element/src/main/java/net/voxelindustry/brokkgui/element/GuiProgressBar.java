@@ -1,12 +1,9 @@
 package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.property.Property;
-import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectSide;
-import net.voxelindustry.brokkgui.skin.GuiProgressBarSkin;
-import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
 /**
  * @author Phenix246
@@ -23,7 +20,7 @@ public class GuiProgressBar extends GuiLabeled
         progressBarProgressDirection = new Property<>(RectSide.RIGHT);
 
         progressBarProgressProperty.setValue(progressRatio);
-        getTextAlignmentProperty().setValue(RectAlignment.MIDDLE_CENTER);
+        textAlignmentProperty().setValue(RectAlignment.MIDDLE_CENTER);
     }
 
     public GuiProgressBar(String text)
@@ -45,12 +42,6 @@ public class GuiProgressBar extends GuiLabeled
     public String type()
     {
         return "progress";
-    }
-
-    @Override
-    protected GuiSkinBase<?> makeDefaultSkin()
-    {
-        return new GuiProgressBarSkin<>(this, new GuiBehaviorBase<>(this));
     }
 
     public Property<Float> getProgressProperty()

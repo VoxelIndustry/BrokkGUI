@@ -220,8 +220,8 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
 
         result = result.substring(0, cursorPos() - 1);
         result += temp;
-        textComponent.text(result);
         cursorPos(cursorPos() - 1);
+        textComponent.text(result);
         return true;
     }
 
@@ -341,9 +341,11 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             return false;
         }
         int pos = previousWordPosition();
+        int previousCursorPos = cursorPos();
         String currentText = textComponent.text();
-        textComponent.text(currentText.substring(0, pos) + currentText.substring(cursorPos()));
+
         cursorPos(pos);
+        textComponent.text(currentText.substring(0, pos) + currentText.substring(previousCursorPos));
         return true;
     }
 

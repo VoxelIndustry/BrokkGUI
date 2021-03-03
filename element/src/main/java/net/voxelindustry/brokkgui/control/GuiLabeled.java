@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.control;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.LabelIconComponent;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
@@ -10,12 +11,10 @@ import net.voxelindustry.brokkgui.text.TextLayoutComponent;
 
 import javax.annotation.Nonnull;
 
-public abstract class GuiLabeled extends GuiSkinedElement
+public abstract class GuiLabeled extends GuiFather
 {
-    private final Property<GuiElement> iconProperty;
-    private final Property<RectSide>   iconSideProperty    = new Property<>(RectSide.LEFT);
-    private final Property<Float>      iconPaddingProperty = new Property<>(2F);
 
+    private LabelIconComponent  iconComponent;
     private TextComponent       textComponent;
     private TextLayoutComponent textLayoutComponent;
 
@@ -24,8 +23,8 @@ public abstract class GuiLabeled extends GuiSkinedElement
     public GuiLabeled(String text, GuiElement icon)
     {
         startingText = text;
-        iconProperty = new Property<>(icon);
 
+        iconComponent.icon(icon);
         textComponent.text(startingText);
 
         style().styleClass().add("text");
@@ -48,14 +47,16 @@ public abstract class GuiLabeled extends GuiSkinedElement
 
         textComponent = provide(TextComponent.class);
         textLayoutComponent = provide(TextLayoutComponent.class);
+
+        iconComponent = provide(LabelIconComponent.class);
     }
 
-    public Property<RectAlignment> getTextAlignmentProperty()
+    public Property<RectAlignment> textAlignmentProperty()
     {
         return textComponent().textAlignmentProperty();
     }
 
-    public Property<String> getTextProperty()
+    public Property<String> textProperty()
     {
         return textComponent.textProperty();
     }
@@ -65,37 +66,37 @@ public abstract class GuiLabeled extends GuiSkinedElement
         return textComponent().textPaddingProperty();
     }
 
-    public Property<GuiElement> getIconProperty()
+    public Property<GuiElement> iconProperty()
     {
-        return iconProperty;
+        return iconComponent.iconProperty();
     }
 
-    public Property<RectSide> getIconSideProperty()
+    public Property<RectSide> iconSideProperty()
     {
-        return iconSideProperty;
+        return iconComponent.iconSideProperty();
     }
 
-    public Property<Float> getIconPaddingProperty()
+    public Property<Float> iconPaddingProperty()
     {
-        return iconPaddingProperty;
+        return iconComponent.iconPaddingProperty();
     }
 
-    public RectAlignment getTextAlignment()
+    public RectAlignment textAlignment()
     {
-        return getTextAlignmentProperty().getValue();
+        return textAlignmentProperty().getValue();
     }
 
-    public void setTextAlignment(RectAlignment alignment)
+    public void textAlignment(RectAlignment alignment)
     {
-        getTextAlignmentProperty().setValue(alignment);
+        textAlignmentProperty().setValue(alignment);
     }
 
-    public String getText()
+    public String text()
     {
         return textComponent.text();
     }
 
-    public void setText(@Nonnull String text)
+    public void text(@Nonnull String text)
     {
         textComponent.text(text);
     }
@@ -105,44 +106,49 @@ public abstract class GuiLabeled extends GuiSkinedElement
         return textPaddingProperty().getValue();
     }
 
-    public void setTextPadding(RectBox textPadding)
+    public void textPadding(RectBox textPadding)
     {
         textPaddingProperty().setValue(textPadding);
     }
 
-    public GuiElement getIcon()
+    public GuiElement icon()
     {
-        return iconProperty.getValue();
+        return iconComponent.icon();
     }
 
-    public void setIcon(GuiElement icon)
+    public void icon(GuiElement icon)
     {
-        iconProperty.setValue(icon);
+        iconComponent.icon(icon);
     }
 
     public RectSide getIconSide()
     {
-        return iconSideProperty.getValue();
+        return iconComponent.iconSide();
     }
 
     public void setIconSide(RectSide iconSide)
     {
-        iconSideProperty.setValue(iconSide);
+        iconComponent.iconSide(iconSide);
     }
 
-    public float getIconPadding()
+    public float iconPadding()
     {
-        return iconPaddingProperty.getValue();
+        return iconComponent.iconPadding();
     }
 
-    public void setIconPadding(float iconPadding)
+    public void iconPadding(float iconPadding)
     {
-        iconPaddingProperty.setValue(iconPadding);
+        iconComponent.iconPadding(iconPadding);
     }
 
     ////////////////
     // COMPONENTS //
     ////////////////
+
+    public LabelIconComponent iconComponent()
+    {
+        return iconComponent;
+    }
 
     public TextComponent textComponent()
     {

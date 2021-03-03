@@ -5,7 +5,6 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.ToggleButtonComponent;
 import net.voxelindustry.brokkgui.control.GuiButtonBase;
 import net.voxelindustry.brokkgui.event.SelectEvent;
-import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 import net.voxelindustry.hermod.EventHandler;
 
 public class GuiToggleButton extends GuiButtonBase
@@ -74,13 +73,5 @@ public class GuiToggleButton extends GuiButtonBase
     public void setOnSelectEvent(EventHandler<SelectEvent> onSelectEvent)
     {
         toggleButtonComponent.setOnSelectEvent(onSelectEvent);
-    }
-
-    @Override
-    protected GuiSkinBase<?> makeDefaultSkin()
-    {
-        // FIXME : Delete this after removing skin system
-        // NOOP
-        return null;
     }
 }

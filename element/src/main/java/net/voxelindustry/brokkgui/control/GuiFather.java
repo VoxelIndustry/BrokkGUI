@@ -18,6 +18,8 @@ public abstract class GuiFather extends GuiElement implements IStyleParent
 {
     private Property<GuiOverflowPolicy> guiOverflowProperty;
 
+    private StyleComponent style;
+
     public GuiFather()
     {
         guiOverflowProperty = new Property<>(GuiOverflowPolicy.NONE);
@@ -33,6 +35,19 @@ public abstract class GuiFather extends GuiElement implements IStyleParent
             else
                 getScissorBox().setRenderPassPredicate(pass -> true);
         });
+    }
+
+    @Override
+    public void postConstruct()
+    {
+        super.postConstruct();
+
+        style = get(StyleComponent.class);
+    }
+
+    public StyleComponent style()
+    {
+        return style;
     }
 
     /**

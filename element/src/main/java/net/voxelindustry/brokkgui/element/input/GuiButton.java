@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.element.input;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiButtonBase;
-import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
 public class GuiButton extends GuiButtonBase
 {
@@ -25,13 +24,5 @@ public class GuiButton extends GuiButtonBase
     public String type()
     {
         return "button";
-    }
-
-    @Override
-    protected GuiSkinBase<?> makeDefaultSkin()
-    {
-        // FIXME : Delete this after removing skin system
-        // NOOP
-        return null;
     }
 }

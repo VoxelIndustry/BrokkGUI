@@ -1,10 +1,7 @@
 package net.voxelindustry.brokkgui.element;
 
-import net.voxelindustry.brokkgui.behavior.GuiBehaviorBase;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
-import net.voxelindustry.brokkgui.skin.GuiLabeledSkin;
-import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
 public class GuiLabel extends GuiLabeled
 {
@@ -27,11 +24,5 @@ public class GuiLabel extends GuiLabeled
     public String type()
     {
         return "label";
-    }
-
-    @Override
-    protected GuiSkinBase<?> makeDefaultSkin()
-    {
-        return new GuiLabeledSkin<>(this, new GuiBehaviorBase<>(this));
     }
 }

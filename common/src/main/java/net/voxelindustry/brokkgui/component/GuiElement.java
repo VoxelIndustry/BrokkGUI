@@ -94,7 +94,7 @@ public abstract class GuiElement implements IEventEmitter
         hoveredProperty = new Property<>(false);
 
         focusableProperty = new Property<>(false);
-        visibleProperty = new Property<>(true);
+        visibleProperty = transform().createRenderProperty(true);
         draggedProperty = new Property<>(false);
 
         opacityProperty = new Property<>(1D);

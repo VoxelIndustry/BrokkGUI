@@ -1,23 +1,22 @@
 package net.voxelindustry.brokkgui.element;
 
 import fr.ourten.teabeans.property.Property;
-import net.voxelindustry.brokkgui.behavior.GuiLinkBehavior;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.LinkComponent;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
-import net.voxelindustry.brokkgui.skin.GuiLabeledSkin;
-import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 
 /**
  * @author Ourten 15 oct. 2016
  */
 public class GuiLink extends GuiLabeled
 {
-    private final Property<String> urlProperty;
+    private LinkComponent linkComponent;
 
     public GuiLink(String url, String text, GuiElement icon)
     {
         super(text, icon);
-        urlProperty = new Property<>(url);
+
+        linkComponent.url(url);
     }
 
     public GuiLink(String url, String text)
@@ -36,29 +35,36 @@ public class GuiLink extends GuiLabeled
     }
 
     @Override
-    public String type()
+    public void postConstruct()
     {
-        return "type";
+        super.postConstruct();
+
+        linkComponent = provide(LinkComponent.class);
+    }
+
+    public LinkComponent linkComponent()
+    {
+        return linkComponent;
     }
 
     @Override
-    protected GuiSkinBase<?> makeDefaultSkin()
+    public String type()
     {
-        return new GuiLabeledSkin<>(this, new GuiLinkBehavior(this));
+        return "link";
     }
 
-    public Property<String> getUrlProperty()
+    public Property<String> urlProperty()
     {
-        return urlProperty;
+        return linkComponent.urlProperty();
     }
 
-    public String getUrl()
+    public String url()
     {
-        return getUrlProperty().getValue();
+        return linkComponent.url();
     }
 
-    public void setUrl(String URL)
+    public void url(String url)
     {
-        getUrlProperty().setValue(URL);
+        linkComponent.url(url);
     }
 }

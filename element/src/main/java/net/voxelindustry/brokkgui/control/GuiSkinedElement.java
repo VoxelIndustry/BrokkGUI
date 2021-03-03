@@ -6,7 +6,6 @@ import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 import net.voxelindustry.brokkgui.skin.IGuiSkinnable;
-import net.voxelindustry.brokkgui.style.StyleComponent;
 
 @Deprecated
 public abstract class GuiSkinedElement extends GuiFather implements IGuiSkinnable
@@ -14,7 +13,6 @@ public abstract class GuiSkinedElement extends GuiFather implements IGuiSkinnabl
     private final Property<GuiSkinBase<?>> skinProperty;
     private final Property<IGuiTooltip>    tooltipProperty;
 
-    private StyleComponent style;
 
     public GuiSkinedElement()
     {
@@ -35,18 +33,11 @@ public abstract class GuiSkinedElement extends GuiFather implements IGuiSkinnabl
     {
         super.postConstruct();
 
-        style = get(StyleComponent.class);
-
-        style.onStyleInit(() ->
+        style().onStyleInit(() ->
         {
             if (!skinProperty.isPresent())
                 skinProperty.setValue(makeDefaultSkin());
         });
-    }
-
-    public StyleComponent style()
-    {
-        return style;
     }
 
     @Override

@@ -4,46 +4,63 @@ import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Ourten 9 oct. 2016
  */
 public class RelativeBindingHelper
 {
-    public static void bindSizeRelative(Transform toBind, Transform parent, float widthRatio, float heightRatio)
+    public static void bindSizeRelative(Transform toBind,
+                                        Transform parent,
+                                        float widthRatio,
+                                        float heightRatio)
     {
         RelativeBindingHelper.bindWidthRelative(toBind, parent, widthRatio);
         RelativeBindingHelper.bindHeightRelative(toBind, parent, heightRatio);
     }
 
-    public static void bindWidthRelative(Transform toBind, Transform parent, float widthRatio)
+    public static void bindWidthRelative(Transform toBind,
+                                         Transform parent,
+                                         float widthRatio)
     {
         toBind.widthProperty().bindProperty(parent.widthProperty().map(width -> width * widthRatio));
     }
 
-    public static void bindHeightRelative(Transform toBind, Transform parent, float heightRatio)
+    public static void bindHeightRelative(Transform toBind,
+                                          Transform parent,
+                                          float heightRatio)
     {
         toBind.heightProperty().bindProperty(parent.heightProperty().map(height -> height * heightRatio));
     }
 
-    public static void bindSizeRelative(Transform toBind, Transform parent, ObservableValue<Float> widthRatio,
+    public static void bindSizeRelative(Transform toBind,
+                                        Transform parent,
+                                        ObservableValue<Float> widthRatio,
                                         ObservableValue<Float> heightRatio)
     {
         RelativeBindingHelper.bindWidthRelative(toBind, parent, widthRatio);
         RelativeBindingHelper.bindHeightRelative(toBind, parent, heightRatio);
     }
 
-    public static void bindWidthRelative(Transform toBind, Transform parent, ObservableValue<Float> widthRatio)
+    public static void bindWidthRelative(Transform toBind,
+                                         Transform parent,
+                                         ObservableValue<Float> widthRatio)
     {
         toBind.widthProperty().bindProperty(parent.widthProperty().combine(widthRatio, (width, ratio) -> width * ratio));
     }
 
-    public static void bindHeightRelative(Transform toBind, Transform parent, ObservableValue<Float> heightRatio)
+    public static void bindHeightRelative(Transform toBind,
+                                          Transform parent,
+                                          ObservableValue<Float> heightRatio)
     {
         toBind.heightProperty().bindProperty(parent.heightProperty().combine(heightRatio, (height, ratio) -> height * ratio));
     }
 
-    public static void bindToPos(Transform toBind, Transform parent, ObservableValue<Float> addX, ObservableValue<Float>
-            addY)
+    public static void bindToPos(Transform toBind,
+                                 Transform parent,
+                                 @Nullable ObservableValue<Float> addX,
+                                 @Nullable ObservableValue<Float> addY)
     {
         if (addX != null)
             toBind.xPosProperty()
@@ -63,7 +80,10 @@ public class RelativeBindingHelper
                     parent.yPosProperty(), parent.yTranslateProperty()));
     }
 
-    public static void bindToPos(Transform toBind, Transform parent, float addX, float addY)
+    public static void bindToPos(Transform toBind,
+                                 Transform parent,
+                                 float addX,
+                                 float addY)
     {
         toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(parent.xTranslateProperty(),
                 (x, translate) -> x + translate + addX));
@@ -73,10 +93,8 @@ public class RelativeBindingHelper
 
     public static void bindToPos(Transform toBind, Transform parent)
     {
-        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(parent.xTranslateProperty(),
-                Float::sum));
-        toBind.yPosProperty().bindProperty(parent.yPosProperty().combine(parent.yTranslateProperty(),
-                Float::sum));
+        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(parent.xTranslateProperty(), Float::sum));
+        toBind.yPosProperty().bindProperty(parent.yPosProperty().combine(parent.yTranslateProperty(), Float::sum));
     }
 
     public static void bindToCenter(Transform toBind, Transform parent)
