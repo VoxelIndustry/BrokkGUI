@@ -32,7 +32,7 @@ public class GuiTextField extends GuiFather
 
         setFocusable(true);
 
-        promptTextLabelProperty().addListener(((observable, oldValue, newValue) ->
+        promptTextLabelProperty().addChangeListener(((observable, oldValue, newValue) ->
         {
             if (oldValue != null)
             {
@@ -40,6 +40,8 @@ public class GuiTextField extends GuiFather
 
                 oldValue.visibleProperty().unbind();
                 oldValue.transform().widthProperty().unbind();
+                oldValue.transform().heightProperty().unbind();
+                oldValue.textComponent().removeTextPaddingProperty(textComponent.computedTextPaddingValue());
                 oldValue.style().removeStyleClass("text-field-prompt-text");
             }
             if (newValue != null)
@@ -49,6 +51,8 @@ public class GuiTextField extends GuiFather
                 newValue.style().addStyleClass("text-field-prompt-text");
                 newValue.expandToText(false);
                 newValue.transform().widthProperty().bindProperty(transform().widthProperty());
+                newValue.transform().heightProperty().bindProperty(transform().heightProperty());
+                newValue.textComponent().addTextPaddingProperty(textComponent().computedTextPaddingValue());
 
                 addChild(newValue);
 
@@ -56,7 +60,7 @@ public class GuiTextField extends GuiFather
             }
         }));
 
-        helperTextLabelProperty().addListener(((observable, oldValue, newValue) ->
+        helperTextLabelProperty().addChangeListener(((observable, oldValue, newValue) ->
         {
             if (oldValue != null)
             {
@@ -150,7 +154,7 @@ public class GuiTextField extends GuiFather
     {
         GuiLabel label = new GuiLabel();
         label.textAlignment(textAlignment());
-        label.textPadding(textComponent().textPadding());
+        label.textPadding(RectBox.EMPTY);
         return label;
     }
 

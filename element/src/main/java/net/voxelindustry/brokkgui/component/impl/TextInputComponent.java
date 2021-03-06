@@ -2,31 +2,39 @@ package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.property.specific.FloatProperty;
 import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
+import net.voxelindustry.brokkgui.animation.Animation;
+import net.voxelindustry.brokkgui.animation.Interpolators;
+import net.voxelindustry.brokkgui.animation.PropertyAnimation;
+import net.voxelindustry.brokkgui.animation.ValueInterpolators;
 import net.voxelindustry.brokkgui.component.GuiComponent;
+import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.data.RectBox;
+import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.event.CursorMoveEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent;
+import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.event.TextTypedEvent;
-import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.RenderPass;
+import net.voxelindustry.brokkgui.sprite.Texture;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.text.TextComponent;
 import net.voxelindustry.hermod.EventHandler;
 
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 
 public class TextInputComponent extends GuiComponent implements RenderComponent
 {
     private static final Pattern ALPHA_NUM_REGEX = Pattern.compile("[a-zA-Z0-9]");
-
-    protected final IKeyboardUtil keyboard = BrokkGuiPlatform.getInstance().getKeyboardUtil();
 
     private final Property<Boolean> editableProperty = new Property<>(true);
 
@@ -36,32 +44,149 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
     private EventHandler<TextTypedEvent>  onTextTyped;
     private EventHandler<CursorMoveEvent> onCursorMoveEvent;
 
-    private TextComponent textComponent;
+    private TextComponent  textComponent;
+    private StyleComponent styleComponent;
+
+    private final PropertyAnimation<Float> cursorAnimation;
+    private final FloatProperty            cursorOpacity = createRenderPropertyFloat(0);
+
+    public TextInputComponent()
+    {
+        cursorAnimation = PropertyAnimation.<Float>build()
+                .property(cursorOpacity)
+                .valueInterpolator(ValueInterpolators.IDENTITY)
+                .interpolator(Interpolators.QUAD_BOTH)
+                .startValue(0F)
+                .endValue(1F)
+                .maxCycles(Animation.INFINITE_CYCLES)
+                .reverse(true)
+                .duration(800, TimeUnit.MILLISECONDS)
+                .create();
+    }
 
     @Override
     public void attach(GuiElement element)
     {
         super.attach(element);
 
+        if (!element.has(TextComponent.class))
+            throw new GuiComponentException("Cannot attach TextInputComponent to an element not having TextComponent!");
+
+        if (!element.has(StyleComponent.class))
+            throw new GuiComponentException("Cannot attach TextInputComponent to an element not having StyleComponent!");
+
         textComponent = element.get(TextComponent.class);
+        styleComponent = element().get(StyleComponent.class);
 
         element.getEventDispatcher().addHandler(KeyEvent.TEXT_TYPED, this::onKeyTyped);
         element.getEventDispatcher().addHandler(KeyEvent.PRESS, this::onKeyPressed);
 
         ValueInvalidationListener onCursorMove = this::computeTextTranslateFromCursorPos;
 
-        transform().widthProperty().addListener(onCursorMove);
+        transform().widthProperty().addChangeListener(onCursorMove);
 
-        textComponent.textProperty().addListener(onCursorMove);
-        textComponent.textAlignmentProperty().addListener(onCursorMove);
+        textComponent.textProperty().addChangeListener(onCursorMove);
+        textComponent.textAlignmentProperty().addChangeListener(onCursorMove);
+        // Prevent stackoverflow by not triggering eager retrieval of binding value
         textComponent.computedTextPaddingValue().addListener(onCursorMove);
 
-        textComponent.boldProperty().addListener(onCursorMove);
-        textComponent.italicProperty().addListener(onCursorMove);
-        textComponent.fontProperty().addListener(onCursorMove);
-        textComponent.fontSizeProperty().addListener(onCursorMove);
+        textComponent.boldProperty().addChangeListener(onCursorMove);
+        textComponent.italicProperty().addChangeListener(onCursorMove);
+        textComponent.fontProperty().addChangeListener(onCursorMove);
+        textComponent.fontSizeProperty().addChangeListener(onCursorMove);
 
-        cursorPosProperty().addListener(onCursorMove);
+        cursorPosProperty().addChangeListener(onCursorMove);
+
+        styleComponent.registerProperty("cursor-color", Color.BLACK, Color.class);
+        styleComponent.registerProperty("cursor-texture", Texture.EMPTY, Texture.class);
+
+        element().focusedProperty().addListener(obs ->
+        {
+            if (element().isFocused())
+                cursorAnimation.restart();
+            else
+                cursorAnimation.pause();
+        });
+
+        getEventDispatcher().addHandler(ClickEvent.TYPE, this::handleClick);
+        getEventDispatcher().addHandler(ScrollEvent.TYPE, this::handleScroll);
+    }
+
+    private void handleScroll(ScrollEvent event)
+    {
+        if (event.scrollX() > 0)
+        {
+            if (textComponent.textTranslate() < 0)
+                textComponent.textTranslateProperty().set(min(0, textComponent.textTranslate() + event.scrollX() * 10));
+        }
+        else if (event.scrollX() < 0)
+        {
+            float textLength = textHelper().getStringWidth(textComponent.text(), textComponent.textSettings());
+
+            if (textLength + textComponent.textTranslate() > transform().width() - textComponent.computedTextPadding().getHorizontal())
+            {
+                float max = transform().width() - textComponent.computedTextPadding().getHorizontal() - textLength;
+                textComponent.textTranslateProperty().set(max(max, textComponent.textTranslate() + event.scrollX() * 10));
+            }
+        }
+    }
+
+    private void handleClick(ClickEvent event)
+    {
+        if (!element().isFocused())
+            return;
+
+        int cursorPos = findCursorPos(event.getMouseX(), event.getMouseY());
+
+        if (cursorPos != -1)
+            cursorPos(cursorPos);
+    }
+
+    private int findCursorPos(float x, float y)
+    {
+        RectBox textPadding = textComponent.computedTextPadding();
+        if (x < transform().leftPos() + textPadding.getLeft() ||
+                x > transform().rightPos() - textPadding.getRight())
+            return -1;
+
+        float currentPos = transform().leftPos() + textPadding.getLeft() + textComponent.textTranslate();
+        String text = textComponent.text();
+
+        int cursorPosFirstPart = findCursorPos(currentPos, x, text, 0, text.length() / 2);
+        if (cursorPosFirstPart != -1)
+            return cursorPosFirstPart;
+        int cursorPosLastPart = findCursorPos(
+                currentPos + textHelper().getStringWidth(text.substring(0, text.length() / 2), textComponent.textSettings()),
+                x,
+                text,
+                text.length() / 2,
+                text.length());
+
+        if (cursorPosLastPart != -1)
+            return cursorPosLastPart;
+        return text.length();
+    }
+
+    private int findCursorPos(float startOffset, float x, String text, int firstChar, int lastChar)
+    {
+        float currentPos = startOffset + textHelper().getStringWidth(text.substring(firstChar, lastChar), textComponent.textSettings());
+
+        if (x >= startOffset && x <= currentPos && lastChar - firstChar == 1)
+            return abs(x - startOffset) > abs(x - currentPos) ? lastChar : firstChar;
+        if (x > currentPos || x < startOffset)
+            return -1;
+
+        int distance = lastChar - firstChar;
+        int cursorPosFirstPart = findCursorPos(startOffset, x, text, firstChar, lastChar - distance / 2);
+        if (cursorPosFirstPart != -1)
+            return cursorPosFirstPart;
+
+        return findCursorPos(
+                startOffset + textHelper().getStringWidth(text.substring(firstChar, firstChar + distance / 2), textComponent.textSettings()),
+                x,
+                text,
+                firstChar + distance / 2,
+                lastChar);
     }
 
     private void computeTextTranslateFromCursorPos(Observable observable)
@@ -82,7 +207,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
         RectBox textPadding = textComponent.computedTextPadding();
 
         if (cursorPos < 0)
-            textComponent.textTranslateProperty().set(textComponent.textTranslate() - (cursorPos));
+            textComponent.textTranslateProperty().set(textComponent.textTranslate() - cursorPos);
         else if (cursorPos > transform().width() - textPadding.getHorizontal())
             textComponent.textTranslateProperty().set(textComponent.textTranslate() + (transform().width() - textPadding.getHorizontal() - cursorPos));
     }
@@ -123,21 +248,51 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
                 else if (textComponent.textAlignment().isDown())
                     yOffset = transform().height() - textHeight - textPadding.getBottom();
 
-                renderer.drawColoredRect(x + xOffset,
-                        y + yOffset,
-                        1,
-                        textHeight,
-                        transform().zLevel() + 1,
-                        getCursorColor(),
-                        RenderPass.FOREGROUND);
+                Texture cursorTexture = getCursorTexture();
+
+                if (cursorTexture != Texture.EMPTY)
+                {
+                    renderer.drawTexturedRectWithColor(
+                            x + xOffset,
+                            y + yOffset,
+                            cursorTexture.getUMin(),
+                            cursorTexture.getVMin(),
+                            cursorTexture.getUMax(),
+                            cursorTexture.getVMax(),
+                            1,
+                            textHeight,
+                            transform().zLevel() + 1,
+                            RenderPass.FOREGROUND,
+                            getCursorColor()
+                    );
+                }
+                else
+                {
+                    Color cursorColor = new Color(getCursorColor().getRed(),
+                            getCursorColor().getGreen(),
+                            getCursorColor().getBlue(),
+                            getCursorColor().getAlpha() * cursorOpacity.getValue());
+
+                    renderer.drawColoredRect(x + xOffset,
+                            y + yOffset,
+                            1,
+                            textHeight,
+                            transform().zLevel() + 1,
+                            cursorColor,
+                            RenderPass.FOREGROUND);
+                }
             }
         }
     }
 
     public Color getCursorColor()
     {
-        // TODO: Cursor CSS properties
-        return Color.WHITE;
+        return styleComponent.getValue("cursor-color", Color.class, Color.BLACK);
+    }
+
+    public Texture getCursorTexture()
+    {
+        return styleComponent.getValue("cursor-texture", Texture.class, Texture.EMPTY);
     }
 
     protected void onKeyTyped(KeyEvent.TextTyped event)
@@ -158,37 +313,37 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
         String oldText = textComponent.text();
         boolean contentChanged = false;
 
-        if (event.getKey() == keyboard.getKeyCode("DELETE"))
+        if (event.getKey() == keyboard().getKeyCode("DELETE"))
         {
             if (editable())
             {
-                if (keyboard.isCtrlKeyDown())
+                if (keyboard().isCtrlKeyDown())
                     contentChanged = deleteWordAfterCursor();
                 else
                     contentChanged = deleteAfterCursor();
             }
         }
-        else if (event.getKey() == keyboard.getKeyCode("BACK"))
+        else if (event.getKey() == keyboard().getKeyCode("BACK"))
         {
             if (editable())
             {
-                if (keyboard.isCtrlKeyDown())
+                if (keyboard().isCtrlKeyDown())
                     contentChanged = deleteWordBeforeCursor();
                 else
                     contentChanged = deleteFromCursor();
             }
         }
-        else if (event.getKey() == keyboard.getKeyCode("LEFT"))
-            if (keyboard.isCtrlKeyDown())
+        else if (event.getKey() == keyboard().getKeyCode("LEFT"))
+            if (keyboard().isCtrlKeyDown())
                 cursorPos(previousWordPosition());
             else
                 cursorPos(cursorPos() - 1);
-        else if (event.getKey() == keyboard.getKeyCode("RIGHT"))
-            if (keyboard.isCtrlKeyDown())
+        else if (event.getKey() == keyboard().getKeyCode("RIGHT"))
+            if (keyboard().isCtrlKeyDown())
                 cursorPos(nextWordPosition());
             else
                 cursorPos(cursorPos() + 1);
-        else if (event.getKey() == keyboard.getKeyCode("V")
+        else if (event.getKey() == keyboard().getKeyCode("V")
                 && BrokkGuiPlatform.getInstance().getKeyboardUtil().isCtrlKeyDown())
         {
             if (editable())
