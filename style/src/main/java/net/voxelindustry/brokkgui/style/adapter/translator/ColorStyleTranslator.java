@@ -109,7 +109,7 @@ public class ColorStyleTranslator implements IStyleTranslator<Color>
 
             if (ColorConstants.hasConstant(colorName))
             {
-                Color color = Color.from(ColorConstants.getColor(colorName));
+                Color color = ColorConstants.getColor(colorName).copy();
                 color.setAlpha(alpha);
                 return color;
             }
