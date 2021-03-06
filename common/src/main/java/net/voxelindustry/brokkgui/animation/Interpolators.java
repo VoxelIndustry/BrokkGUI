@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.animation;
 
 public class Interpolators
 {
-    public static final Interpolator DISCRETE = delta -> delta == 1f ? 1 : 0;
+    public static final Interpolator DISCRETE = delta -> delta == 1F ? 1 : 0;
 
     public static final Interpolator LINEAR = delta -> delta;
 

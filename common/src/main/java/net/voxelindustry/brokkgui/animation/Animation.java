@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class Animation implements ITicking, IEventEmitter
 {
+    public static final int INFINITE_CYCLES = -1;
+
     private long duration;
     private long startTime;
     private long elapsedTime;
@@ -48,26 +50,26 @@ public abstract class Animation implements ITicking, IEventEmitter
             startTime = currentMillis;
             elapsedTime = 0;
 
-            getCurrentCycleProperty().setValue(getCurrentCycle() + 1);
-            if (getCurrentCycle() == maxCycles)
+            currentCycleProperty().setValue(currentCycle() + 1);
+            if (currentCycle() == maxCycles)
             {
                 complete();
                 return;
             }
         }
 
-        float currentProgress = reverse && getCurrentCycle() % 2 != 0 ? 1 - ((float) elapsedTime / duration) :
+        float currentProgress = reverse && currentCycle() % 2 != 0 ? 1 - ((float) elapsedTime / duration) :
                 ((float) elapsedTime / duration);
-        getProgressProperty().setValue(currentProgress);
-        getTotalProgressProperty().setValue((float) (getCurrentCycle() / getMaxCycles()) + (currentProgress / getMaxCycles()));
+        progressProperty().setValue(currentProgress);
+        totalProgressProperty().setValue((float) (currentCycle() / maxCycles()) + (currentProgress / maxCycles()));
     }
 
     public void setCurrentProgress(float progress)
     {
-        getCurrentCycleProperty().setValue((int) Math.floor(progress));
+        currentCycleProperty().setValue((int) Math.floor(progress));
 
-        getProgressProperty().setValue(progress - getCurrentCycle());
-        getTotalProgressProperty().setValue(progress / getMaxCycles());
+        progressProperty().setValue(progress - currentCycle());
+        totalProgressProperty().setValue(progress / maxCycles());
     }
 
     public void start()
@@ -88,31 +90,31 @@ public abstract class Animation implements ITicking, IEventEmitter
         if (!isRunning())
             BrokkGuiPlatform.getInstance().getTickSender().addTicking(this);
 
-        getStatusProperty().setValue(AnimationStatus.RUNNING);
-        getCurrentCycleProperty().setValue(0);
+        statusProperty().setValue(AnimationStatus.RUNNING);
+        currentCycleProperty().setValue(0);
         startTime = System.currentTimeMillis();
         elapsedTime = 0;
     }
 
     public void pause()
     {
-        getStatusProperty().setValue(AnimationStatus.PAUSED);
+        statusProperty().setValue(AnimationStatus.PAUSED);
         BrokkGuiPlatform.getInstance().getTickSender().removeTicking(this);
     }
 
     public void resume()
     {
-        if (getStatus() != AnimationStatus.PAUSED)
+        if (status() != AnimationStatus.PAUSED)
             return;
 
         BrokkGuiPlatform.getInstance().getTickSender().addTicking(this);
         startTime = System.currentTimeMillis() - elapsedTime;
-        getStatusProperty().setValue(AnimationStatus.RUNNING);
+        statusProperty().setValue(AnimationStatus.RUNNING);
     }
 
     public void complete()
     {
-        getStatusProperty().setValue(AnimationStatus.COMPLETED);
+        statusProperty().setValue(AnimationStatus.COMPLETED);
         BrokkGuiPlatform.getInstance().getTickSender().removeTicking(this);
 
         startTime = 0;
@@ -121,22 +123,22 @@ public abstract class Animation implements ITicking, IEventEmitter
             onFinishEvent.handle(new AnimationFinishEvent(this));
     }
 
-    public Property<AnimationStatus> getStatusProperty()
+    public Property<AnimationStatus> statusProperty()
     {
         return statusProperty;
     }
 
-    public Property<Integer> getCurrentCycleProperty()
+    public Property<Integer> currentCycleProperty()
     {
         return currentCycleProperty;
     }
 
-    public Property<Float> getProgressProperty()
+    public Property<Float> progressProperty()
     {
         return progressProperty;
     }
 
-    public Property<Float> getTotalProgressProperty()
+    public Property<Float> totalProgressProperty()
     {
         return totalProgressProperty;
     }
@@ -144,62 +146,62 @@ public abstract class Animation implements ITicking, IEventEmitter
     /**
      * @return a float between 0-1 representing the current progress of the current Cycle of this Animation
      */
-    public float getProgress()
+    public float progress()
     {
-        return getProgressProperty().getValue();
+        return progressProperty().getValue();
     }
 
     /**
      * @return the total progress of this Animation
      */
-    public float getTotalProgress()
+    public float totalProgress()
     {
-        return getTotalProgressProperty().getValue();
+        return totalProgressProperty().getValue();
     }
 
-    public AnimationStatus getStatus()
+    public AnimationStatus status()
     {
-        return getStatusProperty().getValue();
+        return statusProperty().getValue();
     }
 
     public boolean isRunning()
     {
-        return getStatus() == AnimationStatus.RUNNING;
+        return status() == AnimationStatus.RUNNING;
     }
 
     public boolean isCompleted()
     {
-        return getStatus() == AnimationStatus.COMPLETED;
+        return status() == AnimationStatus.COMPLETED;
     }
 
-    public long getDuration()
+    public long duration()
     {
         return duration;
     }
 
-    public void setDuration(long duration)
+    public void duration(long duration)
     {
         this.duration = duration;
     }
 
-    public long getStartTime()
+    public long startTime()
     {
         return startTime;
     }
 
-    public int getMaxCycles()
+    public int maxCycles()
     {
         return maxCycles;
     }
 
-    public void setMaxCycles(int maxCycles)
+    public void maxCycles(int maxCycles)
     {
         this.maxCycles = maxCycles;
     }
 
-    public int getCurrentCycle()
+    public int currentCycle()
     {
-        return getCurrentCycleProperty().getValue();
+        return currentCycleProperty().getValue();
     }
 
     public boolean isReverse()
@@ -207,22 +209,22 @@ public abstract class Animation implements ITicking, IEventEmitter
         return reverse;
     }
 
-    public void setReverse(boolean reverse)
+    public void reverse(boolean reverse)
     {
         this.reverse = reverse;
     }
 
-    public Animation getParent()
+    public Animation parent()
     {
         return parent;
     }
 
-    public void setParent(Animation parent)
+    public void parent(Animation parent)
     {
         this.parent = parent;
     }
 
-    public void setOnFinishEvent(EventHandler<AnimationFinishEvent> onFinishEvent)
+    public void onFinishEvent(EventHandler<AnimationFinishEvent> onFinishEvent)
     {
         if (eventDispatcher == null)
             eventDispatcher = new EventDispatcher();

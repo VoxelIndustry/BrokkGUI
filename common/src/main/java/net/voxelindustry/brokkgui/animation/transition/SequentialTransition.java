@@ -18,12 +18,12 @@ public class SequentialTransition extends Transition
     {
         super(node, 0, TimeUnit.MILLISECONDS);
 
-        this.setInterpolator(Interpolators.LINEAR);
+        setInterpolator(Interpolators.LINEAR);
 
         this.animations = Arrays.asList(animations);
-        this.setDuration(this.animations.stream()
-                .mapToLong(animation -> animation.getDuration() * animation.getMaxCycles()).sum());
-        this.animations.forEach(animation -> animation.setParent(this));
+        duration(this.animations.stream()
+                .mapToLong(animation -> animation.duration() * animation.maxCycles()).sum());
+        this.animations.forEach(animation -> animation.parent(this));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class SequentialTransition extends Transition
         float currentPart = 0;
         for (Animation anim : animations)
         {
-            float part = ((float) anim.getDuration() * anim.getMaxCycles()) / this.getDuration();
+            float part = ((float) anim.duration() * anim.maxCycles()) / duration();
 
             if (currentPart + part > interpolated)
             {

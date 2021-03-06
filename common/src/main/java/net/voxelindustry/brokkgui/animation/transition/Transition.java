@@ -10,19 +10,20 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class Transition extends Animation
 {
+    private final GuiElement node;
+
     private Interpolator interpolator;
-    private GuiElement   node;
 
     public Transition(GuiElement node, long duration, TimeUnit unit)
     {
         super(duration, unit);
 
-        this.interpolator = Interpolators.QUAD_BOTH;
+        interpolator = Interpolators.QUAD_BOTH;
 
-        this.getProgressProperty().addListener(obs -> apply(interpolator.apply(getProgress())));
+        progressProperty().addListener(obs -> apply(interpolator.apply(progress())));
 
         this.node = node;
-        this.node.getEventDispatcher().addHandler(DisposeEvent.TYPE, event -> this.complete());
+        this.node.getEventDispatcher().addHandler(DisposeEvent.TYPE, event -> complete());
     }
 
     protected abstract void apply(float interpolated);
@@ -39,8 +40,8 @@ public abstract class Transition extends Animation
 
     public GuiElement getNode()
     {
-        if (node == null && getParent() instanceof Transition)
-            return ((Transition) getParent()).getNode();
+        if (node == null && parent() instanceof Transition)
+            return ((Transition) parent()).getNode();
         return node;
     }
 }
