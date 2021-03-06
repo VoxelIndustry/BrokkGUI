@@ -260,11 +260,12 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void handleMouseScroll(double scrolled)
+    public void onScroll(int mouseX, int mouseY, double xOffset, double yOffset)
     {
         lastWheelX = mouseX;
         lastWheelY = mouseY;
-        lastWheelValue = scrolled;
+        // FIXME: Does not handle horizontal scrolling
+        lastWheelValue = yOffset;
     }
 
     @Override

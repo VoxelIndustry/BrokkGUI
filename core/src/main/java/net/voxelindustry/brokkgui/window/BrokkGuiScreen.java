@@ -285,14 +285,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void handleMouseScroll(double scrolled)
+    public void onScroll(int mouseX, int mouseY, double xOffset, double yOffset)
     {
-        int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
-        int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
-
         GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
-            hovered.handleMouseScroll(mouseX, mouseY, scrolled);
+            hovered.handleScroll(mouseX, mouseY, xOffset, yOffset);
     }
 
     @Override

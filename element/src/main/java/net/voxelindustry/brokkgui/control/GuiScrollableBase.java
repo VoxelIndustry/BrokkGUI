@@ -9,12 +9,20 @@ import net.voxelindustry.hermod.EventHandler;
 
 public abstract class GuiScrollableBase extends GuiSkinedElement
 {
-    private final Property<Float> scrollXProperty, scrollYProperty;
-    private final Property<Float> trueWidthProperty, trueHeightProperty;
-    private final Property<Float> scrollSpeedProperty;
-    private final Property<Float> gripXWidthProperty, gripXHeightProperty, gripYWidthProperty, gripYHeightProperty;
+    private final Property<Float> scrollXProperty;
+    private final Property<Float> scrollYProperty;
 
-    private final Property<GuiScrollbarPolicy> scrollXPolicyProperty, scrollYPolicyProperty;
+    private final Property<Float> trueWidthProperty;
+    private final Property<Float> trueHeightProperty;
+
+    private final Property<Float> scrollSpeedProperty;
+    private final Property<Float> gripXWidthProperty;
+    private final Property<Float> gripXHeightProperty;
+    private final Property<Float> gripYWidthProperty;
+    private final Property<Float> gripYHeightProperty;
+
+    private final Property<GuiScrollbarPolicy> scrollXPolicyProperty;
+    private final Property<GuiScrollbarPolicy> scrollYPolicyProperty;
 
     private final Property<Float> panSpeedProperty;
 

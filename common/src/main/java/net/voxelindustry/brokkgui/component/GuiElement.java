@@ -19,6 +19,7 @@ import net.voxelindustry.brokkgui.event.HoverEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.event.LayoutEvent;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
+import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.ScissorBox;
@@ -246,24 +247,28 @@ public abstract class GuiElement implements IEventEmitter
                     child.element().handleHover(mouseX, mouseY, false));
     }
 
-    public void handleMouseScroll(int mouseX, int mouseY, double scroll)
+    public void handleScroll(int mouseX, int mouseY, double xOffset, double yOffset)
     {
-        if (scroll != 0)
-            getEventDispatcher().dispatchEvent(GuiMouseEvent.WHEEL,
-                    new GuiMouseEvent.Wheel(this, mouseX, mouseY, (int) scroll));
+        if (xOffset != 0 || yOffset != 0)
+            getEventDispatcher().dispatchEvent(ScrollEvent.TYPE,
+                    new ScrollEvent(this, mouseX, mouseY, (float) xOffset, (float) yOffset));
 
-        transform.childrenProperty().getValue().stream().peek(child ->
+        for (Transform child : transform.childrenProperty().getValue())
         {
             if (child == null)
                 ExceptionTranslator.createNullChildInElement(this);
-        }).filter(child -> child.isPointInside(mouseX, mouseY))
-                .forEach(child -> child.element().handleMouseScroll(mouseX, mouseY, scroll));
+            if (child.isPointInside(mouseX, mouseY))
+                child.element().handleScroll(mouseX, mouseY, xOffset, yOffset);
+        }
     }
 
     public void handleClick(int mouseX, int mouseY, MouseInputCode key)
     {
         if (isDisabled() || !isVisible())
             return;
+
+        setFocused();
+
         switch (key)
         {
             case MOUSE_LEFT:
@@ -282,7 +287,6 @@ public abstract class GuiElement implements IEventEmitter
                 getEventDispatcher().dispatchEvent(ClickEvent.TYPE, new ClickEvent(this, mouseX, mouseY, key));
                 break;
         }
-        setFocused();
 
         transform.childrenProperty().getValue().stream().peek(child ->
         {

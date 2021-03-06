@@ -23,7 +23,7 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
     {
         super(model);
 
-        getModel().getEventDispatcher().addHandler(GuiMouseEvent.WHEEL, this::onMouseWheel);
+        getModel().getEventDispatcher().addHandler(ScrollEvent.TYPE, this::onScroll);
         getModel().getEventDispatcher().addHandler(ClickEvent.TYPE, this::onClick);
 
         getModel().getEventDispatcher().addHandler(GuiMouseEvent.DRAG_START, this::onMouseDragStart);
@@ -124,32 +124,32 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
         }
     }
 
-    private void handleScale(GuiMouseEvent.Wheel event)
+    private void handleScale(ScrollEvent event)
     {
         transform().childrenProperty().getModifiableValue().forEach(child ->
         {
-            float zoomValue = 0.05F * signum(event.getDwheel());
+            float zoomValue = 0.05F * signum((int) event.scrollY());
 
-            child.scalePivot(Position.absolute(event.getMouseX() - child.leftPos(), event.getMouseY() - child.topPos()));
+            child.scalePivot(Position.absolute(event.mouseX() - child.leftPos(), event.mouseY() - child.topPos()));
             child.scale(child.scaleX() + zoomValue);
         });
     }
 
-    private void handleScroll(GuiMouseEvent.Wheel event)
+    private void handleScroll(ScrollEvent event)
     {
         float scrolled;
-        boolean vertical = !BrokkGuiPlatform.getInstance().getKeyboardUtil().isShiftKeyDown();
+        boolean vertical = event.scrollY() != 0 || !BrokkGuiPlatform.getInstance().getKeyboardUtil().isShiftKeyDown();
 
         if (vertical)
         {
             if (transform().height() >= getModel().getTrueHeight())
                 return;
 
-            scrolled = event.getDwheel() / 10f * getModel().getScrollSpeed();
+            scrolled = event.scrollY() / 10F * getModel().getScrollSpeed();
             if (getModel().getScrollY() + scrolled <= transform().height() - getModel().getTrueHeight()
-                    && event.getDwheel() < 0)
+                    && event.scrollY() < 0)
                 scrolled = transform().height() - getModel().getTrueHeight() - getModel().getScrollY();
-            if (getModel().getScrollY() + scrolled >= 0 && event.getDwheel() > 0)
+            if (getModel().getScrollY() + scrolled >= 0 && event.scrollY() > 0)
                 scrolled = 0 - getModel().getScrollY();
 
             getModel().setScrollY(getModel().getScrollY() + scrolled);
@@ -159,25 +159,18 @@ public class GuiScrollableBehavior<C extends GuiScrollableBase> extends GuiBehav
             if (transform().width() >= getModel().getTrueWidth())
                 return;
 
-            scrolled = event.getDwheel() / 10f * getModel().getScrollSpeed();
+            scrolled = event.scrollX() / 10F * getModel().getScrollSpeed();
             if (getModel().getScrollX() + scrolled <= transform().width() - getModel().getTrueWidth()
-                    && event.getDwheel() < 0)
+                    && event.scrollX() < 0)
                 scrolled = transform().width() - getModel().getTrueWidth() - getModel().getScrollX();
-            if (getModel().getScrollX() + scrolled >= 0 && event.getDwheel() > 0)
+            if (getModel().getScrollX() + scrolled >= 0 && event.scrollX() > 0)
                 scrolled = 0 - getModel().getScrollX();
 
             getModel().setScrollX(getModel().getScrollX() + scrolled);
         }
-
-        if (vertical)
-            getModel().getEventDispatcher().dispatchEvent(ScrollEvent.TYPE,
-                    new ScrollEvent(getModel(), 0, scrolled));
-        else
-            getModel().getEventDispatcher().dispatchEvent(ScrollEvent.TYPE,
-                    new ScrollEvent(getModel(), scrolled, 0));
     }
 
-    private void onMouseWheel(GuiMouseEvent.Wheel event)
+    private void onScroll(ScrollEvent event)
     {
         if (getModel().isScalable())
         {

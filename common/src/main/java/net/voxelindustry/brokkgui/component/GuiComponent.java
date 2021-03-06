@@ -8,6 +8,8 @@ import fr.ourten.teabeans.property.specific.LongProperty;
 import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.impl.Transform;
+import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
+import net.voxelindustry.brokkgui.internal.IMouseUtil;
 import net.voxelindustry.brokkgui.internal.ITextHelper;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.IEventEmitter;
@@ -43,6 +45,16 @@ public abstract class GuiComponent implements IEventEmitter
         return BrokkGuiPlatform.getInstance().getTextHelper();
     }
 
+    protected IKeyboardUtil keyboard()
+    {
+        return BrokkGuiPlatform.getInstance().getKeyboardUtil();
+    }
+
+    protected IMouseUtil mouse()
+    {
+        return BrokkGuiPlatform.getInstance().getMouseUtil();
+    }
+
     @Override
     public EventDispatcher getEventDispatcher()
     {
@@ -63,21 +75,21 @@ public abstract class GuiComponent implements IEventEmitter
         return property;
     }
 
-    protected DoubleProperty createRenderPropertyFloat(double initialValue)
+    protected DoubleProperty createRenderPropertyDouble(double initialValue)
     {
         DoubleProperty property = new DoubleProperty(initialValue);
         property.addListener(this::onRenderPropertyChange);
         return property;
     }
 
-    protected IntProperty createRenderPropertyFloat(int initialValue)
+    protected IntProperty createRenderPropertyInt(int initialValue)
     {
         IntProperty property = new IntProperty(initialValue);
         property.addListener(this::onRenderPropertyChange);
         return property;
     }
 
-    protected LongProperty createRenderPropertyFloat(long initialValue)
+    protected LongProperty createRenderPropertyLong(long initialValue)
     {
         LongProperty property = new LongProperty(initialValue);
         property.addListener(this::onRenderPropertyChange);

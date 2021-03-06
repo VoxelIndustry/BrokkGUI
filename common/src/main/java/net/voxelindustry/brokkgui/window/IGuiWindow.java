@@ -55,5 +55,5 @@ public interface IGuiWindow extends IGuiSubWindow
 
     void onClickStop(int mouseX, int mouseY, MouseInputCode key);
 
-    void handleMouseScroll(double scrolled);
+    void onScroll(int mouseX, int mouseY, double xOffset, double yOffset);
 }

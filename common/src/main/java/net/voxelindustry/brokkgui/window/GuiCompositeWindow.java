@@ -241,19 +241,19 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void handleMouseScroll(double scrolled)
+    public void onScroll(int mouseX, int mouseY, double xOffset, double yOffset)
     {
         if (inputEventFilter.isPresent())
         {
             if (inputEventFilter.get().test(first, InputType.MOUSE_SCROLL))
-                first.handleMouseScroll(scrolled);
+                first.onScroll(mouseX, mouseY, xOffset, yOffset);
             if (inputEventFilter.get().test(second, InputType.MOUSE_SCROLL))
-                second.handleMouseScroll(scrolled);
+                second.onScroll(mouseX, mouseY, xOffset, yOffset);
         }
         else
         {
-            first.handleMouseScroll(scrolled);
-            second.handleMouseScroll(scrolled);
+            first.onScroll(mouseX, mouseY, xOffset, yOffset);
+            second.onScroll(mouseX, mouseY, xOffset, yOffset);
         }
     }
 
