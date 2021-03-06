@@ -71,9 +71,9 @@ public class GuiTooltip implements IGuiTooltip
     public void setOwner(GuiElement newOwner)
     {
         if (owner != null && owner != newOwner)
-            owner.hoveredProperty().removeListener(ownerHoverListener);
+            owner.hoveredProperty().removeChangeListener(ownerHoverListener);
         if (newOwner != null)
-            newOwner.hoveredProperty().addListener(ownerHoverListener);
+            newOwner.hoveredProperty().addChangeListener(ownerHoverListener);
         owner = newOwner;
     }
 

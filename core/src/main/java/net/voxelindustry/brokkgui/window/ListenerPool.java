@@ -39,7 +39,7 @@ public class ListenerPool
             valueChangeMap.put(obs, new ArrayList<>(4));
         valueChangeMap.get(obs).add(listener);
 
-        obs.addListener(listener);
+        obs.addChangeListener(listener);
     }
 
     public <T> void attach(ListProperty<T> obs, ListValueChangeListener<T> listener)
@@ -48,7 +48,7 @@ public class ListenerPool
             listValueChangeMap.put(obs, new ArrayList<>(4));
         listValueChangeMap.get(obs).add(listener);
 
-        obs.addListener(listener);
+        obs.addChangeListener(listener);
     }
 
     public void clear()
@@ -63,7 +63,7 @@ public class ListenerPool
         valueChangeMap.forEach((obs, listeners) ->
         {
             for (ValueChangeListener<?> listener : listeners)
-                obs.removeListener((ValueChangeListener<Object>) listener);
+                obs.removeChangeListener((ValueChangeListener<Object>) listener);
             listeners.clear();
         });
         valueChangeMap.clear();
@@ -71,7 +71,7 @@ public class ListenerPool
         listValueChangeMap.forEach((obs, listeners) ->
         {
             for (ListValueChangeListener<?> listener : listeners)
-                obs.removeListener((ListValueChangeListener<Object>) listener);
+                obs.removeChangeListener((ListValueChangeListener<Object>) listener);
             listeners.clear();
         });
         listValueChangeMap.clear();

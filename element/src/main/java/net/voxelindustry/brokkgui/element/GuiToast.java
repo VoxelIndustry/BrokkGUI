@@ -21,7 +21,7 @@ public class GuiToast extends GuiFather implements IGuiPopup
     {
         contentProperty = new Property<>(null);
 
-        contentProperty.addListener((obs, oldValue, newValue) ->
+        contentProperty.addChangeListener((obs, oldValue, newValue) ->
         {
             if (oldValue != null)
             {

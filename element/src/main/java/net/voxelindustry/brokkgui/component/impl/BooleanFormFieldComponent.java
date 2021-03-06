@@ -17,7 +17,7 @@ public class BooleanFormFieldComponent extends GuiComponent
 
     public BooleanFormFieldComponent()
     {
-        buttonNodeProperty.addListener((obs, oldValue, newValue) ->
+        buttonNodeProperty.addChangeListener((obs, oldValue, newValue) ->
         {
             if (newValue != null && !transform().hasChild(newValue.transform()))
             {

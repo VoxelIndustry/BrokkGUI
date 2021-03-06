@@ -55,7 +55,7 @@ public class SpriteProperties implements Consumer<StyleComponent>
         {
             StyleProperty<Resource> animationProperty = holder.getProperty("background-animation", Resource.class);
 
-            animationProperty.addListener((obs, oldValue, newValue) ->
+            animationProperty.addChangeListener((obs, oldValue, newValue) ->
             {
                 if (newValue != null)
                 {
@@ -67,14 +67,14 @@ public class SpriteProperties implements Consumer<StyleComponent>
 
             StyleProperty<Texture> textureProperty = holder.getProperty("background-texture", Texture.class);
 
-            textureProperty.addListener((obs, oldValue, newValue) ->
+            textureProperty.addChangeListener((obs, oldValue, newValue) ->
             {
                 ofNullable(holder.element().paint().backgroundAnimation()).ifPresent(sai -> sai.computeTextures(newValue));
             });
         }
         else
         {
-            holder.getProperty("foreground-animation", Resource.class).addListener((obs, oldValue, newValue) ->
+            holder.getProperty("foreground-animation", Resource.class).addChangeListener((obs, oldValue, newValue) ->
             {
                 if (newValue != null)
                 {
@@ -84,7 +84,7 @@ public class SpriteProperties implements Consumer<StyleComponent>
                 }
             });
 
-            holder.getProperty("foreground-texture", Texture.class).addListener((obs, oldValue, newValue) ->
+            holder.getProperty("foreground-texture", Texture.class).addChangeListener((obs, oldValue, newValue) ->
             {
                 ofNullable(holder.element().paint().foregroundAnimation()).ifPresent(sai -> sai.computeTextures(newValue));
             });

@@ -41,7 +41,7 @@ public class ToggleButtonComponent extends GuiComponent implements IGuiToggleabl
         if (style == null)
             throw new GuiComponentException("ToggleButtonComponent must be applied to an element after a StyleComponent. element=" + element.getClass().getSimpleName());
 
-        selectedProperty.addListener((obs, oldValue, newValue) ->
+        selectedProperty.addChangeListener((obs, oldValue, newValue) ->
         {
             if (newValue)
                 style.activePseudoClass().add("active");

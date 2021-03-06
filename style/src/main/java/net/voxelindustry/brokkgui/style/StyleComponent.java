@@ -58,8 +58,8 @@ public class StyleComponent extends GuiComponent
         activePseudoClass = new SetProperty<>(Collections.emptySet());
 
         ListValueChangeListener<String> styleListRefreshListener = this::valueListChanged;
-        styleClass.addListener(styleListRefreshListener);
-        activePseudoClass.addListener(styleListRefreshListener);
+        styleClass.addChangeListener(styleListRefreshListener);
+        activePseudoClass.addChangeListener(styleListRefreshListener);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class StyleComponent extends GuiComponent
     {
         if (element() != null)
         {
-            element().idProperty().removeListener(styleRefreshListener);
-            element().transform().parentProperty().removeListener(styleParentListener);
+            element().idProperty().removeChangeListener(styleRefreshListener);
+            element().transform().parentProperty().removeChangeListener(styleParentListener);
 
             element().hoveredProperty().removeListener(hoverListener);
             element().disabledProperty().removeListener(disableListener);
@@ -77,8 +77,8 @@ public class StyleComponent extends GuiComponent
 
         super.attach(element);
 
-        element.idProperty().addListener(styleRefreshListener);
-        element.transform().parentProperty().addListener(styleParentListener);
+        element.idProperty().addChangeListener(styleRefreshListener);
+        element.transform().parentProperty().addChangeListener(styleParentListener);
 
         // Properties override
         element().replaceOpacityProperty(registerProperty("opacity", 1D, Double.class));

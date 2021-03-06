@@ -19,7 +19,7 @@ public abstract class GuiSkinedElement extends GuiFather implements IGuiSkinnabl
         skinProperty = new Property<>(null);
         tooltipProperty = new Property<>(null);
 
-        tooltipProperty.addListener((obs, oldValue, newValue) ->
+        tooltipProperty.addChangeListener((obs, oldValue, newValue) ->
         {
             if (oldValue != null)
                 oldValue.setOwner(null);

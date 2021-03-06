@@ -45,7 +45,7 @@ public class ToastManager
         current = new Property<>(null);
         toastHolder = new GuiToast(null, 0L);
 
-        toastHolder.getCurrentTimeProperty().addListener((obs, oldValue, newValue) ->
+        toastHolder.getCurrentTimeProperty().addChangeListener((obs, oldValue, newValue) ->
         {
             if (!(newValue > toastHolder.getLifeTime()))
                 return;

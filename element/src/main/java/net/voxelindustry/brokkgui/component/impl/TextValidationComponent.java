@@ -23,7 +23,7 @@ public class TextValidationComponent extends GuiComponent
         super.attach(element);
 
         textComponent = element.get(TextComponent.class);
-        textComponent.textProperty().addListener(((observable, oldValue, newValue) -> validate()));
+        textComponent.textProperty().addChangeListener(((observable, oldValue, newValue) -> validate()));
     }
 
     public Property<Boolean> validProperty()

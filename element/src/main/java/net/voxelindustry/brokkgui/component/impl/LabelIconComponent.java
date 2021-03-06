@@ -37,7 +37,7 @@ public class LabelIconComponent extends GuiComponent
         StyleComponent styleComponent = element().get(StyleComponent.class);
 
         // Bindings
-        iconProperty().addListener((obs, oldValue, newValue) ->
+        iconProperty().addChangeListener((obs, oldValue, newValue) ->
         {
             if (oldValue != null)
             {

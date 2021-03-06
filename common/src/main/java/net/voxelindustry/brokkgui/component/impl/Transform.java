@@ -69,7 +69,7 @@ public class Transform extends GuiComponent
         parentProperty = new Property<>(null);
         childrenListProperty = new ListProperty<>(null);
 
-        childrenListProperty.addListener((ListValueChangeListener<Transform>) (obs, oldValue, newValue) ->
+        childrenListProperty.addChangeListener((ListValueChangeListener<Transform>) (obs, oldValue, newValue) ->
         {
             if (newValue != null)
                 newValue.setParent(this);
