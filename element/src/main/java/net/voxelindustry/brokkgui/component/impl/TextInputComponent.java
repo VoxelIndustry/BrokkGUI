@@ -5,7 +5,6 @@ import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.property.specific.FloatProperty;
 import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkcolor.Color;
-import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.animation.Animation;
 import net.voxelindustry.brokkgui.animation.Interpolators;
 import net.voxelindustry.brokkgui.animation.PropertyAnimation;
@@ -144,6 +143,24 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             cursorPos(cursorPos);
     }
 
+    private float findStartTextPos()
+    {
+        if (textComponent.textAlignment().isHorizontalCentered())
+            return transform().leftPos()
+                    + transform().width() / 2
+                    - textHelper().getStringWidth(textComponent.text(), textComponent.textSettings()) / 2
+                    + textComponent.textTranslate();
+        else if (textComponent.textAlignment().isLeft())
+            return transform().leftPos()
+                    + textComponent.computedTextPadding().getLeft()
+                    + textComponent.textTranslate();
+        else
+            return transform().rightPos()
+                    - textComponent.computedTextPadding().getRight()
+                    - textHelper().getStringWidth(textComponent.text(), textComponent.textSettings())
+                    - textComponent.textTranslate();
+    }
+
     private int findCursorPos(float x, float y)
     {
         RectBox textPadding = textComponent.computedTextPadding();
@@ -151,7 +168,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
                 x > transform().rightPos() - textPadding.getRight())
             return -1;
 
-        float currentPos = transform().leftPos() + textPadding.getLeft() + textComponent.textTranslate();
+        float currentPos = findStartTextPos();
         String text = textComponent.text();
 
         int cursorPosFirstPart = findCursorPos(currentPos, x, text, 0, text.length() / 2);
