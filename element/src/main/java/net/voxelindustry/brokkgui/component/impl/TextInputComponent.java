@@ -114,19 +114,21 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
 
     private void handleScroll(ScrollEvent event)
     {
-        if (event.scrollX() > 0)
+        float scroll = keyboard().isShiftKeyDown() ? event.scrollY() : event.scrollX();
+
+        if (scroll > 0)
         {
             if (textComponent.textTranslate() < 0)
-                textComponent.textTranslateProperty().set(min(0, textComponent.textTranslate() + event.scrollX() * 10));
+                textComponent.textTranslateProperty().set(min(0, textComponent.textTranslate() + scroll * 10));
         }
-        else if (event.scrollX() < 0)
+        else if (scroll < 0)
         {
             float textLength = textHelper().getStringWidth(textComponent.text(), textComponent.textSettings());
 
             if (textLength + textComponent.textTranslate() > transform().width() - textComponent.computedTextPadding().getHorizontal())
             {
                 float max = transform().width() - textComponent.computedTextPadding().getHorizontal() - textLength;
-                textComponent.textTranslateProperty().set(max(max, textComponent.textTranslate() + event.scrollX() * 10));
+                textComponent.textTranslateProperty().set(max(max, textComponent.textTranslate() + scroll * 10));
             }
         }
     }
