@@ -334,21 +334,32 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             }
         }
         else if (event.getKey() == keyboard().getKeyCode("LEFT"))
+        {
             if (keyboard().isCtrlKeyDown())
                 cursorPos(previousWordPosition());
             else
                 cursorPos(cursorPos() - 1);
+        }
         else if (event.getKey() == keyboard().getKeyCode("RIGHT"))
+        {
             if (keyboard().isCtrlKeyDown())
                 cursorPos(nextWordPosition());
             else
                 cursorPos(cursorPos() + 1);
-        else if (event.getKey() == keyboard().getKeyCode("V")
-                && BrokkGuiPlatform.getInstance().getKeyboardUtil().isCtrlKeyDown())
+        }
+        else if (event.getKey() == keyboard().getKeyCode("UP"))
+        {
+            cursorPos(0);
+        }
+        else if (event.getKey() == keyboard().getKeyCode("DOWN"))
+        {
+            cursorPos(textComponent.text().length());
+        }
+        else if (event.getKey() == keyboard().getKeyCode("V") && keyboard().isCtrlKeyDown())
         {
             if (editable())
             {
-                appendTextToCursor(BrokkGuiPlatform.getInstance().getKeyboardUtil().getClipboardString());
+                appendTextToCursor(keyboard().getClipboardString());
                 contentChanged = true;
             }
         }
