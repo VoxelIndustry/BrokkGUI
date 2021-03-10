@@ -8,7 +8,6 @@ import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.internal.ITextHelper;
-import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
 import net.voxelindustry.brokkgui.text.TextSettings;
 import net.voxelindustry.brokkgui.window.IGuiWindow;
@@ -64,7 +63,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void render(int mouseX, int mouseY, RenderTarget target, RenderPass... pass)
+    public void render(int mouseX, int mouseY, RenderTarget target)
     {
     }
 

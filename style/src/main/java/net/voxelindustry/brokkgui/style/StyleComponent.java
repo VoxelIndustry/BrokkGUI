@@ -1,6 +1,8 @@
 package net.voxelindustry.brokkgui.style;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.listener.ValueChangeListener;
 import fr.ourten.teabeans.listener.ValueInvalidationListener;
@@ -11,19 +13,19 @@ import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
+import net.voxelindustry.brokkgui.style.event.StyleComponentEvent;
 import net.voxelindustry.brokkgui.style.event.StyleRefreshEvent;
 import net.voxelindustry.brokkgui.style.shorthand.GenericShorthandProperty;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMapper;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
 import net.voxelindustry.brokkgui.style.tree.StyleEntry;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
-import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -32,8 +34,8 @@ import static net.voxelindustry.brokkgui.style.PseudoClassConstants.*;
 
 public class StyleComponent extends GuiComponent
 {
-    private Map<String, StyleProperty<?>>                 properties;
-    private List<Pair<Pattern, Consumer<StyleComponent>>> conditionalProperties;
+    private final Map<String, StyleProperty<?>>               properties;
+    private final Multimap<Pattern, Consumer<StyleComponent>> conditionalProperties;
 
     private Supplier<StyleList> styleSupplier;
 
@@ -42,17 +44,17 @@ public class StyleComponent extends GuiComponent
 
     private Runnable onStyleInit;
 
-    private ValueChangeListener<String>    styleRefreshListener = this::valueChanged;
-    private ValueChangeListener<Transform> styleParentListener  = this::parentChanged;
+    private final ValueChangeListener<String>    styleRefreshListener = this::valueChanged;
+    private final ValueChangeListener<Transform> styleParentListener  = this::parentChanged;
 
-    private ValueInvalidationListener focusListener   = this::focusListener;
-    private ValueInvalidationListener disableListener = this::disableListener;
-    private ValueInvalidationListener hoverListener   = this::hoverListener;
+    private final ValueInvalidationListener focusListener   = this::focusListener;
+    private final ValueInvalidationListener disableListener = this::disableListener;
+    private final ValueInvalidationListener hoverListener   = this::hoverListener;
 
     public StyleComponent()
     {
         properties = new HashMap<>();
-        conditionalProperties = new ArrayList<>();
+        conditionalProperties = ArrayListMultimap.create();
 
         styleClass = new SetProperty<>(Collections.emptySet());
         activePseudoClass = new SetProperty<>(Collections.emptySet());
@@ -76,6 +78,8 @@ public class StyleComponent extends GuiComponent
         }
 
         super.attach(element);
+
+        getEventDispatcher().dispatchEvent(StyleComponentEvent.TYPE, new StyleComponentEvent(element(), this));
 
         element.idProperty().addChangeListener(styleRefreshListener);
         element.transform().parentProperty().addChangeListener(styleParentListener);
@@ -227,10 +231,16 @@ public class StyleComponent extends GuiComponent
         if (properties.containsKey(property))
             return true;
 
-        if (conditionalProperties.stream().filter(entry -> entry.getKey().matcher(property).matches())
-                .peek(entry -> entry.getValue().accept(this)).count() > 0)
-            return true;
-        return false;
+        long count = 0L;
+        for (Entry<Pattern, Consumer<StyleComponent>> entry : conditionalProperties.entries())
+        {
+            if (entry.getKey().matcher(property).matches())
+            {
+                entry.getValue().accept(this);
+                count++;
+            }
+        }
+        return count > 0;
     }
 
     /**
@@ -245,8 +255,13 @@ public class StyleComponent extends GuiComponent
     {
         if (properties.containsKey(property))
             return HeldPropertyState.PRESENT;
-        if (conditionalProperties.stream().anyMatch(entry -> entry.getKey().matcher(property).matches()))
-            return HeldPropertyState.CONDITIONAL;
+
+        for (Pattern pattern : conditionalProperties.keySet())
+        {
+            if (pattern.matcher(property).matches())
+                return HeldPropertyState.CONDITIONAL;
+        }
+
         return HeldPropertyState.ABSENT;
     }
 
@@ -288,7 +303,7 @@ public class StyleComponent extends GuiComponent
     {
         String regex = '^' + matchKey.replaceAll("\\*", "\\\\S*") + '$';
 
-        conditionalProperties.add(Pair.of(Pattern.compile(regex), propertiesCreator));
+        conditionalProperties.put(Pattern.compile(regex), propertiesCreator);
     }
 
     /**
@@ -321,7 +336,7 @@ public class StyleComponent extends GuiComponent
      * For example border-width is a shorthand for border-top-width, border-right-width, border-bottom-width,
      * border-left-width
      * <p>
-     * This method will create and add the childs properties of the same type to the StyleHolder.
+     * This method will create and add the children properties of the same type to the StyleHolder.
      *
      * @param name         of the property
      * @param defaultValue initial value

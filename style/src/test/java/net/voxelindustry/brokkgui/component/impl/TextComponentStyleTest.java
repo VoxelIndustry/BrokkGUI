@@ -3,6 +3,8 @@ package net.voxelindustry.brokkgui.component.impl;
 import net.voxelindustry.brokkgui.component.RequiredOverride;
 import net.voxelindustry.brokkgui.text.TextComponent;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -15,6 +17,8 @@ import static org.assertj.core.api.Assertions.fail;
 
 class TextComponentStyleTest
 {
+    static final Logger logger = LoggerFactory.getLogger(TextComponentStyleTest.class);
+
     @Test
     void inspectClass_givenClass_thenShouldOverrideRequiredMethods()
     {
@@ -39,7 +43,10 @@ class TextComponentStyleTest
         }).collect(toList());
 
         if (missingMethods.isEmpty())
+        {
+            logger.info(() -> "Success. All " + requiredMethods.size() + " methods are overridden.");
             return;
+        }
 
         fail("TextComponentStyle must override all required methods.\nMissing methods:\n" + missingMethods.stream().map(method ->
         {

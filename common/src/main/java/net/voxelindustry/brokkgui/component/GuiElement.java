@@ -7,7 +7,6 @@ import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.component.impl.Transform;
-import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.ClickEvent;
 import net.voxelindustry.brokkgui.event.ComponentEvent;
@@ -21,8 +20,6 @@ import net.voxelindustry.brokkgui.event.LayoutEvent;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.RenderPass;
-import net.voxelindustry.brokkgui.shape.ScissorBox;
 import net.voxelindustry.brokkgui.window.IGuiSubWindow;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
@@ -57,8 +54,7 @@ public abstract class GuiElement implements IEventEmitter
     private EventHandler<DisableEvent> onDisableEvent;
     private EventHandler<HoverEvent>   onHoverEvent;
     private EventHandler<ClickEvent>   onClickEvent;
-
-    private final ValueInvalidationListener disableListener = this::disableListener;
+    private EventHandler<ScrollEvent>  onScrollEvent;
 
     private Property<Double> opacityProperty;
 
@@ -72,22 +68,16 @@ public abstract class GuiElement implements IEventEmitter
     private int draggedX;
     private int draggedY;
 
-    private ScissorBox scissorBox;
-
     private IGuiSubWindow window;
 
     private boolean isRenderDirty      = true;
     private boolean isChildRenderDirty = true;
-
-    private RectBox renderMask;
 
     public GuiElement()
     {
         componentMap = new IdentityHashMap<>();
         renderComponents = new ArrayList<>(1);
         updateComponents = new ArrayList<>(1);
-
-        transform = add(new Transform());
         idProperty = new Property<>(null);
 
         focusedProperty = new Property<>(false);
@@ -95,11 +85,12 @@ public abstract class GuiElement implements IEventEmitter
         hoveredProperty = new Property<>(false);
 
         focusableProperty = new Property<>(false);
-        visibleProperty = transform().createRenderProperty(true);
+        visibleProperty = createRenderProperty(true);
         draggedProperty = new Property<>(false);
 
         opacityProperty = new Property<>(1D);
 
+        transform = provide(Transform.class);
         ComponentEngine.instance().inject(this);
 
         paint = provide(Paint.class);
@@ -107,6 +98,7 @@ public abstract class GuiElement implements IEventEmitter
 
         postConstruct();
 
+        ValueInvalidationListener disableListener = this::disableListener;
         disabledProperty.addListener(disableListener);
     }
 
@@ -118,10 +110,6 @@ public abstract class GuiElement implements IEventEmitter
     public void dispose()
     {
         getEventDispatcher().dispatchEvent(DisposeEvent.TYPE, new DisposeEvent(this));
-
-        if (getScissorBox() != null)
-            getScissorBox().dispose();
-
         transform().children().forEach(childTransform -> childTransform.element().dispose());
     }
 
@@ -152,7 +140,7 @@ public abstract class GuiElement implements IEventEmitter
         isChildRenderDirty = true;
     }
 
-    public final void renderNode(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+    public final void renderNode(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
         if (!isVisible())
             return;
@@ -160,9 +148,14 @@ public abstract class GuiElement implements IEventEmitter
         BrokkGuiPlatform.getInstance().getProfiler().preElementRender(this);
 
         boolean appliedMask = false;
-        if (pass == RenderPass.BACKGROUND && inheritedRenderMask() != RectBox.EMPTY)
+        // -1 is the default value for an element with overflow=visible and no parent or a complete hierarchy of parents with overflow=visible.
+        if (transform().clipBoxLeft() != -1)
         {
-            renderer.pushMask(inheritedRenderMask());
+            renderer.pushMask(
+                    transform().clipBoxLeft(),
+                    transform().clipBoxTop(),
+                    transform().clipBoxRight(),
+                    transform().clipBoxBottom());
             appliedMask = true;
         }
 
@@ -201,12 +194,7 @@ public abstract class GuiElement implements IEventEmitter
         if (getOpacity() != 1)
             renderer.startAlphaMask(getOpacity());
 
-        boolean appliedScissor = getScissorBox() != null && getScissorBox().setupAndApply(renderer, pass);
-
-        renderContent(renderer, pass, mouseX, mouseY);
-
-        if (appliedScissor)
-            getScissorBox().end(renderer);
+        renderContent(renderer, mouseX, mouseY);
 
         if (getOpacity() != 1)
             renderer.closeAlphaMask();
@@ -214,7 +202,7 @@ public abstract class GuiElement implements IEventEmitter
         if (createdMatrix)
             renderer.endMatrix();
 
-        if (pass == RenderPass.BACKGROUND && appliedMask)
+        if (appliedMask)
             renderer.popMask();
 
         BrokkGuiPlatform.getInstance().getProfiler().postElementRender(this);
@@ -223,10 +211,10 @@ public abstract class GuiElement implements IEventEmitter
         isChildRenderDirty = false;
     }
 
-    protected void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+    protected void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
         for (RenderComponent component : renderComponents)
-            component.renderContent(renderer, pass, mouseX, mouseY);
+            component.renderContent(renderer, mouseX, mouseY);
     }
 
     public void handleHover(int mouseX, int mouseY, boolean hovered)
@@ -585,16 +573,6 @@ public abstract class GuiElement implements IEventEmitter
         return draggedY;
     }
 
-    public ScissorBox getScissorBox()
-    {
-        return scissorBox;
-    }
-
-    public void setScissorBox(ScissorBox scissorBox)
-    {
-        this.scissorBox = scissorBox;
-    }
-
     public IGuiSubWindow getWindow()
     {
         return window;
@@ -615,21 +593,16 @@ public abstract class GuiElement implements IEventEmitter
         transform().children().forEach(child -> child.element().setWindow(getWindow()));
     }
 
-    public RectBox inheritedRenderMask()
+    protected <T> Property<T> createRenderProperty(T initialValue)
     {
-        if (renderMask() == null)
-            return transform().parent() != null ? transform().parent().element().inheritedRenderMask() : RectBox.EMPTY;
-        return transform().parent().element().inheritedRenderMask() != RectBox.EMPTY ? transform().parent().element().inheritedRenderMask().intersection(renderMask()) : renderMask();
+        Property<T> property = new Property<>(initialValue);
+        property.addListener(this::onRenderPropertyChange);
+        return property;
     }
 
-    public RectBox renderMask()
+    private void onRenderPropertyChange(Observable observable)
     {
-        return renderMask;
-    }
-
-    public void renderMask(RectBox box)
-    {
-        renderMask = box;
+        markRenderDirty();
     }
 
     ////////////////
@@ -822,6 +795,13 @@ public abstract class GuiElement implements IEventEmitter
         getEventDispatcher().addHandler(ClickEvent.TYPE, this.onClickEvent);
     }
 
+    public void setOnScrollEvent(EventHandler<ScrollEvent> onScrollEvent)
+    {
+        getEventDispatcher().removeHandler(ScrollEvent.TYPE, this.onScrollEvent);
+        this.onScrollEvent = onScrollEvent;
+        getEventDispatcher().addHandler(ScrollEvent.TYPE, this.onScrollEvent);
+    }
+
     public EventHandler<ClickEvent> getOnClickEvent()
     {
         return onClickEvent;
@@ -840,6 +820,11 @@ public abstract class GuiElement implements IEventEmitter
     public EventHandler<HoverEvent> getOnHoverEvent()
     {
         return onHoverEvent;
+    }
+
+    public EventHandler<ScrollEvent> getOnScrollEvent()
+    {
+        return onScrollEvent;
     }
 
     @Override

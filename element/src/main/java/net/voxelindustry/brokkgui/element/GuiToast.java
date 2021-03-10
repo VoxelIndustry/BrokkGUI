@@ -7,7 +7,6 @@ import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.element.pane.GuiAbsolutePane;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.RenderPass;
 
 public class GuiToast extends GuiFather implements IGuiPopup
 {
@@ -53,16 +52,13 @@ public class GuiToast extends GuiFather implements IGuiPopup
     }
 
     @Override
-    public void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
-        super.renderContent(renderer, pass, mouseX, mouseY);
+        super.renderContent(renderer, mouseX, mouseY);
 
-        if (pass == RenderPass.MAIN)
-        {
-            if (millisStart == 0)
-                millisStart = System.currentTimeMillis();
-            currentTimeProperty.setValue((System.currentTimeMillis() - millisStart));
-        }
+        if (millisStart == 0)
+            millisStart = System.currentTimeMillis();
+        currentTimeProperty.setValue((System.currentTimeMillis() - millisStart));
     }
 
     @Override

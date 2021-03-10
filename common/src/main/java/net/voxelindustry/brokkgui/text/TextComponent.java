@@ -19,6 +19,9 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 
 import java.util.List;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class TextComponent extends GuiComponent implements RenderComponent
 {
     private final Property<String>  textProperty        = new Property<>("");
@@ -91,11 +94,8 @@ public class TextComponent extends GuiComponent implements RenderComponent
     }
 
     @Override
-    public void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
-        if (pass != RenderPass.MAIN)
-            return;
-
         float xPos = transform().leftPos();
         float yPos = transform().topPos();
 
@@ -119,10 +119,10 @@ public class TextComponent extends GuiComponent implements RenderComponent
 
         if (textMask())
             renderer.pushMask(
-                    transform().leftPos() + currentTextPadding.getLeft(),
-                    transform().topPos() + currentTextPadding.getTop(),
-                    transform().rightPos() - currentTextPadding.getRight(),
-                    transform().bottomPos() - currentTextPadding.getBottom());
+                    max(transform().clipBoxLeft(), transform().leftPos() + currentTextPadding.getLeft()),
+                    max(transform().clipBoxTop(), transform().topPos() + currentTextPadding.getTop()),
+                    min(transform().clipBoxRight(), transform().rightPos() - currentTextPadding.getRight()),
+                    min(transform().clipBoxBottom(), transform().bottomPos() - currentTextPadding.getBottom()));
 
         if (multiline())
             renderer.drawStringMultiline(

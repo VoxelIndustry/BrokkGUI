@@ -5,7 +5,6 @@ import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
-import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
@@ -82,10 +81,10 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void render(int mouseX, int mouseY, RenderTarget target, RenderPass... pass)
+    public void render(int mouseX, int mouseY, RenderTarget target)
     {
-        first.render(mouseX, mouseY, target, pass);
-        second.render(mouseX, mouseY, target, pass);
+        first.render(mouseX, mouseY, target);
+        second.render(mouseX, mouseY, target);
     }
 
     @Override

@@ -6,7 +6,6 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiTooltip;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.internal.PopupHandler;
-import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.hermod.EventDispatcher;
 
 public class GuiTooltip implements IGuiTooltip
@@ -98,7 +97,7 @@ public class GuiTooltip implements IGuiTooltip
     }
 
     @Override
-    public void renderNode(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderNode(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
         if (getContent() == null)
             return;
@@ -108,6 +107,6 @@ public class GuiTooltip implements IGuiTooltip
         if (getContent().transform().yPos() != mouseY + mouseYOffset)
             getContent().transform().yPosProperty().setValue(mouseY + mouseYOffset);
 
-        getContent().renderNode(renderer, pass, mouseX, mouseY);
+        getContent().renderNode(renderer, mouseX, mouseY);
     }
 }

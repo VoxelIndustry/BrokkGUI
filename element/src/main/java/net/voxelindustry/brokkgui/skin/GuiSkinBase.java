@@ -4,7 +4,6 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.control.GuiSkinedElement;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class GuiSkinBase<T extends GuiSkinedElement> implements IGuiSkin
     }
 
     @Override
-    public void render(RenderPass pass, IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    public void render(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
     }
 

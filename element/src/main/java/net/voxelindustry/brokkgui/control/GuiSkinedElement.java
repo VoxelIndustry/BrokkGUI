@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.control;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.IGuiTooltip;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
 import net.voxelindustry.brokkgui.skin.IGuiSkinnable;
 
@@ -41,11 +40,11 @@ public abstract class GuiSkinedElement extends GuiFather implements IGuiSkinnabl
     }
 
     @Override
-    public void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
         if (getSkin() != null)
-            getSkin().render(pass, renderer, mouseX, mouseY);
-        super.renderContent(renderer, pass, mouseX, mouseY);
+            getSkin().render(renderer, mouseX, mouseY);
+        super.renderContent(renderer, mouseX, mouseY);
     }
 
     protected abstract GuiSkinBase<?> makeDefaultSkin();

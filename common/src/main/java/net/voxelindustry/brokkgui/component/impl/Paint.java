@@ -9,11 +9,8 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.component.RequiredOverride;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.data.RectCorner;
-import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import net.voxelindustry.brokkgui.sprite.SpriteAnimationInstance;
@@ -45,16 +42,6 @@ public class Paint extends GuiComponent implements RenderComponent
     protected Property<RandomSpriteRotation> foregroundRotationProperty;
 
     protected Property<Color> borderColorProperty;
-
-    protected Property<Float> borderWidthLeftProperty;
-    protected Property<Float> borderWidthRightProperty;
-    protected Property<Float> borderWidthTopProperty;
-    protected Property<Float> borderWidthBottomProperty;
-
-    protected Property<Integer> borderRadiusTopLeftProperty;
-    protected Property<Integer> borderRadiusTopRightProperty;
-    protected Property<Integer> borderRadiusBottomLeftProperty;
-    protected Property<Integer> borderRadiusBottomRightProperty;
 
     protected Property<Texture> borderImageProperty;
     protected Property<RectBox> borderImageSliceProperty;
@@ -96,45 +83,42 @@ public class Paint extends GuiComponent implements RenderComponent
     }
 
     @Override
-    public void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
         float x = element().transform().leftPos();
         float y = element().transform().topPos();
         float z = element().transform().zLevel();
 
-        if (pass == RenderPass.BACKGROUND)
+        // BACKGROUND
+        if (hasTextureBackground() && backgroundTexture() != Texture.EMPTY)
         {
-            if (hasTextureBackground() && backgroundTexture() != Texture.EMPTY)
-            {
-                SpriteBackgroundDrawer.drawBackground(this, renderer);
-            }
-            else if (hasColorBackground() && backgroundColor().getAlpha() != 0)
-            {
-                Color background = backgroundColor();
-
-                shape.drawColored(element().transform(), renderer, x, y, background, z, backgroundPosition());
-            }
-
-            if (hasBorder())
-            {
-                if (hasBorderImage())
-                    ImageBorderDrawer.drawBorder(this, renderer);
-                else
-                    ColorBorderDrawer.drawBorder(this, renderer);
-            }
+            SpriteBackgroundDrawer.drawBackground(this, renderer);
         }
-        else if (pass == RenderPass.FOREGROUND)
+        else if (hasColorBackground() && backgroundColor().getAlpha() != 0)
         {
-            if (hasTextureForeground() && foregroundTexture() != Texture.EMPTY)
-            {
-                SpriteBackgroundDrawer.drawForeground(this, renderer);
-            }
-            else if (hasColorForeground() && foregroundColor().getAlpha() != 0)
-            {
-                Color foreground = foregroundColor();
+            Color background = backgroundColor();
 
-                shape.drawColored(element().transform(), renderer, x, y, foreground, z, foregroundPosition());
-            }
+            shape.drawColored(element().transform(), renderer, x, y, background, z, backgroundPosition());
+        }
+
+        if (hasBorder())
+        {
+            if (hasBorderImage())
+                ImageBorderDrawer.drawBorder(this, renderer);
+            else
+                ColorBorderDrawer.drawBorder(this, renderer);
+        }
+
+        // FOREGROUND
+        if (hasTextureForeground() && foregroundTexture() != Texture.EMPTY)
+        {
+            SpriteBackgroundDrawer.drawForeground(this, renderer);
+        }
+        else if (hasColorForeground() && foregroundColor().getAlpha() != 0)
+        {
+            Color foreground = foregroundColor();
+
+            shape.drawColored(element().transform(), renderer, x, y, foreground, z, foregroundPosition());
         }
     }
 
@@ -283,70 +267,6 @@ public class Paint extends GuiComponent implements RenderComponent
     }
 
     @RequiredOverride
-    public Property<Float> borderWidthLeftProperty()
-    {
-        if (borderWidthLeftProperty == null)
-            borderWidthLeftProperty = createRenderProperty(1F);
-        return borderWidthLeftProperty;
-    }
-
-    @RequiredOverride
-    public Property<Float> borderWidthRightProperty()
-    {
-        if (borderWidthRightProperty == null)
-            borderWidthRightProperty = createRenderProperty(1F);
-        return borderWidthRightProperty;
-    }
-
-    @RequiredOverride
-    public Property<Float> borderWidthTopProperty()
-    {
-        if (borderWidthTopProperty == null)
-            borderWidthTopProperty = createRenderProperty(1F);
-        return borderWidthTopProperty;
-    }
-
-    @RequiredOverride
-    public Property<Float> borderWidthBottomProperty()
-    {
-        if (borderWidthBottomProperty == null)
-            borderWidthBottomProperty = createRenderProperty(1F);
-        return borderWidthBottomProperty;
-    }
-
-    @RequiredOverride
-    public Property<Integer> borderRadiusTopLeftProperty()
-    {
-        if (borderRadiusTopLeftProperty == null)
-            borderRadiusTopLeftProperty = createRenderProperty(0);
-        return borderRadiusTopLeftProperty;
-    }
-
-    @RequiredOverride
-    public Property<Integer> borderRadiusTopRightProperty()
-    {
-        if (borderRadiusTopRightProperty == null)
-            borderRadiusTopRightProperty = createRenderProperty(0);
-        return borderRadiusTopRightProperty;
-    }
-
-    @RequiredOverride
-    public Property<Integer> borderRadiusBottomLeftProperty()
-    {
-        if (borderRadiusBottomLeftProperty == null)
-            borderRadiusBottomLeftProperty = createRenderProperty(0);
-        return borderRadiusBottomLeftProperty;
-    }
-
-    @RequiredOverride
-    public Property<Integer> borderRadiusBottomRightProperty()
-    {
-        if (borderRadiusBottomRightProperty == null)
-            borderRadiusBottomRightProperty = createRenderProperty(0);
-        return borderRadiusBottomRightProperty;
-    }
-
-    @RequiredOverride
     public Property<Texture> borderImageProperty()
     {
         if (borderImageProperty == null)
@@ -385,7 +305,7 @@ public class Paint extends GuiComponent implements RenderComponent
             borderImageFillProperty = createRenderProperty(Boolean.FALSE);
         return borderImageFillProperty;
     }
-    
+
     ////////////
     // VALUES //
     ////////////
@@ -610,88 +530,6 @@ public class Paint extends GuiComponent implements RenderComponent
     public void borderColor(Color color)
     {
         borderColorProperty().setValue(color);
-    }
-
-    @RequiredOverride
-    public float borderWidth()
-    {
-        return borderWidth(RectSide.UP);
-    }
-
-    @RequiredOverride
-    public float borderWidth(RectSide side)
-    {
-        switch (side)
-        {
-            case UP:
-                return borderWidthTopProperty().getValue();
-            case DOWN:
-                return borderWidthBottomProperty().getValue();
-            case LEFT:
-                return borderWidthLeftProperty().getValue();
-            case RIGHT:
-                return borderWidthRightProperty().getValue();
-            default:
-                return 0;
-        }
-    }
-
-    @RequiredOverride
-    public void borderWidth(RectSide side, float width)
-    {
-        switch (side)
-        {
-            case UP:
-                borderWidthTopProperty().setValue(width);
-                break;
-            case DOWN:
-                borderWidthBottomProperty().setValue(width);
-                break;
-            case LEFT:
-                borderWidthLeftProperty().setValue(width);
-                break;
-            case RIGHT:
-                borderWidthRightProperty().setValue(width);
-                break;
-        }
-    }
-
-    @RequiredOverride
-    public int borderRadius(RectCorner corner)
-    {
-        switch (corner)
-        {
-            case TOP_LEFT:
-                return borderRadiusTopLeftProperty().getValue();
-            case TOP_RIGHT:
-                return borderRadiusTopRightProperty().getValue();
-            case BOTTOM_LEFT:
-                return borderRadiusBottomLeftProperty().getValue();
-            case BOTTOM_RIGHT:
-                return borderRadiusBottomRightProperty().getValue();
-            default:
-                return 0;
-        }
-    }
-
-    @RequiredOverride
-    public void borderRadius(RectCorner corner, int width)
-    {
-        switch (corner)
-        {
-            case TOP_LEFT:
-                borderRadiusTopLeftProperty().setValue(width);
-                break;
-            case TOP_RIGHT:
-                borderRadiusTopRightProperty().setValue(width);
-                break;
-            case BOTTOM_LEFT:
-                borderRadiusBottomLeftProperty().setValue(width);
-                break;
-            case BOTTOM_RIGHT:
-                borderRadiusBottomRightProperty().setValue(width);
-                break;
-        }
     }
 
     @RequiredOverride

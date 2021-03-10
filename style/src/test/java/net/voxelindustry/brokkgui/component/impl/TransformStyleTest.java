@@ -14,17 +14,17 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.fail;
 
-class PaintStyleTest
+class TransformStyleTest
 {
-    static final Logger logger = LoggerFactory.getLogger(PaintStyleTest.class);
+    static final Logger logger = LoggerFactory.getLogger(TransformStyleTest.class);
 
     @Test
     void inspectClass_givenClass_thenShouldOverrideRequiredMethods()
     {
-        Class<PaintStyle> paintStyleClass = PaintStyle.class;
-        Class<Paint> paintClass = Paint.class;
+        Class<TransformStyle> transformStyleClass = TransformStyle.class;
+        Class<Transform> transformClass = Transform.class;
 
-        List<Method> requiredMethods = stream(paintClass.getMethods())
+        List<Method> requiredMethods = stream(transformClass.getMethods())
                 .filter(method -> method.isAnnotationPresent(RequiredOverride.class))
                 .collect(toList());
 
@@ -33,12 +33,12 @@ class PaintStyleTest
             Method override = null;
             try
             {
-                override = paintStyleClass.getMethod(method.getName(), method.getParameterTypes());
+                override = transformStyleClass.getMethod(method.getName(), method.getParameterTypes());
             } catch (NoSuchMethodException ignored)
             {
             }
 
-            return override == null || !override.getDeclaringClass().equals(paintStyleClass);
+            return override == null || !override.getDeclaringClass().equals(transformStyleClass);
         }).collect(toList());
 
         if (missingMethods.isEmpty())
@@ -47,7 +47,7 @@ class PaintStyleTest
             return;
         }
 
-        fail("PaintStyle must override all required methods.\nMissing methods:\n" + missingMethods.stream().map(method ->
+        fail("TransformStyle must override all required methods.\nMissing methods:\n" + missingMethods.stream().map(method ->
         {
             String parameters = method.getParameterTypes().length == 0 ? "void" :
                                 stream(method.getParameterTypes()).map(Class::toString).collect(joining(","));

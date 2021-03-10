@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.border;
 
 import net.voxelindustry.brokkgui.component.impl.Paint;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
@@ -11,23 +12,25 @@ public class ImageBorderDrawer
 {
     public static void drawBorder(Paint paint, IRenderCommandReceiver renderer)
     {
+        Transform transform = paint.transform();
+
         Texture texture = paint.borderImage();
-        float borderLeft = paint.borderWidth(RectSide.LEFT);
-        float borderRight = paint.borderWidth(RectSide.RIGHT);
-        float borderTop = paint.borderWidth(RectSide.UP);
-        float borderBottom = paint.borderWidth(RectSide.DOWN);
+        float borderLeft = transform.borderWidth(RectSide.LEFT);
+        float borderRight = transform.borderWidth(RectSide.RIGHT);
+        float borderTop = transform.borderWidth(RectSide.UP);
+        float borderBottom = transform.borderWidth(RectSide.DOWN);
 
         RectBox sliceBox = paint.borderImageSlice();
         RectBox widthBox = paint.borderImageWidth();
         RectBox outsetBox = paint.borderImageOutset();
 
-        float leftPos = paint.transform().leftPos() - outsetBox.getLeft();
-        float topPos = paint.transform().topPos() - outsetBox.getTop();
-        float rightPos = paint.transform().rightPos() + outsetBox.getRight();
-        float bottomPos = paint.transform().bottomPos() + outsetBox.getBottom();
+        float leftPos = transform.leftPos() - outsetBox.getLeft();
+        float topPos = transform.topPos() - outsetBox.getTop();
+        float rightPos = transform.rightPos() + outsetBox.getRight();
+        float bottomPos = transform.bottomPos() + outsetBox.getBottom();
 
-        float width = paint.transform().width() + outsetBox.getLeft() + outsetBox.getRight();
-        float height = paint.transform().height() + outsetBox.getTop() + outsetBox.getBottom();
+        float width = transform.width() + outsetBox.getLeft() + outsetBox.getRight();
+        float height = transform.height() + outsetBox.getTop() + outsetBox.getBottom();
 
         boolean doFill = paint.borderImageFill();
 
@@ -40,7 +43,7 @@ public class ImageBorderDrawer
             renderer.drawTexturedRect(leftPos, topPos - borderTop,
                     sliceBox.getLeft(), 0,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
-                    width, borderTop * widthBox.getTop(), paint.transform().zLevel(),
+                    width, borderTop * widthBox.getTop(), transform.zLevel(),
                     RenderPass.BACKGROUND);
         }
 
@@ -49,7 +52,7 @@ public class ImageBorderDrawer
             renderer.drawTexturedRect(leftPos, bottomPos - (widthBox.getBottom() - 1) * borderBottom,
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
                     1 - sliceBox.getRight(), 1,
-                    width, borderBottom * widthBox.getBottom(), paint.transform().zLevel(),
+                    width, borderBottom * widthBox.getBottom(), transform.zLevel(),
                     RenderPass.BACKGROUND);
         }
 
@@ -58,7 +61,7 @@ public class ImageBorderDrawer
             renderer.drawTexturedRect(leftPos - borderLeft, topPos,
                     0, sliceBox.getTop(),
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
-                    borderLeft * widthBox.getLeft(), height, paint.transform().zLevel(),
+                    borderLeft * widthBox.getLeft(), height, transform.zLevel(),
                     RenderPass.BACKGROUND);
         }
 
@@ -67,7 +70,7 @@ public class ImageBorderDrawer
             renderer.drawTexturedRect(rightPos - (widthBox.getRight() - 1) * borderRight, topPos,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
                     1, 1 - sliceBox.getBottom(),
-                    borderRight * widthBox.getRight(), height, paint.transform().zLevel(),
+                    borderRight * widthBox.getRight(), height, transform.zLevel(),
                     RenderPass.BACKGROUND);
         }
 
@@ -79,7 +82,7 @@ public class ImageBorderDrawer
                     0, 0,
                     sliceBox.getLeft(), sliceBox.getTop(),
                     borderLeft, borderTop,
-                    paint.transform().zLevel(),
+                    transform.zLevel(),
                     RenderPass.BACKGROUND);
         }
 
@@ -89,7 +92,7 @@ public class ImageBorderDrawer
                     1 - sliceBox.getRight(), 0,
                     1, sliceBox.getTop(),
                     borderRight, borderTop,
-                    paint.transform().zLevel(),
+                    transform.zLevel(),
                     RenderPass.BACKGROUND);
         }
 
@@ -99,7 +102,7 @@ public class ImageBorderDrawer
                     1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     1, 1,
                     borderRight, borderBottom,
-                    paint.transform().zLevel(),
+                    transform.zLevel(),
                     RenderPass.BACKGROUND);
         }
 
@@ -109,7 +112,7 @@ public class ImageBorderDrawer
                     0, 1 - sliceBox.getBottom(),
                     sliceBox.getLeft(), 1,
                     borderLeft, borderBottom,
-                    paint.transform().zLevel(),
+                    transform.zLevel(),
                     RenderPass.BACKGROUND);
         }
 
@@ -119,7 +122,7 @@ public class ImageBorderDrawer
                     sliceBox.getLeft(), sliceBox.getTop(), 1 - sliceBox.getRight(), 1 - sliceBox.getBottom(),
                     width - widthBox.getLeft() * borderLeft - widthBox.getRight() * borderRight,
                     height - widthBox.getTop() * borderTop - widthBox.getBottom() * borderBottom,
-                    paint.transform().zLevel(),
+                    transform.zLevel(),
                     RenderPass.BACKGROUND);
         }
     }

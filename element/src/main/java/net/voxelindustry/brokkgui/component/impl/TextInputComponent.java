@@ -232,74 +232,71 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
     }
 
     @Override
-    public void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
-        if (pass == RenderPass.FOREGROUND)
+        // Cursor
+        if (element().isFocused())
         {
-            // Cursor
-            if (element().isFocused())
+            float x = transform().leftPos();
+            float y = transform().topPos();
+            RectBox textPadding = textComponent.textPadding();
+            float textTranslate = textComponent.textTranslate();
+
+            float xOffset;
+
+            if (textComponent.textAlignment().isHorizontalCentered())
             {
-                float x = transform().leftPos();
-                float y = transform().topPos();
-                RectBox textPadding = textComponent.textPadding();
-                float textTranslate = textComponent.textTranslate();
+                float cursorPosX = textHelper().getStringWidth(textComponent.text().substring(0, cursorPos()), textComponent.textSettings());
+                xOffset = transform().width() / 2 - textHelper().getStringWidth(textComponent.text(), textComponent.textSettings()) / 2 + cursorPosX + textTranslate;
+            }
+            else if (textComponent.textAlignment().isLeft())
+            {
+                float cursorPosX = textHelper().getStringWidth(textComponent.text().substring(0, cursorPos()), textComponent.textSettings());
+                xOffset = cursorPosX + textPadding.getLeft() + textTranslate;
+            }
+            else
+                xOffset = transform().width() - textPadding.getRight() - textHelper().getStringWidth(textComponent.text().substring(cursorPos()), textComponent.textSettings()) - textComponent.textTranslate();
 
-                float xOffset;
+            float textHeight = textHelper().getStringHeight(textComponent.textSettings());
+            float yOffset = textPadding.getTop();
 
-                if (textComponent.textAlignment().isHorizontalCentered())
-                {
-                    float cursorPosX = textHelper().getStringWidth(textComponent.text().substring(0, cursorPos()), textComponent.textSettings());
-                    xOffset = transform().width() / 2 - textHelper().getStringWidth(textComponent.text(), textComponent.textSettings()) / 2 + cursorPosX + textTranslate;
-                }
-                else if (textComponent.textAlignment().isLeft())
-                {
-                    float cursorPosX = textHelper().getStringWidth(textComponent.text().substring(0, cursorPos()), textComponent.textSettings());
-                    xOffset = cursorPosX + textPadding.getLeft() + textTranslate;
-                }
-                else
-                    xOffset = transform().width() - textPadding.getRight() - textHelper().getStringWidth(textComponent.text().substring(cursorPos()), textComponent.textSettings()) - textComponent.textTranslate();
+            if (textComponent.textAlignment().isVerticalCentered())
+                yOffset = transform().height() / 2 - textHeight / 2;
+            else if (textComponent.textAlignment().isDown())
+                yOffset = transform().height() - textHeight - textPadding.getBottom();
 
-                float textHeight = textHelper().getStringHeight(textComponent.textSettings());
-                float yOffset = textPadding.getTop();
+            Texture cursorTexture = getCursorTexture();
 
-                if (textComponent.textAlignment().isVerticalCentered())
-                    yOffset = transform().height() / 2 - textHeight / 2;
-                else if (textComponent.textAlignment().isDown())
-                    yOffset = transform().height() - textHeight - textPadding.getBottom();
+            if (cursorTexture != Texture.EMPTY)
+            {
+                renderer.drawTexturedRectWithColor(
+                        x + xOffset,
+                        y + yOffset,
+                        cursorTexture.getUMin(),
+                        cursorTexture.getVMin(),
+                        cursorTexture.getUMax(),
+                        cursorTexture.getVMax(),
+                        1,
+                        textHeight,
+                        transform().zLevel() + 1,
+                        RenderPass.FOREGROUND,
+                        getCursorColor()
+                );
+            }
+            else
+            {
+                Color cursorColor = new Color(getCursorColor().getRed(),
+                        getCursorColor().getGreen(),
+                        getCursorColor().getBlue(),
+                        getCursorColor().getAlpha() * cursorOpacity.getValue());
 
-                Texture cursorTexture = getCursorTexture();
-
-                if (cursorTexture != Texture.EMPTY)
-                {
-                    renderer.drawTexturedRectWithColor(
-                            x + xOffset,
-                            y + yOffset,
-                            cursorTexture.getUMin(),
-                            cursorTexture.getVMin(),
-                            cursorTexture.getUMax(),
-                            cursorTexture.getVMax(),
-                            1,
-                            textHeight,
-                            transform().zLevel() + 1,
-                            RenderPass.FOREGROUND,
-                            getCursorColor()
-                    );
-                }
-                else
-                {
-                    Color cursorColor = new Color(getCursorColor().getRed(),
-                            getCursorColor().getGreen(),
-                            getCursorColor().getBlue(),
-                            getCursorColor().getAlpha() * cursorOpacity.getValue());
-
-                    renderer.drawColoredRect(x + xOffset,
-                            y + yOffset,
-                            1,
-                            textHeight,
-                            transform().zLevel() + 1,
-                            cursorColor,
-                            RenderPass.FOREGROUND);
-                }
+                renderer.drawColoredRect(x + xOffset,
+                        y + yOffset,
+                        1,
+                        textHeight,
+                        transform().zLevel() + 1,
+                        cursorColor,
+                        RenderPass.FOREGROUND);
             }
         }
     }

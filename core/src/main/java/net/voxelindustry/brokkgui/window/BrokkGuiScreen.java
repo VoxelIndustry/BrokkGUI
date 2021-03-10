@@ -165,13 +165,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void render(int mouseX, int mouseY, RenderTarget target, RenderPass... passes)
+    public void render(int mouseX, int mouseY, RenderTarget target)
     {
         switch (target)
         {
             case MAIN:
-                for (RenderPass pass : passes)
-                    mainPanel.renderNode(renderer, pass, mouseX, mouseY);
+                mainPanel.renderNode(renderer, mouseX, mouseY);
                 break;
             case WINDOW:
                 if (!windows.isEmpty())
@@ -181,13 +180,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                             renderer.drawColoredRect(0, 0, getWidth(),
                                     getHeight(), 5 + i, Color.BLACK.addAlpha(-0.5f), RenderPass.BACKGROUND);
 
-                        for (RenderPass pass : passes)
-                            windows.get(i).renderNode(renderer, pass, mouseX, mouseY);
+                        windows.get(i).renderNode(renderer, mouseX, mouseY);
                     }
                 break;
             case POPUP:
-                for (RenderPass pass : passes)
-                    PopupHandler.getInstance(this).renderPopupInPass(renderer, pass, mouseX, mouseY);
+                PopupHandler.getInstance(this).renderPopup(renderer, mouseX, mouseY);
                 break;
         }
     }

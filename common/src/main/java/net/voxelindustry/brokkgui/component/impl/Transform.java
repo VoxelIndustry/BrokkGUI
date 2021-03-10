@@ -5,16 +5,24 @@ import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.property.specific.FloatProperty;
+import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkgui.component.GuiComponent;
+import net.voxelindustry.brokkgui.component.RequiredOverride;
 import net.voxelindustry.brokkgui.data.Position;
+import net.voxelindustry.brokkgui.data.RectCorner;
+import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.data.Scale;
-import net.voxelindustry.brokkgui.shape.ScissorBox;
+import net.voxelindustry.brokkgui.event.TransformLayoutEvent;
+import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.brokkgui.util.MouseInBoundsChecker;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class Transform extends GuiComponent
 {
@@ -29,6 +37,17 @@ public class Transform extends GuiComponent
     private final Expression<Float> zDepthProperty;
     private final FloatProperty     zTranslateProperty;
 
+    protected Property<Float>   borderWidthLeftProperty;
+    protected Property<Float>   borderWidthRightProperty;
+    protected Property<Float>   borderWidthTopProperty;
+    protected Property<Float>   borderWidthBottomProperty;
+    protected Property<Integer> borderRadiusTopLeftProperty;
+    protected Property<Integer> borderRadiusTopRightProperty;
+    protected Property<Integer> borderRadiusBottomLeftProperty;
+    protected Property<Integer> borderRadiusBottomRightProperty;
+
+    private final Property<GuiOverflow> overflowProperty = createRenderProperty(GuiOverflow.VISIBLE);
+
     private final Property<Rotation> rotationProperty;
 
     private final Property<Scale> scaleProperty;
@@ -39,8 +58,6 @@ public class Transform extends GuiComponent
     private MouseInBoundsChecker mouseInBoundsChecker;
 
     private boolean bindChild = true;
-
-    private ScissorBox scissorBox;
 
     public Transform()
     {
@@ -78,6 +95,13 @@ public class Transform extends GuiComponent
         });
 
         mouseInBoundsChecker = MouseInBoundsChecker.DEFAULT;
+
+        widthProperty().addChangeListener(this::notifyParentOfLayoutChange);
+        heightProperty().addChangeListener(this::notifyParentOfLayoutChange);
+        xPosProperty().addChangeListener(this::notifyParentOfLayoutChange);
+        yPosProperty().addChangeListener(this::notifyParentOfLayoutChange);
+        xTranslateProperty().addChangeListener(this::notifyParentOfLayoutChange);
+        yTranslateProperty().addChangeListener(this::notifyParentOfLayoutChange);
     }
 
     ///////////////
@@ -116,9 +140,21 @@ public class Transform extends GuiComponent
             zDepthProperty.getDependencies().add(parent.zTranslateProperty());
 
             element().setWindow(parent.element().getWindow());
+            parent.notifyOfLayoutChange(this);
         }
         else
             element().setWindow(null);
+    }
+
+    public void notifyParentOfLayoutChange(Observable observable)
+    {
+        if (parent() != null)
+            parent().notifyOfLayoutChange(this);
+    }
+
+    public void notifyOfLayoutChange(Transform child)
+    {
+        getEventDispatcher().dispatchEvent(TransformLayoutEvent.TYPE, new TransformLayoutEvent(this, child));
     }
 
     /**
@@ -293,6 +329,75 @@ public class Transform extends GuiComponent
         return scaleProperty;
     }
 
+    public Property<GuiOverflow> overflowProperty()
+    {
+        return overflowProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> borderWidthLeftProperty()
+    {
+        if (borderWidthLeftProperty == null)
+            borderWidthLeftProperty = createRenderProperty(1F);
+        return borderWidthLeftProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> borderWidthRightProperty()
+    {
+        if (borderWidthRightProperty == null)
+            borderWidthRightProperty = createRenderProperty(1F);
+        return borderWidthRightProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> borderWidthTopProperty()
+    {
+        if (borderWidthTopProperty == null)
+            borderWidthTopProperty = createRenderProperty(1F);
+        return borderWidthTopProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> borderWidthBottomProperty()
+    {
+        if (borderWidthBottomProperty == null)
+            borderWidthBottomProperty = createRenderProperty(1F);
+        return borderWidthBottomProperty;
+    }
+
+    @RequiredOverride
+    public Property<Integer> borderRadiusTopLeftProperty()
+    {
+        if (borderRadiusTopLeftProperty == null)
+            borderRadiusTopLeftProperty = createRenderProperty(0);
+        return borderRadiusTopLeftProperty;
+    }
+
+    @RequiredOverride
+    public Property<Integer> borderRadiusTopRightProperty()
+    {
+        if (borderRadiusTopRightProperty == null)
+            borderRadiusTopRightProperty = createRenderProperty(0);
+        return borderRadiusTopRightProperty;
+    }
+
+    @RequiredOverride
+    public Property<Integer> borderRadiusBottomLeftProperty()
+    {
+        if (borderRadiusBottomLeftProperty == null)
+            borderRadiusBottomLeftProperty = createRenderProperty(0);
+        return borderRadiusBottomLeftProperty;
+    }
+
+    @RequiredOverride
+    public Property<Integer> borderRadiusBottomRightProperty()
+    {
+        if (borderRadiusBottomRightProperty == null)
+            borderRadiusBottomRightProperty = createRenderProperty(0);
+        return borderRadiusBottomRightProperty;
+    }
+
     /**
      * @return xPos, used for layout management, do not attempt to change the
      * property outside the layout scope.
@@ -426,6 +531,158 @@ public class Transform extends GuiComponent
     public float bottomPos()
     {
         return yPos() + yTranslate() + height();
+    }
+
+    public float borderBoxLeft()
+    {
+        return leftPos() - borderWidth(RectSide.LEFT);
+    }
+
+    public float borderBoxTop()
+    {
+        return topPos() - borderWidth(RectSide.UP);
+    }
+
+    public float borderBoxBottom()
+    {
+        return bottomPos() + borderWidth(RectSide.DOWN);
+    }
+
+    public float borderBoxRight()
+    {
+        return rightPos() + borderWidth(RectSide.RIGHT);
+    }
+
+    /**
+     * @return the most restrictive left pos of the clipBox between the left pos of this element borderbox or of its parent clipbox.
+     * If overflow is visible then the parent clipbox is used. In case of a visible overflow and no parent the value -1 is returned.
+     * The -1 special case is used to disable sending the clipBox command to the IRenderCommandReceiver
+     */
+    public float clipBoxLeft()
+    {
+        if (parentProperty().isPresent())
+        {
+            if (overflow() != GuiOverflow.VISIBLE)
+                return max(parent().inheritedClipBoxLeft(), borderBoxLeft());
+
+            return parent().inheritedClipBoxLeft();
+        }
+        if (overflow() != GuiOverflow.VISIBLE)
+            return borderBoxLeft();
+        return -1;
+    }
+
+    private float inheritedClipBoxLeft()
+    {
+        if (parentProperty().isPresent())
+        {
+            if (overflow() != GuiOverflow.VISIBLE)
+                return max(parent().inheritedClipBoxLeft(), leftPos());
+
+            return parent().inheritedClipBoxLeft();
+        }
+        if (overflow() != GuiOverflow.VISIBLE)
+            return leftPos();
+        return -1;
+    }
+
+    /**
+     * @return the most restrictive top pos of the clipBox between the top pos of this element borderbox or of its parent clipbox.
+     * If overflow is visible then the parent clipbox is used. In case of a visible overflow and no parent the value -1 is returned.
+     * The -1 special case is used to disable sending the clipBox command to the IRenderCommandReceiver
+     */
+    public float clipBoxTop()
+    {
+        if (parentProperty().isPresent())
+        {
+            if (overflow() != GuiOverflow.VISIBLE)
+                return max(parent().inheritedClipBoxTop(), borderBoxTop());
+
+            return parent().inheritedClipBoxTop();
+        }
+        if (overflow() != GuiOverflow.VISIBLE)
+            return borderBoxTop();
+        return -1;
+    }
+
+    private float inheritedClipBoxTop()
+    {
+        if (parentProperty().isPresent())
+        {
+            if (overflow() != GuiOverflow.VISIBLE)
+                return max(parent().inheritedClipBoxTop(), topPos());
+
+            return parent().inheritedClipBoxTop();
+        }
+        if (overflow() != GuiOverflow.VISIBLE)
+            return topPos();
+        return -1;
+    }
+
+    /**
+     * @return the most restrictive right pos of the clipBox between the right pos of this element borderbox or of its parent clipbox.
+     * If overflow is visible then the parent clipbox is used. In case of a visible overflow and no parent the value -1 is returned.
+     * The -1 special case is used to disable sending the clipBox command to the IRenderCommandReceiver
+     */
+    public float clipBoxRight()
+    {
+        if (parentProperty().isPresent())
+        {
+            if (overflow() != GuiOverflow.VISIBLE)
+                return min(parent().inheritedClipBoxRight(), borderBoxRight());
+
+            return parent().inheritedClipBoxRight();
+        }
+        if (overflow() != GuiOverflow.VISIBLE)
+            return borderBoxRight();
+        return Float.MAX_VALUE;
+    }
+
+    private float inheritedClipBoxRight()
+    {
+        if (parentProperty().isPresent())
+        {
+            if (overflow() != GuiOverflow.VISIBLE)
+                return min(parent().inheritedClipBoxRight(), rightPos());
+
+            return parent().inheritedClipBoxRight();
+        }
+        if (overflow() != GuiOverflow.VISIBLE)
+            return rightPos();
+        return Float.MAX_VALUE;
+    }
+
+    /**
+     * @return the most restrictive bottom pos of the clipBox between the bottom pos of this element borderbox or of its parent clipbox.
+     * If overflow is visible then the parent clipbox is used. In case of a visible overflow and no parent the value -1 is returned.
+     * The -1 special case is used to disable sending the clipBox command to the IRenderCommandReceiver
+     */
+    public float clipBoxBottom()
+    {
+        if (parentProperty().isPresent())
+        {
+            if (overflow() != GuiOverflow.VISIBLE)
+                return min(parent().inheritedClipBoxBottom(), borderBoxBottom());
+
+            return parent().inheritedClipBoxBottom();
+        }
+        if (overflow() != GuiOverflow.VISIBLE)
+            return borderBoxBottom();
+        return Float.MAX_VALUE;
+    }
+
+    private float inheritedClipBoxBottom()
+    {
+        if (parentProperty().isPresent())
+        {
+            if (overflow() != GuiOverflow.VISIBLE)
+                return min(parent().inheritedClipBoxBottom(), bottomPos());
+
+            return parent().inheritedClipBoxBottom();
+        }
+        if (overflow() != GuiOverflow.VISIBLE)
+            return bottomPos();
+        return Float.MAX_VALUE;
     }
 
     /**
@@ -581,19 +838,19 @@ public class Transform extends GuiComponent
             scale(new Scale(1, 1, 1, scalePivot));
     }
 
-    public ScissorBox scissorBox()
+    public GuiOverflow overflow()
     {
-        return scissorBox;
+        return overflowProperty().getValue();
     }
 
-    public void scissorBox(ScissorBox scissorBox)
+    public void overflow(GuiOverflow overflow)
     {
-        this.scissorBox = scissorBox;
+        overflowProperty().setValue(overflow);
     }
 
     public float screenXToNodeX(float screenX)
     {
-        return screenX / scaleX() - leftPos();
+        return screenX / scaleX() - rightPos();
     }
 
     public float screenYToNodeY(float screenY)
@@ -609,5 +866,87 @@ public class Transform extends GuiComponent
     public float nodeYToScreenY(float nodeY)
     {
         return (topPos() + nodeY) * scaleY();
+    }
+
+    @RequiredOverride
+    public float borderWidth()
+    {
+        return borderWidth(RectSide.UP);
+    }
+
+    @RequiredOverride
+    public float borderWidth(RectSide side)
+    {
+        switch (side)
+        {
+            case UP:
+                return borderWidthTopProperty().getValue();
+            case DOWN:
+                return borderWidthBottomProperty().getValue();
+            case LEFT:
+                return borderWidthLeftProperty().getValue();
+            case RIGHT:
+                return borderWidthRightProperty().getValue();
+            default:
+                return 0;
+        }
+    }
+
+    @RequiredOverride
+    public void borderWidth(RectSide side, float width)
+    {
+        switch (side)
+        {
+            case UP:
+                borderWidthTopProperty().setValue(width);
+                break;
+            case DOWN:
+                borderWidthBottomProperty().setValue(width);
+                break;
+            case LEFT:
+                borderWidthLeftProperty().setValue(width);
+                break;
+            case RIGHT:
+                borderWidthRightProperty().setValue(width);
+                break;
+        }
+    }
+
+    @RequiredOverride
+    public int borderRadius(RectCorner corner)
+    {
+        switch (corner)
+        {
+            case TOP_LEFT:
+                return borderRadiusTopLeftProperty().getValue();
+            case TOP_RIGHT:
+                return borderRadiusTopRightProperty().getValue();
+            case BOTTOM_LEFT:
+                return borderRadiusBottomLeftProperty().getValue();
+            case BOTTOM_RIGHT:
+                return borderRadiusBottomRightProperty().getValue();
+            default:
+                return 0;
+        }
+    }
+
+    @RequiredOverride
+    public void borderRadius(RectCorner corner, int width)
+    {
+        switch (corner)
+        {
+            case TOP_LEFT:
+                borderRadiusTopLeftProperty().setValue(width);
+                break;
+            case TOP_RIGHT:
+                borderRadiusTopRightProperty().setValue(width);
+                break;
+            case BOTTOM_LEFT:
+                borderRadiusBottomLeftProperty().setValue(width);
+                break;
+            case BOTTOM_RIGHT:
+                borderRadiusBottomRightProperty().setValue(width);
+                break;
+        }
     }
 }

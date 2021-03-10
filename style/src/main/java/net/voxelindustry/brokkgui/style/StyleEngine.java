@@ -6,6 +6,7 @@ import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.component.impl.PaintStyle;
 import net.voxelindustry.brokkgui.component.impl.TextComponentStyle;
 import net.voxelindustry.brokkgui.component.impl.Transform;
+import net.voxelindustry.brokkgui.component.impl.TransformStyle;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Resource;
@@ -55,6 +56,7 @@ public class StyleEngine
     {
         ComponentEngine.instance().addComponentInject(StyleComponent.class);
 
+        ComponentEngine.instance().addComponentOverride(Transform.class, TransformStyle.class);
         ComponentEngine.instance().addComponentOverride(Paint.class, PaintStyle.class);
         ComponentEngine.instance().addComponentOverride(TextComponent.class, TextComponentStyle.class);
 

@@ -79,50 +79,47 @@ public class GuiCheckbox extends GuiRadioButton
         }
 
         @Override
-        public void renderContent(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+        public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
         {
-            if (pass == RenderPass.BACKGROUND)
-            {
-                float startX = transform().leftPos();
-                float startY = transform().topPos();
+            float startX = transform().leftPos();
+            float startY = transform().topPos();
 
-                renderer.drawColoredTriangles(
-                        transform().zLevel(),
-                        color(),
-                        pass,
-                        // Left rectangle upper triangle
-                        (3 / 16F * transform().width()) + startX,
-                        (9 / 16F * transform().height()) + startY,
-                        (10 / 16F * transform().width()) + startX,
-                        (12 / 16F * transform().height()) + startY,
-                        (5 / 16F * transform().width()) + startX,
-                        (7 / 16F * transform().height()) + startY,
+            renderer.drawColoredTriangles(
+                    transform().zLevel(),
+                    color(),
+                    RenderPass.BACKGROUND,
+                    // Left rectangle upper triangle
+                    (3 / 16F * transform().width()) + startX,
+                    (9 / 16F * transform().height()) + startY,
+                    (10 / 16F * transform().width()) + startX,
+                    (12 / 16F * transform().height()) + startY,
+                    (5 / 16F * transform().width()) + startX,
+                    (7 / 16F * transform().height()) + startY,
 
-                        // Left rectangle lower triangle
-                        (3 / 16F * transform().width()) + startX,
-                        (9 / 16F * transform().height()) + startY,
-                        (8 / 16F * transform().width()) + startX,
-                        (14 / 16F * transform().height()) + startY,
-                        (10 / 16F * transform().width()) + startX,
-                        (12 / 16F * transform().height()) + startY,
+                    // Left rectangle lower triangle
+                    (3 / 16F * transform().width()) + startX,
+                    (9 / 16F * transform().height()) + startY,
+                    (8 / 16F * transform().width()) + startX,
+                    (14 / 16F * transform().height()) + startY,
+                    (10 / 16F * transform().width()) + startX,
+                    (12 / 16F * transform().height()) + startY,
 
-                        // Right rectangle upper triangle
-                        (15 / 16F * transform().width()) + startX,
-                        (7 / 16F * transform().height()) + startY,
-                        (13 / 16F * transform().width()) + startX,
-                        (5 / 16F * transform().height()) + startY,
-                        (8 / 16F * transform().width()) + startX,
-                        (10 / 16F * transform().height()) + startY,
+                    // Right rectangle upper triangle
+                    (15 / 16F * transform().width()) + startX,
+                    (7 / 16F * transform().height()) + startY,
+                    (13 / 16F * transform().width()) + startX,
+                    (5 / 16F * transform().height()) + startY,
+                    (8 / 16F * transform().width()) + startX,
+                    (10 / 16F * transform().height()) + startY,
 
-                        // Right rectangle lower triangle
-                        (8 / 16F * transform().width()) + startX,
-                        (10 / 16F * transform().height()) + startY,
-                        (10 / 16F * transform().width()) + startX,
-                        (12 / 16F * transform().height()) + startY,
-                        (15 / 16F * transform().width()) + startX,
-                        (7 / 16F * transform().height()) + startY
-                );
-            }
+                    // Right rectangle lower triangle
+                    (8 / 16F * transform().width()) + startX,
+                    (10 / 16F * transform().height()) + startY,
+                    (10 / 16F * transform().width()) + startX,
+                    (12 / 16F * transform().height()) + startY,
+                    (15 / 16F * transform().width()) + startX,
+                    (7 / 16F * transform().height()) + startY
+            );
         }
 
         public Property<Color> colorProperty()

@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.window;
 import fr.ourten.teabeans.property.IProperty;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
-import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
 
 /**
@@ -25,7 +24,7 @@ public interface IGuiWindow extends IGuiSubWindow
 
     IProperty<Integer> getScreenHeightProperty();
 
-    void render(int mouseX, int mouseY, RenderTarget target, RenderPass... pass);
+    void render(int mouseX, int mouseY, RenderTarget target);
 
     void renderLast(int mouseX, int mouseY);
 

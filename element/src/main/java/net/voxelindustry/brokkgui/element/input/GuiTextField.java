@@ -8,9 +8,9 @@ import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.element.GuiLabel;
+import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.brokkgui.text.TextComponent;
 import net.voxelindustry.brokkgui.text.TextLayoutComponent;
-import net.voxelindustry.brokkgui.text.TextOverflow;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -97,7 +97,7 @@ public class GuiTextField extends GuiFather
         textInputComponent = provide(TextInputComponent.class);
 
         textComponent.textPadding(new RectBox(5));
-        textLayoutComponent.textOverflow(TextOverflow.MASK);
+        textLayoutComponent.textOverflow(GuiOverflow.HIDDEN);
 
         textComponent.textAlignment(RectAlignment.LEFT_CENTER);
     }

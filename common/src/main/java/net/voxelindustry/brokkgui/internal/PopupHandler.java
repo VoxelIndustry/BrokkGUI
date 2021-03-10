@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.internal;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
-import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.window.IGuiSubWindow;
 import net.voxelindustry.brokkgui.window.IGuiWindow;
 
@@ -66,7 +65,7 @@ public class PopupHandler
         instances.remove(window);
     }
 
-    public void renderPopupInPass(IRenderCommandReceiver renderer, RenderPass pass, int mouseX, int mouseY)
+    public void renderPopup(IRenderCommandReceiver renderer, int mouseX, int mouseY)
     {
         popups.removeIf(toRemove::contains);
         toRemove.clear();
@@ -74,7 +73,7 @@ public class PopupHandler
         popups.addAll(toAdd);
         toAdd.clear();
 
-        popups.forEach(popup -> popup.renderNode(renderer, pass, mouseX, mouseY));
+        popups.forEach(popup -> popup.renderNode(renderer, mouseX, mouseY));
     }
 
     public void handleHover(int mouseX, int mouseY)

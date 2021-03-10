@@ -5,8 +5,6 @@ import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.data.RectCorner;
-import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
@@ -182,70 +180,6 @@ public class PaintStyle extends Paint
         if (borderColorProperty == null)
             borderColorProperty = style().getOrCreateProperty("border-color", Color.class);
         return borderColorProperty;
-    }
-
-    @Override
-    public Property<Float> borderWidthLeftProperty()
-    {
-        if (borderWidthLeftProperty == null)
-            borderWidthLeftProperty = style().getOrCreateProperty("border-left-width", Float.class);
-        return borderWidthLeftProperty;
-    }
-
-    @Override
-    public Property<Float> borderWidthRightProperty()
-    {
-        if (borderWidthRightProperty == null)
-            borderWidthRightProperty = style().getOrCreateProperty("border-right-width", Float.class);
-        return borderWidthRightProperty;
-    }
-
-    @Override
-    public Property<Float> borderWidthTopProperty()
-    {
-        if (borderWidthTopProperty == null)
-            borderWidthTopProperty = style().getOrCreateProperty("border-top-width", Float.class);
-        return borderWidthTopProperty;
-    }
-
-    @Override
-    public Property<Float> borderWidthBottomProperty()
-    {
-        if (borderWidthBottomProperty == null)
-            borderWidthBottomProperty = style().getOrCreateProperty("border-bottom-width", Float.class);
-        return borderWidthBottomProperty;
-    }
-
-    @Override
-    public Property<Integer> borderRadiusTopLeftProperty()
-    {
-        if (borderRadiusTopLeftProperty == null)
-            borderRadiusTopLeftProperty = style().getOrCreateProperty("border-top-left-radius", Integer.class);
-        return borderRadiusTopLeftProperty;
-    }
-
-    @Override
-    public Property<Integer> borderRadiusTopRightProperty()
-    {
-        if (borderRadiusTopRightProperty == null)
-            borderRadiusTopRightProperty = style().getOrCreateProperty("border-top-right-radius", Integer.class);
-        return borderRadiusTopRightProperty;
-    }
-
-    @Override
-    public Property<Integer> borderRadiusBottomLeftProperty()
-    {
-        if (borderRadiusBottomLeftProperty == null)
-            borderRadiusBottomLeftProperty = style().getOrCreateProperty("border-bottom-left-radius", Integer.class);
-        return borderRadiusBottomLeftProperty;
-    }
-
-    @Override
-    public Property<Integer> borderRadiusBottomRightProperty()
-    {
-        if (borderRadiusBottomRightProperty == null)
-            borderRadiusBottomRightProperty = style().getOrCreateProperty("border-bottom-right-radius", Integer.class);
-        return borderRadiusBottomRightProperty;
     }
 
     @Override
@@ -446,36 +380,6 @@ public class PaintStyle extends Paint
     public boolean hasBorderImage()
     {
         return style().doesHoldProperty("border-image-source") == HeldPropertyState.PRESENT;
-    }
-
-    @Override
-    public float borderWidth()
-    {
-        return style().getValue("border-top-width", Float.class, 0F);
-    }
-
-    @Override
-    public float borderWidth(RectSide side)
-    {
-        return style().getValue("border-" + side.getCssString() + "-width", Float.class, 0F);
-    }
-
-    @Override
-    public void borderWidth(RectSide side, float borderWidth)
-    {
-        style().setPropertyDirect("border-" + side.getCssString() + "-width", borderWidth, Float.class);
-    }
-
-    @Override
-    public int borderRadius(RectCorner corner)
-    {
-        return style().getValue("border-" + corner.getCssString() + "-radius", Integer.class, 0);
-    }
-
-    @Override
-    public void borderRadius(RectCorner corner, int radius)
-    {
-        style().setPropertyDirect("border-" + corner.getCssString() + "-radius", radius, Integer.class);
     }
 
     @Override

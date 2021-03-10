@@ -6,6 +6,7 @@ import net.voxelindustry.brokkgui.control.GuiScrollableBase;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.skin.GuiScrollableSkin;
 import net.voxelindustry.brokkgui.skin.GuiSkinBase;
+import net.voxelindustry.brokkgui.text.GuiOverflow;
 
 /**
  * @author Ourten 9 oct. 2016
@@ -18,6 +19,8 @@ public class ScrollPane extends GuiScrollableBase
     {
         if (node != null)
             setChild(node);
+
+        transform().overflow(GuiOverflow.SCROLL);
     }
 
     public ScrollPane()

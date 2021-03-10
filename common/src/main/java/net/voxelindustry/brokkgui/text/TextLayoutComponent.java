@@ -10,7 +10,7 @@ public class TextLayoutComponent extends GuiComponent
 {
     private final Property<Boolean> expandToTextProperty = new Property<>(true);
 
-    private final Property<TextOverflow> textOverflowProperty = createRenderProperty(TextOverflow.NONE);
+    private final Property<GuiOverflow> textOverflowProperty = createRenderProperty(GuiOverflow.VISIBLE);
 
     private final Property<String> ellipsisProperty = new Property<>("…");
 
@@ -40,7 +40,7 @@ public class TextLayoutComponent extends GuiComponent
     {
         textOverflowProperty.addListener(obs ->
         {
-            if (textOverflow() == TextOverflow.TRUNCATE)
+            if (textOverflow() == GuiOverflow.TRUNCATE)
             {
                 createOrUpdateEllipsedBinding();
                 textComponent.renderTextProperty().bindProperty(ellipsedTextBinding);
@@ -52,7 +52,7 @@ public class TextLayoutComponent extends GuiComponent
                 ellipsedTextBinding.unbindAll();
             }
 
-            if (textOverflow() == TextOverflow.MASK)
+            if (textOverflow() == GuiOverflow.HIDDEN)
                 textComponent.textMask(true);
         });
     }
@@ -160,7 +160,7 @@ public class TextLayoutComponent extends GuiComponent
         return expandToTextProperty;
     }
 
-    public Property<TextOverflow> textOverflowProperty()
+    public Property<GuiOverflow> textOverflowProperty()
     {
         return textOverflowProperty;
     }
@@ -196,13 +196,13 @@ public class TextLayoutComponent extends GuiComponent
         expandToTextProperty().setValue(expandToText);
     }
 
-    public TextOverflow textOverflow()
+    public GuiOverflow textOverflow()
     {
         return textOverflowProperty().getValue();
     }
 
-    public void textOverflow(TextOverflow textOverflow)
+    public void textOverflow(GuiOverflow guiOverflow)
     {
-        textOverflowProperty().setValue(textOverflow);
+        textOverflowProperty().setValue(guiOverflow);
     }
 }
