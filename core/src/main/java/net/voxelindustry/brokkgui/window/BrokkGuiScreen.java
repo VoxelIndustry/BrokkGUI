@@ -11,7 +11,14 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.debug.DebugRenderer;
 import net.voxelindustry.brokkgui.element.pane.GuiPane;
+import net.voxelindustry.brokkgui.event.ClickDragEvent;
+import net.voxelindustry.brokkgui.event.ClickPressEvent;
+import net.voxelindustry.brokkgui.event.ClickReleaseEvent;
+import net.voxelindustry.brokkgui.event.DisposeEvent;
+import net.voxelindustry.brokkgui.event.EventQueueBuilder;
+import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
+import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
@@ -26,6 +33,7 @@ import net.voxelindustry.brokkgui.style.tree.StyleList;
 import net.voxelindustry.brokkgui.text.TextSettings;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
+import net.voxelindustry.hermod.EventQueue;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
 import net.voxelindustry.hermod.IEventEmitter;
@@ -246,37 +254,107 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         PopupHandler.getInstance(this).handleClick(mouseX, mouseY, key);
 
+        GuiElement source = null;
+
         if (!windows.isEmpty())
         {
             if (windows.get(0).isPointInside(mouseX, mouseY))
-                windows.get(0).handleClick(mouseX, mouseY, key);
+                source = windows.get(0);
             else if (windows.get(0).closeOnClick())
                 removeSubGui(windows.get(0));
         }
         else
         {
-            if (mainPanel.isPointInside(mouseX, mouseY))
-                mainPanel.handleClick(mouseX, mouseY, key);
-            else
+            source = mainPanel;
+            if (!mainPanel.isPointInside(mouseX, mouseY))
                 GuiFocusManager.instance.removeWindowFocus(this);
         }
 
         lastClickX = mouseX;
         lastClickY = mouseY;
+
+        if (source == null)
+            return;
+
+        if (source.isPointInside(mouseX, mouseY) && !source.isDisabled() && source.isVisible())
+        {
+            EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(source,
+                    EventQueueBuilder.isPointInside(mouseX, mouseY)
+                            .and(EventQueueBuilder.isEnabled)
+                            .and(EventQueueBuilder.isVisible));
+
+            switch (key)
+            {
+                case MOUSE_LEFT:
+                    eventQueue.dispatch(ClickPressEvent.Left.TYPE, new ClickPressEvent.Left(source, mouseX, mouseY));
+                    break;
+                case MOUSE_RIGHT:
+                    eventQueue.dispatch(ClickPressEvent.Right.TYPE, new ClickPressEvent.Right(source, mouseX, mouseY));
+                    break;
+                case MOUSE_BUTTON_MIDDLE:
+                    eventQueue.dispatch(ClickPressEvent.Middle.TYPE, new ClickPressEvent.Middle(source, mouseX, mouseY));
+                    break;
+                default:
+                    eventQueue.dispatch(ClickPressEvent.TYPE, new ClickPressEvent(source, mouseX, mouseY, key));
+                    break;
+            }
+        }
     }
 
     @Override
     public void onClickDrag(float mouseX, float mouseY, MouseInputCode key)
     {
-        if (mainPanel.isPointInside(lastClickX, lastClickY))
-            mainPanel.handleClickDrag(mouseX, mouseY, key, lastClickX, lastClickY);
+        if (mainPanel.isPointInside(mouseX, mouseY) && !mainPanel.isDisabled() && mainPanel.isVisible())
+        {
+            EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(mainPanel,
+                    EventQueueBuilder.isPointInside(mouseX, mouseY)
+                            .and(EventQueueBuilder.isEnabled)
+                            .and(EventQueueBuilder.isVisible));
+
+            switch (key)
+            {
+                case MOUSE_LEFT:
+                    eventQueue.dispatch(ClickDragEvent.Left.TYPE, new ClickDragEvent.Left(mainPanel, mouseX, mouseY, lastClickX, lastClickY));
+                    break;
+                case MOUSE_RIGHT:
+                    eventQueue.dispatch(ClickDragEvent.Right.TYPE, new ClickDragEvent.Right(mainPanel, mouseX, mouseY, lastClickX, lastClickY));
+                    break;
+                case MOUSE_BUTTON_MIDDLE:
+                    eventQueue.dispatch(ClickDragEvent.Middle.TYPE, new ClickDragEvent.Middle(mainPanel, mouseX, mouseY, lastClickX, lastClickY));
+                    break;
+                default:
+                    eventQueue.dispatch(ClickDragEvent.TYPE, new ClickDragEvent(mainPanel, mouseX, mouseY, lastClickX, lastClickY, key));
+                    break;
+            }
+        }
     }
 
     @Override
     public void onClickStop(float mouseX, float mouseY, MouseInputCode key)
     {
-        if (mainPanel.isPointInside(lastClickX, lastClickY))
-            mainPanel.handleClickStop(mouseX, mouseY, key, lastClickX, lastClickY);
+        if (mainPanel.isPointInside(mouseX, mouseY) && !mainPanel.isDisabled() && mainPanel.isVisible())
+        {
+            EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(mainPanel,
+                    EventQueueBuilder.isPointInside(mouseX, mouseY)
+                            .and(EventQueueBuilder.isEnabled)
+                            .and(EventQueueBuilder.isVisible));
+
+            switch (key)
+            {
+                case MOUSE_LEFT:
+                    eventQueue.dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(mainPanel, mouseX, mouseY));
+                    break;
+                case MOUSE_RIGHT:
+                    eventQueue.dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(mainPanel, mouseX, mouseY));
+                    break;
+                case MOUSE_BUTTON_MIDDLE:
+                    eventQueue.dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(mainPanel, mouseX, mouseY));
+                    break;
+                default:
+                    eventQueue.dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(mainPanel, mouseX, mouseY, key));
+                    break;
+            }
+        }
         lastClickX = -1;
         lastClickY = -1;
     }
@@ -285,32 +363,39 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     public void onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
     {
         GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
-        if (hovered != null)
-            hovered.handleScroll(mouseX, mouseY, xOffset, yOffset);
+        if (hovered != null && (xOffset != 0 || yOffset != 0))
+        {
+            EventQueueBuilder.allChildrenMatching(hovered, EventQueueBuilder.isPointInside(mouseX, mouseY))
+                    .dispatch(ScrollEvent.TYPE, new ScrollEvent(hovered, mouseX, mouseY, (float) xOffset, (float) yOffset));
+        }
     }
 
     @Override
     public void onTextTyped(String text)
     {
-        if (GuiFocusManager.instance.focusedNode() != null && GuiFocusManager.instance.focusedWindow() == this)
-            GuiFocusManager.instance.focusedNode().handleTextTyped(text);
+        GuiElement focusedNode = GuiFocusManager.instance.focusedNode();
+        if (focusedNode != null && GuiFocusManager.instance.focusedWindow() == this)
+            EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.TEXT_TYPED, new KeyEvent.TextTyped(focusedNode, text));
     }
 
     @Override
     public void onKeyPressed(int key)
     {
-        int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
-        int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+        float mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX(this);
+        float mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY(this);
 
-        if (GuiFocusManager.instance.focusedNode() != null && GuiFocusManager.instance.focusedWindow() == this)
+        GuiElement focusedNode = GuiFocusManager.instance.focusedNode();
+        if (focusedNode != null && GuiFocusManager.instance.focusedWindow() == this)
         {
-            GuiFocusManager.instance.focusedNode().handleKeyPress(mouseX, mouseY, key);
+            EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.PRESS, new KeyEvent.Press(focusedNode, key));
             return;
         }
 
         GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
-            hovered.handleKeyPress(mouseX, mouseY, key);
+        {
+            EventQueueBuilder.fromTarget(hovered).dispatch(KeyEvent.PRESS, new KeyEvent.Press(hovered, key));
+        }
     }
 
     @Override
@@ -319,15 +404,18 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         float mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX(this);
         float mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY(this);
 
-        if (GuiFocusManager.instance.focusedNode() != null && GuiFocusManager.instance.focusedWindow() == this)
+        GuiElement focusedNode = GuiFocusManager.instance.focusedNode();
+        if (focusedNode != null && GuiFocusManager.instance.focusedWindow() == this)
         {
-            GuiFocusManager.instance.focusedNode().handleKeyRelease(mouseX, mouseY, key);
+            EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.RELEASE, new KeyEvent.Release(focusedNode, key));
             return;
         }
 
         GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
-            hovered.handleKeyRelease(mouseX, mouseY, key);
+        {
+            EventQueueBuilder.fromTarget(hovered).dispatch(KeyEvent.RELEASE, new KeyEvent.Release(hovered, key));
+        }
     }
 
     public void addSubGui(SubGuiScreen subGui)
@@ -380,7 +468,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onOpen()
     {
-        getEventDispatcher().dispatchEvent(WindowEvent.OPEN, new WindowEvent.Open(this));
+        new EventQueue().addDispatcher(getEventDispatcher()).dispatch(WindowEvent.OPEN, new WindowEvent.Open(this));
     }
 
     @Override
@@ -399,10 +487,10 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         PopupHandler.getInstance(this).delete(this);
 
         if (mainPanel != null)
-            mainPanel.dispose();
+            EventQueueBuilder.allChildren(mainPanel).dispatch(DisposeEvent.TYPE, new DisposeEvent(mainPanel));
         getSubGuis().forEach(SubGuiScreen::close);
 
-        getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
+        new EventQueue().addDispatcher(getEventDispatcher()).dispatch(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
     private GuiFather getNodeUnderMouse(float mouseX, float mouseY)
@@ -711,13 +799,13 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
     {
-        getEventDispatcher().dispatchEvent(type, event.copy(this));
+        EventQueueBuilder.singleton(this).dispatch(type, event.copy(this));
     }
 
     @Override
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
     {
-        getEventDispatcher().dispatchEvent(type, event);
+        EventQueueBuilder.singleton(this).dispatch(type, event);
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.element.IGuiToggleable;
 import net.voxelindustry.brokkgui.element.input.GuiToggleGroup;
 import net.voxelindustry.brokkgui.event.ActionEvent;
+import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.SelectEvent;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.hermod.EventHandler;
@@ -47,7 +48,7 @@ public class ToggleButtonComponent extends GuiComponent implements IGuiToggleabl
                 style.activePseudoClass().add("active");
             else
                 style.activePseudoClass().remove("active");
-            getEventDispatcher().dispatchEvent(SelectEvent.TYPE, new SelectEvent(element(), isSelected()));
+            EventQueueBuilder.fromTarget(element()).dispatch(SelectEvent.TYPE, new SelectEvent(element(), isSelected()));
         });
 
         getEventDispatcher().addHandler(ActionEvent.TYPE, this::onAction);

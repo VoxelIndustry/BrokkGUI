@@ -14,8 +14,9 @@ import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.event.ClickEvent;
+import net.voxelindustry.brokkgui.event.ClickPressEvent;
 import net.voxelindustry.brokkgui.event.CursorMoveEvent;
+import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.event.TextTypedEvent;
@@ -107,7 +108,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
                 cursorAnimation.pause();
         });
 
-        getEventDispatcher().addHandler(ClickEvent.TYPE, this::handleClick);
+        getEventDispatcher().addHandler(ClickPressEvent.TYPE, this::handleClick);
         getEventDispatcher().addHandler(ScrollEvent.TYPE, this::handleScroll);
     }
 
@@ -132,7 +133,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
         }
     }
 
-    private void handleClick(ClickEvent event)
+    private void handleClick(ClickPressEvent event)
     {
         if (!element().isFocused())
             return;
@@ -319,8 +320,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
         {
             appendTextToCursor(event.text());
 
-            element().getEventDispatcher().dispatchEvent(TextTypedEvent.TYPE,
-                    new TextTypedEvent(element(), oldText, textComponent.text()));
+            EventQueueBuilder.fromTarget(element()).dispatch(TextTypedEvent.TYPE, new TextTypedEvent(element(), oldText, textComponent.text()));
         }
     }
 
@@ -381,8 +381,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
         }
 
         if (contentChanged)
-            element().getEventDispatcher().dispatchEvent(TextTypedEvent.TYPE,
-                    new TextTypedEvent(element(), oldText, textComponent.text()));
+            EventQueueBuilder.fromTarget(element()).dispatch(TextTypedEvent.TYPE, new TextTypedEvent(element(), oldText, textComponent.text()));
     }
 
     /**
@@ -586,8 +585,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
         if (cursorPos >= 0 && cursorPos <= textComponent.text().length())
         {
             if (getOnCursorMoveEvent() != null)
-                getEventDispatcher().dispatchEvent(CursorMoveEvent.TYPE,
-                        new CursorMoveEvent(element(), cursorPos(), cursorPos));
+                EventQueueBuilder.fromTarget(element()).dispatch(CursorMoveEvent.TYPE, new CursorMoveEvent(element(), cursorPos(), cursorPos));
             cursorPosProperty().setValue(cursorPos);
         }
     }

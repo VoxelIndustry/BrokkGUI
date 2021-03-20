@@ -4,7 +4,7 @@ import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.property.specific.BooleanProperty;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.event.ClickEvent;
+import net.voxelindustry.brokkgui.event.ClickPressEvent;
 import net.voxelindustry.brokkgui.internal.DesktopUtils;
 
 public class LinkComponent extends GuiComponent
@@ -17,10 +17,10 @@ public class LinkComponent extends GuiComponent
     {
         super.attach(element);
 
-        getEventDispatcher().addHandler(ClickEvent.Left.TYPE, this::onClick);
+        getEventDispatcher().addHandler(ClickPressEvent.Left.TYPE, this::onClick);
     }
 
-    public void onClick(ClickEvent.Left e)
+    public void onClick(ClickPressEvent.Left e)
     {
         DesktopUtils.openURL(url());
     }

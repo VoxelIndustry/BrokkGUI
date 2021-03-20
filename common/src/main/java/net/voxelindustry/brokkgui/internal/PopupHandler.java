@@ -2,9 +2,12 @@ package net.voxelindustry.brokkgui.internal;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
+import net.voxelindustry.brokkgui.event.ClickPressEvent;
+import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.window.IGuiSubWindow;
 import net.voxelindustry.brokkgui.window.IGuiWindow;
+import net.voxelindustry.hermod.EventQueue;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -90,7 +93,32 @@ public class PopupHandler
         popups.forEach(popup ->
         {
             if (popup instanceof GuiElement)
-                ((GuiElement) popup).handleClick(mouseX, mouseY, key);
+            {
+                GuiElement source = (GuiElement) popup;
+                if (source.isPointInside(mouseX, mouseY) && !source.isDisabled() && source.isVisible())
+                {
+                    EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(source,
+                            EventQueueBuilder.isPointInside(mouseX, mouseY)
+                                    .and(EventQueueBuilder.isEnabled)
+                                    .and(EventQueueBuilder.isVisible));
+
+                    switch (key)
+                    {
+                        case MOUSE_LEFT:
+                            eventQueue.dispatch(ClickPressEvent.Left.TYPE, new ClickPressEvent.Left(source, mouseX, mouseY));
+                            break;
+                        case MOUSE_RIGHT:
+                            eventQueue.dispatch(ClickPressEvent.Right.TYPE, new ClickPressEvent.Right(source, mouseX, mouseY));
+                            break;
+                        case MOUSE_BUTTON_MIDDLE:
+                            eventQueue.dispatch(ClickPressEvent.Middle.TYPE, new ClickPressEvent.Middle(source, mouseX, mouseY));
+                            break;
+                        default:
+                            eventQueue.dispatch(ClickPressEvent.TYPE, new ClickPressEvent(source, mouseX, mouseY, key));
+                            break;
+                    }
+                }
+            }
         });
     }
 

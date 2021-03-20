@@ -94,7 +94,7 @@ public class TextComponent extends GuiComponent implements RenderComponent
     }
 
     @Override
-    public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, float mouseX, float mouseY)
     {
         float xPos = transform().leftPos();
         float yPos = transform().topPos();

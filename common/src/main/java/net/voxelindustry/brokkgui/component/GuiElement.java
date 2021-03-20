@@ -8,21 +8,22 @@ import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.Rotation;
-import net.voxelindustry.brokkgui.event.ClickEvent;
+import net.voxelindustry.brokkgui.event.ClickDragEvent;
+import net.voxelindustry.brokkgui.event.ClickPressEvent;
+import net.voxelindustry.brokkgui.event.ClickReleaseEvent;
 import net.voxelindustry.brokkgui.event.ComponentEvent;
 import net.voxelindustry.brokkgui.event.DisableEvent;
-import net.voxelindustry.brokkgui.event.DisposeEvent;
+import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.FocusEvent;
 import net.voxelindustry.brokkgui.event.GuiMouseEvent;
 import net.voxelindustry.brokkgui.event.HoverEvent;
-import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.event.LayoutEvent;
-import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.window.IGuiSubWindow;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
+import net.voxelindustry.hermod.EventQueue;
 import net.voxelindustry.hermod.IEventEmitter;
 
 import java.util.ArrayList;
@@ -49,12 +50,12 @@ public abstract class GuiElement implements IEventEmitter
 
     private final Property<String> idProperty;
 
-    private EventDispatcher            eventDispatcher;
-    private EventHandler<FocusEvent>   onFocusEvent;
-    private EventHandler<DisableEvent> onDisableEvent;
-    private EventHandler<HoverEvent>   onHoverEvent;
-    private EventHandler<ClickEvent>   onClickEvent;
-    private EventHandler<ScrollEvent>  onScrollEvent;
+    private EventDispatcher               eventDispatcher;
+    private EventHandler<FocusEvent>      onFocusEvent;
+    private EventHandler<DisableEvent>    onDisableEvent;
+    private EventHandler<HoverEvent>      onHoverEvent;
+    private EventHandler<ClickPressEvent> onClickEvent;
+    private EventHandler<ScrollEvent>     onScrollEvent;
 
     private Property<Double> opacityProperty;
 
@@ -100,17 +101,10 @@ public abstract class GuiElement implements IEventEmitter
 
         ValueInvalidationListener disableListener = this::disableListener;
         disabledProperty.addListener(disableListener);
-    }
 
-    /**
-     * Clear all resources related to this component
-     * <p>
-     * Only called on UI closing.
-     */
-    public void dispose()
-    {
-        getEventDispatcher().dispatchEvent(DisposeEvent.TYPE, new DisposeEvent(this));
-        transform().children().forEach(childTransform -> childTransform.element().dispose());
+        getEventDispatcher().addHandler(ClickPressEvent.TYPE, this::handleClickStart);
+        getEventDispatcher().addHandler(ClickDragEvent.TYPE, this::handleClickDrag);
+        getEventDispatcher().addHandler(ClickReleaseEvent.TYPE, this::handleClickStop);
     }
 
     public boolean isRenderDirty()
@@ -235,126 +229,44 @@ public abstract class GuiElement implements IEventEmitter
                     child.element().handleHover(mouseX, mouseY, false));
     }
 
-    public void handleScroll(int mouseX, int mouseY, double xOffset, double yOffset)
+    private void handleClickStart(ClickPressEvent event)
     {
-        if (xOffset != 0 || yOffset != 0)
-            getEventDispatcher().dispatchEvent(ScrollEvent.TYPE,
-                    new ScrollEvent(this, mouseX, mouseY, (float) xOffset, (float) yOffset));
-
-        for (Transform child : transform.childrenProperty().getValue())
-        {
-            if (child == null)
-                ExceptionTranslator.createNullChildInElement(this);
-            if (child.isPointInside(mouseX, mouseY))
-                child.element().handleScroll(mouseX, mouseY, xOffset, yOffset);
-        }
-    }
-
-    public void handleClick(int mouseX, int mouseY, MouseInputCode key)
-    {
-        if (isDisabled() || !isVisible())
-            return;
-
         setFocused();
-
-        switch (key)
-        {
-            case MOUSE_LEFT:
-                getEventDispatcher().dispatchEvent(ClickEvent.Left.TYPE,
-                        new ClickEvent.Left(this, mouseX, mouseY));
-                break;
-            case MOUSE_RIGHT:
-                getEventDispatcher().dispatchEvent(ClickEvent.Right.TYPE,
-                        new ClickEvent.Right(this, mouseX, mouseY));
-                break;
-            case MOUSE_BUTTON_MIDDLE:
-                getEventDispatcher().dispatchEvent(ClickEvent.Middle.TYPE,
-                        new ClickEvent.Middle(this, mouseX, mouseY));
-                break;
-            default:
-                getEventDispatcher().dispatchEvent(ClickEvent.TYPE, new ClickEvent(this, mouseX, mouseY, key));
-                break;
-        }
-
-        transform.childrenProperty().getValue().stream().peek(child ->
-        {
-            if (child == null)
-                ExceptionTranslator.createNullChildInElement(this);
-        }).filter(child -> child.isPointInside(mouseX, mouseY))
-                .forEach(child -> child.element().handleClick(mouseX, mouseY, key));
     }
 
-    public void handleClickDrag(int mouseX, int mouseY, MouseInputCode key, int originalMouseX, int originalMouseY)
+    public void handleClickDrag(ClickDragEvent event)
     {
-        if (isDisabled() || !isVisible())
-            return;
+        EventQueue queue = new EventQueue().addDispatcher(getEventDispatcher());
 
         if (!isDragged())
         {
             draggedProperty().setValue(true);
-            getEventDispatcher().dispatchEvent(GuiMouseEvent.DRAG_START,
-                    new GuiMouseEvent.DragStart(this, mouseX, mouseY, key));
+            queue.dispatch(GuiMouseEvent.DRAG_START, new GuiMouseEvent.DragStart(this, event.getMouseX(), event.getMouseY(), event.getKey()));
+
+            draggedX = event.getMouseX() - event.getOriginalMouseX();
+            draggedY = event.getMouseY() - event.getOriginalMouseY();
+
+            queue.dispatch(GuiMouseEvent.DRAGGING, new GuiMouseEvent.Dragging(this, event.getMouseX(), event.getMouseY(), event.getKey(), draggedX, draggedY));
+            return;
         }
-        draggedX = mouseX - originalMouseX;
-        draggedY = mouseY - originalMouseY;
 
+        draggedX = event.getMouseX() - event.getOriginalMouseX();
+        draggedY = event.getMouseY() - event.getOriginalMouseY();
 
-        getEventDispatcher().dispatchEvent(GuiMouseEvent.DRAGGING,
-                new GuiMouseEvent.Dragging(this, mouseX, mouseY, key, draggedX, draggedY));
-
-        transform.childrenProperty().getValue().stream()
-                .filter(child -> child.isPointInside(originalMouseX, originalMouseY))
-                .forEach(child -> child.element().handleClickDrag(mouseX, mouseY, key, originalMouseX,
-                        originalMouseY));
+        queue.dispatch(GuiMouseEvent.DRAGGING, new GuiMouseEvent.Dragging(this, event.getMouseX(), event.getMouseY(), event.getKey(), draggedX, draggedY));
     }
 
-    public void handleClickStop(int mouseX, int mouseY, MouseInputCode key, int originalMouseX, int originalMouseY)
+    public void handleClickStop(ClickReleaseEvent event)
     {
-        if (isDisabled() || !isVisible())
-            return;
-
         if (isDragged())
         {
+            EventQueue queue = new EventQueue().addDispatcher(getEventDispatcher());
+
             draggedProperty().setValue(false);
-            getEventDispatcher().dispatchEvent(GuiMouseEvent.DRAG_STOP,
-                    new GuiMouseEvent.DragStop(this, mouseX, mouseY, key, draggedX, draggedY));
+            queue.dispatch(GuiMouseEvent.DRAG_STOP, new GuiMouseEvent.DragStop(this, event.getMouseX(), event.getMouseY(), event.getKey(), draggedX, draggedY));
             draggedX = 0;
             draggedY = 0;
         }
-
-        transform.childrenProperty().getValue().stream()
-                .filter(child -> child.isPointInside(originalMouseX, originalMouseY))
-                .forEach(child -> child.element().handleClickStop(mouseX, mouseY, key, originalMouseX,
-                        originalMouseY));
-    }
-
-    public void handleTextTyped(String text)
-    {
-        getEventDispatcher().dispatchEvent(KeyEvent.TEXT_TYPED, new KeyEvent.TextTyped(this, text));
-    }
-
-    public void handleKeyPress(int mouseX, int mouseY, int key)
-    {
-        getEventDispatcher().dispatchEvent(KeyEvent.PRESS, new KeyEvent.Press(this, key));
-
-        transform.childrenProperty().getValue().stream().peek(child ->
-        {
-            if (child == null)
-                ExceptionTranslator.createNullChildInElement(this);
-        }).filter(child -> child.isPointInside(mouseX, mouseY))
-                .forEach(child -> child.element().handleKeyPress(mouseX, mouseY, key));
-    }
-
-    public void handleKeyRelease(int mouseX, int mouseY, int key)
-    {
-        getEventDispatcher().dispatchEvent(KeyEvent.RELEASE, new KeyEvent.Release(this, key));
-
-        transform.childrenProperty().getValue().stream().peek(child ->
-        {
-            if (child == null)
-                ExceptionTranslator.createNullChildInElement(this);
-        }).filter(child -> child.isPointInside(mouseX, mouseY))
-                .forEach(child -> child.element().handleKeyRelease(mouseX, mouseY, key));
     }
 
     @Deprecated
@@ -511,7 +423,7 @@ public abstract class GuiElement implements IEventEmitter
     public void internalSetFocused(boolean focused)
     {
         focusedProperty().setValue(focused);
-        getEventDispatcher().dispatchEvent(FocusEvent.TYPE, new FocusEvent(this, focused));
+        EventQueueBuilder.fromTarget(this).dispatch(FocusEvent.TYPE, new FocusEvent(this, focused));
     }
 
     public boolean isFocusable()
@@ -532,7 +444,7 @@ public abstract class GuiElement implements IEventEmitter
     public void setDisabled(boolean disable)
     {
         disabledProperty().setValue(disable);
-        getEventDispatcher().dispatchEvent(DisableEvent.TYPE, new DisableEvent(this, disable));
+        EventQueueBuilder.fromTarget(this).dispatch(DisableEvent.TYPE, new DisableEvent(this, disable));
     }
 
     public boolean isHovered()
@@ -545,7 +457,7 @@ public abstract class GuiElement implements IEventEmitter
         if (isDisabled() && hovered)
             return;
         hoveredProperty().setValue(hovered);
-        getEventDispatcher().dispatchEvent(HoverEvent.TYPE, new HoverEvent(this, hovered));
+        EventQueueBuilder.fromTarget(this).dispatch(HoverEvent.TYPE, new DisableEvent(this, hovered));
     }
 
     public boolean isVisible()
@@ -649,7 +561,7 @@ public abstract class GuiElement implements IEventEmitter
         if (component instanceof UpdateComponent)
             updateComponents.add((UpdateComponent) component);
 
-        getEventDispatcher().dispatchEvent(ComponentEvent.ADDED, new ComponentEvent.Added(this, component));
+        EventQueueBuilder.singleton(this).dispatch(ComponentEvent.ADDED, new ComponentEvent.Added(this, component));
         return component;
     }
 
@@ -671,20 +583,21 @@ public abstract class GuiElement implements IEventEmitter
         if (instance instanceof UpdateComponent)
             updateComponents.add((UpdateComponent) instance);
 
-        getEventDispatcher().dispatchEvent(ComponentEvent.ADDED, new ComponentEvent.Added(this, instance));
+        EventQueueBuilder.singleton(this).dispatch(ComponentEvent.ADDED, new ComponentEvent.Added(this, instance));
         return instance;
     }
 
     public <T extends GuiComponent> T remove(Class<T> componentClass)
     {
         GuiComponent component = componentMap.remove(componentClass);
+        component.detach(this);
 
         if (component instanceof RenderComponent)
             renderComponents.remove(component);
         if (component instanceof UpdateComponent)
             updateComponents.remove(component);
 
-        getEventDispatcher().dispatchEvent(ComponentEvent.REMOVED, new ComponentEvent.Removed(this, component));
+        EventQueueBuilder.singleton(this).dispatch(ComponentEvent.REMOVED, new ComponentEvent.Removed(this, component));
         return (T) component;
     }
 
@@ -788,11 +701,11 @@ public abstract class GuiElement implements IEventEmitter
         getEventDispatcher().addHandler(HoverEvent.TYPE, this.onHoverEvent);
     }
 
-    public void setOnClickEvent(EventHandler<ClickEvent> onClickEvent)
+    public void setOnClickEvent(EventHandler<ClickPressEvent> onClickEvent)
     {
-        getEventDispatcher().removeHandler(ClickEvent.TYPE, this.onClickEvent);
+        getEventDispatcher().removeHandler(ClickPressEvent.TYPE, this.onClickEvent);
         this.onClickEvent = onClickEvent;
-        getEventDispatcher().addHandler(ClickEvent.TYPE, this.onClickEvent);
+        getEventDispatcher().addHandler(ClickPressEvent.TYPE, this.onClickEvent);
     }
 
     public void setOnScrollEvent(EventHandler<ScrollEvent> onScrollEvent)
@@ -802,7 +715,7 @@ public abstract class GuiElement implements IEventEmitter
         getEventDispatcher().addHandler(ScrollEvent.TYPE, this.onScrollEvent);
     }
 
-    public EventHandler<ClickEvent> getOnClickEvent()
+    public EventHandler<ClickPressEvent> getOnClickEvent()
     {
         return onClickEvent;
     }

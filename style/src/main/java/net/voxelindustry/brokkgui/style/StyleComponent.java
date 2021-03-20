@@ -13,6 +13,7 @@ import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
+import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.style.event.StyleComponentEvent;
 import net.voxelindustry.brokkgui.style.event.StyleRefreshEvent;
 import net.voxelindustry.brokkgui.style.shorthand.GenericShorthandProperty;
@@ -79,7 +80,7 @@ public class StyleComponent extends GuiComponent
 
         super.attach(element);
 
-        getEventDispatcher().dispatchEvent(StyleComponentEvent.TYPE, new StyleComponentEvent(element(), this));
+        EventQueueBuilder.singleton(this).dispatch(StyleComponentEvent.TYPE, new StyleComponentEvent(element(), this));
 
         element.idProperty().addChangeListener(styleRefreshListener);
         element.transform().parentProperty().addChangeListener(styleParentListener);
@@ -434,7 +435,7 @@ public class StyleComponent extends GuiComponent
             return;
 
         if (element() != null)
-            element().getEventDispatcher().dispatchEvent(StyleRefreshEvent.BEFORE, new StyleRefreshEvent.BeforeEvent(this));
+            EventQueueBuilder.singleton(this).dispatch(StyleRefreshEvent.BEFORE, new StyleRefreshEvent.BeforeEvent(this));
 
         List<StyleEntry> entries = styleList.getEntriesMatching(this);
 
@@ -452,7 +453,7 @@ public class StyleComponent extends GuiComponent
         {
             element().transform().children().forEach(child ->
                     child.element().ifHas(StyleComponent.class, StyleComponent::refresh));
-            element().getEventDispatcher().dispatchEvent(StyleRefreshEvent.AFTER, new StyleRefreshEvent.AfterEvent(this));
+            EventQueueBuilder.singleton(this).dispatch(StyleRefreshEvent.AFTER, new StyleRefreshEvent.AfterEvent(this));
         }
 
         element().markRenderDirty();

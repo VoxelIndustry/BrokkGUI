@@ -154,7 +154,7 @@ public class Transform extends GuiComponent
 
     public void notifyOfLayoutChange(Transform child)
     {
-        getEventDispatcher().dispatchEvent(TransformLayoutEvent.TYPE, new TransformLayoutEvent(this, child));
+        EventQueueBuilder.singleton(this).dispatch(TransformLayoutEvent.TYPE, new TransformLayoutEvent(this, child));
     }
 
     /**

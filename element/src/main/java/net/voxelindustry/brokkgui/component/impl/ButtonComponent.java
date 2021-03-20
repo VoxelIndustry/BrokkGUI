@@ -3,7 +3,8 @@ package net.voxelindustry.brokkgui.component.impl;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.event.ActionEvent;
-import net.voxelindustry.brokkgui.event.ClickEvent;
+import net.voxelindustry.brokkgui.event.ClickPressEvent;
+import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.hermod.EventHandler;
 
 public class ButtonComponent extends GuiComponent
@@ -15,10 +16,10 @@ public class ButtonComponent extends GuiComponent
     {
         super.attach(element);
 
-        element.getEventDispatcher().addHandler(ClickEvent.Left.TYPE, this::onClick);
+        element.getEventDispatcher().addHandler(ClickPressEvent.Left.TYPE, this::onClick);
     }
 
-    public void onClick(ClickEvent.Left event)
+    public void onClick(ClickPressEvent.Left event)
     {
         if (!element().isDisabled())
             activate();
@@ -26,13 +27,13 @@ public class ButtonComponent extends GuiComponent
 
     public void activate()
     {
-        getEventDispatcher().dispatchEvent(ActionEvent.TYPE, new ActionEvent(element(), this));
+        EventQueueBuilder.fromTarget(element()).dispatch(ActionEvent.TYPE, new ActionEvent(element(), this));
     }
 
     /////////////////////
     // EVENTS HANDLING //
     /////////////////////
-    
+
     public void setOnActionEvent(EventHandler<ActionEvent> onActionEvent)
     {
         getEventDispatcher().removeHandler(ActionEvent.TYPE, this.onActionEvent);

@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.window;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiFather;
+import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
@@ -130,13 +131,13 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     @Override
     public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
     {
-        getEventDispatcher().dispatchEvent(type, event.copy(this));
+        EventQueueBuilder.singleton(this).dispatch(type, event.copy(this));
     }
 
     @Override
     public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
     {
-        getEventDispatcher().dispatchEvent(type, event);
+        EventQueueBuilder.singleton(this).dispatch(type, event);
     }
 
     @Override
@@ -148,14 +149,13 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     @Override
     public void open()
     {
-        getEventDispatcher().dispatchEvent(WindowEvent.OPEN, new WindowEvent.Open(this));
+        EventQueueBuilder.singleton(this).dispatch(WindowEvent.OPEN, new WindowEvent.Open(this));
     }
 
     @Override
     public void close()
     {
-        dispose();
-        getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
+        EventQueueBuilder.singleton(this).dispatch(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
     public void setOnOpenEvent(EventHandler<WindowEvent.Open> onOpenEvent)
