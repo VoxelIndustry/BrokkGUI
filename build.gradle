@@ -97,12 +97,12 @@ project(":common") {
         implementation "com.google.guava:guava:21.0"
         implementation "com.google.code.gson:gson:2.8.0"
 
-        testCompile('org.junit.jupiter:junit-jupiter-api:5.6.1')
-        testCompile('org.mockito:mockito-core:3.3.3')
-        testCompile('org.mockito:mockito-junit-jupiter:3.3.3')
-        testCompile('org.assertj:assertj-core:3.15.0')
+        testImplementation('org.junit.jupiter:junit-jupiter-api:5.6.1')
+        testImplementation('org.mockito:mockito-core:3.3.3')
+        testImplementation('org.mockito:mockito-junit-jupiter:3.3.3')
+        testImplementation('org.assertj:assertj-core:3.15.0')
 
-        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.6.1')
+        testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.1')
     }
 }
 
@@ -136,12 +136,12 @@ project(":style") {
         implementation "commons-io:commons-io:2.5"
         implementation "com.google.guava:guava:21.0"
 
-        testCompile('org.junit.jupiter:junit-jupiter-api:5.6.1')
-        testCompile('org.mockito:mockito-core:3.3.3')
-        testCompile('org.mockito:mockito-junit-jupiter:3.3.3')
-        testCompile('org.assertj:assertj-core:3.15.0')
+        testImplementation('org.junit.jupiter:junit-jupiter-api:5.6.1')
+        testImplementation('org.mockito:mockito-core:3.3.3')
+        testImplementation('org.mockito:mockito-junit-jupiter:3.3.3')
+        testImplementation('org.assertj:assertj-core:3.15.0')
 
-        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.6.1')
+        testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.1')
     }
 }
 
@@ -178,12 +178,12 @@ project(":core") {
         implementation "commons-io:commons-io:2.5"
         implementation "com.google.guava:guava:21.0"
 
-        testCompile('org.junit.jupiter:junit-jupiter-api:5.6.1')
-        testCompile('org.mockito:mockito-core:3.3.3')
-        testCompile('org.mockito:mockito-junit-jupiter:3.3.3')
-        testCompile('org.assertj:assertj-core:3.15.0')
+        testImplementation('org.junit.jupiter:junit-jupiter-api:5.6.1')
+        testImplementation('org.mockito:mockito-core:3.3.3')
+        testImplementation('org.mockito:mockito-junit-jupiter:3.3.3')
+        testImplementation('org.assertj:assertj-core:3.15.0')
 
-        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.6.1')
+        testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.1')
     }
 }
 
