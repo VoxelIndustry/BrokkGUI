@@ -128,6 +128,15 @@ public class TransformStyle extends Transform
     }
 
     @Override
+    public void borderWidth(float width)
+    {
+        borderWidth(RectSide.UP, width);
+        borderWidth(RectSide.DOWN, width);
+        borderWidth(RectSide.LEFT, width);
+        borderWidth(RectSide.RIGHT, width);
+    }
+
+    @Override
     public void borderWidth(RectSide side, float borderWidth)
     {
         style().setPropertyDirect("border-" + side.getCssString() + "-width", borderWidth, Float.class);

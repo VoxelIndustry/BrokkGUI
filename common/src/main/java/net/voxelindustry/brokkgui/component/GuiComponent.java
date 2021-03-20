@@ -25,6 +25,11 @@ public abstract class GuiComponent implements IEventEmitter
         transform = element.transform();
     }
 
+    public void detach(GuiElement element)
+    {
+        
+    }
+
     public GuiElement element()
     {
         return element;

@@ -65,19 +65,19 @@ public class RelativeBindingHelper
         if (addX != null)
             toBind.xPosProperty()
                     .bindProperty(Expression.getExpression(
-                            () -> parent.xPos() + parent.xTranslate() + addX.getValue(), parent.xPosProperty(),
-                            parent.xTranslateProperty(), addX));
+                            () -> parent.xPos() + parent.xTranslate() + parent.xOffsetProperty().get() + addX.getValue(), parent.xPosProperty(),
+                            parent.xTranslateProperty(), parent.xOffsetProperty(), addX));
         else
-            toBind.xPosProperty().bindProperty(Expression.getExpression(() -> parent.xPos() + parent.xTranslate(),
-                    parent.xPosProperty(), parent.xTranslateProperty()));
+            toBind.xPosProperty().bindProperty(Expression.getExpression(() -> parent.xPos() + parent.xTranslate() + parent.xOffsetProperty().get(),
+                    parent.xPosProperty(), parent.xTranslateProperty(), parent.xOffsetProperty()));
         if (addY != null)
             toBind.yPosProperty()
                     .bindProperty(Expression.getExpression(
-                            () -> parent.yPos() + parent.yTranslate() + addY.getValue(), parent.yPosProperty(),
-                            parent.yTranslateProperty(), addY));
+                            () -> parent.yPos() + parent.yTranslate() + parent.yOffsetProperty().get() + addY.getValue(), parent.yPosProperty(),
+                            parent.yTranslateProperty(), parent.yOffsetProperty(), addY));
         else
-            toBind.yPosProperty().bindProperty(Expression.getExpression(() -> parent.yPos() + parent.yTranslate(),
-                    parent.yPosProperty(), parent.yTranslateProperty()));
+            toBind.yPosProperty().bindProperty(Expression.getExpression(() -> parent.yPos() + parent.yTranslate() + parent.yOffsetProperty().get(),
+                    parent.yPosProperty(), parent.yTranslateProperty(), parent.yOffsetProperty()));
     }
 
     public static void bindToPos(Transform toBind,
@@ -85,54 +85,85 @@ public class RelativeBindingHelper
                                  float addX,
                                  float addY)
     {
-        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(parent.xTranslateProperty(),
-                (x, translate) -> x + translate + addX));
-        toBind.yPosProperty().bindProperty(parent.yPosProperty().combine(parent.yTranslateProperty(),
-                (y, translate) -> y + translate + addY));
+        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(
+                parent.xTranslateProperty(),
+                parent.xOffsetProperty(),
+                (x, translate, xOffset) -> x + translate + xOffset + addX));
+
+        toBind.yPosProperty().bindProperty(parent.yPosProperty().combine(
+                parent.yTranslateProperty(),
+                parent.yOffsetProperty(),
+                (y, translate, yOffset) -> y + translate + yOffset + addY));
     }
 
     public static void bindToPos(Transform toBind, Transform parent)
     {
-        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(parent.xTranslateProperty(), Float::sum));
-        toBind.yPosProperty().bindProperty(parent.yPosProperty().combine(parent.yTranslateProperty(), Float::sum));
+        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(
+                parent.xTranslateProperty(),
+                parent.xOffsetProperty(),
+                (xPos, xTranslate, xOffset) -> xPos + xTranslate + xOffset));
+
+        toBind.yPosProperty().bindProperty(parent.yPosProperty().combine(
+                parent.yTranslateProperty(),
+                parent.yOffsetProperty(),
+                (yPos, yTranslate, yOffset) -> yPos + yTranslate + yOffset));
     }
 
     public static void bindToCenter(Transform toBind, Transform parent)
     {
         toBind.xPosProperty()
                 .bindProperty(parent.xPosProperty().combine(
-                        parent.widthProperty(), parent.xTranslateProperty(), toBind.widthProperty(),
-                        (xPos, width, xTranslate, childWidth) -> xPos + xTranslate + (width / 2 - childWidth / 2)));
+                        parent.widthProperty(),
+                        parent.xTranslateProperty(),
+                        parent.xOffsetProperty(),
+                        toBind.widthProperty(),
+                        (xPos, width, xTranslate, xOffset, childWidth) -> xPos + xTranslate + xOffset + (width / 2 - childWidth / 2)));
+
         toBind.yPosProperty()
                 .bindProperty(parent.yPosProperty().combine(
-                        parent.heightProperty(), parent.yTranslateProperty(), toBind.heightProperty(),
-                        (yPos, height, yTranslate, childHeight) -> yPos + yTranslate + (height / 2 - childHeight / 2)));
+                        parent.heightProperty(),
+                        parent.yTranslateProperty(),
+                        parent.yOffsetProperty(),
+                        toBind.heightProperty(),
+                        (yPos, height, yTranslate, yOffset, childHeight) -> yPos + yTranslate + yOffset + (height / 2 - childHeight / 2)));
     }
 
     public static void bindToCenter(Transform toBind, Transform parent, float addX, float addY)
     {
         toBind.xPosProperty()
                 .bindProperty(parent.xPosProperty().combine(
-                        parent.widthProperty(), parent.xTranslateProperty(), toBind.widthProperty(),
-                        (xPos, width, xTranslate, childWidth) ->
-                                xPos + xTranslate + (width / 2 - childWidth / 2) + addX));
+                        parent.widthProperty(),
+                        parent.xTranslateProperty(),
+                        parent.xOffsetProperty(),
+                        toBind.widthProperty(),
+                        (xPos, width, xTranslate, xOffset, childWidth) ->
+                                xPos + xTranslate + xOffset + (width / 2 - childWidth / 2) + addX));
         toBind.yPosProperty()
                 .bindProperty(parent.yPosProperty().combine(
-                        parent.heightProperty(), parent.yTranslateProperty(), toBind.heightProperty(),
-                        (yPos, height, yTranslate, childHeight) ->
-                                yPos + yTranslate + (height / 2 - childHeight / 2) + addY));
+                        parent.heightProperty(),
+                        parent.yTranslateProperty(),
+                        parent.yOffsetProperty(),
+                        toBind.heightProperty(),
+                        (yPos, height, yTranslate, yOffset, childHeight) ->
+                                yPos + yTranslate + yOffset + (height / 2 - childHeight / 2) + addY));
     }
 
     public static void bindToRelative(Transform toBind, Transform parent, float ratioX, float ratioY)
     {
-        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(parent.widthProperty(),
-                parent.xTranslateProperty(), toBind.widthProperty(),
-                (xPos, width, xTranslate, childWidth) -> xPos + xTranslate + (width / (1 / ratioX) - childWidth / 2)));
+        toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(
+                parent.widthProperty(),
+                parent.xTranslateProperty(),
+                parent.xOffsetProperty(),
+                toBind.widthProperty(),
+                (xPos, width, xTranslate, xOffset, childWidth) -> xPos + xTranslate + xOffset + (width / (1 / ratioX) - childWidth / 2)));
 
         toBind.yPosProperty()
-                .bindProperty(parent.yPosProperty().combine(parent.heightProperty(),
-                        parent.yTranslateProperty(), toBind.heightProperty(),
-                        (yPos, height, yTranslate, childHeight) ->
-                                yPos + yTranslate + (height / (1 / ratioY) - childHeight / 2)));
+                .bindProperty(parent.yPosProperty().combine(
+                        parent.heightProperty(),
+                        parent.yTranslateProperty(),
+                        parent.yOffsetProperty(),
+                        toBind.heightProperty(),
+                        (yPos, height, yTranslate, yOffset, childHeight) ->
+                                yPos + yTranslate + yOffset + (height / (1 / ratioY) - childHeight / 2)));
     }
 }

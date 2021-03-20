@@ -14,6 +14,7 @@ import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.data.Scale;
+import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.TransformLayoutEvent;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.brokkgui.util.MouseInBoundsChecker;
@@ -26,10 +27,14 @@ import static java.lang.Math.min;
 
 public class Transform extends GuiComponent
 {
-    private final FloatProperty     xPosProperty;
-    private final FloatProperty     yPosProperty;
-    private final FloatProperty     xTranslateProperty;
-    private final FloatProperty     yTranslateProperty;
+    private final FloatProperty xPosProperty;
+    private final FloatProperty yPosProperty;
+    private final FloatProperty xTranslateProperty;
+    private final FloatProperty yTranslateProperty;
+
+    private final FloatProperty xOffsetProperty;
+    private final FloatProperty yOffsetProperty;
+
     private final FloatProperty     widthProperty;
     private final FloatProperty     heightProperty;
     private final FloatProperty     widthRatioProperty;
@@ -67,6 +72,9 @@ public class Transform extends GuiComponent
         xTranslateProperty = createRenderPropertyFloat(0F);
         yTranslateProperty = createRenderPropertyFloat(0F);
 
+        xOffsetProperty = createRenderPropertyFloat(0F);
+        yOffsetProperty = createRenderPropertyFloat(0F);
+
         widthProperty = createRenderPropertyFloat(0F);
         heightProperty = createRenderPropertyFloat(0F);
 
@@ -102,6 +110,14 @@ public class Transform extends GuiComponent
         yPosProperty().addChangeListener(this::notifyParentOfLayoutChange);
         xTranslateProperty().addChangeListener(this::notifyParentOfLayoutChange);
         yTranslateProperty().addChangeListener(this::notifyParentOfLayoutChange);
+
+        overflowProperty().addChangeListener((obs, oldValue, newValue) ->
+        {
+            if (newValue == GuiOverflow.SCROLL)
+                element().provide(Scrollable.class);
+            else if (oldValue == GuiOverflow.SCROLL)
+                element().remove(Scrollable.class);
+        });
     }
 
     ///////////////
@@ -297,6 +313,16 @@ public class Transform extends GuiComponent
     public FloatProperty yTranslateProperty()
     {
         return yTranslateProperty;
+    }
+
+    public FloatProperty xOffsetProperty()
+    {
+        return xOffsetProperty;
+    }
+
+    public FloatProperty yOffsetProperty()
+    {
+        return yOffsetProperty;
     }
 
     public FloatProperty widthProperty()
@@ -890,6 +916,15 @@ public class Transform extends GuiComponent
             default:
                 return 0;
         }
+    }
+
+    @RequiredOverride
+    public void borderWidth(float width)
+    {
+        borderWidthTopProperty().setValue(width);
+        borderWidthBottomProperty().setValue(width);
+        borderWidthLeftProperty().setValue(width);
+        borderWidthRightProperty().setValue(width);
     }
 
     @RequiredOverride

@@ -1,59 +1,18 @@
 package net.voxelindustry.brokkgui.element.pane;
 
-import net.voxelindustry.brokkgui.behavior.GuiScrollableBehavior;
-import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.control.GuiScrollableBase;
-import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
-import net.voxelindustry.brokkgui.skin.GuiScrollableSkin;
-import net.voxelindustry.brokkgui.skin.GuiSkinBase;
+import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 
-/**
- * @author Ourten 9 oct. 2016
- */
-public class ScrollPane extends GuiScrollableBase
+public class ScrollPane extends GuiFather
 {
-    private GuiElement contentNode;
-
-    public ScrollPane(GuiElement node)
-    {
-        if (node != null)
-            setChild(node);
-
-        transform().overflow(GuiOverflow.SCROLL);
-    }
-
     public ScrollPane()
     {
-        this(null);
+        transform().overflow(GuiOverflow.SCROLL);
     }
 
     @Override
     public String type()
     {
         return "scrollpane";
-    }
-
-    public void setChild(GuiElement node)
-    {
-        if (contentNode != null)
-        {
-            getTrueWidthProperty().unbind();
-            getTrueHeightProperty().unbind();
-            removeChild(contentNode);
-        }
-
-        contentNode = node;
-        addChild(node);
-        RelativeBindingHelper.bindToPos(node.transform(), transform(), getScrollXProperty(), getScrollYProperty());
-
-        getTrueWidthProperty().bindProperty(node.transform().widthProperty());
-        getTrueHeightProperty().bindProperty(node.transform().heightProperty());
-    }
-
-    @Override
-    protected GuiSkinBase<?> makeDefaultSkin()
-    {
-        return new GuiScrollableSkin<>(this, new GuiScrollableBehavior<>(this));
     }
 }
