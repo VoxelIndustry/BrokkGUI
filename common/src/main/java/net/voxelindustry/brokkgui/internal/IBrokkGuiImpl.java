@@ -19,4 +19,8 @@ public interface IBrokkGuiImpl
     IGuiWindow getGui();
 
     void setGuiWindow(IGuiWindow window);
+
+    float windowWidthRatio();
+
+    float windowHeightRatio();
 }

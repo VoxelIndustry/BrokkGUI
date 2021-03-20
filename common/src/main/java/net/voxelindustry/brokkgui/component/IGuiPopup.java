@@ -4,5 +4,5 @@ import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 
 public interface IGuiPopup
 {
-    void renderNode(IRenderCommandReceiver renderer, int mouseX, int mouseY);
+    void renderNode(IRenderCommandReceiver renderer, float mouseX, float mouseY);
 }

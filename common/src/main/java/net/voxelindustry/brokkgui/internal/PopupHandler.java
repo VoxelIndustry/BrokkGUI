@@ -65,7 +65,7 @@ public class PopupHandler
         instances.remove(window);
     }
 
-    public void renderPopup(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    public void renderPopup(IRenderCommandReceiver renderer, float mouseX, float mouseY)
     {
         popups.removeIf(toRemove::contains);
         toRemove.clear();
@@ -76,7 +76,7 @@ public class PopupHandler
         popups.forEach(popup -> popup.renderNode(renderer, mouseX, mouseY));
     }
 
-    public void handleHover(int mouseX, int mouseY)
+    public void handleHover(float mouseX, float mouseY)
     {
         popups.forEach(popup ->
         {
@@ -85,7 +85,7 @@ public class PopupHandler
         });
     }
 
-    public void handleClick(int mouseX, int mouseY, MouseInputCode key)
+    public void handleClick(float mouseX, float mouseY, MouseInputCode key)
     {
         popups.forEach(popup ->
         {

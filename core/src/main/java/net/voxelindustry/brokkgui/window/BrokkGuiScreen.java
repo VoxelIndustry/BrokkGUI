@@ -70,9 +70,10 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     private IBrokkGuiImpl wrapper;
 
-    private int lastClickX, lastClickY;
+    private float lastClickX;
+    private float lastClickY;
 
-    private PriorityQueue<Pair<Runnable, Long>> tasksQueue;
+    private final PriorityQueue<Pair<Runnable, Long>> tasksQueue;
 
     protected boolean isDebugged;
 
@@ -111,7 +112,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     public BrokkGuiScreen(float width, float height)
     {
-        this(0.5f, 0.5f, width, height);
+        this(0.5F, 0.5F, width, height);
     }
 
     public BrokkGuiScreen()
@@ -127,11 +128,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         renderer = wrapper.getRenderer();
 
         xPosProperty.bindProperty(new Expression<>(() -> wrapper.getGuiRelativePosX(getxRelativePos(), getWidth()) + getxOffset(),
-                getScreenWidthProperty(), getxRelativePosProperty(), getWidthProperty(),
+                screenWidthProperty(), getxRelativePosProperty(), getWidthProperty(),
                 getxOffsetProperty()));
 
         yPosProperty.bindProperty(new Expression<>(() -> wrapper.getGuiRelativePosY(getyRelativePos(), getHeight()) + getyOffset(),
-                getyRelativePosProperty(), getScreenHeightProperty(), getHeightProperty(),
+                getyRelativePosProperty(), screenHeightProperty(), getHeightProperty(),
                 getyOffsetProperty()));
 
         stylesheetsProperty.addListener(obs ->
@@ -147,10 +148,9 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void onMouseMoved(int mouseX, int mouseY)
+    public void onMouseMoved(float mouseX, float mouseY)
     {
-        if (!windows.isEmpty() && windows.stream().anyMatch(gui ->
-                gui.isPointInside(mouseX, mouseY)))
+        if (!windows.isEmpty() && windows.stream().anyMatch(gui -> gui.isPointInside(mouseX, mouseY)))
         {
             windows.forEach(gui -> gui.handleHover(mouseX, mouseY, gui.isPointInside(mouseX, mouseY)));
             mainPanel.handleHover(mouseX, mouseY, false);
@@ -165,7 +165,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void render(int mouseX, int mouseY, RenderTarget target)
+    public void render(float mouseX, float mouseY, RenderTarget target)
     {
         switch (target)
         {
@@ -178,7 +178,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                     {
                         if (windows.get(i).hasWarFog())
                             renderer.drawColoredRect(0, 0, getWidth(),
-                                    getHeight(), 5 + i, Color.BLACK.addAlpha(-0.5f), RenderPass.BACKGROUND);
+                                    getHeight(), 5 + i, Color.BLACK.addAlpha(-0.5F), RenderPass.BACKGROUND);
 
                         windows.get(i).renderNode(renderer, mouseX, mouseY);
                     }
@@ -196,20 +196,20 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
      * @param mouseY current y position of the mouse
      */
     @Override
-    public void renderLast(int mouseX, int mouseY)
+    public void renderLast(float mouseX, float mouseY)
     {
         if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !isDebugged)
         {
             renderer.drawColoredEmptyRect(1, 1,
                     BrokkGuiPlatform.getInstance().getTextHelper().getStringWidth("DEBUG", DEBUG_TEXT_SETTINGS) + 2,
                     BrokkGuiPlatform.getInstance().getTextHelper().getStringHeight(DEBUG_TEXT_SETTINGS) + 2,
-                    400, Color.RED, 1f, RenderPass.BACKGROUND);
-            renderer.drawString("DEBUG", 2, 2.5f, 400, RenderPass.BACKGROUND, DEBUG_TEXT_SETTINGS);
+                    400, Color.RED, 1F, RenderPass.BACKGROUND);
+            renderer.drawString("DEBUG", 2, 2.5F, 400, RenderPass.BACKGROUND, DEBUG_TEXT_SETTINGS);
         }
     }
 
     @Override
-    public boolean doesOccludePoint(int mouseX, int mouseY)
+    public boolean doesOccludePoint(float mouseX, float mouseY)
     {
         return !windows.isEmpty() && windows.stream().anyMatch(gui -> gui.isPointInside(mouseX, mouseY));
     }
@@ -233,7 +233,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void onClick(int mouseX, int mouseY, MouseInputCode key)
+    public void onClick(float mouseX, float mouseY, MouseInputCode key)
     {
         if (BrokkGuiPlatform.getInstance().isRenderDebugEnabled() && !isDebugged)
         {
@@ -266,14 +266,14 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void onClickDrag(int mouseX, int mouseY, MouseInputCode key, double dragX, double dragY)
+    public void onClickDrag(float mouseX, float mouseY, MouseInputCode key)
     {
         if (mainPanel.isPointInside(lastClickX, lastClickY))
             mainPanel.handleClickDrag(mouseX, mouseY, key, lastClickX, lastClickY);
     }
 
     @Override
-    public void onClickStop(int mouseX, int mouseY, MouseInputCode key)
+    public void onClickStop(float mouseX, float mouseY, MouseInputCode key)
     {
         if (mainPanel.isPointInside(lastClickX, lastClickY))
             mainPanel.handleClickStop(mouseX, mouseY, key, lastClickX, lastClickY);
@@ -282,7 +282,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public void onScroll(int mouseX, int mouseY, double xOffset, double yOffset)
+    public void onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
     {
         GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
@@ -316,8 +316,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onKeyReleased(int key)
     {
-        int mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX();
-        int mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY();
+        float mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX(this);
+        float mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY(this);
 
         if (GuiFocusManager.instance.focusedNode() != null && GuiFocusManager.instance.focusedWindow() == this)
         {
@@ -335,11 +335,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         windows.add(0, subGui);
 
         subGui.transform().xPosProperty().bindProperty(new Expression<>(() -> getScreenWidth() / (1 / subGui.getxRelativePos())
-                - subGui.getWidth() / 2, subGui.getxRelativePosProperty(), getScreenWidthProperty(),
+                - subGui.getWidth() / 2, subGui.getxRelativePosProperty(), screenWidthProperty(),
                 subGui.transform().widthProperty()));
 
         subGui.transform().yPosProperty().bindProperty(new Expression<>(() -> getScreenHeight() / (1 / subGui.getyRelativePos())
-                - subGui.getHeight() / 2, subGui.getyRelativePosProperty(), getScreenHeightProperty(),
+                - subGui.getHeight() / 2, subGui.getyRelativePosProperty(), screenHeightProperty(),
                 subGui.transform().heightProperty()));
 
         subGui.open();
@@ -405,7 +405,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         getEventDispatcher().dispatchEvent(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
-    private GuiFather getNodeUnderMouse(int mouseX, int mouseY)
+    private GuiFather getNodeUnderMouse(float mouseX, float mouseY)
     {
         if (!windows.isEmpty())
         {
@@ -461,7 +461,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     public void runLater(Runnable runnable, int ticks)
     {
-        runLater(runnable, ticks * 50, TimeUnit.MILLISECONDS);
+        runLater(runnable, ticks * 50L, TimeUnit.MILLISECONDS);
     }
 
     public Property<Float> getWidthProperty()
@@ -609,37 +609,49 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public IProperty<Integer> getScreenWidthProperty()
+    public IProperty<Integer> screenWidthProperty()
     {
         return screenWidthProperty;
     }
 
     @Override
-    public IProperty<Integer> getScreenHeightProperty()
+    public IProperty<Integer> screenHeightProperty()
     {
         return screenHeightProperty;
     }
 
+    @Override
+    public float windowWidthRatio()
+    {
+        return wrapper.windowWidthRatio();
+    }
+
+    @Override
+    public float windowHeightRatio()
+    {
+        return wrapper.windowHeightRatio();
+    }
+
     public int getScreenWidth()
     {
-        return getScreenWidthProperty().getValue();
+        return screenWidthProperty().getValue();
     }
 
     public int getScreenHeight()
     {
-        return getScreenHeightProperty().getValue();
+        return screenHeightProperty().getValue();
     }
 
     @Override
-    public void setScreenWidth(int width)
+    public void screenWidth(int width)
     {
-        getScreenWidthProperty().setValue(width);
+        screenWidthProperty().setValue(width);
     }
 
     @Override
-    public void setScreenHeight(int height)
+    public void screenHeight(int height)
     {
-        getScreenHeightProperty().setValue(height);
+        screenHeightProperty().setValue(height);
     }
 
     public ListenerPool getListeners()

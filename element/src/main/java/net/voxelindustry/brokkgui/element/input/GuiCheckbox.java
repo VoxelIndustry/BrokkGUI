@@ -79,7 +79,7 @@ public class GuiCheckbox extends GuiRadioButton
         }
 
         @Override
-        public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+        public void renderContent(IRenderCommandReceiver renderer, float mouseX, float mouseY)
         {
             float startX = transform().leftPos();
             float startY = transform().topPos();

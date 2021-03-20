@@ -23,13 +23,13 @@ public interface ImmediateWindowBridge
 
     ITextHelper getTextHelper();
 
-    int getMouseX();
+    float getMouseX();
 
-    int getMouseY();
+    float getMouseY();
 
-    int getLastClickX();
+    float getLastClickX();
 
-    int getLastClickY();
+    float getLastClickY();
 
     boolean isAreaHovered(float startX, float startY, float endX, float endY);
 

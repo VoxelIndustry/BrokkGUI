@@ -13,7 +13,7 @@ public class CursorMoveEvent extends GuiMouseEvent
         this(source, 0, 0);
     }
 
-    public CursorMoveEvent(GuiElement source, int mouseX, int mouseY)
+    public CursorMoveEvent(GuiElement source, float mouseX, float mouseY)
     {
         super(source, mouseX, mouseY);
     }

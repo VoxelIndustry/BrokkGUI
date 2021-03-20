@@ -76,7 +76,7 @@ public class ToastManager
             public Float computeValue()
             {
                 float offset = (current.getValue() == toastHolder.getContent() ? 0 :
-                        getToastExitXProperty().getValue());
+                                getToastExitXProperty().getValue());
 
                 if (getToastAlignmentProperty().getValue().isLeft())
                     return xPosProperty.getValue() - toastHolder.transform().width() + offset;
@@ -97,7 +97,7 @@ public class ToastManager
             public Float computeValue()
             {
                 float offset = (current.getValue() == toastHolder.getContent() ? 0 :
-                        getToastExitYProperty().getValue());
+                                getToastExitYProperty().getValue());
 
                 if (getToastAlignmentProperty().getValue().isUp())
                     return yPosProperty.getValue() - toastHolder.transform().height() + offset;
@@ -224,7 +224,7 @@ public class ToastManager
         else if (!getxPosProperty().isBound() && screen != null)
         {
             getxPosProperty().bindProperty(getRelativeXPosProperty().combine(
-                    screen.getScreenWidthProperty(),
+                    screen.screenWidthProperty(),
                     (relativeX, screenWidth) -> screenWidth * relativeX));
         }
         getRelativeXPosProperty().setValue(relativeXPos);
@@ -242,7 +242,7 @@ public class ToastManager
         else if (!getyPosProperty().isBound() && screen != null)
         {
             getyPosProperty().bindProperty(getRelativeYPosProperty().combine(
-                    screen.getScreenHeightProperty(),
+                    screen.screenHeightProperty(),
                     (relativeY, screenHeight) -> screenHeight * relativeY));
         }
         getRelativeYPosProperty().setValue(relativeYPos);

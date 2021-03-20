@@ -72,8 +72,8 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
     private boolean drawHotspots;
 
     private boolean isInputLocked;
-    private int     lockedMouseX;
-    private int     lockedMouseY;
+    private float   lockedMouseX;
+    private float   lockedMouseY;
 
     private List<Transform> hiddenNodes = new ArrayList<>();
 
@@ -383,7 +383,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         }
     }
 
-    private Pair<Transform, Integer> getDeepestHoveredNode(Transform current, int mouseX, int mouseY, int depth)
+    private Pair<Transform, Integer> getDeepestHoveredNode(Transform current, float mouseX, float mouseY, int depth)
     {
         if (!current.childrenProperty().isEmpty())
         {

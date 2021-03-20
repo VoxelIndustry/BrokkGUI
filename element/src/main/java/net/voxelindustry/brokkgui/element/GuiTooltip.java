@@ -97,7 +97,7 @@ public class GuiTooltip implements IGuiTooltip
     }
 
     @Override
-    public void renderNode(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    public void renderNode(IRenderCommandReceiver renderer, float mouseX, float mouseY)
     {
         if (getContent() == null)
             return;

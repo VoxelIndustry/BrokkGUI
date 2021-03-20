@@ -16,17 +16,31 @@ public interface IGuiWindow extends IGuiSubWindow
 
     void setWrapper(IBrokkGuiImpl wrapper);
 
-    void setScreenWidth(int width);
+    default int screenWidth()
+    {
+        return screenWidthProperty().getValue();
+    }
 
-    void setScreenHeight(int height);
+    default int screenHeight()
+    {
+        return screenHeightProperty().getValue();
+    }
 
-    IProperty<Integer> getScreenWidthProperty();
+    void screenWidth(int width);
 
-    IProperty<Integer> getScreenHeightProperty();
+    void screenHeight(int height);
 
-    void render(int mouseX, int mouseY, RenderTarget target);
+    IProperty<Integer> screenWidthProperty();
 
-    void renderLast(int mouseX, int mouseY);
+    IProperty<Integer> screenHeightProperty();
+
+    float windowWidthRatio();
+
+    float windowHeightRatio();
+
+    void render(float mouseX, float mouseY, RenderTarget target);
+
+    void renderLast(float mouseX, float mouseY);
 
     void tick();
 
@@ -34,13 +48,13 @@ public interface IGuiWindow extends IGuiSubWindow
 
     IBrokkGuiImpl getWrapper();
 
-    boolean doesOccludePoint(int mouseX, int mouseY);
+    boolean doesOccludePoint(float mouseX, float mouseY);
 
     ////////////
     // INPUTS //
     ////////////
 
-    void onMouseMoved(int mouseX, int mouseY);
+    void onMouseMoved(float mouseX, float mouseY);
 
     void onKeyPressed(int key);
 
@@ -48,11 +62,11 @@ public interface IGuiWindow extends IGuiSubWindow
 
     void onKeyReleased(int key);
 
-    void onClick(int mouseX, int mouseY, MouseInputCode key);
+    void onClick(float mouseX, float mouseY, MouseInputCode key);
 
-    void onClickDrag(int mouseX, int mouseY, MouseInputCode clickedMouseButton, double dragX, double dragY);
+    void onClickDrag(float mouseX, float mouseY, MouseInputCode clickedMouseButton);
 
-    void onClickStop(int mouseX, int mouseY, MouseInputCode key);
+    void onClickStop(float mouseX, float mouseY, MouseInputCode key);
 
-    void onScroll(int mouseX, int mouseY, double xOffset, double yOffset);
+    void onScroll(float mouseX, float mouseY, double xOffset, double yOffset);
 }

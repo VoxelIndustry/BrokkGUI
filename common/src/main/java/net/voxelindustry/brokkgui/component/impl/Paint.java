@@ -83,7 +83,7 @@ public class Paint extends GuiComponent implements RenderComponent
     }
 
     @Override
-    public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, float mouseX, float mouseY)
     {
         float x = element().transform().leftPos();
         float y = element().transform().topPos();

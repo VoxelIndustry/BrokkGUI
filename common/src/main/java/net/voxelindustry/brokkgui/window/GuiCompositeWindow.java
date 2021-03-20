@@ -24,8 +24,8 @@ public class GuiCompositeWindow implements IGuiWindow
         this.first = first;
         this.second = second;
 
-        this.second.getScreenWidthProperty().bindBidirectional(this.first.getScreenWidthProperty());
-        this.second.getScreenHeightProperty().bindBidirectional(this.first.getScreenHeightProperty());
+        this.second.screenWidthProperty().bindBidirectional(this.first.screenWidthProperty());
+        this.second.screenHeightProperty().bindBidirectional(this.first.screenHeightProperty());
     }
 
     public void setInputEventFilter(BiPredicate<IGuiWindow, InputType> inputEventFilter)
@@ -55,40 +55,52 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void setScreenWidth(int width)
+    public void screenWidth(int width)
     {
-        first.setScreenWidth(width);
-        second.setScreenWidth(width);
+        first.screenWidth(width);
+        second.screenWidth(width);
     }
 
     @Override
-    public void setScreenHeight(int height)
+    public void screenHeight(int height)
     {
-        first.setScreenHeight(height);
-        second.setScreenHeight(height);
+        first.screenHeight(height);
+        second.screenHeight(height);
     }
 
     @Override
-    public IProperty<Integer> getScreenWidthProperty()
+    public IProperty<Integer> screenWidthProperty()
     {
-        return first.getScreenWidthProperty();
+        return first.screenWidthProperty();
     }
 
     @Override
-    public IProperty<Integer> getScreenHeightProperty()
+    public IProperty<Integer> screenHeightProperty()
     {
-        return first.getScreenHeightProperty();
+        return first.screenHeightProperty();
     }
 
     @Override
-    public void render(int mouseX, int mouseY, RenderTarget target)
+    public float windowWidthRatio()
+    {
+        return first.windowWidthRatio();
+    }
+
+    @Override
+    public float windowHeightRatio()
+    {
+        return first.windowHeightRatio();
+    }
+
+    @Override
+    public void render(float mouseX, float mouseY, RenderTarget target)
     {
         first.render(mouseX, mouseY, target);
         second.render(mouseX, mouseY, target);
     }
 
     @Override
-    public void renderLast(int mouseX, int mouseY)
+    public void renderLast(float mouseX, float mouseY)
     {
         first.renderLast(mouseX, mouseY);
         second.renderLast(mouseX, mouseY);
@@ -115,13 +127,13 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public boolean doesOccludePoint(int mouseX, int mouseY)
+    public boolean doesOccludePoint(float mouseX, float mouseY)
     {
         return first.doesOccludePoint(mouseX, mouseY) || second.doesOccludePoint(mouseX, mouseY);
     }
 
     @Override
-    public void onMouseMoved(int mouseX, int mouseY)
+    public void onMouseMoved(float mouseX, float mouseY)
     {
         if (inputEventFilter.isPresent())
         {
@@ -189,7 +201,7 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void onClick(int mouseX, int mouseY, MouseInputCode mouseInputCode)
+    public void onClick(float mouseX, float mouseY, MouseInputCode mouseInputCode)
     {
         if (inputEventFilter.isPresent())
         {
@@ -206,24 +218,24 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void onClickDrag(int mouseX, int mouseY, MouseInputCode mouseInputCode, double dragX, double dragY)
+    public void onClickDrag(float mouseX, float mouseY, MouseInputCode mouseInputCode)
     {
         if (inputEventFilter.isPresent())
         {
             if (inputEventFilter.get().test(first, InputType.MOUSE_DRAG_START))
-                first.onClickDrag(mouseX, mouseY, mouseInputCode, dragX, dragY);
+                first.onClickDrag(mouseX, mouseY, mouseInputCode);
             if (inputEventFilter.get().test(second, InputType.MOUSE_DRAG_START))
-                second.onClickDrag(mouseX, mouseY, mouseInputCode, dragX, dragY);
+                second.onClickDrag(mouseX, mouseY, mouseInputCode);
         }
         else
         {
-            first.onClickDrag(mouseX, mouseY, mouseInputCode, dragX, dragY);
-            second.onClickDrag(mouseX, mouseY, mouseInputCode, dragX, dragY);
+            first.onClickDrag(mouseX, mouseY, mouseInputCode);
+            second.onClickDrag(mouseX, mouseY, mouseInputCode);
         }
     }
 
     @Override
-    public void onClickStop(int mouseX, int mouseY, MouseInputCode mouseInputCode)
+    public void onClickStop(float mouseX, float mouseY, MouseInputCode mouseInputCode)
     {
         if (inputEventFilter.isPresent())
         {
@@ -240,7 +252,7 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void onScroll(int mouseX, int mouseY, double xOffset, double yOffset)
+    public void onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
     {
         if (inputEventFilter.isPresent())
         {

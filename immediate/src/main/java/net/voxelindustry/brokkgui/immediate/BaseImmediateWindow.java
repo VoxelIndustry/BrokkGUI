@@ -29,17 +29,17 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
 
     private IRenderCommandReceiver renderer;
 
-    private int mouseX;
-    private int mouseY;
+    private float mouseX;
+    private float mouseY;
 
-    private int lastClickX;
-    private int lastClickY;
+    private float lastClickX;
+    private float lastClickY;
 
-    private int lastHeldClickX;
-    private int lastHeldClickY;
+    private float lastHeldClickX;
+    private float lastHeldClickY;
 
-    private int    lastWheelX;
-    private int    lastWheelY;
+    private float  lastWheelX;
+    private float  lastWheelY;
     private double lastWheelValue;
 
     private int lastKeyPressed;
@@ -56,19 +56,19 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void onMouseMoved(int mouseX, int mouseY)
+    public void onMouseMoved(float mouseX, float mouseY)
     {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
     }
 
     @Override
-    public void render(int mouseX, int mouseY, RenderTarget target)
+    public void render(float mouseX, float mouseY, RenderTarget target)
     {
     }
 
     @Override
-    public void renderLast(int mouseX, int mouseY)
+    public void renderLast(float mouseX, float mouseY)
     {
         immediateRender();
 
@@ -124,12 +124,12 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
         return stringHeight;
     }
 
-    public int getMouseX()
+    public float getMouseX()
     {
         return mouseX;
     }
 
-    public int getMouseY()
+    public float getMouseY()
     {
         return mouseY;
     }
@@ -160,37 +160,49 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public IProperty<Integer> getScreenWidthProperty()
+    public IProperty<Integer> screenWidthProperty()
     {
         return screenWidthProperty;
     }
 
     @Override
-    public IProperty<Integer> getScreenHeightProperty()
+    public IProperty<Integer> screenHeightProperty()
     {
         return screenHeightProperty;
     }
 
     public int getScreenWidth()
     {
-        return getScreenWidthProperty().getValue();
+        return screenWidthProperty().getValue();
     }
 
     public int getScreenHeight()
     {
-        return getScreenHeightProperty().getValue();
+        return screenHeightProperty().getValue();
     }
 
     @Override
-    public void setScreenWidth(int width)
+    public void screenWidth(int width)
     {
-        getScreenWidthProperty().setValue(width);
+        screenWidthProperty().setValue(width);
     }
 
     @Override
-    public void setScreenHeight(int height)
+    public void screenHeight(int height)
     {
-        getScreenHeightProperty().setValue(height);
+        screenHeightProperty().setValue(height);
+    }
+
+    @Override
+    public float windowWidthRatio()
+    {
+        return wrapper.windowWidthRatio();
+    }
+
+    @Override
+    public float windowHeightRatio()
+    {
+        return wrapper.windowHeightRatio();
     }
 
     @Override
@@ -212,7 +224,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public boolean doesOccludePoint(int mouseX, int mouseY)
+    public boolean doesOccludePoint(float mouseX, float mouseY)
     {
         return false;
     }
@@ -236,7 +248,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void onClick(int mouseX, int mouseY, MouseInputCode key)
+    public void onClick(float mouseX, float mouseY, MouseInputCode key)
     {
         lastClickX = mouseX;
         lastClickY = mouseY;
@@ -246,20 +258,20 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void onClickDrag(int mouseX, int mouseY, MouseInputCode clickedMouseButton, double dragX, double dragY)
+    public void onClickDrag(float mouseX, float mouseY, MouseInputCode clickedMouseButton)
     {
 
     }
 
     @Override
-    public void onClickStop(int mouseX, int mouseY, MouseInputCode mouseInputCode)
+    public void onClickStop(float mouseX, float mouseY, MouseInputCode mouseInputCode)
     {
         lastHeldClickX = -1;
         lastHeldClickY = -1;
     }
 
     @Override
-    public void onScroll(int mouseX, int mouseY, double xOffset, double yOffset)
+    public void onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
     {
         lastWheelX = mouseX;
         lastWheelY = mouseY;
@@ -279,22 +291,22 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
 
     }
 
-    public int getLastClickX()
+    public float getLastClickX()
     {
         return lastClickX;
     }
 
-    public int getLastClickY()
+    public float getLastClickY()
     {
         return lastClickY;
     }
 
-    public int getLastWheelX()
+    public float getLastWheelX()
     {
         return lastWheelX;
     }
 
-    public int getLastWheelY()
+    public float getLastWheelY()
     {
         return lastWheelY;
     }

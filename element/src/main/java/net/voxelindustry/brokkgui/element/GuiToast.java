@@ -52,7 +52,7 @@ public class GuiToast extends GuiFather implements IGuiPopup
     }
 
     @Override
-    public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, float mouseX, float mouseY)
     {
         super.renderContent(renderer, mouseX, mouseY);
 

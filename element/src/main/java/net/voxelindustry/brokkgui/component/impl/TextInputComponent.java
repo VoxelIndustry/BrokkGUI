@@ -232,7 +232,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
     }
 
     @Override
-    public void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    public void renderContent(IRenderCommandReceiver renderer, float mouseX, float mouseY)
     {
         // Cursor
         if (element().isFocused())

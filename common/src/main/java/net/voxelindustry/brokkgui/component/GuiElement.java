@@ -65,8 +65,8 @@ public abstract class GuiElement implements IEventEmitter
     private final Property<Boolean> visibleProperty;
     private final Property<Boolean> draggedProperty;
 
-    private int draggedX;
-    private int draggedY;
+    private float draggedX;
+    private float draggedY;
 
     private IGuiSubWindow window;
 
@@ -140,7 +140,7 @@ public abstract class GuiElement implements IEventEmitter
         isChildRenderDirty = true;
     }
 
-    public final void renderNode(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    public final void renderNode(IRenderCommandReceiver renderer, float mouseX, float mouseY)
     {
         if (!isVisible())
             return;
@@ -211,13 +211,13 @@ public abstract class GuiElement implements IEventEmitter
         isChildRenderDirty = false;
     }
 
-    protected void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    protected void renderContent(IRenderCommandReceiver renderer, float mouseX, float mouseY)
     {
         for (RenderComponent component : renderComponents)
             component.renderContent(renderer, mouseX, mouseY);
     }
 
-    public void handleHover(int mouseX, int mouseY, boolean hovered)
+    public void handleHover(float mouseX, float mouseY, boolean hovered)
     {
         if (!isVisible() || isDisabled())
             return;
@@ -563,12 +563,12 @@ public abstract class GuiElement implements IEventEmitter
         return draggedProperty().getValue();
     }
 
-    public int getDraggedX()
+    public float getDraggedX()
     {
         return draggedX;
     }
 
-    public int getDraggedY()
+    public float getDraggedY()
     {
         return draggedY;
     }

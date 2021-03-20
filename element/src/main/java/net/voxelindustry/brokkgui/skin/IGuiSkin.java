@@ -4,5 +4,5 @@ import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 
 public interface IGuiSkin
 {
-    void render(IRenderCommandReceiver renderer, int mouseX, int mouseY);
+    void render(IRenderCommandReceiver renderer, float mouseX, float mouseY);
 }

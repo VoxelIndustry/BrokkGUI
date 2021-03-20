@@ -39,7 +39,7 @@ public class GuiSkinBase<T extends GuiSkinedElement> implements IGuiSkin
     }
 
     @Override
-    public void render(IRenderCommandReceiver renderer, int mouseX, int mouseY)
+    public void render(IRenderCommandReceiver renderer, float mouseX, float mouseY)
     {
     }
 

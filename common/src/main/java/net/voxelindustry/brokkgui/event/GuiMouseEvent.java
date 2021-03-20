@@ -17,21 +17,22 @@ public class GuiMouseEvent extends GuiInputEvent
     public static final EventType<GuiMouseEvent.DragStop>  DRAG_STOP  = new EventType<>(GuiMouseEvent.ANY,
             "DRAG_STOP_EVENT");
 
-    private final int mouseX, mouseY;
+    private final float mouseX;
+    private final float mouseY;
 
-    public GuiMouseEvent(GuiElement source, int mouseX, int mouseY)
+    public GuiMouseEvent(GuiElement source, float mouseX, float mouseY)
     {
         super(source);
         this.mouseX = mouseX;
         this.mouseY = mouseY;
     }
 
-    public int getMouseX()
+    public float getMouseX()
     {
         return mouseX;
     }
 
-    public int getMouseY()
+    public float getMouseY()
     {
         return mouseY;
     }
@@ -46,7 +47,7 @@ public class GuiMouseEvent extends GuiInputEvent
     {
         private final int dwheel;
 
-        public Wheel(GuiElement source, int mouseX, int mouseY, int dwheel)
+        public Wheel(GuiElement source, float mouseX, float mouseY, int dwheel)
         {
             super(source, mouseX, mouseY);
 
@@ -69,7 +70,7 @@ public class GuiMouseEvent extends GuiInputEvent
     {
         private final MouseInputCode key;
 
-        public DragStart(GuiElement source, int mouseX, int mouseY, MouseInputCode mouseKey)
+        public DragStart(GuiElement source, float mouseX, float mouseY, MouseInputCode mouseKey)
         {
             super(source, mouseX, mouseY);
 
@@ -90,9 +91,10 @@ public class GuiMouseEvent extends GuiInputEvent
 
     public static class Dragging extends DragStart
     {
-        private final int dragX, dragY;
+        private final float dragX;
+        private final float dragY;
 
-        public Dragging(GuiElement source, int mouseX, int mouseY, MouseInputCode mouseKey, int dragX, int dragY)
+        public Dragging(GuiElement source, float mouseX, float mouseY, MouseInputCode mouseKey, float dragX, float dragY)
         {
             super(source, mouseX, mouseY, mouseKey);
 
@@ -100,12 +102,12 @@ public class GuiMouseEvent extends GuiInputEvent
             this.dragY = dragY;
         }
 
-        public int getDragX()
+        public float getDragX()
         {
             return dragX;
         }
 
-        public int getDragY()
+        public float getDragY()
         {
             return dragY;
         }
@@ -119,7 +121,7 @@ public class GuiMouseEvent extends GuiInputEvent
 
     public static final class DragStop extends Dragging
     {
-        public DragStop(GuiElement source, int mouseX, int mouseY, MouseInputCode mouseKey, int dragX, int dragY)
+        public DragStop(GuiElement source, float mouseX, float mouseY, MouseInputCode mouseKey, float dragX, float dragY)
         {
             super(source, mouseX, mouseY, mouseKey, dragX, dragY);
         }

@@ -4,5 +4,5 @@ import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 
 public interface RenderComponent
 {
-    void renderContent(IRenderCommandReceiver renderer, int mouseX, int mouseY);
+    void renderContent(IRenderCommandReceiver renderer, float mouseX, float mouseY);
 }
