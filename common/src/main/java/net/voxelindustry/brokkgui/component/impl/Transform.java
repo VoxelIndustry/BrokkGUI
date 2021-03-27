@@ -4,6 +4,7 @@ import fr.ourten.teabeans.binding.Expression;
 import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.property.specific.BooleanProperty;
 import fr.ourten.teabeans.property.specific.FloatProperty;
 import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkgui.component.GuiComponent;
@@ -40,6 +41,8 @@ public class Transform extends GuiComponent
     private final FloatProperty     heightRatioProperty;
     private final Expression<Float> zDepthProperty;
     private final FloatProperty     zTranslateProperty;
+
+    private final BooleanProperty visibleProperty;
 
     protected Property<Float>   borderWidthLeftProperty;
     protected Property<Float>   borderWidthRightProperty;
@@ -89,6 +92,8 @@ public class Transform extends GuiComponent
 
         rotationProperty = createRenderProperty(Rotation.NONE);
         scaleProperty = createRenderProperty(null);
+
+        visibleProperty = createRenderPropertyPropagateChildrenBoolean(true);
 
         parentProperty = new Property<>(null);
         childrenListProperty = new ListProperty<>(null);
@@ -421,6 +426,11 @@ public class Transform extends GuiComponent
         if (borderRadiusBottomRightProperty == null)
             borderRadiusBottomRightProperty = createRenderProperty(0);
         return borderRadiusBottomRightProperty;
+    }
+
+    public BooleanProperty visibleProperty()
+    {
+        return visibleProperty;
     }
 
     /**
@@ -982,5 +992,15 @@ public class Transform extends GuiComponent
                 borderRadiusBottomRightProperty().setValue(width);
                 break;
         }
+    }
+
+    public boolean isVisible()
+    {
+        return visibleProperty().get() && (parent() == null || parent().isVisible());
+    }
+
+    public void visible(boolean visible)
+    {
+        visibleProperty().set(visible);
     }
 }

@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.property.specific.BooleanProperty;
 import fr.ourten.teabeans.property.specific.DoubleProperty;
 import fr.ourten.teabeans.property.specific.FloatProperty;
 import fr.ourten.teabeans.property.specific.IntProperty;
@@ -27,7 +28,7 @@ public abstract class GuiComponent implements IEventEmitter
 
     public void detach(GuiElement element)
     {
-        
+
     }
 
     public GuiElement element()
@@ -101,9 +102,32 @@ public abstract class GuiComponent implements IEventEmitter
         return property;
     }
 
+    protected <T> Property<T> createRenderPropertyPropagateChildren(T initialValue)
+    {
+        Property<T> property = new Property<>(initialValue);
+        property.addListener(this::onRenderPropertyPropagatedChange);
+        return property;
+    }
+
+    protected BooleanProperty createRenderPropertyPropagateChildrenBoolean(boolean initialValue)
+    {
+        BooleanProperty property = new BooleanProperty(initialValue);
+        property.addListener(this::onRenderPropertyPropagatedChange);
+        return property;
+    }
+
     private void onRenderPropertyChange(Observable observable)
     {
         if (element() != null)
             element().markRenderDirty();
+    }
+
+    private void onRenderPropertyPropagatedChange(Observable observable)
+    {
+        if (element() != null)
+        {
+            element().markRenderDirty();
+            element().markChildRenderDirty();
+        }
     }
 }

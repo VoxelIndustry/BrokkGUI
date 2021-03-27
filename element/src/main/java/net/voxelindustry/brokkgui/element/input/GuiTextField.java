@@ -38,7 +38,7 @@ public class GuiTextField extends GuiFather
             {
                 removeChild(oldValue);
 
-                oldValue.visibleProperty().unbind();
+                oldValue.transform().visibleProperty().unbind();
                 oldValue.transform().widthProperty().unbind();
                 oldValue.transform().heightProperty().unbind();
                 oldValue.textComponent().removeTextPaddingProperty(textComponent.computedTextPaddingValue());
@@ -46,7 +46,7 @@ public class GuiTextField extends GuiFather
             }
             if (newValue != null)
             {
-                newValue.visibleProperty().bindProperty(promptTextAlwaysDisplayedProperty
+                newValue.transform().visibleProperty().bindProperty(promptTextAlwaysDisplayedProperty
                         .combine(textProperty(), (alwaysDisplay, textContent) -> alwaysDisplay || StringUtils.isEmpty(textContent)));
                 newValue.style().addStyleClass("text-field-prompt-text");
                 newValue.expandToText(false);

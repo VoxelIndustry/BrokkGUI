@@ -50,7 +50,7 @@ public class GuiCheckbox extends GuiRadioButton
             mark.transform().widthProperty().bindProperty(mark.transform().heightProperty());
             mark.transform().heightProperty().bindProperty(transform().heightProperty().subtract(2));
 
-            mark.visibleProperty().bindProperty(parent.getSelectedProperty());
+            mark.transform().visibleProperty().bindProperty(parent.getSelectedProperty());
         }
 
         @Override

@@ -113,7 +113,7 @@ public class GuiRadioButton extends GuiToggleButton
             mark.transform().widthProperty().bindProperty(mark.transform().heightProperty());
             mark.transform().heightProperty().bindProperty(transform().heightProperty().subtract(4));
 
-            mark.visibleProperty().bindProperty(toggleButtonComponent.getSelectedProperty());
+            mark.transform().visibleProperty().bindProperty(toggleButtonComponent.getSelectedProperty());
         }
 
         public GuiElement getMark()

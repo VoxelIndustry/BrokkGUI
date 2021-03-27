@@ -62,11 +62,7 @@ public abstract class GuiElement implements IEventEmitter
     private final Property<Boolean> disabledProperty;
     private final Property<Boolean> hoveredProperty;
     private final Property<Boolean> focusableProperty;
-    private final Property<Boolean> visibleProperty;
     private final Property<Boolean> draggedProperty;
-
-    private float draggedX;
-    private float draggedY;
 
     private IGuiSubWindow window;
 
@@ -85,7 +81,6 @@ public abstract class GuiElement implements IEventEmitter
         hoveredProperty = new Property<>(false);
 
         focusableProperty = new Property<>(false);
-        visibleProperty = createRenderProperty(true);
         draggedProperty = new Property<>(false);
 
         opacityProperty = new Property<>(1D);
@@ -376,11 +371,6 @@ public abstract class GuiElement implements IEventEmitter
         return focusableProperty;
     }
 
-    public Property<Boolean> visibleProperty()
-    {
-        return visibleProperty;
-    }
-
     public Property<Boolean> draggedProperty()
     {
         return draggedProperty;
@@ -439,12 +429,12 @@ public abstract class GuiElement implements IEventEmitter
 
     public boolean isVisible()
     {
-        return visibleProperty().getValue();
+        return transform().isVisible();
     }
 
     public void setVisible(boolean visible)
     {
-        visibleProperty().setValue(visible);
+        transform().visible(visible);
     }
 
     public boolean isDragged()
@@ -479,9 +469,22 @@ public abstract class GuiElement implements IEventEmitter
         return property;
     }
 
+    protected <T> Property<T> createRenderPropertyPropagateChildren(T initialValue)
+    {
+        Property<T> property = new Property<>(initialValue);
+        property.addListener(this::onRenderPropertyPropagatedChange);
+        return property;
+    }
+
     private void onRenderPropertyChange(Observable observable)
     {
         markRenderDirty();
+    }
+
+    private void onRenderPropertyPropagatedChange(Observable observable)
+    {
+        markRenderDirty();
+        markChildRenderDirty();
     }
 
     ////////////////
