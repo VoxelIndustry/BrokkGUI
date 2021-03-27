@@ -48,7 +48,7 @@ public class GuiCheckbox extends GuiRadioButton
             RelativeBindingHelper.bindToCenter(mark.transform(), transform());
 
             mark.transform().widthProperty().bindProperty(mark.transform().heightProperty());
-            mark.transform().heightProperty().bindProperty(transform().heightProperty().map(height -> height - 2));
+            mark.transform().heightProperty().bindProperty(transform().heightProperty().subtract(2));
 
             mark.visibleProperty().bindProperty(parent.getSelectedProperty());
         }

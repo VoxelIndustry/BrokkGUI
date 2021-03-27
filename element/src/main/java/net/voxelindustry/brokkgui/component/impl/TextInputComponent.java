@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.property.Property;
-import fr.ourten.teabeans.property.specific.FloatProperty;
 import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.animation.Animation;
@@ -48,7 +47,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
     private StyleComponent styleComponent;
 
     private final PropertyAnimation<Float> cursorAnimation;
-    private final FloatProperty            cursorOpacity = createRenderPropertyFloat(0);
+    private final Property<Float>          cursorOpacity = createRenderProperty(0F);
 
     public TextInputComponent()
     {

@@ -111,7 +111,7 @@ public class GuiRadioButton extends GuiToggleButton
             RelativeBindingHelper.bindToCenter(mark.transform(), transform());
 
             mark.transform().widthProperty().bindProperty(mark.transform().heightProperty());
-            mark.transform().heightProperty().bindProperty(transform().heightProperty().map(height -> height - 4));
+            mark.transform().heightProperty().bindProperty(transform().heightProperty().subtract(4));
 
             mark.visibleProperty().bindProperty(toggleButtonComponent.getSelectedProperty());
         }
