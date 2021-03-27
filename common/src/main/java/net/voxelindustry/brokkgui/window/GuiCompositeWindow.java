@@ -326,21 +326,21 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler)
+    public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<? super T> handler)
     {
         first.removeEventHandler(type, handler);
         second.removeEventHandler(type, handler);
     }
 
     @Override
-    public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
+    public <T extends HermodEvent> void dispatchEventRedirect(EventType<T> type, T event)
     {
         first.dispatchEventRedirect(type, event);
         second.dispatchEventRedirect(type, event);
     }
 
     @Override
-    public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
+    public <T extends HermodEvent> void dispatchEvent(EventType<T> type, T event)
     {
         first.dispatchEvent(type, event);
         second.dispatchEvent(type, event);

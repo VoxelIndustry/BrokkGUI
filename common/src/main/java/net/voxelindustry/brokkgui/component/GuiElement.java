@@ -8,14 +8,14 @@ import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.Rotation;
-import net.voxelindustry.brokkgui.event.ClickDragEvent;
 import net.voxelindustry.brokkgui.event.ClickPressEvent;
-import net.voxelindustry.brokkgui.event.ClickReleaseEvent;
 import net.voxelindustry.brokkgui.event.ComponentEvent;
 import net.voxelindustry.brokkgui.event.DisableEvent;
 import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.FocusEvent;
 import net.voxelindustry.brokkgui.event.GuiMouseEvent;
+import net.voxelindustry.brokkgui.event.GuiMouseEvent.DragStart;
+import net.voxelindustry.brokkgui.event.GuiMouseEvent.DragStop;
 import net.voxelindustry.brokkgui.event.HoverEvent;
 import net.voxelindustry.brokkgui.event.LayoutEvent;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
@@ -23,7 +23,6 @@ import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.window.IGuiSubWindow;
 import net.voxelindustry.hermod.EventDispatcher;
 import net.voxelindustry.hermod.EventHandler;
-import net.voxelindustry.hermod.EventQueue;
 import net.voxelindustry.hermod.IEventEmitter;
 
 import java.util.ArrayList;
@@ -103,8 +102,9 @@ public abstract class GuiElement implements IEventEmitter
         disabledProperty.addListener(disableListener);
 
         getEventDispatcher().addHandler(ClickPressEvent.TYPE, this::handleClickStart);
-        getEventDispatcher().addHandler(ClickDragEvent.TYPE, this::handleClickDrag);
-        getEventDispatcher().addHandler(ClickReleaseEvent.TYPE, this::handleClickStop);
+
+        getEventDispatcher().addHandler(GuiMouseEvent.DRAG_START, this::handleDragStart);
+        getEventDispatcher().addHandler(GuiMouseEvent.DRAG_STOP, this::handleDragStop);
     }
 
     public boolean isRenderDirty()
@@ -234,39 +234,16 @@ public abstract class GuiElement implements IEventEmitter
         setFocused();
     }
 
-    public void handleClickDrag(ClickDragEvent event)
+    public void handleDragStart(DragStart event)
     {
-        EventQueue queue = new EventQueue().addDispatcher(getEventDispatcher());
-
-        if (!isDragged())
-        {
-            draggedProperty().setValue(true);
-            queue.dispatch(GuiMouseEvent.DRAG_START, new GuiMouseEvent.DragStart(this, event.getMouseX(), event.getMouseY(), event.getKey()));
-
-            draggedX = event.getMouseX() - event.getOriginalMouseX();
-            draggedY = event.getMouseY() - event.getOriginalMouseY();
-
-            queue.dispatch(GuiMouseEvent.DRAGGING, new GuiMouseEvent.Dragging(this, event.getMouseX(), event.getMouseY(), event.getKey(), draggedX, draggedY));
-            return;
-        }
-
-        draggedX = event.getMouseX() - event.getOriginalMouseX();
-        draggedY = event.getMouseY() - event.getOriginalMouseY();
-
-        queue.dispatch(GuiMouseEvent.DRAGGING, new GuiMouseEvent.Dragging(this, event.getMouseX(), event.getMouseY(), event.getKey(), draggedX, draggedY));
+        draggedProperty().setValue(true);
+        GuiFocusManager.instance.draggedNode(this);
     }
 
-    public void handleClickStop(ClickReleaseEvent event)
+    public void handleDragStop(DragStop event)
     {
-        if (isDragged())
-        {
-            EventQueue queue = new EventQueue().addDispatcher(getEventDispatcher());
-
-            draggedProperty().setValue(false);
-            queue.dispatch(GuiMouseEvent.DRAG_STOP, new GuiMouseEvent.DragStop(this, event.getMouseX(), event.getMouseY(), event.getKey(), draggedX, draggedY));
-            draggedX = 0;
-            draggedY = 0;
-        }
+        draggedProperty().setValue(false);
+        GuiFocusManager.instance.removeDraggedNode(this);
     }
 
     @Deprecated
@@ -475,16 +452,6 @@ public abstract class GuiElement implements IEventEmitter
         return draggedProperty().getValue();
     }
 
-    public float getDraggedX()
-    {
-        return draggedX;
-    }
-
-    public float getDraggedY()
-    {
-        return draggedY;
-    }
-
     public IGuiSubWindow getWindow()
     {
         return window;
@@ -561,7 +528,7 @@ public abstract class GuiElement implements IEventEmitter
         if (component instanceof UpdateComponent)
             updateComponents.add((UpdateComponent) component);
 
-        EventQueueBuilder.singleton(this).dispatch(ComponentEvent.ADDED, new ComponentEvent.Added(this, component));
+        getEventDispatcher().singletonQueue().dispatch(ComponentEvent.ADDED, new ComponentEvent.Added(this, component));
         return component;
     }
 
@@ -583,7 +550,7 @@ public abstract class GuiElement implements IEventEmitter
         if (instance instanceof UpdateComponent)
             updateComponents.add((UpdateComponent) instance);
 
-        EventQueueBuilder.singleton(this).dispatch(ComponentEvent.ADDED, new ComponentEvent.Added(this, instance));
+        getEventDispatcher().singletonQueue().dispatch(ComponentEvent.ADDED, new ComponentEvent.Added(this, instance));
         return instance;
     }
 
@@ -597,7 +564,7 @@ public abstract class GuiElement implements IEventEmitter
         if (component instanceof UpdateComponent)
             updateComponents.remove(component);
 
-        EventQueueBuilder.singleton(this).dispatch(ComponentEvent.REMOVED, new ComponentEvent.Removed(this, component));
+        getEventDispatcher().singletonQueue().dispatch(ComponentEvent.REMOVED, new ComponentEvent.Removed(this, component));
         return (T) component;
     }
 

@@ -1,9 +1,11 @@
 package net.voxelindustry.brokkgui;
 
+import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.window.IGuiSubWindow;
 
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -15,6 +17,8 @@ public class GuiFocusManager
 
     private final Property<GuiElement>    focusedNodeProperty   = new Property<>(null);
     private final Property<IGuiSubWindow> focusedWindowProperty = new Property<>(null);
+
+    private final ListProperty<GuiElement> draggedNodesProperty = new ListProperty<>();
 
     public GuiElement focusedNode()
     {
@@ -57,5 +61,25 @@ public class GuiFocusManager
             focusedNodeProperty.setValue(null);
             focusedWindowProperty.setValue(null);
         }
+    }
+
+    public void draggedNode(GuiElement element)
+    {
+        draggedNodesProperty.add(element);
+    }
+
+    public boolean isDraggedNode(GuiElement element)
+    {
+        return draggedNodesProperty.contains(element);
+    }
+
+    public void removeDraggedNode(GuiElement element)
+    {
+        draggedNodesProperty.remove(element);
+    }
+
+    public Collection<GuiElement> draggedNodes()
+    {
+        return draggedNodesProperty.getValue();
     }
 }

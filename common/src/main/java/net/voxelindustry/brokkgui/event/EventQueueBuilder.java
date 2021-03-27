@@ -3,17 +3,11 @@ package net.voxelindustry.brokkgui.event;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.hermod.EventQueue;
-import net.voxelindustry.hermod.IEventEmitter;
 
 import java.util.function.Predicate;
 
 public class EventQueueBuilder
 {
-    public static EventQueue singleton(IEventEmitter emitter)
-    {
-        return new EventQueue().addDispatcher(emitter.getEventDispatcher());
-    }
-
     public static EventQueue fromTarget(GuiElement target)
     {
         EventQueue eventQueue = new EventQueue();
@@ -67,7 +61,7 @@ public class EventQueueBuilder
         for (Transform child : root.children())
         {
             if (predicate.test(child.element()))
-                allChildren(child, eventQueue);
+                allChildrenMatching(child, predicate, eventQueue);
         }
     }
 

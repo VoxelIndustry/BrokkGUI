@@ -3,7 +3,6 @@ package net.voxelindustry.brokkgui.window;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiFather;
-import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
@@ -123,21 +122,21 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     }
 
     @Override
-    public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler)
+    public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<? super T> handler)
     {
         getEventDispatcher().removeHandler(type, handler);
     }
 
     @Override
-    public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
+    public <T extends HermodEvent> void dispatchEventRedirect(EventType<T> type, T event)
     {
-        EventQueueBuilder.singleton(this).dispatch(type, event.copy(this));
+        getEventDispatcher().singletonQueue().dispatch(type, (T) event.copy(this));
     }
 
     @Override
-    public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
+    public <T extends HermodEvent> void dispatchEvent(EventType<T> type, T event)
     {
-        EventQueueBuilder.singleton(this).dispatch(type, event);
+        getEventDispatcher().singletonQueue().dispatch(type, event);
     }
 
     @Override
@@ -149,13 +148,13 @@ public class SubGuiScreen extends GuiFather implements IGuiSubWindow
     @Override
     public void open()
     {
-        EventQueueBuilder.singleton(this).dispatch(WindowEvent.OPEN, new WindowEvent.Open(this));
+        getEventDispatcher().singletonQueue().dispatch(WindowEvent.OPEN, new WindowEvent.Open(this));
     }
 
     @Override
     public void close()
     {
-        EventQueueBuilder.singleton(this).dispatch(WindowEvent.CLOSE, new WindowEvent.Close(this));
+        getEventDispatcher().singletonQueue().dispatch(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
     public void setOnOpenEvent(EventHandler<WindowEvent.Open> onOpenEvent)

@@ -14,7 +14,6 @@ import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.data.Scale;
-import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.TransformLayoutEvent;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.brokkgui.util.MouseInBoundsChecker;
@@ -170,7 +169,7 @@ public class Transform extends GuiComponent
 
     public void notifyOfLayoutChange(Transform child)
     {
-        EventQueueBuilder.singleton(this).dispatch(TransformLayoutEvent.TYPE, new TransformLayoutEvent(this, child));
+        getEventDispatcher().singletonQueue().dispatch(TransformLayoutEvent.TYPE, new TransformLayoutEvent(this, child));
     }
 
     /**

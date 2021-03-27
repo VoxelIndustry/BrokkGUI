@@ -4,7 +4,6 @@ import fr.ourten.teabeans.property.IProperty;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.event.EventQueueBuilder;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
@@ -399,21 +398,21 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler)
+    public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<? super T> handler)
     {
         getEventDispatcher().removeHandler(type, handler);
     }
 
     @Override
-    public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
+    public <T extends HermodEvent> void dispatchEventRedirect(EventType<T> type, T event)
     {
-        EventQueueBuilder.singleton(this).dispatch(type, event.copy(this));
+        getEventDispatcher().singletonQueue().dispatch(type, (T) event.copy(this));
     }
 
     @Override
-    public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
+    public <T extends HermodEvent> void dispatchEvent(EventType<T> type, T event)
     {
-        EventQueueBuilder.singleton(this).dispatch(type, event);
+        getEventDispatcher().singletonQueue().dispatch(type, event);
     }
 
     public TextSettings textSettings()

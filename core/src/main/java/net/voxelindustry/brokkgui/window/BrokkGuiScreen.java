@@ -11,11 +11,11 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.debug.DebugRenderer;
 import net.voxelindustry.brokkgui.element.pane.GuiPane;
-import net.voxelindustry.brokkgui.event.ClickDragEvent;
 import net.voxelindustry.brokkgui.event.ClickPressEvent;
 import net.voxelindustry.brokkgui.event.ClickReleaseEvent;
 import net.voxelindustry.brokkgui.event.DisposeEvent;
 import net.voxelindustry.brokkgui.event.EventQueueBuilder;
+import net.voxelindustry.brokkgui.event.GuiMouseEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
@@ -80,6 +80,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     private float lastClickX;
     private float lastClickY;
+
+    private boolean firstDragSinceClick;
 
     private final PriorityQueue<Pair<Runnable, Long>> tasksQueue;
 
@@ -272,6 +274,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         lastClickX = mouseX;
         lastClickY = mouseY;
+        firstDragSinceClick = true;
 
         if (source == null)
             return;
@@ -304,28 +307,24 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onClickDrag(float mouseX, float mouseY, MouseInputCode key)
     {
-        if (mainPanel.isPointInside(mouseX, mouseY) && !mainPanel.isDisabled() && mainPanel.isVisible())
+        if (firstDragSinceClick)
         {
-            EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(mainPanel,
-                    EventQueueBuilder.isPointInside(mouseX, mouseY)
-                            .and(EventQueueBuilder.isEnabled)
-                            .and(EventQueueBuilder.isVisible));
-
-            switch (key)
+            if (mainPanel.isPointInside(mouseX, mouseY) && !mainPanel.isDisabled() && mainPanel.isVisible())
             {
-                case MOUSE_LEFT:
-                    eventQueue.dispatch(ClickDragEvent.Left.TYPE, new ClickDragEvent.Left(mainPanel, mouseX, mouseY, lastClickX, lastClickY));
-                    break;
-                case MOUSE_RIGHT:
-                    eventQueue.dispatch(ClickDragEvent.Right.TYPE, new ClickDragEvent.Right(mainPanel, mouseX, mouseY, lastClickX, lastClickY));
-                    break;
-                case MOUSE_BUTTON_MIDDLE:
-                    eventQueue.dispatch(ClickDragEvent.Middle.TYPE, new ClickDragEvent.Middle(mainPanel, mouseX, mouseY, lastClickX, lastClickY));
-                    break;
-                default:
-                    eventQueue.dispatch(ClickDragEvent.TYPE, new ClickDragEvent(mainPanel, mouseX, mouseY, lastClickX, lastClickY, key));
-                    break;
+                EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(mainPanel,
+                        EventQueueBuilder.isPointInside(mouseX, mouseY)
+                                .and(EventQueueBuilder.isEnabled)
+                                .and(EventQueueBuilder.isVisible));
+
+                eventQueue.dispatch(GuiMouseEvent.DRAG_START, new GuiMouseEvent.DragStart(mainPanel, mouseX, mouseY, key));
             }
+            firstDragSinceClick = false;
+        }
+
+        for (GuiElement element : GuiFocusManager.instance.draggedNodes())
+        {
+            element.getEventDispatcher().singletonQueue()
+                    .dispatch(GuiMouseEvent.DRAGGING, new GuiMouseEvent.Dragging(element, mouseX, mouseY, key, mouseX - lastClickX, mouseY - lastClickY));
         }
     }
 
@@ -355,6 +354,14 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                     break;
             }
         }
+
+        GuiElement[] draggedNodesArray = GuiFocusManager.instance.draggedNodes().toArray(new GuiElement[0]);
+        for (GuiElement element : draggedNodesArray)
+        {
+            element.getEventDispatcher().singletonQueue()
+                    .dispatch(GuiMouseEvent.DRAG_STOP, new GuiMouseEvent.DragStop(element, mouseX, mouseY, key, mouseX - lastClickX, mouseY - lastClickY));
+        }
+
         lastClickX = -1;
         lastClickY = -1;
     }
@@ -791,21 +798,21 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<T> handler)
+    public <T extends HermodEvent> void removeEventHandler(EventType<T> type, EventHandler<? super T> handler)
     {
         getEventDispatcher().removeHandler(type, handler);
     }
 
     @Override
-    public void dispatchEventRedirect(EventType<? extends HermodEvent> type, HermodEvent event)
+    public <T extends HermodEvent> void dispatchEventRedirect(EventType<T> type, T event)
     {
-        EventQueueBuilder.singleton(this).dispatch(type, event.copy(this));
+        getEventDispatcher().singletonQueue().dispatch(type, (T) event.copy(this));
     }
 
     @Override
-    public void dispatchEvent(EventType<? extends HermodEvent> type, HermodEvent event)
+    public <T extends HermodEvent> void dispatchEvent(EventType<T> type, T event)
     {
-        EventQueueBuilder.singleton(this).dispatch(type, event);
+        getEventDispatcher().singletonQueue().dispatch(type, event);
     }
 
     @Override
