@@ -1,5 +1,21 @@
-scrollpane > .grip-x, scrollpane > .grip-y {
-    background-color: lightgrey;
+.scrollbar-track {
+    background-color: gray;
+}
+
+.scrollbar-grip {
+    background-color: #D3D3D3;
+}
+
+.scrollbar-track-button:hover {
+    background-color: #FFFFFF 50%;
+}
+
+.scrollbar-track:hover {
+    background-color: #737373;
+}
+
+.scrollbar-grip:hover {
+    background-color: #C6C6C6;
 }
 
 progressbar > .track {

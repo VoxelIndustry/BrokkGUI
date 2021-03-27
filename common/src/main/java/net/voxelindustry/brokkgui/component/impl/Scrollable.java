@@ -1,31 +1,42 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.binding.specific.FloatBinding;
+import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.property.specific.BooleanProperty;
 import fr.ourten.teabeans.property.specific.FloatProperty;
 import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.data.Position;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.event.ClickPressEvent;
 import net.voxelindustry.brokkgui.event.GuiMouseEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent.Press;
 import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.event.TransformLayoutEvent;
-import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
 import net.voxelindustry.brokkgui.shape.Rectangle;
+import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.util.MathUtils;
+import net.voxelindustry.hermod.HermodEvent;
+import org.apache.commons.lang3.NotImplementedException;
+
+import javax.annotation.Nullable;
 
 import static java.lang.Integer.signum;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class Scrollable extends GuiComponent implements RenderComponent
+public class Scrollable extends GuiComponent
 {
+    public static final Texture TRACK_LEFT_TEXTURE  = new Texture("brokkgui:textures/scroll/track_button_left.png");
+    public static final Texture TRACK_RIGHT_TEXTURE = new Texture("brokkgui:textures/scroll/track_button_right.png");
+    public static final Texture TRACK_UP_TEXTURE    = new Texture("brokkgui:textures/scroll/track_button_up.png");
+    public static final Texture TRACK_DOWN_TEXTURE  = new Texture("brokkgui:textures/scroll/track_button_down.png");
+
     private final FloatProperty trueWidthProperty  = new FloatProperty();
     private final FloatProperty trueHeightProperty = new FloatProperty();
 
@@ -37,8 +48,15 @@ public class Scrollable extends GuiComponent implements RenderComponent
     private final Property<GuiScrollbarPolicy> scrollXPolicyProperty = createRenderProperty(GuiScrollbarPolicy.NEEDED);
     private final Property<GuiScrollbarPolicy> scrollYPolicyProperty = createRenderProperty(GuiScrollbarPolicy.NEEDED);
 
-    private final FloatProperty scrollSpeedProperty = new FloatProperty(1F);
+    private final Property<RectBox> paddingProperty = new Property<>(RectBox.EMPTY);
+
+    private final FloatProperty scrollXProperty = new FloatProperty();
+    private final FloatProperty scrollYProperty = new FloatProperty();
+
+    private final FloatProperty scrollSpeedProperty = new FloatProperty(5F);
     private final FloatProperty panSpeedProperty    = new FloatProperty(1F);
+
+    private final BooleanProperty showTrackButtonsProperty = new BooleanProperty(false);
 
     private boolean isPannable;
     private boolean isScalable;
@@ -47,40 +65,195 @@ public class Scrollable extends GuiComponent implements RenderComponent
     private float dragStartX;
     private float dragStartY;
 
-    private GuiElement gripXComponent;
-    private GuiElement gripYComponent;
+    protected GuiElement gripX;
+    protected GuiElement gripY;
 
-    private GuiElement trackXComponent;
-    private GuiElement trackYComponent;
+    protected GuiElement trackX;
+    protected GuiElement trackY;
 
+    protected GuiElement trackXButtonLeft;
+    protected GuiElement trackXButtonRight;
+
+    protected GuiElement trackYButtonUp;
+    protected GuiElement trackYButtonDown;
 
     @Override
     public void attach(GuiElement element)
     {
         super.attach(element);
 
+        element().setFocusable(true);
+
+        transform().xOffsetProperty().bindProperty(scrollXProperty().combine(paddingProperty(),
+                (scroll, padding) -> scroll.floatValue() + padding.getLeft()));
+        transform().yOffsetProperty().bindProperty(scrollYProperty().combine(paddingProperty(),
+                (scroll, padding) -> scroll.floatValue() + padding.getTop()));
+
         getEventDispatcher().addHandler(TransformLayoutEvent.TYPE, this::onLayoutChange);
 
         getEventDispatcher().addHandler(ScrollEvent.TYPE, this::onScroll);
-        getEventDispatcher().addHandler(ClickPressEvent.TYPE, this::onClick);
         getEventDispatcher().addHandler(KeyEvent.PRESS, this::onScrollKey);
 
         getEventDispatcher().addHandler(GuiMouseEvent.DRAG_START, this::onMouseDragStart);
         getEventDispatcher().addHandler(GuiMouseEvent.DRAGGING, this::onMouseDrag);
 
+        createTrackX();
+        createGripX();
         createTrackY();
         createGripY();
+
+        showTrackButtonsProperty().addChangeListener(obs ->
+        {
+            if (showTrackButtons())
+            {
+                if (trackXButtonLeft == null)
+                {
+                    createXTrackButtons();
+                    createYTrackButtons();
+                }
+                else
+                {
+                    trackXButtonLeft.setVisible(true);
+                    trackXButtonRight.setVisible(true);
+                    trackYButtonUp.setVisible(true);
+                    trackYButtonDown.setVisible(true);
+                }
+                bindTracksToButtons();
+            }
+            else
+            {
+                trackX.transform().xPosProperty().bindProperty(
+                        transform().xPosProperty()
+                                .add(transform().xTranslateProperty()));
+                trackX.transform().widthProperty().bindProperty(transform().widthProperty());
+
+                trackY.transform().yPosProperty().bindProperty(
+                        transform().yPosProperty()
+                                .add(transform().yTranslateProperty()));
+                trackY.transform().heightProperty().bindProperty(transform().heightProperty());
+                trackXButtonLeft.setVisible(false);
+                trackXButtonRight.setVisible(false);
+                trackYButtonUp.setVisible(false);
+                trackYButtonDown.setVisible(false);
+            }
+        });
+
+        if (!showTrackButtons())
+        {
+            trackX.transform().xPosProperty().bindProperty(
+                    transform().xPosProperty()
+                            .add(transform().xTranslateProperty()));
+            trackX.transform().widthProperty().bindProperty(transform().widthProperty().subtract(trackY.transform().widthProperty()));
+
+            trackY.transform().yPosProperty().bindProperty(
+                    transform().yPosProperty()
+                            .add(transform().yTranslateProperty()));
+            trackY.transform().heightProperty().bindProperty(transform().heightProperty());
+        }
+        else
+        {
+            createXTrackButtons();
+            createYTrackButtons();
+            bindTracksToButtons();
+        }
+
+        ValueInvalidationListener widthListener = obs ->
+        {
+            if (scrollXPolicy() == GuiScrollbarPolicy.NEEDED)
+            {
+                boolean visible = trueWidth() > transform().width();
+                trackX.setVisible(visible);
+                // Check due to concurrent evaluation of listener while track buttons are being created
+                if (showTrackButtons() && trackXButtonLeft != null && trackXButtonRight != null)
+                {
+                    trackXButtonLeft.setVisible(visible);
+                    trackXButtonRight.setVisible(visible);
+                }
+            }
+        };
+        transform().widthProperty().addChangeListener(widthListener);
+        trueWidthProperty().addChangeListener(widthListener);
+
+        ValueInvalidationListener heightListener = obs ->
+        {
+            if (scrollYPolicy() == GuiScrollbarPolicy.NEEDED)
+            {
+                boolean visible = trueHeight() > transform().height();
+                trackY.setVisible(visible);
+                // Check due to concurrent evaluation of listener while track buttons are being created
+                if (showTrackButtons() && trackYButtonUp != null && trackYButtonDown != null)
+                {
+                    trackYButtonUp.setVisible(visible);
+                    trackYButtonDown.setVisible(visible);
+                }
+            }
+        };
+        transform().heightProperty().addChangeListener(heightListener);
+        trueHeightProperty().addChangeListener(heightListener);
+
+        scrollXPolicyProperty().addChangeListener((obs, oldValue, newValue) ->
+        {
+            if (newValue == GuiScrollbarPolicy.NEVER && (oldValue == GuiScrollbarPolicy.ALWAYS || trueWidth() > transform().width()))
+            {
+                trackX.setVisible(false);
+                if (showTrackButtons())
+                {
+                    trackXButtonLeft.setVisible(false);
+                    trackXButtonRight.setVisible(false);
+                }
+            }
+            else if (newValue != GuiScrollbarPolicy.NEVER && oldValue == GuiScrollbarPolicy.NEVER)
+            {
+                trackX.setVisible(true);
+                if (showTrackButtons())
+                {
+                    trackXButtonLeft.setVisible(true);
+                    trackXButtonRight.setVisible(true);
+                }
+            }
+        });
+        scrollYPolicyProperty().addChangeListener((obs, oldValue, newValue) ->
+        {
+            if (newValue == GuiScrollbarPolicy.NEVER && (oldValue == GuiScrollbarPolicy.ALWAYS || trueHeight() > transform().height()))
+            {
+                trackY.setVisible(false);
+                if (showTrackButtons())
+                {
+                    trackYButtonUp.setVisible(false);
+                    trackYButtonDown.setVisible(false);
+                }
+            }
+            else if (newValue != GuiScrollbarPolicy.NEVER && oldValue == GuiScrollbarPolicy.NEVER)
+            {
+                trackY.setVisible(true);
+                if (showTrackButtons())
+                {
+                    trackYButtonUp.setVisible(true);
+                    trackYButtonDown.setVisible(true);
+                }
+            }
+        });
+
+        paddingProperty.addChangeListener(obs -> onLayoutChange(null));
     }
 
     private void onScrollKey(Press event)
     {
         if (event.getKey() == keyboard().getKeyCode("UP"))
         {
-            scrollY(min(0, scrollY() + 10 * scrollSpeed()));
+            scrollY(min(0, scrollY() + scrollSpeed()));
         }
         else if (event.getKey() == keyboard().getKeyCode("DOWN"))
         {
-            scrollY(max(transform().height() - trueHeight(), scrollY() - 10 * scrollSpeed()));
+            scrollY(max(transform().height() - trueHeight(), scrollY() - scrollSpeed()));
+        }
+        else if (event.getKey() == keyboard().getKeyCode("LEFT"))
+        {
+            scrollX(min(0, scrollX() + scrollSpeed()));
+        }
+        else if (event.getKey() == keyboard().getKeyCode("RIGHT"))
+        {
+            scrollX(max(transform().width() - trueWidth(), scrollX() - scrollSpeed()));
         }
         else if (event.getKey() == keyboard().getKeyCode("PAGE_UP"))
         {
@@ -100,66 +273,244 @@ public class Scrollable extends GuiComponent implements RenderComponent
         }
     }
 
-    private void createTrackY()
+    protected void createTrackX()
     {
-        transform().addChild((trackYComponent = new Rectangle()).transform());
-        trackYComponent.paint().backgroundColor(Color.GRAY);
+        transform().addChild((trackX = new Rectangle()).transform());
 
-        trackYComponent.transform().xPosProperty().bindProperty(transform().xPosProperty().combine(transform().xTranslateProperty(),
-                transform().widthProperty(),
-                trackYComponent.transform().widthProperty(),
-                (xPos, xTranslate, width, trackWidth) -> xPos + xTranslate + width - trackWidth));
-        trackYComponent.transform().yPosProperty().bindProperty(transform().yPosProperty().combine(transform().yTranslateProperty(), Float::sum));
+        trackX.transform().visibleProperty().addChangeListener(obs -> System.out.println(trackX.isVisible()));
+        trackX.paint().backgroundColor(Color.GRAY);
 
-        trackYComponent.width(8);
-        trackYComponent.transform().heightProperty().bindProperty(transform().heightProperty());
+        trackX.transform().xPosProperty().bindProperty(transform().xPosProperty().add(transform().xTranslateProperty()));
+        trackX.transform().yPosProperty().bindProperty(transform().yPosProperty().combine(transform().yTranslateProperty(),
+                transform().heightProperty(),
+                trackX.transform().heightProperty(),
+                (yPos, yTranslate, height, trackHeight) -> yPos.floatValue() + yTranslate.floatValue() + height.floatValue() - trackHeight.floatValue()));
 
-        trackYComponent.getEventDispatcher().addHandler(ClickPressEvent.TYPE, e ->
+        trackX.height(8);
+
+        trackX.getEventDispatcher().addHandler(ClickPressEvent.TYPE, e ->
         {
-            float ratio = max(0, (e.getMouseY() - trackYComponent.getTopPos()) / trackYComponent.height());
+            float ratio = max(0, (e.getMouseX() - trackX.getLeftPos()) / trackX.width());
+            scrollX(-(trueWidth() - transform().width()) * ratio);
+        });
+
+        if (scrollXPolicy() == GuiScrollbarPolicy.NEVER || (scrollXPolicy() == GuiScrollbarPolicy.NEEDED && trueWidth() <= transform().width()))
+        {
+            trackX.setVisible(false);
+            if (showTrackButtons())
+            {
+                trackXButtonLeft.setVisible(false);
+                trackXButtonRight.setVisible(false);
+            }
+        }
+    }
+
+    protected void createXTrackButtons()
+    {
+        transform().addChild((trackXButtonLeft = new Rectangle(8, 8)).transform());
+        trackXButtonLeft.paint().backgroundTexture(TRACK_LEFT_TEXTURE);
+        trackXButtonLeft.transform().xPosProperty().bindProperty(transform().xPosProperty().add(transform().xTranslateProperty()));
+        trackXButtonLeft.transform().yPosProperty().bindProperty(transform().yPosProperty().combine(
+                transform().yTranslateProperty(),
+                transform().heightProperty(),
+                trackXButtonLeft.transform().heightProperty(),
+                (yPos, yTranslate, height, trackButtonHeight) -> yPos.floatValue() + yTranslate.floatValue() + height.floatValue() - trackButtonHeight.floatValue()));
+
+        trackXButtonLeft.getEventDispatcher().addHandler(ClickPressEvent.TYPE, event -> scrollX(min(0, scrollX() + scrollSpeed())));
+
+        transform().addChild((trackXButtonRight = new Rectangle(8, 8)).transform());
+        trackXButtonRight.paint().backgroundTexture(TRACK_RIGHT_TEXTURE);
+        trackXButtonRight.transform().xPosProperty().bindProperty(new FloatBinding()
+        {
+            {
+                super.bind(transform().xPosProperty(),
+                        transform().xTranslateProperty(),
+                        transform().widthProperty(),
+                        trackXButtonRight.transform().widthProperty(),
+                        trackY.transform().visibleProperty(),
+                        trackY.transform().widthProperty()
+                );
+            }
+
+            @Override
+            protected float computeValue()
+            {
+                if (trackY.isVisible())
+                    return transform().rightPos() - trackXButtonRight.width() - trackY.width();
+                return transform().rightPos() - trackXButtonRight.width();
+            }
+        });
+
+        trackXButtonRight.transform().yPosProperty().bindProperty(transform().yPosProperty().combine(
+                transform().yTranslateProperty(),
+                transform().heightProperty(),
+                trackXButtonRight.transform().heightProperty(),
+                (yPos, yTranslate, height, trackButtonHeight) -> yPos.floatValue() + yTranslate.floatValue() + height.floatValue() - trackButtonHeight.floatValue()));
+
+        trackXButtonRight.getEventDispatcher().addHandler(ClickPressEvent.TYPE, event -> scrollX(max(transform().width() - trueWidth(), scrollX() - scrollSpeed())));
+    }
+
+    protected void createYTrackButtons()
+    {
+        transform().addChild((trackYButtonUp = new Rectangle(8, 8)).transform());
+        trackYButtonUp.paint().backgroundTexture(TRACK_UP_TEXTURE);
+        trackYButtonUp.transform().xPosProperty().bindProperty(transform().xPosProperty().combine(
+                transform().xTranslateProperty(),
+                transform().widthProperty(),
+                trackYButtonUp.transform().widthProperty(),
+                (xPos, xTranslate, width, trackButtonWidth) -> xPos.floatValue() + xTranslate.floatValue() + width.floatValue() - trackButtonWidth.floatValue()));
+        trackYButtonUp.transform().yPosProperty().bindProperty(transform().yPosProperty().add(transform().yTranslateProperty()));
+
+        trackYButtonUp.getEventDispatcher().addHandler(ClickPressEvent.TYPE, event -> scrollY(min(0, scrollY() + scrollSpeed())));
+
+        transform().addChild((trackYButtonDown = new Rectangle(8, 8)).transform());
+        trackYButtonDown.paint().backgroundTexture(TRACK_DOWN_TEXTURE);
+        trackYButtonDown.transform().yPosProperty().bindProperty(transform().yPosProperty().combine(
+                transform().yTranslateProperty(),
+                transform().heightProperty(),
+                trackYButtonDown.transform().heightProperty(),
+                (yPos, yTranslate, height, trackButtonHeight) -> yPos.floatValue() + yTranslate.floatValue() + height.floatValue() - trackButtonHeight.floatValue()));
+        trackYButtonDown.transform().xPosProperty().bindProperty(transform().xPosProperty().combine(
+                transform().xTranslateProperty(),
+                transform().widthProperty(),
+                trackYButtonDown.transform().widthProperty(),
+                (xPos, xTranslate, width, trackButtonWidth) -> xPos.floatValue() + xTranslate.floatValue() + width.floatValue() - trackButtonWidth.floatValue()));
+
+        trackYButtonDown.getEventDispatcher().addHandler(ClickPressEvent.TYPE, event -> scrollY(max(transform().height() - trueHeight(), scrollY() - scrollSpeed())));
+    }
+
+    private void bindTracksToButtons()
+    {
+        trackX.transform().xPosProperty().bindProperty(transform().xPosProperty()
+                .combine(transform().xTranslateProperty(), trackXButtonLeft.transform().widthProperty(),
+                        (xPos, xTranslate, buttonWidth) -> xPos.floatValue() + xTranslate.floatValue() + buttonWidth.floatValue()));
+
+        trackX.transform().widthProperty().bindProperty(new FloatBinding()
+        {
+            {
+                super.bind(trackY.transform().visibleProperty(),
+                        trackY.transform().widthProperty(),
+                        transform().widthProperty(),
+                        trackXButtonLeft.transform().widthProperty(),
+                        trackXButtonRight.transform().widthProperty());
+            }
+
+            @Override
+            protected float computeValue()
+            {
+                if (trackY.isVisible())
+                    return transform().width() - trackXButtonLeft.width() - trackXButtonRight.width() - trackY.width();
+                return transform().width() - trackXButtonLeft.width() - trackXButtonRight.width();
+            }
+        });
+
+        trackY.transform().yPosProperty().bindProperty(transform().yPosProperty()
+                .combine(transform().yTranslateProperty(), trackYButtonUp.transform().heightProperty(),
+                        (yPos, yTranslate, buttonHeight) -> yPos.floatValue() + yTranslate.floatValue() + buttonHeight.floatValue()));
+        trackY.transform().heightProperty().bindProperty(
+                transform().heightProperty().combine(
+                        trackYButtonUp.transform().heightProperty(),
+                        trackYButtonDown.transform().heightProperty(),
+                        (height, upButtonHeight, downButtonHeight) -> height.floatValue() - upButtonHeight.floatValue() - downButtonHeight.floatValue()));
+    }
+
+    public void createGripX()
+    {
+        trackX.transform().addChild((gripX = new Rectangle()).transform());
+
+        gripX.getEventDispatcher().addHandler(ClickPressEvent.TYPE, HermodEvent::consume);
+
+        gripX.getEventDispatcher().addHandler(GuiMouseEvent.DRAG_START, event -> dragStartX = scrollX());
+        gripX.getEventDispatcher().addHandler(GuiMouseEvent.DRAGGING, event ->
+        {
+            float ratio = trueWidth() / transform().width();
+            scrollX(-MathUtils.clamp(0, trueWidth() - transform().width(), -dragStartX + event.getDragX() * ratio));
+        });
+
+        gripX.paint().backgroundColor(Color.LIGHT_GRAY);
+
+        gripX.transform().yPosProperty().bindProperty(transform().yPosProperty().combine(transform().yTranslateProperty(),
+                transform().heightProperty(),
+                gripX.transform().heightProperty(),
+                (yPos, yTranslate, height, gripHeight) -> yPos.floatValue() + yTranslate.floatValue() + height.floatValue() - gripHeight.floatValue()));
+
+        gripX.transform().xPosProperty().bindProperty(new FloatBinding()
+        {
+            {
+                super.bind(trackX.transform().xPosProperty(),
+                        trackX.transform().xTranslateProperty(),
+                        scrollXProperty(),
+                        trackX.transform().widthProperty(),
+                        gripX.transform().widthProperty(),
+                        trueWidthProperty(),
+                        transform().widthProperty());
+            }
+
+            @Override
+            protected float computeValue()
+            {
+                return trackX.transform().leftPos() - scrollX() / (trueWidth() - transform().width()) * (trackX.width() - gripX.width());
+            }
+        });
+
+        gripX.height(8);
+        gripX.transform().widthProperty().bindProperty(trueWidthProperty().combine(
+                transform().widthProperty(),
+                (trueWidth, width) -> max(16, 0.9F * width.floatValue() * (width.floatValue() / trueWidth.floatValue()))));
+    }
+
+    protected void createTrackY()
+    {
+        transform().addChild((trackY = new Rectangle()).transform());
+        trackY.paint().backgroundColor(Color.GRAY);
+
+        trackY.transform().xPosProperty().bindProperty(transform().xPosProperty().combine(transform().xTranslateProperty(),
+                transform().widthProperty(),
+                trackY.transform().widthProperty(),
+                (xPos, xTranslate, width, trackWidth) -> xPos.floatValue() + xTranslate.floatValue() + width.floatValue() - trackWidth.floatValue()));
+        trackY.transform().yPosProperty().bindProperty(transform().yPosProperty().add(transform().yTranslateProperty()));
+
+        trackY.width(8);
+        trackY.transform().heightProperty().bindProperty(transform().heightProperty());
+
+        trackY.getEventDispatcher().addHandler(ClickPressEvent.TYPE, e ->
+        {
+            float ratio = max(0, (e.getMouseY() - trackY.getTopPos()) / trackY.height());
             scrollY(-(trueHeight() - transform().height()) * ratio);
         });
+
+        if (scrollYPolicy() == GuiScrollbarPolicy.NEVER || (scrollYPolicy() == GuiScrollbarPolicy.NEEDED && trueHeight() <= transform().height()))
+            trackY.setVisible(false);
     }
 
     public void createGripY()
     {
-        transform().addChild((gripYComponent = new Rectangle()).transform());
+        trackY.transform().addChild((gripY = new Rectangle()).transform());
 
-        gripYComponent.getEventDispatcher().addHandler(GuiMouseEvent.DRAG_START, event ->
+        gripY.getEventDispatcher().addHandler(ClickPressEvent.TYPE, HermodEvent::consume);
+
+        gripY.getEventDispatcher().addHandler(GuiMouseEvent.DRAG_START, event -> dragStartY = scrollY());
+        gripY.getEventDispatcher().addHandler(GuiMouseEvent.DRAGGING, event ->
         {
-            dragStartY = scrollY();
+            float ratio = trueHeight() / transform().height();
+            scrollY(-MathUtils.clamp(0, trueHeight() - transform().height(), -dragStartY + event.getDragY() * ratio));
         });
 
-        gripYComponent.getEventDispatcher().addHandler(GuiMouseEvent.DRAGGING, event ->
-        {
-            System.out.println(-dragStartY + event.getDragY());
-            System.out.println(scrollY());
-/*            scrollY(MathUtils.clamp(0,
-                    transform().height() - trueHeight(),
-                    -dragStartY + event.getDragY()));*/
-            scrollY(-MathUtils.clamp(0, trueHeight() - transform().height(), -dragStartY + event.getDragY()));
-        });
+        gripY.paint().backgroundColor(Color.LIGHT_GRAY);
 
-        gripYComponent.getEventDispatcher().addHandler(GuiMouseEvent.DRAG_STOP, event ->
-        {
-            System.out.println("STOPPED");
-        });
-
-        gripYComponent.paint().backgroundColor(Color.LIGHT_GRAY);
-
-        gripYComponent.transform().xPosProperty().bindProperty(transform().xPosProperty().combine(transform().xTranslateProperty(),
+        gripY.transform().xPosProperty().bindProperty(transform().xPosProperty().combine(transform().xTranslateProperty(),
                 transform().widthProperty(),
-                gripYComponent.transform().widthProperty(),
-                (xPos, xTranslate, width, gripWidth) -> xPos + xTranslate + width - gripWidth));
+                gripY.transform().widthProperty(),
+                (xPos, xTranslate, width, gripWidth) -> xPos.floatValue() + xTranslate.floatValue() + width.floatValue() - gripWidth.floatValue()));
 
-        gripYComponent.transform().yPosProperty().bindProperty(new FloatBinding()
+        gripY.transform().yPosProperty().bindProperty(new FloatBinding()
         {
             {
-                super.bind(trackYComponent.transform().yPosProperty(),
-                        trackYComponent.transform().yTranslateProperty(),
+                super.bind(trackY.transform().yPosProperty(),
+                        trackY.transform().yTranslateProperty(),
                         scrollYProperty(),
-                        trackYComponent.transform().heightProperty(),
-                        gripYComponent.transform().heightProperty(),
+                        trackY.transform().heightProperty(),
+                        gripY.transform().heightProperty(),
                         trueHeightProperty(),
                         transform().heightProperty());
             }
@@ -167,36 +518,49 @@ public class Scrollable extends GuiComponent implements RenderComponent
             @Override
             protected float computeValue()
             {
-                return trackYComponent.transform().topPos() - scrollY() / (trueHeight() - transform().height()) * (trackYComponent.height() - gripYComponent.height());
+                return trackY.transform().topPos() - scrollY() / (trueHeight() - transform().height()) * (trackY.height() - gripY.height());
             }
         });
 
-        gripYComponent.width(8);
-        gripYComponent.transform().heightProperty().bindProperty(trueHeightProperty().combine(
+        gripY.width(8);
+        gripY.transform().heightProperty().bindProperty(trueHeightProperty().combine(
                 transform().heightProperty(),
-                (trueHeight, height) -> max(16, 0.9F * height * (height / trueHeight))));
+                (trueHeight, height) -> max(16, 0.9F * height.floatValue() * (height.floatValue() / trueHeight.floatValue()))));
     }
 
-    private void onLayoutChange(TransformLayoutEvent event)
+    private void onLayoutChange(@Nullable TransformLayoutEvent event)
     {
         float maxX = 0;
         float maxY = 0;
         for (Transform child : transform().children())
         {
-            if (child.rightPos() > maxX)
-                maxX = child.rightPos() - transform().leftPos();
-            if (child.bottomPos() > maxY)
-                maxY = child.bottomPos() - transform().topPos();
+            if (shouldIgnoreLayoutForChild(child))
+                continue;
+
+            float childRightPos = child.rightPos() - transform().leftPos() - transform().xOffsetProperty().get();
+            float childBottomPos = child.bottomPos() - transform().topPos() - transform().yOffsetProperty().get();
+
+            if (childRightPos > maxX)
+                maxX = childRightPos;
+            if (childBottomPos > maxY)
+                maxY = childBottomPos;
         }
 
-        trueWidthProperty().set(maxX);
-        trueHeightProperty().set(maxY);
+        if (maxX + padding().getLeft() > transform().width())
+            trueWidthProperty().set(maxX + padding().getHorizontal());
+        else
+            trueWidthProperty().set(maxX);
+
+        if (maxY + padding().getTop() > transform().height())
+            trueHeightProperty().set(maxY + padding().getVertical());
+        else
+            trueHeightProperty().set(maxY);
     }
 
-    @Override
-    public void renderContent(IRenderCommandReceiver renderer, float mouseX, float mouseY)
+    private boolean shouldIgnoreLayoutForChild(Transform child)
     {
-
+        GuiElement element = child.element();
+        return element == trackX || element == trackY || element == trackXButtonLeft || element == trackXButtonRight || element == trackYButtonUp || element == trackYButtonDown;
     }
 
     private void onMouseDragStart(GuiMouseEvent.DragStart event)
@@ -229,68 +593,6 @@ public class Scrollable extends GuiComponent implements RenderComponent
     {
         if (pannable())
             handlePanning(event);
-
-/*        // Min X to select the vertical grip
-        float gripYMinX = transform().rightPos() - gripYWidth();
-
-        if (scrollYPolicy() != GuiScrollbarPolicy.NEVER &&
-                trueHeight() > transform().height() && event.getMouseX() - event.getDragX() > gripYMinX)
-        {
-            float ratio =
-                    (event.getMouseY() - transform().yPos() - transform().yTranslate()) / transform().height();
-            float minY = transform().topPos();
-            float maxY = minY + transform().height();
-
-            if (event.getMouseY() > minY && event.getMouseY() < maxY)
-                scrollY((trueHeight() - transform().height()) * -ratio);
-            else if (event.getMouseY() <= minY)
-                scrollY(0);
-            else
-                scrollY(-(trueHeight() - transform().height()));
-        }
-
-        // Min Y to select the horizontal grip
-        float gripXMinY = transform().bottomPos() - gripXHeight();
-
-        if (scrollXPolicy() != GuiScrollbarPolicy.NEVER &&
-                trueWidth() > transform().width() && event.getMouseY() - event.getDragY() > gripXMinY)
-        {
-            float ratio =
-                    (event.getMouseX() - transform().xPos() - transform().xTranslate()) / transform().width();
-            float minX = transform().leftPos();
-            float maxX = minX + transform().width();
-
-            if (event.getMouseX() > minX && event.getMouseX() < maxX)
-                scrollX((trueWidth() - transform().width()) * -ratio);
-            else if (event.getMouseX() <= minX)
-                scrollX(0);
-            else
-                scrollX(-(trueWidth() - transform().width()));
-        }*/
-    }
-
-    private void onClick(ClickPressEvent event)
-    {
-        // Min X to select the vertical grip
-        float gripYMinX = transform().rightPos() - gripYWidth();
-
-        if (scrollYPolicy() != GuiScrollbarPolicy.NEVER &&
-                trueHeight() > transform().height() && event.getMouseX() > gripYMinX)
-        {
-            float ratio =
-                    (event.getMouseY() - transform().yPos() - transform().yTranslate()) / transform().height();
-            scrollY((trueHeight() - transform().height()) * -ratio);
-        }
-
-        // Min Y to select the horizontal grip
-        float gripXMinY = transform().bottomPos() - gripXHeight();
-        if (scrollXPolicy() != GuiScrollbarPolicy.NEVER &&
-                trueWidth() > transform().width() && event.getMouseY() > gripXMinY)
-        {
-            float ratio =
-                    (event.getMouseX() - transform().xPos() - transform().xTranslate()) / transform().width();
-            scrollX((trueWidth() - transform().width()) * -ratio);
-        }
     }
 
     private void handleScale(ScrollEvent event)
@@ -307,14 +609,14 @@ public class Scrollable extends GuiComponent implements RenderComponent
     private void handleScroll(ScrollEvent event)
     {
         float scrolled;
-        boolean vertical = event.scrollY() != 0 || !BrokkGuiPlatform.getInstance().getKeyboardUtil().isShiftKeyDown();
+        boolean vertical = event.scrollY() != 0 && !BrokkGuiPlatform.getInstance().getKeyboardUtil().isShiftKeyDown();
 
         if (vertical)
         {
             if (transform().height() >= trueHeight())
                 return;
 
-            scrolled = event.scrollY() * 5 * scrollSpeed();
+            scrolled = event.scrollY() * scrollSpeed();
             if (scrollY() + scrolled <= transform().height() - trueHeight()
                     && event.scrollY() < 0)
                 scrolled = transform().height() - trueHeight() - scrollY();
@@ -328,11 +630,14 @@ public class Scrollable extends GuiComponent implements RenderComponent
             if (transform().width() >= trueWidth())
                 return;
 
-            scrolled = event.scrollX() * 10F * scrollSpeed();
+            // Use scrollY in the case of shift holding (switch scroll axis)
+            float eventScroll = event.scrollX() == 0 ? event.scrollY() : event.scrollX();
+
+            scrolled = eventScroll * scrollSpeed();
             if (scrollX() + scrolled <= transform().width() - trueWidth()
-                    && event.scrollX() < 0)
+                    && eventScroll < 0)
                 scrolled = transform().width() - trueWidth() - scrollX();
-            if (scrollX() + scrolled >= 0 && event.scrollX() > 0)
+            if (scrollX() + scrolled >= 0 && eventScroll > 0)
                 scrolled = 0 - scrollX();
 
             scrollX(scrollX() + scrolled);
@@ -353,12 +658,12 @@ public class Scrollable extends GuiComponent implements RenderComponent
 
     public FloatProperty scrollXProperty()
     {
-        return transform().xOffsetProperty();
+        return scrollXProperty;
     }
 
     public FloatProperty scrollYProperty()
     {
-        return transform().yOffsetProperty();
+        return scrollYProperty;
     }
 
     public FloatProperty trueWidthProperty()
@@ -409,6 +714,16 @@ public class Scrollable extends GuiComponent implements RenderComponent
     public Property<GuiScrollbarPolicy> scrollYPolicyProperty()
     {
         return scrollYPolicyProperty;
+    }
+
+    public BooleanProperty showTrackButtonsProperty()
+    {
+        return showTrackButtonsProperty;
+    }
+
+    public Property<RectBox> paddingProperty()
+    {
+        return paddingProperty;
     }
 
     ////////////
@@ -574,6 +889,7 @@ public class Scrollable extends GuiComponent implements RenderComponent
     public void scalable(boolean scalable)
     {
         isScalable = scalable;
+        throw new NotImplementedException("Scalable is currently not supported by Scrollable component.");
     }
 
     public boolean scrollable()
@@ -584,5 +900,25 @@ public class Scrollable extends GuiComponent implements RenderComponent
     public void scrollable(boolean scrollable)
     {
         isScrollable = scrollable;
+    }
+
+    public boolean showTrackButtons()
+    {
+        return showTrackButtonsProperty().getValue();
+    }
+
+    public void showTrackButtons(boolean showButtons)
+    {
+        showTrackButtonsProperty().setValue(showButtons);
+    }
+
+    public RectBox padding()
+    {
+        return paddingProperty().getValue();
+    }
+
+    public void padding(RectBox padding)
+    {
+        paddingProperty().setValue(padding);
     }
 }
