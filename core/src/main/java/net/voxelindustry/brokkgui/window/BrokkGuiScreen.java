@@ -8,7 +8,6 @@ import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.debug.DebugRenderer;
 import net.voxelindustry.brokkgui.element.pane.GuiPane;
 import net.voxelindustry.brokkgui.event.ClickPressEvent;
@@ -369,7 +368,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
     {
-        GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
+        GuiElement hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null && (xOffset != 0 || yOffset != 0))
         {
             EventQueueBuilder.allChildrenMatching(hovered, EventQueueBuilder.isPointInside(mouseX, mouseY))
@@ -398,7 +397,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             return;
         }
 
-        GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
+        GuiElement hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
         {
             EventQueueBuilder.fromTarget(hovered).dispatch(KeyEvent.PRESS, new KeyEvent.Press(hovered, key));
@@ -418,7 +417,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             return;
         }
 
-        GuiFather hovered = getNodeUnderMouse(mouseX, mouseY);
+        GuiElement hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
         {
             EventQueueBuilder.fromTarget(hovered).dispatch(KeyEvent.RELEASE, new KeyEvent.Release(hovered, key));
@@ -500,7 +499,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         new EventQueue().addDispatcher(getEventDispatcher()).dispatch(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
-    private GuiFather getNodeUnderMouse(float mouseX, float mouseY)
+    private GuiElement getNodeUnderMouse(float mouseX, float mouseY)
     {
         if (!windows.isEmpty())
         {

@@ -1,14 +1,14 @@
 package net.voxelindustry.brokkgui.element.pane;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
+import net.voxelindustry.brokkgui.style.StyledElement;
 
-public class GuiPane extends GuiFather
+public class GuiPane extends GuiElement implements StyledElement
 {
     public GuiPane()
     {
-        this.transform().bindChild(false);
+        transform().bindChild(false);
     }
 
     @Override
@@ -18,10 +18,10 @@ public class GuiPane extends GuiFather
     }
 
     @Override
-    public void addChild(final GuiElement node)
+    public void addChild(GuiElement node)
     {
         super.addChild(node);
 
-        RelativeBindingHelper.bindToCenter(node.transform(), this.transform());
+        RelativeBindingHelper.bindToCenter(node.transform(), transform());
     }
 }

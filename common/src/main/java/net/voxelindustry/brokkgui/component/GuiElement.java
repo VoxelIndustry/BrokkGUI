@@ -27,16 +27,20 @@ import net.voxelindustry.hermod.IEventEmitter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static net.voxelindustry.brokkgui.shape.RectangleShape.RECTANGLE_SHAPE;
 
-public abstract class GuiElement implements IEventEmitter
+public abstract class GuiElement implements IEventEmitter, ComponentHolder
 {
     private final Map<Class<? extends GuiComponent>, GuiComponent> componentMap;
 
@@ -557,6 +561,7 @@ public abstract class GuiElement implements IEventEmitter
         return instance;
     }
 
+    @Override
     public <T extends GuiComponent> T remove(Class<T> componentClass)
     {
         GuiComponent component = componentMap.remove(componentClass);
@@ -571,32 +576,55 @@ public abstract class GuiElement implements IEventEmitter
         return (T) component;
     }
 
+    @Override
     public <T extends GuiComponent> T get(Class<T> componentClass)
     {
+        for (Class<? extends GuiComponent> aClass : componentMap.keySet())
+        {
+            if (componentClass.isAssignableFrom(aClass))
+            {
+                return (T) componentMap.getOrDefault(componentClass,
+                        Optional.<Class<? extends GuiComponent>>of(aClass).map(componentMap::get).orElse(null));
+            }
+        }
         return (T) componentMap.getOrDefault(componentClass,
-                componentMap.keySet().stream()
-                        .filter(componentClass::isAssignableFrom)
-                        .findFirst().map(componentMap::get).orElse(null));
+                Optional.<Class<? extends GuiComponent>>empty().map(componentMap::get).orElse(null));
     }
 
+    @Override
     public <T extends GuiComponent> Collection<T> getAll(Class<T> componentClass)
     {
-        return componentMap.keySet().stream().filter(componentClass::isAssignableFrom)
-                .map(key -> (T) componentMap.get(key)).collect(Collectors.toSet());
+        Set<T> set = new HashSet<>();
+        for (Class<? extends GuiComponent> key : componentMap.keySet())
+        {
+            if (componentClass.isAssignableFrom(key))
+            {
+                T t = (T) componentMap.get(key);
+                set.add(t);
+            }
+        }
+        return set;
     }
 
+    @Override
     public <T extends GuiComponent> boolean has(Class<T> componentClass)
     {
-        return componentMap.containsKey(componentClass) ||
-                componentMap.keySet().stream()
-                        .anyMatch(componentClass::isAssignableFrom);
+        if (componentMap.containsKey(componentClass)) return true;
+        for (Class<? extends GuiComponent> aClass : componentMap.keySet())
+        {
+            if (componentClass.isAssignableFrom(aClass))
+                return true;
+        }
+        return false;
     }
 
+    @Override
     public boolean has(GuiComponent component)
     {
         return componentMap.containsValue(component);
     }
 
+    @Override
     public <T extends GuiComponent> boolean ifHas(Class<T> componentClass, Consumer<T> action)
     {
         if (!has(componentClass))
@@ -620,6 +648,69 @@ public abstract class GuiElement implements IEventEmitter
     public void id(String id)
     {
         idProperty().setValue(id);
+    }
+
+    //////////////
+    // CHILDREN //
+    //////////////
+
+    /**
+     * @return an immutable list
+     */
+    public List<Transform> getChildren()
+    {
+        return transform().childrenProperty().getValue();
+    }
+
+    public void addChild(GuiElement node)
+    {
+        transform().childrenProperty().add(node.transform());
+    }
+
+    public void addChildren(GuiElement... nodes)
+    {
+        for (GuiElement node : nodes)
+            addChild(node);
+    }
+
+    public void removeChild(GuiElement node)
+    {
+        transform().removeChild(node.transform());
+    }
+
+    public void clearChildren()
+    {
+        transform().clearChildren();
+    }
+
+    public void removeChildrenOfType(Class<?> typeClass)
+    {
+        transform().streamChildren()
+                .filter(childTransform -> typeClass.isInstance(childTransform.element()))
+                .collect(toList())
+                .forEach(transform -> transform().removeChild(transform));
+    }
+
+    public boolean hasChild(GuiElement node)
+    {
+        return transform().hasChild(node.transform());
+    }
+
+    public List<GuiElement> getNodesAtPoint(float pointX, float pointY, boolean searchChildren)
+    {
+        return streamNodesAtPoint(pointX, pointY, searchChildren).collect(toList());
+    }
+
+    public Stream<GuiElement> streamNodesAtPoint(float pointX, float pointY, boolean searchChildren)
+    {
+        Stream<GuiElement> filteredChildren = transform().streamChildren()
+                .filter(child -> child.isPointInside(pointX, pointY)).map(GuiComponent::element);
+
+        if (searchChildren)
+            filteredChildren = filteredChildren.flatMap(child ->
+                    Stream.concat(Stream.of(child), streamNodesAtPoint(pointX, pointY, true)));
+
+        return filteredChildren;
     }
 
     /////////////

@@ -6,14 +6,14 @@ import net.voxelindustry.brokkgui.component.impl.LabelIconComponent;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectSide;
+import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.brokkgui.text.TextComponent;
 import net.voxelindustry.brokkgui.text.TextLayoutComponent;
 
 import javax.annotation.Nonnull;
 
-public abstract class GuiLabeled extends GuiFather
+public abstract class GuiLabeled extends GuiElement implements StyledElement
 {
-
     private LabelIconComponent  iconComponent;
     private TextComponent       textComponent;
     private TextLayoutComponent textLayoutComponent;

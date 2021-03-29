@@ -1,13 +1,14 @@
 package net.voxelindustry.brokkgui.element.input;
 
 import fr.ourten.teabeans.property.Property;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.TextInputComponent;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.element.GuiLabel;
+import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.brokkgui.text.TextComponent;
 import net.voxelindustry.brokkgui.text.TextLayoutComponent;
@@ -16,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Ourten 2 oct. 2016
  */
-public class GuiTextField extends GuiFather
+public class GuiTextField extends GuiElement implements StyledElement
 {
     private final Property<GuiLabeled> helperTextLabelProperty           = new Property<>();
     private final Property<GuiLabeled> promptTextLabelProperty           = new Property<>();

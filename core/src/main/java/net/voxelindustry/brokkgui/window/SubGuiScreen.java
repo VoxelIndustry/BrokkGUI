@@ -2,13 +2,13 @@ package net.voxelindustry.brokkgui.window;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.event.WindowEvent;
+import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
 
-public class SubGuiScreen extends GuiFather implements IGuiSubWindow
+public class SubGuiScreen extends GuiElement implements StyledElement, IGuiSubWindow
 {
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;

@@ -4,7 +4,6 @@ import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
-import net.voxelindustry.brokkgui.control.GuiFather;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.debug.hierarchy.AccordionItem;
 import net.voxelindustry.brokkgui.debug.hierarchy.AccordionLayout;
@@ -144,7 +143,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
                 hierarchiesByName.get("Popups"),
                 items,
                 PopupHandler.getInstance(window).getPopups()
-                        .stream().mapToInt(popup -> popup instanceof GuiFather ? getChildCountDeep(((GuiFather) popup).transform()) + 1 : 1)
+                        .stream().mapToInt(popup -> popup instanceof GuiElement ? getChildCountDeep(((GuiElement) popup).transform()) + 1 : 1)
                         .sum(),
                 PopupHandler.getInstance(window).getPopups().stream()
                         .filter(GuiElement.class::isInstance)
