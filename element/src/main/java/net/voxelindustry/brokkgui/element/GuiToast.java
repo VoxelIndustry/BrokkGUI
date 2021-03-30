@@ -4,7 +4,7 @@ import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.IGuiPopup;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
-import net.voxelindustry.brokkgui.element.pane.GuiAbsolutePane;
+import net.voxelindustry.brokkgui.element.pane.GuiPane;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.style.StyledElement;
 
@@ -33,7 +33,7 @@ public class GuiToast extends GuiElement implements StyledElement, IGuiPopup
 
             if (newValue != null)
             {
-                addChild(newValue);
+                transform().addChild(newValue.transform());
                 RelativeBindingHelper.bindToPos(newValue.transform(), transform());
                 transform().widthProperty().bindProperty(newValue.transform().widthProperty());
                 transform().heightProperty().bindProperty(newValue.transform().heightProperty());
@@ -48,7 +48,7 @@ public class GuiToast extends GuiElement implements StyledElement, IGuiPopup
 
     public GuiToast(long lifeTime)
     {
-        this(new GuiAbsolutePane(), lifeTime);
+        this(new GuiPane(), lifeTime);
     }
 
     @Override

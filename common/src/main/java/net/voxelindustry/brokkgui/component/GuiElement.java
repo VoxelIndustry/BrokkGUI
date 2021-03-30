@@ -662,17 +662,6 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         return transform().childrenProperty().getValue();
     }
 
-    public void addChild(GuiElement node)
-    {
-        transform().childrenProperty().add(node.transform());
-    }
-
-    public void addChildren(GuiElement... nodes)
-    {
-        for (GuiElement node : nodes)
-            addChild(node);
-    }
-
     public void removeChild(GuiElement node)
     {
         transform().removeChild(node.transform());

@@ -55,7 +55,7 @@ public class GuiTextField extends GuiElement implements StyledElement
                 newValue.transform().heightProperty().bindProperty(transform().heightProperty());
                 newValue.textComponent().addTextPaddingProperty(textComponent().computedTextPaddingValue());
 
-                addChild(newValue);
+                transform().addChild(newValue.transform());
 
                 RelativeBindingHelper.bindToPos(newValue.transform(), transform());
             }
@@ -76,7 +76,7 @@ public class GuiTextField extends GuiElement implements StyledElement
                 newValue.expandToText(false);
                 newValue.transform().widthProperty().bindProperty(transform().widthProperty());
 
-                addChild(newValue);
+                transform().addChild(newValue.transform());
 
                 RelativeBindingHelper.bindToPos(newValue.transform(), transform(), null, transform().heightProperty());
             }

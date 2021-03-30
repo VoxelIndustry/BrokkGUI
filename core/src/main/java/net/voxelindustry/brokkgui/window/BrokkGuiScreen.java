@@ -116,7 +116,9 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         Comparator<Pair<Runnable, Long>> comparator = Comparator.comparingLong(Pair::getValue);
         tasksQueue = new PriorityQueue<>(comparator.reversed());
 
-        setMainPanel(new GuiPane());
+        GuiPane mainPanel = new GuiPane();
+        mainPanel.id("main-panel");
+        setMainPanel(mainPanel);
     }
 
     public BrokkGuiScreen(float width, float height)
@@ -147,13 +149,13 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         stylesheetsProperty.addListener(obs ->
         {
             StylesheetManager.getInstance().refreshStylesheets(this);
-            if (getMainPanel() != null)
-                StyleEngine.refreshHierarchy(getMainPanel().transform());
+            if (mainPanel() != null)
+                StyleEngine.refreshHierarchy(mainPanel().transform());
         });
 
         StylesheetManager.getInstance().refreshStylesheets(this);
-        if (getMainPanel() != null)
-            StyleEngine.refreshHierarchy(getMainPanel().transform());
+        if (mainPanel() != null)
+            StyleEngine.refreshHierarchy(mainPanel().transform());
     }
 
     @Override
@@ -509,12 +511,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             if (match.isPresent())
                 return match.get();
         }
-        if (getMainPanel().isPointInside(mouseX, mouseY))
-            return getMainPanel();
+        if (mainPanel().isPointInside(mouseX, mouseY))
+            return mainPanel();
         return null;
     }
 
-    public GuiPane getMainPanel()
+    public GuiPane mainPanel()
     {
         return mainPanel;
     }
@@ -817,7 +819,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public GuiElement getRootElement()
     {
-        return getMainPanel();
+        return mainPanel();
     }
 
     /////////////////////

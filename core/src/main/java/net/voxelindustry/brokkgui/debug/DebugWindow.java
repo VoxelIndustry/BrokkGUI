@@ -92,7 +92,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
             return;
 
         handleInputLock();
-        hoveredNode = getDeepestHoveredNode(((BrokkGuiScreen) window).getMainPanel().transform(), getMouseX(), getMouseY(), 0).getKey();
+        hoveredNode = getDeepestHoveredNode(((BrokkGuiScreen) window).mainPanel().transform(), getMouseX(), getMouseY(), 0).getKey();
         hoveredHierarchyNode = null;
 
         // WINDOWS
@@ -135,8 +135,8 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         drawWindowHierarchy(mainWindowName,
                 hierarchiesByName.get(mainWindowName),
                 items,
-                getChildCountDeep(((BrokkGuiScreen) window).getMainPanel().transform()),
-                ((BrokkGuiScreen) window).getMainPanel().transform());
+                getChildCountDeep(((BrokkGuiScreen) window).mainPanel().transform()),
+                ((BrokkGuiScreen) window).mainPanel().transform());
 
         drawWindowHierarchy(
                 "Popups",
@@ -180,7 +180,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         if (button("RELOAD CSS", 120, 0, BUTTON_ACTION).isClicked())
         {
             StylesheetManager.getInstance().forceReload((IStyleRoot) window);
-            StyleEngine.refreshHierarchy(((BrokkGuiScreen) window).getMainPanel().transform());
+            StyleEngine.refreshHierarchy(((BrokkGuiScreen) window).mainPanel().transform());
 
             StylesheetManager.getInstance().forceReload(this, false);
             refreshStyle();
