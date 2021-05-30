@@ -5,20 +5,18 @@ plugins {
 
 subprojects {
     apply plugin: 'java-library'
-    apply plugin: 'eclipse'
-    apply plugin: 'idea'
 
     group = "net.voxelindustry"
-    compileJava.options.encoding = 'UTF-8'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    project.ext.jdkVersion = 16
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(project.jdkVersion))
+        }
+    }
 
     apply plugin: "maven-publish"
     apply plugin: "com.jfrog.artifactory"
-
-    if (project != rootProject) {
-        eclipse.project.name = (rootProject.name + project.path).replaceAll(':', '-')
-    }
 
     artifactory {
         contextUrl = "${artifactory_contextUrl}"
@@ -32,14 +30,6 @@ subprojects {
             defaults {
                 publications('mavenJava')
             }
-        }
-    }
-
-    // Fix JDK version use in eclipse
-    eclipse {
-        jdt {
-            sourceCompatibility = 1.8
-            targetCompatibility = 1.8
         }
     }
 
@@ -67,15 +57,6 @@ subprojects {
             }
         }
     }
-
-    // Add references to core project
-    tasks.cleanEclipse.doLast {
-        project.configurations.stream()
-                .flatMap({ config -> config.dependencies.stream() })                  // get all deps
-                .filter({ dep -> dep instanceof ProjectDependency })                  // that are Projects
-                .forEach({ dep -> eclipse.project.referencedProjects.add(dep.name) }) // and add to referencedProjects
-    }
-    tasks.eclipse.dependsOn(cleanEclipse)
 
     artifactoryPublish.dependsOn build
 
