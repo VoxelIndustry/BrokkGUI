@@ -85,11 +85,24 @@ public class RelativeBindingHelper
                                  float addX,
                                  float addY)
     {
+        bindXToPos(toBind, parent, addX);
+        bindYToPos(toBind, parent, addY);
+    }
+
+    public static void bindXToPos(Transform toBind,
+                                  Transform parent,
+                                  float addX)
+    {
         toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(
                 parent.xTranslateProperty(),
                 parent.xOffsetProperty(),
                 (x, translate, xOffset) -> x.floatValue() + translate.floatValue() + xOffset.floatValue() + addX));
+    }
 
+    public static void bindYToPos(Transform toBind,
+                                  Transform parent,
+                                  float addY)
+    {
         toBind.yPosProperty().bindProperty(parent.yPosProperty().combine(
                 parent.yTranslateProperty(),
                 parent.yOffsetProperty(),
@@ -150,13 +163,22 @@ public class RelativeBindingHelper
 
     public static void bindToRelative(Transform toBind, Transform parent, float ratioX, float ratioY)
     {
+        bindXToRelative(toBind, parent, ratioX);
+        bindYToRelative(toBind, parent, ratioY);
+    }
+
+    public static void bindXToRelative(Transform toBind, Transform parent, float ratioX)
+    {
         toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(
                 parent.widthProperty(),
                 parent.xTranslateProperty(),
                 parent.xOffsetProperty(),
                 toBind.widthProperty(),
                 (xPos, width, xTranslate, xOffset, childWidth) -> xPos.floatValue() + xTranslate.floatValue() + xOffset.floatValue() + (width.floatValue() / (1 / ratioX) - childWidth.floatValue() / 2)));
+    }
 
+    public static void bindYToRelative(Transform toBind, Transform parent, float ratioY)
+    {
         toBind.yPosProperty()
                 .bindProperty(parent.yPosProperty().combine(
                         parent.heightProperty(),

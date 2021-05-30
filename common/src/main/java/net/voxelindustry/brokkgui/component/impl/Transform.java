@@ -197,7 +197,8 @@ public class Transform extends GuiComponent
 
     public void addChild(Transform element)
     {
-        childrenProperty().add(element);
+        if (!childrenProperty().contains(element))
+            childrenProperty().add(element);
 
         if (bindChild())
             RelativeBindingHelper.bindToPos(element, this);

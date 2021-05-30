@@ -95,6 +95,7 @@ project(":element") {
     dependencies {
         api project(":common")
         api project(":style")
+        api project(":markup")
 
         implementation "org.apache.commons:commons-lang3:3.4"
         implementation "com.google.code.findbugs:jsr305:3.0.1"
@@ -123,6 +124,23 @@ project(":style") {
         testImplementation('org.assertj:assertj-core:3.15.0')
 
         testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.1')
+    }
+}
+
+project(":markup") {
+    archivesBaseName = "brokkgui-markup"
+
+    version = project.brokkgui_version
+
+    dependencies {
+        api project(":common")
+        api project(":style")
+
+        implementation "org.apache.commons:commons-lang3:3.4"
+        implementation "com.google.code.findbugs:jsr305:3.0.1"
+        implementation "commons-io:commons-io:2.5"
+        implementation "com.google.guava:guava:21.0"
+        implementation "org.dom4j:dom4j:2.1.3"
     }
 }
 

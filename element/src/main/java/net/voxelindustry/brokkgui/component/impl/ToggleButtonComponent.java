@@ -14,8 +14,7 @@ import net.voxelindustry.hermod.EventHandler;
 
 public class ToggleButtonComponent extends GuiComponent implements IGuiToggleable
 {
-    private ButtonComponent button;
-    private StyleComponent  style;
+    private StyleComponent style;
 
     private final Property<GuiToggleGroup>  toggleGroupProperty;
     private final Property<Boolean>         selectedProperty;
@@ -32,7 +31,7 @@ public class ToggleButtonComponent extends GuiComponent implements IGuiToggleabl
     {
         super.attach(element);
 
-        button = element.get(ButtonComponent.class);
+        ButtonComponent button = element.get(ButtonComponent.class);
 
         if (button == null)
             throw new GuiComponentException("ToggleButtonComponent must be applied to an element after a ButtonComponent. element=" + element.getClass().getSimpleName());

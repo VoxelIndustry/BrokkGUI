@@ -40,11 +40,6 @@ public class Scrollable extends GuiComponent
     private final FloatProperty trueWidthProperty  = new FloatProperty();
     private final FloatProperty trueHeightProperty = new FloatProperty();
 
-    private final FloatProperty gripXWidthProperty  = createRenderPropertyFloat(0F);
-    private final FloatProperty gripXHeightProperty = createRenderPropertyFloat(5F);
-    private final FloatProperty gripYWidthProperty  = createRenderPropertyFloat(20F);
-    private final FloatProperty gripYHeightProperty = createRenderPropertyFloat(0F);
-
     private final Property<GuiScrollbarPolicy> scrollXPolicyProperty = createRenderProperty(GuiScrollbarPolicy.NEEDED);
     private final Property<GuiScrollbarPolicy> scrollYPolicyProperty = createRenderProperty(GuiScrollbarPolicy.NEEDED);
 
@@ -683,22 +678,22 @@ public class Scrollable extends GuiComponent
 
     public FloatProperty gripXWidthProperty()
     {
-        return gripXWidthProperty;
+        return gripX.transform().widthProperty();
     }
 
     public FloatProperty gripXHeightProperty()
     {
-        return gripXHeightProperty;
+        return gripX.transform().heightProperty();
     }
 
     public FloatProperty gripYWidthProperty()
     {
-        return gripYWidthProperty;
+        return gripY.transform().widthProperty();
     }
 
     public FloatProperty gripYHeightProperty()
     {
-        return gripYHeightProperty;
+        return gripY.transform().heightProperty();
     }
 
     public FloatProperty panSpeedProperty()
@@ -729,6 +724,27 @@ public class Scrollable extends GuiComponent
     ////////////
     // VALUES //
     ////////////
+
+
+    public GuiElement gripX()
+    {
+        return gripX;
+    }
+
+    public GuiElement gripY()
+    {
+        return gripY;
+    }
+
+    public GuiElement trackX()
+    {
+        return trackX;
+    }
+
+    public GuiElement trackY()
+    {
+        return trackY;
+    }
 
     public float scrollX()
     {
@@ -797,7 +813,7 @@ public class Scrollable extends GuiComponent
 
     public float gripXWidth()
     {
-        return gripXWidthProperty.getValue();
+        return gripXWidthProperty().getValue();
     }
 
     /**
@@ -807,32 +823,32 @@ public class Scrollable extends GuiComponent
      */
     public void gripXWidth(float gripXWidth)
     {
-        gripXWidthProperty.setValue(gripXWidth);
+        gripXWidthProperty().setValue(gripXWidth);
     }
 
     public float gripXHeight()
     {
-        return gripXHeightProperty.getValue();
+        return gripXHeightProperty().getValue();
     }
 
     public void gripXHeight(float gripXHeight)
     {
-        gripXHeightProperty.setValue(gripXHeight);
+        gripXHeightProperty().setValue(gripXHeight);
     }
 
     public float gripYWidth()
     {
-        return gripYWidthProperty.getValue();
+        return gripYWidthProperty().getValue();
     }
 
     public void gripYWidth(float gripYWidth)
     {
-        gripYWidthProperty.setValue(gripYWidth);
+        gripYWidthProperty().setValue(gripYWidth);
     }
 
     public float gripYHeight()
     {
-        return gripYHeightProperty.getValue();
+        return gripYHeightProperty().getValue();
     }
 
     /**
@@ -842,7 +858,7 @@ public class Scrollable extends GuiComponent
      */
     public void gripYHeight(float gripYHeight)
     {
-        gripYHeightProperty.setValue(gripYHeight);
+        gripYHeightProperty().setValue(gripYHeight);
     }
 
     public float panSpeed()

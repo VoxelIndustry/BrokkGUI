@@ -273,6 +273,11 @@ public class StyleComponent extends GuiComponent
             property.setStyleRaw(source, specificity, value);
     }
 
+    public void setPropertyFromMarkup(String propertyName, String value)
+    {
+        setProperty(propertyName, value, StyleSource.INLINE, 10_000);
+    }
+
     public <T> void setPropertyDirect(String propertyName, T value, Class<T> valueClass)
     {
         if (!hasProperty(propertyName))
