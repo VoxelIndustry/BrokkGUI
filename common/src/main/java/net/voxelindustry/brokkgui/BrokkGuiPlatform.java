@@ -7,6 +7,11 @@ import net.voxelindustry.brokkgui.internal.IResourceHandler;
 import net.voxelindustry.brokkgui.internal.ITextHelper;
 import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
 import net.voxelindustry.brokkgui.internal.profiler.ProfilerNoop;
+import net.voxelindustry.brokkgui.mock.MockKeyboardUtil;
+import net.voxelindustry.brokkgui.mock.MockMouseUtil;
+import net.voxelindustry.brokkgui.mock.MockResourceHandler;
+import net.voxelindustry.brokkgui.mock.MockTextHelper;
+import net.voxelindustry.brokkgui.mock.MockTickSender;
 
 import java.util.Random;
 import java.util.logging.Logger;
@@ -44,6 +49,22 @@ public class BrokkGuiPlatform
     {
         random = new Random();
         profiler = new ProfilerNoop();
+    }
+
+    public void mock()
+    {
+        if (logger == null)
+            logger = Logger.getLogger("BrokkGui Mock");
+        if (keyboardUtil == null)
+            keyboardUtil = new MockKeyboardUtil();
+        if (mouseUtil == null)
+            mouseUtil = new MockMouseUtil();
+        if (resourceHandler == null)
+            resourceHandler = new MockResourceHandler();
+        if (textHelper == null)
+            textHelper = new MockTextHelper();
+        if (tickSender == null)
+            tickSender = new MockTickSender();
     }
 
     public IProfiler getProfiler()
