@@ -7,13 +7,16 @@ import net.voxelindustry.brokkgui.text.TextSettings;
 
 public class Text extends GuiElement
 {
-    private final String        startingText;
-    private       TextComponent textComponent;
+    private TextComponent textComponent;
 
     public Text(String text)
     {
-        startingText = text;
-        textComponent.text(startingText);
+        textComponent.text(text);
+    }
+
+    public Text()
+    {
+        this("");
     }
 
     @Override

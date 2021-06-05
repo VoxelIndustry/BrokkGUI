@@ -18,12 +18,77 @@ import net.voxelindustry.brokkgui.markup.attributes.TextComponentAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextInputAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextLayoutAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TransformAttributes;
+import net.voxelindustry.brokkgui.shape.Circle;
+import net.voxelindustry.brokkgui.shape.Line;
+import net.voxelindustry.brokkgui.shape.Rectangle;
+import net.voxelindustry.brokkgui.shape.Text;
 import net.voxelindustry.brokkgui.text.TextComponent;
 
 public class ElementMarkupSetup
 {
     public static void setup()
     {
+        MarkupEngine.registerElementDefinition("rectangle",
+                new MarkupElementDefinition<>(Rectangle::new)
+                        // GuiElement
+                        .attributes(TransformAttributes.getAttributes())
+                        .attributes(StyleComponentAttributes.getAttributes())
+                        .attributes(GuiElementAttributes.getAttributes())
+                        .attributes(ScrollableAttributes.getAttributes())
+                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
+                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
+                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
+                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
+                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+        );
+
+        MarkupEngine.registerElementDefinition("circle",
+                new MarkupElementDefinition<>(Circle::new)
+                        // GuiElement
+                        .attributes(TransformAttributes.getAttributes())
+                        .attributes(StyleComponentAttributes.getAttributes())
+                        .attributes(GuiElementAttributes.getAttributes())
+                        .attributes(ScrollableAttributes.getAttributes())
+                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
+                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
+                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
+                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
+                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+        );
+
+        MarkupEngine.registerElementDefinition("line",
+                new MarkupElementDefinition<>(Line::new)
+                        // GuiElement
+                        .attributes(TransformAttributes.getAttributes())
+                        .attributes(StyleComponentAttributes.getAttributes())
+                        .attributes(GuiElementAttributes.getAttributes())
+                        .attributes(ScrollableAttributes.getAttributes())
+                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
+                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
+                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
+                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
+                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+        );
+
+        MarkupEngine.registerElementDefinition("text",
+                new MarkupElementDefinition<>(Text::new)
+                        // GuiElement
+                        .attributes(TransformAttributes.getAttributes())
+                        .attributes(StyleComponentAttributes.getAttributes())
+                        .attributes(GuiElementAttributes.getAttributes())
+                        .attributes(ScrollableAttributes.getAttributes())
+                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
+                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
+                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
+                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
+                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        // Label
+                        .attributes(TextComponentAttributes.getAttributes())
+                        .childrenAttributes(TextComponentAttributes.getChildrenAttributes())
+                        // Text creator
+                        .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
+        );
+
         MarkupEngine.registerElementDefinition("label",
                 new MarkupElementDefinition<>(GuiLabel::new)
                         // GuiElement
