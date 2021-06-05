@@ -7,6 +7,8 @@ import net.voxelindustry.brokkgui.element.input.GuiCheckbox;
 import net.voxelindustry.brokkgui.element.input.GuiRadioButton;
 import net.voxelindustry.brokkgui.element.input.GuiTextField;
 import net.voxelindustry.brokkgui.element.input.GuiToggleButton;
+import net.voxelindustry.brokkgui.element.pane.GuiPane;
+import net.voxelindustry.brokkgui.element.pane.ScrollPane;
 import net.voxelindustry.brokkgui.markup.attributes.BooleanFormFieldAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.ButtonAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.GuiElementAttributes;
@@ -28,6 +30,33 @@ public class ElementMarkupSetup
 {
     public static void setup()
     {
+        MarkupEngine.registerElementDefinition("pane",
+                new MarkupElementDefinition<>(GuiPane::new)
+                        // GuiElement
+                        .attributes(TransformAttributes.getAttributes())
+                        .attributes(StyleComponentAttributes.getAttributes())
+                        .attributes(GuiElementAttributes.getAttributes())
+                        .attributes(ScrollableAttributes.getAttributes())
+                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
+                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
+                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
+                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
+                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+        );
+
+        MarkupEngine.registerElementDefinition("scrollpane",
+                new MarkupElementDefinition<>(ScrollPane::new)
+                        // GuiElement
+                        .attributes(TransformAttributes.getAttributes())
+                        .attributes(StyleComponentAttributes.getAttributes())
+                        .attributes(GuiElementAttributes.getAttributes())
+                        .attributes(ScrollableAttributes.getAttributes())
+                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
+                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
+                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
+                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
+        );
+
         MarkupEngine.registerElementDefinition("rectangle",
                 new MarkupElementDefinition<>(Rectangle::new)
                         // GuiElement
