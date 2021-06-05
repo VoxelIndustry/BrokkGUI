@@ -1,11 +1,12 @@
 package net.voxelindustry.brokkgui.markup.attributes;
 
-import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.markup.MarkupAttribute;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.voxelindustry.brokkgui.data.RelativeBindingHelper.*;
 
 public class TransformAttributes
 {
@@ -86,12 +87,12 @@ public class TransformAttributes
             if (attribute.endsWith("%"))
             {
                 var ratio = Float.parseFloat(attribute.substring(0, attribute.length() - 1)) / 100F;
-                RelativeBindingHelper.bindXToRelative(element.transform(), element.transform().parent(), ratio);
+                bindXToRelative(element.transform(), element.transform().parent(), ratio);
             }
             else
             {
                 var pos = Float.parseFloat(attribute);
-                RelativeBindingHelper.bindXToPos(element.transform(), element.transform().parent(), pos);
+                bindXToPos(element.transform(), element.transform().parent(), pos);
             }
         }));
 
@@ -100,12 +101,33 @@ public class TransformAttributes
             if (attribute.endsWith("%"))
             {
                 var ratio = Float.parseFloat(attribute.substring(0, attribute.length() - 1)) / 100F;
-                RelativeBindingHelper.bindYToRelative(element.transform(), element.transform().parent(), ratio);
+                bindYToRelative(element.transform(), element.transform().parent(), ratio);
             }
             else
             {
                 var pos = Float.parseFloat(attribute);
-                RelativeBindingHelper.bindYToPos(element.transform(), element.transform().parent(), pos);
+                bindYToPos(element.transform(), element.transform().parent(), pos);
+            }
+        }));
+
+        childrenAttributes.add(new MarkupAttribute("position", (attibute, element) ->
+        {
+            switch (attibute.toLowerCase())
+            {
+                case "centered" -> bindToCenter(element.transform(), element.transform().parent());
+                case "left-top" -> bindToPos(element.transform(), element.transform().parent());
+                case "right-top" -> bindToPos(element.transform(),
+                        element.transform().parent(),
+                        element.transform().parent().widthProperty().subtract(element.transform().widthProperty()),
+                        null);
+                case "left-bottom" -> bindToPos(element.transform(),
+                        element.transform().parent(),
+                        null,
+                        element.transform().parent().heightProperty().subtract(element.transform().heightProperty()));
+                case "right-bottom" -> bindToPos(element.transform(),
+                        element.transform().parent(),
+                        element.transform().parent().widthProperty().subtract(element.transform().widthProperty()),
+                        element.transform().parent().heightProperty().subtract(element.transform().heightProperty()));
             }
         }));
     }
