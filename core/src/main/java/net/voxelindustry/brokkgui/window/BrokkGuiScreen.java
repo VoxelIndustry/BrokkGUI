@@ -59,7 +59,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
 
-    private       GuiPane                 mainPanel;
+    private       GuiElement              root;
     private final ArrayList<SubGuiScreen> windows;
     private       IRenderCommandReceiver  renderer;
 
@@ -118,7 +118,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         GuiPane mainPanel = new GuiPane();
         mainPanel.id("main-panel");
-        setMainPanel(mainPanel);
+        setRoot(mainPanel);
     }
 
     public BrokkGuiScreen(float width, float height)
@@ -149,13 +149,13 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         stylesheetsProperty.addListener(obs ->
         {
             StylesheetManager.getInstance().refreshStylesheets(this);
-            if (mainPanel() != null)
-                StyleEngine.refreshHierarchy(mainPanel().transform());
+            if (root() != null)
+                StyleEngine.refreshHierarchy(root().transform());
         });
 
         StylesheetManager.getInstance().refreshStylesheets(this);
-        if (mainPanel() != null)
-            StyleEngine.refreshHierarchy(mainPanel().transform());
+        if (root() != null)
+            StyleEngine.refreshHierarchy(root().transform());
     }
 
     @Override
@@ -164,12 +164,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         if (!windows.isEmpty() && windows.stream().anyMatch(gui -> gui.isPointInside(mouseX, mouseY)))
         {
             windows.forEach(gui -> gui.handleHover(mouseX, mouseY, gui.isPointInside(mouseX, mouseY)));
-            mainPanel.handleHover(mouseX, mouseY, false);
+            root.handleHover(mouseX, mouseY, false);
         }
         else
         {
             windows.forEach(gui -> gui.handleHover(mouseX, mouseY, false));
-            mainPanel.handleHover(mouseX, mouseY, mainPanel.isPointInside(mouseX, mouseY));
+            root.handleHover(mouseX, mouseY, root.isPointInside(mouseX, mouseY));
         }
 
         PopupHandler.getInstance(this).handleHover(mouseX, mouseY);
@@ -181,7 +181,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         switch (target)
         {
             case MAIN:
-                mainPanel.renderNode(renderer, mouseX, mouseY);
+                root.renderNode(renderer, mouseX, mouseY);
                 break;
             case WINDOW:
                 if (!windows.isEmpty())
@@ -268,8 +268,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         }
         else
         {
-            source = mainPanel;
-            if (!mainPanel.isPointInside(mouseX, mouseY))
+            source = root;
+            if (!root.isPointInside(mouseX, mouseY))
                 GuiFocusManager.instance.removeWindowFocus(this);
         }
 
@@ -310,14 +310,14 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         if (firstDragSinceClick)
         {
-            if (mainPanel.isPointInside(mouseX, mouseY) && !mainPanel.isDisabled() && mainPanel.isVisible())
+            if (root.isPointInside(mouseX, mouseY) && !root.isDisabled() && root.isVisible())
             {
-                EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(mainPanel,
+                EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(root,
                         EventQueueBuilder.isPointInside(mouseX, mouseY)
                                 .and(EventQueueBuilder.isEnabled)
                                 .and(EventQueueBuilder.isVisible));
 
-                eventQueue.dispatch(GuiMouseEvent.DRAG_START, new GuiMouseEvent.DragStart(mainPanel, mouseX, mouseY, key));
+                eventQueue.dispatch(GuiMouseEvent.DRAG_START, new GuiMouseEvent.DragStart(root, mouseX, mouseY, key));
             }
             firstDragSinceClick = false;
         }
@@ -332,9 +332,9 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onClickStop(float mouseX, float mouseY, MouseInputCode key)
     {
-        if (mainPanel.isPointInside(mouseX, mouseY) && !mainPanel.isDisabled() && mainPanel.isVisible())
+        if (root.isPointInside(mouseX, mouseY) && !root.isDisabled() && root.isVisible())
         {
-            EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(mainPanel,
+            EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(root,
                     EventQueueBuilder.isPointInside(mouseX, mouseY)
                             .and(EventQueueBuilder.isEnabled)
                             .and(EventQueueBuilder.isVisible));
@@ -342,16 +342,16 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             switch (key)
             {
                 case MOUSE_LEFT:
-                    eventQueue.dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(mainPanel, mouseX, mouseY));
+                    eventQueue.dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(root, mouseX, mouseY));
                     break;
                 case MOUSE_RIGHT:
-                    eventQueue.dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(mainPanel, mouseX, mouseY));
+                    eventQueue.dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(root, mouseX, mouseY));
                     break;
                 case MOUSE_BUTTON_MIDDLE:
-                    eventQueue.dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(mainPanel, mouseX, mouseY));
+                    eventQueue.dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(root, mouseX, mouseY));
                     break;
                 default:
-                    eventQueue.dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(mainPanel, mouseX, mouseY, key));
+                    eventQueue.dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(root, mouseX, mouseY, key));
                     break;
             }
         }
@@ -494,8 +494,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         listenerPool.clear();
         PopupHandler.getInstance(this).delete(this);
 
-        if (mainPanel != null)
-            EventQueueBuilder.allChildren(mainPanel).dispatch(DisposeEvent.TYPE, new DisposeEvent(mainPanel));
+        if (root != null)
+            EventQueueBuilder.allChildren(root).dispatch(DisposeEvent.TYPE, new DisposeEvent(root));
         getSubGuis().forEach(SubGuiScreen::close);
 
         new EventQueue().addDispatcher(getEventDispatcher()).dispatch(WindowEvent.CLOSE, new WindowEvent.Close(this));
@@ -511,41 +511,41 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             if (match.isPresent())
                 return match.get();
         }
-        if (mainPanel().isPointInside(mouseX, mouseY))
-            return mainPanel();
+        if (root().isPointInside(mouseX, mouseY))
+            return root();
         return null;
     }
 
-    public GuiPane mainPanel()
+    public GuiElement root()
     {
-        return mainPanel;
+        return root;
     }
 
-    public <T extends GuiPane> T setMainPanel(T mainPanel)
+    public <T extends GuiElement> T setRoot(T mainPanel)
     {
-        if (this.mainPanel != null)
+        if (root != null)
         {
-            this.mainPanel.transform().widthProperty().unbind();
-            this.mainPanel.transform().heightProperty().unbind();
-            this.mainPanel.transform().xPosProperty().unbind();
-            this.mainPanel.transform().yPosProperty().unbind();
+            root.transform().widthProperty().unbind();
+            root.transform().heightProperty().unbind();
+            root.transform().xPosProperty().unbind();
+            root.transform().yPosProperty().unbind();
 
-            if (this.mainPanel.getWindow() == this)
-                this.mainPanel.setWindow(null);
+            if (root.getWindow() == this)
+                root.setWindow(null);
         }
 
-        this.mainPanel = mainPanel;
+        root = mainPanel;
 
-        this.mainPanel.transform().widthProperty().bindProperty(widthProperty);
-        this.mainPanel.transform().heightProperty().bindProperty(heightProperty);
+        root.transform().widthProperty().bindProperty(widthProperty);
+        root.transform().heightProperty().bindProperty(heightProperty);
 
-        this.mainPanel.transform().xPosProperty().bindProperty(xPosProperty);
-        this.mainPanel.transform().yPosProperty().bindProperty(yPosProperty);
+        root.transform().xPosProperty().bindProperty(xPosProperty);
+        root.transform().yPosProperty().bindProperty(yPosProperty);
 
         StyleEngine.setStyleSupplierHierarchy(mainPanel.transform(), getStyleListProperty()::getValue);
         if (wrapper != null)
             StyleEngine.refreshHierarchy(mainPanel.transform());
-        this.mainPanel.setWindow(this);
+        root.setWindow(this);
 
         return mainPanel;
     }
@@ -819,7 +819,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public GuiElement getRootElement()
     {
-        return mainPanel();
+        return root();
     }
 
     /////////////////////
