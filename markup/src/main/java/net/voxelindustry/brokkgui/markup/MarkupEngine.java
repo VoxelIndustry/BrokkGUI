@@ -1,6 +1,8 @@
 package net.voxelindustry.brokkgui.markup;
 
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.data.Resource;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -9,6 +11,7 @@ import org.dom4j.Node;
 import org.dom4j.Text;
 import org.dom4j.io.SAXReader;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -27,6 +30,18 @@ public class MarkupEngine
     public static <T extends GuiElement> MarkupElementDefinition<T> getElementDefinition(String name)
     {
         return (MarkupElementDefinition<T>) elementDefinitions.get(name);
+    }
+
+    public static GuiElement fromMarkupFile(Resource resource)
+    {
+        try
+        {
+            return fromMarkup(BrokkGuiPlatform.getInstance().getResourceHandler().readToString(resource));
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static GuiElement fromMarkup(String markup)
@@ -49,17 +64,13 @@ public class MarkupEngine
         Document document = null;
         try
         {
-            document = parseXML(IOUtils.toInputStream("""
-                    <pane>
-                        <label x="10" y="50" translate-x="50">Ceci est un label</label>
-                    </pane>
-                    """, StandardCharsets.UTF_8));
+            document = parseXML(IOUtils.toInputStream(markup, charset));
         } catch (DocumentException e)
         {
             e.printStackTrace();
         }
 
-        return walkXMLTree(document.getRootElement(), root, getElementDefinition(root.type()));
+        return walkXMLTree(document.getRootElement(), root, root == null ? null : getElementDefinition(root.type()));
     }
 
     private static Document parseXML(InputStream is) throws DocumentException

@@ -3,34 +3,34 @@ package net.voxelindustry.brokkgui.validation;
 public abstract class BaseTextValidator implements ITextValidator
 {
     private String  message;
-    private boolean isErrored;
+    private boolean invalid;
 
     @Override
-    public boolean validate(final String data)
+    public boolean validate(String data)
     {
-        if (!this.eval(data))
-            this.setErrored(true);
-        return this.isErrored;
+        if (!eval(data))
+            setInvalid(true);
+        return invalid;
     }
 
-    public boolean isErrored()
+    public boolean isInvalid()
     {
-        return this.isErrored;
+        return invalid;
     }
 
-    public void setErrored(final boolean isErrored)
+    public void setInvalid(boolean isErrored)
     {
-        this.isErrored = isErrored;
+        invalid = isErrored;
     }
 
     @Override
     public String toString()
     {
-        return "BaseTextValidator [isErrored=" + this.isErrored + "]";
+        return "BaseTextValidator [isErrored=" + invalid + "]";
     }
 
     @Override
-    public void setMessage(final String message)
+    public void setMessage(String message)
     {
         this.message = message;
     }
@@ -38,6 +38,6 @@ public abstract class BaseTextValidator implements ITextValidator
     @Override
     public String getMessage()
     {
-        return this.message;
+        return message;
     }
 }

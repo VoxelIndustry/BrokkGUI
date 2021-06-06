@@ -16,6 +16,7 @@ import net.voxelindustry.brokkgui.markup.attributes.LabelIconAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.LinkAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.ScrollableAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.StyleComponentAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.TextAssistAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextComponentAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextInputAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextLayoutAttributes;
@@ -296,7 +297,9 @@ public class ElementMarkupSetup
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
                         // Text field
                         .attributes(TextInputAttributes.getAttributes())
+                        .attributes(TextAssistAttributes.getAttributes())
                         .childrenAttributes(TextInputAttributes.getChildrenAttributes())
+                        .childrenAttributes(TextAssistAttributes.getChildrenAttributes())
         );
     }
 }

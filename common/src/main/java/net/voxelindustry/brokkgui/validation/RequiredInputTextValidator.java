@@ -6,11 +6,11 @@ public class RequiredInputTextValidator extends BaseTextValidator
 {
     public RequiredInputTextValidator()
     {
-        this.setMessage("Cannot be blank. Input is required !");
+        setMessage("Cannot be blank. Input is required");
     }
 
     @Override
-    public boolean eval(final String data)
+    public boolean eval(String data)
     {
         return StringUtils.isEmpty(data);
     }

@@ -6,11 +6,11 @@ public class AsciiPrintableTextValidator extends BaseTextValidator
 {
     public AsciiPrintableTextValidator()
     {
-        this.setMessage("Only printable characters are supported !");
+        setMessage("Only printable characters are supported");
     }
 
     @Override
-    public boolean eval(final String data)
+    public boolean eval(String data)
     {
         return StringUtils.isAsciiPrintable(data);
     }
