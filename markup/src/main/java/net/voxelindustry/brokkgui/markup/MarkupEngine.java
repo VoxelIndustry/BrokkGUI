@@ -22,6 +22,19 @@ public class MarkupEngine
 {
     private static final Map<String, MarkupElementDefinition<?>> elementDefinitions = new HashMap<>();
 
+    private static SAXReader saxReader;
+
+    private static SAXReader getSaxReader()
+    {
+        if (saxReader == null)
+        {
+            saxReader = SAXReader.createDefault();
+            saxReader.setMergeAdjacentText(true);
+            saxReader.setStripWhitespaceText(true);
+        }
+        return saxReader;
+    }
+
     public static <T extends GuiElement> void registerElementDefinition(String name, MarkupElementDefinition<T> definition)
     {
         elementDefinitions.put(name, definition);
@@ -75,10 +88,7 @@ public class MarkupEngine
 
     private static Document parseXML(InputStream is) throws DocumentException
     {
-        SAXReader reader = new SAXReader();
-        reader.setMergeAdjacentText(true);
-        reader.setStripWhitespaceText(true);
-        return reader.read(is);
+        return getSaxReader().read(is);
     }
 
     private static GuiElement walkXMLTree(Node node, GuiElement parentElement, MarkupElementDefinition<?> parentDefinition)
@@ -98,17 +108,6 @@ public class MarkupEngine
                         .findAny()
                         .ifPresent(event -> event.getValue().accept(createdElement));
 
-                boolean resolved = false;
-                for (var dynamicResolver : currentDefinition.dynamicAttributeResolvers())
-                {
-                    if (dynamicResolver.resolve(attribute.getName(), attribute.getValue(), createdElement))
-                    {
-                        resolved = true;
-                        break;
-                    }
-                }
-                if (resolved)
-                    continue;
 
                 var markupAttribute = currentDefinition.attributeMap().get(attribute.getName());
                 if (markupAttribute == null && parentDefinition != null)
@@ -116,6 +115,14 @@ public class MarkupEngine
 
                 if (markupAttribute != null)
                     markupAttribute.decoder().decode(attribute.getValue(), createdElement);
+                else
+                {
+                    for (var dynamicResolver : currentDefinition.dynamicAttributeResolvers())
+                    {
+                        if (dynamicResolver.resolve(attribute.getName(), attribute.getValue(), createdElement))
+                            break;
+                    }
+                }
             }
 
             for (int i = 0, size = ((Element) node).nodeCount(); i < size; i++)
