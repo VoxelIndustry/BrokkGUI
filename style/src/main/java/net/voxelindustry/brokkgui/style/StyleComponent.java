@@ -273,9 +273,15 @@ public class StyleComponent extends GuiComponent
             property.setStyleRaw(source, specificity, value);
     }
 
-    public void setPropertyFromMarkup(String propertyName, String value)
+    public boolean setPropertyFromMarkup(String propertyName, String value)
     {
-        setProperty(propertyName, value, StyleSource.INLINE, 10_000);
+        // Check needed in order to force load conditional properties
+        if (hasProperty(propertyName))
+        {
+            setProperty(propertyName, value, StyleSource.INLINE, 10_000);
+            return true;
+        }
+        return false;
     }
 
     public <T> void setPropertyDirect(String propertyName, T value, Class<T> valueClass)
@@ -474,7 +480,7 @@ public class StyleComponent extends GuiComponent
     void resetToDefault()
     {
         properties.values().stream().filter(property ->
-                property.getSource() == StyleSource.AUTHOR || property.getSource() == StyleSource.USER_AGENT)
+                        property.getSource() == StyleSource.AUTHOR || property.getSource() == StyleSource.USER_AGENT)
                 .forEach(StyleProperty::setToDefault);
     }
 
