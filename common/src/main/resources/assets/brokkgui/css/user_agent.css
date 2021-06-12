@@ -38,13 +38,13 @@ checkbox > > .mark {
     background-color: rgba(0, 0, 0, 0);
 }
 
-text-field text {
+text-field {
     color: white;
     shadow: true;
     shadow-color: #4C4C4C;
 }
 
-text-field .prompt {
+text-field > .text-field-prompt-text {
     color: #7F7F7F;
     shadow: false;
 }
