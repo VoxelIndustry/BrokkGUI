@@ -3,30 +3,45 @@ package net.voxelindustry.brokkgui.markup.attributes;
 import net.voxelindustry.brokkgui.component.impl.LabelIconComponent;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.markup.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LabelIconAttributes
+public class LabelIconAttributes implements MarkupAttributesGroup
 {
-    private static final List<MarkupAttribute> attributes         = new ArrayList<>();
-    private static final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+    private static final LabelIconAttributes instance = new LabelIconAttributes();
 
-    public static List<MarkupAttribute> getAttributes()
+    public static LabelIconAttributes instance()
+    {
+        return instance;
+    }
+
+    private final List<MarkupAttribute> attributes         = new ArrayList<>();
+    private final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+
+    private LabelIconAttributes()
+    {
+
+    }
+
+    @Override
+    public List<MarkupAttribute> getAttributes()
     {
         if (attributes.isEmpty())
             createAttributes();
         return attributes;
     }
 
-    public static List<MarkupAttribute> getChildrenAttributes()
+    @Override
+    public List<MarkupAttribute> getChildrenAttributes()
     {
         if (childrenAttributes.isEmpty())
             createChildrenAttributes();
         return childrenAttributes;
     }
 
-    private static void createAttributes()
+    private void createAttributes()
     {
         attributes.add(new MarkupAttribute("icon-side", ((attribute, element) ->
                 element.get(LabelIconComponent.class).iconSide(RectSide.valueOf(attribute))
@@ -36,7 +51,7 @@ public class LabelIconAttributes
         )));
     }
 
-    private static void createChildrenAttributes()
+    private void createChildrenAttributes()
     {
         childrenAttributes.add(new MarkupAttribute("icon-node", ((attributeValue, element) ->
                 element.transform().parent().element().get(LabelIconComponent.class).icon(element)

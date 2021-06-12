@@ -4,6 +4,7 @@ import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Scrollable;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.markup.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 
@@ -11,46 +12,62 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ScrollableAttributes
+public class ScrollableAttributes implements MarkupAttributesGroup
 {
-    private static final List<MarkupAttribute> attributes         = new ArrayList<>();
-    private static final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+    private static final ScrollableAttributes instance = new ScrollableAttributes();
 
-    private static final List<String> attributesNames = new ArrayList<>();
+    public static ScrollableAttributes instance()
+    {
+        return instance;
+    }
 
-    private static final Consumer<GuiElement> onAttributeAdded = element ->
+    private final List<MarkupAttribute> attributes         = new ArrayList<>();
+    private final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+
+    private final List<String> attributesNames = new ArrayList<>();
+
+    private ScrollableAttributes()
+    {
+
+    }
+
+    private final Consumer<GuiElement> onAttributeAdded = element ->
     {
         if (!element.has(Scrollable.class))
             element.provide(Scrollable.class);
     };
 
-    public static List<MarkupAttribute> getAttributes()
+    @Override
+    public List<MarkupAttribute> getAttributes()
     {
         if (attributes.isEmpty())
             createAttributes();
         return attributes;
     }
 
-    public static List<MarkupAttribute> getChildrenAttributes()
+    @Override
+    public List<MarkupAttribute> getChildrenAttributes()
     {
         if (childrenAttributes.isEmpty())
             createChildrenAttributes();
         return childrenAttributes;
     }
 
-    public static List<String> getAttributesNames()
+    @Override
+    public List<String> getAttributesNames()
     {
         if (attributesNames.isEmpty())
             attributes.stream().map(MarkupAttribute::name).forEach(attributesNames::add);
         return attributesNames;
     }
 
-    public static Consumer<GuiElement> onAttributeAdded()
+    @Override
+    public Consumer<GuiElement> onAttributeAdded()
     {
         return onAttributeAdded;
     }
 
-    private static void createAttributes()
+    private void createAttributes()
     {
         attributes.add(new MarkupAttribute("grip-x-width", ((attribute, element) ->
         {
@@ -121,12 +138,12 @@ public class ScrollableAttributes
                 element.get(Scrollable.class).scrollable(Boolean.parseBoolean(attribute))
         )));
 
-        attributes.add(new MarkupAttribute("track-buttons", ((attribute, element) ->
+        attributes.add(new MarkupAttribute("show-track-buttons", ((attribute, element) ->
                 element.get(Scrollable.class).showTrackButtons(Boolean.parseBoolean(attribute))
         )));
     }
 
-    private static void createChildrenAttributes()
+    private void createChildrenAttributes()
     {
     }
 }

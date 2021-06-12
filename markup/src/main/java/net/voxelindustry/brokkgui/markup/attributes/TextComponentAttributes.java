@@ -3,32 +3,47 @@ package net.voxelindustry.brokkgui.markup.attributes;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.markup.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 import net.voxelindustry.brokkgui.text.TextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextComponentAttributes
+public class TextComponentAttributes implements MarkupAttributesGroup
 {
-    private static final List<MarkupAttribute> attributes         = new ArrayList<>();
-    private static final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+    private static final TextComponentAttributes instance = new TextComponentAttributes();
 
-    public static List<MarkupAttribute> getAttributes()
+    public static TextComponentAttributes instance()
+    {
+        return instance;
+    }
+
+    private final List<MarkupAttribute> attributes         = new ArrayList<>();
+    private final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+
+    private TextComponentAttributes()
+    {
+
+    }
+
+    @Override
+    public List<MarkupAttribute> getAttributes()
     {
         if (attributes.isEmpty())
             createAttributes();
         return attributes;
     }
 
-    public static List<MarkupAttribute> getChildrenAttributes()
+    @Override
+    public List<MarkupAttribute> getChildrenAttributes()
     {
         if (childrenAttributes.isEmpty())
             createChildrenAttributes();
         return childrenAttributes;
     }
 
-    private static void createAttributes()
+    private void createAttributes()
     {
         attributes.add(new MarkupAttribute("line-spacing", ((attribute, element) ->
                 element.get(TextComponent.class).lineSpacing(Integer.parseInt(attribute))
@@ -50,7 +65,7 @@ public class TextComponentAttributes
         )));
     }
 
-    private static void createChildrenAttributes()
+    private void createChildrenAttributes()
     {
     }
 }

@@ -2,30 +2,45 @@ package net.voxelindustry.brokkgui.markup.attributes;
 
 import net.voxelindustry.brokkgui.component.impl.LinkComponent;
 import net.voxelindustry.brokkgui.markup.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LinkAttributes
+public class LinkAttributes implements MarkupAttributesGroup
 {
-    private static final List<MarkupAttribute> attributes         = new ArrayList<>();
-    private static final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+    private static final LinkAttributes instance = new LinkAttributes();
 
-    public static List<MarkupAttribute> getAttributes()
+    public static LinkAttributes instance()
+    {
+        return instance;
+    }
+
+    private final List<MarkupAttribute> attributes         = new ArrayList<>();
+    private final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+
+    private LinkAttributes()
+    {
+
+    }
+
+    @Override
+    public List<MarkupAttribute> getAttributes()
     {
         if (attributes.isEmpty())
             createAttributes();
         return attributes;
     }
 
-    public static List<MarkupAttribute> getChildrenAttributes()
+    @Override
+    public List<MarkupAttribute> getChildrenAttributes()
     {
         if (childrenAttributes.isEmpty())
             createChildrenAttributes();
         return childrenAttributes;
     }
 
-    private static void createAttributes()
+    private void createAttributes()
     {
         attributes.add(new MarkupAttribute("url", ((attribute, element) ->
                 element.get(LinkComponent.class).url(attribute)
@@ -35,7 +50,7 @@ public class LinkAttributes
         )));
     }
 
-    private static void createChildrenAttributes()
+    private void createChildrenAttributes()
     {
     }
 }

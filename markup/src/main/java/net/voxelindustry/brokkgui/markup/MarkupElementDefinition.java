@@ -33,6 +33,22 @@ public class MarkupElementDefinition<T extends GuiElement>
         return this;
     }
 
+    public MarkupElementDefinition<T> attributeGroup(MarkupAttributesGroup attributeGroup)
+    {
+        attributes(attributeGroup.getAttributes());
+        childrenAttributes(attributeGroup.getChildrenAttributes());
+
+        var dynamicResolver = attributeGroup.getDynamicResolver();
+        if (dynamicResolver != null)
+            dynamicAttributeResolver(dynamicResolver);
+
+        var attributeNames = attributeGroup.getAttributesNames();
+        if (!attributeNames.isEmpty())
+            onAttributesAdded(attributeNames, attributeGroup.onAttributeAdded());
+        
+        return this;
+    }
+
     public MarkupElementDefinition<T> attributes(Collection<MarkupAttribute> attributes)
     {
         for (MarkupAttribute attribute : attributes)

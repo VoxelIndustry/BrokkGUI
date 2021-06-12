@@ -34,87 +34,63 @@ public class ElementMarkupSetup
         MarkupEngine.registerElementDefinition("pane",
                 new MarkupElementDefinition<>(GuiPane::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("scrollpane",
                 new MarkupElementDefinition<>(ScrollPane::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("rectangle",
                 new MarkupElementDefinition<>(Rectangle::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("circle",
                 new MarkupElementDefinition<>(Circle::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("line",
                 new MarkupElementDefinition<>(Line::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("text",
                 new MarkupElementDefinition<>(Text::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
                         // Label
-                        .attributes(TextComponentAttributes.getAttributes())
-                        .childrenAttributes(TextComponentAttributes.getChildrenAttributes())
+                        .attributeGroup(TextComponentAttributes.instance())
                         // Text creator
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
         );
@@ -122,22 +98,15 @@ public class ElementMarkupSetup
         MarkupEngine.registerElementDefinition("label",
                 new MarkupElementDefinition<>(GuiLabel::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
                         // Label
-                        .attributes(TextComponentAttributes.getAttributes())
-                        .attributes(TextLayoutAttributes.getAttributes())
-                        .attributes(LabelIconAttributes.getAttributes())
-                        .childrenAttributes(TextComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(TextLayoutAttributes.getChildrenAttributes())
-                        .childrenAttributes(LabelIconAttributes.getChildrenAttributes())
+                        .attributeGroup(TextComponentAttributes.instance())
+                        .attributeGroup(TextLayoutAttributes.instance())
+                        .attributeGroup(LabelIconAttributes.instance())
                         // Text creator
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
         );
@@ -145,161 +114,112 @@ public class ElementMarkupSetup
         MarkupEngine.registerElementDefinition("link",
                 new MarkupElementDefinition<>(GuiLink::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
                         // Label
-                        .attributes(TextComponentAttributes.getAttributes())
-                        .attributes(TextLayoutAttributes.getAttributes())
-                        .attributes(LabelIconAttributes.getAttributes())
-                        .childrenAttributes(TextComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(TextLayoutAttributes.getChildrenAttributes())
-                        .childrenAttributes(LabelIconAttributes.getChildrenAttributes())
+                        .attributeGroup(TextComponentAttributes.instance())
+                        .attributeGroup(TextLayoutAttributes.instance())
+                        .attributeGroup(LabelIconAttributes.instance())
                         // Text creator
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
                         // Link
-                        .attributes(LinkAttributes.getAttributes())
-                        .childrenAttributes(LinkAttributes.getChildrenAttributes())
+                        .attributeGroup(LinkAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("button",
                 new MarkupElementDefinition<>(GuiButton::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
                         // Label
-                        .attributes(TextComponentAttributes.getAttributes())
-                        .attributes(TextLayoutAttributes.getAttributes())
-                        .attributes(LabelIconAttributes.getAttributes())
-                        .childrenAttributes(TextComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(TextLayoutAttributes.getChildrenAttributes())
-                        .childrenAttributes(LabelIconAttributes.getChildrenAttributes())
+                        .attributeGroup(TextComponentAttributes.instance())
+                        .attributeGroup(TextLayoutAttributes.instance())
+                        .attributeGroup(LabelIconAttributes.instance())
                         // Text creator
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
                         // Button
-                        .attributes(ButtonAttributes.getAttributes())
-                        .childrenAttributes(ButtonAttributes.getChildrenAttributes())
+                        .attributeGroup(ButtonAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("toggle-button",
                 new MarkupElementDefinition<>(GuiToggleButton::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
                         // Label
-                        .attributes(TextComponentAttributes.getAttributes())
-                        .attributes(TextLayoutAttributes.getAttributes())
-                        .attributes(LabelIconAttributes.getAttributes())
-                        .childrenAttributes(TextComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(TextLayoutAttributes.getChildrenAttributes())
-                        .childrenAttributes(LabelIconAttributes.getChildrenAttributes())
+                        .attributeGroup(TextComponentAttributes.instance())
+                        .attributeGroup(TextLayoutAttributes.instance())
+                        .attributeGroup(LabelIconAttributes.instance())
                         // Text creator
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
                         // Button
-                        .attributes(ButtonAttributes.getAttributes())
-                        .childrenAttributes(ButtonAttributes.getChildrenAttributes())
+                        .attributeGroup(ButtonAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("radio-button",
                 new MarkupElementDefinition<>(GuiRadioButton::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
                         // Label
-                        .attributes(TextComponentAttributes.getAttributes())
-                        .attributes(TextLayoutAttributes.getAttributes())
-                        .attributes(LabelIconAttributes.getAttributes())
-                        .childrenAttributes(TextComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(TextLayoutAttributes.getChildrenAttributes())
-                        .childrenAttributes(LabelIconAttributes.getChildrenAttributes())
+                        .attributeGroup(TextComponentAttributes.instance())
+                        .attributeGroup(TextLayoutAttributes.instance())
+                        .attributeGroup(LabelIconAttributes.instance())
                         // Text creator
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
                         // Button
-                        .attributes(ButtonAttributes.getAttributes())
-                        .attributes(BooleanFormFieldAttributes.getAttributes())
-                        .childrenAttributes(ButtonAttributes.getChildrenAttributes())
-                        .childrenAttributes(BooleanFormFieldAttributes.getChildrenAttributes())
+                        .attributeGroup(ButtonAttributes.instance())
+                        .attributeGroup(BooleanFormFieldAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("checkbox",
                 new MarkupElementDefinition<>(GuiCheckbox::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
                         // Label
-                        .attributes(TextComponentAttributes.getAttributes())
-                        .attributes(TextLayoutAttributes.getAttributes())
-                        .attributes(LabelIconAttributes.getAttributes())
-                        .childrenAttributes(TextComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(TextLayoutAttributes.getChildrenAttributes())
-                        .childrenAttributes(LabelIconAttributes.getChildrenAttributes())
+                        .attributeGroup(TextComponentAttributes.instance())
+                        .attributeGroup(TextLayoutAttributes.instance())
+                        .attributeGroup(LabelIconAttributes.instance())
                         // Text creator
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
                         // Button
-                        .attributes(ButtonAttributes.getAttributes())
-                        .attributes(BooleanFormFieldAttributes.getAttributes())
-                        .childrenAttributes(ButtonAttributes.getChildrenAttributes())
-                        .childrenAttributes(BooleanFormFieldAttributes.getChildrenAttributes())
+                        .attributeGroup(ButtonAttributes.instance())
+                        .attributeGroup(BooleanFormFieldAttributes.instance())
         );
 
         MarkupEngine.registerElementDefinition("text-field",
                 new MarkupElementDefinition<>(GuiTextField::new)
                         // GuiElement
-                        .attributes(TransformAttributes.getAttributes())
-                        .attributes(StyleComponentAttributes.getAttributes())
-                        .attributes(GuiElementAttributes.getAttributes())
-                        .attributes(ScrollableAttributes.getAttributes())
-                        .childrenAttributes(TransformAttributes.getChildrenAttributes())
-                        .childrenAttributes(StyleComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(GuiElementAttributes.getChildrenAttributes())
-                        .childrenAttributes(ScrollableAttributes.getChildrenAttributes())
-                        .onAttributesAdded(ScrollableAttributes.getAttributesNames(), ScrollableAttributes.onAttributeAdded())
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
                         // Label
-                        .attributes(TextComponentAttributes.getAttributes())
-                        .attributes(TextLayoutAttributes.getAttributes())
-                        .childrenAttributes(TextComponentAttributes.getChildrenAttributes())
-                        .childrenAttributes(TextLayoutAttributes.getChildrenAttributes())
+                        .attributeGroup(TextComponentAttributes.instance())
+                        .attributeGroup(TextLayoutAttributes.instance())
+                        .attributeGroup(LabelIconAttributes.instance())
                         // Text creator
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
                         // Text field
-                        .attributes(TextInputAttributes.getAttributes())
-                        .attributes(TextAssistAttributes.getAttributes())
-                        .childrenAttributes(TextInputAttributes.getChildrenAttributes())
-                        .childrenAttributes(TextAssistAttributes.getChildrenAttributes())
+                        .attributeGroup(TextInputAttributes.instance())
+                        .attributeGroup(TextAssistAttributes.instance())
         );
     }
 }

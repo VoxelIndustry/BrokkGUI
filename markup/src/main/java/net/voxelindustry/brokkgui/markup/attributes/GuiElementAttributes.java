@@ -2,30 +2,45 @@ package net.voxelindustry.brokkgui.markup.attributes;
 
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.markup.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiElementAttributes
+public class GuiElementAttributes implements MarkupAttributesGroup
 {
-    private static final List<MarkupAttribute> attributes         = new ArrayList<>();
-    private static final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+    private static final GuiElementAttributes instance = new GuiElementAttributes();
 
-    public static List<MarkupAttribute> getAttributes()
+    public static GuiElementAttributes instance()
+    {
+        return instance;
+    }
+
+    private final List<MarkupAttribute> attributes         = new ArrayList<>();
+    private final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+
+    private GuiElementAttributes()
+    {
+
+    }
+
+    @Override
+    public List<MarkupAttribute> getAttributes()
     {
         if (attributes.isEmpty())
             createAttributes();
         return attributes;
     }
 
-    public static List<MarkupAttribute> getChildrenAttributes()
+    @Override
+    public List<MarkupAttribute> getChildrenAttributes()
     {
         if (childrenAttributes.isEmpty())
             createChildrenAttributes();
         return childrenAttributes;
     }
 
-    private static void createAttributes()
+    private void createAttributes()
     {
         attributes.add(new MarkupAttribute("id", ((attribute, element) ->
                 element.id(attribute))
@@ -50,7 +65,7 @@ public class GuiElementAttributes
         })));
     }
 
-    private static void createChildrenAttributes()
+    private void createChildrenAttributes()
     {
     }
 }

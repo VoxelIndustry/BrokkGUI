@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.markup.attributes;
 
 import net.voxelindustry.brokkgui.markup.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 
 import java.util.ArrayList;
@@ -8,26 +9,40 @@ import java.util.List;
 
 import static net.voxelindustry.brokkgui.data.RelativeBindingHelper.*;
 
-public class TransformAttributes
+public class TransformAttributes implements MarkupAttributesGroup
 {
-    private static final List<MarkupAttribute> attributes         = new ArrayList<>();
-    private static final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+    private static final TransformAttributes instance = new TransformAttributes();
 
-    public static List<MarkupAttribute> getAttributes()
+    public static TransformAttributes instance()
+    {
+        return instance;
+    }
+
+    private final List<MarkupAttribute> attributes         = new ArrayList<>();
+    private final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+
+    private TransformAttributes()
+    {
+
+    }
+
+    @Override
+    public List<MarkupAttribute> getAttributes()
     {
         if (attributes.isEmpty())
             createAttributes();
         return attributes;
     }
 
-    public static List<MarkupAttribute> getChildrenAttributes()
+    @Override
+    public List<MarkupAttribute> getChildrenAttributes()
     {
         if (childrenAttributes.isEmpty())
             createChildrenAttributes();
         return childrenAttributes;
     }
 
-    private static void createAttributes()
+    private void createAttributes()
     {
         attributes.add(new MarkupAttribute("translate-x", (attribute, element) ->
                 element.transform().xTranslate(Float.parseFloat(attribute))
@@ -80,7 +95,7 @@ public class TransformAttributes
         ));
     }
 
-    private static void createChildrenAttributes()
+    private void createChildrenAttributes()
     {
         childrenAttributes.add(new MarkupAttribute("x", (attribute, element) ->
         {

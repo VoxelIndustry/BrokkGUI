@@ -3,30 +3,45 @@ package net.voxelindustry.brokkgui.markup.attributes;
 import net.voxelindustry.brokkgui.component.impl.TextAssistComponent;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
 import net.voxelindustry.brokkgui.markup.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextAssistAttributes
+public class TextAssistAttributes implements MarkupAttributesGroup
 {
-    private static final List<MarkupAttribute> attributes         = new ArrayList<>();
-    private static final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+    private static final TextAssistAttributes instance = new TextAssistAttributes();
 
-    public static List<MarkupAttribute> getAttributes()
+    public static TextAssistAttributes instance()
+    {
+        return instance;
+    }
+
+    private final List<MarkupAttribute> attributes         = new ArrayList<>();
+    private final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
+
+    private TextAssistAttributes()
+    {
+
+    }
+
+    @Override
+    public List<MarkupAttribute> getAttributes()
     {
         if (attributes.isEmpty())
             createAttributes();
         return attributes;
     }
 
-    public static List<MarkupAttribute> getChildrenAttributes()
+    @Override
+    public List<MarkupAttribute> getChildrenAttributes()
     {
         if (childrenAttributes.isEmpty())
             createChildrenAttributes();
         return childrenAttributes;
     }
 
-    private static void createAttributes()
+    private void createAttributes()
     {
         attributes.add(new MarkupAttribute("prompt-always-displayed", ((attribute, element) ->
                 element.get(TextAssistComponent.class).promptTextAlwaysDisplayed(Boolean.parseBoolean(attribute))
@@ -42,7 +57,7 @@ public class TextAssistAttributes
         )));
     }
 
-    private static void createChildrenAttributes()
+    private void createChildrenAttributes()
     {
         childrenAttributes.add(new MarkupAttribute("prompt-label", ((attributeValue, element) ->
                 element.transform().parent().element().get(TextAssistComponent.class).promptTextLabel((GuiLabeled) element)
