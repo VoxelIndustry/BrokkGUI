@@ -320,11 +320,14 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             appendTextToCursor(event.text());
 
             EventQueueBuilder.fromTarget(element()).dispatch(TextTypedEvent.TYPE, new TextTypedEvent(element(), oldText, textComponent.text()));
+            event.consume();
         }
     }
 
     protected void onKeyPressed(KeyEvent.Press event)
     {
+        event.consume();
+
         String oldText = textComponent.text();
         boolean contentChanged = false;
 

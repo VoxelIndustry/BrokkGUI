@@ -234,38 +234,46 @@ public class Scrollable extends GuiComponent
 
     private void onScrollKey(Press event)
     {
-        if (event.getKey() == keyboard().getKeyCode("UP"))
+        if (transform().height() < trueHeight())
         {
-            scrollY(min(0, scrollY() + scrollSpeed()));
+            if (event.getKey() == keyboard().getKeyCode("UP"))
+            {
+                scrollY(min(0, scrollY() + scrollSpeed()));
+            }
+            else if (event.getKey() == keyboard().getKeyCode("DOWN"))
+            {
+                scrollY(max(transform().height() - trueHeight(), scrollY() - scrollSpeed()));
+            }
+            else if (event.getKey() == keyboard().getKeyCode("PAGE_UP"))
+            {
+                scrollY(min(0, scrollY() + transform().height()));
+            }
+            else if (event.getKey() == keyboard().getKeyCode("PAGE_DOWN"))
+            {
+                scrollY(max(transform().height() - trueHeight(), scrollY() - transform().height()));
+            }
+            else if (event.getKey() == keyboard().getKeyCode("HOME"))
+            {
+                scrollY(0);
+            }
+            else if (event.getKey() == keyboard().getKeyCode("END"))
+            {
+                scrollY(transform().height() - trueHeight());
+            }
         }
-        else if (event.getKey() == keyboard().getKeyCode("DOWN"))
+
+        if (transform().width() < trueWidth())
         {
-            scrollY(max(transform().height() - trueHeight(), scrollY() - scrollSpeed()));
+            if (event.getKey() == keyboard().getKeyCode("LEFT"))
+            {
+                scrollX(min(0, scrollX() + scrollSpeed()));
+            }
+            else if (event.getKey() == keyboard().getKeyCode("RIGHT"))
+            {
+                scrollX(max(transform().width() - trueWidth(), scrollX() - scrollSpeed()));
+            }
         }
-        else if (event.getKey() == keyboard().getKeyCode("LEFT"))
-        {
-            scrollX(min(0, scrollX() + scrollSpeed()));
-        }
-        else if (event.getKey() == keyboard().getKeyCode("RIGHT"))
-        {
-            scrollX(max(transform().width() - trueWidth(), scrollX() - scrollSpeed()));
-        }
-        else if (event.getKey() == keyboard().getKeyCode("PAGE_UP"))
-        {
-            scrollY(min(0, scrollY() + transform().height()));
-        }
-        else if (event.getKey() == keyboard().getKeyCode("PAGE_DOWN"))
-        {
-            scrollY(max(transform().height() - trueHeight(), scrollY() - transform().height()));
-        }
-        else if (event.getKey() == keyboard().getKeyCode("HOME"))
-        {
-            scrollY(0);
-        }
-        else if (event.getKey() == keyboard().getKeyCode("END"))
-        {
-            scrollY(transform().height() - trueHeight());
-        }
+
     }
 
     protected void createTrackX()

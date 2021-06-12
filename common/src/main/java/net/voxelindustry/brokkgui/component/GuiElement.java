@@ -230,7 +230,8 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
 
     private void handleClickStart(ClickPressEvent event)
     {
-        setFocused();
+        if (setFocused())
+            event.consume();
     }
 
     public void handleDragStart(DragStart event)
@@ -385,10 +386,11 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         return focusedProperty().getValue();
     }
 
-    public void setFocused()
+    public boolean setFocused()
     {
         if (!isDisabled() && isFocusable())
             GuiFocusManager.instance.requestFocus(this, window);
+        return GuiFocusManager.instance.focusedNode() == this;
     }
 
     public void internalSetFocused(boolean focused)
