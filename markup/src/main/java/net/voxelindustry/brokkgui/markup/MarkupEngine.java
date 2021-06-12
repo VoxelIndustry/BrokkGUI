@@ -133,7 +133,12 @@ public class MarkupEngine
             return createdElement;
         }
         else if (node instanceof Text)
-            parentDefinition.textChildReceiver().decode(node.getText(), parentElement);
+        {
+            var text = node.getText();
+            if (text.charAt(0) == '\n')
+                text = text.substring(1);
+            parentDefinition.textChildReceiver().decode(text.stripTrailing().stripIndent(), parentElement);
+        }
 
         return parentElement;
     }
