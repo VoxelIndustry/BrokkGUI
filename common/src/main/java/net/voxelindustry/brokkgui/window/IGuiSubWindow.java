@@ -2,9 +2,12 @@ package net.voxelindustry.brokkgui.window;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
+
+import java.util.Collection;
 
 /**
  * @author Ourten 31 oct. 2016
@@ -15,13 +18,13 @@ public interface IGuiSubWindow
 
     void close();
 
-    float getxRelativePos();
+    float xRelativePos();
 
-    float getyRelativePos();
+    float yRelativePos();
 
-    Property<Float> getxRelativePosProperty();
+    Property<Float> xRelativePosProperty();
 
-    Property<Float> getyRelativePosProperty();
+    Property<Float> yRelativePosProperty();
 
     float getWidth();
 
@@ -36,4 +39,10 @@ public interface IGuiSubWindow
     <T extends HermodEvent> void dispatchEvent(EventType<T> type, T event);
 
     GuiElement getRootElement();
+
+    void addFloating(Transform transform);
+
+    boolean removeFloating(Transform transform);
+
+    Collection<Transform> getFloatingList();
 }

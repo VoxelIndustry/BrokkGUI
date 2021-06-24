@@ -74,6 +74,13 @@ public abstract class GuiComponent implements IEventEmitter
         return property;
     }
 
+    protected BooleanProperty createRenderPropertyBoolean(boolean initialValue)
+    {
+        BooleanProperty property = new BooleanProperty(initialValue);
+        property.addListener(this::onRenderPropertyChange);
+        return property;
+    }
+
     protected FloatProperty createRenderPropertyFloat(float initialValue)
     {
         FloatProperty property = new FloatProperty(initialValue);

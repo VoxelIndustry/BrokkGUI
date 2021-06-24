@@ -8,6 +8,7 @@ import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.debug.DebugRenderer;
 import net.voxelindustry.brokkgui.element.pane.GuiPane;
 import net.voxelindustry.brokkgui.event.ClickPressEvent;
@@ -21,7 +22,6 @@ import net.voxelindustry.brokkgui.event.ScrollEvent;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
-import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
 import net.voxelindustry.brokkgui.style.IStyleRoot;
@@ -39,10 +39,10 @@ import net.voxelindustry.hermod.IEventEmitter;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -60,25 +60,33 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     private EventHandler<WindowEvent.Close> onCloseEvent;
 
     private       GuiElement              root;
-    private final ArrayList<SubGuiScreen> windows;
+    private final ArrayList<SubGuiScreen> windows = new ArrayList<>();
     private       IRenderCommandReceiver  renderer;
 
-    private final Property<Float> widthProperty, heightProperty, xPosProperty, yPosProperty;
+    private final Property<Float> widthProperty;
+    private final Property<Float> heightProperty;
+    private final Property<Float> xPosProperty = new Property<>(0F);
+    private final Property<Float> yPosProperty = new Property<>(0F);
 
-    private final Property<Float> xRelativePosProperty, yRelativePosProperty;
-    private final Property<Float> xOffsetProperty, yOffsetProperty;
+    private final Property<Float> xRelativePosProperty;
+    private final Property<Float> yRelativePosProperty;
+    private final Property<Float> xOffsetProperty = new Property<>(0F);
+    private final Property<Float> yOffsetProperty = new Property<>(0F);
 
-    private final Property<Integer> screenWidthProperty, screenHeightProperty;
+    private final Property<Integer> screenWidthProperty  = new Property<>(0);
+    private final Property<Integer> screenHeightProperty = new Property<>(0);
 
-    private final ListProperty<String> stylesheetsProperty;
-    private final Property<StyleList>  styleListProperty;
+    private final ListProperty<String> stylesheetsProperty = new ListProperty<>(emptyList());
+    private final Property<StyleList>  styleListProperty   = new Property<>(null);
 
-    private final ListenerPool listenerPool;
+    private final List<Transform> floatingTransforms = new ArrayList<>();
+
+    private final ListenerPool listenerPool = new ListenerPool();
 
     private IBrokkGuiImpl wrapper;
 
-    private float lastClickX;
-    private float lastClickY;
+    private float lastClickX = -1;
+    private float lastClickY = -1;
 
     private boolean firstDragSinceClick;
 
@@ -94,31 +102,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         xRelativePosProperty = new Property<>(xRelativePos);
         yRelativePosProperty = new Property<>(yRelativePos);
 
-        xPosProperty = new Property<>(0F);
-        yPosProperty = new Property<>(0F);
-
-        xOffsetProperty = new Property<>(0F);
-        yOffsetProperty = new Property<>(0F);
-
-        windows = new ArrayList<>();
-
-        screenWidthProperty = new Property<>(0);
-        screenHeightProperty = new Property<>(0);
-
-        listenerPool = new ListenerPool();
-
-        stylesheetsProperty = new ListProperty<>(emptyList());
-        styleListProperty = new Property<>(null);
-
-        lastClickX = -1;
-        lastClickY = -1;
-
         Comparator<Pair<Runnable, Long>> comparator = Comparator.comparingLong(Pair::getValue);
         tasksQueue = new PriorityQueue<>(comparator.reversed());
 
-        GuiPane mainPanel = new GuiPane();
-        mainPanel.id("main-panel");
-        setRoot(mainPanel);
+        GuiPane root = new GuiPane();
+        root.id("main-panel");
+        setRoot(root);
     }
 
     public BrokkGuiScreen(float width, float height)
@@ -138,12 +127,12 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         renderer = wrapper.getRenderer();
 
-        xPosProperty.bindProperty(new Expression<>(() -> wrapper.getGuiRelativePosX(getxRelativePos(), getWidth()) + getxOffset(),
-                screenWidthProperty(), getxRelativePosProperty(), getWidthProperty(),
+        xPosProperty.bindProperty(new Expression<>(() -> wrapper.getGuiRelativePosX(xRelativePos(), getWidth()) + getxOffset(),
+                screenWidthProperty(), xRelativePosProperty(), getWidthProperty(),
                 getxOffsetProperty()));
 
-        yPosProperty.bindProperty(new Expression<>(() -> wrapper.getGuiRelativePosY(getyRelativePos(), getHeight()) + getyOffset(),
-                getyRelativePosProperty(), screenHeightProperty(), getHeightProperty(),
+        yPosProperty.bindProperty(new Expression<>(() -> wrapper.getGuiRelativePosY(yRelativePos(), getHeight()) + getyOffset(),
+                yRelativePosProperty(), screenHeightProperty(), getHeightProperty(),
                 getyOffsetProperty()));
 
         stylesheetsProperty.addListener(obs ->
@@ -172,7 +161,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             root.handleHover(mouseX, mouseY, root.isPointInside(mouseX, mouseY));
         }
 
-        PopupHandler.getInstance(this).handleHover(mouseX, mouseY);
+        floatingTransforms.forEach(transform ->
+                transform.element().handleHover(mouseX, mouseY, transform.isPointInside(mouseX, mouseY)));
     }
 
     @Override
@@ -193,9 +183,6 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
                         windows.get(i).renderNode(renderer, mouseX, mouseY);
                     }
-                break;
-            case POPUP:
-                PopupHandler.getInstance(this).renderPopup(renderer, mouseX, mouseY);
                 break;
         }
     }
@@ -255,21 +242,46 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             }
         }
 
-        PopupHandler.getInstance(this).handleClick(mouseX, mouseY, key);
-
         GuiElement source = null;
+
+        boolean clicked = false;
 
         if (!windows.isEmpty())
         {
-            if (windows.get(0).isPointInside(mouseX, mouseY))
-                source = windows.get(0);
-            else if (windows.get(0).closeOnClick())
-                removeSubGui(windows.get(0));
+            for (var window : windows)
+            {
+                if (window.transform().isPointInside(mouseX, mouseY))
+                {
+                    source = window;
+                    clicked = true;
+                    break;
+                }
+                else if (window.closeOnClick())
+                    removeSubGui(window);
+            }
         }
-        else
+
+        if (!clicked && !floatingTransforms.isEmpty())
         {
-            source = root;
-            if (!root.isPointInside(mouseX, mouseY))
+            for (var transform : floatingTransforms)
+            {
+                if (transform.isPointInside(mouseX, mouseY) && transform.isVisible() && !transform.element().isDisabled())
+                {
+                    source = transform.element();
+                    clicked = true;
+                    break;
+                }
+            }
+        }
+
+        if (!clicked)
+        {
+            if (root.transform().isPointInside(mouseX, mouseY))
+            {
+                if (!root.isDisabled() && root.isVisible())
+                    source = root;
+            }
+            else
                 GuiFocusManager.instance.removeWindowFocus(this);
         }
 
@@ -280,28 +292,17 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         if (source == null)
             return;
 
-        if (source.isPointInside(mouseX, mouseY) && !source.isDisabled() && source.isVisible())
-        {
-            EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(source,
-                    EventQueueBuilder.isPointInside(mouseX, mouseY)
-                            .and(EventQueueBuilder.isEnabled)
-                            .and(EventQueueBuilder.isVisible));
+        EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(source,
+                EventQueueBuilder.isPointInside(mouseX, mouseY)
+                        .and(EventQueueBuilder.isEnabled)
+                        .and(EventQueueBuilder.isVisible));
 
-            switch (key)
-            {
-                case MOUSE_LEFT:
-                    eventQueue.dispatch(ClickPressEvent.Left.TYPE, new ClickPressEvent.Left(source, mouseX, mouseY));
-                    break;
-                case MOUSE_RIGHT:
-                    eventQueue.dispatch(ClickPressEvent.Right.TYPE, new ClickPressEvent.Right(source, mouseX, mouseY));
-                    break;
-                case MOUSE_BUTTON_MIDDLE:
-                    eventQueue.dispatch(ClickPressEvent.Middle.TYPE, new ClickPressEvent.Middle(source, mouseX, mouseY));
-                    break;
-                default:
-                    eventQueue.dispatch(ClickPressEvent.TYPE, new ClickPressEvent(source, mouseX, mouseY, key));
-                    break;
-            }
+        switch (key)
+        {
+            case MOUSE_LEFT -> eventQueue.dispatch(ClickPressEvent.Left.TYPE, new ClickPressEvent.Left(source, mouseX, mouseY));
+            case MOUSE_RIGHT -> eventQueue.dispatch(ClickPressEvent.Right.TYPE, new ClickPressEvent.Right(source, mouseX, mouseY));
+            case MOUSE_BUTTON_MIDDLE -> eventQueue.dispatch(ClickPressEvent.Middle.TYPE, new ClickPressEvent.Middle(source, mouseX, mouseY));
+            default -> eventQueue.dispatch(ClickPressEvent.TYPE, new ClickPressEvent(source, mouseX, mouseY, key));
         }
     }
 
@@ -310,14 +311,16 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         if (firstDragSinceClick)
         {
-            if (root.isPointInside(mouseX, mouseY) && !root.isDisabled() && root.isVisible())
+            GuiElement source = getNodeUnderMouse(mouseX, mouseY);
+
+            if (source != null)
             {
-                EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(root,
+                EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(source,
                         EventQueueBuilder.isPointInside(mouseX, mouseY)
                                 .and(EventQueueBuilder.isEnabled)
                                 .and(EventQueueBuilder.isVisible));
 
-                eventQueue.dispatch(GuiMouseEvent.DRAG_START, new GuiMouseEvent.DragStart(root, mouseX, mouseY, key));
+                eventQueue.dispatch(GuiMouseEvent.DRAG_START, new GuiMouseEvent.DragStart(source, mouseX, mouseY, key));
             }
             firstDragSinceClick = false;
         }
@@ -332,27 +335,21 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onClickStop(float mouseX, float mouseY, MouseInputCode key)
     {
-        if (root.isPointInside(mouseX, mouseY) && !root.isDisabled() && root.isVisible())
+        GuiElement source = getNodeUnderMouse(mouseX, mouseY);
+
+        if (source != null)
         {
-            EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(root,
+            EventQueue eventQueue = EventQueueBuilder.allChildrenMatching(source,
                     EventQueueBuilder.isPointInside(mouseX, mouseY)
                             .and(EventQueueBuilder.isEnabled)
                             .and(EventQueueBuilder.isVisible));
 
             switch (key)
             {
-                case MOUSE_LEFT:
-                    eventQueue.dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(root, mouseX, mouseY));
-                    break;
-                case MOUSE_RIGHT:
-                    eventQueue.dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(root, mouseX, mouseY));
-                    break;
-                case MOUSE_BUTTON_MIDDLE:
-                    eventQueue.dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(root, mouseX, mouseY));
-                    break;
-                default:
-                    eventQueue.dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(root, mouseX, mouseY, key));
-                    break;
+                case MOUSE_LEFT -> eventQueue.dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(source, mouseX, mouseY));
+                case MOUSE_RIGHT -> eventQueue.dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(source, mouseX, mouseY));
+                case MOUSE_BUTTON_MIDDLE -> eventQueue.dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(source, mouseX, mouseY));
+                default -> eventQueue.dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(source, mouseX, mouseY, key));
             }
         }
 
@@ -426,16 +423,17 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         }
     }
 
+
     public void addSubGui(SubGuiScreen subGui)
     {
         windows.add(0, subGui);
 
-        subGui.transform().xPosProperty().bindProperty(new Expression<>(() -> getScreenWidth() / (1 / subGui.getxRelativePos())
-                - subGui.getWidth() / 2, subGui.getxRelativePosProperty(), screenWidthProperty(),
+        subGui.transform().xPosProperty().bindProperty(new Expression<>(() -> getScreenWidth() / (1 / subGui.xRelativePos())
+                - subGui.getWidth() / 2, subGui.xRelativePosProperty(), screenWidthProperty(),
                 subGui.transform().widthProperty()));
 
-        subGui.transform().yPosProperty().bindProperty(new Expression<>(() -> getScreenHeight() / (1 / subGui.getyRelativePos())
-                - subGui.getHeight() / 2, subGui.getyRelativePosProperty(), screenHeightProperty(),
+        subGui.transform().yPosProperty().bindProperty(new Expression<>(() -> getScreenHeight() / (1 / subGui.yRelativePos())
+                - subGui.getHeight() / 2, subGui.yRelativePosProperty(), screenHeightProperty(),
                 subGui.transform().heightProperty()));
 
         subGui.open();
@@ -492,7 +490,6 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         if (GuiFocusManager.instance.focusedWindow() == this)
             GuiFocusManager.instance.requestFocus(null, this);
         listenerPool.clear();
-        PopupHandler.getInstance(this).delete(this);
 
         if (root != null)
             EventQueueBuilder.allChildren(root).dispatch(DisposeEvent.TYPE, new DisposeEvent(root));
@@ -505,13 +502,19 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     {
         if (!windows.isEmpty())
         {
-            Optional<SubGuiScreen> match =
-                    windows.stream().filter(gui -> gui.isPointInside(mouseX, mouseY)).findFirst();
+            var match = windows.stream()
+                    .filter(gui -> gui.transform().isPointInside(mouseX, mouseY) && !gui.isDisabled() && gui.isVisible())
+                    .findFirst();
 
             if (match.isPresent())
                 return match.get();
         }
-        if (root().isPointInside(mouseX, mouseY))
+        for (Transform transform : floatingTransforms)
+        {
+            if (transform.isPointInside(mouseX, mouseY) && !transform.element().isDisabled() && transform.isVisible())
+                return transform.element();
+        }
+        if (root().transform().isPointInside(mouseX, mouseY) && !root().isDisabled() && root().isVisible())
             return root();
         return null;
     }
@@ -530,8 +533,8 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             root.transform().xPosProperty().unbind();
             root.transform().yPosProperty().unbind();
 
-            if (root.getWindow() == this)
-                root.setWindow(null);
+            if (root.window() == this)
+                root.window(null);
         }
 
         root = mainPanel;
@@ -545,7 +548,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         StyleEngine.setStyleSupplierHierarchy(mainPanel.transform(), getStyleListProperty()::getValue);
         if (wrapper != null)
             StyleEngine.refreshHierarchy(mainPanel.transform());
-        root.setWindow(this);
+        root.window(this);
 
         return mainPanel;
     }
@@ -581,13 +584,13 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public Property<Float> getxRelativePosProperty()
+    public Property<Float> xRelativePosProperty()
     {
         return xRelativePosProperty;
     }
 
     @Override
-    public Property<Float> getyRelativePosProperty()
+    public Property<Float> yRelativePosProperty()
     {
         return yRelativePosProperty;
     }
@@ -651,25 +654,25 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public float getxRelativePos()
+    public float xRelativePos()
     {
-        return getxRelativePosProperty().getValue();
+        return xRelativePosProperty().getValue();
     }
 
     public void setxRelativePos(float xRelativePos)
     {
-        getxRelativePosProperty().setValue(xRelativePos);
+        xRelativePosProperty().setValue(xRelativePos);
     }
 
     @Override
-    public float getyRelativePos()
+    public float yRelativePos()
     {
-        return getyRelativePosProperty().getValue();
+        return yRelativePosProperty().getValue();
     }
 
     public void setyRelativePos(float yRelativePos)
     {
-        getyRelativePosProperty().setValue(yRelativePos);
+        yRelativePosProperty().setValue(yRelativePos);
     }
 
     public void setRelativePos(float xRelativePos, float yRelativePos)
@@ -761,6 +764,32 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         return wrapper;
     }
 
+    @Override
+    public GuiElement getRootElement()
+    {
+        return root();
+    }
+
+    @Override
+    public void addFloating(Transform transform)
+    {
+        if (floatingTransforms.contains(transform))
+            return;
+        floatingTransforms.add(transform);
+    }
+
+    @Override
+    public boolean removeFloating(Transform transform)
+    {
+        return floatingTransforms.remove(transform);
+    }
+
+    @Override
+    public Collection<Transform> getFloatingList()
+    {
+        return floatingTransforms;
+    }
+
     /////////////////////
     // EVENTS HANDLING //
     /////////////////////
@@ -814,12 +843,6 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     public <T extends HermodEvent> void dispatchEvent(EventType<T> type, T event)
     {
         getEventDispatcher().singletonQueue().dispatch(type, event);
-    }
-
-    @Override
-    public GuiElement getRootElement()
-    {
-        return root();
     }
 
     /////////////////////

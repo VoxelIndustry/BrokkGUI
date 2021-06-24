@@ -4,6 +4,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.immediate.element.BoxElement;
@@ -20,6 +21,8 @@ import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +99,6 @@ public abstract class ImmediateWindow extends BaseImmediateWindow implements Imm
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T getStyleObject(StyleType type, Class<T> objectClass, Function<StyleType, T> styleObjectSupplier)
     {
         Object styleObject = elementStyles.get(objectClass, type);
@@ -167,5 +169,23 @@ public abstract class ImmediateWindow extends BaseImmediateWindow implements Imm
     public GuiElement getRootElement()
     {
         return ImmediateGuiElement.INSTANCE;
+    }
+
+    @Override
+    public void addFloating(Transform transform)
+    {
+        throw new UnsupportedOperationException("Cannot use floating transforms in an ImmediateWindow");
+    }
+
+    @Override
+    public boolean removeFloating(Transform transform)
+    {
+        throw new UnsupportedOperationException("Cannot use floating transforms in an ImmediateWindow");
+    }
+
+    @Override
+    public Collection<Transform> getFloatingList()
+    {
+        return Collections.emptyList();
     }
 }

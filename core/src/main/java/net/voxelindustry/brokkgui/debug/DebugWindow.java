@@ -10,7 +10,6 @@ import net.voxelindustry.brokkgui.debug.hierarchy.AccordionLayout;
 import net.voxelindustry.brokkgui.immediate.ImmediateWindow;
 import net.voxelindustry.brokkgui.immediate.InteractionResult;
 import net.voxelindustry.brokkgui.immediate.style.StyleType;
-import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.internal.profiler.IProfiler;
 import net.voxelindustry.brokkgui.profiler.GuiProfiler;
 import net.voxelindustry.brokkgui.style.IStyleRoot;
@@ -107,7 +106,7 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
         hierarchiesByName.putIfAbsent(mainWindowName, new DebugHierarchy(mainWindowName, 0, false, 0));
         hierarchiesByName.putIfAbsent("Popups", new DebugHierarchy("Popups", 0, false,
                 getScreenHeight() - ((BrokkGuiScreen) window).getSubGuis().size() * 14 - 14
-                        - max(PopupHandler.getInstance(window).getPopups().stream().filter(GuiElement.class::isInstance).count(), 3) * 14));
+                        - max(window.getFloatingList().size(), 3) * 14));
 
         List<AccordionItem> items = new ArrayList<>();
         items.add(hierarchiesByName.get(mainWindowName));
@@ -142,14 +141,11 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
                 "Popups",
                 hierarchiesByName.get("Popups"),
                 items,
-                PopupHandler.getInstance(window).getPopups()
-                        .stream().mapToInt(popup -> popup instanceof GuiElement ? getChildCountDeep(((GuiElement) popup).transform()) + 1 : 1)
+                window.getFloatingList().stream()
+                        .mapToInt(popup -> getChildCountDeep(popup) + 1)
                         .sum(),
-                PopupHandler.getInstance(window).getPopups().stream()
-                        .filter(GuiElement.class::isInstance)
-                        .map(GuiElement.class::cast)
-                        .map(GuiElement::transform)
-                        .toArray(Transform[]::new));
+                window.getFloatingList().toArray(new Transform[0])
+        );
 
         for (SubGuiScreen subWindow : ((BrokkGuiScreen) window).getSubGuis())
         {

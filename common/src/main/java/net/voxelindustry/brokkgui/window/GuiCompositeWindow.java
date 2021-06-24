@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.window;
 import fr.ourten.teabeans.property.IProperty;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.event.MouseInputCode;
 import net.voxelindustry.brokkgui.internal.IBrokkGuiImpl;
 import net.voxelindustry.brokkgui.paint.RenderTarget;
@@ -10,6 +11,7 @@ import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
@@ -283,27 +285,27 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public float getxRelativePos()
+    public float xRelativePos()
     {
-        return first.getxRelativePos();
+        return first.xRelativePos();
     }
 
     @Override
-    public float getyRelativePos()
+    public float yRelativePos()
     {
-        return first.getyRelativePos();
+        return first.yRelativePos();
     }
 
     @Override
-    public Property<Float> getxRelativePosProperty()
+    public Property<Float> xRelativePosProperty()
     {
-        return first.getxRelativePosProperty();
+        return first.xRelativePosProperty();
     }
 
     @Override
-    public Property<Float> getyRelativePosProperty()
+    public Property<Float> yRelativePosProperty()
     {
-        return first.getyRelativePosProperty();
+        return first.yRelativePosProperty();
     }
 
     @Override
@@ -350,5 +352,23 @@ public class GuiCompositeWindow implements IGuiWindow
     public GuiElement getRootElement()
     {
         return first.getRootElement();
+    }
+
+    @Override
+    public void addFloating(Transform transform)
+    {
+        first.addFloating(transform);
+    }
+
+    @Override
+    public boolean removeFloating(Transform transform)
+    {
+        return first.removeFloating(transform);
+    }
+
+    @Override
+    public Collection<Transform> getFloatingList()
+    {
+        return first.getFloatingList();
     }
 }

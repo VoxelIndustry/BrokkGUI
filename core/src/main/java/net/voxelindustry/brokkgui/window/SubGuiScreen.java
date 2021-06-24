@@ -2,11 +2,15 @@ package net.voxelindustry.brokkgui.window;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.hermod.EventHandler;
 import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public class SubGuiScreen extends GuiElement implements StyledElement, IGuiSubWindow
 {
@@ -25,7 +29,7 @@ public class SubGuiScreen extends GuiElement implements StyledElement, IGuiSubWi
         xRelativePosProperty = new Property<>(xRelativePos);
         yRelativePosProperty = new Property<>(yRelativePos);
 
-        setWindow(this);
+        window(this);
     }
 
     public SubGuiScreen()
@@ -66,37 +70,37 @@ public class SubGuiScreen extends GuiElement implements StyledElement, IGuiSubWi
     }
 
     @Override
-    public Property<Float> getxRelativePosProperty()
+    public Property<Float> xRelativePosProperty()
     {
         return xRelativePosProperty;
     }
 
     @Override
-    public Property<Float> getyRelativePosProperty()
+    public Property<Float> yRelativePosProperty()
     {
         return yRelativePosProperty;
     }
 
     @Override
-    public float getxRelativePos()
+    public float xRelativePos()
     {
-        return getxRelativePosProperty().getValue();
+        return xRelativePosProperty().getValue();
     }
 
     public void setxRelativePos(float xRelativePos)
     {
-        getxRelativePosProperty().setValue(xRelativePos);
+        xRelativePosProperty().setValue(xRelativePos);
     }
 
     @Override
-    public float getyRelativePos()
+    public float yRelativePos()
     {
-        return getyRelativePosProperty().getValue();
+        return yRelativePosProperty().getValue();
     }
 
     public void setyRelativePos(float yRelativePos)
     {
-        getyRelativePosProperty().setValue(yRelativePos);
+        yRelativePosProperty().setValue(yRelativePos);
     }
 
     @Override
@@ -143,6 +147,24 @@ public class SubGuiScreen extends GuiElement implements StyledElement, IGuiSubWi
     public GuiElement getRootElement()
     {
         return this;
+    }
+
+    @Override
+    public void addFloating(Transform transform)
+    {
+        throw new UnsupportedOperationException("Cannot use floating transforms in a SubGuiScreen");
+    }
+
+    @Override
+    public boolean removeFloating(Transform transform)
+    {
+        throw new UnsupportedOperationException("Cannot use floating transforms in a SubGuiScreen");
+    }
+
+    @Override
+    public Collection<Transform> getFloatingList()
+    {
+        return Collections.emptyList();
     }
 
     @Override

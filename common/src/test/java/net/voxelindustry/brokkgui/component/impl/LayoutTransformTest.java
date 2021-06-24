@@ -22,12 +22,12 @@ class LayoutTransformTest
         IGuiSubWindow window = mock(IGuiSubWindow.class);
 
         Rectangle parentElement = new Rectangle();
-        parentElement.setWindow(window);
+        parentElement.window(window);
 
         Rectangle childElement = new Rectangle();
         parentElement.transform().addChild(childElement.transform());
 
-        assertThat(childElement.getWindow()).isEqualTo(window);
+        assertThat(childElement.window()).isEqualTo(window);
         verify(window, times(2)).dispatchEvent(eq(LayoutEvent.ADD), layoutEventCaptor.capture());
 
         assertThat(layoutEventCaptor.getAllValues().get(0).getSource()).isEqualTo(parentElement);
@@ -48,11 +48,11 @@ class LayoutTransformTest
         Rectangle childElement = new Rectangle();
         parentElement.transform().addChild(childElement.transform());
 
-        parentElement.setWindow(window);
+        parentElement.window(window);
 
         parentElement.transform().removeChild(childElement.transform());
 
-        assertThat(childElement.getWindow()).isNull();
+        assertThat(childElement.window()).isNull();
 
         verify(window, times(2)).dispatchEvent(eq(LayoutEvent.ADD), any(LayoutEvent.Add.class));
         verify(window).dispatchEvent(eq(LayoutEvent.REMOVE), layoutEventCaptor.capture());
@@ -71,11 +71,11 @@ class LayoutTransformTest
 
         Rectangle parentElement = new Rectangle();
 
-        parentElement.setWindow(window);
-        parentElement.setWindow(null);
+        parentElement.window(window);
+        parentElement.window(null);
 
 
-        assertThat(parentElement.getWindow()).isNull();
+        assertThat(parentElement.window()).isNull();
         verify(window).dispatchEvent(eq(LayoutEvent.ADD), any(LayoutEvent.Add.class));
         verify(window).dispatchEvent(eq(LayoutEvent.REMOVE), layoutEventCaptor.capture());
         assertThat(layoutEventCaptor.getValue().getSource()).isEqualTo(parentElement);

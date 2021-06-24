@@ -68,7 +68,7 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
     private final Property<Boolean> focusableProperty;
     private final Property<Boolean> draggedProperty;
 
-    private IGuiSubWindow window;
+    private Property<IGuiSubWindow> windowProperty = new Property<>();
 
     private boolean isRenderDirty      = true;
     private boolean isChildRenderDirty = true;
@@ -389,7 +389,7 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
     public boolean setFocused()
     {
         if (!isDisabled() && isFocusable())
-            GuiFocusManager.instance.requestFocus(this, window);
+            GuiFocusManager.instance.requestFocus(this, window());
         return GuiFocusManager.instance.focusedNode() == this;
     }
 
@@ -448,24 +448,29 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         return draggedProperty().getValue();
     }
 
-    public IGuiSubWindow getWindow()
+    public Property<IGuiSubWindow> windowProperty()
     {
-        return window;
+        return windowProperty;
     }
 
-    public void setWindow(IGuiSubWindow window)
+    public IGuiSubWindow window()
     {
-        if (this.window != window)
+        return windowProperty().getValue();
+    }
+
+    public void window(IGuiSubWindow window)
+    {
+        if (window() != window)
         {
             if (window != null)
                 window.dispatchEvent(LayoutEvent.ADD, new LayoutEvent.Add(this));
             else
-                this.window.dispatchEvent(LayoutEvent.REMOVE, new LayoutEvent.Remove(this));
+                window().dispatchEvent(LayoutEvent.REMOVE, new LayoutEvent.Remove(this));
         }
 
-        this.window = window;
+        windowProperty().setValue(window);
 
-        transform().children().forEach(child -> child.element().setWindow(getWindow()));
+        transform().children().forEach(child -> child.element().window(window()));
     }
 
     protected <T> Property<T> createRenderProperty(T initialValue)
@@ -810,7 +815,7 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         if (isHovered())
             setHovered(false);
         if (isFocused())
-            GuiFocusManager.instance.removeFocusedNode(this, window);
+            GuiFocusManager.instance.removeFocusedNode(this, window());
     }
 
     //////////////////

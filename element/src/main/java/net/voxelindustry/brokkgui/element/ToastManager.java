@@ -4,7 +4,6 @@ import fr.ourten.teabeans.binding.Binding;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
-import net.voxelindustry.brokkgui.internal.PopupHandler;
 import net.voxelindustry.brokkgui.window.IGuiWindow;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -50,7 +49,9 @@ public class ToastManager
             if (!(newValue > toastHolder.getLifeTime()))
                 return;
 
-            PopupHandler.getInstance(screen).removePopup(toastHolder);
+            toastHolder.transform().floating(false);
+            toastHolder.transform().visible(false);
+
             current.setValue(null);
             toastHolder.setContent(null);
 
@@ -61,7 +62,9 @@ public class ToastManager
                 toastHolder.setContent(current.getValue());
                 toastHolder.resetCurrentTime();
                 toastHolder.setLifeTime(next.getValue());
-                PopupHandler.getInstance(screen).addPopup(toastHolder);
+
+                toastHolder.transform().floating(true);
+                toastHolder.transform().visible(true);
             }
         });
 
@@ -76,7 +79,7 @@ public class ToastManager
             public Float computeValue()
             {
                 float offset = (current.getValue() == toastHolder.getContent() ? 0 :
-                                getToastExitXProperty().getValue());
+                        getToastExitXProperty().getValue());
 
                 if (getToastAlignmentProperty().getValue().isLeft())
                     return xPosProperty.getValue() - toastHolder.transform().width() + offset;
@@ -97,7 +100,7 @@ public class ToastManager
             public Float computeValue()
             {
                 float offset = (current.getValue() == toastHolder.getContent() ? 0 :
-                                getToastExitYProperty().getValue());
+                        getToastExitYProperty().getValue());
 
                 if (getToastAlignmentProperty().getValue().isUp())
                     return yPosProperty.getValue() - toastHolder.transform().height() + offset;
@@ -119,7 +122,9 @@ public class ToastManager
             toastHolder.resetCurrentTime();
             toastHolder.setLifeTime(lifeTime);
             toastHolder.setContent(current.getValue());
-            PopupHandler.getInstance(screen).addPopup(toastHolder);
+            
+            toastHolder.transform().floating(true);
+            toastHolder.transform().visible(true);
         }
     }
 

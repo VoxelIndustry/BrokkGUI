@@ -8,6 +8,7 @@ import fr.ourten.teabeans.property.specific.BooleanProperty;
 import fr.ourten.teabeans.property.specific.FloatProperty;
 import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkgui.component.GuiComponent;
+import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.RequiredOverride;
 import net.voxelindustry.brokkgui.data.Position;
 import net.voxelindustry.brokkgui.data.RectCorner;
@@ -27,22 +28,28 @@ import static java.lang.Math.min;
 
 public class Transform extends GuiComponent
 {
-    private final FloatProperty xPosProperty;
-    private final FloatProperty yPosProperty;
-    private final FloatProperty xTranslateProperty;
-    private final FloatProperty yTranslateProperty;
+    private final FloatProperty xPosProperty       = createRenderPropertyFloat(0F);
+    private final FloatProperty yPosProperty       = createRenderPropertyFloat(0F);
+    private final FloatProperty xTranslateProperty = createRenderPropertyFloat(0F);
+    private final FloatProperty yTranslateProperty = createRenderPropertyFloat(0F);
 
-    private final FloatProperty xOffsetProperty;
-    private final FloatProperty yOffsetProperty;
+    private final FloatProperty xOffsetProperty = createRenderPropertyFloat(0F);
+    private final FloatProperty yOffsetProperty = createRenderPropertyFloat(0F);
 
-    private final FloatProperty     widthProperty;
-    private final FloatProperty     heightProperty;
-    private final FloatProperty     widthRatioProperty;
-    private final FloatProperty     heightRatioProperty;
-    private final Expression<Float> zDepthProperty;
-    private final FloatProperty     zTranslateProperty;
+    private final FloatProperty     widthProperty       = createRenderPropertyFloat(0F);
+    private final FloatProperty     heightProperty      = createRenderPropertyFloat(0F);
+    private final FloatProperty     widthRatioProperty  = new FloatProperty(-1F);
+    private final FloatProperty     heightRatioProperty = new FloatProperty(-1F);
+    private final Expression<Float> zDepthProperty      = new Expression<>(() ->
+    {
+        element().markRenderDirty();
+        return parentProperty().isPresent() ? parent().zLevel() : 0;
+    });
+    private final FloatProperty     zTranslateProperty  = createRenderPropertyFloat(1F);
 
-    private final BooleanProperty visibleProperty;
+    private final BooleanProperty visibleProperty = createRenderPropertyPropagateChildrenBoolean(true);
+
+    private final BooleanProperty floatingProperty = createRenderPropertyBoolean(false);
 
     protected Property<Float>   borderWidthLeftProperty;
     protected Property<Float>   borderWidthRightProperty;
@@ -55,48 +62,31 @@ public class Transform extends GuiComponent
 
     private final Property<GuiOverflow> overflowProperty = createRenderProperty(GuiOverflow.VISIBLE);
 
-    private final Property<Rotation> rotationProperty;
+    private final Property<Rotation> rotationProperty = createRenderProperty(Rotation.NONE);
 
-    private final Property<Scale> scaleProperty;
+    private final Property<Scale> scaleProperty = createRenderProperty(null);
 
-    private final Property<Transform>     parentProperty;
-    private final ListProperty<Transform> childrenListProperty;
+    private final Property<Transform>     parentProperty       = new Property<>(null);
+    private final ListProperty<Transform> childrenListProperty = new ListProperty<>(null);
 
-    private MouseInBoundsChecker mouseInBoundsChecker;
+    private MouseInBoundsChecker mouseInBoundsChecker = MouseInBoundsChecker.DEFAULT;
 
     private boolean bindChild = true;
 
     public Transform()
     {
-        xPosProperty = createRenderPropertyFloat(0F);
-        yPosProperty = createRenderPropertyFloat(0F);
-
-        xTranslateProperty = createRenderPropertyFloat(0F);
-        yTranslateProperty = createRenderPropertyFloat(0F);
-
-        xOffsetProperty = createRenderPropertyFloat(0F);
-        yOffsetProperty = createRenderPropertyFloat(0F);
-
-        widthProperty = createRenderPropertyFloat(0F);
-        heightProperty = createRenderPropertyFloat(0F);
-
-        widthRatioProperty = new FloatProperty(-1F);
-        heightRatioProperty = new FloatProperty(-1F);
-
-        zDepthProperty = new Expression<>(() ->
+        floatingProperty.addChangeListener(obs ->
         {
-            element().markRenderDirty();
-            return parentProperty().isPresent() ? parent().zLevel() : 0;
+            zTranslate(zTranslate() + (isFloating() ? 200 : -200));
+
+            if (element().window() == null)
+                return;
+
+            if (isFloating())
+                element().window().addFloating(this);
+            else
+                element().window().removeFloating(this);
         });
-        zTranslateProperty = createRenderPropertyFloat(1F);
-
-        rotationProperty = createRenderProperty(Rotation.NONE);
-        scaleProperty = createRenderProperty(null);
-
-        visibleProperty = createRenderPropertyPropagateChildrenBoolean(true);
-
-        parentProperty = new Property<>(null);
-        childrenListProperty = new ListProperty<>(null);
 
         childrenListProperty.addChangeListener((ListValueChangeListener<Transform>) (obs, oldValue, newValue) ->
         {
@@ -105,8 +95,6 @@ public class Transform extends GuiComponent
             if (oldValue != null)
                 oldValue.setParent(null);
         });
-
-        mouseInBoundsChecker = MouseInBoundsChecker.DEFAULT;
 
         widthProperty().addChangeListener(this::notifyParentOfLayoutChange);
         heightProperty().addChangeListener(this::notifyParentOfLayoutChange);
@@ -121,6 +109,20 @@ public class Transform extends GuiComponent
                 element().provide(Scrollable.class);
             else if (oldValue == GuiOverflow.SCROLL)
                 element().remove(Scrollable.class);
+        });
+    }
+
+    @Override
+    public void attach(GuiElement element)
+    {
+        super.attach(element);
+
+        element.windowProperty().addChangeListener((obs, oldValue, newValue) ->
+        {
+            if (oldValue != null && isFloating())
+                oldValue.removeFloating(this);
+            else if (newValue != null && isFloating())
+                newValue.addFloating(this);
         });
     }
 
@@ -159,11 +161,11 @@ public class Transform extends GuiComponent
             zDepthProperty.getDependencies().add(parent.zDepthExpression());
             zDepthProperty.getDependencies().add(parent.zTranslateProperty());
 
-            element().setWindow(parent.element().getWindow());
+            element().window(parent.element().window());
             parent.notifyOfLayoutChange(this);
         }
         else
-            element().setWindow(null);
+            element().window(null);
     }
 
     public void notifyParentOfLayoutChange(Observable observable)
@@ -432,6 +434,11 @@ public class Transform extends GuiComponent
     public BooleanProperty visibleProperty()
     {
         return visibleProperty;
+    }
+
+    public BooleanProperty floatingProperty()
+    {
+        return floatingProperty;
     }
 
     /**
@@ -1003,5 +1010,15 @@ public class Transform extends GuiComponent
     public void visible(boolean visible)
     {
         visibleProperty().set(visible);
+    }
+
+    public boolean isFloating()
+    {
+        return floatingProperty().get();
+    }
+
+    public void floating(boolean isFloating)
+    {
+        floatingProperty().set(isFloating);
     }
 }

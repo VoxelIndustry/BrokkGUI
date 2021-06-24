@@ -343,25 +343,25 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public float getxRelativePos()
+    public float xRelativePos()
     {
         return RELATIVE_POS_PROPERTY.getValue();
     }
 
     @Override
-    public float getyRelativePos()
+    public float yRelativePos()
     {
         return RELATIVE_POS_PROPERTY.getValue();
     }
 
     @Override
-    public Property<Float> getxRelativePosProperty()
+    public Property<Float> xRelativePosProperty()
     {
         return RELATIVE_POS_PROPERTY;
     }
 
     @Override
-    public Property<Float> getyRelativePosProperty()
+    public Property<Float> yRelativePosProperty()
     {
         return RELATIVE_POS_PROPERTY;
     }
