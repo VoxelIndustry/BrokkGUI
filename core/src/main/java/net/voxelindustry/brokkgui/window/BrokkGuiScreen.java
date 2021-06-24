@@ -789,7 +789,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     private void initEventDispatcher()
     {
-        eventDispatcher = new EventDispatcher();
+        eventDispatcher = new EventDispatcher(this);
     }
 
     @Override

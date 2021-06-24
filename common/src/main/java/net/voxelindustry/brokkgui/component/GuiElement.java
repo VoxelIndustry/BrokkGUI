@@ -802,7 +802,7 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
 
     private void initEventDispatcher()
     {
-        eventDispatcher = new EventDispatcher();
+        eventDispatcher = new EventDispatcher(this);
     }
 
     private void disableListener(Observable obs)

@@ -227,7 +227,7 @@ public abstract class Animation implements ITicking, IEventEmitter
     public void onFinishEvent(EventHandler<AnimationFinishEvent> onFinishEvent)
     {
         if (eventDispatcher == null)
-            eventDispatcher = new EventDispatcher();
+            eventDispatcher = new EventDispatcher(this);
         this.onFinishEvent = onFinishEvent;
     }
 

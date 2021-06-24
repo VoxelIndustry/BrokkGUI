@@ -388,7 +388,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
 
     private void initEventDispatcher()
     {
-        eventDispatcher = new EventDispatcher();
+        eventDispatcher = new EventDispatcher(this);
     }
 
     @Override
