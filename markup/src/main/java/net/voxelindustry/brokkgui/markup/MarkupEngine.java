@@ -96,6 +96,10 @@ public class MarkupEngine
         if (node instanceof Element)
         {
             var currentDefinition = MarkupEngine.getElementDefinition(node.getName());
+
+            if (currentDefinition == null)
+                throw new UnsupportedOperationException("Missing element definition for tag: " + node.getName());
+
             var createdElement = currentDefinition.elementCreator().get();
 
             if (parentElement != null)
