@@ -21,8 +21,8 @@ public class ButtonComponent extends GuiComponent
 
     public void onClick(ClickPressEvent.Left event)
     {
-        if (!element().isDisabled())
-            activate();
+        activate();
+        event.consume();
     }
 
     public void activate()
