@@ -46,9 +46,6 @@ public class GuiElementAttributes implements MarkupAttributesGroup
                 element.id(attribute))
         ));
 
-        attributes.add(new MarkupAttribute("visible", ((attribute, element) ->
-                element.setVisible(Boolean.parseBoolean(attribute))
-        )));
         attributes.add(new MarkupAttribute("disable", ((attribute, element) ->
                 element.setDisabled(Boolean.parseBoolean(attribute))
         )));
@@ -61,7 +58,7 @@ public class GuiElementAttributes implements MarkupAttributesGroup
             if (focused)
                 element.setFocused();
             else
-                GuiFocusManager.instance.removeFocusedNode(element, element.getWindow());
+                GuiFocusManager.instance.removeFocusedNode(element, element.window());
         })));
     }
 

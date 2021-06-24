@@ -44,6 +44,10 @@ public class TransformAttributes implements MarkupAttributesGroup
 
     private void createAttributes()
     {
+        attributes.add(new MarkupAttribute("visible", ((attribute, element) ->
+                element.transform().visible(Boolean.parseBoolean(attribute))
+        )));
+
         attributes.add(new MarkupAttribute("translate-x", (attribute, element) ->
                 element.transform().xTranslate(Float.parseFloat(attribute))
         ));
