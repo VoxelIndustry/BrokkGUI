@@ -25,8 +25,6 @@ public class GuiTextField extends GuiElement implements StyledElement
     public GuiTextField(String text)
     {
         textComponent.text(text);
-
-        setFocusable(true);
     }
 
     public GuiTextField()

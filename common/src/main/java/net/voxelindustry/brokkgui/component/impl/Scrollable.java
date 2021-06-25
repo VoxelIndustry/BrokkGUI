@@ -77,8 +77,6 @@ public class Scrollable extends GuiComponent
     {
         super.attach(element);
 
-        element().setFocusable(true);
-
         transform().xOffsetProperty().bindProperty(scrollXProperty().combine(paddingProperty(),
                 (scroll, padding) -> scroll.floatValue() + padding.getLeft()));
         transform().yOffsetProperty().bindProperty(scrollYProperty().combine(paddingProperty(),

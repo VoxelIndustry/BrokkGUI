@@ -49,6 +49,8 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
     private final PropertyAnimation<Float> cursorAnimation;
     private final Property<Float>          cursorOpacity = createRenderProperty(0F);
 
+    private final EventHandler<ClickPressEvent> clickOutsideHandler = this::onClickPressOutside;
+
     public TextInputComponent()
     {
         cursorAnimation = PropertyAnimation.<Float>build()
@@ -79,6 +81,17 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
 
         element.getEventDispatcher().addHandler(KeyEvent.TEXT_TYPED, this::onKeyTyped);
         element.getEventDispatcher().addHandler(KeyEvent.PRESS, this::onKeyPressed);
+
+        element.getEventDispatcher().addHandler(ClickPressEvent.TYPE, this::onClickPress);
+        element().windowProperty().addChangeListener((obs, oldValue, newValue) ->
+        {
+            if (oldValue != null)
+                oldValue.removeEventHandler(ClickPressEvent.TYPE, clickOutsideHandler);
+            if (newValue != null)
+                newValue.addEventHandler(ClickPressEvent.TYPE, clickOutsideHandler);
+        });
+        if (element().windowProperty().isPresent())
+            element().window().addEventHandler(ClickPressEvent.TYPE, clickOutsideHandler);
 
         ValueInvalidationListener onCursorMove = this::computeTextTranslateFromCursorPos;
 
@@ -384,6 +397,18 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
 
         if (contentChanged)
             EventQueueBuilder.fromTarget(element()).dispatch(TextTypedEvent.TYPE, new TextTypedEvent(element(), oldText, textComponent.text()));
+    }
+
+    private void onClickPress(ClickPressEvent event)
+    {
+        if (element().setFocused())
+            event.consume();
+    }
+
+    private void onClickPressOutside(ClickPressEvent event)
+    {
+        if (!transform().isPointInside(event.getMouseX(), event.getMouseY()) && element().isFocused())
+            element().removeFocus();
     }
 
     /**

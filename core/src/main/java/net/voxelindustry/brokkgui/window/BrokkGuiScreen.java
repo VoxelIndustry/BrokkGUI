@@ -299,10 +299,22 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         switch (key)
         {
-            case MOUSE_LEFT -> eventQueue.dispatch(ClickPressEvent.Left.TYPE, new ClickPressEvent.Left(source, mouseX, mouseY));
-            case MOUSE_RIGHT -> eventQueue.dispatch(ClickPressEvent.Right.TYPE, new ClickPressEvent.Right(source, mouseX, mouseY));
-            case MOUSE_BUTTON_MIDDLE -> eventQueue.dispatch(ClickPressEvent.Middle.TYPE, new ClickPressEvent.Middle(source, mouseX, mouseY));
-            default -> eventQueue.dispatch(ClickPressEvent.TYPE, new ClickPressEvent(source, mouseX, mouseY, key));
+            case MOUSE_LEFT -> {
+                eventQueue.dispatch(ClickPressEvent.Left.TYPE, new ClickPressEvent.Left(source, mouseX, mouseY));
+                getEventDispatcher().singletonQueue().dispatch(ClickPressEvent.Left.TYPE, new ClickPressEvent.Left(source, mouseX, mouseY));
+            }
+            case MOUSE_RIGHT -> {
+                eventQueue.dispatch(ClickPressEvent.Right.TYPE, new ClickPressEvent.Right(source, mouseX, mouseY));
+                getEventDispatcher().singletonQueue().dispatch(ClickPressEvent.Right.TYPE, new ClickPressEvent.Right(source, mouseX, mouseY));
+            }
+            case MOUSE_BUTTON_MIDDLE -> {
+                eventQueue.dispatch(ClickPressEvent.Middle.TYPE, new ClickPressEvent.Middle(source, mouseX, mouseY));
+                getEventDispatcher().singletonQueue().dispatch(ClickPressEvent.Middle.TYPE, new ClickPressEvent.Middle(source, mouseX, mouseY));
+            }
+            default -> {
+                eventQueue.dispatch(ClickPressEvent.TYPE, new ClickPressEvent(source, mouseX, mouseY, key));
+                getEventDispatcher().singletonQueue().dispatch(ClickPressEvent.TYPE, new ClickPressEvent(source, mouseX, mouseY, key));
+            }
         }
     }
 
@@ -322,12 +334,17 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
                 eventQueue.dispatch(GuiMouseEvent.DRAG_START, new GuiMouseEvent.DragStart(source, mouseX, mouseY, key));
             }
+
+            getEventDispatcher().singletonQueue().dispatch(GuiMouseEvent.DRAG_START, new GuiMouseEvent.DragStart(source, mouseX, mouseY, key));
             firstDragSinceClick = false;
         }
 
         for (GuiElement element : GuiFocusManager.instance.draggedNodes())
         {
             element.getEventDispatcher().singletonQueue()
+                    .dispatch(GuiMouseEvent.DRAGGING, new GuiMouseEvent.Dragging(element, mouseX, mouseY, key, mouseX - lastClickX, mouseY - lastClickY));
+
+            getEventDispatcher().singletonQueue()
                     .dispatch(GuiMouseEvent.DRAGGING, new GuiMouseEvent.Dragging(element, mouseX, mouseY, key, mouseX - lastClickX, mouseY - lastClickY));
         }
     }
@@ -346,10 +363,22 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
             switch (key)
             {
-                case MOUSE_LEFT -> eventQueue.dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(source, mouseX, mouseY));
-                case MOUSE_RIGHT -> eventQueue.dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(source, mouseX, mouseY));
-                case MOUSE_BUTTON_MIDDLE -> eventQueue.dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(source, mouseX, mouseY));
-                default -> eventQueue.dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(source, mouseX, mouseY, key));
+                case MOUSE_LEFT -> {
+                    eventQueue.dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(source, mouseX, mouseY));
+                    getEventDispatcher().singletonQueue().dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(source, mouseX, mouseY));
+                }
+                case MOUSE_RIGHT -> {
+                    eventQueue.dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(source, mouseX, mouseY));
+                    getEventDispatcher().singletonQueue().dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(source, mouseX, mouseY));
+                }
+                case MOUSE_BUTTON_MIDDLE -> {
+                    eventQueue.dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(source, mouseX, mouseY));
+                    getEventDispatcher().singletonQueue().dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(source, mouseX, mouseY));
+                }
+                default -> {
+                    eventQueue.dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(source, mouseX, mouseY, key));
+                    getEventDispatcher().singletonQueue().dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(source, mouseX, mouseY, key));
+                }
             }
         }
 
@@ -360,6 +389,9 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                     .dispatch(GuiMouseEvent.DRAG_STOP, new GuiMouseEvent.DragStop(element, mouseX, mouseY, key, mouseX - lastClickX, mouseY - lastClickY));
         }
 
+        getEventDispatcher().singletonQueue()
+                .dispatch(GuiMouseEvent.DRAG_STOP, new GuiMouseEvent.DragStop(null, mouseX, mouseY, key, mouseX - lastClickX, mouseY - lastClickY));
+
         lastClickX = -1;
         lastClickY = -1;
     }
@@ -368,10 +400,19 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     public void onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
     {
         GuiElement hovered = getNodeUnderMouse(mouseX, mouseY);
-        if (hovered != null && (xOffset != 0 || yOffset != 0))
+        if (xOffset != 0 || yOffset != 0)
         {
-            EventQueueBuilder.allChildrenMatching(hovered, EventQueueBuilder.isPointInside(mouseX, mouseY))
+            getEventDispatcher().singletonQueue()
                     .dispatch(ScrollEvent.TYPE, new ScrollEvent(hovered, mouseX, mouseY, (float) xOffset, (float) yOffset));
+
+            if (hovered != null)
+            {
+                EventQueueBuilder.allChildrenMatching(hovered,
+                                EventQueueBuilder.isPointInside(mouseX, mouseY)
+                                        .and(EventQueueBuilder.isEnabled)
+                                        .and(EventQueueBuilder.isVisible))
+                        .dispatch(ScrollEvent.TYPE, new ScrollEvent(hovered, mouseX, mouseY, (float) xOffset, (float) yOffset));
+            }
         }
     }
 
@@ -379,8 +420,13 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     public void onTextTyped(String text)
     {
         GuiElement focusedNode = GuiFocusManager.instance.focusedNode();
-        if (focusedNode != null && GuiFocusManager.instance.focusedWindow() == this)
-            EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.TEXT_TYPED, new KeyEvent.TextTyped(focusedNode, text));
+        if (GuiFocusManager.instance.focusedWindow() == this)
+        {
+            getEventDispatcher().singletonQueue().dispatch(KeyEvent.TEXT_TYPED, new KeyEvent.TextTyped(focusedNode, text));
+
+            if (focusedNode != null)
+                EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.TEXT_TYPED, new KeyEvent.TextTyped(focusedNode, text));
+        }
     }
 
     @Override
@@ -390,16 +436,27 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         float mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY(this);
 
         GuiElement focusedNode = GuiFocusManager.instance.focusedNode();
-        if (focusedNode != null && GuiFocusManager.instance.focusedWindow() == this)
+        if (GuiFocusManager.instance.focusedWindow() == this)
         {
-            EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.PRESS, new KeyEvent.Press(focusedNode, key));
-            return;
+            getEventDispatcher().singletonQueue().dispatch(KeyEvent.PRESS, new KeyEvent.Press(focusedNode, key));
+
+            if (focusedNode != null)
+            {
+                var event = EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.PRESS, new KeyEvent.Press(focusedNode, key));
+
+                if (event.isConsumed())
+                    return;
+            }
         }
 
         GuiElement hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
         {
-            EventQueueBuilder.fromTarget(hovered).dispatch(KeyEvent.PRESS, new KeyEvent.Press(hovered, key));
+            EventQueueBuilder.allChildrenMatching(hovered,
+                            EventQueueBuilder.isPointInside(mouseX, mouseY)
+                                    .and(EventQueueBuilder.isEnabled)
+                                    .and(EventQueueBuilder.isVisible))
+                    .dispatch(KeyEvent.PRESS, new KeyEvent.Press(hovered, key));
         }
     }
 
@@ -410,16 +467,27 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         float mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY(this);
 
         GuiElement focusedNode = GuiFocusManager.instance.focusedNode();
-        if (focusedNode != null && GuiFocusManager.instance.focusedWindow() == this)
+        if (GuiFocusManager.instance.focusedWindow() == this)
         {
-            EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.RELEASE, new KeyEvent.Release(focusedNode, key));
-            return;
+            getEventDispatcher().singletonQueue().dispatch(KeyEvent.RELEASE, new KeyEvent.Release(focusedNode, key));
+
+            if (focusedNode != null)
+            {
+                var event = EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.RELEASE, new KeyEvent.Release(focusedNode, key));
+
+                if (event.isConsumed())
+                    return;
+            }
         }
 
         GuiElement hovered = getNodeUnderMouse(mouseX, mouseY);
         if (hovered != null)
         {
-            EventQueueBuilder.fromTarget(hovered).dispatch(KeyEvent.RELEASE, new KeyEvent.Release(hovered, key));
+            EventQueueBuilder.allChildrenMatching(hovered,
+                            EventQueueBuilder.isPointInside(mouseX, mouseY)
+                                    .and(EventQueueBuilder.isEnabled)
+                                    .and(EventQueueBuilder.isVisible))
+                    .dispatch(KeyEvent.RELEASE, new KeyEvent.Release(hovered, key));
         }
     }
 
@@ -474,7 +542,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     @Override
     public void onOpen()
     {
-        new EventQueue().addDispatcher(getEventDispatcher()).dispatch(WindowEvent.OPEN, new WindowEvent.Open(this));
+        getEventDispatcher().singletonQueue().dispatch(WindowEvent.OPEN, new WindowEvent.Open(this));
     }
 
     @Override
@@ -495,7 +563,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
             EventQueueBuilder.allChildren(root).dispatch(DisposeEvent.TYPE, new DisposeEvent(root));
         getSubGuis().forEach(SubGuiScreen::close);
 
-        new EventQueue().addDispatcher(getEventDispatcher()).dispatch(WindowEvent.CLOSE, new WindowEvent.Close(this));
+        getEventDispatcher().singletonQueue().dispatch(WindowEvent.CLOSE, new WindowEvent.Close(this));
     }
 
     private GuiElement getNodeUnderMouse(float mouseX, float mouseY)

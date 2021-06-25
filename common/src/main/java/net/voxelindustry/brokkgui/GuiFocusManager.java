@@ -60,6 +60,8 @@ public class GuiFocusManager
         {
             focusedNodeProperty.setValue(null);
             focusedWindowProperty.setValue(null);
+
+            focusedNode.internalSetFocused(false);
         }
     }
 

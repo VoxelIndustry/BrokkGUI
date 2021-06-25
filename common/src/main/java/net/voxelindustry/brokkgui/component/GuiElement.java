@@ -65,7 +65,6 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
     private final Property<Boolean> focusedProperty;
     private final Property<Boolean> disabledProperty;
     private final Property<Boolean> hoveredProperty;
-    private final Property<Boolean> focusableProperty;
     private final Property<Boolean> draggedProperty;
 
     private Property<IGuiSubWindow> windowProperty = new Property<>();
@@ -84,7 +83,6 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         disabledProperty = new Property<>(false);
         hoveredProperty = new Property<>(false);
 
-        focusableProperty = new Property<>(false);
         draggedProperty = new Property<>(false);
 
         opacityProperty = new Property<>(1D);
@@ -99,8 +97,6 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
 
         ValueInvalidationListener disableListener = this::disableListener;
         disabledProperty.addListener(disableListener);
-
-        getEventDispatcher().addHandler(ClickPressEvent.TYPE, this::handleClickStart);
 
         getEventDispatcher().addHandler(GuiMouseEvent.DRAG_START, this::handleDragStart);
         getEventDispatcher().addHandler(GuiMouseEvent.DRAG_STOP, this::handleDragStop);
@@ -226,12 +222,6 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         else
             transform.childrenProperty().getValue().forEach(child ->
                     child.element().handleHover(mouseX, mouseY, false));
-    }
-
-    private void handleClickStart(ClickPressEvent event)
-    {
-        if (setFocused())
-            event.consume();
     }
 
     public void handleDragStart(DragStart event)
@@ -371,11 +361,6 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         return hoveredProperty;
     }
 
-    public Property<Boolean> focusableProperty()
-    {
-        return focusableProperty;
-    }
-
     public Property<Boolean> draggedProperty()
     {
         return draggedProperty;
@@ -388,25 +373,20 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
 
     public boolean setFocused()
     {
-        if (!isDisabled() && isFocusable())
+        if (!isDisabled())
             GuiFocusManager.instance.requestFocus(this, window());
         return GuiFocusManager.instance.focusedNode() == this;
+    }
+
+    public void removeFocus()
+    {
+        GuiFocusManager.instance.removeFocusedNode(this, window());
     }
 
     public void internalSetFocused(boolean focused)
     {
         focusedProperty().setValue(focused);
         EventQueueBuilder.fromTarget(this).dispatch(FocusEvent.TYPE, new FocusEvent(this, focused));
-    }
-
-    public boolean isFocusable()
-    {
-        return focusableProperty().getValue();
-    }
-
-    public void setFocusable(boolean focusable)
-    {
-        focusableProperty().setValue(focusable);
     }
 
     public boolean isDisabled()
