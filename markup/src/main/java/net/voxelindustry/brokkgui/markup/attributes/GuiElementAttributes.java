@@ -49,9 +49,6 @@ public class GuiElementAttributes implements MarkupAttributesGroup
         attributes.add(new MarkupAttribute("disable", ((attribute, element) ->
                 element.setDisabled(Boolean.parseBoolean(attribute))
         )));
-        attributes.add(new MarkupAttribute("focusable", ((attribute, element) ->
-                element.setFocusable(Boolean.parseBoolean(attribute))
-        )));
         attributes.add(new MarkupAttribute("focused", ((attribute, element) ->
         {
             var focused = Boolean.parseBoolean(attribute);
