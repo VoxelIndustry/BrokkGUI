@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.element.input.GuiCheckbox;
 import net.voxelindustry.brokkgui.element.input.GuiRadioButton;
 import net.voxelindustry.brokkgui.element.input.GuiTextField;
 import net.voxelindustry.brokkgui.element.input.GuiToggleButton;
+import net.voxelindustry.brokkgui.element.menu.GuiSelect;
 import net.voxelindustry.brokkgui.element.pane.GuiPane;
 import net.voxelindustry.brokkgui.element.pane.ScrollPane;
 import net.voxelindustry.brokkgui.markup.attributes.BooleanFormFieldAttributes;
@@ -14,6 +15,7 @@ import net.voxelindustry.brokkgui.markup.attributes.ButtonAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.GuiElementAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.LabelIconAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.LinkAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.MenuSelectAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.ScrollableAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.StyleComponentAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextAssistAttributes;
@@ -220,6 +222,25 @@ public class ElementMarkupSetup
                         // Text field
                         .attributeGroup(TextInputAttributes.instance())
                         .attributeGroup(TextAssistAttributes.instance())
+        );
+
+        MarkupEngine.registerElementDefinition("select",
+                new MarkupElementDefinition<>(GuiSelect::new)
+                        // GuiElement
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
+                        // Label
+                        .attributeGroup(TextComponentAttributes.instance())
+                        .attributeGroup(TextLayoutAttributes.instance())
+                        // Text creator
+                        .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
+                        // Button
+                        .attributeGroup(ButtonAttributes.instance())
+                        // Menu
+                        .attributeGroup(MenuSelectAttributes.instance())
         );
     }
 }
