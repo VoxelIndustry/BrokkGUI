@@ -93,57 +93,81 @@ public class MarkupEngine
 
     private static GuiElement walkXMLTree(Node node, GuiElement parentElement, MarkupElementDefinition<?> parentDefinition)
     {
-        if (node instanceof Element)
+        if (node instanceof Element element)
         {
-            var currentDefinition = MarkupEngine.getElementDefinition(node.getName());
+            MarkupElementReaderImpl elementReader = null;
+            boolean consumed = false;
 
-            if (currentDefinition == null)
-                throw new UnsupportedOperationException("Missing element definition for tag: " + node.getName());
-
-            var createdElement = currentDefinition.elementCreator().get();
-
-            if (parentElement != null)
-                parentElement.transform().addChild(createdElement.transform());
-
-            for (var attribute : ((Element) node).attributes())
+            if (parentDefinition != null && !parentDefinition.childElementReceivers().isEmpty())
             {
-                currentDefinition.attributeEvents().entrySet().stream()
-                        .filter(event -> event.getKey().contains(attribute.getName()))
-                        .findAny()
-                        .ifPresent(event -> event.getValue().accept(createdElement));
-
-
-                var markupAttribute = currentDefinition.attributeMap().get(attribute.getName());
-                if (markupAttribute == null && parentDefinition != null)
-                    markupAttribute = parentDefinition.childrenAttributeMap().get(attribute.getName());
-
-                if (markupAttribute != null)
-                    markupAttribute.decoder().decode(attribute.getValue(), createdElement);
-                else
+                for (ChildElementReceiver receiver : parentDefinition.childElementReceivers())
                 {
-                    for (var dynamicResolver : currentDefinition.dynamicAttributeResolvers())
+                    if (receiver.canReceive(element.getName()))
                     {
-                        if (dynamicResolver.resolve(attribute.getName(), attribute.getValue(), createdElement))
-                            break;
+                        if (elementReader == null)
+                            elementReader = new MarkupElementReaderImpl();
+                        elementReader.setElement(element);
+                        elementReader.setParentElement(parentElement);
+                        elementReader.setParentDefinition(parentDefinition);
+
+                        receiver.receive(element.getName(), elementReader);
+
+                        consumed = true;
                     }
                 }
             }
 
-            for (int i = 0, size = ((Element) node).nodeCount(); i < size; i++)
-            {
-                var childNode = ((Element) node).node(i);
-                walkXMLTree(childNode, createdElement, currentDefinition);
-            }
-            return createdElement;
+            if (consumed)
+                return parentElement;
+
+            return getGuiElement(parentElement, element, parentDefinition, MarkupEngine.getElementDefinition(element.getName()));
         }
         else if (node instanceof Text)
         {
-            var text = node.getText();
-            if (text.charAt(0) == '\n')
-                text = text.substring(1);
-            parentDefinition.textChildReceiver().decode(text.stripTrailing().stripIndent(), parentElement);
+            parentDefinition.textChildReceiver().decode(MarkupUtils.extractText(node.getText()), parentElement);
         }
 
         return parentElement;
+    }
+
+    static <T extends GuiElement> T getGuiElement(GuiElement parentElement, Element element, MarkupElementDefinition<?> parentDefinition, MarkupElementDefinition<T> currentDefinition)
+    {
+        if (currentDefinition == null)
+            throw new UnsupportedOperationException("Missing element definition for tag: " + element.getName());
+
+        var createdElement = currentDefinition.elementCreator().get();
+
+        if (parentElement != null)
+            parentElement.transform().addChild(createdElement.transform());
+
+        for (var attribute : element.attributes())
+        {
+            currentDefinition.attributeEvents().entrySet().stream()
+                    .filter(event -> event.getKey().contains(attribute.getName()))
+                    .findAny()
+                    .ifPresent(event -> event.getValue().accept(createdElement));
+
+            var markupAttribute = currentDefinition.attributeMap().get(attribute.getName());
+            if (markupAttribute == null && parentDefinition != null)
+                markupAttribute = parentDefinition.childrenAttributeMap().get(attribute.getName());
+
+            if (markupAttribute != null)
+                markupAttribute.decoder().decode(attribute.getValue(), createdElement);
+            else
+            {
+                for (var dynamicResolver : currentDefinition.dynamicAttributeResolvers())
+                {
+                    if (dynamicResolver.resolve(attribute.getName(), attribute.getValue(), createdElement))
+                        break;
+                }
+            }
+        }
+
+        for (int i = 0, size = element.nodeCount(); i < size; i++)
+        {
+            var childNode = element.node(i);
+            walkXMLTree(childNode, createdElement, currentDefinition);
+        }
+        return createdElement;
     }
 }

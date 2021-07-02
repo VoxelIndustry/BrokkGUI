@@ -19,6 +19,8 @@ public class MarkupElementDefinition<T extends GuiElement>
 
     private final List<DynamicAttributeResolver> dynamicAttributeResolvers = new ArrayList<>(1);
 
+    private final List<ChildElementReceiver> childElementReceivers = new ArrayList<>(1);
+
     private       AttributeDecoder textChildReceiver;
     private final Supplier<T>      elementCreator;
 
@@ -45,7 +47,10 @@ public class MarkupElementDefinition<T extends GuiElement>
         var attributeNames = attributeGroup.getAttributesNames();
         if (!attributeNames.isEmpty())
             onAttributesAdded(attributeNames, attributeGroup.onAttributeAdded());
-        
+
+        if (attributeGroup.childElementReceiver() != null)
+            childElementReceiver(attributeGroup.childElementReceiver());
+
         return this;
     }
 
@@ -97,6 +102,12 @@ public class MarkupElementDefinition<T extends GuiElement>
         return this;
     }
 
+    public MarkupElementDefinition<T> childElementReceiver(ChildElementReceiver childElementReceiver)
+    {
+        childElementReceivers.add(childElementReceiver);
+        return this;
+    }
+
     public Map<String, MarkupAttribute> attributeMap()
     {
         return attributeMap;
@@ -115,6 +126,11 @@ public class MarkupElementDefinition<T extends GuiElement>
     public AttributeDecoder textChildReceiver()
     {
         return textChildReceiver;
+    }
+
+    public List<ChildElementReceiver> childElementReceivers()
+    {
+        return childElementReceivers;
     }
 
     public Supplier<T> elementCreator()

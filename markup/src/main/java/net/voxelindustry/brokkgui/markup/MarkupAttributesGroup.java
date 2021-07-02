@@ -26,4 +26,9 @@ public interface MarkupAttributesGroup
     {
         return null;
     }
+
+    default ChildElementReceiver childElementReceiver()
+    {
+        return null;
+    }
 }
