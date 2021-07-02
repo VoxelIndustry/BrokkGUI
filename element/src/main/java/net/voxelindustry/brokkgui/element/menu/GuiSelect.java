@@ -9,6 +9,7 @@ import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.brokkgui.text.TextComponent;
 import net.voxelindustry.brokkgui.text.TextLayoutComponent;
+import org.apache.commons.lang3.StringUtils;
 
 public class GuiSelect extends GuiElement implements StyledElement
 {
@@ -33,7 +34,9 @@ public class GuiSelect extends GuiElement implements StyledElement
         textLayoutComponent.textOverflow(GuiOverflow.HIDDEN);
         textComponent.textAlignment(RectAlignment.LEFT_CENTER);
 
-        textComponent.textProperty().bindProperty(menuSelectComponent.selectedValueProperty());
+        textComponent.textProperty().bindProperty(menuSelectComponent.selectedValueProperty()
+                .combine(menuSelectComponent.promptTextProperty(),
+                        (selectedValue, promptText) -> StringUtils.isEmpty(selectedValue) ? promptText : selectedValue));
 
         menuDisplayListComponent.displayList().verticalLayoutComponent().setChildrenElements(menuSelectComponent().optionsElementProperty());
         menuDisplayListComponent.displayList().style().parseInlineCSS("border-color: pink; border-width: 1;");
