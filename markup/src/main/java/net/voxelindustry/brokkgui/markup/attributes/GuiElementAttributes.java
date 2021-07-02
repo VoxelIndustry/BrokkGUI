@@ -35,8 +35,6 @@ public class GuiElementAttributes implements MarkupAttributesGroup
     @Override
     public List<MarkupAttribute> getChildrenAttributes()
     {
-        if (childrenAttributes.isEmpty())
-            createChildrenAttributes();
         return childrenAttributes;
     }
 
@@ -57,9 +55,5 @@ public class GuiElementAttributes implements MarkupAttributesGroup
             else
                 GuiFocusManager.instance.removeFocusedNode(element, element.window());
         })));
-    }
-
-    private void createChildrenAttributes()
-    {
     }
 }

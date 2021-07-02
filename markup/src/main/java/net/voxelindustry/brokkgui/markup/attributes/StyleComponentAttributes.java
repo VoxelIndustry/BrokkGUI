@@ -42,8 +42,6 @@ public class StyleComponentAttributes implements MarkupAttributesGroup
     @Override
     public List<MarkupAttribute> getChildrenAttributes()
     {
-        if (childrenAttributes.isEmpty())
-            createChildrenAttributes();
         return childrenAttributes;
     }
 
@@ -62,9 +60,5 @@ public class StyleComponentAttributes implements MarkupAttributesGroup
             for (String clazz : classes)
                 style.addStyleClass(clazz);
         })));
-    }
-
-    private void createChildrenAttributes()
-    {
     }
 }

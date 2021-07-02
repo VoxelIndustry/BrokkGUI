@@ -26,24 +26,12 @@ public class ButtonAttributes implements MarkupAttributesGroup
     @Override
     public List<MarkupAttribute> getAttributes()
     {
-        if (attributes.isEmpty())
-            createAttributes();
         return attributes;
     }
 
     @Override
     public List<MarkupAttribute> getChildrenAttributes()
     {
-        if (childrenAttributes.isEmpty())
-            createChildrenAttributes();
         return childrenAttributes;
-    }
-
-    private void createAttributes()
-    {
-    }
-
-    private void createChildrenAttributes()
-    {
     }
 }

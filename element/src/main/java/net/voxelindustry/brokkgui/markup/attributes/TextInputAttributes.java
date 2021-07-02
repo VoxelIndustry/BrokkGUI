@@ -35,8 +35,6 @@ public class TextInputAttributes implements MarkupAttributesGroup
     @Override
     public List<MarkupAttribute> getChildrenAttributes()
     {
-        if (childrenAttributes.isEmpty())
-            createChildrenAttributes();
         return childrenAttributes;
     }
 
@@ -48,9 +46,5 @@ public class TextInputAttributes implements MarkupAttributesGroup
         attributes.add(new MarkupAttribute("text-max-length", ((attribute, element) ->
                 element.get(TextInputComponent.class).maxTextLength(Integer.parseInt(attribute))
         )));
-    }
-
-    private void createChildrenAttributes()
-    {
     }
 }

@@ -48,8 +48,6 @@ public class ScrollableAttributes implements MarkupAttributesGroup
     @Override
     public List<MarkupAttribute> getChildrenAttributes()
     {
-        if (childrenAttributes.isEmpty())
-            createChildrenAttributes();
         return childrenAttributes;
     }
 
@@ -110,10 +108,10 @@ public class ScrollableAttributes implements MarkupAttributesGroup
                 element.get(Scrollable.class).gripY().height(Float.parseFloat(attribute));
         })));
         attributes.add(new MarkupAttribute("scroll-x-policy", ((attribute, element) ->
-                element.get(Scrollable.class).scrollXPolicy(GuiScrollbarPolicy.valueOf(attribute))
+                element.get(Scrollable.class).scrollXPolicy(GuiScrollbarPolicy.valueOf(attribute.toUpperCase()))
         )));
         attributes.add(new MarkupAttribute("scroll-y-policy", ((attribute, element) ->
-                element.get(Scrollable.class).scrollYPolicy(GuiScrollbarPolicy.valueOf(attribute))
+                element.get(Scrollable.class).scrollYPolicy(GuiScrollbarPolicy.valueOf(attribute.toUpperCase()))
         )));
 
         attributes.add(new MarkupAttribute("scroll-speed", ((attribute, element) ->
@@ -141,9 +139,5 @@ public class ScrollableAttributes implements MarkupAttributesGroup
         attributes.add(new MarkupAttribute("show-track-buttons", ((attribute, element) ->
                 element.get(Scrollable.class).showTrackButtons(Boolean.parseBoolean(attribute))
         )));
-    }
-
-    private void createChildrenAttributes()
-    {
     }
 }

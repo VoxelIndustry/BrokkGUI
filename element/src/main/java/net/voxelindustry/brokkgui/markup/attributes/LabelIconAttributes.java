@@ -44,7 +44,7 @@ public class LabelIconAttributes implements MarkupAttributesGroup
     private void createAttributes()
     {
         attributes.add(new MarkupAttribute("icon-side", ((attribute, element) ->
-                element.get(LabelIconComponent.class).iconSide(RectSide.valueOf(attribute))
+                element.get(LabelIconComponent.class).iconSide(RectSide.valueOf(attribute.toUpperCase()))
         )));
         attributes.add(new MarkupAttribute("icon-padding", ((attribute, element) ->
                 element.get(LabelIconComponent.class).iconPadding(Float.parseFloat(attribute))

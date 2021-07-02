@@ -36,8 +36,6 @@ public class TextLayoutAttributes implements MarkupAttributesGroup
     @Override
     public List<MarkupAttribute> getChildrenAttributes()
     {
-        if (childrenAttributes.isEmpty())
-            createChildrenAttributes();
         return childrenAttributes;
     }
 
@@ -47,14 +45,10 @@ public class TextLayoutAttributes implements MarkupAttributesGroup
                 element.get(TextLayoutComponent.class).expandToText(Boolean.parseBoolean(attribute))
         )));
         attributes.add(new MarkupAttribute("text-overflow", ((attribute, element) ->
-                element.get(TextLayoutComponent.class).textOverflow(GuiOverflow.valueOf(attribute))
+                element.get(TextLayoutComponent.class).textOverflow(GuiOverflow.valueOf(attribute.toUpperCase()))
         )));
         attributes.add(new MarkupAttribute("ellipsis", ((attribute, element) ->
                 element.get(TextLayoutComponent.class).ellipsis(attribute)
         )));
-    }
-
-    private void createChildrenAttributes()
-    {
     }
 }

@@ -35,8 +35,6 @@ public class LinkAttributes implements MarkupAttributesGroup
     @Override
     public List<MarkupAttribute> getChildrenAttributes()
     {
-        if (childrenAttributes.isEmpty())
-            createChildrenAttributes();
         return childrenAttributes;
     }
 
@@ -48,9 +46,5 @@ public class LinkAttributes implements MarkupAttributesGroup
         attributes.add(new MarkupAttribute("show-link", ((attribute, element) ->
                 element.get(LinkComponent.class).showLinkContent(Boolean.parseBoolean(attribute))
         )));
-    }
-
-    private void createChildrenAttributes()
-    {
     }
 }

@@ -44,7 +44,7 @@ public class BooleanFormFieldAttributes implements MarkupAttributesGroup
     private void createAttributes()
     {
         attributes.add(new MarkupAttribute("button-side", ((attribute, element) ->
-                element.get(BooleanFormFieldComponent.class).buttonSide(RectSide.valueOf(attribute))
+                element.get(BooleanFormFieldComponent.class).buttonSide(RectSide.valueOf(attribute.toUpperCase()))
         )));
         attributes.add(new MarkupAttribute("button-size", ((attribute, element) ->
                 element.get(BooleanFormFieldComponent.class).buttonSize(Float.parseFloat(attribute))

@@ -38,8 +38,6 @@ public class TextComponentAttributes implements MarkupAttributesGroup
     @Override
     public List<MarkupAttribute> getChildrenAttributes()
     {
-        if (childrenAttributes.isEmpty())
-            createChildrenAttributes();
         return childrenAttributes;
     }
 
@@ -49,7 +47,7 @@ public class TextComponentAttributes implements MarkupAttributesGroup
                 element.get(TextComponent.class).lineSpacing(Integer.parseInt(attribute))
         )));
         attributes.add(new MarkupAttribute("text-alignment", ((attribute, element) ->
-                element.get(TextComponent.class).textAlignment(RectAlignment.valueOf(attribute))
+                element.get(TextComponent.class).textAlignment(RectAlignment.valueOf(attribute.toUpperCase()))
         )));
         attributes.add(new MarkupAttribute("multiline", ((attribute, element) ->
                 element.get(TextComponent.class).multiline(Boolean.parseBoolean(attribute))
@@ -63,9 +61,5 @@ public class TextComponentAttributes implements MarkupAttributesGroup
         attributes.add(new MarkupAttribute("text", ((attribute, element) ->
                 element.get(TextComponent.class).text(attribute)
         )));
-    }
-
-    private void createChildrenAttributes()
-    {
     }
 }
