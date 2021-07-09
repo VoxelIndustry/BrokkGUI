@@ -4,11 +4,6 @@ import net.voxelindustry.brokkgui.internal.IKeyboardUtil;
 
 public class MockKeyboardUtil implements IKeyboardUtil
 {
-    @Override
-    public boolean isKeyValidChar(int key)
-    {
-        return true;
-    }
 
     @Override
     public boolean isCtrlKeyDown()
@@ -26,6 +21,12 @@ public class MockKeyboardUtil implements IKeyboardUtil
     public String getClipboardString()
     {
         return "";
+    }
+
+    @Override
+    public void setClipboardString(String text)
+    {
+        
     }
 
     @Override

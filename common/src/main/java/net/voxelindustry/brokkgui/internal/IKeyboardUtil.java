@@ -5,12 +5,6 @@ package net.voxelindustry.brokkgui.internal;
  */
 public interface IKeyboardUtil
 {
-    /**
-     * @return if a key passed in parameter is translatable to a char writtable
-     * into a textfield
-     */
-    boolean isKeyValidChar(final int key);
-
     boolean isCtrlKeyDown();
 
     /**
@@ -19,6 +13,8 @@ public interface IKeyboardUtil
     boolean isShiftKeyDown();
 
     String getClipboardString();
+
+    void setClipboardString(String text);
 
     int getKeyCode(String keyName);
 
