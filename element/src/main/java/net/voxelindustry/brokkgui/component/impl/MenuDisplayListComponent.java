@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.event.ClickPressEvent;
 import net.voxelindustry.brokkgui.event.TransformLayoutEvent;
 import net.voxelindustry.brokkgui.style.StyledElement;
+import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.hermod.EventHandler;
 
 import javax.annotation.Nullable;
@@ -80,8 +81,8 @@ public class MenuDisplayListComponent extends GuiComponent
             verticalLayoutComponent.addElementsToHierarchy(true);
 
             transform().floating(true);
-
             transform().widthRatio(1);
+            transform().overflow(GuiOverflow.SCROLL);
 
             getEventDispatcher().addHandler(TransformLayoutEvent.TYPE, this::onLayoutChange);
 

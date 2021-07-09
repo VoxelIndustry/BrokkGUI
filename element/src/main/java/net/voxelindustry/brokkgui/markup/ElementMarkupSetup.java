@@ -15,6 +15,7 @@ import net.voxelindustry.brokkgui.markup.attributes.ButtonAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.GuiElementAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.LabelIconAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.LinkAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.MenuDisplayListAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.MenuSelectAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.ScrollableAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.StyleComponentAttributes;
@@ -241,6 +242,7 @@ public class ElementMarkupSetup
                         .attributeGroup(ButtonAttributes.instance())
                         // Menu
                         .attributeGroup(MenuSelectAttributes.instance())
+                        .attributeGroup(MenuDisplayListAttributes.instance())
         );
     }
 }
