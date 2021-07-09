@@ -278,7 +278,6 @@ public class Scrollable extends GuiComponent
     {
         transform().addChild((trackX = new Rectangle()).transform());
 
-        trackX.transform().visibleProperty().addChangeListener(obs -> System.out.println(trackX.isVisible()));
         trackX.paint().backgroundColor(Color.GRAY);
 
         trackX.transform().xPosProperty().bindProperty(transform().xPosProperty().add(transform().xTranslateProperty()));
