@@ -59,7 +59,7 @@ public class HorizontalLayout extends GuiComponent
         if (value == null)
             return;
 
-        Transform boundTransform = value instanceof Transform t ? t : value instanceof GuiElement ? ((GuiElement) value).transform() : null;
+        var boundTransform = value instanceof Transform t ? t : value instanceof GuiElement ? ((GuiElement) value).transform() : null;
 
         if (boundTransform == null)
             return;
@@ -89,7 +89,7 @@ public class HorizontalLayout extends GuiComponent
                             case BEGIN -> transform().topPos();
                             case CENTER -> transform().topPos() + transform().height() / 2 - boundTransform.height() / 2;
                             case END -> transform().bottomPos() - boundTransform.height();
-                        };
+                        } + transform().yOffsetProperty().get();
             }
         });
 
@@ -116,7 +116,7 @@ public class HorizontalLayout extends GuiComponent
                         childPos += previousChild.width() + previousChild.xTranslate();
                     }
 
-                    return transform().bottomPos() + childPos;
+                    return transform().bottomPos() + transform().xOffsetProperty().get() + childPos;
                 }
             });
         }

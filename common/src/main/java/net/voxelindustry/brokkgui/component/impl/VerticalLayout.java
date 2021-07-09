@@ -59,7 +59,7 @@ public class VerticalLayout extends GuiComponent
         if (value == null)
             return;
 
-        Transform boundTransform = value instanceof Transform t ? t : value instanceof GuiElement ? ((GuiElement) value).transform() : null;
+        var boundTransform = value instanceof Transform t ? t : value instanceof GuiElement ? ((GuiElement) value).transform() : null;
 
         if (boundTransform == null)
             return;
@@ -89,7 +89,7 @@ public class VerticalLayout extends GuiComponent
                             case BEGIN -> transform().leftPos();
                             case CENTER -> transform().leftPos() + transform().width() / 2 - boundTransform.width() / 2;
                             case END -> transform().rightPos() - boundTransform.width();
-                        };
+                        } + transform().xOffsetProperty().get();
             }
         });
 
@@ -116,7 +116,7 @@ public class VerticalLayout extends GuiComponent
                         childPos += previousChild.height() + previousChild.yTranslate();
                     }
 
-                    return transform().topPos() + childPos;
+                    return transform().topPos() + transform().yOffsetProperty().get() + childPos;
                 }
             });
         }
@@ -143,7 +143,7 @@ public class VerticalLayout extends GuiComponent
                         childPos += previousChild.height() + previousChild.yTranslate();
                     }
 
-                    return transform().topPos() + childPos;
+                    return transform().topPos() + transform().yOffsetProperty().get() + childPos;
                 }
             });
         }
