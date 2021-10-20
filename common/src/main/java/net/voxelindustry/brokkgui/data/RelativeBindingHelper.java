@@ -62,6 +62,14 @@ public class RelativeBindingHelper
                                  @Nullable ObservableValue<Number> addX,
                                  @Nullable ObservableValue<Number> addY)
     {
+        bindXToPos(toBind, parent, addX);
+        bindYToPos(toBind, parent, addY);
+    }
+
+    public static void bindXToPos(Transform toBind,
+                                  Transform parent,
+                                  @Nullable ObservableValue<Number> addX)
+    {
         if (addX != null)
             toBind.xPosProperty()
                     .bindProperty(Expression.getExpression(
@@ -70,6 +78,12 @@ public class RelativeBindingHelper
         else
             toBind.xPosProperty().bindProperty(Expression.getExpression(() -> parent.xPos() + parent.xTranslate() + parent.xOffsetProperty().get(),
                     parent.xPosProperty(), parent.xTranslateProperty(), parent.xOffsetProperty()));
+    }
+
+    public static void bindYToPos(Transform toBind,
+                                  Transform parent,
+                                  @Nullable ObservableValue<Number> addY)
+    {
         if (addY != null)
             toBind.yPosProperty()
                     .bindProperty(Expression.getExpression(
@@ -163,21 +177,37 @@ public class RelativeBindingHelper
 
     public static void bindToRelative(Transform toBind, Transform parent, float ratioX, float ratioY)
     {
-        bindXToRelative(toBind, parent, ratioX);
-        bindYToRelative(toBind, parent, ratioY);
+        bindToRelative(toBind, parent, ratioX, ratioY, 0, 0);
+    }
+
+    public static void bindToRelative(Transform toBind, Transform parent, float ratioX, float ratioY, float addX, float addY)
+    {
+        bindXToRelative(toBind, parent, ratioX, addX);
+        bindYToRelative(toBind, parent, ratioY, addY);
     }
 
     public static void bindXToRelative(Transform toBind, Transform parent, float ratioX)
+    {
+        bindXToRelative(toBind, parent, ratioX, 0);
+    }
+
+    public static void bindXToRelative(Transform toBind, Transform parent, float ratioX, float addX)
     {
         toBind.xPosProperty().bindProperty(parent.xPosProperty().combine(
                 parent.widthProperty(),
                 parent.xTranslateProperty(),
                 parent.xOffsetProperty(),
                 toBind.widthProperty(),
-                (xPos, width, xTranslate, xOffset, childWidth) -> xPos.floatValue() + xTranslate.floatValue() + xOffset.floatValue() + (width.floatValue() / (1 / ratioX) - childWidth.floatValue() / 2)));
+                (xPos, width, xTranslate, xOffset, childWidth) ->
+                        xPos.floatValue() + xTranslate.floatValue() + xOffset.floatValue() + addX + (width.floatValue() / (1 / ratioX) - childWidth.floatValue() / 2)));
     }
 
     public static void bindYToRelative(Transform toBind, Transform parent, float ratioY)
+    {
+        bindYToRelative(toBind, parent, ratioY, 0);
+    }
+
+    public static void bindYToRelative(Transform toBind, Transform parent, float ratioY, float addY)
     {
         toBind.yPosProperty()
                 .bindProperty(parent.yPosProperty().combine(
@@ -186,6 +216,6 @@ public class RelativeBindingHelper
                         parent.yOffsetProperty(),
                         toBind.heightProperty(),
                         (yPos, height, yTranslate, yOffset, childHeight) ->
-                                yPos.floatValue() + yTranslate.floatValue() + yOffset.floatValue() + (height.floatValue() / (1 / ratioY) - childHeight.floatValue() / 2)));
+                                yPos.floatValue() + yTranslate.floatValue() + yOffset.floatValue() + addY + (height.floatValue() / (1 / ratioY) - childHeight.floatValue() / 2)));
     }
 }

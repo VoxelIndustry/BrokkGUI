@@ -10,6 +10,8 @@ public class DefaultPaneChildPlacer<T extends GuiElement> implements PaneChildPl
 
     private Transform currentChild;
 
+    private SecondStepChildPlacer<T> secondStepChildPlacer;
+
     public DefaultPaneChildPlacer(T element)
     {
         this.element = element;
@@ -53,6 +55,19 @@ public class DefaultPaneChildPlacer<T extends GuiElement> implements PaneChildPl
         return element;
     }
 
+    public SecondStepChildPlacer<T> left()
+    {
+        return absolute(0);
+    }
+
+    public SecondStepChildPlacer<T> right()
+    {
+        RelativeBindingHelper.bindXToPos(currentChild,
+                element.transform(),
+                element.transform().widthProperty().subtract(currentChild.widthProperty()));
+        return getOrCreateSecondChildPlacer();
+    }
+
     public T centered()
     {
         RelativeBindingHelper.bindToCenter(currentChild, element.transform());
@@ -81,5 +96,63 @@ public class DefaultPaneChildPlacer<T extends GuiElement> implements PaneChildPl
                 ratioX,
                 ratioY);
         return element;
+    }
+
+    public T relativeWithOffset(float ratioX, float ratioY, float offsetX, float offsetY)
+    {
+        RelativeBindingHelper.bindToRelative(currentChild,
+                element.transform(),
+                ratioX,
+                ratioY,
+                offsetX,
+                offsetY);
+        return element;
+    }
+
+    public SecondStepChildPlacer<T> absolute(float x)
+    {
+        RelativeBindingHelper.bindXToPos(currentChild, element.transform(), x);
+        return getOrCreateSecondChildPlacer();
+    }
+
+    public SecondStepChildPlacer<T> relative(float x)
+    {
+        RelativeBindingHelper.bindXToRelative(currentChild, element.transform(), x);
+        return getOrCreateSecondChildPlacer();
+    }
+
+    private SecondStepChildPlacer<T> getOrCreateSecondChildPlacer()
+    {
+        if (secondStepChildPlacer == null)
+            secondStepChildPlacer = new SecondStepChildPlacer<>(this);
+        return secondStepChildPlacer;
+    }
+
+    public static record SecondStepChildPlacer<T extends GuiElement>(DefaultPaneChildPlacer<T> parentPlacer)
+    {
+        public T absolute(float y)
+        {
+            RelativeBindingHelper.bindYToPos(parentPlacer.currentChild, parentPlacer.element.transform(), y);
+            return parentPlacer.element;
+        }
+
+        public T relative(float y)
+        {
+            RelativeBindingHelper.bindYToRelative(parentPlacer.currentChild, parentPlacer.element.transform(), y);
+            return parentPlacer.element;
+        }
+
+        public T top()
+        {
+            return absolute(0);
+        }
+
+        public T right()
+        {
+            RelativeBindingHelper.bindXToPos(parentPlacer.currentChild,
+                    parentPlacer.element.transform(),
+                    parentPlacer.element.transform().widthProperty().subtract(parentPlacer.currentChild.widthProperty()));
+            return parentPlacer.element;
+        }
     }
 }
