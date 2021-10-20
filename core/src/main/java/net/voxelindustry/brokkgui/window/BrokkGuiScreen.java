@@ -687,18 +687,48 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
     public void setWidth(float width)
     {
+        if (getWidthProperty().isBound())
+            getWidthProperty().unbind();
         getWidthProperty().setValue(width);
     }
 
     public void setHeight(float height)
     {
+        if (getHeightProperty().isBound())
+            getHeightProperty().unbind();
         getHeightProperty().setValue(height);
+    }
+
+    public void setWidthRelative(float ratio)
+    {
+        getWidthProperty().bindProperty(screenWidthProperty().map(ratio, (screenWidth, windowRatio) -> screenWidth * windowRatio));
+    }
+
+    public void setHeightRelative(float ratio)
+    {
+        getHeightProperty().bindProperty(screenHeightProperty().map(ratio, (screenHeight, windowRatio) -> screenHeight * windowRatio));
     }
 
     public void setSize(float width, float height)
     {
         setWidth(width);
         setHeight(height);
+    }
+
+    public void setSizeRelative(float ratio)
+    {
+        setWidthRelative(ratio);
+        setHeightRelative(ratio);
+    }
+
+    public void setAspectRatio(AspectRatioMode mode, float ratio)
+    {
+        if (mode == AspectRatioMode.WIDTH)
+            getHeightProperty().bindProperty(getWidthProperty().map(ratio, (width, aspectRatio) -> width * aspectRatio));
+        else if (mode == AspectRatioMode.HEIGHT)
+            getWidthProperty().bindProperty(getHeightProperty().map(ratio, (height, aspectRatio) -> height * aspectRatio));
+        else
+            throw new UnsupportedOperationException("Cannot set aspect ratio for mode=" + mode);
     }
 
     public float getxPos()
