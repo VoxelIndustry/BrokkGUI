@@ -4,6 +4,7 @@ import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.data.FillMethod;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
@@ -43,6 +44,9 @@ public class PaintStyle extends Paint
 
         style.registerConditionalProperties("border*", BorderProperties.getInstance());
         style.registerConditionalProperties("border-image*", BorderImageProperties.getInstance());
+
+        style.registerProperty("fill-method", FillMethod.HORIZONTAL, FillMethod.class);
+        style.registerProperty("fill-amount", 1F, Float.class);
     }
 
     private StyleComponent style()
@@ -220,6 +224,22 @@ public class PaintStyle extends Paint
         if (borderImageFillProperty == null)
             borderImageFillProperty = style().getOrCreateProperty("border-image-fill", Boolean.class);
         return borderImageFillProperty;
+    }
+
+    @Override
+    public Property<FillMethod> fillMethodProperty()
+    {
+        if (fillMethodProperty == null)
+            fillMethodProperty = style().getOrCreateProperty("fill-method", FillMethod.class);
+        return fillMethodProperty;
+    }
+
+    @Override
+    public Property<Float> fillAmountProperty()
+    {
+        if (fillAmountProperty == null)
+            fillAmountProperty = style().getOrCreateProperty("fill-amount", Float.class);
+        return fillAmountProperty;
     }
 
     ////////////
@@ -452,5 +472,29 @@ public class PaintStyle extends Paint
     public void borderImageFill(boolean doFill)
     {
         style().setPropertyDirect("border-image-fill", doFill, Boolean.class);
+    }
+
+    @Override
+    public FillMethod fillMethod()
+    {
+        return style().getValue("fill-method", FillMethod.class, FillMethod.HORIZONTAL);
+    }
+
+    @Override
+    public void fillMethod(FillMethod fillMethod)
+    {
+        style().setPropertyDirect("fill-method", fillMethod, FillMethod.class);
+    }
+
+    @Override
+    public float fillAmount()
+    {
+        return style().getValue("fill-amount", Float.class, 1F);
+    }
+
+    @Override
+    public void fillAmount(float fillAmount)
+    {
+        style().setPropertyDirect("fill-amount", fillAmount, Float.class);
     }
 }

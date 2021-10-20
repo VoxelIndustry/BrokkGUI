@@ -9,6 +9,7 @@ import net.voxelindustry.brokkgui.component.impl.ScrollableStyle;
 import net.voxelindustry.brokkgui.component.impl.TextComponentStyle;
 import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.component.impl.TransformStyle;
+import net.voxelindustry.brokkgui.data.FillMethod;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Resource;
@@ -18,6 +19,7 @@ import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.BackgroundRepeatStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.ColorStyleTranslator;
+import net.voxelindustry.brokkgui.style.adapter.translator.FillMethodStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.RandomSpriteRotationStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.RectAlignmentStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.RectBoxTranslator;
@@ -75,5 +77,6 @@ public class StyleEngine
         StyleTranslator.getInstance().registerTranslator(RandomSpriteRotation.class, new RandomSpriteRotationStyleTranslator());
 
         StyleTranslator.getInstance().registerTranslator(RectAlignment.class, new RectAlignmentStyleTranslator());
+        StyleTranslator.getInstance().registerTranslator(FillMethod.class, new FillMethodStyleTranslator());
     }
 }

@@ -8,6 +8,7 @@ import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.component.RequiredOverride;
+import net.voxelindustry.brokkgui.data.FillMethod;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
@@ -50,6 +51,9 @@ public class Paint extends GuiComponent implements RenderComponent
 
     protected Property<Boolean> borderImageFillProperty;
 
+    protected Property<FillMethod> fillMethodProperty;
+    protected Property<Float>      fillAmountProperty;
+
     private SpriteAnimationInstance backgroundAnimation;
     private SpriteAnimationInstance foregroundAnimation;
 
@@ -89,6 +93,14 @@ public class Paint extends GuiComponent implements RenderComponent
         float y = element().transform().topPos();
         float z = element().transform().zLevel();
 
+        if (fillAmount() < 1)
+        {
+            if (fillMethod() == FillMethod.HORIZONTAL)
+                renderer.pushMask(transform().leftPos(), transform().topPos(), transform().leftPos() + transform().width() * fillAmount(), transform().bottomPos());
+            else if (fillMethod() == FillMethod.VERTICAL)
+                renderer.pushMask(transform().leftPos(), transform().topPos(), transform().rightPos(), transform().topPos() + transform().height() * fillAmount());
+        }
+
         // BACKGROUND
         if (hasTextureBackground() && backgroundTexture() != Texture.EMPTY)
         {
@@ -101,14 +113,6 @@ public class Paint extends GuiComponent implements RenderComponent
             shape.drawColored(element().transform(), renderer, x, y, background, z, backgroundPosition());
         }
 
-        if (hasBorder())
-        {
-            if (hasBorderImage())
-                ImageBorderDrawer.drawBorder(this, renderer);
-            else
-                ColorBorderDrawer.drawBorder(this, renderer);
-        }
-
         // FOREGROUND
         if (hasTextureForeground() && foregroundTexture() != Texture.EMPTY)
         {
@@ -119,6 +123,19 @@ public class Paint extends GuiComponent implements RenderComponent
             Color foreground = foregroundColor();
 
             shape.drawColored(element().transform(), renderer, x, y, foreground, z, foregroundPosition());
+        }
+
+        if (fillAmount() < 1)
+        {
+            renderer.popMask();
+        }
+
+        if (hasBorder())
+        {
+            if (hasBorderImage())
+                ImageBorderDrawer.drawBorder(this, renderer);
+            else
+                ColorBorderDrawer.drawBorder(this, renderer);
         }
     }
 
@@ -304,6 +321,22 @@ public class Paint extends GuiComponent implements RenderComponent
         if (borderImageFillProperty == null)
             borderImageFillProperty = createRenderProperty(Boolean.FALSE);
         return borderImageFillProperty;
+    }
+
+    @RequiredOverride
+    public Property<FillMethod> fillMethodProperty()
+    {
+        if (fillMethodProperty == null)
+            fillMethodProperty = createRenderProperty(FillMethod.HORIZONTAL);
+        return fillMethodProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> fillAmountProperty()
+    {
+        if (fillAmountProperty == null)
+            fillAmountProperty = createRenderProperty(1F);
+        return fillAmountProperty;
     }
 
     ////////////
@@ -590,5 +623,29 @@ public class Paint extends GuiComponent implements RenderComponent
     public void borderImageFill(boolean doFill)
     {
         borderImageFillProperty().setValue(doFill);
+    }
+
+    @RequiredOverride
+    public FillMethod fillMethod()
+    {
+        return fillMethodProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void fillMethod(FillMethod fillMethod)
+    {
+        fillMethodProperty().setValue(fillMethod);
+    }
+
+    @RequiredOverride
+    public float fillAmount()
+    {
+        return fillAmountProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void fillAmount(float fillAmount)
+    {
+        fillAmountProperty().setValue(fillAmount);
     }
 }
