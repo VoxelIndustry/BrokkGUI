@@ -9,8 +9,9 @@ public class DebugRenderer
 {
     public static DebugWindow wrap(BrokkGuiScreen brokkGuiScreen)
     {
-        DebugWindow debugWindow = new DebugWindow(brokkGuiScreen);
-        GuiCompositeWindow composite = new GuiCompositeWindow(brokkGuiScreen, debugWindow);
+        var debugWindow = new DebugWindow(brokkGuiScreen);
+        var composite = new GuiCompositeWindow(brokkGuiScreen, debugWindow);
+
         composite.setInputEventFilter(debugWindow);
         debugWindow.setWrapper(brokkGuiScreen.getWrapper());
         brokkGuiScreen.getWrapper().setGuiWindow(composite);

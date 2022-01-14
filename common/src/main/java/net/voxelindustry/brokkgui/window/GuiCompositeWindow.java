@@ -12,14 +12,13 @@ import net.voxelindustry.hermod.EventType;
 import net.voxelindustry.hermod.HermodEvent;
 
 import java.util.Collection;
-import java.util.Optional;
-import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public class GuiCompositeWindow implements IGuiWindow
 {
     private final IGuiWindow first, second;
 
-    private Optional<BiPredicate<IGuiWindow, InputType>> inputEventFilter = Optional.empty();
+    private WindowInputEventFilter inputEventFilter;
 
     public GuiCompositeWindow(IGuiWindow first, IGuiWindow second)
     {
@@ -30,9 +29,9 @@ public class GuiCompositeWindow implements IGuiWindow
         this.second.screenHeightProperty().bindBidirectional(this.first.screenHeightProperty());
     }
 
-    public void setInputEventFilter(BiPredicate<IGuiWindow, InputType> inputEventFilter)
+    public void setInputEventFilter(WindowInputEventFilter inputEventFilter)
     {
-        this.inputEventFilter = Optional.ofNullable(inputEventFilter);
+        this.inputEventFilter = inputEventFilter;
     }
 
     @Override
@@ -135,139 +134,68 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public void onMouseMoved(float mouseX, float mouseY)
+    public boolean onMouseMoved(float mouseX, float mouseY)
     {
-        if (inputEventFilter.isPresent())
-        {
-            if (inputEventFilter.get().test(first, InputType.MOUSE_MOVE))
-                first.onMouseMoved(mouseX, mouseY);
-            if (inputEventFilter.get().test(second, InputType.MOUSE_MOVE))
-                second.onMouseMoved(mouseX, mouseY);
-        }
-        else
-        {
-            first.onMouseMoved(mouseX, mouseY);
-            second.onMouseMoved(mouseX, mouseY);
-        }
+        return dispatchEventToWindows(InputType.MOUSE_MOVE, window -> window.onMouseMoved(mouseX, mouseY));
     }
 
     @Override
-    public void onKeyPressed(int key)
+    public boolean onKeyPressed(int key)
     {
-        if (inputEventFilter.isPresent())
-        {
-            if (inputEventFilter.get().test(first, InputType.KEY_PRESS))
-                first.onKeyPressed(key);
-            if (inputEventFilter.get().test(second, InputType.KEY_PRESS))
-                second.onKeyPressed(key);
-        }
-        else
-        {
-            first.onKeyPressed(key);
-            second.onKeyPressed(key);
-        }
+        return dispatchEventToWindows(InputType.KEY_PRESS, window -> window.onKeyPressed(key));
     }
 
     @Override
-    public void onTextTyped(String text)
+    public boolean onTextTyped(String text)
     {
-        if (inputEventFilter.isPresent())
-        {
-            if (inputEventFilter.get().test(first, InputType.KEY_TYPE))
-                first.onTextTyped(text);
-            if (inputEventFilter.get().test(second, InputType.KEY_TYPE))
-                second.onTextTyped(text);
-        }
-        else
-        {
-            first.onTextTyped(text);
-            second.onTextTyped(text);
-        }
+        return dispatchEventToWindows(InputType.KEY_TYPE, window -> window.onTextTyped(text));
     }
 
     @Override
-    public void onKeyReleased(int key)
+    public boolean onKeyReleased(int key)
     {
-        if (inputEventFilter.isPresent())
-        {
-            if (inputEventFilter.get().test(first, InputType.KEY_RELEASE))
-                first.onKeyReleased(key);
-            if (inputEventFilter.get().test(second, InputType.KEY_RELEASE))
-                second.onKeyReleased(key);
-        }
-        else
-        {
-            first.onKeyReleased(key);
-            second.onKeyReleased(key);
-        }
+        return dispatchEventToWindows(InputType.KEY_RELEASE, window -> window.onKeyReleased(key));
     }
 
     @Override
-    public void onClick(float mouseX, float mouseY, MouseInputCode mouseInputCode)
+    public boolean onClick(float mouseX, float mouseY, MouseInputCode mouseInputCode)
     {
-        if (inputEventFilter.isPresent())
-        {
-            if (inputEventFilter.get().test(first, InputType.MOUSE_CLICK))
-                first.onClick(mouseX, mouseY, mouseInputCode);
-            if (inputEventFilter.get().test(second, InputType.MOUSE_CLICK))
-                second.onClick(mouseX, mouseY, mouseInputCode);
-        }
-        else
-        {
-            first.onClick(mouseX, mouseY, mouseInputCode);
-            second.onClick(mouseX, mouseY, mouseInputCode);
-        }
+        return dispatchEventToWindows(InputType.MOUSE_CLICK, window -> window.onClick(mouseX, mouseY, mouseInputCode));
     }
 
     @Override
-    public void onClickDrag(float mouseX, float mouseY, MouseInputCode mouseInputCode)
+    public boolean onClickDrag(float mouseX, float mouseY, MouseInputCode mouseInputCode)
     {
-        if (inputEventFilter.isPresent())
-        {
-            if (inputEventFilter.get().test(first, InputType.MOUSE_DRAG_START))
-                first.onClickDrag(mouseX, mouseY, mouseInputCode);
-            if (inputEventFilter.get().test(second, InputType.MOUSE_DRAG_START))
-                second.onClickDrag(mouseX, mouseY, mouseInputCode);
-        }
-        else
-        {
-            first.onClickDrag(mouseX, mouseY, mouseInputCode);
-            second.onClickDrag(mouseX, mouseY, mouseInputCode);
-        }
+        return dispatchEventToWindows(InputType.MOUSE_CLICK_DRAG, window -> window.onClickDrag(mouseX, mouseY, mouseInputCode));
     }
 
     @Override
-    public void onClickStop(float mouseX, float mouseY, MouseInputCode mouseInputCode)
+    public boolean onClickStop(float mouseX, float mouseY, MouseInputCode mouseInputCode)
     {
-        if (inputEventFilter.isPresent())
-        {
-            if (inputEventFilter.get().test(first, InputType.MOUSE_DRAG_STOP))
-                first.onClickStop(mouseX, mouseY, mouseInputCode);
-            if (inputEventFilter.get().test(second, InputType.MOUSE_DRAG_STOP))
-                second.onClickStop(mouseX, mouseY, mouseInputCode);
-        }
-        else
-        {
-            first.onClickStop(mouseX, mouseY, mouseInputCode);
-            second.onClickStop(mouseX, mouseY, mouseInputCode);
-        }
+        return dispatchEventToWindows(InputType.MOUSE_CLICK_STOP, window -> window.onClickStop(mouseX, mouseY, mouseInputCode));
     }
 
     @Override
-    public void onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
+    public boolean onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
     {
-        if (inputEventFilter.isPresent())
+        return dispatchEventToWindows(InputType.MOUSE_SCROLL, window -> window.onScroll(mouseX, mouseY, xOffset, yOffset));
+    }
+
+    private boolean dispatchEventToWindows(InputType inputType, Predicate<IGuiWindow> eventCallable)
+    {
+        if (inputEventFilter != null)
         {
-            if (inputEventFilter.get().test(first, InputType.MOUSE_SCROLL))
-                first.onScroll(mouseX, mouseY, xOffset, yOffset);
-            if (inputEventFilter.get().test(second, InputType.MOUSE_SCROLL))
-                second.onScroll(mouseX, mouseY, xOffset, yOffset);
+            var filterResult = inputEventFilter.apply(first, inputType);
+            var consumed = false;
+            if (filterResult != WindowEventFilter.IGNORE)
+                consumed = eventCallable.test(first);
+            if (filterResult == WindowEventFilter.SWALLOW)
+                return consumed;
+            if (!consumed)
+                return eventCallable.test(second);
+            return true;
         }
-        else
-        {
-            first.onScroll(mouseX, mouseY, xOffset, yOffset);
-            second.onScroll(mouseX, mouseY, xOffset, yOffset);
-        }
+        return eventCallable.test(first) || eventCallable.test(second);
     }
 
     @Override

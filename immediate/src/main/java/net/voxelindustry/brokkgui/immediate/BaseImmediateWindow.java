@@ -56,10 +56,11 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void onMouseMoved(float mouseX, float mouseY)
+    public boolean onMouseMoved(float mouseX, float mouseY)
     {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
+        return false;
     }
 
     @Override
@@ -230,53 +231,57 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public void onKeyPressed(int key)
+    public boolean onKeyPressed(int key)
     {
         lastKeyPressed = key;
+        return false;
     }
 
     @Override
-    public void onTextTyped(String text)
+    public boolean onTextTyped(String text)
     {
-
+        return false;
     }
 
     @Override
-    public void onKeyReleased(int key)
+    public boolean onKeyReleased(int key)
     {
-
+        return false;
     }
 
     @Override
-    public void onClick(float mouseX, float mouseY, MouseInputCode key)
+    public boolean onClick(float mouseX, float mouseY, MouseInputCode key)
     {
         lastClickX = mouseX;
         lastClickY = mouseY;
 
         lastHeldClickX = mouseX;
         lastHeldClickY = mouseY;
+        return false;
     }
 
     @Override
-    public void onClickDrag(float mouseX, float mouseY, MouseInputCode clickedMouseButton)
+    public boolean onClickDrag(float mouseX, float mouseY, MouseInputCode clickedMouseButton)
     {
-
+        return false;
     }
 
     @Override
-    public void onClickStop(float mouseX, float mouseY, MouseInputCode mouseInputCode)
+    public boolean onClickStop(float mouseX, float mouseY, MouseInputCode mouseInputCode)
     {
         lastHeldClickX = -1;
         lastHeldClickY = -1;
+        return false;
     }
 
     @Override
-    public void onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
+    public boolean onScroll(float mouseX, float mouseY, double xOffset, double yOffset)
     {
         lastWheelX = mouseX;
         lastWheelY = mouseY;
         // FIXME: Does not handle horizontal scrolling
         lastWheelValue = yOffset;
+        return false;
     }
 
     @Override

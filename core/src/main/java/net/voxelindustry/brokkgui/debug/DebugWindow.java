@@ -21,6 +21,8 @@ import net.voxelindustry.brokkgui.window.BrokkGuiScreen;
 import net.voxelindustry.brokkgui.window.IGuiWindow;
 import net.voxelindustry.brokkgui.window.InputType;
 import net.voxelindustry.brokkgui.window.SubGuiScreen;
+import net.voxelindustry.brokkgui.window.WindowEventFilter;
+import net.voxelindustry.brokkgui.window.WindowInputEventFilter;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.NumberFormat;
@@ -29,7 +31,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.function.BiPredicate;
 
 import static com.google.common.base.Predicates.not;
 import static java.lang.Math.max;
@@ -39,7 +40,7 @@ import static net.voxelindustry.brokkgui.debug.DebugRenderer.getNodeName;
 import static net.voxelindustry.brokkgui.util.ListUtil.tryGetIndex;
 import static net.voxelindustry.brokkgui.util.MathUtils.clamp;
 
-public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWindow, InputType>
+public class DebugWindow extends ImmediateWindow implements WindowInputEventFilter
 {
     private static final NumberFormat NO_DECIMAL_FORMAT;
     private static final NumberFormat TWO_DECIMAL_FORMAT;
@@ -73,9 +74,9 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
     private float   lockedMouseX;
     private float   lockedMouseY;
 
-    private List<Transform> hiddenNodes = new ArrayList<>();
+    private final List<Transform> hiddenNodes = new ArrayList<>();
 
-    private Map<String, DebugHierarchy> hierarchiesByName = new LinkedHashMap<>();
+    private final Map<String, DebugHierarchy> hierarchiesByName = new LinkedHashMap<>();
 
     public DebugWindow(IGuiWindow window)
     {
@@ -427,10 +428,13 @@ public class DebugWindow extends ImmediateWindow implements BiPredicate<IGuiWind
 
     // Input filtering to take control of the mouse
     @Override
-    public boolean test(IGuiWindow window, InputType inputType)
+    public WindowEventFilter apply(IGuiWindow iGuiWindow, InputType inputType)
     {
+        if (isInputLocked && window == this)
+            return WindowEventFilter.SWALLOW;
         if (isInputLocked)
-            return window == this;
-        return true;
+            return WindowEventFilter.IGNORE;
+
+        return WindowEventFilter.CONSUME;
     }
 }

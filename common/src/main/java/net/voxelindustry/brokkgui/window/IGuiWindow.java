@@ -54,19 +54,19 @@ public interface IGuiWindow extends IGuiSubWindow
     // INPUTS //
     ////////////
 
-    void onMouseMoved(float mouseX, float mouseY);
+    boolean onMouseMoved(float mouseX, float mouseY);
 
-    void onKeyPressed(int key);
+    boolean onKeyPressed(int key);
 
-    void onTextTyped(String text);
+    boolean onTextTyped(String text);
 
-    void onKeyReleased(int key);
+    boolean onKeyReleased(int key);
 
-    void onClick(float mouseX, float mouseY, MouseInputCode key);
+    boolean onClick(float mouseX, float mouseY, MouseInputCode key);
 
-    void onClickDrag(float mouseX, float mouseY, MouseInputCode clickedMouseButton);
+    boolean onClickDrag(float mouseX, float mouseY, MouseInputCode clickedMouseButton);
 
-    void onClickStop(float mouseX, float mouseY, MouseInputCode key);
+    boolean onClickStop(float mouseX, float mouseY, MouseInputCode key);
 
-    void onScroll(float mouseX, float mouseY, double xOffset, double yOffset);
+    boolean onScroll(float mouseX, float mouseY, double xOffset, double yOffset);
 }
