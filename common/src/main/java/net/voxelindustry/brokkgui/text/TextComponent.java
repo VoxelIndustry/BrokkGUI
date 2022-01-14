@@ -13,7 +13,6 @@ import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.component.RequiredOverride;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.internal.IGuiHelper;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.paint.RenderPass;
 
@@ -163,12 +162,12 @@ public class TextComponent extends GuiComponent implements RenderComponent
                 .glowWidth(glowWidth());
     }
 
-    private float textWidth(IGuiHelper helper)
+    private float textWidth()
     {
         return lazyTextWidth.getValue();
     }
 
-    private float textHeight(IGuiHelper helper)
+    private float textHeight()
     {
         return lazyTextHeight.getValue();
     }
