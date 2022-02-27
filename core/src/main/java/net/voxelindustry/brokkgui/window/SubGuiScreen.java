@@ -3,6 +3,7 @@ package net.voxelindustry.brokkgui.window;
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
+import net.voxelindustry.brokkgui.element.pane.GuiPane;
 import net.voxelindustry.brokkgui.event.WindowEvent;
 import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.hermod.EventHandler;
@@ -12,7 +13,7 @@ import net.voxelindustry.hermod.HermodEvent;
 import java.util.Collection;
 import java.util.Collections;
 
-public class SubGuiScreen extends GuiElement implements StyledElement, IGuiSubWindow
+public class SubGuiScreen extends GuiPane implements StyledElement, IGuiSubWindow
 {
     private EventHandler<WindowEvent.Open>  onOpenEvent;
     private EventHandler<WindowEvent.Close> onCloseEvent;
