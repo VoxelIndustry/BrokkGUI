@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.element.pane;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.component.impl.Scrollable;
 import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 
@@ -8,10 +9,18 @@ public class ScrollPane extends GuiElement implements StyledElement, IGuiPane<De
 {
     private final DefaultPaneChildPlacer<ScrollPane> placer = new DefaultPaneChildPlacer<>(this);
 
+    private final Scrollable scrollable;
+
     public ScrollPane()
     {
         transform().bindChild(false);
         transform().overflow(GuiOverflow.SCROLL);
+        this.scrollable = get(Scrollable.class);
+    }
+
+    public Scrollable scrollable()
+    {
+        return this.scrollable;
     }
 
     @Override

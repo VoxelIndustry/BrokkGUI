@@ -454,6 +454,11 @@ public class Scrollable extends GuiComponent
         });
 
         gripX.height(8);
+        bindGripXWidth();
+    }
+
+    private void bindGripXWidth()
+    {
         gripX.transform().widthProperty().bindProperty(trueWidthProperty().combine(
                 transform().widthProperty(),
                 (trueWidth, width) -> max(16, 0.9F * width.floatValue() * (width.floatValue() / trueWidth.floatValue()))));
@@ -523,6 +528,11 @@ public class Scrollable extends GuiComponent
         });
 
         gripY.width(8);
+        bindGripYHeight();
+    }
+
+    private void bindGripYHeight()
+    {
         gripY.transform().heightProperty().bindProperty(trueHeightProperty().combine(
                 transform().heightProperty(),
                 (trueHeight, height) -> max(16, 0.9F * height.floatValue() * (height.floatValue() / trueHeight.floatValue()))));
@@ -828,6 +838,14 @@ public class Scrollable extends GuiComponent
      */
     public void gripXWidth(float gripXWidth)
     {
+        if (gripXWidth == 0 && !gripXWidthProperty().isBound())
+        {
+            bindGripXWidth();
+            return;
+        }
+
+        if (gripXWidth != 0 && gripXWidthProperty().isBound())
+            gripXWidthProperty().unbind();
         gripXWidthProperty().setValue(gripXWidth);
     }
 
@@ -863,6 +881,14 @@ public class Scrollable extends GuiComponent
      */
     public void gripYHeight(float gripYHeight)
     {
+        if (gripYHeight == 0 && !gripYHeightProperty().isBound())
+        {
+            bindGripYHeight();
+            return;
+        }
+
+        if (gripYHeight != 0 && gripYHeightProperty().isBound())
+            gripYHeightProperty().unbind();
         gripYHeightProperty().setValue(gripYHeight);
     }
 
