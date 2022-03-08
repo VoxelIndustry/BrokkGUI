@@ -88,12 +88,6 @@ public interface IRenderCommandReceiver extends ITextRenderer
 
     void closeAlphaMask();
 
-    void beginScissor();
-
-    void scissorBox(float fromX, float fromY, float toX, float toY);
-
-    void endScissor();
-
     void bindTexture(Texture texture);
 
     default void pushMask(RectBox mask)

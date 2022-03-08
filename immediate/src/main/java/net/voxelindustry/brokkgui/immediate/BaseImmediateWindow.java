@@ -326,15 +326,14 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
         isScissorActive = true;
 
         scissorBox = RectBox.build().left(startX).right(endX).top(startY).bottom(endY).create();
-        getRenderer().beginScissor();
-        getRenderer().scissorBox(startX, startY, endX, endY);
+        getRenderer().pushMask(scissorBox);
     }
 
     public void stopScissor()
     {
         isScissorActive = false;
         scissorBox = RectBox.EMPTY;
-        getRenderer().endScissor();
+        getRenderer().popMask();
     }
 
     public boolean isScissorActive()
