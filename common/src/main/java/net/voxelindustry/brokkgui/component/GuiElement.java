@@ -346,6 +346,11 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         transform().size(width, height);
     }
 
+    public void size(float size)
+    {
+        size(size, size);
+    }
+
     public Property<Boolean> focusedProperty()
     {
         return focusedProperty;
