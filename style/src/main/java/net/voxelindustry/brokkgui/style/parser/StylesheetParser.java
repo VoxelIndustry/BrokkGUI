@@ -14,9 +14,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
+
+import static java.util.Collections.emptyList;
 
 public class StylesheetParser
 {
@@ -85,20 +86,25 @@ public class StylesheetParser
     private List<StyleRule> readBlock(NumberedLineIterator content)
     {
         if (!content.hasNext())
-            return Collections.emptyList();
+            return emptyList();
         String currentLine = content.nextLine();
         List<StyleRule> elements = new ArrayList<>();
         while (!StringUtils.contains(currentLine, "}"))
         {
-            if (StringUtils.contains(currentLine, "{"))
+            if (!StringUtils.isBlank(currentLine))
             {
-                logger.severe("Found opening bracket at line " + content.getLineNumber() + " while inside a block");
-                return Collections.emptyList();
+                if (StringUtils.contains(currentLine, "{"))
+                {
+                    logger.severe("Found opening bracket at line " + content.getLineNumber() + " while inside a block");
+                    return emptyList();
+                }
+                String[] rule = currentLine.replace(';', ' ').trim().split(":", 2);
+                elements.add(new StyleRule(rule[0].trim(), rule[1].trim()));
+
             }
-            String[] rule = currentLine.replace(';', ' ').trim().split(":", 2);
-            elements.add(new StyleRule(rule[0].trim(), rule[1].trim()));
+
             if (!content.hasNext())
-                return Collections.emptyList();
+                return emptyList();
             currentLine = content.nextLine();
         }
         return elements;
