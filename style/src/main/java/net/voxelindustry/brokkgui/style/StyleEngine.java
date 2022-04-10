@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.style;
 
 import net.voxelindustry.brokkcolor.Color;
+import net.voxelindustry.brokkcolor.ColorLike;
 import net.voxelindustry.brokkgui.component.ComponentEngine;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.component.impl.PaintStyle;
@@ -66,6 +67,7 @@ public class StyleEngine
         ComponentEngine.instance().addComponentOverride(Scrollable.class, ScrollableStyle.class);
 
         StyleTranslator.getInstance().registerTranslator(Color.class, new ColorStyleTranslator());
+        StyleTranslator.getInstance().registerTranslator(ColorLike.class, new ColorStyleTranslator());
         StyleTranslator.getInstance().registerTranslator(Texture.class, new TextureStyleTranslator());
 
         StyleTranslator.getInstance().registerTranslator(RectBox.class, new RectBoxTranslator());

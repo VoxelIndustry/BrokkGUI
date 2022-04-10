@@ -2,12 +2,13 @@ package net.voxelindustry.brokkgui.style.adapter.translator;
 
 import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkcolor.ColorConstants;
+import net.voxelindustry.brokkcolor.ColorLike;
 import net.voxelindustry.brokkgui.style.adapter.IStyleTranslator;
 
 import java.text.NumberFormat;
 import java.util.regex.Pattern;
 
-public class ColorStyleTranslator implements IStyleTranslator<Color>
+public class ColorStyleTranslator implements IStyleTranslator<ColorLike>
 {
     private final NumberFormat colorFormat;
 
@@ -24,28 +25,29 @@ public class ColorStyleTranslator implements IStyleTranslator<Color>
     }
 
     @Override
-    public String encode(Color value, boolean prettyPrint)
+    public String encode(ColorLike value, boolean prettyPrint)
     {
+        var colorFloat = value.toColorFloat();
         StringBuilder builder = new StringBuilder();
 
         if (prettyPrint)
         {
-            builder.append(value.toHex())
+            builder.append(colorFloat.toHex())
                     .append(" (")
-                    .append(colorFormat.format(value.getRed() * 255))
+                    .append(colorFormat.format(colorFloat.getRed() * 255))
                     .append(",")
-                    .append(colorFormat.format(value.getGreen() * 255))
+                    .append(colorFormat.format(colorFloat.getGreen() * 255))
                     .append(",")
-                    .append(colorFormat.format(value.getBlue() * 255))
+                    .append(colorFormat.format(colorFloat.getBlue() * 255))
                     .append(",")
-                    .append(colorFormat.format(value.getAlpha() * 255))
+                    .append(colorFormat.format(colorFloat.getAlpha() * 255))
                     .append(")");
         }
         else
         {
-            builder.append(value.toHex())
+            builder.append(colorFloat.toHex())
                     .append(" ")
-                    .append(value.getAlpha() * 100)
+                    .append(colorFloat.getAlpha() * 100)
                     .append("%");
         }
         return builder.toString();

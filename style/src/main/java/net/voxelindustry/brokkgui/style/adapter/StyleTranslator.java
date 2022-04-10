@@ -18,20 +18,16 @@ public class StyleTranslator
         return INSTANCE;
     }
 
-    private Map<Class<?>, IStyleDecoder<?>>   styleDecoders;
-    private Map<Class<?>, IStyleEncoder<?>>   styleEncoders;
-    private Map<Class<?>, IStyleValidator<?>> styleValidators;
+    private final Map<Class<?>, IStyleDecoder<?>>   styleDecoders   = new IdentityHashMap<>();
+    private final Map<Class<?>, IStyleEncoder<?>>   styleEncoders   = new IdentityHashMap<>();
+    private final Map<Class<?>, IStyleValidator<?>> styleValidators = new IdentityHashMap<>();
 
     private StyleTranslator()
     {
-        this.styleDecoders = new IdentityHashMap<>();
-        this.styleEncoders = new IdentityHashMap<>();
-        this.styleValidators = new IdentityHashMap<>();
-
         this.registerBuiltins();
     }
 
-    public <T> void registerTranslator(Class<T> valueClass, IStyleDecoder<T> decoder, IStyleEncoder<T> encoder,
+    public <T> void registerTranslator(Class<? extends T> valueClass, IStyleDecoder<T> decoder, IStyleEncoder<T> encoder,
                                        IStyleValidator<T> validator)
     {
         this.styleDecoders.put(valueClass, decoder);
@@ -39,7 +35,7 @@ public class StyleTranslator
         this.styleValidators.put(valueClass, validator);
     }
 
-    public <T, V extends IStyleDecoder<T> & IStyleEncoder<T> & IStyleValidator<T>> void registerTranslator(Class<T> valueClass, V translator)
+    public <T, V extends IStyleDecoder<T> & IStyleEncoder<T> & IStyleValidator<T>> void registerTranslator(Class<? extends T> valueClass, V translator)
     {
         this.registerTranslator(valueClass, translator, translator, translator);
     }
