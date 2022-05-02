@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.element.pane;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Transform;
+import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 
 public class DefaultPaneChildPlacer<T extends GuiElement> implements PaneChildPlacer
@@ -86,6 +87,55 @@ public class DefaultPaneChildPlacer<T extends GuiElement> implements PaneChildPl
                 element.transform(),
                 x,
                 y);
+        return element;
+    }
+
+    public T absolute(float x, float y, RectAlignment alignment)
+    {
+        switch (alignment)
+        {
+            case LEFT_CENTER, RIGHT_CENTER, MIDDLE_CENTER ->
+            {
+                RelativeBindingHelper.bindYToPos(currentChild,
+                        element.transform(),
+                        currentChild.heightProperty().map(height -> y - height.floatValue() / 2));
+            }
+            case LEFT_UP, MIDDLE_UP, RIGHT_UP ->
+            {
+                RelativeBindingHelper.bindYToPos(currentChild,
+                        element.transform(),
+                        y);
+            }
+            case LEFT_DOWN, MIDDLE_DOWN, RIGHT_DOWN ->
+            {
+                RelativeBindingHelper.bindYToPos(currentChild,
+                        element.transform(),
+                        currentChild.heightProperty().map(height -> y - height.floatValue()));
+            }
+        }
+
+        switch (alignment)
+        {
+            case RIGHT_CENTER, RIGHT_UP, RIGHT_DOWN ->
+            {
+                RelativeBindingHelper.bindXToPos(currentChild,
+                        element.transform(),
+                        currentChild.widthProperty().map(width -> x - width.floatValue()));
+            }
+            case MIDDLE_CENTER, MIDDLE_UP, MIDDLE_DOWN ->
+            {
+                RelativeBindingHelper.bindXToPos(currentChild,
+                        element.transform(),
+                        currentChild.widthProperty().map(width -> x - width.floatValue() / 2));
+            }
+            case LEFT_CENTER, LEFT_UP, LEFT_DOWN ->
+            {
+                RelativeBindingHelper.bindXToPos(currentChild,
+                        element.transform(),
+                        x);
+            }
+        }
+
         return element;
     }
 
