@@ -415,7 +415,7 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         if (isDisabled() && hovered)
             return;
         hoveredProperty().setValue(hovered);
-        EventQueueBuilder.fromTarget(this).dispatch(HoverEvent.TYPE, new HoverEvent(this, hovered));
+        getEventDispatcher().singletonQueue().dispatch(HoverEvent.TYPE, new HoverEvent(this, hovered));
     }
 
     public boolean isVisible()

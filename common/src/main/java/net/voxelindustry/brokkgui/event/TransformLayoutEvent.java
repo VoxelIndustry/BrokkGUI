@@ -25,9 +25,9 @@ public class TransformLayoutEvent extends HermodEvent
     }
 
     @Override
-    public Transform getSource()
+    public Transform getTarget()
     {
-        return (Transform) super.getSource();
+        return (Transform) super.getTarget();
     }
 
     public Transform child()

@@ -23,9 +23,9 @@ public class LayoutEvent extends HermodEvent
     }
 
     @Override
-    public GuiElement getSource()
+    public GuiElement getTarget()
     {
-        return (GuiElement) super.getSource();
+        return (GuiElement) super.getTarget();
     }
 
     public static class Add extends LayoutEvent
