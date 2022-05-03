@@ -24,13 +24,24 @@ public class ImageBorderDrawer
         RectBox widthBox = paint.borderImageWidth();
         RectBox outsetBox = paint.borderImageOutset();
 
-        float leftPos = transform.leftPos() - outsetBox.getLeft();
-        float topPos = transform.topPos() - outsetBox.getTop();
-        float rightPos = transform.rightPos() + outsetBox.getRight();
-        float bottomPos = transform.bottomPos() + outsetBox.getBottom();
+        float leftPos = transform.leftPos();
+        float topPos = transform.topPos();
+        float rightPos = transform.rightPos();
+        float bottomPos = transform.bottomPos();
 
-        float width = transform.width() + outsetBox.getLeft() + outsetBox.getRight();
-        float height = transform.height() + outsetBox.getTop() + outsetBox.getBottom();
+        float width = transform.width();
+        float height = transform.height();
+
+        if (paint.borderBox() == BorderBox.OUTSIDE)
+        {
+            leftPos -= outsetBox.getLeft();
+            rightPos += outsetBox.getRight();
+            bottomPos += outsetBox.getBottom();
+            topPos -= outsetBox.getTop();
+
+            width += outsetBox.getHorizontal();
+            height += outsetBox.getVertical();
+        }
 
         boolean doFill = paint.borderImageFill();
 
@@ -44,7 +55,7 @@ public class ImageBorderDrawer
                     sliceBox.getLeft(), 0,
                     1 - sliceBox.getRight(), sliceBox.getTop(),
                     width, borderTop * widthBox.getTop(), transform.zLevel(),
-                    RenderPass.BACKGROUND);
+                    RenderPass.BORDER);
         }
 
         if (borderBottom > 0)
@@ -53,7 +64,7 @@ public class ImageBorderDrawer
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
                     1 - sliceBox.getRight(), 1,
                     width, borderBottom * widthBox.getBottom(), transform.zLevel(),
-                    RenderPass.BACKGROUND);
+                    RenderPass.BORDER);
         }
 
         if (borderLeft > 0)
@@ -62,7 +73,7 @@ public class ImageBorderDrawer
                     0, sliceBox.getTop(),
                     sliceBox.getLeft(), 1 - sliceBox.getBottom(),
                     borderLeft * widthBox.getLeft(), height, transform.zLevel(),
-                    RenderPass.BACKGROUND);
+                    RenderPass.BORDER);
         }
 
         if (borderRight > 0)
@@ -71,7 +82,7 @@ public class ImageBorderDrawer
                     1 - sliceBox.getRight(), sliceBox.getTop(),
                     1, 1 - sliceBox.getBottom(),
                     borderRight * widthBox.getRight(), height, transform.zLevel(),
-                    RenderPass.BACKGROUND);
+                    RenderPass.BORDER);
         }
 
         // Corners
@@ -83,7 +94,7 @@ public class ImageBorderDrawer
                     sliceBox.getLeft(), sliceBox.getTop(),
                     borderLeft, borderTop,
                     transform.zLevel(),
-                    RenderPass.BACKGROUND);
+                    RenderPass.BORDER);
         }
 
         if (borderTop > 0 && borderRight > 0)
@@ -93,7 +104,7 @@ public class ImageBorderDrawer
                     1, sliceBox.getTop(),
                     borderRight, borderTop,
                     transform.zLevel(),
-                    RenderPass.BACKGROUND);
+                    RenderPass.BORDER);
         }
 
         if (borderBottom > 0 && borderRight > 0)
@@ -103,7 +114,7 @@ public class ImageBorderDrawer
                     1, 1,
                     borderRight, borderBottom,
                     transform.zLevel(),
-                    RenderPass.BACKGROUND);
+                    RenderPass.BORDER);
         }
 
         if (borderBottom > 0 && borderLeft > 0)
@@ -113,7 +124,7 @@ public class ImageBorderDrawer
                     sliceBox.getLeft(), 1,
                     borderLeft, borderBottom,
                     transform.zLevel(),
-                    RenderPass.BACKGROUND);
+                    RenderPass.BORDER);
         }
 
         if (doFill)
@@ -123,7 +134,7 @@ public class ImageBorderDrawer
                     width - widthBox.getLeft() * borderLeft - widthBox.getRight() * borderRight,
                     height - widthBox.getTop() * borderTop - widthBox.getBottom() * borderBottom,
                     transform.zLevel(),
-                    RenderPass.BACKGROUND);
+                    RenderPass.BORDER);
         }
     }
 }

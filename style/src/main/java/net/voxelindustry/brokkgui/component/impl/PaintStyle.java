@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkcolor.Color;
+import net.voxelindustry.brokkgui.border.BorderBox;
 import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.FillMethod;
@@ -400,6 +401,18 @@ public class PaintStyle extends Paint
     public boolean hasBorderImage()
     {
         return style().doesHoldProperty("border-image-source") == HeldPropertyState.PRESENT;
+    }
+
+    @Override
+    public BorderBox borderBox()
+    {
+        return style().getValue("border-box", BorderBox.class, BorderBox.OUTSIDE);
+    }
+
+    @Override
+    public void borderBox(BorderBox borderBox)
+    {
+        style().setPropertyDirect("border-box", borderBox, BorderBox.class);
     }
 
     @Override

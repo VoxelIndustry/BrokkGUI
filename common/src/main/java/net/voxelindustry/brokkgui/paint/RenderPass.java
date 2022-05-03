@@ -3,11 +3,12 @@ package net.voxelindustry.brokkgui.paint;
 public class RenderPass
 {
     public static final RenderPass BACKGROUND = new RenderPass("background", 0);
-    public static final RenderPass MAIN       = new RenderPass("main", 1);
-    public static final RenderPass FOREGROUND = new RenderPass("foreground", 2);
-    public static final RenderPass HOVER      = new RenderPass("hover", 3);
+    public static final RenderPass BORDER     = new RenderPass("border", 1);
+    public static final RenderPass MAIN       = new RenderPass("main", 2);
+    public static final RenderPass FOREGROUND = new RenderPass("foreground", 3);
+    public static final RenderPass HOVER      = new RenderPass("hover", 4);
 
-    public static final RenderPass[] VALUES = new RenderPass[]{BACKGROUND, MAIN, FOREGROUND, HOVER};
+    public static final RenderPass[] VALUES = new RenderPass[]{BACKGROUND, BORDER, MAIN, FOREGROUND, HOVER};
 
     /**
      * Create a new RenderPass according to parameters.
@@ -22,8 +23,8 @@ public class RenderPass
         return new RenderPass(name, priority);
     }
 
-    private String name;
-    private int    priority;
+    private final String name;
+    private final int    priority;
 
     private RenderPass(String name, int priority)
     {
