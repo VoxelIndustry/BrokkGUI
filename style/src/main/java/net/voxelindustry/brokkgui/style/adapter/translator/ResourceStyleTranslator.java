@@ -23,7 +23,7 @@ public class ResourceStyleTranslator implements IStyleTranslator<Resource>
     @Override
     public String encode(Resource value, boolean prettyPrint)
     {
-        return value.getPath();
+        return value.path();
     }
 
     @Override
