@@ -7,7 +7,7 @@ subprojects {
     apply plugin: 'java-library'
 
     group = "net.voxelindustry"
-    project.ext.jdkVersion = 16
+    project.ext.jdkVersion = 17
 
     java {
         toolchain {
