@@ -351,6 +351,14 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         size(size, size);
     }
 
+    /**
+     * @return sum of the zDepth inherited property from the parent and the zTranslate offset of this child
+     */
+    public float zLevel()
+    {
+        return transform().zLevel();
+    }
+
     public Property<Boolean> focusedProperty()
     {
         return focusedProperty;
