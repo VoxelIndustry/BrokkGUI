@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.property.specific.StringProperty;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.control.GuiLabeled;
@@ -23,6 +24,7 @@ public class TextAssistComponent extends GuiComponent
 
     private final Property<GuiLabeled> errorTextLabelProperty = new Property<>();
     private final Property<Boolean>    validProperty          = new Property<>(true);
+    private final StringProperty       validatedTextProperty  = new StringProperty();
 
     private final ListProperty<BaseTextValidator> validatorsProperty = new ListProperty<>(null);
 
@@ -34,7 +36,8 @@ public class TextAssistComponent extends GuiComponent
         super.attach(element);
 
         textComponent = element.get(TextComponent.class);
-        textComponent.textProperty().addChangeListener(((observable, oldValue, newValue) -> validate()));
+        textComponent.textProperty().addChangeListener(obs -> validate());
+        validatorsProperty.addChangeListener(obs -> validate());
 
         var helperTextOffsetY = transform().heightProperty().combine(validProperty(), (height, isValid) ->
         {
@@ -154,13 +157,18 @@ public class TextAssistComponent extends GuiComponent
     {
         valid(true);
         if (!validators().isEmpty())
-            validators().forEach(validator ->
+        {
+            for (var validator : validators())
             {
                 validator.setInvalid(false);
                 validator.validate(textComponent.text());
                 if (validator.isInvalid())
                     valid(false);
-            });
+            }
+        }
+
+        if (valid())
+            validatedTextProperty().setValue(textComponent.text());
     }
 
     public Property<Boolean> promptTextAlwaysDisplayedProperty()
@@ -287,5 +295,15 @@ public class TextAssistComponent extends GuiComponent
         label.textAlignment(RectAlignment.LEFT_CENTER);
         label.textPadding(textComponent.textPadding());
         return label;
+    }
+
+    public StringProperty validatedTextProperty()
+    {
+        return validatedTextProperty;
+    }
+
+    public String validatedText()
+    {
+        return validatedTextProperty().getValue();
     }
 }
