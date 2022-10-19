@@ -2,8 +2,6 @@ package net.voxelindustry.brokkgui.markup.attributes;
 
 import net.voxelindustry.brokkgui.component.impl.MenuSelectComponent;
 import net.voxelindustry.brokkgui.markup.ChildElementReceiver;
-import net.voxelindustry.brokkgui.markup.MarkupAttribute;
-import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 import net.voxelindustry.brokkgui.markup.MarkupElementReader;
 
 import java.util.ArrayList;

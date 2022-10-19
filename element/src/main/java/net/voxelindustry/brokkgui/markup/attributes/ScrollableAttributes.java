@@ -3,8 +3,6 @@ package net.voxelindustry.brokkgui.markup.attributes;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.Scrollable;
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.markup.MarkupAttribute;
-import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 

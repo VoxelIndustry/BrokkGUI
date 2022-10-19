@@ -1,8 +1,8 @@
-package net.voxelindustry.brokkgui.markup.attributes;
+package net.voxelindustry.brokkgui.markup.attributes.elements;
 
 import net.voxelindustry.brokkgui.GuiFocusManager;
-import net.voxelindustry.brokkgui.markup.MarkupAttribute;
-import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
+import net.voxelindustry.brokkgui.markup.attributes.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.attributes.MarkupAttributesGroup;
 
 import java.util.ArrayList;
 import java.util.List;

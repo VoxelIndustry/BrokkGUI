@@ -1,6 +1,8 @@
 package net.voxelindustry.brokkgui.markup;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.markup.definitions.MarkupElementDefinition;
+import net.voxelindustry.brokkgui.markup.definitions.ParentDefinition;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 
@@ -10,9 +12,9 @@ import static java.util.stream.Collectors.toMap;
 
 class MarkupElementReaderImpl implements MarkupElementReader
 {
-    private Element                    element;
-    private GuiElement                 parentElement;
-    private MarkupElementDefinition<?> parentDefinition;
+    private Element          element;
+    private GuiElement       parentElement;
+    private ParentDefinition parentDefinition;
 
     public void setElement(Element element)
     {
@@ -24,7 +26,7 @@ class MarkupElementReaderImpl implements MarkupElementReader
         this.parentElement = parentElement;
     }
 
-    public void setParentDefinition(MarkupElementDefinition<?> parentDefinition)
+    public void setParentDefinition(ParentDefinition parentDefinition)
     {
         this.parentDefinition = parentDefinition;
     }
@@ -56,13 +58,13 @@ class MarkupElementReaderImpl implements MarkupElementReader
     @Override
     public GuiElement parseElement()
     {
-        return MarkupEngine.getGuiElement(parentElement, element, parentDefinition, MarkupEngine.getElementDefinition(element.getName()));
+        return MarkupEngine.getGuiElement(parentElement, element, parentDefinition, MarkupElementRegistry.getElementDefinition(element.getName()));
     }
 
     @Override
     public GuiElement parseElementAs(String typeAlias)
     {
-        return MarkupEngine.getGuiElement(parentElement, element, parentDefinition, MarkupEngine.getElementDefinition(typeAlias));
+        return MarkupEngine.getGuiElement(parentElement, element, parentDefinition, MarkupElementRegistry.getElementDefinition(typeAlias));
     }
 
     @Override

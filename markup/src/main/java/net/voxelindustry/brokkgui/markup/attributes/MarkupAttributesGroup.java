@@ -1,6 +1,7 @@
-package net.voxelindustry.brokkgui.markup;
+package net.voxelindustry.brokkgui.markup.attributes;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.markup.ChildElementReceiver;
 
 import java.util.Collections;
 import java.util.List;

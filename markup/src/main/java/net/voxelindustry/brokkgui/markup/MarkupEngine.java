@@ -3,6 +3,9 @@ package net.voxelindustry.brokkgui.markup;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.Resource;
+import net.voxelindustry.brokkgui.markup.definitions.MarkupElementDefinition;
+import net.voxelindustry.brokkgui.markup.definitions.MarkupMetaElementDefinition;
+import net.voxelindustry.brokkgui.markup.definitions.ParentDefinition;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -15,13 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MarkupEngine
 {
-    private static final Map<String, MarkupElementDefinition<?>> elementDefinitions = new HashMap<>();
-
     private static SAXReader saxReader;
 
     private static SAXReader getSaxReader()
@@ -33,16 +32,6 @@ public class MarkupEngine
             saxReader.setStripWhitespaceText(true);
         }
         return saxReader;
-    }
-
-    public static <T extends GuiElement> void registerElementDefinition(String name, MarkupElementDefinition<T> definition)
-    {
-        elementDefinitions.put(name, definition);
-    }
-
-    public static <T extends GuiElement> MarkupElementDefinition<T> getElementDefinition(String name)
-    {
-        return (MarkupElementDefinition<T>) elementDefinitions.get(name);
     }
 
     public static GuiElement fromMarkupFile(Resource resource)
@@ -83,7 +72,7 @@ public class MarkupEngine
             e.printStackTrace();
         }
 
-        return walkXMLTree(document.getRootElement(), root, root == null ? null : getElementDefinition(root.type()));
+        return walkXMLTree(document.getRootElement(), root, root == null ? null : MarkupElementRegistry.getElementDefinition(root.type()), true);
     }
 
     private static Document parseXML(InputStream is) throws DocumentException
@@ -91,7 +80,7 @@ public class MarkupEngine
         return getSaxReader().read(is);
     }
 
-    private static GuiElement walkXMLTree(Node node, GuiElement parentElement, MarkupElementDefinition<?> parentDefinition)
+    private static GuiElement walkXMLTree(Node node, GuiElement parentElement, ParentDefinition parentDefinition, boolean rootOfDocument)
     {
         if (node instanceof Element element)
         {
@@ -100,7 +89,7 @@ public class MarkupEngine
 
             if (parentDefinition != null && !parentDefinition.childElementReceivers().isEmpty())
             {
-                for (ChildElementReceiver receiver : parentDefinition.childElementReceivers())
+                for (var receiver : parentDefinition.childElementReceivers())
                 {
                     if (receiver.canReceive(element.getName()))
                     {
@@ -120,7 +109,16 @@ public class MarkupEngine
             if (consumed)
                 return parentElement;
 
-            return getGuiElement(parentElement, element, parentDefinition, MarkupEngine.getElementDefinition(element.getName()));
+            if (rootOfDocument && MarkupElementRegistry.getMetaElementDefinition(element.getName()) != null)
+                throw new UnsupportedOperationException("Meta-Element cannot be used at root-level of document");
+
+            var metaElement = MarkupElementRegistry.getMetaElementDefinition(element.getName());
+            if (metaElement != null)
+            {
+                getMetaElement(parentElement, element, parentDefinition, metaElement);
+                return null;
+            }
+            return getGuiElement(parentElement, element, parentDefinition, MarkupElementRegistry.getElementDefinition(element.getName()));
         }
         else if (node instanceof Text)
         {
@@ -130,7 +128,7 @@ public class MarkupEngine
         return parentElement;
     }
 
-    static <T extends GuiElement> T getGuiElement(GuiElement parentElement, Element element, MarkupElementDefinition<?> parentDefinition, MarkupElementDefinition<T> currentDefinition)
+    static <T extends GuiElement> T getGuiElement(GuiElement parentElement, Element element, ParentDefinition parentDefinition, MarkupElementDefinition<T> currentDefinition)
     {
         if (currentDefinition == null)
             throw new UnsupportedOperationException("Missing element definition for tag: " + element.getName());
@@ -166,7 +164,30 @@ public class MarkupEngine
         for (int i = 0, size = element.nodeCount(); i < size; i++)
         {
             var childNode = element.node(i);
-            walkXMLTree(childNode, createdElement, currentDefinition);
+            walkXMLTree(childNode, createdElement, currentDefinition, false);
+        }
+        return createdElement;
+    }
+
+    static <T> T getMetaElement(GuiElement parentElement, Element element, ParentDefinition parentDefinition, MarkupMetaElementDefinition<T> currentDefinition)
+    {
+        if (currentDefinition == null)
+            throw new UnsupportedOperationException("Missing element definition for tag: " + element.getName());
+
+        var createdElement = currentDefinition.elementCreator().get();
+
+        for (var attribute : element.attributes())
+        {
+            var markupAttribute = currentDefinition.attributeMap().get(attribute.getName());
+
+            if (markupAttribute != null)
+                markupAttribute.decoder().decode(attribute.getValue(), createdElement);
+        }
+
+        for (int i = 0, size = element.nodeCount(); i < size; i++)
+        {
+            var childNode = element.node(i);
+            walkXMLTree(childNode, parentElement, currentDefinition, false);
         }
         return createdElement;
     }

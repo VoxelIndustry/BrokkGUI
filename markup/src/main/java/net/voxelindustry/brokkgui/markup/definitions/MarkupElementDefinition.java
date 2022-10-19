@@ -1,6 +1,11 @@
-package net.voxelindustry.brokkgui.markup;
+package net.voxelindustry.brokkgui.markup.definitions;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.markup.ChildElementReceiver;
+import net.voxelindustry.brokkgui.markup.attributes.AttributeDecoder;
+import net.voxelindustry.brokkgui.markup.attributes.DynamicAttributeResolver;
+import net.voxelindustry.brokkgui.markup.attributes.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.attributes.MarkupAttributesGroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +15,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class MarkupElementDefinition<T extends GuiElement>
+public class MarkupElementDefinition<T extends GuiElement> implements ParentDefinition
 {
     private final Map<String, MarkupAttribute> attributeMap         = new HashMap<>();
     private final Map<String, MarkupAttribute> childrenAttributeMap = new HashMap<>();
@@ -56,7 +61,7 @@ public class MarkupElementDefinition<T extends GuiElement>
 
     public MarkupElementDefinition<T> attributes(Collection<MarkupAttribute> attributes)
     {
-        for (MarkupAttribute attribute : attributes)
+        for (var attribute : attributes)
             attributeMap.put(attribute.name(), attribute);
         return this;
     }
@@ -74,7 +79,7 @@ public class MarkupElementDefinition<T extends GuiElement>
 
     public MarkupElementDefinition<T> childrenAttributes(Collection<MarkupAttribute> attributes)
     {
-        for (MarkupAttribute attribute : attributes)
+        for (var attribute : attributes)
             childrenAttributeMap.put(attribute.name(), attribute);
         return this;
     }

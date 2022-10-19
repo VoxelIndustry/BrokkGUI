@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.markup;
 
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.markup.definitions.MarkupElementDefinition;
 
 import java.util.Map;
 

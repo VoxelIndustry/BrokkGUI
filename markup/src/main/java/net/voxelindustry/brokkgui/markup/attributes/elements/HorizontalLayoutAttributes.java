@@ -1,18 +1,18 @@
-package net.voxelindustry.brokkgui.markup.attributes;
+package net.voxelindustry.brokkgui.markup.attributes.elements;
 
-import net.voxelindustry.brokkgui.component.impl.VerticalLayout;
+import net.voxelindustry.brokkgui.component.impl.HorizontalLayout;
 import net.voxelindustry.brokkgui.data.AlignmentMode;
-import net.voxelindustry.brokkgui.markup.MarkupAttribute;
-import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
+import net.voxelindustry.brokkgui.markup.attributes.MarkupAttribute;
+import net.voxelindustry.brokkgui.markup.attributes.MarkupAttributesGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VerticalLayoutAttributes implements MarkupAttributesGroup
+public class HorizontalLayoutAttributes implements MarkupAttributesGroup
 {
-    private static final VerticalLayoutAttributes instance = new VerticalLayoutAttributes();
+    private static final HorizontalLayoutAttributes instance = new HorizontalLayoutAttributes();
 
-    public static VerticalLayoutAttributes instance()
+    public static HorizontalLayoutAttributes instance()
     {
         return instance;
     }
@@ -20,7 +20,7 @@ public class VerticalLayoutAttributes implements MarkupAttributesGroup
     private final List<MarkupAttribute> attributes         = new ArrayList<>();
     private final List<MarkupAttribute> childrenAttributes = new ArrayList<>();
 
-    private VerticalLayoutAttributes()
+    private HorizontalLayoutAttributes()
     {
 
     }
@@ -42,7 +42,7 @@ public class VerticalLayoutAttributes implements MarkupAttributesGroup
     private void createAttributes()
     {
         attributes.add(new MarkupAttribute("alignment", ((attribute, element) ->
-                element.get(VerticalLayout.class).alignment(AlignmentMode.valueOf(attribute.toUpperCase()))
+                element.get(HorizontalLayout.class).alignment(AlignmentMode.valueOf(attribute.toUpperCase()))
         )));
     }
 }

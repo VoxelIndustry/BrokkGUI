@@ -2,8 +2,6 @@ package net.voxelindustry.brokkgui.markup.attributes;
 
 import net.voxelindustry.brokkgui.component.impl.BooleanFormFieldComponent;
 import net.voxelindustry.brokkgui.data.RectSide;
-import net.voxelindustry.brokkgui.markup.MarkupAttribute;
-import net.voxelindustry.brokkgui.markup.MarkupAttributesGroup;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -12,18 +12,19 @@ import net.voxelindustry.brokkgui.element.pane.GuiPane;
 import net.voxelindustry.brokkgui.element.pane.ScrollPane;
 import net.voxelindustry.brokkgui.markup.attributes.BooleanFormFieldAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.ButtonAttributes;
-import net.voxelindustry.brokkgui.markup.attributes.GuiElementAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.LabelIconAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.LinkAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.MenuDisplayListAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.MenuSelectAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.ScrollableAttributes;
-import net.voxelindustry.brokkgui.markup.attributes.StyleComponentAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextAssistAttributes;
-import net.voxelindustry.brokkgui.markup.attributes.TextComponentAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextInputAttributes;
-import net.voxelindustry.brokkgui.markup.attributes.TextLayoutAttributes;
-import net.voxelindustry.brokkgui.markup.attributes.TransformAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.elements.GuiElementAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.elements.StyleComponentAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.elements.TextComponentAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.elements.TextLayoutAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.elements.TransformAttributes;
+import net.voxelindustry.brokkgui.markup.definitions.MarkupElementDefinition;
 import net.voxelindustry.brokkgui.shape.Circle;
 import net.voxelindustry.brokkgui.shape.Line;
 import net.voxelindustry.brokkgui.shape.Rectangle;
@@ -34,7 +35,7 @@ public class ElementMarkupSetup
 {
     public static void setup()
     {
-        MarkupEngine.registerElementDefinition("pane",
+        MarkupElementRegistry.registerElementDefinition("pane",
                 new MarkupElementDefinition<>(GuiPane::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -44,7 +45,7 @@ public class ElementMarkupSetup
                         .attributeGroup(StyleComponentAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("scrollpane",
+        MarkupElementRegistry.registerElementDefinition("scrollpane",
                 new MarkupElementDefinition<>(ScrollPane::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -54,7 +55,7 @@ public class ElementMarkupSetup
                         .attributeGroup(StyleComponentAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("rectangle",
+        MarkupElementRegistry.registerElementDefinition("rectangle",
                 new MarkupElementDefinition<>(Rectangle::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -64,7 +65,7 @@ public class ElementMarkupSetup
                         .attributeGroup(StyleComponentAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("circle",
+        MarkupElementRegistry.registerElementDefinition("circle",
                 new MarkupElementDefinition<>(Circle::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -74,7 +75,7 @@ public class ElementMarkupSetup
                         .attributeGroup(StyleComponentAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("line",
+        MarkupElementRegistry.registerElementDefinition("line",
                 new MarkupElementDefinition<>(Line::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -84,7 +85,7 @@ public class ElementMarkupSetup
                         .attributeGroup(StyleComponentAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("text",
+        MarkupElementRegistry.registerElementDefinition("text",
                 new MarkupElementDefinition<>(Text::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -98,7 +99,7 @@ public class ElementMarkupSetup
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
         );
 
-        MarkupEngine.registerElementDefinition("label",
+        MarkupElementRegistry.registerElementDefinition("label",
                 new MarkupElementDefinition<>(GuiLabel::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -114,7 +115,7 @@ public class ElementMarkupSetup
                         .textChildReceiver((attribute, element) -> element.get(TextComponent.class).text(attribute))
         );
 
-        MarkupEngine.registerElementDefinition("link",
+        MarkupElementRegistry.registerElementDefinition("link",
                 new MarkupElementDefinition<>(GuiLink::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -132,7 +133,7 @@ public class ElementMarkupSetup
                         .attributeGroup(LinkAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("button",
+        MarkupElementRegistry.registerElementDefinition("button",
                 new MarkupElementDefinition<>(GuiButton::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -150,7 +151,7 @@ public class ElementMarkupSetup
                         .attributeGroup(ButtonAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("toggle-button",
+        MarkupElementRegistry.registerElementDefinition("toggle-button",
                 new MarkupElementDefinition<>(GuiToggleButton::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -168,7 +169,7 @@ public class ElementMarkupSetup
                         .attributeGroup(ButtonAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("radio-button",
+        MarkupElementRegistry.registerElementDefinition("radio-button",
                 new MarkupElementDefinition<>(GuiRadioButton::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -187,7 +188,7 @@ public class ElementMarkupSetup
                         .attributeGroup(BooleanFormFieldAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("checkbox",
+        MarkupElementRegistry.registerElementDefinition("checkbox",
                 new MarkupElementDefinition<>(GuiCheckbox::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -206,7 +207,7 @@ public class ElementMarkupSetup
                         .attributeGroup(BooleanFormFieldAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("text-field",
+        MarkupElementRegistry.registerElementDefinition("text-field",
                 new MarkupElementDefinition<>(GuiTextField::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
@@ -225,7 +226,7 @@ public class ElementMarkupSetup
                         .attributeGroup(TextAssistAttributes.instance())
         );
 
-        MarkupEngine.registerElementDefinition("select",
+        MarkupElementRegistry.registerElementDefinition("select",
                 new MarkupElementDefinition<>(GuiSelect::new)
                         // GuiElement
                         .attributeGroup(TransformAttributes.instance())
