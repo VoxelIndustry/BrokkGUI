@@ -67,6 +67,13 @@ public abstract class GuiComponent implements IEventEmitter
         return element().getEventDispatcher();
     }
 
+    protected <T> Property<T> createRenderProperty()
+    {
+        Property<T> property = new Property<>();
+        property.addListener(this::onRenderPropertyChange);
+        return property;
+    }
+
     protected <T> Property<T> createRenderProperty(T initialValue)
     {
         Property<T> property = new Property<>(initialValue);
