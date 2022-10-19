@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -232,7 +231,7 @@ public class StyleComponent extends GuiComponent
             return true;
 
         long count = 0L;
-        for (Entry<Pattern, Consumer<StyleComponent>> entry : conditionalProperties.entries())
+        for (var entry : conditionalProperties.entries())
         {
             if (entry.getKey().matcher(property).matches())
             {
@@ -376,7 +375,7 @@ public class StyleComponent extends GuiComponent
 
     public <T> StyleProperty<T> registerProperty(String name, T defaultValue, Class<T> valueClass)
     {
-        StyleProperty<T> property = new StyleProperty<>(defaultValue, name, valueClass);
+        var property = new StyleProperty<T>(defaultValue, name, valueClass);
         properties.put(name, property);
         return property;
     }
@@ -449,6 +448,10 @@ public class StyleComponent extends GuiComponent
 
         List<StyleEntry> entries = styleList.getEntriesMatching(this);
 
+
+        for (var value : properties.values())
+            value.mute();
+
         resetToDefault();
         entries.forEach(entry -> entry.getRules().forEach(rule ->
         {
@@ -458,6 +461,9 @@ public class StyleComponent extends GuiComponent
                         StyleSource.AUTHOR,
                         entry.getSelector().getSpecificity());
         }));
+
+        for (var value : properties.values())
+            value.unmute();
 
         if (element() != null)
         {
@@ -479,9 +485,11 @@ public class StyleComponent extends GuiComponent
 
     void resetToDefault()
     {
-        properties.values().stream().filter(property ->
-                        property.getSource() == StyleSource.AUTHOR || property.getSource() == StyleSource.USER_AGENT)
-                .forEach(StyleProperty::setToDefault);
+        for (StyleProperty<?> property : properties.values())
+        {
+            if (property.getSource() == StyleSource.AUTHOR || property.getSource() == StyleSource.USER_AGENT)
+                property.setToDefault();
+        }
     }
 
     public void beginStyleProfiling()

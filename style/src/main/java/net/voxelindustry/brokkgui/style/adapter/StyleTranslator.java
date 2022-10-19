@@ -58,8 +58,7 @@ public class StyleTranslator
         return (IStyleValidator<T>) this.styleValidators.get(valueClass);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T decode(String cssString, Class<?> valueClass)
+    public <T> T decode(String cssString, Class<T> valueClass)
     {
         return (T) this.styleDecoders.get(valueClass).decode(cssString);
     }
