@@ -379,6 +379,21 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         return draggedProperty;
     }
 
+    /**
+     * Switch between focus and unfocused state
+     *
+     * @return the new focus state the element is in
+     */
+    public boolean toggleFocus()
+    {
+        if (isFocused())
+        {
+            removeFocus();
+            return false;
+        }
+        return setFocused();
+    }
+
     public boolean isFocused()
     {
         return focusedProperty().getValue();
