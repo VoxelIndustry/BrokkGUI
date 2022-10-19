@@ -61,6 +61,12 @@ public class DefaultPaneChildPlacer<T extends GuiElement> implements PaneChildPl
         return absolute(0);
     }
 
+    public SecondStepChildPlacer<T> middle()
+    {
+        RelativeBindingHelper.bindXToCenter(currentChild, element.transform());
+        return getOrCreateSecondChildPlacer();
+    }
+
     public SecondStepChildPlacer<T> right()
     {
         RelativeBindingHelper.bindXToPos(currentChild,
@@ -178,7 +184,7 @@ public class DefaultPaneChildPlacer<T extends GuiElement> implements PaneChildPl
         return secondStepChildPlacer;
     }
 
-    public static record SecondStepChildPlacer<T extends GuiElement>(DefaultPaneChildPlacer<T> parentPlacer)
+    public record SecondStepChildPlacer<T extends GuiElement>(DefaultPaneChildPlacer<T> parentPlacer)
     {
         public T absolute(float y)
         {
