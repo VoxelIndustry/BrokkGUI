@@ -231,9 +231,9 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public boolean onKeyPressed(int key)
+    public boolean onKeyPressed(int scanCode, int keyCode)
     {
-        lastKeyPressed = key;
+        lastKeyPressed = keyCode;
         return false;
     }
 
@@ -244,7 +244,7 @@ public abstract class BaseImmediateWindow implements IGuiWindow, IEventEmitter
     }
 
     @Override
-    public boolean onKeyReleased(int key)
+    public boolean onKeyReleased(int scanCode, int keyCode)
     {
         return false;
     }

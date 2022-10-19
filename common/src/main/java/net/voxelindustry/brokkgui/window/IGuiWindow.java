@@ -56,11 +56,11 @@ public interface IGuiWindow extends IGuiSubWindow
 
     boolean onMouseMoved(float mouseX, float mouseY);
 
-    boolean onKeyPressed(int key);
+    boolean onKeyPressed(int scanCode, int keyCode);
 
     boolean onTextTyped(String text);
 
-    boolean onKeyReleased(int key);
+    boolean onKeyReleased(int scanCode, int keyCode);
 
     boolean onClick(float mouseX, float mouseY, MouseInputCode key);
 

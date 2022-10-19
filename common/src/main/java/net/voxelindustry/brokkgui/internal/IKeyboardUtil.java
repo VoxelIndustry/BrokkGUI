@@ -12,11 +12,23 @@ public interface IKeyboardUtil
      */
     boolean isShiftKeyDown();
 
+    boolean isAltDown();
+
+    boolean isEnterDown();
+
     String getClipboardString();
 
     void setClipboardString(String text);
 
-    int getKeyCode(String keyName);
+    int getScanCode(String keyName);
 
-    String getKeyName(int keyCode);
+    String getKeyName(int scanCode);
+
+    boolean isEnterKey(int keyCode);
+
+    boolean isCtrlKey(int keyCode);
+
+    boolean isShiftKey(int keyCode);
+
+    boolean isAltKey(int keyCode);
 }

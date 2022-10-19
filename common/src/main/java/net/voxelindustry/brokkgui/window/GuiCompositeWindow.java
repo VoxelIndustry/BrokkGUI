@@ -140,9 +140,9 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public boolean onKeyPressed(int key)
+    public boolean onKeyPressed(int scanCode, int keyCode)
     {
-        return dispatchEventToWindows(InputType.KEY_PRESS, window -> window.onKeyPressed(key));
+        return dispatchEventToWindows(InputType.KEY_PRESS, window -> window.onKeyPressed(scanCode, keyCode));
     }
 
     @Override
@@ -152,9 +152,9 @@ public class GuiCompositeWindow implements IGuiWindow
     }
 
     @Override
-    public boolean onKeyReleased(int key)
+    public boolean onKeyReleased(int scanCode, int keyCode)
     {
-        return dispatchEventToWindows(InputType.KEY_RELEASE, window -> window.onKeyReleased(key));
+        return dispatchEventToWindows(InputType.KEY_RELEASE, window -> window.onKeyReleased(scanCode, keyCode));
     }
 
     @Override

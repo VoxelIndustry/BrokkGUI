@@ -12,22 +12,29 @@ public class KeyEvent extends GuiInputEvent
     public static final EventType<Press>     PRESS      = new EventType<>(ANY, "KEY_PRESS_EVENT");
     public static final EventType<Release>   RELEASE    = new EventType<>(ANY, "KEY_RELEASE_EVENT");
 
-    private final int key;
+    private final int keyCode;
+    private final int scanCode;
 
     public KeyEvent(GuiElement source)
     {
-        this(source, 0);
+        this(source, 0, 0);
     }
 
-    public KeyEvent(GuiElement source, int key)
+    public KeyEvent(GuiElement source, int keyCode, int scanCode)
     {
         super(source);
-        this.key = key;
+        this.keyCode = keyCode;
+        this.scanCode = scanCode;
     }
 
-    public int getKey()
+    public int scanCode()
     {
-        return key;
+        return scanCode;
+    }
+
+    public int keyCode()
+    {
+        return keyCode;
     }
 
     public boolean isCtrlDown()
@@ -40,10 +47,20 @@ public class KeyEvent extends GuiInputEvent
         return BrokkGuiPlatform.getInstance().getKeyboardUtil().isShiftKeyDown();
     }
 
+    public boolean isAltDown()
+    {
+        return BrokkGuiPlatform.getInstance().getKeyboardUtil().isAltDown();
+    }
+
+    public boolean isEnterDown()
+    {
+        return BrokkGuiPlatform.getInstance().getKeyboardUtil().isEnterDown();
+    }
+
     @Override
     public KeyEvent copy(IEventEmitter source)
     {
-        return new KeyEvent((GuiElement) source, getKey());
+        return new KeyEvent((GuiElement) source, keyCode(), scanCode());
     }
 
     public static class TextTyped extends GuiInputEvent
@@ -70,29 +87,29 @@ public class KeyEvent extends GuiInputEvent
 
     public static class Press extends KeyEvent
     {
-        public Press(GuiElement source, int key)
+        public Press(GuiElement source, int keyCode, int scanCode)
         {
-            super(source, key);
+            super(source, keyCode, scanCode);
         }
 
         @Override
         public KeyEvent.Press copy(IEventEmitter source)
         {
-            return new KeyEvent.Press((GuiElement) source, getKey());
+            return new KeyEvent.Press((GuiElement) source, keyCode(), scanCode());
         }
     }
 
     public static class Release extends KeyEvent
     {
-        public Release(GuiElement source, int key)
+        public Release(GuiElement source, int keyCode, int scanCode)
         {
-            super(source, key);
+            super(source, keyCode, scanCode);
         }
 
         @Override
         public KeyEvent.Release copy(IEventEmitter source)
         {
-            return new KeyEvent.Release((GuiElement) source, getKey());
+            return new KeyEvent.Release((GuiElement) source, keyCode(), scanCode());
         }
     }
 }

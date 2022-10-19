@@ -234,7 +234,7 @@ public class DebugWindow extends ImmediateWindow implements WindowInputEventFilt
 
     private void handleInputLock()
     {
-        if (BrokkGuiPlatform.getInstance().getKeyboardUtil().isCtrlKeyDown() && getLastKeyPressed() == BrokkGuiPlatform.getInstance().getKeyboardUtil().getKeyCode("D"))
+        if (BrokkGuiPlatform.getInstance().getKeyboardUtil().isCtrlKeyDown() && getLastKeyPressed() == BrokkGuiPlatform.getInstance().getKeyboardUtil().getScanCode("D"))
         {
             isInputLocked = !isInputLocked;
 

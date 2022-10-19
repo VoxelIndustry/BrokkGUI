@@ -234,27 +234,27 @@ public class Scrollable extends GuiComponent
     {
         if (transform().height() < trueHeight())
         {
-            if (event.getKey() == keyboard().getKeyCode("UP"))
+            if (event.scanCode() == keyboard().getScanCode("UP"))
             {
                 scrollY(min(0, scrollY() + scrollSpeed()));
             }
-            else if (event.getKey() == keyboard().getKeyCode("DOWN"))
+            else if (event.scanCode() == keyboard().getScanCode("DOWN"))
             {
                 scrollY(max(transform().height() - trueHeight(), scrollY() - scrollSpeed()));
             }
-            else if (event.getKey() == keyboard().getKeyCode("PAGE_UP"))
+            else if (event.scanCode() == keyboard().getScanCode("PAGE_UP"))
             {
                 scrollY(min(0, scrollY() + transform().height()));
             }
-            else if (event.getKey() == keyboard().getKeyCode("PAGE_DOWN"))
+            else if (event.scanCode() == keyboard().getScanCode("PAGE_DOWN"))
             {
                 scrollY(max(transform().height() - trueHeight(), scrollY() - transform().height()));
             }
-            else if (event.getKey() == keyboard().getKeyCode("HOME"))
+            else if (event.scanCode() == keyboard().getScanCode("HOME"))
             {
                 scrollY(0);
             }
-            else if (event.getKey() == keyboard().getKeyCode("END"))
+            else if (event.scanCode() == keyboard().getScanCode("END"))
             {
                 scrollY(transform().height() - trueHeight());
             }
@@ -262,11 +262,11 @@ public class Scrollable extends GuiComponent
 
         if (transform().width() < trueWidth())
         {
-            if (event.getKey() == keyboard().getKeyCode("LEFT"))
+            if (event.scanCode() == keyboard().getScanCode("LEFT"))
             {
                 scrollX(min(0, scrollX() + scrollSpeed()));
             }
-            else if (event.getKey() == keyboard().getKeyCode("RIGHT"))
+            else if (event.scanCode() == keyboard().getScanCode("RIGHT"))
             {
                 scrollX(max(transform().width() - trueWidth(), scrollX() - scrollSpeed()));
             }

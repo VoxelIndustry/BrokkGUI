@@ -302,19 +302,23 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
         switch (key)
         {
-            case MOUSE_LEFT -> {
+            case MOUSE_LEFT ->
+            {
                 consumed = eventQueue.dispatch(ClickPressEvent.Left.TYPE, new ClickPressEvent.Left(source, mouseX, mouseY)).isConsumed();
                 consumed = getEventDispatcher().singletonQueue().dispatch(ClickPressEvent.Left.TYPE, new ClickPressEvent.Left(source, mouseX, mouseY)).isConsumed() || consumed;
             }
-            case MOUSE_RIGHT -> {
+            case MOUSE_RIGHT ->
+            {
                 consumed = eventQueue.dispatch(ClickPressEvent.Right.TYPE, new ClickPressEvent.Right(source, mouseX, mouseY)).isConsumed();
                 consumed = getEventDispatcher().singletonQueue().dispatch(ClickPressEvent.Right.TYPE, new ClickPressEvent.Right(source, mouseX, mouseY)).isConsumed() || consumed;
             }
-            case MOUSE_BUTTON_MIDDLE -> {
+            case MOUSE_BUTTON_MIDDLE ->
+            {
                 consumed = eventQueue.dispatch(ClickPressEvent.Middle.TYPE, new ClickPressEvent.Middle(source, mouseX, mouseY)).isConsumed();
                 consumed = getEventDispatcher().singletonQueue().dispatch(ClickPressEvent.Middle.TYPE, new ClickPressEvent.Middle(source, mouseX, mouseY)).isConsumed() || consumed;
             }
-            default -> {
+            default ->
+            {
                 consumed = eventQueue.dispatch(ClickPressEvent.TYPE, new ClickPressEvent(source, mouseX, mouseY, key)).isConsumed();
                 consumed = getEventDispatcher().singletonQueue().dispatch(ClickPressEvent.TYPE, new ClickPressEvent(source, mouseX, mouseY, key)).isConsumed() || consumed;
             }
@@ -374,19 +378,23 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
 
             switch (key)
             {
-                case MOUSE_LEFT -> {
+                case MOUSE_LEFT ->
+                {
                     consumed = eventQueue.dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(source, mouseX, mouseY)).isConsumed();
                     consumed = getEventDispatcher().singletonQueue().dispatch(ClickReleaseEvent.Left.TYPE, new ClickReleaseEvent.Left(source, mouseX, mouseY)).isConsumed() || consumed;
                 }
-                case MOUSE_RIGHT -> {
+                case MOUSE_RIGHT ->
+                {
                     consumed = eventQueue.dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(source, mouseX, mouseY)).isConsumed();
                     consumed = getEventDispatcher().singletonQueue().dispatch(ClickReleaseEvent.Right.TYPE, new ClickReleaseEvent.Right(source, mouseX, mouseY)).isConsumed() || consumed;
                 }
-                case MOUSE_BUTTON_MIDDLE -> {
+                case MOUSE_BUTTON_MIDDLE ->
+                {
                     consumed = eventQueue.dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(source, mouseX, mouseY)).isConsumed();
                     consumed = getEventDispatcher().singletonQueue().dispatch(ClickReleaseEvent.Middle.TYPE, new ClickReleaseEvent.Middle(source, mouseX, mouseY)).isConsumed() || consumed;
                 }
-                default -> {
+                default ->
+                {
                     consumed = eventQueue.dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(source, mouseX, mouseY, key)).isConsumed();
                     consumed = getEventDispatcher().singletonQueue().dispatch(ClickReleaseEvent.TYPE, new ClickReleaseEvent(source, mouseX, mouseY, key)).isConsumed() || consumed;
                 }
@@ -450,7 +458,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public boolean onKeyPressed(int key)
+    public boolean onKeyPressed(int scanCode, int keyCode)
     {
         float mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX(this);
         float mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY(this);
@@ -458,11 +466,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         GuiElement focusedNode = GuiFocusManager.instance.focusedNode();
         if (GuiFocusManager.instance.focusedWindow() == this)
         {
-            getEventDispatcher().singletonQueue().dispatch(KeyEvent.PRESS, new KeyEvent.Press(focusedNode, key));
+            getEventDispatcher().singletonQueue().dispatch(KeyEvent.PRESS, new KeyEvent.Press(focusedNode, scanCode, keyCode));
 
             if (focusedNode != null)
             {
-                var event = EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.PRESS, new KeyEvent.Press(focusedNode, key));
+                var event = EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.PRESS, new KeyEvent.Press(focusedNode, scanCode, keyCode));
 
                 if (event.isConsumed())
                     return true;
@@ -476,7 +484,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                             EventQueueBuilder.isPointInside(mouseX, mouseY)
                                     .and(EventQueueBuilder.isEnabled)
                                     .and(EventQueueBuilder.isVisible))
-                    .dispatch(KeyEvent.PRESS, new KeyEvent.Press(hovered, key));
+                    .dispatch(KeyEvent.PRESS, new KeyEvent.Press(hovered, scanCode, keyCode));
 
             return event.isConsumed();
         }
@@ -484,7 +492,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     }
 
     @Override
-    public boolean onKeyReleased(int key)
+    public boolean onKeyReleased(int scanCode, int keyCode)
     {
         float mouseX = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseX(this);
         float mouseY = BrokkGuiPlatform.getInstance().getMouseUtil().getMouseY(this);
@@ -492,11 +500,11 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
         var focusedNode = GuiFocusManager.instance.focusedNode();
         if (GuiFocusManager.instance.focusedWindow() == this)
         {
-            getEventDispatcher().singletonQueue().dispatch(KeyEvent.RELEASE, new KeyEvent.Release(focusedNode, key));
+            getEventDispatcher().singletonQueue().dispatch(KeyEvent.RELEASE, new KeyEvent.Release(focusedNode, scanCode, keyCode));
 
             if (focusedNode != null)
             {
-                var event = EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.RELEASE, new KeyEvent.Release(focusedNode, key));
+                var event = EventQueueBuilder.fromTarget(focusedNode).dispatch(KeyEvent.RELEASE, new KeyEvent.Release(focusedNode, scanCode, keyCode));
 
                 if (event.isConsumed())
                     return true;
@@ -510,7 +518,7 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
                             EventQueueBuilder.isPointInside(mouseX, mouseY)
                                     .and(EventQueueBuilder.isEnabled)
                                     .and(EventQueueBuilder.isVisible))
-                    .dispatch(KeyEvent.RELEASE, new KeyEvent.Release(hovered, key));
+                    .dispatch(KeyEvent.RELEASE, new KeyEvent.Release(hovered, scanCode, keyCode));
 
             return event.isConsumed();
         }
@@ -575,7 +583,6 @@ public class BrokkGuiScreen implements IGuiWindow, IStyleRoot, IEventEmitter
     public void close()
     {
         wrapper.askClose();
-        onClose();
     }
 
     @Override

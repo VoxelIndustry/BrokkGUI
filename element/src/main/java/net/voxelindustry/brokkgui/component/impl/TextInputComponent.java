@@ -405,7 +405,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
         if (!editable())
             return;
 
-        if (event.getKey() == keyboard().getKeyCode("DELETE"))
+        if (event.scanCode() == keyboard().getScanCode("DELETE"))
         {
             if (hasSelection())
                 removeSelectedText();
@@ -414,7 +414,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             else
                 contentChanged = deleteAfterCursor();
         }
-        else if (event.getKey() == keyboard().getKeyCode("BACK"))
+        else if (event.scanCode() == keyboard().getScanCode("BACK"))
         {
             if (hasSelection())
                 removeSelectedText();
@@ -423,7 +423,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             else
                 contentChanged = deleteFromCursor();
         }
-        else if (event.getKey() == keyboard().getKeyCode("V")
+        else if (event.scanCode() == keyboard().getScanCode("V")
                 && keyboard().isCtrlKeyDown()
                 && !StringUtils.isEmpty(keyboard().getClipboardString()))
         {
@@ -433,7 +433,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             appendTextToCursor(keyboard().getClipboardString());
             contentChanged = true;
         }
-        else if (event.getKey() == keyboard().getKeyCode("C")
+        else if (event.scanCode() == keyboard().getScanCode("C")
                 && keyboard().isCtrlKeyDown())
         {
             if (hasSelection())
@@ -448,7 +448,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
 
     private void moveCursorAndSelection(KeyEvent.Press event)
     {
-        if (event.getKey() == keyboard().getKeyCode("LEFT"))
+        if (event.scanCode() == keyboard().getScanCode("LEFT"))
         {
             if (keyboard().isShiftKeyDown())
             {
@@ -467,7 +467,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             else
                 cursorPos(cursorPos() - 1);
         }
-        else if (event.getKey() == keyboard().getKeyCode("RIGHT"))
+        else if (event.scanCode() == keyboard().getScanCode("RIGHT"))
         {
             if (keyboard().isShiftKeyDown())
             {
@@ -486,7 +486,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
             else
                 cursorPos(cursorPos() + 1);
         }
-        else if (event.getKey() == keyboard().getKeyCode("UP"))
+        else if (event.scanCode() == keyboard().getScanCode("UP"))
         {
             if (keyboard().isShiftKeyDown())
             {
@@ -498,7 +498,7 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
 
             cursorPos(0);
         }
-        else if (event.getKey() == keyboard().getKeyCode("DOWN"))
+        else if (event.scanCode() == keyboard().getScanCode("DOWN"))
         {
             if (keyboard().isShiftKeyDown())
             {
