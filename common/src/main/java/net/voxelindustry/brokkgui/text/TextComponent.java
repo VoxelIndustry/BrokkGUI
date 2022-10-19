@@ -27,9 +27,7 @@ public class TextComponent extends GuiComponent implements RenderComponent
     private final Property<String>  renderTextProperty  = createRenderProperty("");
     private final Property<Integer> lineSpacingProperty = createRenderProperty(1);
 
-    private final Property<RectBox> textPaddingProperty = new Property<>(RectBox.EMPTY);
-
-    private final List<ObservableValue<RectBox>> textPaddingList = Lists.newArrayList(textPaddingProperty);
+    protected final List<ObservableValue<RectBox>> textPaddingList = Lists.newArrayList();
 
     private final Expression<RectBox> computedTextPadding = new Expression<>(
             () ->
@@ -60,6 +58,8 @@ public class TextComponent extends GuiComponent implements RenderComponent
     protected Property<Float> outlineWidthProperty;
     protected Property<Color> glowColorProperty;
     protected Property<Float> glowWidthProperty;
+
+    protected Property<RectBox> textPaddingProperty;
 
     private final ObservableValue<Float> lazyTextWidth;
     private final ObservableValue<Float> lazyTextHeight;
@@ -295,8 +295,15 @@ public class TextComponent extends GuiComponent implements RenderComponent
         return lineSpacingProperty;
     }
 
+    @RequiredOverride
     public Property<RectBox> textPaddingProperty()
     {
+        if (textPaddingProperty == null)
+        {
+            textPaddingProperty = new Property<>(RectBox.EMPTY);
+            this.textPaddingList.add(textPaddingProperty);
+            recomputeTextPadding();
+        }
         return textPaddingProperty;
     }
 
@@ -354,11 +361,13 @@ public class TextComponent extends GuiComponent implements RenderComponent
         lineSpacingProperty().setValue(lineSpacing);
     }
 
+    @RequiredOverride
     public RectBox textPadding()
     {
         return textPaddingProperty().getValue();
     }
 
+    @RequiredOverride
     public void textPadding(RectBox textPadding)
     {
         if (textPaddingProperty().isBound())
@@ -388,11 +397,12 @@ public class TextComponent extends GuiComponent implements RenderComponent
         recomputeTextPadding();
     }
 
-    private void recomputeTextPadding()
+    protected void recomputeTextPadding()
     {
-        Observable[] currentDependencies = computedTextPadding.getDependencies().toArray(new Observable[0]);
-        for (Observable observable : currentDependencies)
+        var currentDependencies = computedTextPadding.getDependencies().toArray(new Observable[0]);
+        for (var observable : currentDependencies)
         {
+            //noinspection SuspiciousMethodCalls
             if (!textPaddingList.contains(observable))
                 computedTextPadding.unbind(observable);
         }

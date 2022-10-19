@@ -5,6 +5,7 @@ import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.text.TextComponent;
 
@@ -38,6 +39,20 @@ public class TextComponentStyle extends TextComponent
         style.registerProperty("text-outline-width", 0F, Float.class);
         style.registerProperty("text-glow-color", Color.ALPHA, Color.class);
         style.registerProperty("text-glow-width", 0F, Float.class);
+
+
+        style.registerConditionalProperties("text-padding", this::registerTextPadding);
+    }
+
+    private void registerTextPadding(StyleComponent style)
+    {
+        var property = style.registerProperty("text-padding", RectBox.EMPTY, RectBox.class);
+        if (textPaddingProperty != null)
+            return;
+
+        textPaddingProperty = property;
+        textPaddingList.add(textPaddingProperty);
+        recomputeTextPadding();
     }
 
     private StyleComponent style()
@@ -152,6 +167,18 @@ public class TextComponentStyle extends TextComponent
         if (glowWidthProperty == null)
             glowWidthProperty = style().getOrCreateProperty("text-glow-width", Float.class);
         return glowWidthProperty;
+    }
+
+    @Override
+    public Property<RectBox> textPaddingProperty()
+    {
+        if (textPaddingProperty == null)
+        {
+            textPaddingProperty = style().getOrCreateProperty("text-padding", RectBox.class);
+            this.textPaddingList.add(textPaddingProperty);
+            recomputeTextPadding();
+        }
+        return textPaddingProperty;
     }
 
     ////////////
@@ -312,5 +339,17 @@ public class TextComponentStyle extends TextComponent
     public void glowWidth(float glowWidth)
     {
         style().setPropertyDirect("text-glow-width", glowWidth, Float.class);
+    }
+
+    @Override
+    public RectBox textPadding()
+    {
+        return style().getValue("text-padding", RectBox.class, RectBox.EMPTY);
+    }
+
+    @Override
+    public void textPadding(RectBox textPadding)
+    {
+        style().setPropertyDirect("text-padding", textPadding, RectBox.class);
     }
 }
