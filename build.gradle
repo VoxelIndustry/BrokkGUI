@@ -73,10 +73,11 @@ project(":common") {
         api "net.voxelindustry:brokkcolor:${project.brokkcolor_version}"
 
         implementation "org.apache.commons:commons-lang3:3.4"
-        implementation "com.google.code.findbugs:jsr305:3.0.1"
         implementation "commons-io:commons-io:2.5"
         implementation "com.google.guava:guava:21.0"
         implementation "com.google.code.gson:gson:2.8.0"
+
+        implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
         testImplementation('org.junit.jupiter:junit-jupiter-api:5.6.1')
         testImplementation('org.mockito:mockito-core:3.3.3')
