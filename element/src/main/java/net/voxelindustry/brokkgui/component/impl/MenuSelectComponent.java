@@ -4,16 +4,19 @@ import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
 import fr.ourten.teabeans.property.specific.BooleanProperty;
+import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RectAlignment;
 import net.voxelindustry.brokkgui.element.GuiLabel;
 import net.voxelindustry.brokkgui.event.ClickReleaseEvent;
 import net.voxelindustry.brokkgui.shape.Rectangle;
+import net.voxelindustry.brokkgui.style.PseudoClassConstants;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.brokkgui.text.TextComponent;
 import net.voxelindustry.hermod.EventHandler;
+import net.voxelindustry.hermod.IEventEmitter;
 
 import java.util.Objects;
 
@@ -24,10 +27,16 @@ public class MenuSelectComponent extends GuiComponent
     private final Property<String> selectedValueProperty       = new Property<>("");
     private final Property<String> promptTextProperty          = new Property<>("");
     private final BooleanProperty  allowEmptySelectionProperty = new BooleanProperty();
+    private final BooleanProperty  selectActiveOptionProperty  = new BooleanProperty();
+
+    private final EventHandler<ClickReleaseEvent> onOptionSelected = this::onOptionSelected;
 
     private GuiLabel emptySelectionOptionElement;
 
-    private final EventHandler<ClickReleaseEvent> onOptionSelected = this::onOptionSelected;
+    private GuiElement selectedElement;
+    private GuiElement activeElement;
+
+    private MenuDisplayListComponent menuDisplayListComponent;
 
     @Override
     public void attach(GuiElement element)
@@ -54,19 +63,43 @@ public class MenuSelectComponent extends GuiComponent
 
     private void onOptionSelected(ClickReleaseEvent event)
     {
-        if (event.getSource() instanceof GuiElement source)
+        selectOption(event.getSource());
+
+        menuDisplayListComponent().displayList().removeFocus();
+    }
+
+    private void selectOption(IEventEmitter option)
+    {
+        if (!(option instanceof GuiElement source))
+            return;
+
+        if (source == emptySelectionOptionElement)
         {
-            if (source == emptySelectionOptionElement)
-            {
-                selectedValueProperty.setValue("");
-                return;
-            }
+            selectedValueProperty.setValue("");
+            selectedElement = emptySelectionOptionElement;
 
-            var value = getLabelFromElement(source);
-
-            if (value != null)
-                selectedValueProperty.setValue(value);
+            activateOption(selectedElement);
+            return;
         }
+
+        var value = getLabelFromElement(source);
+
+        if (value != null)
+        {
+            selectedValueProperty.setValue(value);
+            selectedElement = source;
+
+            activateOption(selectedElement);
+        }
+    }
+
+    private void activateOption(GuiElement element)
+    {
+        if (activeElement != null)
+            activeElement.get(StyleComponent.class).removePseudoClass(PseudoClassConstants.ACTIVE);
+
+        element.get(StyleComponent.class).addPseudoClass(PseudoClassConstants.ACTIVE);
+        activeElement = element;
     }
 
     private String getLabelFromElement(GuiElement element)
@@ -97,6 +130,13 @@ public class MenuSelectComponent extends GuiComponent
         return emptySelectionOptionElement;
     }
 
+    private MenuDisplayListComponent menuDisplayListComponent()
+    {
+        if (menuDisplayListComponent == null)
+            menuDisplayListComponent = element().get(MenuDisplayListComponent.class);
+        return menuDisplayListComponent;
+    }
+
     ////////////////
     // PROPERTIES //
     ////////////////
@@ -106,7 +146,7 @@ public class MenuSelectComponent extends GuiComponent
         return optionsElementProperty;
     }
 
-    public Property<String> selectedValueProperty()
+    public ObservableValue<String> selectedValueObservable()
     {
         return selectedValueProperty;
     }
@@ -121,24 +161,63 @@ public class MenuSelectComponent extends GuiComponent
         return allowEmptySelectionProperty;
     }
 
+    public BooleanProperty selectActiveOptionProperty()
+    {
+        return selectActiveOptionProperty;
+    }
+
     ////////////
     // VALUES //
     ////////////
 
     public String selectedValue()
     {
-        return selectedValueProperty().getValue();
+        return selectedValueObservable().getValue();
     }
 
     public void selectedValue(String selectedValue)
     {
-        selectedValueProperty().setValue(selectedValue);
+        for (var element : optionsElementProperty())
+        {
+            var value = getLabelFromElement(element);
+
+            if (Objects.equals(value, selectedValue))
+                selectOption(element);
+        }
+    }
+
+    public int ordinalOfSelected()
+    {
+        return optionsElementProperty().indexOf(selectedElement);
+    }
+
+    public void selectWithOrdinal(int ordinal)
+    {
+        selectOption(optionsElementProperty().get(ordinal));
+    }
+
+    public int ordinalOfActive()
+    {
+        return optionsElementProperty().indexOf(activeElement);
+    }
+
+    public void activateWithOrdinal(int ordinal)
+    {
+        if (activeElement != null)
+            activeElement.get(StyleComponent.class).removePseudoClass(PseudoClassConstants.ACTIVE);
+
+        var element = optionsElementProperty().get(ordinal);
+        activateOption(element);
+
+        if (selectActiveOption())
+            selectOption(activeElement);
     }
 
     public GuiElement addOption(String option)
     {
         var label = new GuiLabel(option);
         label.expandToText(false);
+        label.style().addStyleClass("menu-select-element");
         label.textAlignment(RectAlignment.LEFT_CENTER);
         label.transform().overflow(GuiOverflow.HIDDEN);
         label.transform().widthRatio(1);
@@ -151,6 +230,7 @@ public class MenuSelectComponent extends GuiComponent
     public GuiElement addOption(GuiElement option)
     {
         optionsElementProperty().add(option);
+        option.ifHas(StyleComponent.class, style -> style.addStyleClass("menu-select-element"));
 
         return option;
     }
@@ -182,6 +262,7 @@ public class MenuSelectComponent extends GuiComponent
         var label = new GuiLabel(option);
         label.expandToText(false);
         label.transform().overflow(GuiOverflow.HIDDEN);
+        label.style().addStyleClass("menu-select-element");
 
         optionsElementProperty().add(index, label);
 
@@ -191,6 +272,7 @@ public class MenuSelectComponent extends GuiComponent
     public GuiElement addOption(GuiElement option, int index)
     {
         optionsElementProperty().add(index, option);
+        option.ifHas(StyleComponent.class, style -> style.addStyleClass("menu-select-element"));
 
         return option;
     }
@@ -208,6 +290,16 @@ public class MenuSelectComponent extends GuiComponent
     public void removeOption(GuiElement option)
     {
         optionsElementProperty().remove(option);
+    }
+
+    public GuiElement getOption(int ordinal)
+    {
+        return optionsElementProperty().get(ordinal);
+    }
+
+    public int getOptionsCount()
+    {
+        return optionsElementProperty().size();
     }
 
     public String promptText()
@@ -228,5 +320,15 @@ public class MenuSelectComponent extends GuiComponent
     public void allowEmptySelection(boolean allowEmptySelection)
     {
         allowEmptySelectionProperty().set(allowEmptySelection);
+    }
+
+    public boolean selectActiveOption()
+    {
+        return selectActiveOptionProperty().get();
+    }
+
+    public void selectActiveOption(boolean selectActiveOption)
+    {
+        selectActiveOptionProperty().set(selectActiveOption);
     }
 }

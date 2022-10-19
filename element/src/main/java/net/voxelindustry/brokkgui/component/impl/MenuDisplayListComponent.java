@@ -1,11 +1,14 @@
 package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.property.specific.FloatProperty;
+import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.event.ClickPressEvent;
+import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.event.TransformLayoutEvent;
+import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.hermod.EventHandler;
@@ -14,30 +17,48 @@ import javax.annotation.Nullable;
 
 public class MenuDisplayListComponent extends GuiComponent
 {
+    private final int escapeKey    = BrokkGuiPlatform.getInstance().getKeyboardUtil().getScanCode("ESCAPE");
+    private final int upArrowKey   = BrokkGuiPlatform.getInstance().getKeyboardUtil().getScanCode("UP");
+    private final int downArrowKey = BrokkGuiPlatform.getInstance().getKeyboardUtil().getScanCode("DOWN");
+
     private final EventHandler<ClickPressEvent> clickOutsideHandler = this::onClickPressOutside;
+    private final EventHandler<KeyEvent.Press>  keyHandler          = this::onKeyPress;
 
     private MenuDisplayListElement displayList;
+
+    private MenuSelectComponent selectComponent;
 
     @Override
     public void attach(GuiElement element)
     {
         super.attach(element);
 
+        selectComponent = element().get(MenuSelectComponent.class);
+
         element().windowProperty().addChangeListener((obs, oldValue, newValue) ->
         {
             if (oldValue != null)
+            {
                 oldValue.removeEventHandler(ClickPressEvent.TYPE, clickOutsideHandler);
+                oldValue.removeEventHandler(KeyEvent.PRESS, keyHandler);
+            }
             if (newValue != null)
+            {
                 newValue.addEventHandler(ClickPressEvent.TYPE, clickOutsideHandler);
+                newValue.addEventHandler(KeyEvent.PRESS, keyHandler);
+            }
         });
         if (element().windowProperty().isPresent())
+        {
             element().window().addEventHandler(ClickPressEvent.TYPE, clickOutsideHandler);
+            element().window().addEventHandler(KeyEvent.PRESS, keyHandler);
+        }
 
         displayList = new MenuDisplayListElement();
         transform().addChild(displayList.transform());
         RelativeBindingHelper.bindToPos(displayList.transform(), transform(), null, transform().heightProperty());
 
-        element().get(ButtonComponent.class).setOnActionEvent(e -> displayList.setFocused());
+        element().get(ButtonComponent.class).setOnActionEvent(e -> displayList.toggleFocus());
     }
 
     private void onClickPressOutside(ClickPressEvent event)
@@ -46,6 +67,33 @@ public class MenuDisplayListComponent extends GuiComponent
                 !displayList.transform().isPointInside(event.getMouseX(), event.getMouseY()) &&
                 displayList.isFocused())
             displayList.removeFocus();
+    }
+
+    private void onKeyPress(KeyEvent.Press e)
+    {
+        if (!displayList.isFocused())
+            return;
+
+        if (e.scanCode() == escapeKey)
+            displayList.removeFocus();
+
+        else if (e.scanCode() == downArrowKey)
+        {
+            var current = selectComponent.ordinalOfActive();
+            if (current < selectComponent.getOptionsCount() - 1)
+                selectComponent.activateWithOrdinal(current + 1);
+        }
+        else if (e.scanCode() == upArrowKey)
+        {
+            var current = selectComponent.ordinalOfActive();
+            if (current > 0)
+                selectComponent.activateWithOrdinal(current - 1);
+        }
+        else if (BrokkGuiPlatform.getInstance().getKeyboardUtil().isEnterKey(e.keyCode()))
+        {
+            selectComponent.selectWithOrdinal(selectComponent.ordinalOfActive());
+            displayList.removeFocus();
+        }
     }
 
     ////////////
@@ -98,8 +146,15 @@ public class MenuDisplayListComponent extends GuiComponent
         private void onLayoutChange(@Nullable TransformLayoutEvent event)
         {
             float maxY = 0;
-            for (Transform child : transform().children())
+            for (var child : transform().children())
             {
+                if (child.element().has(StyleComponent.class))
+                {
+                    var style = child.element().get(StyleComponent.class);
+                    if (style.hasStyleClass("scrollbar-grip") || style.hasStyleClass("scrollbar-track-button") || style.hasStyleClass("scrollbar-track"))
+                        continue;
+                }
+
                 float childBottomPos = child.bottomPos() - transform().topPos() - transform().yOffsetProperty().get();
 
                 if (childBottomPos > maxY)
