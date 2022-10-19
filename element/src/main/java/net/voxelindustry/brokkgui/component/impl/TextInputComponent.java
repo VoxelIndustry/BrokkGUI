@@ -247,6 +247,9 @@ public class TextInputComponent extends GuiComponent implements RenderComponent
 
     private void computeTextTranslateFromCursorPos(Observable observable)
     {
+        if (cursorPos() > textComponent.text().length())
+            cursorPos(textComponent.text().length());
+
         float cursorPos = textComponent.textTranslate();
 
         if (textComponent.textAlignment().isLeft())
