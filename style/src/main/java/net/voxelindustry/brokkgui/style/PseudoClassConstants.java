@@ -8,4 +8,6 @@ public class PseudoClassConstants
     public static final String HOVER = "hover";
 
     public static final String FOCUS = "focus";
+
+    public static final String ACTIVE = "active";
 }
