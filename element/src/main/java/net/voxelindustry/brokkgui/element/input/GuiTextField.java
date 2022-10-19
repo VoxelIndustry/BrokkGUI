@@ -54,76 +54,6 @@ public class GuiTextField extends GuiElement implements StyledElement
         return "text-field";
     }
 
-    public boolean promptTextAlwaysDisplayed()
-    {
-        return textAssistComponent.promptTextAlwaysDisplayed();
-    }
-
-    public void promptTextAlwaysDisplayed(boolean always)
-    {
-        textAssistComponent.promptTextAlwaysDisplayed(always);
-    }
-
-    public GuiLabeled promptTextLabel()
-    {
-        return textAssistComponent.promptTextLabel();
-    }
-
-    public void promptTextLabel(GuiLabeled label)
-    {
-        textAssistComponent.promptTextLabel(label);
-    }
-
-    public String promptText()
-    {
-        return textAssistComponent.promptText();
-    }
-
-    public void promptText(String promptText)
-    {
-        textAssistComponent.promptText(promptText);
-    }
-
-    public GuiLabeled helperTextLabel()
-    {
-        return textAssistComponent.helperTextLabel();
-    }
-
-    public void helperTextLabel(GuiLabeled label)
-    {
-        textAssistComponent.helperTextLabel(label);
-    }
-
-    public String helperText()
-    {
-        return textAssistComponent.helperText();
-    }
-
-    public void helperText(String helperText)
-    {
-        textAssistComponent.helperText(helperText);
-    }
-
-    public GuiLabeled errorTextLabel()
-    {
-        return textAssistComponent.errorTextLabel();
-    }
-
-    public void errorTextLabel(GuiLabeled label)
-    {
-        textAssistComponent.errorTextLabel(label);
-    }
-
-    public String errorText()
-    {
-        return textAssistComponent.errorText();
-    }
-
-    public void errorText(String errorText)
-    {
-        textAssistComponent.errorText(errorText);
-    }
-
     ////////////////
     // COMPONENTS //
     ////////////////
@@ -195,5 +125,80 @@ public class GuiTextField extends GuiElement implements StyledElement
     public void textAlignment(RectAlignment alignment)
     {
         textComponent.textAlignment(alignment);
+    }
+
+    public boolean promptTextAlwaysDisplayed()
+    {
+        return textAssistComponent.promptTextAlwaysDisplayed();
+    }
+
+    public void promptTextAlwaysDisplayed(boolean always)
+    {
+        textAssistComponent.promptTextAlwaysDisplayed(always);
+    }
+
+    public GuiLabeled promptTextLabel()
+    {
+        return textAssistComponent.promptTextLabel();
+    }
+
+    public void promptTextLabel(GuiLabeled label)
+    {
+        textAssistComponent.promptTextLabel(label);
+    }
+
+    public String promptText()
+    {
+        return textAssistComponent.promptText();
+    }
+
+    public void promptText(String promptText)
+    {
+        textAssistComponent.promptText(promptText);
+    }
+
+    public GuiLabeled helperTextLabel()
+    {
+        return textAssistComponent.helperTextLabel();
+    }
+
+    public void helperTextLabel(GuiLabeled label)
+    {
+        textAssistComponent.helperTextLabel(label);
+    }
+
+    public String helperText()
+    {
+        return textAssistComponent.helperText();
+    }
+
+    public void helperText(String helperText)
+    {
+        textAssistComponent.helperText(helperText);
+    }
+
+    public GuiLabeled errorTextLabel()
+    {
+        return textAssistComponent.errorTextLabel();
+    }
+
+    public void errorTextLabel(GuiLabeled label)
+    {
+        textAssistComponent.errorTextLabel(label);
+    }
+
+    public String errorText()
+    {
+        return textAssistComponent.errorText();
+    }
+
+    public void errorText(String errorText)
+    {
+        textAssistComponent.errorText(errorText);
+    }
+
+    public String validatedText()
+    {
+        return textAssistComponent().validatedText();
     }
 }
