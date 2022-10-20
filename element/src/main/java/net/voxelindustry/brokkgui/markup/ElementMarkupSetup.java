@@ -20,10 +20,12 @@ import net.voxelindustry.brokkgui.markup.attributes.ScrollableAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextAssistAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.TextInputAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.elements.GuiElementAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.elements.HorizontalLayoutAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.elements.StyleComponentAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.elements.TextComponentAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.elements.TextLayoutAttributes;
 import net.voxelindustry.brokkgui.markup.attributes.elements.TransformAttributes;
+import net.voxelindustry.brokkgui.markup.attributes.elements.VerticalLayoutAttributes;
 import net.voxelindustry.brokkgui.markup.definitions.MarkupElementDefinition;
 import net.voxelindustry.brokkgui.shape.Circle;
 import net.voxelindustry.brokkgui.shape.Line;
@@ -43,6 +45,30 @@ public class ElementMarkupSetup
                         .attributeGroup(ScrollableAttributes.instance())
                         // Styling
                         .attributeGroup(StyleComponentAttributes.instance())
+        );
+
+        MarkupElementRegistry.registerElementDefinition("vertical-pane",
+                new MarkupElementDefinition<>(GuiPane::new)
+                        // GuiElement
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
+                        // Layout
+                        .attributeGroup(VerticalLayoutAttributes.instance())
+        );
+
+        MarkupElementRegistry.registerElementDefinition("horizontal-pane",
+                new MarkupElementDefinition<>(GuiPane::new)
+                        // GuiElement
+                        .attributeGroup(TransformAttributes.instance())
+                        .attributeGroup(GuiElementAttributes.instance())
+                        .attributeGroup(ScrollableAttributes.instance())
+                        // Styling
+                        .attributeGroup(StyleComponentAttributes.instance())
+                        // Layout
+                        .attributeGroup(HorizontalLayoutAttributes.instance())
         );
 
         MarkupElementRegistry.registerElementDefinition("scrollpane",

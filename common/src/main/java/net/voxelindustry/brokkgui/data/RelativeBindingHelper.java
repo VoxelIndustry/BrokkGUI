@@ -177,6 +177,30 @@ public class RelativeBindingHelper
                         (yPos, height, yTranslate, yOffset, childHeight) -> yPos.floatValue() + yTranslate.floatValue() + yOffset.floatValue() + (height.floatValue() / 2 - childHeight.floatValue() / 2)));
     }
 
+    public static void bindXToCenter(Transform toBind, Transform parent, float addX)
+    {
+        toBind.xPosProperty()
+                .bindProperty(parent.xPosProperty().combine(
+                        parent.widthProperty(),
+                        parent.xTranslateProperty(),
+                        parent.xOffsetProperty(),
+                        toBind.widthProperty(),
+                        (xPos, width, xTranslate, xOffset, childWidth) ->
+                                xPos.floatValue() + xTranslate.floatValue() + xOffset.floatValue() + (width.floatValue() / 2 - childWidth.floatValue() / 2) + addX));
+    }
+
+    public static void bindYToCenter(Transform toBind, Transform parent, float addY)
+    {
+        toBind.yPosProperty()
+                .bindProperty(parent.yPosProperty().combine(
+                        parent.heightProperty(),
+                        parent.yTranslateProperty(),
+                        parent.yOffsetProperty(),
+                        toBind.heightProperty(),
+                        (yPos, height, yTranslate, yOffset, childHeight) ->
+                                yPos.floatValue() + yTranslate.floatValue() + yOffset.floatValue() + (height.floatValue() / 2 - childHeight.floatValue() / 2) + addY));
+    }
+
     public static void bindToCenter(Transform toBind, Transform parent, float addX, float addY)
     {
         toBind.xPosProperty()

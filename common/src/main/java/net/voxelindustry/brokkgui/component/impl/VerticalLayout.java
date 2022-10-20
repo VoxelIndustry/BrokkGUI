@@ -27,6 +27,7 @@ public class VerticalLayout extends GuiComponent
     private final ValueInvalidationListener dirtyLayoutListener = obs -> dirtyLayoutProperty.set(true);
 
     private boolean addToHierarchy;
+    private boolean elementHorizontalAlignment = true;
 
     private void doLayout(ObservableValue<?> observable, Object oldValue, Object newValue)
     {
@@ -34,6 +35,8 @@ public class VerticalLayout extends GuiComponent
         {
             childElement.transform().heightProperty().removeListener(dirtyLayoutListener);
             childElement.transform().yTranslateProperty().removeListener(dirtyLayoutListener);
+            childElement.transform().marginProperty().removeListener(dirtyLayoutListener);
+
             childElement.transform().xPosProperty().unbind();
             childElement.transform().yPosProperty().unbind();
 
@@ -44,6 +47,8 @@ public class VerticalLayout extends GuiComponent
         {
             childTransform.heightProperty().removeListener(dirtyLayoutListener);
             childTransform.transform().yTranslateProperty().removeListener(dirtyLayoutListener);
+            childTransform.marginProperty().removeListener(dirtyLayoutListener);
+
             childTransform.xPosProperty().unbind();
             childTransform.yPosProperty().unbind();
 
@@ -59,7 +64,8 @@ public class VerticalLayout extends GuiComponent
         if (value == null)
             return;
 
-        var boundTransform = value instanceof Transform t ? t : value instanceof GuiElement ? ((GuiElement) value).transform() : null;
+        var boundTransform = value instanceof Transform transform ? transform :
+                value instanceof GuiElement element ? element.transform() : null;
 
         if (boundTransform == null)
             return;
@@ -67,31 +73,12 @@ public class VerticalLayout extends GuiComponent
         if (addToHierarchy)
             transform().addChild(boundTransform);
 
-        boundTransform.heightProperty().addListener(dirtyLayoutListener);
-        boundTransform.yTranslateProperty().addListener(dirtyLayoutListener);
+        boundTransform.marginProperty().addChangeListener(dirtyLayoutListener);
+        boundTransform.heightProperty().addChangeListener(dirtyLayoutListener);
+        boundTransform.yTranslateProperty().addChangeListener(dirtyLayoutListener);
 
-        boundTransform.xPosProperty().bindProperty(new FloatBinding()
-        {
-            {
-                super.bind(transform().xPosProperty(),
-                        transform().xTranslateProperty(),
-                        transform().xOffsetProperty(),
-                        transform().widthProperty(),
-                        boundTransform.widthProperty(),
-                        alignmentProperty);
-            }
-
-            @Override
-            protected float computeValue()
-            {
-                return switch (alignmentProperty.getValue())
-                        {
-                            case BEGIN -> transform().leftPos();
-                            case CENTER -> transform().leftPos() + transform().width() / 2 - boundTransform.width() / 2;
-                            case END -> transform().rightPos() - boundTransform.width();
-                        } + transform().xOffsetProperty().get();
-            }
-        });
+        if (elementHorizontalAlignment)
+            bindElementXPos(boundTransform);
 
         if (value instanceof GuiElement)
         {
@@ -113,8 +100,9 @@ public class VerticalLayout extends GuiComponent
                     for (int index = 0; index < childIndex; index++)
                     {
                         var previousChild = childrenElementProperty.get(index);
-                        childPos += previousChild.height() + previousChild.yTranslate();
+                        childPos += previousChild.transform().layoutHeight() + previousChild.yTranslate();
                     }
+                    childPos += boundTransform.margin().getTop();
 
                     return transform().topPos() + transform().yOffsetProperty().get() + childPos;
                 }
@@ -140,13 +128,40 @@ public class VerticalLayout extends GuiComponent
                     for (int index = 0; index < childIndex; index++)
                     {
                         var previousChild = childrenTransformProperty.get(index);
-                        childPos += previousChild.height() + previousChild.yTranslate();
+                        childPos += previousChild.layoutHeight() + previousChild.yTranslate();
                     }
+                    childPos += boundTransform.margin().getTop();
 
                     return transform().topPos() + transform().yOffsetProperty().get() + childPos;
                 }
             });
         }
+    }
+
+    private void bindElementXPos(Transform boundTransform)
+    {
+        boundTransform.xPosProperty().bindProperty(new FloatBinding()
+        {
+            {
+                super.bind(transform().xPosProperty(),
+                        transform().xTranslateProperty(),
+                        transform().xOffsetProperty(),
+                        transform().widthProperty(),
+                        boundTransform.widthProperty(),
+                        alignmentProperty);
+            }
+
+            @Override
+            protected float computeValue()
+            {
+                return switch (alignmentProperty.getValue())
+                        {
+                            case BEGIN -> transform().leftPos();
+                            case CENTER -> transform().leftPos() + transform().width() / 2 - boundTransform.width() / 2;
+                            case END -> transform().rightPos() - boundTransform.width();
+                        } + transform().xOffsetProperty().get();
+            }
+        });
     }
 
     @Override
@@ -214,6 +229,11 @@ public class VerticalLayout extends GuiComponent
                     transform().removeChild(transform);
             }
         }
+    }
+
+    public void elementHorizontalAlignment(boolean shouldAlign)
+    {
+        this.elementHorizontalAlignment = shouldAlign;
     }
 
     ////////////////
