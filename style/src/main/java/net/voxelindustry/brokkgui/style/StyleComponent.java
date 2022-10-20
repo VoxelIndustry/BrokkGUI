@@ -288,7 +288,7 @@ public class StyleComponent extends GuiComponent
         if (!hasProperty(propertyName))
             return;
 
-        StyleProperty<T> property = getProperty(propertyName, valueClass);
+        var property = getProperty(propertyName, valueClass);
 
         if (property != null)
         {
@@ -298,15 +298,15 @@ public class StyleComponent extends GuiComponent
     }
 
     /**
-     * Register conditionally enabled properties. It allows to lazily add properties to a Styleable node, increasing
-     * the memory efficiency of simple nodes.
+     * Register conditionally enabled properties. It allows to lazily add properties to a StyleComponent, increasing
+     * the memory efficiency of simple elements.
      * <p>
      * For example borders are conditionals, if any property matching "border*" is called all border related
      * properties are added.
      *
      * @param matchKey          key to transform into a regular expression. See this example syntax "border*" and
      *                          "*-image*"
-     * @param propertiesCreator Consumer parameterized with this StyleHolder. Add the properties or execute
+     * @param propertiesCreator Consumer parameterized with this StyleComponent. Add the properties or execute
      *                          invalidating operations for conflicting properties.
      */
     public void registerConditionalProperties(String matchKey, Consumer<StyleComponent> propertiesCreator)
@@ -314,6 +314,21 @@ public class StyleComponent extends GuiComponent
         String regex = '^' + matchKey.replaceAll("\\*", "\\\\S*") + '$';
 
         conditionalProperties.put(Pattern.compile(regex), propertiesCreator);
+    }
+
+    /**
+     * Register a conditionally enabled property. It allows to lazily add a property to a StyleComponent, increasing
+     * the memory efficiency of simple elements.
+     * <p>
+     * For example margin is conditional, if no style value is assigned to the key margin no property is created.
+     *
+     * @param propertyName      name of the property and style key
+     * @param propertiesCreator Consumer parameterized with this StyleComponent. Add the properties or execute
+     *                          invalidating operations for conflicting properties.
+     */
+    public void registerConditionalProperty(String propertyName, Consumer<StyleComponent> propertiesCreator)
+    {
+        conditionalProperties.put(Pattern.compile(propertyName), propertiesCreator);
     }
 
     /**
@@ -346,7 +361,7 @@ public class StyleComponent extends GuiComponent
      * For example border-width is a shorthand for border-top-width, border-right-width, border-bottom-width,
      * border-left-width
      * <p>
-     * This method will create and add the children properties of the same type to the StyleHolder.
+     * This method will create and add the children properties of the same type to the StyleComponent.
      *
      * @param name         of the property
      * @param defaultValue initial value

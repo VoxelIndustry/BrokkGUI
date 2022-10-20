@@ -7,6 +7,7 @@ import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.component.impl.Transform;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.Rotation;
 import net.voxelindustry.brokkgui.event.ClickPressEvent;
 import net.voxelindustry.brokkgui.event.ComponentEvent;
@@ -357,6 +358,16 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
     public float zLevel()
     {
         return transform().zLevel();
+    }
+
+    public RectBox margin()
+    {
+        return transform.margin();
+    }
+
+    public void margin(RectBox margin)
+    {
+        transform.margin(margin);
     }
 
     public Property<Boolean> focusedProperty()

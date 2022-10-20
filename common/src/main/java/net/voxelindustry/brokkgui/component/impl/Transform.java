@@ -11,6 +11,7 @@ import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.RequiredOverride;
 import net.voxelindustry.brokkgui.data.Position;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
@@ -69,6 +70,8 @@ public class Transform extends GuiComponent
     private final Property<Transform>     parentProperty       = new Property<>(null);
     private final ListProperty<Transform> childrenListProperty = new ListProperty<>(null);
 
+    protected Property<RectBox> marginProperty;
+
     private MouseInBoundsChecker mouseInBoundsChecker = MouseInBoundsChecker.DEFAULT;
 
     private boolean bindChild = true;
@@ -124,6 +127,12 @@ public class Transform extends GuiComponent
             else if (newValue != null && isFloating())
                 newValue.addFloating(this);
         });
+    }
+
+    @Override
+    public Transform transform()
+    {
+        return this;
     }
 
     ///////////////
@@ -439,6 +448,17 @@ public class Transform extends GuiComponent
     public BooleanProperty floatingProperty()
     {
         return floatingProperty;
+    }
+
+    @RequiredOverride
+    public Property<RectBox> marginProperty()
+    {
+        if (marginProperty == null)
+        {
+            marginProperty = createRenderProperty(RectBox.EMPTY);
+            marginProperty.addChangeListener(this::notifyParentOfLayoutChange);
+        }
+        return marginProperty;
     }
 
     /**
@@ -1020,5 +1040,35 @@ public class Transform extends GuiComponent
     public void floating(boolean isFloating)
     {
         floatingProperty().set(isFloating);
+    }
+
+    @RequiredOverride
+    public RectBox margin()
+    {
+        if (marginProperty == null)
+            return RectBox.EMPTY;
+        return marginProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void margin(RectBox margin)
+    {
+        if (marginProperty == null && margin == RectBox.EMPTY)
+            return;
+        marginProperty().setValue(margin);
+    }
+
+    ///////////////
+    //   LAYOUT  //
+    ///////////////
+
+    public float layoutWidth()
+    {
+        return width() + margin().getHorizontal();
+    }
+
+    public float layoutHeight()
+    {
+        return height() + margin().getVertical();
     }
 }

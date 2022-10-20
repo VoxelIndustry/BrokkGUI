@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkgui.component.GuiElement;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.style.StyleComponent;
@@ -20,7 +21,8 @@ public class TransformStyle extends Transform
         if (element.has(StyleComponent.class))
         {
             style = element.get(StyleComponent.class);
-            style.registerConditionalProperties("border*", this::registerProperties);
+            style.registerConditionalProperties("border*", this::registerBorderProperties);
+            style.registerConditionalProperty("margin", this::registerMarginProperty);
         }
         getEventDispatcher().addHandler(StyleComponentEvent.TYPE, this::onStyleComponentAdded);
     }
@@ -28,10 +30,17 @@ public class TransformStyle extends Transform
     private void onStyleComponentAdded(StyleComponentEvent event)
     {
         style = event.component();
-        registerProperties(style);
+        registerBorderProperties(style);
+        style.registerConditionalProperty("margin", this::registerMarginProperty);
     }
 
-    private void registerProperties(StyleComponent styleComponent)
+    private void registerMarginProperty(StyleComponent styleComponent)
+    {
+        styleComponent.registerProperty("margin", RectBox.EMPTY, RectBox.class)
+                .addChangeListener(this::notifyParentOfLayoutChange);
+    }
+
+    private void registerBorderProperties(StyleComponent styleComponent)
     {
         styleComponent.registerShorthand("border-width", 0F,
                 Float.class, ShorthandArgMappers.BOX_MAPPER,
@@ -116,6 +125,14 @@ public class TransformStyle extends Transform
     }
 
     @Override
+    public Property<RectBox> marginProperty()
+    {
+        if (marginProperty == null)
+            marginProperty = style().getOrCreateProperty("margin", RectBox.class);
+        return marginProperty;
+    }
+
+    @Override
     public float borderWidth()
     {
         return style().getValue("border-top-width", Float.class, 0F);
@@ -152,5 +169,17 @@ public class TransformStyle extends Transform
     public void borderRadius(RectCorner corner, int radius)
     {
         style().setPropertyDirect("border-" + corner.getCssString() + "-radius", radius, Integer.class);
+    }
+
+    @Override
+    public RectBox margin()
+    {
+        return style.getValue("margin", RectBox.class, RectBox.EMPTY);
+    }
+
+    @Override
+    public void margin(RectBox margin)
+    {
+        style().setPropertyDirect("margin", margin, RectBox.class);
     }
 }
