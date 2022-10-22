@@ -56,13 +56,13 @@ public class TextAssistComponent extends GuiComponent
                 oldValue.transform().widthProperty().unbind();
                 oldValue.transform().heightProperty().unbind();
                 oldValue.textComponent().removeTextPaddingProperty(textComponent.computedTextPaddingValue());
-                oldValue.style().removeStyleClass("text-field-prompt-text");
+                oldValue.addTag("text-field-prompt-text");
             }
             if (newValue != null)
             {
                 newValue.transform().visibleProperty().bindProperty(promptTextAlwaysDisplayedProperty
                         .combine(textComponent.textProperty(), (alwaysDisplay, textContent) -> alwaysDisplay || StringUtils.isEmpty(textContent)));
-                newValue.style().addStyleClass("text-field-prompt-text");
+                newValue.addTag("text-field-prompt-text");
                 newValue.expandToText(false);
                 newValue.transform().widthProperty().bindProperty(transform().widthProperty());
                 newValue.transform().heightProperty().bindProperty(transform().heightProperty());
@@ -101,11 +101,11 @@ public class TextAssistComponent extends GuiComponent
                 transform().removeChild(oldValue.transform());
 
                 oldValue.transform().widthProperty().unbind();
-                oldValue.style().removeStyleClass("text-field-error-text");
+                oldValue.removeTag("text-field-error-text");
             }
             if (newValue != null)
             {
-                newValue.style().addStyleClass("text-field-error-text");
+                newValue.addTag("text-field-error-text");
                 newValue.expandToText(false);
                 newValue.transform().widthProperty().bindProperty(transform().widthProperty());
 
@@ -254,7 +254,7 @@ public class TextAssistComponent extends GuiComponent
 
     protected GuiLabeled createDefaultHelperLabel()
     {
-        GuiLabel label = new GuiLabel();
+        var label = new GuiLabel();
         label.textAlignment(RectAlignment.LEFT_CENTER);
         label.textPadding(textComponent.textPadding());
         return label;

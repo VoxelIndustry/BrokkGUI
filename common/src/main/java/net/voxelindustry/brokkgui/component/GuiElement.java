@@ -2,6 +2,7 @@ package net.voxelindustry.brokkgui.component;
 
 import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.property.Property;
+import fr.ourten.teabeans.property.SetProperty;
 import fr.ourten.teabeans.value.Observable;
 import net.voxelindustry.brokkgui.BrokkGuiPlatform;
 import net.voxelindustry.brokkgui.GuiFocusManager;
@@ -52,7 +53,8 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
 
     private final Paint paint;
 
-    private final Property<String> idProperty;
+    private final Property<String>    idProperty   = new Property<>();
+    private final SetProperty<String> tagsProperty = new SetProperty<>();
 
     private EventDispatcher               eventDispatcher;
     private EventHandler<FocusEvent>      onFocusEvent;
@@ -78,7 +80,6 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         componentMap = new IdentityHashMap<>();
         renderComponents = new ArrayList<>(1);
         updateComponents = new ArrayList<>(1);
-        idProperty = new Property<>(null);
 
         focusedProperty = new Property<>(false);
         disabledProperty = new Property<>(false);
@@ -674,6 +675,26 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
     public void id(String id)
     {
         idProperty().setValue(id);
+    }
+
+    public SetProperty<String> tagsProperty()
+    {
+        return tagsProperty;
+    }
+
+    public void addTag(String tag)
+    {
+        tagsProperty().add(tag);
+    }
+
+    public boolean removeTag(String tag)
+    {
+        return tagsProperty().remove(tag);
+    }
+
+    public boolean hasTag(String tag)
+    {
+        return tagsProperty().contains(tag);
     }
 
     //////////////

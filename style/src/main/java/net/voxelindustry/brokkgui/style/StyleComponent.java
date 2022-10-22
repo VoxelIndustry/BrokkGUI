@@ -38,13 +38,13 @@ public class StyleComponent extends GuiComponent
 
     private Supplier<StyleList> styleSupplier;
 
-    private final SetProperty<String> styleClass;
     private final SetProperty<String> activePseudoClass;
 
     private Runnable onStyleInit;
 
     private final ValueChangeListener<String>    styleRefreshListener = this::valueChanged;
     private final ValueChangeListener<Transform> styleParentListener  = this::parentChanged;
+    private final ListValueChangeListener<String> styleListRefreshListener = this::valueListChanged;
 
     private final ValueInvalidationListener focusListener   = this::focusListener;
     private final ValueInvalidationListener disableListener = this::disableListener;
@@ -55,11 +55,8 @@ public class StyleComponent extends GuiComponent
         properties = new HashMap<>();
         conditionalProperties = ArrayListMultimap.create();
 
-        styleClass = new SetProperty<>(Collections.emptySet());
         activePseudoClass = new SetProperty<>(Collections.emptySet());
 
-        ListValueChangeListener<String> styleListRefreshListener = this::valueListChanged;
-        styleClass.addChangeListener(styleListRefreshListener);
         activePseudoClass.addChangeListener(styleListRefreshListener);
     }
 
@@ -69,6 +66,7 @@ public class StyleComponent extends GuiComponent
         if (element() != null)
         {
             element().idProperty().removeChangeListener(styleRefreshListener);
+            element().tagsProperty().removeChangeListener(styleListRefreshListener);
             element().transform().parentProperty().removeChangeListener(styleParentListener);
 
             element().hoveredProperty().removeListener(hoverListener);
@@ -81,6 +79,7 @@ public class StyleComponent extends GuiComponent
         getEventDispatcher().singletonQueue().dispatch(StyleComponentEvent.TYPE, new StyleComponentEvent(element(), this));
 
         element.idProperty().addChangeListener(styleRefreshListener);
+        element().tagsProperty().addChangeListener(styleListRefreshListener);
         element.transform().parentProperty().addChangeListener(styleParentListener);
 
         // Properties override
@@ -150,7 +149,7 @@ public class StyleComponent extends GuiComponent
 
     public SetProperty<String> styleClass()
     {
-        return styleClass;
+        return element().tagsProperty();
     }
 
     public void addStyleClass(String styleClass)

@@ -217,7 +217,7 @@ public class MenuSelectComponent extends GuiComponent
     {
         var label = new GuiLabel(option);
         label.expandToText(false);
-        label.style().addStyleClass("menu-select-element");
+        label.addTag("menu-select-element");
         label.textAlignment(RectAlignment.LEFT_CENTER);
         label.transform().overflow(GuiOverflow.HIDDEN);
         label.transform().widthRatio(1);
@@ -230,7 +230,7 @@ public class MenuSelectComponent extends GuiComponent
     public GuiElement addOption(GuiElement option)
     {
         optionsElementProperty().add(option);
-        option.ifHas(StyleComponent.class, style -> style.addStyleClass("menu-select-element"));
+        option.addTag("menu-select-element");
 
         return option;
     }
@@ -238,7 +238,7 @@ public class MenuSelectComponent extends GuiComponent
     public GuiElement addSeparator()
     {
         var separator = new Rectangle();
-        separator.get(StyleComponent.class).addStyleClass("menu-separator");
+        separator.addTag("menu-separator");
         separator.transform().widthRatio(1);
 
         optionsElementProperty().add(separator);
@@ -249,7 +249,7 @@ public class MenuSelectComponent extends GuiComponent
     public GuiElement addSeparator(int index)
     {
         var separator = new Rectangle();
-        separator.get(StyleComponent.class).addStyleClass("menu-separator");
+        separator.addTag("menu-separator");
         separator.transform().widthRatio(1);
 
         optionsElementProperty().set(index, separator);
@@ -262,7 +262,7 @@ public class MenuSelectComponent extends GuiComponent
         var label = new GuiLabel(option);
         label.expandToText(false);
         label.transform().overflow(GuiOverflow.HIDDEN);
-        label.style().addStyleClass("menu-select-element");
+        label.addTag("menu-select-element");
 
         optionsElementProperty().add(index, label);
 
@@ -272,7 +272,7 @@ public class MenuSelectComponent extends GuiComponent
     public GuiElement addOption(GuiElement option, int index)
     {
         optionsElementProperty().add(index, option);
-        option.ifHas(StyleComponent.class, style -> style.addStyleClass("menu-select-element"));
+        option.addTag("menu-select-element");
 
         return option;
     }
