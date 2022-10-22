@@ -22,21 +22,21 @@ public class HorizontalPaneChildPlacer<T extends GuiElement> implements PaneChil
         currentChild = child;
     }
 
-    public HorizontalPaneChildPlacer<T> marginTop(float top)
+    public HorizontalPaneChildPlacer<T> marginLeft(float left)
     {
-        return margin(top, 0);
+        return margin(left, 0);
     }
 
-    public HorizontalPaneChildPlacer<T> marginBottom(float bottom)
+    public HorizontalPaneChildPlacer<T> marginRight(float right)
     {
-        return margin(0, bottom);
+        return margin(0, right);
     }
 
-    public HorizontalPaneChildPlacer<T> margin(float top, float bottom)
+    public HorizontalPaneChildPlacer<T> margin(float left, float right)
     {
         currentChild.margin(RectBox.build()
-                .top(top)
-                .bottom(bottom)
+                .left(left)
+                .right(right)
                 .create());
         return this;
     }
