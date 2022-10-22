@@ -623,7 +623,7 @@ public class Transform extends GuiComponent
      */
     public float clipBoxLeft()
     {
-        if (parentProperty().isPresent())
+        if (parentProperty().isPresent() && !isFloating())
         {
             if (overflow() != GuiOverflow.VISIBLE)
                 return max(parent().inheritedClipBoxLeft(), borderBoxLeft());
@@ -637,7 +637,7 @@ public class Transform extends GuiComponent
 
     private float inheritedClipBoxLeft()
     {
-        if (parentProperty().isPresent())
+        if (parentProperty().isPresent() && !isFloating())
         {
             if (overflow() != GuiOverflow.VISIBLE)
                 return max(parent().inheritedClipBoxLeft(), leftPos());
@@ -656,7 +656,7 @@ public class Transform extends GuiComponent
      */
     public float clipBoxTop()
     {
-        if (parentProperty().isPresent())
+        if (parentProperty().isPresent() && !isFloating())
         {
             if (overflow() != GuiOverflow.VISIBLE)
                 return max(parent().inheritedClipBoxTop(), borderBoxTop());
@@ -670,7 +670,7 @@ public class Transform extends GuiComponent
 
     private float inheritedClipBoxTop()
     {
-        if (parentProperty().isPresent())
+        if (parentProperty().isPresent() && !isFloating())
         {
             if (overflow() != GuiOverflow.VISIBLE)
                 return max(parent().inheritedClipBoxTop(), topPos());
@@ -689,7 +689,7 @@ public class Transform extends GuiComponent
      */
     public float clipBoxRight()
     {
-        if (parentProperty().isPresent())
+        if (parentProperty().isPresent() && !isFloating())
         {
             if (overflow() != GuiOverflow.VISIBLE)
                 return min(parent().inheritedClipBoxRight(), borderBoxRight());
@@ -703,7 +703,7 @@ public class Transform extends GuiComponent
 
     private float inheritedClipBoxRight()
     {
-        if (parentProperty().isPresent())
+        if (parentProperty().isPresent() && !isFloating())
         {
             if (overflow() != GuiOverflow.VISIBLE)
                 return min(parent().inheritedClipBoxRight(), rightPos());
@@ -722,7 +722,7 @@ public class Transform extends GuiComponent
      */
     public float clipBoxBottom()
     {
-        if (parentProperty().isPresent())
+        if (parentProperty().isPresent() && !isFloating())
         {
             if (overflow() != GuiOverflow.VISIBLE)
                 return min(parent().inheritedClipBoxBottom(), borderBoxBottom());
@@ -736,7 +736,7 @@ public class Transform extends GuiComponent
 
     private float inheritedClipBoxBottom()
     {
-        if (parentProperty().isPresent())
+        if (parentProperty().isPresent() && !isFloating())
         {
             if (overflow() != GuiOverflow.VISIBLE)
                 return min(parent().inheritedClipBoxBottom(), bottomPos());
