@@ -22,6 +22,46 @@ public class GuiTextField extends GuiElement implements StyledElement
     private TextInputComponent  textInputComponent;
     private TextAssistComponent textAssistComponent;
 
+    public GuiTextField(boolean value)
+    {
+        this(String.valueOf(value));
+    }
+
+    public GuiTextField(char value)
+    {
+        this(String.valueOf(value));
+    }
+
+    public GuiTextField(byte value)
+    {
+        this(String.valueOf(value));
+    }
+
+    public GuiTextField(short value)
+    {
+        this(String.valueOf(value));
+    }
+
+    public GuiTextField(int value)
+    {
+        this(String.valueOf(value));
+    }
+
+    public GuiTextField(long value)
+    {
+        this(String.valueOf(value));
+    }
+
+    public GuiTextField(float value)
+    {
+        this(String.valueOf(value));
+    }
+
+    public GuiTextField(double value)
+    {
+        this(String.valueOf(value));
+    }
+
     public GuiTextField(String text)
     {
         textComponent.text(text);
