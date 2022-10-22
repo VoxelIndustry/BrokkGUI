@@ -5,7 +5,6 @@ import fr.ourten.teabeans.listener.ListValueChangeListener;
 import fr.ourten.teabeans.listener.ValueInvalidationListener;
 import fr.ourten.teabeans.property.ListProperty;
 import fr.ourten.teabeans.property.Property;
-import fr.ourten.teabeans.property.specific.BooleanProperty;
 import fr.ourten.teabeans.value.ObservableValue;
 import net.voxelindustry.brokkgui.component.GuiComponent;
 import net.voxelindustry.brokkgui.component.GuiElement;
@@ -21,10 +20,7 @@ public class VerticalLayout extends GuiComponent
     private ListProperty<Transform>  childrenTransformProperty;
     private ListProperty<GuiElement> childrenElementProperty;
 
-    // Value is always true
-    // This property is observed with changes-unaware listeners so any calls will trigger a new layout pass
-    private final BooleanProperty           dirtyLayoutProperty = new BooleanProperty(true);
-    private final ValueInvalidationListener dirtyLayoutListener = obs -> dirtyLayoutProperty.set(true);
+    private final ValueInvalidationListener dirtyLayoutListener = obs -> refreshLayout();
 
     private boolean addToHierarchy;
     private boolean elementHorizontalAlignment = true;
@@ -57,6 +53,7 @@ public class VerticalLayout extends GuiComponent
         }
 
         bindElementToLayout(newValue);
+        refreshLayout();
     }
 
     private void bindElementToLayout(Object value)
@@ -77,64 +74,45 @@ public class VerticalLayout extends GuiComponent
         boundTransform.heightProperty().addChangeListener(dirtyLayoutListener);
         boundTransform.yTranslateProperty().addChangeListener(dirtyLayoutListener);
 
+        boundTransform.yPosProperty().unbind();
+
         if (elementHorizontalAlignment)
             bindElementXPos(boundTransform);
+    }
 
-        if (value instanceof GuiElement)
+    private void refreshLayout()
+    {
+        if (childrenTransformProperty != null)
         {
-            boundTransform.yPosProperty().bindProperty(new FloatBinding()
+            var childPos = 0F;
+            for (var childTransform : childrenTransformProperty)
             {
-                {
-                    super.bind(transform().yPosProperty(),
-                            transform().yTranslateProperty(),
-                            transform().yOffsetProperty(),
-                            dirtyLayoutProperty);
-                }
+                childTransform.yPosProperty().set(
+                        transform().topPos() +
+                                transform().yOffsetProperty().get() +
+                                childPos +
+                                childTransform.margin().getTop()
+                );
 
-                @Override
-                protected float computeValue()
-                {
-                    var childPos = 0F;
-                    var childIndex = childrenElementProperty.indexOf(boundTransform.element());
-
-                    for (int index = 0; index < childIndex; index++)
-                    {
-                        var previousChild = childrenElementProperty.get(index);
-                        childPos += previousChild.transform().layoutHeight() + previousChild.yTranslate();
-                    }
-                    childPos += boundTransform.margin().getTop();
-
-                    return transform().topPos() + transform().yOffsetProperty().get() + childPos;
-                }
-            });
+                childPos += childTransform.layoutHeight() + childTransform.yTranslate();
+            }
+            return;
         }
-        else
+
+        if (childrenElementProperty == null)
+            return;
+
+        var childPos = 0F;
+        for (var childElement : childrenElementProperty)
         {
-            boundTransform.yPosProperty().bindProperty(new FloatBinding()
-            {
-                {
-                    super.bind(transform().yPosProperty(),
-                            transform().yTranslateProperty(),
-                            transform().yOffsetProperty(),
-                            dirtyLayoutProperty);
-                }
+            childElement.transform().yPosProperty().set(
+                    transform().topPos() +
+                            transform().yOffsetProperty().get() +
+                            childPos +
+                            childElement.margin().getTop()
+            );
 
-                @Override
-                protected float computeValue()
-                {
-                    var childPos = 0F;
-                    var childIndex = childrenTransformProperty.indexOf(boundTransform);
-
-                    for (int index = 0; index < childIndex; index++)
-                    {
-                        var previousChild = childrenTransformProperty.get(index);
-                        childPos += previousChild.layoutHeight() + previousChild.yTranslate();
-                    }
-                    childPos += boundTransform.margin().getTop();
-
-                    return transform().topPos() + transform().yOffsetProperty().get() + childPos;
-                }
-            });
+            childPos += childElement.transform().layoutHeight() + childElement.yTranslate();
         }
     }
 
@@ -169,7 +147,8 @@ public class VerticalLayout extends GuiComponent
     {
         super.attach(element);
 
-        setChildrenTransforms(transform().childrenProperty());
+        transform().yPosProperty().addChangeListener(dirtyLayoutListener);
+        transform().yTranslateProperty().addChangeListener(dirtyLayoutListener);
     }
 
     public void setChildrenTransforms(ListProperty<Transform> childrenProperty)
@@ -180,7 +159,6 @@ public class VerticalLayout extends GuiComponent
             childrenElementProperty.removeChangeListener(elementListener);
 
         childrenTransformProperty = childrenProperty;
-        childrenProperty.addChangeListener(dirtyLayoutListener);
         childrenProperty.addChangeListener(transformListener);
 
         childrenProperty.forEach(this::bindElementToLayout);
@@ -194,7 +172,6 @@ public class VerticalLayout extends GuiComponent
             childrenTransformProperty.removeChangeListener(transformListener);
 
         childrenElementProperty = childrenProperty;
-        childrenProperty.addChangeListener(dirtyLayoutListener);
         childrenProperty.addChangeListener(elementListener);
 
         childrenProperty.forEach(this::bindElementToLayout);
