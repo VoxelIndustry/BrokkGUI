@@ -8,6 +8,7 @@ import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.event.ClickPressEvent;
 import net.voxelindustry.brokkgui.event.KeyEvent;
 import net.voxelindustry.brokkgui.event.TransformLayoutEvent;
+import net.voxelindustry.brokkgui.policy.GuiScrollbarPolicy;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
@@ -131,6 +132,7 @@ public class MenuDisplayListComponent extends GuiComponent
             transform().floating(true);
             transform().widthRatio(1);
             transform().overflow(GuiOverflow.SCROLL);
+            get(Scrollable.class).scrollXPolicy(GuiScrollbarPolicy.NEVER);
 
             getEventDispatcher().addHandler(TransformLayoutEvent.TYPE, this::onLayoutChange);
 
