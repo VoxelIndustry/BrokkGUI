@@ -3,13 +3,17 @@ package net.voxelindustry.brokkgui.element.menu;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.component.impl.ButtonComponent;
 import net.voxelindustry.brokkgui.component.impl.MenuDisplayListComponent;
+import net.voxelindustry.brokkgui.component.impl.MenuOptionComponent;
 import net.voxelindustry.brokkgui.component.impl.MenuSelectComponent;
 import net.voxelindustry.brokkgui.data.RectAlignment;
+import net.voxelindustry.brokkgui.data.RelativeBindingHelper;
 import net.voxelindustry.brokkgui.style.StyledElement;
 import net.voxelindustry.brokkgui.text.GuiOverflow;
 import net.voxelindustry.brokkgui.text.TextComponent;
 import net.voxelindustry.brokkgui.text.TextLayoutComponent;
 import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.Nullable;
 
 public class GuiSelect extends GuiElement implements StyledElement
 {
@@ -19,24 +23,50 @@ public class GuiSelect extends GuiElement implements StyledElement
     private MenuDisplayListComponent menuDisplayListComponent;
     private ButtonComponent          buttonComponent;
 
+    @Nullable
+    private final GuiElement selectedValueElement;
+
+    public GuiSelect()
+    {
+        this(null);
+    }
+
+    public GuiSelect(GuiElement selectedValueElement)
+    {
+        this.selectedValueElement = selectedValueElement;
+
+        if (selectedValueElement == null)
+        {
+            textComponent = provide(TextComponent.class);
+            textLayoutComponent = provide(TextLayoutComponent.class);
+
+            textLayoutComponent.textOverflow(GuiOverflow.HIDDEN);
+            textComponent.textAlignment(RectAlignment.LEFT_CENTER);
+
+            textComponent.textProperty().bindProperty(menuSelectComponent.selectedValueObservable()
+                    .combine(menuSelectComponent.promptTextProperty(),
+                            (selectedValue, promptText) -> StringUtils.isEmpty(selectedValue) ? promptText : selectedValue));
+        }
+        else
+        {
+            transform().addChild(selectedValueElement.transform());
+            RelativeBindingHelper.bindToPos(selectedValueElement.transform(), transform());
+
+            var menuOptionComponent = selectedValueElement.get(MenuOptionComponent.class);
+            menuSelectComponent.selectedValueObservable()
+                    .addChangeListener(obs -> menuOptionComponent.optionsValueSetter().accept(menuSelectComponent.selectedValue()));
+        }
+    }
+
     @Override
     public void postConstruct()
     {
         super.postConstruct();
 
-        textComponent = provide(TextComponent.class);
-        textLayoutComponent = provide(TextLayoutComponent.class);
         buttonComponent = provide(ButtonComponent.class);
 
         menuSelectComponent = provide(MenuSelectComponent.class);
         menuDisplayListComponent = provide(MenuDisplayListComponent.class);
-
-        textLayoutComponent.textOverflow(GuiOverflow.HIDDEN);
-        textComponent.textAlignment(RectAlignment.LEFT_CENTER);
-
-        textComponent.textProperty().bindProperty(menuSelectComponent.selectedValueObservable()
-                .combine(menuSelectComponent.promptTextProperty(),
-                        (selectedValue, promptText) -> StringUtils.isEmpty(selectedValue) ? promptText : selectedValue));
 
         menuDisplayListComponent.displayList().verticalLayoutComponent().setChildrenElements(menuSelectComponent().optionsElementProperty());
     }
@@ -45,6 +75,12 @@ public class GuiSelect extends GuiElement implements StyledElement
     public String type()
     {
         return "select";
+    }
+
+    @Nullable
+    public GuiElement selectedValueElement()
+    {
+        return selectedValueElement;
     }
 
     ////////////////
@@ -66,7 +102,7 @@ public class GuiSelect extends GuiElement implements StyledElement
         return menuSelectComponent;
     }
 
-    public MenuDisplayListComponent menuDropdownListComponent()
+    public MenuDisplayListComponent menuDisplayListComponent()
     {
         return menuDisplayListComponent;
     }
@@ -79,7 +115,6 @@ public class GuiSelect extends GuiElement implements StyledElement
     ////////////////
     // DELEGATES  //
     ////////////////
-
 
     public String selectedValue()
     {
