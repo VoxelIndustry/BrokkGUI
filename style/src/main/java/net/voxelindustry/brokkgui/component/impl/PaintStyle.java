@@ -6,6 +6,8 @@ import net.voxelindustry.brokkgui.component.GuiComponentException;
 import net.voxelindustry.brokkgui.component.GuiElement;
 import net.voxelindustry.brokkgui.data.FillMethod;
 import net.voxelindustry.brokkgui.data.RectBox;
+import net.voxelindustry.brokkgui.data.RectCorner;
+import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
@@ -14,6 +16,7 @@ import net.voxelindustry.brokkgui.style.HeldPropertyState;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
 import net.voxelindustry.brokkgui.style.optional.BorderProperties;
+import net.voxelindustry.brokkgui.style.optional.OutlineProperties;
 import net.voxelindustry.brokkgui.style.optional.SpriteProperties;
 import net.voxelindustry.brokkgui.style.optional.SpriteRandomRotationProperties;
 
@@ -44,6 +47,8 @@ public class PaintStyle extends Paint
 
         style.registerConditionalProperties("border*", BorderProperties.getInstance());
         style.registerConditionalProperties("border-image*", BorderImageProperties.getInstance());
+
+        style.registerConditionalProperties("outline*", OutlineProperties.getInstance());
 
         style.registerProperty("fill-method", FillMethod.HORIZONTAL, FillMethod.class);
         style.registerProperty("fill-amount", 1F, Float.class);
@@ -184,6 +189,94 @@ public class PaintStyle extends Paint
         if (borderColorProperty == null)
             borderColorProperty = style().getOrCreateProperty("border-color", Color.class);
         return borderColorProperty;
+    }
+
+    @Override
+    public Property<RectBox> borderBoxProperty()
+    {
+        if (borderBoxProperty == null)
+            borderBoxProperty = style().getOrCreateProperty("border-box", RectBox.class);
+        return borderBoxProperty;
+    }
+
+    @Override
+    public Property<RectBox> outlineBoxProperty()
+    {
+        if (outlineBoxProperty == null)
+            outlineBoxProperty = style().getOrCreateProperty("outline-box", RectBox.class);
+        return outlineBoxProperty;
+    }
+
+    @Override
+    public Property<Color> outlineColorProperty()
+    {
+        if (outlineColorProperty == null)
+            outlineColorProperty = style().getOrCreateProperty("outline-color", Color.class);
+        return outlineColorProperty;
+    }
+
+    @Override
+    public Property<Float> outlineWidthLeftProperty()
+    {
+        if (outlineWidthLeftProperty == null)
+            outlineWidthLeftProperty = style().getOrCreateProperty("outline-left-width", Float.class);
+        return outlineWidthLeftProperty;
+    }
+
+    @Override
+    public Property<Float> outlineWidthRightProperty()
+    {
+        if (outlineWidthRightProperty == null)
+            outlineWidthRightProperty = style().getOrCreateProperty("outline-right-width", Float.class);
+        return outlineWidthRightProperty;
+    }
+
+    @Override
+    public Property<Float> outlineWidthTopProperty()
+    {
+        if (outlineWidthTopProperty == null)
+            outlineWidthTopProperty = style().getOrCreateProperty("outline-top-width", Float.class);
+        return outlineWidthTopProperty;
+    }
+
+    @Override
+    public Property<Float> outlineWidthBottomProperty()
+    {
+        if (outlineWidthBottomProperty == null)
+            outlineWidthBottomProperty = style().getOrCreateProperty("outline-bottom-width", Float.class);
+        return outlineWidthBottomProperty;
+    }
+
+    @Override
+    public Property<Integer> outlineRadiusTopLeftProperty()
+    {
+        if (outlineRadiusTopLeftProperty == null)
+            outlineRadiusTopLeftProperty = style().getOrCreateProperty("outline-top-left-radius", Integer.class);
+        return outlineRadiusTopLeftProperty;
+    }
+
+    @Override
+    public Property<Integer> outlineRadiusTopRightProperty()
+    {
+        if (outlineRadiusTopRightProperty == null)
+            outlineRadiusTopRightProperty = style().getOrCreateProperty("outline-top-right-radius", Integer.class);
+        return outlineRadiusTopRightProperty;
+    }
+
+    @Override
+    public Property<Integer> outlineRadiusBottomLeftProperty()
+    {
+        if (outlineRadiusBottomLeftProperty == null)
+            outlineRadiusBottomLeftProperty = style().getOrCreateProperty("outline-bottom-left-radius", Integer.class);
+        return outlineRadiusBottomLeftProperty;
+    }
+
+    @Override
+    public Property<Integer> outlineRadiusBottomRightProperty()
+    {
+        if (outlineRadiusBottomRightProperty == null)
+            outlineRadiusBottomRightProperty = style().getOrCreateProperty("outline-bottom-right-radius", Integer.class);
+        return outlineRadiusBottomRightProperty;
     }
 
     @Override
@@ -397,6 +490,12 @@ public class PaintStyle extends Paint
     }
 
     @Override
+    public boolean hasOutline()
+    {
+        return style().doesHoldProperty("outline-width") == HeldPropertyState.PRESENT;
+    }
+
+    @Override
     public boolean hasBorderImage()
     {
         return style().doesHoldProperty("border-image-source") == HeldPropertyState.PRESENT;
@@ -424,6 +523,69 @@ public class PaintStyle extends Paint
     public void borderColor(Color color)
     {
         style().setPropertyDirect("border-color", color, Color.class);
+    }
+
+    @Override
+    public Color outlineColor()
+    {
+        return style().getValue("outline-color", Color.class, Color.ALPHA);
+    }
+
+    @Override
+    public void outlineColor(Color color)
+    {
+        style().setPropertyDirect("outline-color", color, Color.class);
+    }
+
+    @Override
+    public float outlineWidth()
+    {
+        return style().getValue("outline-top-width", Float.class, 0F);
+    }
+
+    @Override
+    public float outlineWidth(RectSide side)
+    {
+        return style().getValue("outline-" + side.getCssString() + "-width", Float.class, 0F);
+    }
+
+    @Override
+    public void outlineWidth(float width)
+    {
+        outlineWidth(RectSide.UP, width);
+        outlineWidth(RectSide.DOWN, width);
+        outlineWidth(RectSide.LEFT, width);
+        outlineWidth(RectSide.RIGHT, width);
+    }
+
+    @Override
+    public void outlineWidth(RectSide side, float outlineWidth)
+    {
+        style().setPropertyDirect("outline-" + side.getCssString() + "-width", outlineWidth, Float.class);
+    }
+
+    @Override
+    public int outlineRadius(RectCorner corner)
+    {
+        return style().getValue("outline-" + corner.getCssString() + "-radius", Integer.class, 0);
+    }
+
+    @Override
+    public void outlineRadius(RectCorner corner, int radius)
+    {
+        style().setPropertyDirect("outline-" + corner.getCssString() + "-radius", radius, Integer.class);
+    }
+
+    @Override
+    public RectBox outlineBox()
+    {
+        return style().getValue("outline-box", RectBox.class, RectBox.EMPTY);
+    }
+
+    @Override
+    public void outlineBox(RectBox outlineBox)
+    {
+        style().setPropertyDirect("outline-box", outlineBox, RectBox.class);
     }
 
     @Override

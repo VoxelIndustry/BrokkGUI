@@ -1,6 +1,8 @@
 package net.voxelindustry.brokkgui.border;
 
+import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkgui.component.impl.Paint;
+import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
@@ -9,6 +11,61 @@ import net.voxelindustry.brokkgui.paint.RenderPass;
 
 public class ColorBorderDrawer
 {
+
+    public static void drawOutline(Paint paint, IRenderCommandReceiver renderer)
+    {
+        var transform = paint.transform();
+        var color = paint.outlineColor();
+
+        if (color.isInvisible())
+            return;
+
+        var outlineLeft = paint.outlineWidth(RectSide.LEFT);
+        var outlineRight = paint.outlineWidth(RectSide.RIGHT);
+        var outlineTop = paint.outlineWidth(RectSide.UP);
+        var outlineBottom = paint.outlineWidth(RectSide.DOWN);
+
+        var topLeftRadius = paint.outlineRadius(RectCorner.TOP_LEFT);
+        var topRightRadius = paint.outlineRadius(RectCorner.TOP_RIGHT);
+        var bottomLeftRadius = paint.outlineRadius(RectCorner.BOTTOM_LEFT);
+        var bottomRightRadius = paint.outlineRadius(RectCorner.BOTTOM_RIGHT);
+
+        var leftPos = transform.leftPos();
+        var rightPos = transform.rightPos();
+        var bottomPos = transform.bottomPos();
+        var topPos = transform.topPos();
+
+        var width = transform.width();
+        var height = transform.height();
+
+        if (paint.outlineBox() != RectBox.EMPTY)
+        {
+            leftPos -= paint.outlineBox().getLeft();
+            rightPos += paint.outlineBox().getRight();
+            bottomPos += paint.outlineBox().getBottom();
+            topPos -= paint.outlineBox().getTop();
+
+            width += paint.outlineBox().getHorizontal();
+            height += paint.outlineBox().getVertical();
+        }
+        else
+        {
+            var borderLeft = transform.borderWidth(RectSide.LEFT);
+            var borderRight = transform.borderWidth(RectSide.RIGHT);
+            var borderTop = transform.borderWidth(RectSide.UP);
+            var borderBottom = transform.borderWidth(RectSide.DOWN);
+
+            leftPos -= outlineLeft + borderLeft;
+            rightPos += outlineRight + borderRight;
+            bottomPos += outlineBottom + borderBottom;
+            topPos -= outlineTop + borderTop;
+
+            width += outlineLeft + outlineRight + borderLeft + borderRight;
+            height += outlineTop + outlineBottom + borderTop + borderBottom;
+        }
+
+        drawBorderShape(renderer, transform, color, outlineLeft, outlineRight, outlineTop, outlineBottom, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius, leftPos, rightPos, bottomPos, topPos, width, height);
+    }
 
     public static void drawBorder(Paint paint, IRenderCommandReceiver renderer)
     {
@@ -57,6 +114,27 @@ public class ColorBorderDrawer
             height += borderTop + borderBottom;
         }
 
+        drawBorderShape(renderer, transform, color, borderLeft, borderRight, borderTop, borderBottom, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius, leftPos, rightPos, bottomPos, topPos, width, height);
+    }
+
+    private static void drawBorderShape(IRenderCommandReceiver renderer,
+                                        Transform transform,
+                                        Color color,
+                                        float borderLeft,
+                                        float borderRight,
+                                        float borderTop,
+                                        float borderBottom,
+                                        int topLeftRadius,
+                                        int topRightRadius,
+                                        int bottomLeftRadius,
+                                        int bottomRightRadius,
+                                        float leftPos,
+                                        float rightPos,
+                                        float bottomPos,
+                                        float topPos,
+                                        float width,
+                                        float height)
+    {
         var zLevel = transform.zLevel();
 
         // Straightforward empty rect tracing in case of same border width

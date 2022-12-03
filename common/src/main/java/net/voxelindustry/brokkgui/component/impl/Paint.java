@@ -10,6 +10,8 @@ import net.voxelindustry.brokkgui.component.RenderComponent;
 import net.voxelindustry.brokkgui.component.RequiredOverride;
 import net.voxelindustry.brokkgui.data.FillMethod;
 import net.voxelindustry.brokkgui.data.RectBox;
+import net.voxelindustry.brokkgui.data.RectCorner;
+import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
@@ -52,6 +54,17 @@ public class Paint extends GuiComponent implements RenderComponent
     protected Property<RectBox> borderImageOutsetProperty;
 
     protected Property<Boolean> borderImageFillProperty;
+
+    protected Property<Color>   outlineColorProperty;
+    protected Property<Float>   outlineWidthLeftProperty;
+    protected Property<Float>   outlineWidthRightProperty;
+    protected Property<Float>   outlineWidthTopProperty;
+    protected Property<Float>   outlineWidthBottomProperty;
+    protected Property<Integer> outlineRadiusTopLeftProperty;
+    protected Property<Integer> outlineRadiusTopRightProperty;
+    protected Property<Integer> outlineRadiusBottomLeftProperty;
+    protected Property<Integer> outlineRadiusBottomRightProperty;
+    protected Property<RectBox> outlineBoxProperty;
 
     protected Property<FillMethod> fillMethodProperty;
     protected Property<Float>      fillAmountProperty;
@@ -139,6 +152,9 @@ public class Paint extends GuiComponent implements RenderComponent
             else
                 ColorBorderDrawer.drawBorder(this, renderer);
         }
+
+        if (hasOutline())
+            ColorBorderDrawer.drawOutline(this, renderer);
     }
 
     ////////////////
@@ -173,6 +189,12 @@ public class Paint extends GuiComponent implements RenderComponent
     public boolean hasBorder()
     {
         return borderColorProperty != null;
+    }
+
+    @RequiredOverride
+    public boolean hasOutline()
+    {
+        return outlineColorProperty != null;
     }
 
     @RequiredOverride
@@ -291,6 +313,86 @@ public class Paint extends GuiComponent implements RenderComponent
         if (borderColorProperty == null)
             borderColorProperty = createRenderProperty(Color.ALPHA);
         return borderColorProperty;
+    }
+
+    @RequiredOverride
+    public Property<Color> outlineColorProperty()
+    {
+        if (outlineColorProperty == null)
+            outlineColorProperty = createRenderProperty(Color.ALPHA);
+        return outlineColorProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> outlineWidthLeftProperty()
+    {
+        if (outlineWidthLeftProperty == null)
+            outlineWidthLeftProperty = createRenderProperty(1F);
+        return outlineWidthLeftProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> outlineWidthRightProperty()
+    {
+        if (outlineWidthRightProperty == null)
+            outlineWidthRightProperty = createRenderProperty(1F);
+        return outlineWidthRightProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> outlineWidthTopProperty()
+    {
+        if (outlineWidthTopProperty == null)
+            outlineWidthTopProperty = createRenderProperty(1F);
+        return outlineWidthTopProperty;
+    }
+
+    @RequiredOverride
+    public Property<Float> outlineWidthBottomProperty()
+    {
+        if (outlineWidthBottomProperty == null)
+            outlineWidthBottomProperty = createRenderProperty(1F);
+        return outlineWidthBottomProperty;
+    }
+
+    @RequiredOverride
+    public Property<Integer> outlineRadiusTopLeftProperty()
+    {
+        if (outlineRadiusTopLeftProperty == null)
+            outlineRadiusTopLeftProperty = createRenderProperty(0);
+        return outlineRadiusTopLeftProperty;
+    }
+
+    @RequiredOverride
+    public Property<Integer> outlineRadiusTopRightProperty()
+    {
+        if (outlineRadiusTopRightProperty == null)
+            outlineRadiusTopRightProperty = createRenderProperty(0);
+        return outlineRadiusTopRightProperty;
+    }
+
+    @RequiredOverride
+    public Property<Integer> outlineRadiusBottomLeftProperty()
+    {
+        if (outlineRadiusBottomLeftProperty == null)
+            outlineRadiusBottomLeftProperty = createRenderProperty(0);
+        return outlineRadiusBottomLeftProperty;
+    }
+
+    @RequiredOverride
+    public Property<Integer> outlineRadiusBottomRightProperty()
+    {
+        if (outlineRadiusBottomRightProperty == null)
+            outlineRadiusBottomRightProperty = createRenderProperty(0);
+        return outlineRadiusBottomRightProperty;
+    }
+
+    @RequiredOverride
+    public Property<RectBox> outlineBoxProperty()
+    {
+        if (outlineBoxProperty == null)
+            outlineBoxProperty = createRenderProperty(RectBox.EMPTY);
+        return outlineBoxProperty;
     }
 
     @RequiredOverride
@@ -441,7 +543,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public void backgroundRotation(SpriteRotation rotation)
     {
         if (backgroundRotationArray == null)
-            backgroundRotationArray = new SpriteRotation[]{rotation};
+            backgroundRotationArray = new SpriteRotation[] { rotation };
         else
             backgroundRotationArray[0] = rotation;
     }
@@ -546,7 +648,7 @@ public class Paint extends GuiComponent implements RenderComponent
     public void foregroundRotation(SpriteRotation rotation)
     {
         if (foregroundRotationArray == null)
-            foregroundRotationArray = new SpriteRotation[]{rotation};
+            foregroundRotationArray = new SpriteRotation[] { rotation };
         else
             foregroundRotationArray[0] = rotation;
     }
@@ -585,6 +687,95 @@ public class Paint extends GuiComponent implements RenderComponent
     public void borderColor(Color color)
     {
         borderColorProperty().setValue(color);
+    }
+
+    @RequiredOverride
+    public Color outlineColor()
+    {
+        if (outlineColorProperty == null)
+            return Color.ALPHA;
+        return outlineColorProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void outlineColor(Color color)
+    {
+        outlineColorProperty().setValue(color);
+    }
+
+    @RequiredOverride
+    public float outlineWidth()
+    {
+        return outlineWidth(RectSide.UP);
+    }
+
+    @RequiredOverride
+    public float outlineWidth(RectSide side)
+    {
+        return switch (side)
+                {
+                    case UP -> outlineWidthTopProperty().getValue();
+                    case DOWN -> outlineWidthBottomProperty().getValue();
+                    case LEFT -> outlineWidthLeftProperty().getValue();
+                    case RIGHT -> outlineWidthRightProperty().getValue();
+                };
+    }
+
+    @RequiredOverride
+    public void outlineWidth(float width)
+    {
+        outlineWidthTopProperty().setValue(width);
+        outlineWidthBottomProperty().setValue(width);
+        outlineWidthLeftProperty().setValue(width);
+        outlineWidthRightProperty().setValue(width);
+    }
+
+    @RequiredOverride
+    public void outlineWidth(RectSide side, float width)
+    {
+        switch (side)
+        {
+            case UP -> outlineWidthTopProperty().setValue(width);
+            case DOWN -> outlineWidthBottomProperty().setValue(width);
+            case LEFT -> outlineWidthLeftProperty().setValue(width);
+            case RIGHT -> outlineWidthRightProperty().setValue(width);
+        }
+    }
+
+    @RequiredOverride
+    public int outlineRadius(RectCorner corner)
+    {
+        return switch (corner)
+                {
+                    case TOP_LEFT -> outlineRadiusTopLeftProperty().getValue();
+                    case TOP_RIGHT -> outlineRadiusTopRightProperty().getValue();
+                    case BOTTOM_LEFT -> outlineRadiusBottomLeftProperty().getValue();
+                    case BOTTOM_RIGHT -> outlineRadiusBottomRightProperty().getValue();
+                };
+    }
+
+    @RequiredOverride
+    public void outlineRadius(RectCorner corner, int width)
+    {
+        switch (corner)
+        {
+            case TOP_LEFT -> outlineRadiusTopLeftProperty().setValue(width);
+            case TOP_RIGHT -> outlineRadiusTopRightProperty().setValue(width);
+            case BOTTOM_LEFT -> outlineRadiusBottomLeftProperty().setValue(width);
+            case BOTTOM_RIGHT -> outlineRadiusBottomRightProperty().setValue(width);
+        }
+    }
+
+    @RequiredOverride
+    public RectBox outlineBox()
+    {
+        return outlineBoxProperty().getValue();
+    }
+
+    @RequiredOverride
+    public void outlineBox(RectBox outlineBox)
+    {
+        outlineBoxProperty().setValue(outlineBox);
     }
 
     @RequiredOverride
