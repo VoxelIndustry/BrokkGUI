@@ -44,7 +44,7 @@ public class StylesheetManager
         styleCache = CacheBuilder.newBuilder()
                 .maximumSize(100)
                 .expireAfterAccess(10, TimeUnit.MINUTES)
-                .build(new CacheLoader<String, StyleList>()
+                .build(new CacheLoader<>()
                 {
                     @Override
                     public StyleList load(@Nonnull String stylesheet) throws IOException
@@ -75,7 +75,11 @@ public class StylesheetManager
     {
         screen.getStylesheets().forEach(styleCache::refresh);
         refreshStylesheets(screen, useUserAgent);
+    }
 
+    public void forceReloadAll()
+    {
+        styleCache.invalidateAll();
     }
 
     public synchronized void refreshStylesheets(IStyleRoot screen)
@@ -104,9 +108,9 @@ public class StylesheetManager
 
     StyleList loadStylesheets(String... styleSheets) throws ExecutionException
     {
-        StyleList list = new StyleList();
+        var list = new StyleList();
 
-        for (String styleSheet : styleSheets)
+        for (var styleSheet : styleSheets)
             list.merge(getStyleList(styleSheet));
         return list;
     }
