@@ -15,7 +15,7 @@ public class ColorBorderDrawer
         var transform = paint.transform();
         var color = paint.borderColor();
 
-        if (color.getAlpha() == 0)
+        if (color.isInvisible())
             return;
 
         var borderLeft = transform.borderWidth(RectSide.LEFT);
