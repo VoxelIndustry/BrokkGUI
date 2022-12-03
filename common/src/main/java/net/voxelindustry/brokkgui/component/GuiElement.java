@@ -682,9 +682,10 @@ public abstract class GuiElement implements IEventEmitter, ComponentHolder
         return tagsProperty;
     }
 
-    public void addTag(String tag)
+    public void addTag(String... tags)
     {
-        tagsProperty().add(tag);
+        for (String tag : tags)
+            tagsProperty().add(tag);
     }
 
     public boolean removeTag(String tag)
