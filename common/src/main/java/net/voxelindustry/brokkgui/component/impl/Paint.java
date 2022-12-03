@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.component.impl;
 
 import fr.ourten.teabeans.property.Property;
 import net.voxelindustry.brokkcolor.Color;
-import net.voxelindustry.brokkgui.border.BorderBox;
 import net.voxelindustry.brokkgui.border.ColorBorderDrawer;
 import net.voxelindustry.brokkgui.border.ImageBorderDrawer;
 import net.voxelindustry.brokkgui.component.GuiComponent;
@@ -43,7 +42,7 @@ public class Paint extends GuiComponent implements RenderComponent
 
     protected Property<RandomSpriteRotation> foregroundRotationProperty;
 
-    protected Property<BorderBox> borderBoxProperty;
+    protected Property<RectBox> borderBoxProperty;
 
     protected Property<Color> borderColorProperty;
 
@@ -279,10 +278,10 @@ public class Paint extends GuiComponent implements RenderComponent
     }
 
     @RequiredOverride
-    public Property<BorderBox> borderBoxProperty()
+    public Property<RectBox> borderBoxProperty()
     {
         if (borderBoxProperty == null)
-            borderBoxProperty = createRenderProperty(BorderBox.OUTSIDE);
+            borderBoxProperty = createRenderProperty(RectBox.EMPTY);
         return borderBoxProperty;
     }
 
@@ -565,13 +564,13 @@ public class Paint extends GuiComponent implements RenderComponent
     }
 
     @RequiredOverride
-    public BorderBox borderBox()
+    public RectBox borderBox()
     {
         return borderBoxProperty().getValue();
     }
 
     @RequiredOverride
-    public void borderBox(BorderBox borderBox)
+    public void borderBox(RectBox borderBox)
     {
         borderBoxProperty().setValue(borderBox);
     }

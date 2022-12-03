@@ -22,7 +22,6 @@ public class ImageBorderDrawer
 
         RectBox sliceBox = paint.borderImageSlice();
         RectBox widthBox = paint.borderImageWidth();
-        RectBox outsetBox = paint.borderImageOutset();
 
         float leftPos = transform.leftPos();
         float topPos = transform.topPos();
@@ -32,15 +31,25 @@ public class ImageBorderDrawer
         float width = transform.width();
         float height = transform.height();
 
-        if (paint.borderBox() == BorderBox.OUTSIDE)
+        if (paint.borderBox() != RectBox.EMPTY)
         {
-            leftPos -= outsetBox.getLeft();
-            rightPos += outsetBox.getRight();
-            bottomPos += outsetBox.getBottom();
-            topPos -= outsetBox.getTop();
+            leftPos -= paint.borderBox().getLeft();
+            rightPos += paint.borderBox().getRight();
+            bottomPos += paint.borderBox().getBottom();
+            topPos -= paint.borderBox().getTop();
 
-            width += outsetBox.getHorizontal();
-            height += outsetBox.getVertical();
+            width += paint.borderBox().getHorizontal();
+            height += paint.borderBox().getVertical();
+        }
+        else
+        {
+            leftPos -= borderLeft;
+            rightPos += borderRight;
+            bottomPos += borderBottom;
+            topPos -= borderTop;
+
+            width += borderLeft + borderRight;
+            height += borderTop + borderBottom;
         }
 
         boolean doFill = paint.borderImageFill();

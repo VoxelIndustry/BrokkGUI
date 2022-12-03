@@ -1,7 +1,7 @@
 package net.voxelindustry.brokkgui.style.optional;
 
 import net.voxelindustry.brokkcolor.Color;
-import net.voxelindustry.brokkgui.border.BorderBox;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.style.StyleComponent;
 import net.voxelindustry.brokkgui.style.StyleProperty;
 
@@ -29,6 +29,6 @@ public class BorderProperties implements Consumer<StyleComponent>
         StyleProperty<Color> borderColorProperty = holder.registerProperty("border-color", Color.BLACK, Color.class);
         holder.registerGenericShorthand("border", "", borderColorProperty, holder.getProperty("border-width", Float.class));
 
-        holder.registerProperty("border-box", BorderBox.OUTSIDE, BorderBox.class);
+        holder.registerProperty("border-box", RectBox.EMPTY, RectBox.class);
     }
 }

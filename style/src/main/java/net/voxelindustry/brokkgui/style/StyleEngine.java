@@ -2,7 +2,6 @@ package net.voxelindustry.brokkgui.style;
 
 import net.voxelindustry.brokkcolor.Color;
 import net.voxelindustry.brokkcolor.ColorLike;
-import net.voxelindustry.brokkgui.border.BorderBox;
 import net.voxelindustry.brokkgui.component.ComponentEngine;
 import net.voxelindustry.brokkgui.component.impl.Paint;
 import net.voxelindustry.brokkgui.component.impl.PaintStyle;
@@ -20,7 +19,6 @@ import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.BackgroundRepeatStyleTranslator;
-import net.voxelindustry.brokkgui.style.adapter.translator.BorderBoxStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.ColorStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.FillMethodStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.RandomSpriteRotationStyleTranslator;
@@ -82,6 +80,5 @@ public class StyleEngine
 
         StyleTranslator.getInstance().registerTranslator(RectAlignment.class, new RectAlignmentStyleTranslator());
         StyleTranslator.getInstance().registerTranslator(FillMethod.class, new FillMethodStyleTranslator());
-        StyleTranslator.getInstance().registerTranslator(BorderBox.class, new BorderBoxStyleTranslator());
     }
 }

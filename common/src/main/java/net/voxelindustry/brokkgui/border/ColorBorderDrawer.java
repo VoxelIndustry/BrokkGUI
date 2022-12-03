@@ -1,6 +1,7 @@
 package net.voxelindustry.brokkgui.border;
 
 import net.voxelindustry.brokkgui.component.impl.Paint;
+import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
@@ -35,7 +36,17 @@ public class ColorBorderDrawer
         var width = transform.width();
         var height = transform.height();
 
-        if (paint.borderBox() == BorderBox.OUTSIDE)
+        if (paint.borderBox() != RectBox.EMPTY)
+        {
+            leftPos -= paint.borderBox().getLeft();
+            rightPos += paint.borderBox().getRight();
+            bottomPos += paint.borderBox().getBottom();
+            topPos -= paint.borderBox().getTop();
+
+            width += paint.borderBox().getHorizontal();
+            height += paint.borderBox().getVertical();
+        }
+        else
         {
             leftPos -= borderLeft;
             rightPos += borderRight;
@@ -91,7 +102,7 @@ public class ColorBorderDrawer
                     height - borderBottom - bottomLeftRadiusOffset - topLeftRadius,
                     zLevel, color, RenderPass.BORDER);
 
-        float topLeftRadiusOffset = topLeftRadius > 0 && topLeftRadius <= borderLeft ? topLeftRadius - borderLeft : 0;
+        float topLeftRadiusOffset = topLeftRadius > 0 && topLeftRadius <= borderLeft ? topLeftRadius - borderLeft : 1;
         if (borderTop > 0)
             renderer.drawColoredRect(leftPos + borderLeft + topLeftRadiusOffset,
                     topPos,
@@ -107,7 +118,7 @@ public class ColorBorderDrawer
                     zLevel, color, RenderPass.BORDER);
 
         float bottomRightRadiusOffset = bottomRightRadius > 0 && bottomRightRadius <= borderRight ?
-                bottomRightRadius - borderRight : 0;
+                bottomRightRadius - borderRight : 1;
         if (borderBottom > 0)
             renderer.drawColoredRect(leftPos + bottomLeftRadius,
                     bottomPos - borderBottom,
