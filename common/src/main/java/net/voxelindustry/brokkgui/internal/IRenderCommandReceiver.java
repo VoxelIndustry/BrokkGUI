@@ -84,6 +84,8 @@ public interface IRenderCommandReceiver extends ITextRenderer
 
     void drawColoredArc(float centerX, float centerY, float radius, float zLevel, ColorLike color, RectCorner corner, RenderPass pass);
 
+    void drawColoredArc(float centerX, float centerY, float radius, float zLevel, ColorLike color, RectCorner corner, int octantIndex, RenderPass pass);
+
     void startAlphaMask(double opacity);
 
     void closeAlphaMask();
