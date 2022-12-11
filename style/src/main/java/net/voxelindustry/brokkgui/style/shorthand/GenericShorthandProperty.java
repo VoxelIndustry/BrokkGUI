@@ -1,15 +1,20 @@
 package net.voxelindustry.brokkgui.style.shorthand;
 
 import net.voxelindustry.brokkgui.style.StyleProperty;
-import net.voxelindustry.brokkgui.style.StyleSource;
-import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
+import net.voxelindustry.brokkgui.style.specificity.StyleSource;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GenericShorthandProperty extends StyleProperty<String>
 {
     private final List<StyleProperty<?>> childProperties;
+    private final List<StyleProperty<?>> alreadySet = new ArrayList<>();
+
+    private final AtomicInteger styleConsumedLength = new AtomicInteger();
+
 
     public GenericShorthandProperty(String defaultValue, String name)
     {
@@ -30,40 +35,37 @@ public class GenericShorthandProperty extends StyleProperty<String>
 
     public void applyDefaultValue()
     {
-        this.setStyleRaw(StyleSource.USER_AGENT, 0, this.getDefaultValue());
+        this.setStyleRaw("", StyleSource.USER_AGENT, 0, this.getDefaultValue(), null);
     }
 
     @Override
-    public boolean setStyleRaw(StyleSource source, int specificity, String rawValue)
+    public void setStyleRaw(String propertyName, StyleSource source, int specificity, String rawValue, @Nullable AtomicInteger consumedLength)
     {
         String current = rawValue;
         boolean anySet;
-        List<StyleProperty<?>> alreadySet = new ArrayList<>();
 
-        while (!current.isEmpty())
+        while (!current.isBlank())
         {
             anySet = false;
-            for (StyleProperty<?> child : this.childProperties)
+            for (var child : this.childProperties)
             {
                 if (alreadySet.contains(child))
                     continue;
 
-                int validated = StyleTranslator.getInstance().validate(current, child.getValueClass());
+                child.setStyleRaw(child.getName(), source, specificity, current, styleConsumedLength);
 
-                if (validated != 0)
-                {
-                    child.setStyleRaw(source, specificity, current.substring(0, validated));
-                    current = current.substring(validated).trim();
+                current = current.substring(styleConsumedLength.get()).trim();
 
-                    alreadySet.add(child);
-                    anySet = true;
-                    break;
-                }
+                alreadySet.add(child);
+                anySet = true;
+                break;
             }
 
             if (!anySet)
-                return false;
+                break;
         }
-        return true;
+
+        styleConsumedLength.set(0);
+        alreadySet.clear();
     }
 }

@@ -6,13 +6,13 @@ import net.voxelindustry.brokkgui.sprite.SpriteRotation;
 import net.voxelindustry.brokkgui.style.adapter.IStyleTranslator;
 
 import java.util.EnumMap;
-import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RandomSpriteRotationStyleTranslator implements IStyleTranslator<RandomSpriteRotation>
 {
     @Override
-    public RandomSpriteRotation decode(String style)
+    public RandomSpriteRotation decode(String style, AtomicInteger consumedLength)
     {
         String[] parts = style.split(" ");
 
@@ -56,19 +56,12 @@ public class RandomSpriteRotationStyleTranslator implements IStyleTranslator<Ran
     {
         String result = "";
 
-        for (Map.Entry<SpriteRotation, Float> entry : value.getChanceByRotation().entrySet())
+        for (var entry : value.getChanceByRotation().entrySet())
         {
             SpriteRotation rotation = entry.getKey();
             Float chance = entry.getValue();
             result = result.concat(rotation.name()).concat(" ").concat(String.valueOf(chance)).concat("% ");
         }
         return result.trim();
-    }
-
-    @Override
-    public int validate(String style)
-    {
-        // TODO: RandomSpriteRotation validator
-        return 0;
     }
 }

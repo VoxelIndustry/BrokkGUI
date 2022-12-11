@@ -1,7 +1,6 @@
-package net.voxelindustry.brokkgui.style.adapter;
+package net.voxelindustry.brokkgui.style.adapter.translator;
 
 import net.voxelindustry.brokkgui.data.RectBox;
-import net.voxelindustry.brokkgui.style.adapter.translator.RectBoxTranslator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

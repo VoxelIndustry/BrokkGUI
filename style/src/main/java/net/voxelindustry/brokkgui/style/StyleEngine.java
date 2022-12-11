@@ -18,11 +18,10 @@ import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
-import net.voxelindustry.brokkgui.style.adapter.translator.BackgroundRepeatStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.ColorStyleTranslator;
-import net.voxelindustry.brokkgui.style.adapter.translator.FillMethodStyleTranslator;
+import net.voxelindustry.brokkgui.style.adapter.translator.ConstantListStyleTranslator;
+import net.voxelindustry.brokkgui.style.adapter.translator.EnumStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.RandomSpriteRotationStyleTranslator;
-import net.voxelindustry.brokkgui.style.adapter.translator.RectAlignmentStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.RectBoxTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.ResourceStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.TextureStyleTranslator;
@@ -72,13 +71,23 @@ public class StyleEngine
 
         StyleTranslator.getInstance().registerTranslator(RectBox.class, new RectBoxTranslator());
 
-        StyleTranslator.getInstance().registerTranslator(SpriteRepeat.class, new BackgroundRepeatStyleTranslator());
+        StyleTranslator.getInstance().registerTranslator(SpriteRepeat.class, new EnumStyleTranslator<>(SpriteRepeat.class));
 
         StyleTranslator.getInstance().registerTranslator(Resource.class, new ResourceStyleTranslator());
 
         StyleTranslator.getInstance().registerTranslator(RandomSpriteRotation.class, new RandomSpriteRotationStyleTranslator());
 
-        StyleTranslator.getInstance().registerTranslator(RectAlignment.class, new RectAlignmentStyleTranslator());
-        StyleTranslator.getInstance().registerTranslator(FillMethod.class, new FillMethodStyleTranslator());
+        StyleTranslator.getInstance().registerTranslator(RectAlignment.class, ConstantListStyleTranslator.builder(RectAlignment.class)
+                .entry(RectAlignment.LEFT_CENTER, "left center", "left")
+                .entry(RectAlignment.RIGHT_CENTER, "right center", "right")
+                .entry(RectAlignment.MIDDLE_CENTER, "center", "center center")
+                .entry(RectAlignment.LEFT_UP, "left up")
+                .entry(RectAlignment.RIGHT_UP, "right up")
+                .entry(RectAlignment.LEFT_DOWN, "left down")
+                .entry(RectAlignment.RIGHT_DOWN, "right down")
+                .entry(RectAlignment.MIDDLE_UP, "center up", "up")
+                .entry(RectAlignment.MIDDLE_DOWN, "center down", "down")
+                .create());
+        StyleTranslator.getInstance().registerTranslator(FillMethod.class, new EnumStyleTranslator<>(FillMethod.class));
     }
 }

@@ -1,7 +1,6 @@
-package net.voxelindustry.brokkgui.style.adapter;
+package net.voxelindustry.brokkgui.style.adapter.translator;
 
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
-import net.voxelindustry.brokkgui.style.adapter.translator.RandomSpriteRotationStyleTranslator;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.BeforeEach;

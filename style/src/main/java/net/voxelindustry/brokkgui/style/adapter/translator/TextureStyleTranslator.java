@@ -5,6 +5,7 @@ import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.adapter.IStyleTranslator;
 
 import java.text.NumberFormat;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TextureStyleTranslator implements IStyleTranslator<Texture>
 {
@@ -27,15 +28,18 @@ public class TextureStyleTranslator implements IStyleTranslator<Texture>
     }
 
     @Override
-    public Texture decode(String style)
+    public Texture decode(String style, AtomicInteger consumedLength)
     {
-        if (!style.startsWith("url(") && !style.startsWith("assets("))
+        var doesStartWithURL = style.startsWith("url(");
+        var doesStartWithAssets = style.startsWith("assets(");
+
+        if (!doesStartWithURL && !doesStartWithAssets)
             return Texture.EMPTY;
 
-        if (style.startsWith("url("))
+        if (doesStartWithURL)
             BrokkGuiPlatform.getInstance().getLogger().warning("Deprecated texture specification used. url(...) will be removed from BrokkGUI in version 1.0.0.");
 
-        String[] split = style.replace("url(", "").replace("assets(", "").replace(")", "").split(",");
+        String[] split = style.substring(style.indexOf("(") + 1, style.indexOf(")")).split(",");
 
         String resource = "";
         float uMin = 0;
@@ -57,13 +61,9 @@ public class TextureStyleTranslator implements IStyleTranslator<Texture>
             if (split[index].contains("px"))
             {
                 if (index % 2 == 1)
-                {
                     pixelWidth = Integer.parseInt(split[index].replace("px", "").trim());
-                }
                 else
-                {
                     pixelHeight = Integer.parseInt(split[index].replace("px", "").trim());
-                }
             }
             else
             {
@@ -78,15 +78,8 @@ public class TextureStyleTranslator implements IStyleTranslator<Texture>
             }
         }
 
+        if (consumedLength != null)
+            consumedLength.set(style.indexOf(')')+1);
         return new Texture(resource, uMin, vMin, uMax, vMax, pixelWidth, pixelHeight);
-    }
-
-    @Override
-    public int validate(String style)
-    {
-        if (!style.startsWith("url(") || !style.startsWith("assets("))
-            return 0;
-
-        return style.substring(0, style.indexOf(')') + 1).length();
     }
 }

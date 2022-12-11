@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.fail;
 
 class PaintStyleTest
@@ -26,7 +25,7 @@ class PaintStyleTest
 
         List<Method> requiredMethods = stream(paintClass.getMethods())
                 .filter(method -> method.isAnnotationPresent(RequiredOverride.class))
-                .collect(toList());
+                .toList();
 
         List<Method> missingMethods = requiredMethods.stream().filter(method ->
         {
@@ -39,7 +38,7 @@ class PaintStyleTest
             }
 
             return override == null || !override.getDeclaringClass().equals(paintStyleClass);
-        }).collect(toList());
+        }).toList();
 
         if (missingMethods.isEmpty())
         {

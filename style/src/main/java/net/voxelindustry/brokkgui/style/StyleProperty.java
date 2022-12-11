@@ -2,13 +2,18 @@ package net.voxelindustry.brokkgui.style;
 
 import fr.ourten.teabeans.property.named.NamedProperty;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
+import net.voxelindustry.brokkgui.style.specificity.StyleSource;
+
+import javax.annotation.Nullable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class StyleProperty<T> extends NamedProperty<T>
 {
     private final Class<T>    valueClass;
     private       int         specificitySet;
     private       StyleSource source;
-    private       T           defaultValue;
+
+    private final T defaultValue;
 
     public StyleProperty(T defaultValue, String name, Class<T> valueClass)
     {
@@ -20,15 +25,18 @@ public class StyleProperty<T> extends NamedProperty<T>
         this.defaultValue = defaultValue;
     }
 
-    public boolean setStyleRaw(StyleSource source, int specificity, String rawValue)
+    public void setStyleRaw(String propertyName, StyleSource source, int specificity, String rawValue)
     {
-        if (source.ordinal() > this.source.ordinal() ||
-                (source.ordinal() == this.source.ordinal() && specificity >= specificitySet))
-        {
-            internalSetStyle(source, specificity, StyleTranslator.getInstance().decode(rawValue, getValueClass()));
-            return true;
-        }
-        return false;
+        this.setStyleRaw(propertyName, source, specificity, rawValue, null);
+    }
+
+    public void setStyleRaw(String propertyName, StyleSource source, int specificity, String rawValue, @Nullable AtomicInteger consumedLength)
+    {
+        if (source.ordinal() <= this.source.ordinal() &&
+                (source.ordinal() != this.source.ordinal() || specificity < specificitySet))
+            return;
+
+        internalSetStyle(source, specificity, StyleTranslator.getInstance().decode(rawValue, getValueClass(), consumedLength));
     }
 
     public boolean setStyle(StyleSource source, int specificity, T value)

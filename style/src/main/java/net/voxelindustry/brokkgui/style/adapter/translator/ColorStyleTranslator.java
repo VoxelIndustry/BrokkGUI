@@ -6,16 +6,19 @@ import net.voxelindustry.brokkcolor.ColorLike;
 import net.voxelindustry.brokkgui.style.adapter.IStyleTranslator;
 
 import java.text.NumberFormat;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 public class ColorStyleTranslator implements IStyleTranslator<ColorLike>
 {
     private final NumberFormat colorFormat;
 
-    private final Pattern hexColorPattern      = Pattern.compile("^#\\d{6}");
-    private final Pattern hexAlphaColorPattern = Pattern.compile("^#\\d{6}\\s+\\d{2}%");
-    private final Pattern rgbColorPattern      = Pattern.compile("^rgb\\((\\s?\\d+\\s?,\\s?){2}(\\s?\\d+\\s?)\\)");
-    private final Pattern rgbaColorPattern     = Pattern.compile("^rgba\\((\\s?\\d+\\s?,\\s?){3}(\\s?\\d+\\s?)\\)");
+    private final Pattern hexColorPattern      = Pattern.compile("^#\\p{XDigit}{6}");
+    private final Pattern hexAlphaColorPattern = Pattern.compile("^#(\\p{XDigit}{6})\\s+(\\d{2,3})%");
+    private final Pattern rgbColorPattern      = Pattern.compile("^rgb\\(\\s?(\\d+%?)\\s?,\\s?(\\d+%?)\\s?,\\s?(\\d+%?)\\s?\\)");
+    private final Pattern rgbaColorPattern     = Pattern.compile("^rgba\\(\\s?(\\d+%?)\\s?,\\s?(\\d+%?)\\s?,\\s?(\\d+%?)\\s?,\\s?(\\d+%?)\\s?\\)");
+
+    private final Pattern colorConstantPattern = Pattern.compile("^(\\w+)\\s?(\\d+)?%?");
 
     public ColorStyleTranslator()
     {
@@ -54,84 +57,88 @@ public class ColorStyleTranslator implements IStyleTranslator<ColorLike>
     }
 
     @Override
-    public Color decode(String style)
+    public Color decode(String style, AtomicInteger consumedLength)
     {
-        // Hexa Color ex: #FF0011 20%
+        // Hex Color ex: #FF0011 20%
         if (style.startsWith("#"))
         {
-            if (!style.contains(" "))
+            var hexAlphaMatch = hexAlphaColorPattern.matcher(style);
+
+            if (!hexAlphaMatch.matches())
+            {
+                if (consumedLength != null)
+                    consumedLength.set(7);
                 return Color.fromHex(style);
+            }
             else
             {
-                String[] split = style.split(" ");
-                String rgb = split[0];
-                float alpha = Float.parseFloat(split[1].substring(0, split[1].length() - 1)) / 100;
+                var rgb = hexAlphaMatch.group(1);
+                float alpha = Float.parseFloat(hexAlphaMatch.group(2)) / 100;
 
+                if (consumedLength != null)
+                    consumedLength.set(hexAlphaMatch.regionEnd());
                 return Color.fromHex(rgb, alpha);
             }
         }
         // RGB or RGBA Color ex: rgba(255, 255, 255, 255)
-        if (style.startsWith("rgb"))
+        var rgbMatcher = rgbColorPattern.matcher(style);
+        if (rgbMatcher.matches())
         {
-            boolean alpha = style.startsWith("rgba");
-
-            String[] colorNames = style.substring(alpha ? 5 : 4, style.length() - 1).split(",");
-
-            Color color = new Color(1, 1, 1);
-            int i = 0;
-            for (String value : colorNames)
+            var color = new Color();
+            for (int i = 0; i < 3; i++)
             {
-                if (i != 3)
-                {
-                    float colorValue;
-                    value = value.trim();
-                    if (value.endsWith("%"))
-                        colorValue = Float.parseFloat(value.substring(0, value.length() - 1)) / 100f;
-                    else
-                        colorValue = Integer.parseInt(value) / 255f;
-                    if (i == 0)
-                        color.setRed(colorValue);
-                    else if (i == 1)
-                        color.setGreen(colorValue);
-                    else if (i == 2)
-                        color.setBlue(colorValue);
-                }
-                else if (alpha)
-                    color.setAlpha(Float.parseFloat(value));
-                i++;
+                var value = rgbMatcher.group(1 + i);
+                float colorValue;
+                if (value.endsWith("%"))
+                    colorValue = Float.parseFloat(value.substring(0, value.length() - 1)) / 100F;
+                else
+                    colorValue = Integer.parseInt(value) / 255F;
+                color.set(i, colorValue);
             }
+
+            if (consumedLength != null)
+                consumedLength.set(rgbMatcher.regionEnd());
+            return color;
+        }
+        var rgbaMatcher = rgbaColorPattern.matcher(style);
+        if (rgbaMatcher.matches())
+        {
+            var color = new Color();
+            for (int i = 0; i < 4; i++)
+            {
+                var value = rgbaMatcher.group(1 + i);
+                float colorValue;
+                if (value.endsWith("%"))
+                    colorValue = Float.parseFloat(value.substring(0, value.length() - 1)) / 100F;
+                else
+                    colorValue = Integer.parseInt(value) / 255F;
+                color.set(i, colorValue);
+            }
+
+            if (consumedLength != null)
+                consumedLength.set(rgbaMatcher.regionEnd());
             return color;
         }
 
-        if (style.contains(" "))
+        var colorConstantMatcher = colorConstantPattern.matcher(style);
+        if (colorConstantMatcher.matches())
         {
-            String[] split = style.split(" ");
-            String colorName = split[0];
-            float alpha = Float.parseFloat(split[1].substring(0, split[1].length() - 1)) / 100;
+            var colorName = colorConstantMatcher.group(1);
 
-            if (ColorConstants.hasConstant(colorName))
-            {
-                Color color = ColorConstants.getColor(colorName).copy();
-                color.setAlpha(alpha);
-                return color;
-            }
-        }
-        else if (ColorConstants.hasConstant(style))
-            return ColorConstants.getColor(style);
-        throw new RuntimeException("Cannot retrieve specified Color constant. constant=" + style);
-    }
+            if (!ColorConstants.hasConstant(colorName))
+                throw new IllegalArgumentException("Cannot retrieve specified Color constant. constant=" + style);
 
-    @Override
-    public int validate(String style)
-    {
-        if (hexColorPattern.matcher(style).matches())
-        {
-            if (hexAlphaColorPattern.matcher(style).matches())
-                return style.substring(0, style.indexOf("%") + 1).length();
-            return 7;
+            var alpha = 1F;
+            var alphaPart = colorConstantMatcher.group(2);
+            if (alphaPart != null)
+                alpha = Float.parseFloat(alphaPart) / 100F;
+
+            if (consumedLength != null)
+                consumedLength.set(colorConstantMatcher.regionEnd());
+            var color = ColorConstants.getColor(colorName).copy();
+            color.setAlpha(alpha);
+            return color;
         }
-        if (!rgbColorPattern.matcher(style).matches() && !rgbaColorPattern.matcher(style).matches())
-            return 0;
-        return style.substring(0, style.indexOf(")") + 1).length();
+        throw new UnsupportedOperationException("Cannot parse Color from style. style=" + style);
     }
 }

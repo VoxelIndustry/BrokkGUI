@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.style.shorthand;
 
 import net.voxelindustry.brokkgui.style.StyleEngine;
 import net.voxelindustry.brokkgui.style.StyleProperty;
-import net.voxelindustry.brokkgui.style.StyleSource;
+import net.voxelindustry.brokkgui.style.specificity.StyleSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +29,7 @@ public class GenericShorthandPropertyTest
         shorthand.addChild(child2);
         shorthand.addChild(child3);
 
-        shorthand.setStyleRaw(StyleSource.AUTHOR, 1000, "10 20 30");
+        shorthand.setStyleRaw("", StyleSource.AUTHOR, 1000, "10 20 30");
 
         assertThat(child1.getValue()).isEqualTo(10);
         assertThat(child2.getValue()).isEqualTo(20);
@@ -49,7 +49,7 @@ public class GenericShorthandPropertyTest
         shorthand.addChild(child2);
         shorthand.addChild(child3);
 
-        shorthand.setStyleRaw(StyleSource.AUTHOR, 1000, "10 somestring 30.2");
+        shorthand.setStyleRaw("", StyleSource.AUTHOR, 1000, "10 somestring 30.2");
 
         assertThat(child1.getValue()).isEqualTo(10);
         assertThat(child2.getValue()).isEqualTo("somestring");
@@ -69,7 +69,7 @@ public class GenericShorthandPropertyTest
         shorthand.addChild(child2);
         shorthand.addChild(child3);
 
-        shorthand.setStyleRaw(StyleSource.AUTHOR, 1000, "somestring 30.2 10");
+        shorthand.setStyleRaw("", StyleSource.AUTHOR, 1000, "10 somestring 30.2");
 
         assertThat(child1.getValue()).isEqualTo(10);
         assertThat(child2.getValue()).isEqualTo("somestring");

@@ -1,4 +1,4 @@
-package net.voxelindustry.brokkgui.style;
+package net.voxelindustry.brokkgui.style.specificity;
 
 public enum StyleSource
 {

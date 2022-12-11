@@ -4,6 +4,8 @@ import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.style.adapter.IStyleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.StyleTranslator;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class RectBoxTranslator implements IStyleTranslator<RectBox>
 {
     @Override
@@ -16,60 +18,39 @@ public class RectBoxTranslator implements IStyleTranslator<RectBox>
     }
 
     @Override
-    public RectBox decode(String style)
+    public RectBox decode(String style, AtomicInteger consumedLength)
     {
-        float top = 0;
-        float right = 0;
-        float bottom = 0;
-        float left = 0;
+        float top;
+        float right;
+        float bottom;
+        float left;
 
-        String[] parts = style.split(" ");
+        String[] parts = style.split(" ", 4);
 
         switch (parts.length)
         {
-            case 1:
-                top = right = bottom = left = StyleTranslator.getInstance().decode(parts[0], Float.class);
-                break;
-            case 2:
+            case 1 -> top = right = bottom = left = StyleTranslator.getInstance().decode(parts[0], Float.class);
+            case 2 ->
+            {
                 top = bottom = StyleTranslator.getInstance().decode(parts[0], Float.class);
                 right = left = StyleTranslator.getInstance().decode(parts[1], Float.class);
-                break;
-            case 3:
+            }
+            case 3 ->
+            {
                 top = StyleTranslator.getInstance().decode(parts[0], Float.class);
                 right = left = StyleTranslator.getInstance().decode(parts[1], Float.class);
                 bottom = StyleTranslator.getInstance().decode(parts[2], Float.class);
-                break;
-            case 4:
+            }
+            case 4 ->
+            {
                 top = StyleTranslator.getInstance().decode(parts[0], Float.class);
                 right = StyleTranslator.getInstance().decode(parts[1], Float.class);
                 bottom = StyleTranslator.getInstance().decode(parts[2], Float.class);
                 left = StyleTranslator.getInstance().decode(parts[3], Float.class);
-                break;
+            }
+            default ->
+                    throw new UnsupportedOperationException("RectBox style translator does not support more than 4 elements. value=" + style);
         }
         return RectBox.build().top(top).right(right).bottom(bottom).left(left).create();
-    }
-
-    @Override
-    public int validate(String style)
-    {
-        int totalLength = StyleTranslator.getInstance().validate(style, Float.class);
-
-        if (totalLength == 0)
-            return 0;
-
-        String current = style.substring(totalLength);
-
-        for (int index = 0; index < 3; index++)
-        {
-            String trimmed = current.trim();
-            int length = StyleTranslator.getInstance().validate(trimmed, Float.class) + current.indexOf(trimmed);
-
-            if (length == 0)
-                break;
-
-            totalLength += length;
-            current = current.substring(length);
-        }
-        return totalLength;
     }
 }

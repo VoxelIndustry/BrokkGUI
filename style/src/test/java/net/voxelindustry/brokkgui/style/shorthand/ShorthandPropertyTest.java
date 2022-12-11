@@ -2,7 +2,7 @@ package net.voxelindustry.brokkgui.style.shorthand;
 
 import net.voxelindustry.brokkgui.style.StyleEngine;
 import net.voxelindustry.brokkgui.style.StyleProperty;
-import net.voxelindustry.brokkgui.style.StyleSource;
+import net.voxelindustry.brokkgui.style.specificity.StyleSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ public class ShorthandPropertyTest
     @Test
     public void simpleMappedSet()
     {
-        ShorthandArgMapper simpleMapper = (index, count) -> new int[]{index};
+        ShorthandArgMapper simpleMapper = (index, count) -> new int[] { index };
         ShorthandProperty<Integer> shorthand = new ShorthandProperty<>(0, "shorthand-simple",
                 Integer.class, simpleMapper);
 
@@ -35,7 +35,7 @@ public class ShorthandPropertyTest
         shorthand.addChild(child3);
         shorthand.addChild(child4);
 
-        shorthand.setStyleRaw(StyleSource.AUTHOR, 1000, "10 20 30 40");
+        shorthand.setStyleRaw("", StyleSource.AUTHOR, 1000, "10 20 30 40");
 
         assertThat(child1.getValue()).isEqualTo(10);
         assertThat(child2.getValue()).isEqualTo(20);
@@ -60,7 +60,7 @@ public class ShorthandPropertyTest
         shorthand.addChild(child3);
         shorthand.addChild(child4);
 
-        shorthand.setStyleRaw(StyleSource.AUTHOR, 1000, "10");
+        shorthand.setStyleRaw("", StyleSource.AUTHOR, 1000, "10");
 
         assertThat(child1.getValue()).isEqualTo(10);
         assertThat(child2.getValue()).isEqualTo(10);

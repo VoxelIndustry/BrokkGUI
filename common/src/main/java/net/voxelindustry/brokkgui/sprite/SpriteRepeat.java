@@ -1,27 +1,38 @@
 package net.voxelindustry.brokkgui.sprite;
 
+import net.voxelindustry.brokkgui.data.StyleValue;
+
 import static java.lang.Math.ceil;
 
-public enum SpriteRepeat
+public enum SpriteRepeat implements StyleValue
 {
-    NONE,
-    REPEAT_X,
-    REPEAT_Y,
-    REPEAT_BOTH;
+    NONE("none"),
+    REPEAT_X("repeat-x"),
+    REPEAT_Y("repeat-y"),
+    REPEAT_BOTH("repeat");
+
+    private final String value;
+
+    SpriteRepeat(String value)
+    {
+        this.value = value;
+    }
+
+    @Override
+    public String value()
+    {
+        return value;
+    }
 
     public int getRepeatCount(Texture texture, float width, float height)
     {
-        switch (this)
-        {
-            case NONE:
-                return 1;
-            case REPEAT_X:
-                return (int) ceil(width / texture.getPixelWidth());
-            case REPEAT_Y:
-                return (int) ceil(height / texture.getPixelHeight());
-            case REPEAT_BOTH:
-                return (int) (ceil(width / texture.getPixelWidth()) * ceil(height / texture.getPixelHeight()));
-        }
-        return 0;
+        return switch (this)
+                {
+                    case NONE -> 1;
+                    case REPEAT_X -> (int) ceil(width / texture.getPixelWidth());
+                    case REPEAT_Y -> (int) ceil(height / texture.getPixelHeight());
+                    case REPEAT_BOTH ->
+                            (int) (ceil(width / texture.getPixelWidth()) * ceil(height / texture.getPixelHeight()));
+                };
     }
 }

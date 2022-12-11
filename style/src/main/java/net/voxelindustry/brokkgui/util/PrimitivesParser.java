@@ -1,25 +1,25 @@
 package net.voxelindustry.brokkgui.util;
 
-public class StringCountUtils
+public class PrimitivesParser
 {
-    public static int integerAtStart(String str)
+    public static int intLength(String value)
     {
         int count = 0;
 
-        for (int index = 0; index < str.length(); index++)
+        for (int index = 0; index < value.length(); index++)
         {
             // Early return to prevent parsing a floating number
-            if (str.charAt(index) == '.')
+            if (value.charAt(index) == '.')
                 return 0;
-            
-            if (!Character.isDigit(str.charAt(index)) && ((index != 0 || str.charAt(index) != '+') && str.charAt(index) != '-'))
+
+            if (!Character.isDigit(value.charAt(index)) && ((index != 0 || value.charAt(index) != '+') && value.charAt(index) != '-'))
                 break;
             count++;
         }
         return count;
     }
 
-    public static int floatAtStart(String str)
+    public static int floatLength(String str)
     {
         int count = 0;
         boolean decimalPart = false;
@@ -35,7 +35,7 @@ public class StringCountUtils
         return count;
     }
 
-    public static int boolAtStart(String str)
+    public static int boolLength(String str)
     {
         if (str.equalsIgnoreCase("true"))
             return 4;

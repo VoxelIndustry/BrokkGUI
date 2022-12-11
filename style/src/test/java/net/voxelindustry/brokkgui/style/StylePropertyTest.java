@@ -1,5 +1,6 @@
 package net.voxelindustry.brokkgui.style;
 
+import net.voxelindustry.brokkgui.style.specificity.StyleSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

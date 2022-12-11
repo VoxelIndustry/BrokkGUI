@@ -2,10 +2,11 @@ package net.voxelindustry.brokkgui.style.adapter;
 
 import net.voxelindustry.brokkgui.style.adapter.translator.DoubleTranslator;
 import net.voxelindustry.brokkgui.style.adapter.translator.FloatTranslator;
-import net.voxelindustry.brokkgui.util.StringCountUtils;
+import net.voxelindustry.brokkgui.util.PrimitivesParser;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class StyleTranslator
 {
@@ -18,26 +19,23 @@ public class StyleTranslator
         return INSTANCE;
     }
 
-    private final Map<Class<?>, IStyleDecoder<?>>   styleDecoders   = new IdentityHashMap<>();
-    private final Map<Class<?>, IStyleEncoder<?>>   styleEncoders   = new IdentityHashMap<>();
-    private final Map<Class<?>, IStyleValidator<?>> styleValidators = new IdentityHashMap<>();
+    private final Map<Class<?>, IStyleDecoder<?>> styleDecoders = new IdentityHashMap<>();
+    private final Map<Class<?>, IStyleEncoder<?>> styleEncoders = new IdentityHashMap<>();
 
     private StyleTranslator()
     {
         this.registerBuiltins();
     }
 
-    public <T> void registerTranslator(Class<? extends T> valueClass, IStyleDecoder<T> decoder, IStyleEncoder<T> encoder,
-                                       IStyleValidator<T> validator)
+    public <T> void registerTranslator(Class<? extends T> valueClass, IStyleDecoder<T> decoder, IStyleEncoder<T> encoder)
     {
         this.styleDecoders.put(valueClass, decoder);
         this.styleEncoders.put(valueClass, encoder);
-        this.styleValidators.put(valueClass, validator);
     }
 
-    public <T, V extends IStyleDecoder<T> & IStyleEncoder<T> & IStyleValidator<T>> void registerTranslator(Class<? extends T> valueClass, V translator)
+    public <T, V extends IStyleDecoder<T> & IStyleEncoder<T>> void registerTranslator(Class<? extends T> valueClass, V translator)
     {
-        this.registerTranslator(valueClass, translator, translator, translator);
+        this.registerTranslator(valueClass, translator, translator);
     }
 
     @SuppressWarnings("unchecked")
@@ -53,14 +51,15 @@ public class StyleTranslator
     }
 
     @SuppressWarnings("unchecked")
-    public <T> IStyleValidator<T> getValidator(Class<T> valueClass)
-    {
-        return (IStyleValidator<T>) this.styleValidators.get(valueClass);
-    }
-
     public <T> T decode(String cssString, Class<T> valueClass)
     {
         return (T) this.styleDecoders.get(valueClass).decode(cssString);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T decode(String cssString, Class<T> valueClass, AtomicInteger consumedLength)
+    {
+        return (T) this.styleDecoders.get(valueClass).decode(cssString, consumedLength);
     }
 
     @SuppressWarnings("unchecked")
@@ -69,33 +68,52 @@ public class StyleTranslator
         return ((IStyleEncoder<T>) this.styleEncoders.get(valueClass)).encode((T) value, prettyPrint);
     }
 
-    public int validate(String cssString, Class<?> valueClass)
-    {
-        return this.styleValidators.get(valueClass).validate(cssString);
-    }
-
     private void registerBuiltins()
     {
-        this.registerTranslator(Integer.class, Integer::parseInt,
-                (cssString, pretty) -> String.valueOf(cssString),
-                StringCountUtils::integerAtStart);
+        this.registerTranslator(Integer.class, (style, consumedLength) ->
+                {
+                    var length = PrimitivesParser.intLength(style);
+                    if (consumedLength != null)
+                        consumedLength.set(length);
+                    return Integer.parseInt(style, 0, length, 10);
+                },
+                (cssString, pretty) -> String.valueOf(cssString));
 
-        this.registerTranslator(Long.class, Long::parseLong,
-                (cssString, pretty) -> String.valueOf(cssString),
-                StringCountUtils::integerAtStart);
+        this.registerTranslator(Long.class, (style, consumedLength) ->
+                {
+                    var length = PrimitivesParser.intLength(style);
+                    if (consumedLength != null)
+                        consumedLength.set(length);
+                    return Long.parseLong(style, 0, length, 10);
+                },
+                (cssString, pretty) -> String.valueOf(cssString));
 
-        FloatTranslator floatTranslator = new FloatTranslator();
-        this.registerTranslator(Float.class, floatTranslator, floatTranslator, floatTranslator);
+        var floatTranslator = new FloatTranslator();
+        this.registerTranslator(Float.class, floatTranslator, floatTranslator);
 
-        DoubleTranslator doubleTranslator = new DoubleTranslator();
-        this.registerTranslator(Double.class, doubleTranslator, doubleTranslator, doubleTranslator);
+        var doubleTranslator = new DoubleTranslator();
+        this.registerTranslator(Double.class, doubleTranslator, doubleTranslator);
 
-        this.registerTranslator(String.class, String::valueOf,
-                (cssString, pretty) -> cssString,
-                cssString -> cssString.indexOf(" "));
+        this.registerTranslator(String.class, (style, consumedLength) ->
+                {
+                    var firstSpace = style.indexOf(" ");
+                    if (firstSpace == -1)
+                        firstSpace = style.length();
 
-        this.registerTranslator(Boolean.class, Boolean::parseBoolean,
-                (cssString, pretty) -> String.valueOf(cssString),
-                StringCountUtils::boolAtStart);
+                    if (consumedLength != null)
+                        consumedLength.set(firstSpace);
+                    return style.substring(0, firstSpace);
+                },
+                (cssString, pretty) -> cssString);
+
+        this.registerTranslator(Boolean.class, (style, consumedLength) ->
+                {
+                    var value = Boolean.parseBoolean(style);
+
+                    if (consumedLength != null)
+                        consumedLength.set(value ? 4 : 5);
+                    return value;
+                },
+                (cssString, pretty) -> String.valueOf(cssString));
     }
 }

@@ -18,12 +18,11 @@ import net.voxelindustry.brokkgui.style.event.StyleRefreshEvent;
 import net.voxelindustry.brokkgui.style.shorthand.GenericShorthandProperty;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMapper;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
-import net.voxelindustry.brokkgui.style.tree.StyleEntry;
+import net.voxelindustry.brokkgui.style.specificity.StyleSource;
 import net.voxelindustry.brokkgui.style.tree.StyleList;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -42,8 +41,8 @@ public class StyleComponent extends GuiComponent
 
     private Runnable onStyleInit;
 
-    private final ValueChangeListener<String>    styleRefreshListener = this::valueChanged;
-    private final ValueChangeListener<Transform> styleParentListener  = this::parentChanged;
+    private final ValueChangeListener<String>     styleRefreshListener     = this::valueChanged;
+    private final ValueChangeListener<Transform>  styleParentListener      = this::parentChanged;
     private final ListValueChangeListener<String> styleListRefreshListener = this::valueListChanged;
 
     private final ValueInvalidationListener focusListener   = this::focusListener;
@@ -265,10 +264,10 @@ public class StyleComponent extends GuiComponent
 
     private void setProperty(String propertyName, String value, StyleSource source, int specificity)
     {
-        StyleProperty<?> property = properties.get(propertyName);
+        var property = properties.get(propertyName);
 
         if (property != null)
-            property.setStyleRaw(source, specificity, value);
+            property.setStyleRaw(propertyName, source, specificity, value);
     }
 
     public boolean setPropertyFromMarkup(String propertyName, String value)
@@ -374,11 +373,11 @@ public class StyleComponent extends GuiComponent
     public <T> ShorthandProperty<T> registerShorthand(String name, T defaultValue, Class<T> valueClass,
                                                       ShorthandArgMapper mapper, String... children)
     {
-        ShorthandProperty<T> shorthand = new ShorthandProperty<>(defaultValue, name, valueClass, mapper);
+        var shorthand = new ShorthandProperty<>(defaultValue, name, valueClass, mapper);
 
-        for (String child : children)
+        for (var child : children)
         {
-            StyleProperty<T> childProperty = new StyleProperty<>(defaultValue, child, valueClass);
+            var childProperty = new StyleProperty<>(defaultValue, child, valueClass);
             shorthand.addChild(childProperty);
             properties.put(child, childProperty);
         }
@@ -460,8 +459,7 @@ public class StyleComponent extends GuiComponent
         if (element() != null)
             getEventDispatcher().singletonQueue().dispatch(StyleRefreshEvent.BEFORE, new StyleRefreshEvent.BeforeEvent(this));
 
-        List<StyleEntry> entries = styleList.getEntriesMatching(this);
-
+        var entries = styleList.getEntriesMatching(this);
 
         for (var value : properties.values())
             value.mute();
