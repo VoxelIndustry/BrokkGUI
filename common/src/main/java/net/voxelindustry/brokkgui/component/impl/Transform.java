@@ -208,6 +208,9 @@ public class Transform extends GuiComponent
 
     public void addChild(Transform element)
     {
+        if (element == this)
+            throw new UnsupportedOperationException("Cannot add self as child");
+
         if (!childrenProperty().contains(element))
             childrenProperty().add(element);
 
