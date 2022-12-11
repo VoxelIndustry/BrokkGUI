@@ -14,6 +14,8 @@ import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.Resource;
 import net.voxelindustry.brokkgui.internal.IRenderCommandReceiver;
+import net.voxelindustry.brokkgui.paint.border.BorderPaint;
+import net.voxelindustry.brokkgui.paint.outline.OutlinePaint;
 import net.voxelindustry.brokkgui.shape.ShapeDefinition;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import net.voxelindustry.brokkgui.sprite.SpriteAnimationInstance;
@@ -44,18 +46,9 @@ public class Paint extends GuiComponent implements RenderComponent
 
     protected Property<RandomSpriteRotation> foregroundRotationProperty;
 
-    protected Property<RectBox> borderBoxProperty;
+    protected BorderPaint border = BorderPaint.EMPTY;
+    protected OutlinePaint outline = OutlinePaint.EMPTY;
 
-    protected Property<Color> borderColorProperty;
-
-    protected Property<Texture> borderImageProperty;
-    protected Property<RectBox> borderImageSliceProperty;
-    protected Property<RectBox> borderImageWidthProperty;
-    protected Property<RectBox> borderImageOutsetProperty;
-
-    protected Property<Boolean> borderImageFillProperty;
-
-    protected Property<Color>   outlineColorProperty;
     protected Property<Float>   outlineWidthLeftProperty;
     protected Property<Float>   outlineWidthRightProperty;
     protected Property<Float>   outlineWidthTopProperty;
@@ -64,7 +57,6 @@ public class Paint extends GuiComponent implements RenderComponent
     protected Property<Integer> outlineRadiusTopRightProperty;
     protected Property<Integer> outlineRadiusBottomLeftProperty;
     protected Property<Integer> outlineRadiusBottomRightProperty;
-    protected Property<RectBox> outlineBoxProperty;
 
     protected Property<FillMethod> fillMethodProperty;
     protected Property<Float>      fillAmountProperty;
@@ -188,19 +180,18 @@ public class Paint extends GuiComponent implements RenderComponent
     @RequiredOverride
     public boolean hasBorder()
     {
-        return borderColorProperty != null;
+        return border() != BorderPaint.EMPTY;
     }
 
     @RequiredOverride
     public boolean hasOutline()
     {
-        return outlineColorProperty != null;
+        return outline() != OutlinePaint.EMPTY;
     }
 
-    @RequiredOverride
     public boolean hasBorderImage()
     {
-        return borderImageProperty != null;
+        return hasBorder() && (border().image() != null && border().image() != Texture.EMPTY);
     }
 
     @RequiredOverride
@@ -300,30 +291,6 @@ public class Paint extends GuiComponent implements RenderComponent
     }
 
     @RequiredOverride
-    public Property<RectBox> borderBoxProperty()
-    {
-        if (borderBoxProperty == null)
-            borderBoxProperty = createRenderProperty(RectBox.EMPTY);
-        return borderBoxProperty;
-    }
-
-    @RequiredOverride
-    public Property<Color> borderColorProperty()
-    {
-        if (borderColorProperty == null)
-            borderColorProperty = createRenderProperty(Color.ALPHA);
-        return borderColorProperty;
-    }
-
-    @RequiredOverride
-    public Property<Color> outlineColorProperty()
-    {
-        if (outlineColorProperty == null)
-            outlineColorProperty = createRenderProperty(Color.ALPHA);
-        return outlineColorProperty;
-    }
-
-    @RequiredOverride
     public Property<Float> outlineWidthLeftProperty()
     {
         if (outlineWidthLeftProperty == null)
@@ -385,54 +352,6 @@ public class Paint extends GuiComponent implements RenderComponent
         if (outlineRadiusBottomRightProperty == null)
             outlineRadiusBottomRightProperty = createRenderProperty(0);
         return outlineRadiusBottomRightProperty;
-    }
-
-    @RequiredOverride
-    public Property<RectBox> outlineBoxProperty()
-    {
-        if (outlineBoxProperty == null)
-            outlineBoxProperty = createRenderProperty(RectBox.EMPTY);
-        return outlineBoxProperty;
-    }
-
-    @RequiredOverride
-    public Property<Texture> borderImageProperty()
-    {
-        if (borderImageProperty == null)
-            borderImageProperty = createRenderProperty(Texture.EMPTY);
-        return borderImageProperty;
-    }
-
-    @RequiredOverride
-    public Property<RectBox> borderImageSliceProperty()
-    {
-        if (borderImageSliceProperty == null)
-            borderImageSliceProperty = createRenderProperty(RectBox.build().all(1).create());
-        return borderImageSliceProperty;
-    }
-
-    @RequiredOverride
-    public Property<RectBox> borderImageWidthProperty()
-    {
-        if (borderImageWidthProperty == null)
-            borderImageWidthProperty = createRenderProperty(RectBox.build().all(1).create());
-        return borderImageWidthProperty;
-    }
-
-    @RequiredOverride
-    public Property<RectBox> borderImageOutsetProperty()
-    {
-        if (borderImageOutsetProperty == null)
-            borderImageOutsetProperty = createRenderProperty(RectBox.build().all(0).create());
-        return borderImageOutsetProperty;
-    }
-
-    @RequiredOverride
-    public Property<Boolean> borderImageFillProperty()
-    {
-        if (borderImageFillProperty == null)
-            borderImageFillProperty = createRenderProperty(Boolean.FALSE);
-        return borderImageFillProperty;
     }
 
     @RequiredOverride
@@ -665,42 +584,14 @@ public class Paint extends GuiComponent implements RenderComponent
         foregroundColorProperty().setValue(color);
     }
 
-    @RequiredOverride
-    public RectBox borderBox()
+    public BorderPaint border()
     {
-        return borderBoxProperty().getValue();
+        return border;
     }
 
-    @RequiredOverride
-    public void borderBox(RectBox borderBox)
+    public OutlinePaint outline()
     {
-        borderBoxProperty().setValue(borderBox);
-    }
-
-    @RequiredOverride
-    public Color borderColor()
-    {
-        return borderColorProperty().getValue();
-    }
-
-    @RequiredOverride
-    public void borderColor(Color color)
-    {
-        borderColorProperty().setValue(color);
-    }
-
-    @RequiredOverride
-    public Color outlineColor()
-    {
-        if (outlineColorProperty == null)
-            return Color.ALPHA;
-        return outlineColorProperty().getValue();
-    }
-
-    @RequiredOverride
-    public void outlineColor(Color color)
-    {
-        outlineColorProperty().setValue(color);
+        return outline;
     }
 
     @RequiredOverride
@@ -764,78 +655,6 @@ public class Paint extends GuiComponent implements RenderComponent
             case BOTTOM_LEFT -> outlineRadiusBottomLeftProperty().setValue(width);
             case BOTTOM_RIGHT -> outlineRadiusBottomRightProperty().setValue(width);
         }
-    }
-
-    @RequiredOverride
-    public RectBox outlineBox()
-    {
-        return outlineBoxProperty().getValue();
-    }
-
-    @RequiredOverride
-    public void outlineBox(RectBox outlineBox)
-    {
-        outlineBoxProperty().setValue(outlineBox);
-    }
-
-    @RequiredOverride
-    public Texture borderImage()
-    {
-        return borderImageProperty().getValue();
-    }
-
-    @RequiredOverride
-    public void borderImage(Texture texture)
-    {
-        borderImageProperty().setValue(texture);
-    }
-
-    @RequiredOverride
-    public RectBox borderImageSlice()
-    {
-        return borderImageSliceProperty().getValue();
-    }
-
-    @RequiredOverride
-    public void borderImageSlice(RectBox box)
-    {
-        borderImageSliceProperty().setValue(box);
-    }
-
-    @RequiredOverride
-    public RectBox borderImageWidth()
-    {
-        return borderImageWidthProperty().getValue();
-    }
-
-    @RequiredOverride
-    public void borderImageWidth(RectBox box)
-    {
-        borderImageWidthProperty().setValue(box);
-    }
-
-    @RequiredOverride
-    public RectBox borderImageOutset()
-    {
-        return borderImageOutsetProperty().getValue();
-    }
-
-    @RequiredOverride
-    public void borderImageOutset(RectBox box)
-    {
-        borderImageOutsetProperty().setValue(box);
-    }
-
-    @RequiredOverride
-    public boolean borderImageFill()
-    {
-        return borderImageFillProperty().getValue();
-    }
-
-    @RequiredOverride
-    public void borderImageFill(boolean doFill)
-    {
-        borderImageFillProperty().setValue(doFill);
     }
 
     @RequiredOverride

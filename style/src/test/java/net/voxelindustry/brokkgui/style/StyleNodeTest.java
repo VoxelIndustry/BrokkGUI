@@ -40,7 +40,7 @@ public class StyleNodeTest
         element.get(StyleComponent.class).setStyleSupplier(() -> finalTree);
         element.get(StyleComponent.class).refresh();
 
-        assertThat(element.paint().borderColor()).isEqualTo(ColorConstants.getColor("khaki"));
+        assertThat(element.paint().border().colorLeft()).isEqualTo(ColorConstants.getColor("khaki"));
         assertThat(element.transform().borderWidth()).isEqualTo(2);
     }
 
@@ -73,7 +73,7 @@ public class StyleNodeTest
         fakeChildPane.get(StyleComponent.class).setStyleSupplier(() -> finalTree);
         fakeChildPane.get(StyleComponent.class).refresh();
 
-        assertThat(element.paint().borderColor()).isEqualTo(ColorConstants.getColor("khaki"));
+        assertThat(element.paint().border().colorLeft()).isEqualTo(ColorConstants.getColor("khaki"));
         assertThat(element.transform().borderWidth()).isEqualTo(2);
     }
 

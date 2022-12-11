@@ -14,14 +14,15 @@ public class ImageBorderDrawer
     {
         Transform transform = paint.transform();
 
-        Texture texture = paint.borderImage();
+        var border = paint.border();
+        Texture texture = border.image();
         float borderLeft = transform.borderWidth(RectSide.LEFT);
         float borderRight = transform.borderWidth(RectSide.RIGHT);
         float borderTop = transform.borderWidth(RectSide.UP);
         float borderBottom = transform.borderWidth(RectSide.DOWN);
 
-        RectBox sliceBox = paint.borderImageSlice();
-        RectBox widthBox = paint.borderImageWidth();
+        RectBox sliceBox = border.imageSlice();
+        RectBox widthBox = border.imageWidth();
 
         float leftPos = transform.leftPos();
         float topPos = transform.topPos();
@@ -31,15 +32,15 @@ public class ImageBorderDrawer
         float width = transform.width();
         float height = transform.height();
 
-        if (paint.borderBox() != RectBox.EMPTY)
+        if (border.box() != RectBox.EMPTY)
         {
-            leftPos -= paint.borderBox().getLeft();
-            rightPos += paint.borderBox().getRight();
-            bottomPos += paint.borderBox().getBottom();
-            topPos -= paint.borderBox().getTop();
+            leftPos -= border.box().getLeft();
+            rightPos += border.box().getRight();
+            bottomPos += border.box().getBottom();
+            topPos -= border.box().getTop();
 
-            width += paint.borderBox().getHorizontal();
-            height += paint.borderBox().getVertical();
+            width += border.box().getHorizontal();
+            height += border.box().getVertical();
         }
         else
         {
@@ -52,7 +53,7 @@ public class ImageBorderDrawer
             height += borderTop + borderBottom;
         }
 
-        boolean doFill = paint.borderImageFill();
+        boolean doFill = border.imageFill();
 
         renderer.bindTexture(texture);
 

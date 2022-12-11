@@ -9,20 +9,25 @@ import net.voxelindustry.brokkgui.data.RectBox;
 import net.voxelindustry.brokkgui.data.RectCorner;
 import net.voxelindustry.brokkgui.data.RectSide;
 import net.voxelindustry.brokkgui.data.Resource;
+import net.voxelindustry.brokkgui.paint.border.BorderPaint;
+import net.voxelindustry.brokkgui.paint.outline.OutlinePaint;
 import net.voxelindustry.brokkgui.sprite.RandomSpriteRotation;
 import net.voxelindustry.brokkgui.sprite.SpriteRepeat;
 import net.voxelindustry.brokkgui.sprite.Texture;
 import net.voxelindustry.brokkgui.style.HeldPropertyState;
 import net.voxelindustry.brokkgui.style.StyleComponent;
-import net.voxelindustry.brokkgui.style.optional.BorderImageProperties;
-import net.voxelindustry.brokkgui.style.optional.BorderProperties;
 import net.voxelindustry.brokkgui.style.optional.OutlineProperties;
 import net.voxelindustry.brokkgui.style.optional.SpriteProperties;
 import net.voxelindustry.brokkgui.style.optional.SpriteRandomRotationProperties;
+import net.voxelindustry.brokkgui.style.shorthand.paint.BorderPaintStyleProperty;
+import net.voxelindustry.brokkgui.style.shorthand.paint.OutlinePaintStyleProperty;
 
 public class PaintStyle extends Paint
 {
     private StyleComponent style;
+
+    private final BorderPaintStyleProperty  borderProperty  = new BorderPaintStyleProperty("border");
+    private final OutlinePaintStyleProperty outlineProperty = new OutlinePaintStyleProperty("outline");
 
     public PaintStyle()
     {
@@ -45,10 +50,10 @@ public class PaintStyle extends Paint
         style.registerConditionalProperties("background-rotation", SpriteRandomRotationProperties.getBackgroundInstance());
         style.registerConditionalProperties("foreground-rotation", SpriteRandomRotationProperties.getForegroundInstance());
 
-        style.registerConditionalProperties("border*", BorderProperties.getInstance());
-        style.registerConditionalProperties("border-image*", BorderImageProperties.getInstance());
-
         style.registerConditionalProperties("outline*", OutlineProperties.getInstance());
+
+        style.registerProperty(borderProperty);
+        style.registerProperty(outlineProperty);
 
         style.registerProperty("fill-method", FillMethod.HORIZONTAL, FillMethod.class);
         style.registerProperty("fill-amount", 1F, Float.class);
@@ -184,38 +189,6 @@ public class PaintStyle extends Paint
     }
 
     @Override
-    public Property<Color> borderColorProperty()
-    {
-        if (borderColorProperty == null)
-            borderColorProperty = style().getOrCreateProperty("border-color", Color.class);
-        return borderColorProperty;
-    }
-
-    @Override
-    public Property<RectBox> borderBoxProperty()
-    {
-        if (borderBoxProperty == null)
-            borderBoxProperty = style().getOrCreateProperty("border-box", RectBox.class);
-        return borderBoxProperty;
-    }
-
-    @Override
-    public Property<RectBox> outlineBoxProperty()
-    {
-        if (outlineBoxProperty == null)
-            outlineBoxProperty = style().getOrCreateProperty("outline-box", RectBox.class);
-        return outlineBoxProperty;
-    }
-
-    @Override
-    public Property<Color> outlineColorProperty()
-    {
-        if (outlineColorProperty == null)
-            outlineColorProperty = style().getOrCreateProperty("outline-color", Color.class);
-        return outlineColorProperty;
-    }
-
-    @Override
     public Property<Float> outlineWidthLeftProperty()
     {
         if (outlineWidthLeftProperty == null)
@@ -277,46 +250,6 @@ public class PaintStyle extends Paint
         if (outlineRadiusBottomRightProperty == null)
             outlineRadiusBottomRightProperty = style().getOrCreateProperty("outline-bottom-right-radius", Integer.class);
         return outlineRadiusBottomRightProperty;
-    }
-
-    @Override
-    public Property<Texture> borderImageProperty()
-    {
-        if (borderImageProperty == null)
-            borderImageProperty = style().getOrCreateProperty("border-image-source", Texture.class);
-        return borderImageProperty;
-    }
-
-    @Override
-    public Property<RectBox> borderImageSliceProperty()
-    {
-        if (borderImageSliceProperty == null)
-            borderImageSliceProperty = style().getOrCreateProperty("border-image-slice", RectBox.class);
-        return borderImageSliceProperty;
-    }
-
-    @Override
-    public Property<RectBox> borderImageWidthProperty()
-    {
-        if (borderImageWidthProperty == null)
-            borderImageWidthProperty = style().getOrCreateProperty("border-image-width", RectBox.class);
-        return borderImageWidthProperty;
-    }
-
-    @Override
-    public Property<RectBox> borderImageOutsetProperty()
-    {
-        if (borderImageOutsetProperty == null)
-            borderImageOutsetProperty = style().getOrCreateProperty("border-image-outset", RectBox.class);
-        return borderImageOutsetProperty;
-    }
-
-    @Override
-    public Property<Boolean> borderImageFillProperty()
-    {
-        if (borderImageFillProperty == null)
-            borderImageFillProperty = style().getOrCreateProperty("border-image-fill", Boolean.class);
-        return borderImageFillProperty;
     }
 
     @Override
@@ -484,57 +417,27 @@ public class PaintStyle extends Paint
     }
 
     @Override
+    public BorderPaint border()
+    {
+        return borderProperty;
+    }
+
+    @Override
+    public OutlinePaint outline()
+    {
+        return outlineProperty;
+    }
+
+    @Override
     public boolean hasBorder()
     {
-        return style().doesHoldProperty("border-width") == HeldPropertyState.PRESENT;
+        return !borderProperty.isEmpty();
     }
 
     @Override
     public boolean hasOutline()
     {
-        return style().doesHoldProperty("outline-width") == HeldPropertyState.PRESENT;
-    }
-
-    @Override
-    public boolean hasBorderImage()
-    {
-        return style().doesHoldProperty("border-image-source") == HeldPropertyState.PRESENT;
-    }
-
-    @Override
-    public RectBox borderBox()
-    {
-        return style().getValue("border-box", RectBox.class, RectBox.EMPTY);
-    }
-
-    @Override
-    public void borderBox(RectBox borderBox)
-    {
-        style().setPropertyDirect("border-box", borderBox, RectBox.class);
-    }
-
-    @Override
-    public Color borderColor()
-    {
-        return style().getValue("border-color", Color.class, Color.ALPHA);
-    }
-
-    @Override
-    public void borderColor(Color color)
-    {
-        style().setPropertyDirect("border-color", color, Color.class);
-    }
-
-    @Override
-    public Color outlineColor()
-    {
-        return style().getValue("outline-color", Color.class, Color.ALPHA);
-    }
-
-    @Override
-    public void outlineColor(Color color)
-    {
-        style().setPropertyDirect("outline-color", color, Color.class);
+        return !outlineProperty.isEmpty();
     }
 
     @Override
@@ -574,78 +477,6 @@ public class PaintStyle extends Paint
     public void outlineRadius(RectCorner corner, int radius)
     {
         style().setPropertyDirect("outline-" + corner.getCssString() + "-radius", radius, Integer.class);
-    }
-
-    @Override
-    public RectBox outlineBox()
-    {
-        return style().getValue("outline-box", RectBox.class, RectBox.EMPTY);
-    }
-
-    @Override
-    public void outlineBox(RectBox outlineBox)
-    {
-        style().setPropertyDirect("outline-box", outlineBox, RectBox.class);
-    }
-
-    @Override
-    public Texture borderImage()
-    {
-        return style().getValue("border-image-source", Texture.class, Texture.EMPTY);
-    }
-
-    @Override
-    public void borderImage(Texture texture)
-    {
-        style().setPropertyDirect("border-image-source", texture, Texture.class);
-    }
-
-    @Override
-    public RectBox borderImageSlice()
-    {
-        return style().getValue("border-image-slice", RectBox.class, RectBox.ONE);
-    }
-
-    @Override
-    public void borderImageSlice(RectBox box)
-    {
-        style().setPropertyDirect("border-image-slice", box, RectBox.class);
-    }
-
-    @Override
-    public RectBox borderImageWidth()
-    {
-        return style().getValue("border-image-width", RectBox.class, RectBox.ONE);
-    }
-
-    @Override
-    public void borderImageWidth(RectBox box)
-    {
-        style().setPropertyDirect("border-image-width", box, RectBox.class);
-    }
-
-    @Override
-    public RectBox borderImageOutset()
-    {
-        return style().getValue("border-image-outset", RectBox.class, RectBox.EMPTY);
-    }
-
-    @Override
-    public void borderImageOutset(RectBox box)
-    {
-        style().setPropertyDirect("border-image-outset", box, RectBox.class);
-    }
-
-    @Override
-    public boolean borderImageFill()
-    {
-        return style().getValue("border-image-fill", Boolean.class, Boolean.FALSE);
-    }
-
-    @Override
-    public void borderImageFill(boolean doFill)
-    {
-        style().setPropertyDirect("border-image-fill", doFill, Boolean.class);
     }
 
     @Override

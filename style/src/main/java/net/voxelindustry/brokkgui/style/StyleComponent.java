@@ -16,6 +16,7 @@ import net.voxelindustry.brokkgui.component.impl.Transform;
 import net.voxelindustry.brokkgui.style.event.StyleComponentEvent;
 import net.voxelindustry.brokkgui.style.event.StyleRefreshEvent;
 import net.voxelindustry.brokkgui.style.shorthand.GenericShorthandProperty;
+import net.voxelindustry.brokkgui.style.shorthand.MultiStyleProperty;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandArgMapper;
 import net.voxelindustry.brokkgui.style.shorthand.ShorthandProperty;
 import net.voxelindustry.brokkgui.style.specificity.StyleSource;
@@ -390,6 +391,13 @@ public class StyleComponent extends GuiComponent
     {
         var property = new StyleProperty<T>(defaultValue, name, valueClass);
         properties.put(name, property);
+        return property;
+    }
+
+    public <T, P extends StyleProperty<T> & MultiStyleProperty> P registerProperty(P property)
+    {
+        for (var name : property.names())
+            properties.put(name, property);
         return property;
     }
 
